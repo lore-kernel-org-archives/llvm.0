@@ -1,101 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792445127;
-	b=CZrtu0bLEzWkbZJxPRTpKvUsTjZJFAVxhGdYj0MgFls5dgmgUWyESo+i21hbMcP2hP6D
-	 CHddlHBUxv36ch5Cj+hUpdXGB3vyQUgaRFpxoBGYLvpPYMzp0UYMlXd53KaujUFK7NNqo
-	 SSE1H1VRItfvB1yvE1XhLN5UJxac5j2b9xljRTImgBqCGZG7JD3avC12XThirCUFYpjp+
-	 8Lis09TiIGNdUpsNqdSwCB4Au2qMnQPA+0pQwHoc+/QJAwOn8ry0l7+Ecs+e2NsJVbWhY
-	 4pggMtg7lV8I7YjU5FRxXLUUYWnlA3gtkDEllfO2mH3bt9H6XtYEkt3zsIU9VLBBm1g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792445127;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.171
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792447154;
+	b=mzzAe9cfp32bxvmftV+co8lx4teYlW+NcTxmkH2jO2yaOyIcHkQwwM0j8x8nDuxWiohE
+	 wQyWAZ5CSeIW6IhLws/wl5X1fQ0gras7iWd2mw2LhA3EkAFovBiXj+tpLM0bR51WUhZQH
+	 MPYzldf3kC5CUMU6ZvbCnC37zhEAcbo899nR4y2pW5sE/zQQFZ1Yp7CBNtMuOenutH2pv
+	 vrzLY0x9fcABA9BCzpI0sB+NWrR9n9LOJ8ez+8lVRTCwwfiB9g8g0bfd3MQnBgbPYNNQ5
+	 gr02JbgtTHZVXxbbb5ZS/zOACFK46cyaRAWhNqbxw9B7Grni9QCABlnudlrTEoTZm2g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792447154;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=bqwC/Ywk/urErM3liCKcvDfgOsAI1aXiD3ThAOoBayk=;
-	b=iYpzgrvHAtaoOsBjfwPeHwYVVOdgekHeN3rEeIqT8sz3Rt/wdRdLF/CxJ74HFR21u+aw
-	 PaPwI3LIyTOCNqe6cNI33HWq7Cc5K6euTTcJjJzx1NhYLBUs0Yv4fbFB11kPgCsdh5DRF
-	 Aqpc/jhB5exW8qbZ6W1vDbZt/2tC28hI8y0lamiAwHViHXgGCRKxCKKhtqS9zUkmYVWwR
-	 hMBni0fIhbd1uVdmdQ4qFyRUawtZjFKlnwPBXiEqv8BHoyQMrGdaBW9G3CwcbbD0jHeM8
-	 00qO8zMFhxNj2EMVhgIqdpbc+An3BezwjPsFjCMgYSX83qxf4WR6LL6CtCdInanXBNw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=itDUHLdI;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=jctDokCQpU+5f4McBmCcNrit0g75bLIuZ0vnR/79ocM=;
+	b=qKQzueH8IQjTqotwTZd4D58q1H2PE8GUbx+PYO0ZBXhlahmMNR2x2IM8t8NFbUB+t8wC
+	 eTKKyxgWH4guRxdyk0vdJ+LXlxM+4VrTSdKkd1uJ9ffnjJ/HroIH9gKqAu8JTQQQNIOC7
+	 psxrmyBiEpc16peuoPkqxSOvGaPJVhle9fK7/NJFDGhCMxQdblw10QSacxZrSmss/YQrN
+	 nWVhsxLEFxN2RfIJWHPhaIkmE3zlN6+zuwU+SHi3mDqBrZ7SG0y0OTHFJ2v5nabAdkT96
+	 u7l9VXhKE8VQ4hZCgyXkfS1wl+zDLYPKjWUZl15YVqGFhXcS5n42rvYWkmTVOworaGw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=OoAVr58l;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C66606A31B
-	for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 21:25:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64C66606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6699606A31C
+	for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 21:59:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6699606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=itDUHLdI
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a1e2957d7eso16284885e9.2
-        for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 14:25:27 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=OoAVr58l
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-3514b90bb89so6768952eec.1
+        for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 14:59:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792447153; cv=none;
+        d=google.com; s=arc-20260327;
+        b=V/iBc9Ukt8YV8P8yxJRMJoEZmhozK/guuGrTeZDgw+Qds1p3qZ6i0XHHytL5HNWkVN
+         icHy3vdB6MZ4Zb3UKxlIWGbXf/iw2ERGShSOZW7yJ42WkS9r4Nn+V4mk6UAe7XsFmEb+
+         ZDTix8YF/u0SCxrC1KZfFb6Drv+mJTiUIswseiHS9QAs/9NefCGpfNVyCp2DXjh/T3/R
+         qg4YTTP8QVXZ2Tox4OP2bJeL+NjGO11ITlw5HTICUdg/a64nHn98981hNo9JV/n6K2r0
+         K2rEflmhigpjT11VmxqcvcX66UnyByXe3fkY1JhPwwlzqBQfTCNhaDgDBqGKWWY+xr4v
+         43xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=jctDokCQpU+5f4McBmCcNrit0g75bLIuZ0vnR/79ocM=;
+        fh=WIogyjvNoTJ01z8Rz6j7i3oO1h645JFnuaxCPU9kWvA=;
+        b=gWtkXd/8ODFlDbXnDyF+3mr5VyFZRpl5mdJN1Y8vElElK/lIbnfVRzD4KZg2xr+7Hn
+         jo7io550N5BvPEmJ3WJyrrMvbLYOOcPdGGNd30o8CM/nmVAT91q07pm9aVOsbkVClNCD
+         hv+xm0lDPUAlUK2jVEFfLz0MX9Gsyq+UPIkvCqW5WcTSFEPolo/lmbqxT/IZnWqkoWvt
+         M30k6P6/GDVpFlIifx8RuWwj+OytNuRU/rAKv/phONQBDfdGpJKWkRvgl4b6scC/u/ZH
+         WCgZf6vpbFNDB4xfOAvJ0BioRJdB0GbEBc+Mi3PXl3ByBPWYEB6JSj+7uMnvsB09CiVa
+         flFw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792445126; x=1793049926; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bqwC/Ywk/urErM3liCKcvDfgOsAI1aXiD3ThAOoBayk=;
-        b=itDUHLdIepQVIvQlnig5A4A03myxzoFTGvol0IGglsjVpwNUiY8faImKzMUMs9FFm3
-         RzYFr3AzNaGiHONTKV6lFlvhyC3VWKY59X9ICdrrVUNVm8HeJ7hikxC5zoRmg/CE9ntu
-         qxhNrGGL/zsYaEc5UpDierf4O1UOrjX4h/BE4pFbWVlZ4yyy7i1sqKhft1kT2aWy0AvL
-         pPUiSkAhFZmyfFfbSBOOII5q3ic+wWUemLyVyKvMFXbnvbMnkXv08wh+HUhRI690FEyK
-         ZuKtzhzE6ln0jDQIr/m20t0xftepq6plPm6yv9LdQIl2wOJM/MxCe5YjDuAbP6aHxbFe
-         aiMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792445126; x=1793049926;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1792447153; x=1793051953; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bqwC/Ywk/urErM3liCKcvDfgOsAI1aXiD3ThAOoBayk=;
-        b=fMyVuq6QqJP6sc40N8iRiviLaLHLk0GLDpcT1o+MX/QIREzo6hLW+4nbnQuKFcGcTY
-         JOAmoKObDDLbBVw8l2ddFGuRXcGMjBeTVg6OJnr8IYfZcGlL3ZO4l37GcWW71/V2c15q
-         ZqeNjrll0Y33GOvX82OzvIl339xul7StFq++UiFeddx3ji+DtFMpwFNSSYJQhexIYJUu
-         jW0gvylsjtpaMudrpjEst+k/ordgT2Phu9CeN/6Hm2NQgOZf+EVNYxn7encWO1cj23xG
-         FN0HNn3qvXhr2yvlHPlC06boDq4g4GzUcofbCeUaJXluxeUeklXWd4ZP7ah28Ehz1jL+
-         gIZw==
-X-Forwarded-Encrypted: i=1; AKwUvBz8fkbOoVcLezF4/1Nv1lLHz0LU6DFVZsq0Ft3rii2iEujMQEFllImFiO69pN+CCwup7nbP@lists.linux.dev
-X-Gm-Message-State: AFq9FYKSqY3FGQbJtzJ2kDunNzkaf4LvvzR4fLwGSdNVucG1cUv4SWOh
-	Um+qIHRBAn92jhKJHgZITBYz5wYVXiNphigjWgVwS/OicuQNTJ8wKnEQ
-X-Gm-Gg: AYBFou2/civzMEoLxTt2qx0/ImHGcO8+KYSgvSZDTX1FBGBxJ87j1ZO5lM0GG8g7ni4
-	qWz7JJEpSdkim8gK7eWTHNolny2bnU8+MCN3AQ337NmBH0rhOmuR1m7AcA6O/9W/btbcE0VCAYQ
-	JYQbQn/JgSpfqCexHTwZJdQW7HTKI4Oc5xWmQieFFKOepQQl5Z3T3QnsmiIBLkzn1WXK9MJmQVC
-	aH6MSRH3Ydfk22y/VuIK92+hKNZw3LrIJF0tI3uQxlBlZhOYZFSb4txmf1cXQTBRq7wK6LLP0ql
-	DWG5r/k4ygQs+9ev+o+81wm9lSA7AANLCXKn3dEHQkX0lxJLppQSiDvqPQuINCwM0VCf2AnoJ3s
-	lwyPtRCZ5+s0ArjikMhKf+UDC/rqwF9jG1q+1C9VdZC+5FFUEGq8VYe7G5+RZGwksxSu4xFVQe3
-	s6TD5DZ0N3vvOxzV6UMBtKlZAlpU4TDDN8hcv1koQ/JG8rVOYpWgqUlMO72UaOfCRsyaAW+Rtem
-	Hu+COB7Z83G82+ebxz1cy99877vOyV9X3w=
-X-Received: by 2002:a05:600c:c8c:b0:4a0:bc9:28c6 with SMTP id 5b1f17b1804b1-4a1d7643dadmr171548545e9.34.1792445125587;
-        Mon, 19 Oct 2026 14:25:25 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2c1e0e6sm25118305e9.0.2026.10.19.14.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 14:25:25 -0700 (PDT)
-Date: Mon, 19 Oct 2026 22:25:24 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek
- <pmladek@suse.com>, Kees Cook <kees@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes
- <ljs@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
- Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v2 next 03/15] kallsyms: Improve selftest
- test_perf_kallsyms_lookup_name() output
-Message-ID: <20261019222524.695a4d31@pumpkin>
-In-Reply-To: <202610200434.qSHPOyDo-lkp@intel.com>
-References: <20261018155206.132411-4-david.laight.linux@gmail.com>
-	<202610200434.qSHPOyDo-lkp@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        bh=jctDokCQpU+5f4McBmCcNrit0g75bLIuZ0vnR/79ocM=;
+        b=OoAVr58lioza8l1kfoR6Gnsl37MNlrhxK1M9ZIuU8Sr5d5+EVFsLe+Wd8fAIfFuFbG
+         ahH3Me2CgQ35eimodVQpwbnt8FsbbHJ8x/C2aqtW0aHILvoQKLcqMl4Kr1D6r39yUvDk
+         nnOnOpXfm8kc1V/kMoaq+G45d6XCkzATEcPSn3XdfQl6dGvnuLvqDqlHQM/xA4cGzhmQ
+         Lm4766py2UlyrqZDNQA+5VR5C27Asu+L1SJIdntfcn27dVckVErQwC5RqejK5EiCMr3q
+         BtzmXVoYqWEx+rQGZ+mr1HP+h7uTaJ4QbC7pzAi4G8Ys7d7nmTi2f/nyMReuTXxUpUBz
+         Vw/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792447153; x=1793051953;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jctDokCQpU+5f4McBmCcNrit0g75bLIuZ0vnR/79ocM=;
+        b=ND16uWQmp8xaFTJdks5enzXvnaFgJxTGQAM1RvvmF/UwU6ZyxSV3KcStSAOIZjFKlC
+         nQCVYmZ6BJVwfvvfdSden6WjUesaOd22Ci8GGdd3hvSeiwZEc5pp1m04XrXTR8tmUjkX
+         cVPBQrp15v4y5DjL+BwRCe+6OLiqwbPs/Inof7r55HXq9jeNEMhqdI7EHqy8ZdI+5gts
+         IUzDGLkR9mzGxKWgywQpu/RyG3/MVZvBfTPncuOCsoVsUM1uuDfH+jBe6CdfscDwY6gi
+         HHyLFj3SxJ/93zmzqVPet605UvoXHl/zGHP5uIzEhuxWhF68Y0u011YG5t+RQi2Chwru
+         +hLw==
+X-Forwarded-Encrypted: i=1; AKwUvByf2nZb4O0O2NgmRVvT1evTG+O/pPZf/f4FknaZmRueTSIZpD6Tq8yEdXGCameky1AHq5Ps@lists.linux.dev
+X-Gm-Message-State: AFq9FYJTOSpywn8b1hzoyyeyrhql2CvC+TTpEt+VftLehgijdt4krd75
+	ShUuLPrqgq64sQP5EHniTAyizdv5jEmUwEgstV4kAHMnSaY/wIAiQaYVbP6iEjVlxXWAwbXeQSz
+	53HpKE9wPQFcBBgpz2DT3NiY9R/G4odRAdc6jiQzL
+X-Gm-Gg: AYBFou10184L0FYzOzxMIYR78fhYs1RL20dOewCQWHb9VHbXlajLXVZ5mZfcctHgNo9
+	5AOK3KcVgqrrAtsKeBoR2bLNzw7QnNAFBbv8OIpePJCwn899u6bK4EY4uYIKUt7NbmpAzcHSPPx
+	VXDDjiujqvvjEXTHtSONe3pm7yyqo3AFo54j0TLcqI5IW6Iz2X0aGUi1KH3uSMZqqNHq9kxN6Et
+	cbmlJZn3gG6VK3BP//jHHZCCBI7azBfkb0wu6fgpTNq52d+G5zZdzWSYfEiWEKL/MFwqYw7NvBy
+	YBmJhNNUo4zda0PmVZA8SX9gpOVVDmKEqIcPne52HTRyx2BUfFdsYOy6EERYJJlZcBti5ZAXxiQ
+	P60y00kToyxo=
+X-Received: by 2002:a05:701b:2207:b0:136:c443:80e5 with SMTP id
+ a92af1059eb24-1876658f6c4mr9237879c88.6.1792447152061; Mon, 19 Oct 2026
+ 14:59:12 -0700 (PDT)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -105,59 +103,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20261015145714.3327543-1-elver@google.com> <DM8X51YCN6AA.1HV7J3R3PIYY9@garyguo.net>
+In-Reply-To: <DM8X51YCN6AA.1HV7J3R3PIYY9@garyguo.net>
+From: Marco Elver <elver@google.com>
+Date: Mon, 19 Oct 2026 23:58:26 +0200
+X-Gm-Features: AclHuK_qWUQb64XA37ScTQq_ZMKUMtenjdgDmPfnErmCHixLBqORRUjuSE_XZSQ
+Message-ID: <CANpmjNPALPJQDZFfNAqo8v0eu_0uNvj+rJ5xqeC3ZZSvs9zQwA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] kbuild: rust: enable KCSAN support
+To: Gary Guo <gary@garyguo.net>
+Cc: Alexander Potapenko <glider@google.com>, Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Asahi Lina <lina+kernel@asahilina.net>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Yury Norov <ynorov@nvidia.com>, David Gow <david@davidgow.net>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Alvin Sun <alvin.sun@linux.dev>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Petr Mladek <pmladek@suse.com>, workflows@vger.kernel.org, 
+	linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 20 Oct 2026 04:57:54 +0800
-kernel test robot <lkp@intel.com> wrote:
+On Mon, 19 Oct 2026 at 17:27, Gary Guo <gary@garyguo.net> wrote:
+>
+> On Thu Oct 15, 2026 at 3:56 PM BST, Marco Elver wrote:
+> > Rust supports ThreadSanitizer instrumentation via LLVM, which is what
+> > KCSAN relies on; however, Rust code is not currently instrumented.
+> >
+> > Pass -Zsanitizer=thread and the same TSan backend options used for C
+> > code to rustc. Wire up KCSAN_SANITIZE in scripts/Makefile.lib for parity
+> > with C (though rustc currently rejects linking crates with mismatched
+> > instrumentation).
+> >
+> > rustc only accepts -Zsanitizer=thread for targets that declare support
+> > for it. Of the targets used by the kernel, this is only possible for the
+> > generated x86_64 target specification, so restrict instrumentation of
+> > Rust code to x86_64 for now via HAVE_KCSAN_RUSTC. On other architectures
+> > Rust code remains uninstrumented as before.
+> >
+> > All TSan options used are supported by the LLVM versions of the minimum
+> > supported rustc, so no rustc-option checks are needed (they would also
+> > fail, because x86_64-unknown-none used for option checks does not
+> > support -Zsanitizer=thread).
+> >
+> > Unlike Clang and GCC, an equivalent to -fno-optimize-sibling-calls is
+> > omitted for Rust because rustc provides no corresponding option. While
+> > disabling tail-call optimizations helps preserve complete stacks traces
+> > in reports, it is optional and not required for KCSAN to function.
+> >
+> > With this enabled we can detect data races in kernel Rust code and
+> > between Rust and C code.
+> >
+> > Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> > Acked-by: Boqun Feng <boqun@kernel.org>
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> Acked-by: Gary Guo <gary@garyguo.net>
 
-> Hi David,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on akpm-mm/mm-everything]
-> [also build test WARNING on linus/master v7.3]
-> [cannot apply to next-20261016 next-20261016]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/kallsyms-scripts-kallsyms-c-Avoid-overrunning-on-stack-buffer/20261018-165152
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20261018155206.132411-4-david.laight.linux%40gmail.com
-> patch subject: [PATCH v2 next 03/15] kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
-> config: arm64-randconfig-1000-20261019 (https://download.01.org/0day-ci/archive/20261020/202610200434.qSHPOyDo-lkp@intel.com/config)
-> compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610200434.qSHPOyDo-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202610200434.qSHPOyDo-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> kernel/kallsyms_selftest.c:82:12: warning: unused variable 'The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run_Shall_we_be_trotting_home_again_But_answer_came_there_none_And_this_was_scarcely_odd_because_Theyd_eaten_every_one_The_moon_was_shining_sulkily_Because_she_thought_the_sun_Had_got_no_business_to_be_there_After_the_day_was_done_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun' [-Wunused-variable]  
->       82 | static int kallsyms_very_long_name = 1;
->          |            ^~~~~~~~~~~~~~~~~~~~~~~
->    kernel/kallsyms_selftest.c:69:33: note: expanded from macro 'kallsyms_very_long_name'
->       69 | #define kallsyms_very_long_name \
->          |                                 ^
->    1 warning generated.
+Thanks!
 
-Duplicate, depends on config options.
-
-David
-
-> 
-> 
-> vim +/The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run_Shall_we_be_trotting_home_again_But_answer_came_there_none_And_this_was_scarcely_odd_because_Theyd_eaten_every_one_The_moon_was_shining_sulkily_Because_she_thought_the_sun_Had_got_no_business_to_be_there_After_the_day_was_done_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun +82 kernel/kallsyms_selftest.c
-> 
->     81	
->   > 82	static int kallsyms_very_long_name = 1;  
->     83	
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-
+Which tree should this go through? The Rust tree? Probably too late
+for this cycle.
