@@ -1,87 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792443503;
-	b=D+rIv+v+Xxe9XofecjPqhxJT6Ft8qwcw03taSX8tLMa/TfsNNc34ZkieACHKjh/uNic6
-	 XjpwH0OlEpMBAkpfRaAXFkTFfWTcHiIWBPhX//Rh9eHwr9+SVd0vazpNFzB3/qmrIAfKi
-	 vmUSFS/c7uxT1w/d3HvlHX7javupfvgqnjMu4nxf9rAbeYrKmj3s6O/UmOcwCPSbiwmC+
-	 foUzw05LieLxSR6QAWmjrpkKenmgLO6LSff9NO9q7+Hxi+u25kO/wyyAlyN//hQrRQfQg
-	 cIvE/smK+EVMz163eLSqmHYw2TjNnuMKDdyaDs6y4kS8ts2vi2Qcu+/33cVVNWTMhww==
+	t=1792445036;
+	b=KmY/mtqO5Hwb2nGVp8+PUEku9qOl+2fRANbtnNViytORYPlDJWAf2ZLavQx/C1NamsRv
+	 Xxb1BKfVqMRJxk9x1pK0dlyCWpfa4ZsuoGy8ntCvCrmZ+mJbL2QDK5RnoKGbNYGWQ7ZZG
+	 V0PfTeb073uUnr+WlkbX1WIzTuRZAIFP5l55Vgv1/v6swTc0NAkBMoK0ecb5E1cvjT9ku
+	 Q5STgY53QMpSPC+NX+FpvmV2yzCH8UJ4YXSFLSLxi7MlWxzzSqZNGmSw12igmCVAX0Y4S
+	 NuqOhKAvnk8z2l4FWOhArVliZiMBLakeaT85SjxLZwlUIIej5GjK49G9UHqUStlUcYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792443503;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=etQvNscIjqvkrWpefPH+Ohc94n3wsi43ZWyZPkQfApQ=;
-	b=5Yz/hB9Oy+65sq0nFKsJvW2Q+3Fu73tKiwnZBJb4sjgtit3eqd1xdn8q7Qqzq0FJVu7/
-	 bHfmU2ZZbEJVPUECtItBCqwoSbIPbWGApiNRvAIo4GW9lOzFtoTNYtbsg95FdieMGCs7n
-	 cWdHUjF+54xVCU9WX2Ht4gBUbdVN0/kyqPM3nD7T9Yvz07wuJtXDmqN8+/1OadDIZkHls
-	 i0sg80rS2VKOvfru75wgWoVduG47+ZNLEvP42plnLy4MWiINNUjhx6xE4s2qydBegh6aq
-	 20nHDGzlD/N/lnMETkwiJ2nIbZhFO4IS1137MRH+0mbDHr8un4tZIxwERj0kVn5OQ5A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792445036;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=RaSAtodmC/zEZWFNfit/fgpW8kKnO7aYgRQp3aEBxrU=;
+	b=c6FrZoGrhWrFqzDcOurzjHFJiW91axCxkyGBQ6FN7NehlOBPuM5XHF2gy5lkWg7va3Oy
+	 CXYeiL0DEIxcQ+xtD6ldp++jJgn28kwU8rzA8SWHTzEwVEWfg1nXaAndZ/CmUuphOECLf
+	 qLoFMzZ1pTD4JvmGUA5CAJsdi0QzbZqmFG6BiuSGp+UkDImW8HQ2NgY7csENg8KEswWQq
+	 Yo029ZR4BNZzOQJUmCY/z885XBYPF6+XxVgafNEAy0bg0sb71MeZjhR0SmRUaAulPKidd
+	 4H2dHjiHtmhjomMb6afDkdJB9MgX7z10KcWiuTbszXJAaX9rWPi3nZWp4JYd8I+vY4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="MQJP/Zeq";
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bvjbG3UL;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACEF6606A31B;
-	Mon, 19 Oct 2026 20:58:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ACEF6606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF59A606A31F
+	for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 21:23:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF59A606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MQJP/Zeq
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792443503; x=1823979503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LjZKwGBbVcACOcsPvYU618VBeMr1LoG3ldjZ3OGSp3Q=;
-  b=MQJP/ZeqaCS9Hl76Rfka6j/Fyty9PVAXaYJuFhaL+ujI1YEvAoTgtqbi
-   xYeK4Qe+kVYy8C9eAIBUuld7ggPEqP4uQeYCSt9CAogVx6ZT8vPGwylx0
-   ZXYdXSaHaO1zoxSw6me+mPJOEexthNvdGh95al4OM8hxedUa9CZ9W/rvK
-   9a0cdgx+58RLW9rxlHlUhSF6VHq6uUCWS/dYOMWsXwx9ZpOKOVHbT1Pn1
-   ZpfSg/AGa5vpwSy2ZRKBKWyrnyvYRIF4vQuR2QIbSDDuFz3KGD1Eg6wlO
-   OxiqNQlaNICcZL4BMYycn6v16HTfEXYmbqSkyAL/Aoz7AL0BUON9jCFwR
-   Q==;
-X-CSE-ConnectionGUID: oe8dplDrS56jpgIaTEmVAg==
-X-CSE-MsgGUID: AFUWxvxyQTW/MYVoU+wfrw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1240727"
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="1240727"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 13:58:22 -0700
-X-CSE-ConnectionGUID: l4uSqfeCQheS9pa1UzaC7Q==
-X-CSE-MsgGUID: pxRj+kMZRlaHxvrp1glKuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="2943062"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Oct 2026 13:58:18 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xIuQx-00000000MO2-3Cks;
-	Mon, 19 Oct 2026 20:58:15 +0000
-Date: Tue, 20 Oct 2026 04:57:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Laight <david.laight.linux@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Petr Mladek <pmladek@suse.com>, Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>,
-	Lorenzo Stoakes <ljs@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v2 next 03/15] kallsyms: Improve selftest
- test_perf_kallsyms_lookup_name() output
-Message-ID: <202610200434.qSHPOyDo-lkp@intel.com>
-References: <20261018155206.132411-4-david.laight.linux@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bvjbG3UL
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a1df146015so14251145e9.0
+        for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 14:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792445034; x=1793049834; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=RaSAtodmC/zEZWFNfit/fgpW8kKnO7aYgRQp3aEBxrU=;
+        b=bvjbG3ULgs5lVGdYLaDDB8YbgLhAE3JciWU4l09U+Z4VRPK/JK5d1Pvv8s9YARjdZt
+         P6TOu/FPV255FT2bBn2fuxuYdiFM0EGHl9QKktKtCCC0vy/15/YAsFkS422PEmzX8lrb
+         6bdtDzerJydkGiDSbqPXneca1K0A87IrXEUr7bMOYktEjX3OQ2id5U2fbaRo8qRh/LQK
+         OmGzH5YWlIA3/S4wjyYmfJwjqbMDkfwGN5de7KhNHV9Qtj0gT4Gx77MMeyuk6sMJ1qPT
+         10CH+aoBSr6oWnYqZztnHdnU7ZZTviiljOaomujnvq/VshkOQk8dkzVZw61sU2tcbH6s
+         aPgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792445034; x=1793049834;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RaSAtodmC/zEZWFNfit/fgpW8kKnO7aYgRQp3aEBxrU=;
+        b=wGWkmZFh2WXw8Q+eLxmuykKEIouTUphEo5psK5m9WivdnFSa60RE8kUudwlgTtTnkJ
+         o3HstWzucbqEfDqhjR30S3w7PgGbax/7EeSzniJpTbOHlhRvu+dfBMg/hLWybaimgnQz
+         39Lqvagycr3ALv6aiiwfDrZ1CNmWOgQkcv61W1fp/q2SY7U08tz11VxgFdVJz1h5l86q
+         BFsugpuSznSP/P1cHSpEB5XW5iToU8uPM3nxcQvtLHzA9g42DKU0zDwEFCse0w4yzJGQ
+         bjBYrR3LiE8EkGR4D2G8v2rW2yJkh9GHkvP6josH/u7eymCAj+VcHdYimznq4Wc68z8Q
+         staA==
+X-Forwarded-Encrypted: i=1; AKwUvBzTlPtHgayeIG1kJJstKRzToguIFTfs4EDJ4RowtXY+kdUfrcy+Uj17anFICEuvkOsnfBPP@lists.linux.dev
+X-Gm-Message-State: AFq9FYIFXgzAjbfen0Vyrt1YFmD7h8d462XK5imHdYJKCFaiUKoK8Ypp
+	AxAvPwZ+zIDqbDChzM75Ii/9Z/UlvBPzIy6941fyRVq/R7cVXDDM9z3g
+X-Gm-Gg: AYBFou3J/MVTV+QbeFA/8rk5v7Ku5WS42mC3xtQVdQVk5hWkurVWsZmSauOrLQtgCfk
+	V2dmp1Tnn0cihpnz9I6mkjTPPtpuhlVIjmHLgcW7up3rK+9v59xt2n6+wB8KKWTN+jKrwHmptvi
+	SgfjCHzYjHMgROyv19WRBp0xz6NkZhKu9LzmDDd9G7BINTrrmpQx8PPlC40PolG9R6NWaZxrE3s
+	EMfgnW0lmJjwehLR2qd9FENBjhI0MgiNtgEkWKN6faXrMCmpuWzBakU5hADmdqw6kqiKTjs+poL
+	32qoekY8Vbo3OyOgTdOOsVNDdfx9RV80lFqDpiJRsKfElT9ZrQW7hDxUN4f7dNboj6bG5URKLJ+
+	+D/50eI3YGAjscYtteYk/QMf0A+GFwsHC1waJNh/drF1Mcw/VxFGox3/R+eHYEWakjh/+2+itaG
+	fg/NBgiuWLdXJGf+POYxT2q6KNOmk0O33QJotPvq5aLvRqQuqPplPXUDMSjJ6V1hw78TUBUV2//
+	wGa9iqLTSQ1m9nqLpc0xhLEIO9V2hUJ2HG57ZH1N19SsQ==
+X-Received: by 2002:a05:600c:e549:20b0:4a1:811c:8078 with SMTP id 5b1f17b1804b1-4a1d7624601mr116807835e9.26.1792445034012;
+        Mon, 19 Oct 2026 14:23:54 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1e2def9ecsm97956265e9.1.2026.10.19.14.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 14:23:53 -0700 (PDT)
+Date: Mon, 19 Oct 2026 22:23:51 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek
+ <pmladek@suse.com>, Kees Cook <kees@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes
+ <ljs@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Linux Memory Management List <linux-mm@kvack.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+ Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 14/15] kallsyms: scripts/kallsyms: Reduce the output
+ file size
+Message-ID: <20261019222351.64bb9d35@pumpkin>
+In-Reply-To: <202610200336.6v4SE96n-lkp@intel.com>
+References: <20261018155206.132411-15-david.laight.linux@gmail.com>
+	<202610200336.6v4SE96n-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -91,51 +105,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261018155206.132411-4-david.laight.linux@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi David,
+On Tue, 20 Oct 2026 03:50:35 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> Hi David,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on akpm-mm/mm-everything]
+> [also build test WARNING on linus/master v7.3]
+> [cannot apply to next-20261016 next-20261016]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/kallsyms-scripts-kallsyms-c-Avoid-overrunning-on-stack-buffer/20261018-165152
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20261018155206.132411-15-david.laight.linux%40gmail.com
+> patch subject: [PATCH 14/15] kallsyms: scripts/kallsyms: Reduce the output file size
+> config: um-allmodconfig (https://download.01.org/0day-ci/archive/20261020/202610200336.6v4SE96n-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610200336.6v4SE96n-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202610200336.6v4SE96n-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> scripts/kallsyms.c:371:26: warning: adding 'int' to a string does not append to the string [-Wstring-plus-int]  
+>      371 |                         printf("\n\t.short\t" + !i);
+>          |                                ~~~~~~~~~~~~~~~^~~~
+>    scripts/kallsyms.c:371:26: note: use array indexing to silence this warning
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v7.3]
-[cannot apply to next-20261016 next-20261016]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/kallsyms-scripts-kallsyms-c-Avoid-overrunning-on-stack-buffer/20261018-165152
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20261018155206.132411-4-david.laight.linux%40gmail.com
-patch subject: [PATCH v2 next 03/15] kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
-config: arm64-randconfig-1000-20261019 (https://download.01.org/0day-ci/archive/20261020/202610200434.qSHPOyDo-lkp@intel.com/config)
-compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610200434.qSHPOyDo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610200434.qSHPOyDo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/kallsyms_selftest.c:82:12: warning: unused variable 'The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run_Shall_we_be_trotting_home_again_But_answer_came_there_none_And_this_was_scarcely_odd_because_Theyd_eaten_every_one_The_moon_was_shining_sulkily_Because_she_thought_the_sun_Had_got_no_business_to_be_there_After_the_day_was_done_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun' [-Wunused-variable]
-      82 | static int kallsyms_very_long_name = 1;
-         |            ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/kallsyms_selftest.c:69:33: note: expanded from macro 'kallsyms_very_long_name'
-      69 | #define kallsyms_very_long_name \
-         |                                 ^
-   1 warning generated.
+Hmmm it gives the same error for (!i + "string") even though that doesn't even look
+like a broken attempt to append to the string.
 
 
-vim +/The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run_Shall_we_be_trotting_home_again_But_answer_came_there_none_And_this_was_scarcely_odd_because_Theyd_eaten_every_one_The_moon_was_shining_sulkily_Because_she_thought_the_sun_Had_got_no_business_to_be_there_After_the_day_was_done_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun +82 kernel/kallsyms_selftest.c
+>      371 |                         printf("\n\t.short\t" + !i);
+>          |                                               ^   
+>          |                                &              [   ]
+> >> scripts/kallsyms.c:371:11: warning: format string is not a string literal (potentially insecure) [-Wformat-security]  
+>      371 |                         printf("\n\t.short\t" + !i);
+>          |                                ^~~~~~~~~~~~~~~~~~~
 
-    81	
-  > 82	static int kallsyms_very_long_name = 1;
-    83	
+The compiler ought to do better there...
+Indeed, gcc does.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+...
+>    366		output_label("kallsyms_token_index");
+>    367		for (i = 0; i < 256; i++) {
+>    368			if (i & 15)
+>    369				printf(",");
+>    370			else
+>  > 371				printf("\n\t.short\t" + !i);  
+>    372			printf("%u", best_idx[i]);
+>    373		}
+
+I knew I should have interleaved putchar() and fputs() with the printf().
+They are somewhat faster - in this file it is measurable.
+gcc does convert printf() to putchar() or puts() but not fputs().
+
+The time taken to write the files halves if I initialise an array with all the
+",%u" values and use fputs(str[byte_val] + !comma).
+I decided someone would object to the mess.
+
+I'll think of something for v3.
+
+David
+
