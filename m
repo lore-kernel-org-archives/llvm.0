@@ -1,101 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB654E0B7D;
-	Mon, 19 Oct 2026 11:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635AB4B923E;
+	Mon, 19 Oct 2026 12:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792407965; cv=none; b=jnlTRoXXxwwbrvHbCtedxZe7NzJlNeCR4E/g6XhBEbn3GyJjsttP5exHv4b8KEDgUsjjw3n2msIJXNgDVR56A5iWe+6U5it8hCbOvTpWWzqhDYcmFSfCoASLN2YTUcmY0mAUXy/YKzzpQQZYEzqaeL3qYvOHrxni7SqLH4goz6E=
+	t=1792414484; cv=none; b=MmgdnhrzW2nDkpKUOYDMtDaAFSM14cA2wn5k7kVUV1A9ew08SnhAki+dxpN7Udlegd7kGxzLI/Tz65pQL7LSTkKUVJ6Yn6ZC5f1LTRl0xK7d4JJ8vhIyX/hEjgeq5Pi8neeO9a/LKUYgcNFRlK33fb6Vcw0LS+vQbVU4WWA7a9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792407965; c=relaxed/simple;
-	bh=jdcE7CavQjBaeRB2gqAjIU1V2Qkw94QPdQpetUuMqFQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=KIP5kCFDsEdc80LymNnGwf5hQUpXWEptad2G8L5sPT6xVyMFkHU1xF4OUVabc/razVbJX6ChEih77tYEW7l/Cuvhn0Bt9nfD0C2DKf4AttHhfsp5mOerFIoeHwc23ZlPSeaAUEypL44F4C/NDpWwG1bYk4J7opV3b2Bcri4v+jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lOy5aTKh; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1792414484; c=relaxed/simple;
+	bh=lG8ba8f3XvMZ016RxZR1uTEgZGmbv/N4GGCyJVqPUXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sG0UuE4mkHGEpQqInnZAZ6IgKe8MwEAMRAqF1AyuTOG3NOxQN7oqTWTKi4kr43pNzvb9bdq8tgoK+7nH+g0uwUcp/uIRSIUgmwOzebntCNbSPtM9+iCa5b6fFKofV66PFsdN8BAplPHJYvCmx4QtlXhNv7QrLJvbrQjaKTqAhZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=Tw5QL/pZ; arc=none smtp.client-ip=207.54.90.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lOy5aTKh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792407962; x=1823943962;
-  h=date:from:to:cc:subject:message-id;
-  bh=jdcE7CavQjBaeRB2gqAjIU1V2Qkw94QPdQpetUuMqFQ=;
-  b=lOy5aTKhVMt9EByBPRC/729J0gzYRkg+9kQiiHY+IjNRIMtWZMXB6LTZ
-   JfYDfTN0RN7W41xCVSrAubwX+EAMCJQk9Zvoe8CdZQ9JmzNHyiL72XjP2
-   MyuYjmKJNOzOLiFyqgJg/VkRr7YZHsDd2d2ScJzyK1/C9K6s6q1qDMg1R
-   9zuZW1KycTVVPlPuZx40Tk0sQgJE7JZRRcNEtL0m1tKMkK6pBTsieq/5p
-   e2kQpD4EKE22VZoTQlBHcaDLu0E45wf0MhA8B3Vp++kzJr1hQ4GQFmA+J
-   URC2Rv6HXKwS58EfeZ+1olchWOaX8iOmHIIqL8sX8d6+wMV+BRfHt2C0q
-   Q==;
-X-CSE-ConnectionGUID: W+UBU4lWSa6Rq+fAeazLmQ==
-X-CSE-MsgGUID: XG28YpNqQl2a99Vc3qtbXA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="1096975"
-X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
-   d="scan'208";a="1096975"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 04:06:01 -0700
-X-CSE-ConnectionGUID: o522qmMKRsejZMfCTcjOmQ==
-X-CSE-MsgGUID: fN7jeY9+QF6ITtSNgyXrDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
-   d="scan'208";a="4348084"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3c253b998be3) ([10.211.93.152])
-  by fmviesa011.fm.intel.com with ESMTP; 19 Oct 2026 04:06:00 -0700
-Received: from kbuild by 3c253b998be3 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xIlBl-000000005at-3OUg;
-	Mon, 19 Oct 2026 11:05:57 +0000
-Date: Mon, 19 Oct 2026 13:04:57 +0200
-From: kernel test robot <lkp@intel.com>
-To: Brian Cain <brian.cain@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bcain:hexagon 41/82]
- arch/hexagon/kernel/hexagon_ksyms.c:22:15: error: use of undeclared
- identifier '__vmhwconfig'
-Message-ID: <202610191251.0QhKvTtb-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="Tw5QL/pZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1792414488; x=1823950488;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lG8ba8f3XvMZ016RxZR1uTEgZGmbv/N4GGCyJVqPUXg=;
+  b=Tw5QL/pZ20tk9BQT1nNGhI6mrrTYb1vfZkMylF3Gv9Gwb9jrAdCDi45S
+   bAA6MwVwTV4F9FWbyBzz9sAgxk1g6x1mP/3OzO0OgEB/OxIBHVwJYUGlX
+   vcpvUeLxRQ8vaI4le/5n6qKUUx5eqQKO3dEIHUyWdBRuBfooeqGzdcNmw
+   VzSTHygkoZsa1wjEr8/3xaYIG7zRLIoV1NQh5zz50gjZ/tCpLDn5x5ENw
+   /L33dBfpxSIRM3yn35yr0Vg6LNqGZ5jVcAIxrzep8umSJZW9PNMnsY2EY
+   5UN/J+KimyGiJOw3PIrdLNapKGZ1qSrsIzDsdwkCoT6970Ggv2zMD7dO3
+   w==;
+X-CSE-ConnectionGUID: CH/9T8XmQBu3VWq370i0ZQ==
+X-CSE-MsgGUID: Hsac6XJjSP2uuEsfIVOX6Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="258703255"
+X-IronPort-AV: E=Sophos;i="6.27,167,1786978800"; 
+   d="scan'208";a="258703255"
+Received: from gmgwnl01.global.fujitsu.com ([52.143.17.124])
+  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 21:53:36 +0900
+Received: from az2nlsmgm4.fujitsu.com (unknown [10.150.26.204])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 24C201C000CE;
+	Mon, 19 Oct 2026 12:53:30 +0000 (UTC)
+Received: from az2nlsmom4.fujitsu.com (unknown [10.150.26.201])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmgm4.fujitsu.com (Postfix) with ESMTPS id C70211000862;
+	Mon, 19 Oct 2026 12:53:29 +0000 (UTC)
+Received: from FCCLS0092175.localdomain (unknown [10.8.51.148])
+	by az2nlsmom4.fujitsu.com (Postfix) with SMTP id 9EDCE2000233;
+	Mon, 19 Oct 2026 12:53:21 +0000 (UTC)
+Date: Mon, 19 Oct 2026 21:53:20 +0900
+From: Kohei Enju <enju.kohei@fujitsu.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Tomohiro Misono <misono.tomohiro@fujitsu.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Radu Rendec <radu@rendec.net>, 
+	Oliver Upton <oupton@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>, 
+	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	kvmarm@lists.linux.dev
+Subject: Re: [PATCH v2 4/4] irqchip/gicv3: Add workaround for FUJITSU-MONAKA
+ erratum E#030003
+Message-ID: <atYOKfirjR1VqBZ3@FCCLS0092175.localdomain>
+References: <20261016-monaka-fix-for-upstream-v2-4-fc7ede7f9f48@fujitsu.com>
+ <202610171939.VWCcPPra-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202610171939.VWCcPPra-lkp@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git hexagon
-head:   35ab1dadb94646b74469738c1741f68e8c6aac3d
-commit: ce5a6b702e8c793c721b2431bae81ef249eb17cc [41/82] hexagon: add the hypervisor's hwconfig call to the VM interface
-config: hexagon-randconfig-2001-20261019 (https://download.01.org/0day-ci/archive/20261019/202610191251.0QhKvTtb-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 337446dacd2a713010f1c9856c21eb8d899b5613)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610191251.0QhKvTtb-lkp@intel.com/reproduce)
+On 10/17 19:48, kernel test robot wrote:
+> Hi Tomohiro,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Tomohiro-Misono/arm64-cputype-Add-FUJITSU-MONAKA-definition/20261016-190045
+> base:   24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+> patch link:    https://lore.kernel.org/r/20261016-monaka-fix-for-upstream-v2-4-fc7ede7f9f48%40fujitsu.com
+> patch subject: [PATCH v2 4/4] irqchip/gicv3: Add workaround for FUJITSU-MONAKA erratum E#030003
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20261017/202610171939.VWCcPPra-lkp@intel.com/config)
+> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261017/202610171939.VWCcPPra-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202610171939.VWCcPPra-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/irqchip/irq-gic-v3.c:1892:34: error: use of undeclared identifier 'ARM_CPU_IMP_FUJITSU'
+>     1892 |         if (read_cpuid_implementor() != ARM_CPU_IMP_FUJITSU ||
+>          |                                         ^~~~~~~~~~~~~~~~~~~
+> >> drivers/irqchip/irq-gic-v3.c:1893:34: error: use of undeclared identifier 'FUJITSU_CPU_PART_MONAKA'
+>     1893 |             read_cpuid_part_number() != FUJITSU_CPU_PART_MONAKA)
+>          |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+>    2 errors generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610191251.0QhKvTtb-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/hexagon/kernel/hexagon_ksyms.c:22:15: error: use of undeclared identifier '__vmhwconfig'
-      22 | EXPORT_SYMBOL(__vmhwconfig);
-         |               ^~~~~~~~~~~~
-   1 error generated.
-
-
-vim +/__vmhwconfig +22 arch/hexagon/kernel/hexagon_ksyms.c
-
-    13	
-    14	/* Additional functions */
-    15	EXPORT_SYMBOL(__clear_user_hexagon);
-    16	EXPORT_SYMBOL(raw_copy_from_user);
-    17	EXPORT_SYMBOL(raw_copy_to_user);
-    18	EXPORT_SYMBOL(__vmgetie);
-    19	EXPORT_SYMBOL(vmgetie_cached);
-    20	EXPORT_SYMBOL(vmsetie_cached);
-    21	EXPORT_SYMBOL(__vmyield);
-  > 22	EXPORT_SYMBOL(__vmhwconfig);
-    23	EXPORT_SYMBOL(memcpy);
-    24	EXPORT_SYMBOL(memset);
-    25	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Oops, I missed testing this with CONFIG_ARM=y. I will fix this in v3.
