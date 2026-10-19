@@ -1,134 +1,263 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8AD49D595
-	for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 09:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B1E4C651D
+	for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 10:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792403985; cv=none; b=r/3dbzO9LTNszIqIn9YEw5AM0Mf1lTj5i/dKHuteCNK1P3If43yvTyc/yFaVPFuk2btxQqUyUSDmL6Zaf/A6ipDgIgmtFDK8fb97CBEljl8EjfDuyXkA9Gihd37dIcbAWJQQBUqBe9WA2YqTF53C0ArmJ6kM+6wET7voGouKpJc=
+	t=1792404062; cv=none; b=i91xxdIorUYXslWjy4boK3apCXttIWdOhKEmPC37MqxyH5l7CHF04geIdyZrZV/gI4IG35ERdPOtZHmIECkDmrTrroXAqBIuGsBZ83f1MkXhUw8ntegfkg9mHKkcjP2X5XIQVka6n5enifGlb/EOn1DGdr+f4gwEPy1uxLGR7oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792403985; c=relaxed/simple;
-	bh=6bNcxzUVlmQvjet7ksUI2Ld7TTjqmjQ//XfC+z0s0z8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j0eGP2glFD7UBw8nvVJzyDV/k8p4Rii2nvI7fEodQCnOUa2GvsBRTC05q0j0FAFzdShQNyzaER+xp9+5yPJuThOKjGrzF10jDAXhJbo7avaraV5A1f57HMDafXg1ATRnv7eSPU6VAfynDSH8klxNWWoq9s4HnoaKsAty1NZpZro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oH8ieUg2; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792404062; c=relaxed/simple;
+	bh=egbULZ03EDGavKIkuF8cK7yURukL6dKszh6+khdiwR8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R6QaXu4D8uOfNpiRf3HhQV9ugOQ7mnmPueJSLePpexh3RHc87/JPv+Cn5DBSlSMrHjJRKr4TnsZ24kmExy1Z0cI0Jmvvgt7WY83faW5aXbHMCM7BEG5+MGTB5vVAUJ4//egQt0CuXjwcyKQ/nwz3/SJiPClH3l6HZDw/PR3ME7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZNjfAR8S; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oH8ieUg2"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e9d7791b00so3883565ad.0
-        for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 02:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792403984; x=1793008784; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EGOLZT0g0vS6HQl4RNLoJTQMf+l+IbI+5Jp/8hOXDLs=;
-        b=oH8ieUg27nN/MDW6HQT47Q/N4fke0Z8BtAr/Xoqpdpsh+kq4zhqg4Navoa8j1I9TI2
-         XqTz+uNll3nVwqmhOgDBTX9Kdd0ZpY2awafcdrGDk+g0zbOtNe79nMu/3anPYqJAQBK2
-         gue3l1xMUujI1XGGuBXQEjHpCmcw3GOL8rYoZxt66UocP26SMq7gRWG7Eoqw15K6zJU6
-         jQdKzakQiROOz9Z3RB8epUkHVmfrTLZBDrMYYmgUCRqcl4uKIwL/uQplgVxrm0eGISkB
-         C5yAri7nTfAmdX9h3q3Ot4aXCQJfVVvBxB54ENMyor71s9sSa+DKRR7YzEQmDPAcyBzq
-         Xjow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792403984; x=1793008784;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EGOLZT0g0vS6HQl4RNLoJTQMf+l+IbI+5Jp/8hOXDLs=;
-        b=DYP8EZEDdOYl2VsfcMmGQaUJcM0u4GYyym4CxFOGkR41mJedEHIUgdDWbg9O1omuPE
-         YFIBadKgGhJqf07v0Y+aiq1nTd1Z4ChoBbkHg1RX7Gk1JhDLyoIVqgA3miMX6OztWDSa
-         ULgPQ7QYk5SbNrv0wtcvYeti7MiVOjlwZYo4Uijxnylb9PMNMXBpjkDVfyZ/QYP5ayOr
-         axmiQNhXQ+eOWX/bD8PJMRKdn8eGf/mklAd2fUlQl6+sjgmwX6G1yyvS/zElPVd5TGfp
-         /Uda0leF0XdnzU30gOFs6Dph3g+ZqM/d5wPAKmadTe77P0IsRWHH1hUiuJOpBw7vJoC1
-         x0Qg==
-X-Forwarded-Encrypted: i=1; AKwUvBwTKTqeCjzXVuT+JG+U3nb8Me4KmyEBgBwENAVnFY9VG6BHeUThS13+iWloGNnLLRstJDyI@lists.linux.dev
-X-Gm-Message-State: AFq9FYL2dbuhtlFN6luwz9rbwUCKfhSTdb8ZpJEt3j7AVzt9vhh8FbcY
-	/pixoz0j03T2CKVdtl5Y3M0VQC4SXEqc6lqIdLGySx55ANOEkRpd9FyQ
-X-Gm-Gg: AYBFou3LpVzJsGvCGHE/PVSuhyVM7mLPn3pYtjVxhuxGYicH8FVD5bEn7Gm1/T44ms2
-	j5D1evy/hgFMiJl82k5smiDsUMlV9ielkvkUxIJtDhwmu5YoVoO5V5rAAPbIt0+IEiaZSOULxbL
-	CNkk3ZW0fPUPNHX32S3WOjFngJUAuJzkg5VzwIgGF00zyoii0Of++5Uc3W6Y83/dMoWE45DfZvS
-	kPro4mB2/x8IROs3NAhBXpkj+ByawPJh/2+y8fPTQcbzPP60u6PktKOe6LyKwhGRIEnfLS9f//q
-	mB3BZFpJ+ROppjXDUh6P45l5J1YRUTZybFWxaJ/aLr9H9Zqb8dMSDN13shywjwsqqNYqV1Aw0rq
-	IqENRd5BDCVIQngathSiIio3kDZUkxLTYppNIzVtv5qvQM979CRZjcKMA/tKFLnVDFw2XtuYzTk
-	v+CIVRGwItYEuQq4hK0W9gd/jPpVaOdH3nJm+iUVkXAeXDgpvjGZj9JJPftbZnvj/112loxPLKa
-	172Kt+cqlQcNGvPrNfhW/Z/8qukDfSuY6+3tb6R7oNV+7Rt+lpbKA5UnWm1+BaSZErO7AyUq7a4
-	hbL0+/c=
-X-Received: by 2002:a17:902:f603:b0:2e5:70cd:b606 with SMTP id d9443c01a7336-2e9a705c7c9mr54901255ad.56.1792403983748;
-        Mon, 19 Oct 2026 02:59:43 -0700 (PDT)
-Received: from DESKTOP-G3E0OSP.localdomain ([58.224.60.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e834029sm36631725ad.31.2026.10.19.02.59.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 02:59:43 -0700 (PDT)
-From: Jinseob Kim <kimjinseob88@gmail.com>
-To: jic23@kernel.org
-Cc: linux-iio@vger.kernel.org,
-	dlechner@baylibre.com,
-	nuno.sa@analog.com,
-	andy@kernel.org,
-	linux-kernel@vger.kernel.org,
-	lkp@intel.com,
-	oe-kbuild-all@lists.linux.dev,
-	llvm@lists.linux.dev
-Subject: [PATCH] iio: osf: avoid a large stack frame in osf_core_init
-Date: Mon, 19 Oct 2026 18:58:49 +0900
-Message-ID: <fc593496353a60a15fd5ef1a2786d41dd9bdff3a.1792403576.git.kimjinseob88@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <202610191514.fRYyu0HX-lkp@intel.com>
-References: <202610191514.fRYyu0HX-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZNjfAR8S"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1792404058;
+	bh=egbULZ03EDGavKIkuF8cK7yURukL6dKszh6+khdiwR8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZNjfAR8SD5Lkd9jrByeIce9HaMAGkCY4vqO6CS7559mRXv3Ga2iFSGBBcslFCW6NE
+	 td8U+ifFP43HwTtuBt4wUVeVibnPfVqh3Hm5NFWjfAxbn7PAYoSJo/CUDaFd7OLVjZ
+	 c+W8b9wS/UHIzli85r1XGtSXHixpT3BB1Ju7I7Ig/OQfHh4LFr5dLgNe1OUK39cZOP
+	 Smzb1E/zhiSN8MpdLc1rNrh/OxgW7HZFdrjhMJW8dauxDevZcZo7SgiNpjrNK/ENGj
+	 tESGEFPkPGQXetNEOsCNLhGZfDhuk720xgyS8nXD5TjXonR+GR44moEtm9G2Fceguc
+	 kvGTJvCMy6QNQ==
+Received: from [100.64.0.157] (unknown [100.64.0.157])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange x25519)
+	(No client certificate requested)
+	(Authenticated sender: vignesh)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 511A917E04B2;
+	Mon, 19 Oct 2026 12:00:56 +0200 (CEST)
+Message-ID: <9e1fc5c6-53ff-4a4d-9744-77bcf6a0325e@collabora.com>
+Date: Mon, 19 Oct 2026 15:30:54 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] drm/ci: Add CI pipeline for drm-misc branches
+To: Maxime Ripard <mripard@kernel.org>,
+ Helen Koike <helen.fornazier@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev
+References: <20260911-drm-drm-misc-ci-v2-1-1847f89585cb@kernel.org>
+Content-Language: en-US
+From: Vignesh Raman <vignesh.raman@collabora.com>
+In-Reply-To: <20260911-drm-drm-misc-ci-v2-1-1847f89585cb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Clang reports a 1344-byte stack frame in osf_core_init() for
-hexagon-allmodconfig, exceeding CONFIG_FRAME_WARN=1280.
+Hi,
 
-The aggregate assignment materializes a temporary struct osf_device on
-the stack and copies it to the destination. With the mutex and caches
-added by the IIO support, this structure is 1328 bytes in the reported
-configuration.
+On 11/09/26 17:48, Maxime Ripard wrote:
+> The DRM CI infrastructure builds upon Mesa's CI to run IGT tests on
+> hardware. Its focus is on functional testing on a selected number of
+> targets.
+> 
+> The concern for drm-misc is different: it merges a large number of
+> patches across many platforms, and build or unit test breakages happen
+> on a regular basis. Adding build and unit testing for drm-misc has been
+> on the back of our minds, and a first attempt was made last year. The
+> feedback was to rely more on the existing infrastructure.
+> 
+> Introduce a CI entry point that runs on pushes to drm-misc-next,
+> drm-misc-fixes, and drm-misc-next-fixes. It reuses kunit.yml,
+> check-devicetrees.yml, and the freedesktop ci-templates, while defining
+> build templates inline to avoid pulling in the Mesa pipeline.
+> 
+> A single Debian container with LLVM handles cross-compilation to all
+> three architectures. The pipeline compiles the kernel using defconfigs
+> from the drm/tip rerere-cache branch, runs the DRM KUnit tests, and
+> checks device tree bindings.
+> 
+> Link: https://lore.kernel.org/all/20250319-greedy-sturgeon-from-avalon-ac758f@houat/
+> Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> ---
+> Changes in v2:
+> - Run dt_bindings_check
+> - Run on push instead of MR after some discussions with Dave and Sima
+> - Test run here: https://gitlab.freedesktop.org/mripard/kernel/-/pipelines/1744733
+> - Link to v1: https://lore.kernel.org/r/20260902-drm-drm-misc-ci-v1-1-49d05e228eab@kernel.org
 
-Clear the destination directly, then set dev and initialize latest_lock
-as before. This preserves zero initialization of all other fields,
-including when the core is reinitialized for a new session, without the
-large temporary object.
+Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
 
-With the reported Clang 24.0.0git compiler and Hexagon configuration, the
-frame decreases from 1344 to 8 bytes and the warning disappears.
+Regards,
+Vignesh
 
-Fixes: 7329986669f2 ("iio: osf: add IIO devices from capability reports")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202610191514.fRYyu0HX-lkp@intel.com/
-Assisted-by: LLM
-Signed-off-by: Jinseob Kim <kimjinseob88@gmail.com>
----
- drivers/iio/sensorhubs/osf/osf_core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/iio/sensorhubs/osf/osf_core.c b/drivers/iio/sensorhubs/osf/osf_core.c
-index 4f73ff5e9572..62b086f67e6f 100644
---- a/drivers/iio/sensorhubs/osf/osf_core.c
-+++ b/drivers/iio/sensorhubs/osf/osf_core.c
-@@ -16,9 +16,8 @@
- 
- void osf_core_init(struct osf_device *osf, struct device *dev)
- {
--	*osf = (struct osf_device) {
--		.dev = dev,
--	};
-+	memset(osf, 0, sizeof(*osf));
-+	osf->dev = dev;
- 	mutex_init(&osf->latest_lock);
- }
- 
-
-base-commit: 43ffda3c7f8456bbe641ae8249a077a361b97880
--- 
-2.43.0
+> ---
+>   drivers/gpu/drm/ci/drm-misc-ci.yml | 147 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 147 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/ci/drm-misc-ci.yml b/drivers/gpu/drm/ci/drm-misc-ci.yml
+> new file mode 100644
+> index 000000000000..4ab87547794e
+> --- /dev/null
+> +++ b/drivers/gpu/drm/ci/drm-misc-ci.yml
+> @@ -0,0 +1,147 @@
+> +# CI pipeline for drm-misc-next, drm-misc-fixes, and drm-misc-next-fixes.
+> +#
+> +# Runs on pushes to drm-misc-next, drm-misc-fixes, and
+> +# drm-misc-next-fixes. Compiles the kernel for arm, arm64, and
+> +# x86_64, runs the DRM KUnit tests, and checks device tree bindings.
+> +#
+> +# A single container image is built using freedesktop ci-templates with
+> +# the packages needed for kernel compilation and LLVM for
+> +# cross-compilation. QEMU is installed at runtime by the KUnit jobs.
+> +#
+> +# check-devicetrees.yml and kunit.yml are included directly. build.yml
+> +# and the Mesa container/build pipelines are not:
+> +# they pull in hundreds of Mesa-specific jobs and templates that would
+> +# each need to be individually stubbed or disabled. The build templates
+> +# (.build:arm32, .build:arm64, .build:x86_64) are defined inline.
+> +
+> +variables:
+> +  CI_TEMPLATES_COMMIT: &ci-templates-commit aec7a6ce7bb38902c70641526f6611e27141784a
+> +  # Project whose container registry stores the built images
+> +  FDO_UPSTREAM_REPO: mripard/kernel
+> +  KERNEL_BUILD_CONTAINER_TAG: "2026-09-11-01"
+> +  LLVM_VERSION: "19"
+> +
+> +default:
+> +  before_script: []
+> +
+> +include:
+> +  - project: 'freedesktop/ci-templates'
+> +    ref: *ci-templates-commit
+> +    file:
+> +      - '/templates/debian.yml'
+> +  - local: drivers/gpu/drm/ci/check-devicetrees.yml
+> +  - local: drivers/gpu/drm/ci/kunit.yml
+> +
+> +stages:
+> +  - container
+> +  - build
+> +  - static-checks
+> +  - kunit
+> +
+> +# --- Pipeline rules ---
+> +workflow:
+> +  rules:
+> +    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ /^drm-misc-(next|fixes|next-fixes)$/
+> +      when: always
+> +
+> +# kunit.yml's jobs inherit .build-rules through the .build:* chain.
+> +# Pass everything through since the pipeline is already gated by
+> +# workflow:rules.
+> +.build-rules:
+> +  rules:
+> +    - when: on_success
+> +
+> +# --- Container build job ---
+> +# Single container with all build tools. LLVM handles cross-compilation
+> +# to arm and arm64, so no architecture-specific containers are needed.
+> +debian/kernel-build:
+> +  extends: .fdo.container-build@debian
+> +  stage: container
+> +  variables:
+> +    FDO_DISTRIBUTION_VERSION: trixie
+> +    FDO_DISTRIBUTION_TAG: "${KERNEL_BUILD_CONTAINER_TAG}"
+> +    FDO_DISTRIBUTION_PACKAGES: >-
+> +      bc bison ca-certificates cpio curl
+> +      clang-${LLVM_VERSION} flex gcc gzip
+> +      lld-${LLVM_VERSION} llvm-${LLVM_VERSION}
+> +      libelf-dev libssl-dev
+> +      make perl pkg-config
+> +      python3 python3-dev python3-pip python3-venv
+> +      swig xz-utils yamllint
+> +
+> +# --- Build templates ---
+> +# Stubs for templates referenced by check-devicetrees.yml. The
+> +# originals live in build.yml and container.yml which we do not
+> +# include.
+> +.build:
+> +  extends: .build-rules
+> +
+> +.use-debian/x86_64_build:
+> +  extends: .build-base
+> +
+> +.build-base:
+> +  image: "${CI_REGISTRY}/${FDO_UPSTREAM_REPO}/debian/trixie:${KERNEL_BUILD_CONTAINER_TAG}"
+> +  needs: ["debian/kernel-build"]
+> +
+> +.build:arm32:
+> +  extends: .build-base
+> +  variables:
+> +    KERNEL_ARCH: "arm"
+> +    DEFCONFIG_ARCH: "arm"
+> +
+> +.build:arm64:
+> +  extends: .build-base
+> +  variables:
+> +    KERNEL_ARCH: "arm64"
+> +    DEFCONFIG_ARCH: "arm64"
+> +
+> +.build:x86_64:
+> +  extends: .build-base
+> +  variables:
+> +    KERNEL_ARCH: "x86_64"
+> +    DEFCONFIG_ARCH: "x86"
+> +
+> +# --- Kernel-wide build jobs (LLVM) ---
+> +.kernel-build:
+> +  stage: build
+> +  timeout: 45m
+> +  variables:
+> +    GIT_DEPTH: 1
+> +    DEFCONFIG_URL: https://gitlab.freedesktop.org/drm/tip/-/raw/rerere-cache/drm-misc-${DEFCONFIG_ARCH}_defconfig
+> +  artifacts: {}
+> +  before_script:
+> +    - drivers/gpu/drm/ci/setup-llvm-links.sh
+> +    - curl -L --retry 4 -f --retry-all-errors --retry-delay 60 -o .config "${DEFCONFIG_URL}"
+> +
+> +kernel-build:arm32:
+> +  extends: [.build:arm32, .kernel-build]
+> +  script:
+> +    - make ARCH=arm LLVM=1 olddefconfig
+> +    - make ARCH=arm LLVM=1 -j$(nproc)
+> +
+> +kernel-build:arm64:
+> +  extends: [.build:arm64, .kernel-build]
+> +  script:
+> +    - make ARCH=arm64 LLVM=1 olddefconfig
+> +    - make ARCH=arm64 LLVM=1 -j$(nproc)
+> +
+> +kernel-build:x86_64:
+> +  extends: [.build:x86_64, .kernel-build]
+> +  script:
+> +    - make ARCH=x86 LLVM=1 olddefconfig
+> +    - make ARCH=x86 LLVM=1 -j$(nproc)
+> +
+> +# --- Disable dtbs-check jobs ---
+> +# dtbs-check validates compiled DTBs which may produce warnings from
+> +# code we are not responsible for. Keep dt-binding-check only.
+> +dtbs-check:arm32:
+> +  rules:
+> +    - when: never
+> +
+> +dtbs-check:arm64:
+> +  rules:
+> +    - when: never
+> +
+> +# --- KUnit jobs ---
+> +# kunit:arm32, kunit:arm64, and kunit:x86_64 are defined in kunit.yml
+> +# and implicitly enabled here through the .build:* templates above.
+> 
+> ---
+> base-commit: 99c95ce1b07081d7944d637ba7d72d835c0d520a
+> change-id: 20260902-drm-drm-misc-ci-ec6c69506609
+> 
+> Best regards,
 
