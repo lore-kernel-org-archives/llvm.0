@@ -1,44 +1,44 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1792503973;
-	b=yfYrrNQB/pk4NURYWvCquIq/kxy7dThGAOAaZjK3GQqIwT7WJVM/G7UzdjEdpx2enoib
-	 Tbr2dlpG1AAjgZMw/GiyoTp6A6niqU1Au9gsRFoOPX9ik4kn2kwdUiev/uMAKUEKf0L5h
-	 DCYy1K68+HltDS/cAcVJd112kDXTcGwbRpc3fipmN5Az0vnb8Po0iGRutHSzNEMWmC3xG
-	 yeDLgF8Ua6s1oZ/9CbUfCSnjaPWqZSToEFiF7j1bsv02gpXDtWUXHehsYW9xxxBF74mgT
-	 +nzo1TLeM2XzIhonaBO0WXsbZHqwRYeeInfMwBBE2dl+ms8TPcbZF21QKdRk3AI8KMA==
+	b=cr3ZzWCUukAQvOC1Oc9yIzEEIeqxV1qNher9jTF6pxEg1N19IHXfouHF3smUT7wC9QTe
+	 4XHrf8CczdkvZWdWNzoblLTSJqxHwvjbUqkYfIVKSMkBk2wZhWuVQ2ikfCa1ACdTfBNK1
+	 xdihH8lx5GJvJbUKK1PuklmA6fMOTIvMvDZiHV+qejjMjT1j+W313xLJ3Ylv3WV3uPdbW
+	 o8s0/wWxK1CswyXtoZTGS6usSORp25ylHBJB+SOtUkCmTHDR6cspKyreDGmi7GNTAAHeH
+	 Vmkau3/e3vfhOx4DMQ9WctZeq2EC9N6MJhIjbOQiUY24oJtV22L8tKI2X3zpdM4wOng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792503973;
 	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
 	 X-CM-SenderInfo;
-	bh=CZWy778o6XGQDQD29XDHWZl04pvNL0pti0ZIWrzvNv4=;
-	b=21orjoQd7sLNv8/ifz6IghuF8fDEVFoHHGUO8zJ++dnyD3vclqRsSyONnh8N13zBHzJR
-	 Kwt+kM3ylXn8fzXOxF6B4Qx2gPGP24noo+Erzmm03hMTmME14EP8+f+ctJX6Ry2IxxprC
-	 IXhd9HOidtyrau/qvVNRznewdy+WCAw5EgRj1qDDR5vp1zZuiM6XvcYP+bQWPK5LkjlKr
-	 DggJqb6X0mdqxqoYrFplcC3Q+SxTecDO+v74MewVA9WEJXcXmePofsHv5bA0DaP1r9CSl
-	 sS+Cj/Pev/o5Ydx8aKNgideVN1+8SXmiOyz3E1Gadk//nBwsv2tYaz0yL/2YOohQJng==
+	bh=YSxOc9RSBc/7XL7i6RQr/k6774k4YAacfF3TFX6F7GQ=;
+	b=pb2BfCBXlGPIo2QgYaJRtbkoSNDh5MxK2BswEz1LmJtRwOgTDxUkNReZx9ZbVeSKU/gl
+	 dwzooCrr6ga7FyEwhD9e5nfOWGrvoonlSiKaM754DlYPobMNVxcrSIHpwYsowZvRrG55H
+	 H2vhsp2ihsY8Qk2VzrZ8hZzvUwNyl/y9UUNT+hY4mGQzE+mGWRX3M/gxU9bH3lIkwA+vS
+	 XzuGLbC0ZbFmC22bXwSiZNovraBKCHa/FKcIrg4quqwcs9m08WgI75il2ZkGyHMJOF0qo
+	 00GOXOZPvNTYsu9TLdTFT0yjMT0qMiNJ8w4WhfKHeY0ekah6XvYOXrSHbtWsnpmPOcQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=huaweicloud.com;
 	spf=pass smtp.mailfrom=huaweicloud.com;
-	arc=none smtp.remote-ip=45.249.212.51
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	arc=none smtp.remote-ip=45.249.212.56
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6788606F45D
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:46:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6788606F45D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999D8606F469
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:46:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 999D8606F469
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j8DFx0WQdzYQtxB
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:57 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4j8DFm57bdzKHMZN
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:48 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 1383F40571
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:59 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id A4ADE40A5E
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:58 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3QOaGcNdq8xegBA--.22174S14;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3QOaGcNdq8xegBA--.22174S11;
 	Tue, 20 Oct 2026 21:45:58 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -61,9 +61,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v8 12/15] perf annotate-arm64: Support 'add' instruction tracking
-Date: Tue, 20 Oct 2026 13:45:08 +0000
-Message-Id: <adbd0606147f0243bfe059002d97703a25e153a5.1792411435.git.wutengda@huaweicloud.com>
+Subject: [PATCH v8 09/15] perf annotate-x86: Delete stale stack state on store of untracked register
+Date: Tue, 20 Oct 2026 13:45:05 +0000
+Message-Id: <60c5fe1ce61fb79c9506516221deb18aa728b4c5.1792411435.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1792411435.git.wutengda@huaweicloud.com>
 References: <cover.1792411435.git.wutengda@huaweicloud.com>
@@ -77,14 +77,14 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB3QOaGcNdq8xegBA--.22174S14
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw15Xw1fJw1UJrWkurWruFg_yoWrCryUpF
-	WDu34UWw12vrs2gws3JrWfXr93Kws7GF1Ykr9IqwnayFWayrn5Kas3KrW2vFW5Gr9xCr13
-	Jw4DKrs3Xw40kaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:Syh0CgB3QOaGcNdq8xegBA--.22174S11
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4xGry8KFyxtF43Jr4xWFg_yoWrJr4kpr
+	yDC343Ww17Gr4SqrnxAF45XF95urs7X3WrC3s0qwn2vF1xJr1fG3s7tFWYyF47Xr92kw12
+	yw1UKr4DXa12gaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
 	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
 	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
 	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
@@ -92,135 +92,102 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxXw15Xw1fJw1UJrWkurWruFg_yoWrCryUpF
 	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
 	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
 	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
-	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
 	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state_arm64() to track 'add' instructions for
-structure member address calculation.
+When a register without a tracked type is stored to a stack slot that
+previously held a valid type, the code currently performs an early return.
+This leaves the old type information intact in the stack state.
 
-Unlike x86, the arm64 'add' instruction has an extra base register among
-its source operands. Therefore, in terms of propagating the data type,
-it is essentially performing a 'mov', except that before the 'mov', it
-first needs to be updated by adding the offset or reg2.
+As a result, a stale type bug occurs:
+1. A tracked register is stored into a stack slot.
+2. The register becomes untracked/invalid (e.g., across a function call).
+3. The now-untracked register is stored into the same stack slot.
+4. Subsequent loads from that slot erroneously pick up the old stale type
+   because the stack entry was never invalidated.
 
-A real-world example is shown below:
-
-  ffff80008001c9a8 <flush_ptrace_hw_breakpoint>:
-  ffff80008001c9c4:  add  x19, x0, #0xeb8   // x0 (task_struct*) + 0xeb8 -> x19
-* ffff80008001c9d0:  ldr  x0, [x19]
-
-Before this commit, the type flow broke at the 'add' instruction,
-leaving the subsequent load with no type information:
-
-  chk [28] reg19 offset=0 ok=0 kind=0 cfa : no type information
-  final result: no type information
-
-After this commit, the tracker correctly follows the member address
-calculation:
-
-  var [0] reg0 offset 0 type='struct task_struct*'
-  add [1c] address of 0xeb8(reg0) -> reg19 type='struct task_struct*'
-  chk [28] reg19 offset=0 ok=1 kind=1 (struct task_struct*) : Good!
-  found by insn track: 0(reg19) type-offset=0xeb8
-  final result: type='struct task_struct'
+Fix this by introducing delete_stack_state() to search and free a stack
+entry for a given offset. When storing an untracked or invalid source
+register into a stack location, call delete_stack_state() to delete the
+stale entry before returning.
 
 Reviewed-by: Ian Rogers <irogers@google.com>
 Reviewed-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ tools/perf/util/annotate-arch/annotate-x86.c | 17 +++++++++++++----
+ tools/perf/util/annotate-data.c              | 10 ++++++++++
+ tools/perf/util/annotate-data.h              |  1 +
+ 3 files changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 38a9cb37c952..61df9c4f4877 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -959,6 +959,74 @@ static void update_mov_insn_state(struct type_state *state,
- 	pr_debug_type_name(&tsr->type, tsr->kind);
+diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
+index 21729e153fa0..3a6ea7e978e0 100644
+--- a/tools/perf/util/annotate-arch/annotate-x86.c
++++ b/tools/perf/util/annotate-arch/annotate-x86.c
+@@ -753,15 +753,24 @@ static void update_insn_state_x86(struct type_state *state,
+ 	}
+ 	/* Case 3. register to memory transfers */
+ 	if (!src->mem_ref && dst->mem_ref) {
+-		if (!has_reg_type(state, src->reg1) ||
+-		    !state->regs[src->reg1].ok)
+-			return;
+-
+ 		/* Check stack variables with offset */
+ 		if (dst->reg1 == fbreg || dst->reg1 == state->stack_reg) {
+ 			struct type_state_stack *stack;
+ 			int offset = dst->offset - fboff;
+ 
++			if (!has_reg_type(state, src->reg1) ||
++			    !state->regs[src->reg1].ok) {
++				stack = find_stack_state(state, offset);
++				/*
++				 * Preserve compound states when only a member
++				 * is overwritten.
++				 */
++				if (stack && !stack->compound)
++					delete_stack_state(state, offset);
++
++				return;
++			}
++
+ 			tsr = &state->regs[src->reg1];
+ 
+ 			stack = find_stack_state(state, offset);
+diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+index 9ed0780d6244..1d47db3a9dd9 100644
+--- a/tools/perf/util/annotate-data.c
++++ b/tools/perf/util/annotate-data.c
+@@ -761,6 +761,16 @@ struct type_state_stack *findnew_stack_state(struct type_state *state,
+ 	return stack;
  }
  
-+static void update_add_insn_state(struct type_state *state,
-+				  struct data_loc_info *dloc,
-+				  struct disasm_line *dl,
-+				  struct annotated_op_loc *src,
-+				  struct annotated_op_loc *dst)
++void delete_stack_state(struct type_state *state, int offset)
 +{
-+	struct type_state_reg *tsr;
-+	struct type_state_reg src_tsr;
-+	u32 insn_offset = dl->al.offset;
-+	int sreg = src->reg1;
-+	int dreg = dst->reg1;
-+	int reg_offset;
++	struct type_state_stack *stack = find_stack_state(state, offset);
 +
-+	if (!has_reg_type(state, dreg))
-+		return;
-+
-+	tsr = &state->regs[dreg];
-+	tsr->copied_from = -1;
-+	tsr->lifetime_active = false;
-+	tsr->lifetime_end = 0;
-+
-+retry:
-+	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
-+		invalidate_reg_state(tsr);
-+		return;
++	if (stack) {
++		list_del(&stack->list);
++		free(stack);
 +	}
-+
-+	src_tsr = state->regs[sreg];
-+
-+	if (arch_get_reg_offset(dloc->arch, src, sreg, state, false, &reg_offset))
-+		goto add_non_regoff;
-+
-+	if (src_tsr.kind == TSR_KIND_CONST) {
-+		tsr->kind = src_tsr.kind;
-+		tsr->imm_value = src_tsr.imm_value + reg_offset;
-+		tsr->offset = 0;
-+		tsr->ok = src_tsr.ok;
-+
-+		pr_debug_dtp("add [%x] imm %#x(reg%d) -> reg%d\n",
-+			     insn_offset, reg_offset, sreg, dreg);
-+		return;
-+	}
-+
-+	if (src_tsr.kind == TSR_KIND_POINTER ||
-+	    (src_tsr.kind == TSR_KIND_TYPE &&
-+	     dwarf_tag(&src_tsr.type) == DW_TAG_pointer_type)) {
-+		tsr->type = src_tsr.type;
-+		tsr->kind = src_tsr.kind;
-+		tsr->imm_value = src_tsr.imm_value;
-+		tsr->offset = src_tsr.offset + reg_offset;
-+		tsr->ok = src_tsr.ok;
-+
-+		pr_debug_dtp("add [%x] address of %#x(reg%d) -> reg%d",
-+			     insn_offset, reg_offset, sreg, dreg);
-+		pr_debug_type_name(&tsr->type, tsr->kind);
-+		return;
-+	}
-+
-+add_non_regoff:
-+	/* Try another register if any */
-+	if (src->multi_regs && src->reg1 != src->reg2 && sreg != src->reg2 &&
-+	    !(src->extend_type || src->shift_type)) {
-+		sreg = src->reg2;
-+		goto retry;
-+	}
-+	invalidate_reg_state(tsr);
 +}
 +
- static void update_insn_state_arm64(struct type_state *state,
- 				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				    struct disasm_line *dl)
-@@ -975,6 +1043,8 @@ static void update_insn_state_arm64(struct type_state *state,
- 
- 	if (ins__is_call(&dl->ins))
- 		update_call_insn_state(state, dloc, cu_die, dl);
-+	else if (!strcmp(dl->ins.name, "add"))
-+		update_add_insn_state(state, dloc, dl, src, dst);
- 	/* Register to register or imm value to register transfers */
- 	else if (!strcmp(dl->ins.name, "mov"))
- 		update_mov_insn_state(state, dl, src, dst);
+ void invalidate_reg_state(struct type_state_reg *reg)
+ {
+ 	reg->kind = TSR_KIND_INVALID;
+diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
+index dccd56759cea..425d9ddfad41 100644
+--- a/tools/perf/util/annotate-data.h
++++ b/tools/perf/util/annotate-data.h
+@@ -268,6 +268,7 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+ 				Dwarf_Die *type_die, int ptr_offset, u64 imm_value);
+ struct type_state_stack *find_stack_state(struct type_state *state,
+ 						int offset);
++void delete_stack_state(struct type_state *state, int offset);
+ void invalidate_reg_state(struct type_state_reg *reg);
+ bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
+ 				u64 ip, u64 var_addr, int *var_offset,
 -- 
 2.34.1
 
