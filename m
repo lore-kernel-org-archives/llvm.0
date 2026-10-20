@@ -1,126 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792502075;
-	b=g61cadUG1XDbphlbrGE3fKeLSidq/YD0BWTnnT+4SRlId1ixfEkflbGdL5A+rVBQUZlP
-	 B0RzRB5BesKH4EEYFWM5Mj8lgEY0Ttj6Y2GhxRFr35905kjDVycZbMJadVbRFoHsqgTMS
-	 y0O0d7HNHODqoUtoRbQn4BMtwngdazVotQcTWWVNtyJkWl+MsVn3XfFXM8aQALIrupkGU
-	 nm4twFHAnWJ/PUAxskwf0IrV3rbNIfvJWN5Yi07YNIKpswb0H/DqwlY2vFz3WhTtJ/KTS
-	 OojJcjo0GuB4Cr/jKqaegc4g5rgxXxnHqtW4nRpMM8j90nwI1763ok15094iUh/CAzg==
+	t=1792503968;
+	b=o/NeEPUTVo8fjtXvrlnqvVSfrXeocx4s6MX5AkKwuctTwYtt9DamRB+7ISgNquNH/iy9
+	 zEzozjZUwYN04T9xAn6iPtYtg+exwYZllFzl6op4lkZVe9MxhDh4JfVmDKlzrT6zAbBL6
+	 wuIBWm16QQMdvZAWNp4zr6coU/d+Uo84Te8li6pjN5RBwXNu2YY0PFQGt7jddbqVcYwGP
+	 wPlKnAzc68NeLG7NskR9gzBjVzC4NzE+9TRxMZnqq1EASuBOwvzC7uN4p+ZPTlxhUTbhm
+	 THCKLIJucR7Xo8rR32P6T7RLA4orASJ0hL1t4k7xnDWdHlc2TTtVmIuQPZhuSM7IeNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792502075;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type:Content-Transfer-Encoding;
-	bh=8G/au8IGCgWkCQlmR0nxChmBB3BGHgTEyZFF4LAB4C4=;
-	b=Qgd65v8x0RCVxequ+q0ycaBeQ9DR+T+ckGkXciAmA0r/fqNJ/aUTqvPssiJ0jLRkF/7h
-	 zQNAQZPMnQ9J6u2tmc5ZSI+m/TjuSCNUAQ6APKcDGPhGDhjw0txp5oQVlEhvIBOkdg9n+
-	 0dpFhDXpuF98Uum7SEWxtYbcNpJ7AjZpStlOkY68pofmDDcccRcHe0x8R7waVYwsqYoy7
-	 Ky/b9nAXM9HTbIom/1VWdduXG/dIjUsMCb1zJfGapj6ZRpbgNSk4nZq4kh3nfqn1KESIf
-	 N3h0eq7kLv6FQZkTm9hxHKwUOdVuk4F4cvxylLQCg0vENrX6C38jIL6n8Lu2YUOO9MA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792503968;
+	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=r7Jj+7iqzFb6IuBrZRgHoxVqen+BPmVI9Tm/CM9SebY=;
+	b=x7xdUIc/yGfdeMxLH8kOcPP73siIBD4ukHFWq+4elxSGtpN21uVAqSePWTHxZLqdMiqw
+	 v1D7O0n9GbYpt6jUEFtjNNLTwGEAPSClyMEprFTRj2BfKZEyF5y+Tqp3Or/mxw8OPgLKT
+	 nEmyJ4aaJVkKBTI34hAZcxww704Wb/zjc/bfUX7Y7A04TMvARU6rFUj589bpC/i2X0otJ
+	 yQDxk1c2PjSBFFAJMkzZ7jRBTYZHXJ8IkVfQjSiaHVic+jJowBBL8FS7urn/yfe8wPtkB
+	 SrdM4oCigoXuGPXglP6JSRCeBKXObo9Z82OZyy8pZJ5OjSB1fewTee9KMvkLt4jK8Dg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=flapping.org;
-	spf=pass smtp.mailfrom=flapping.org;
-	dkim=pass header.d=flapping.org header.i=@flapping.org header.a=rsa-sha256 header.s=fm1 header.b=WTzFghvi;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=SPzTeEbQ;
-	arc=none smtp.remote-ip=103.168.172.147
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+	dmarc=none header.from=huaweicloud.com;
+	spf=pass smtp.mailfrom=huaweicloud.com;
+	arc=none smtp.remote-ip=45.249.212.56
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FDF606A321
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:14:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55FDF606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=flapping.org header.i=@flapping.org header.a=rsa-sha256 header.s=fm1 header.b=WTzFghvi;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=SPzTeEbQ
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id 9EEC7EC01D3
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 09:14:34 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Tue, 20 Oct 2026 09:14:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1792502074;
-	 x=1792588474; bh=8G/au8IGCgWkCQlmR0nxChmBB3BGHgTEyZFF4LAB4C4=; b=
-	WTzFghviK6RW1DfTiPPD4S7JqXJkWrwROjfMJptCgvx0aSsDd91VV76gsFE65qAw
-	WGsWUY3H2WZD9T0G0e2gSpLvr/AtjHJsG1DaG4/WNvrcQXGWEOdkMBwRQMTrnp3j
-	7X/1NH49jUbRbJmhVKjPwZUSlZDks3XNc0fp78uxAnCs8652c/XyThzZrtQM4UlR
-	vgAV8nNSXy13ZW9xQkj8hQEgu99h29OMjNGOKb834I+wfAPoYe6NDXjGqvt/XyeA
-	V8BFLSUzMU7nsrz0YPAkE7V1rBwYJS5SB7RRAzY70vEr8Z/xDpC8ab/ooSkZxlNi
-	NJmyU6fBGt43U/fo/LawMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792502074; x=
-	1792588474; bh=8G/au8IGCgWkCQlmR0nxChmBB3BGHgTEyZFF4LAB4C4=; b=S
-	PzTeEbQSy52/r/MutL+B10kvqV8k9sHEeEsQL6flF4P3j5YAiYwhpCB912ahSYqk
-	XDafSOzgUKmOKRP8j5xX6b1klmKacXr3/8oWxODZaDOGYjDrEVB/h3n9e7AEvMzR
-	/vhL/4MAQnm1LE1a1EaFZZ6J8vtBHySy7bf9l9QSGUMjVOf5UC3h4ov8MHBKer+X
-	QD+5IGLBdznF/sddKdhuTmZkDXkx8ISIePFkNbwLQkXQxesfGOCpVsRfO5CYUFqt
-	8ii8eEFlVJONoLNX9BGSY9BWi5zm+p+OJvpYrvZtZQ74gMMwvVbOs30jmjuXe/f1
-	AsQs0+XH/rQLL0PJikljg==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
-	action=sign d=flapping.org a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792502074; d=flapping.org;
-	mf=PHRvbW9AZmxhcHBpbmcub3JnPg==;
-	rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
-	s=fm1:rsa-sha256:tzxbisWlXoa3LPHsnEABMMP96ILwr1aZt07iCy8E/juQanJ
-	90gE6+Q89bU3yX1RjPlzsixP+du+Tk5ymYFVSLlupslkWkjaSWMr6qODP1V8r6DF
-	/v/J0hvnFt1Ma2bRXiJTV7slk8nQZzu+B4dEH/eOlXHotcZ08i85QcQMGSDepCiO
-	i1McrHS+FNARb0E3msan0TBu4vnbpJVN5AXe+O/gTheRY1cxSKK+mOnIq4ape/RS
-	C7F58OF18nPso4+m1kDyELbV6SXEERisgIz/0V1eqsNmgd5MGJxdUVmOfddD311i
-	AmNHVLHVKcPc8nVrZowXqaiaA5vqGrFkMYJfVrQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:Jp1uw6NDC0LelkgrEQDre31XjjsqFJ/cxJg2BXyPQQs=:8G/au8IGCgWkCQlmR0nxChmBB3BGHgTEyZFF4LAB4C4=;
-X-ME-Sender: <xms:OWnXalljNuIn7qruDdHLMsPX6PtzDa3gsFMZO7QEzawtbg-bP89-lQ>
-    <xme:OWnXaiPakFQoF9eXxI7qrIYLewLd3x8pGzZjwBjbqPzxJlad-pF29p0wHM2YyKjDX
-    B1x6pvMwGUzfK_3stakdYmA_7sini8aXJGZGIGLLLnosybOplawpBHQ>
-X-ME-Received: <xmr:OWnXak4SozNrdkL1quQPoXwwU8sL1xoD8zYaacZCqzT-YdmlapUtXitdRfGXJjS4xtiv5ayyYYdqWqkDBuQQ36Sn>
-X-ME-Proxy-Cause: dmFkZTGcfW0MA6TedKDhIOan3Q5qiQfjgOELCWuy0M/BqXUjlCAkZFfjhKzTb0Q+ICIFja
-    EBqOKSR600uavTtm8+sspp11Xi1eCtqH751mma2VreIvr3n1a1CBLpJmX4Wczketli9I8h
-    b8ndnefBNjnp4wiM1tpaIj0rzKE6Q8DKi1x4+Pv6I7BFchydJghUCtnRGExzcOe9vuSblE
-    PmY7I2kmxDzTyWyDWpay50sjJ/JS7eXhquSNucMdAydYZHgenLhfVJfzzpyMETwW6akjvB
-    VGMF7TfbgidX9ytwGRYDc0QytjZ7ELrSjIlEldxbhhvvO8vtj/sj+0JYnoAXm8l8Iyj4qh
-    eY4axpAufvHtjuucCfCaOO5hYLkKH3TbyBXffIpdejrIqsUoKiGF9NP5Hwmc0WhU54OTKA
-    NFl78xvyt6TcQxBqxHMQ6anPKMtI45n6V2nNaBlzmKJiT85Y/gmIH9Q0/hdzkp1Zl9OavD
-    2HHLhUCOSIM2gZ7O/Fz5Ybk51ZGmu9zYqSzurRJTdV1VDGUyIYJ0ddJOevQjyN/ETVAspV
-    SllW/fOmwxQNzFZVWu/H/GxAS8UWL0XRMGfo9EXXehkgSTEu/hSjoehuoFLFmPrJ6viDfc
-    2QVv5LUXLiuViUQ7O4+U2b21tSVnWm3NQ5mYAD+wmH2ebhc1DhKBPAN/N20Q
-X-ME-Proxy: <xmx:OWnXat2VvwaeN7epPJFuWtkfLCu3PDBrTGvF-xzxrzHYKd7mewkDrg>
-    <xmx:OWnXaqpmmeMn1ULhaZEmaep_IvY76P4LFQI0MOyZ_kBoLTxCV06piA>
-    <xmx:OWnXavnPKOCJGF6DVGMdT9CmWamRVbA2nKL4Ikhk77-P01WaP_PU-A>
-    <xmx:OWnXakSVtXWXDrCFSnaCLEOu4__cjj-SGY55JxzXDG1XWm5IInmxNg>
-    <xmx:OmnXamzm9ssA-QIqgLpFuk89QsHS8hqjkc2tfSYWjvOyaVbE57c7yQcQ>
-Feedback-ID: i51fe4b43:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Oct 2026 09:14:29 -0400 (EDT)
-Date: Tue, 20 Oct 2026 22:14:27 +0900 (JST)
-Message-Id: <20261020.221427.1259003459217579110.tomo@flapping.org>
-To: ojeda@kernel.org
-Cc: nathan@kernel.org, boqun@kernel.org, gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
- aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org,
- daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com,
- work@onurozkan.dev, rust-for-linux@vger.kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- llvm@lists.linux.dev
-Subject: Re: [PATCH v3 1/2] rust: std_vendor: add `likely()`, `unlikely()`
- and `cold_path()`
-From: FUJITA Tomonori <tomo@flapping.org>
-In-Reply-To: <20261016162446.121509-1-ojeda@kernel.org>
-References: <20261016162446.121509-1-ojeda@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E18606A339
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:46:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8E18606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4j8DFm0bwdzKHMZ5
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 061DC40561
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:58 +0800 (CST)
+Received: from huawei.com (unknown [10.67.174.45])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3QOaGcNdq8xegBA--.22174S6;
+	Tue, 20 Oct 2026 21:45:57 +0800 (CST)
+From: Tengda Wu <wutengda@huaweicloud.com>
+To: Namhyung Kim <namhyung@kernel.org>,
+	james.clark@linaro.org,
+	xueshuai@linux.alibaba.com,
+	Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	leo.yan@linux.dev,
+	Li Huafei <lihuafei1@huawei.com>,
+	Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tengda Wu <wutengda@huaweicloud.com>
+Subject: [PATCH v8 04/15] perf annotate-arm64: Track return type after call instructions
+Date: Tue, 20 Oct 2026 13:45:00 +0000
+Message-Id: <62622766adb2db49d32e51136c8a78050b133617.1792411435.git.wutengda@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1792411435.git.wutengda@huaweicloud.com>
+References: <cover.1792411435.git.wutengda@huaweicloud.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -129,20 +75,96 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgB3QOaGcNdq8xegBA--.22174S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFy3ZFykGryUKr18Jr15XFb_yoW5JFyDpa
+	4Du34j9r1UGr4IgrnxJr4xZry3urWxW342kr98AanavFW2yrn3JaykKryaqF45Xr95Cw4U
+	JwsFkF4UZa1IkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
+	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
+	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
+	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-On Fri, 16 Oct 2026 18:24:45 +0200
-Miguel Ojeda <ojeda@kernel.org> wrote:
+Enable data type profiling to track function return values in arm64
+annotations by looking up the DWARF return type of called functions.
 
-> `{un,}likely()` are commonly used macros on the C side -- there are
-> more than 25k occurrences in the tree. Rust is likely going to provide
-> functions (not macros) for the same purpose: `core::hint::{un,}likely()`.
-> Currently they are unstable under `feature(likely_unlikely)` [1].
+Reviewed-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+---
+ .../perf/util/annotate-arch/annotate-arm64.c  | 21 ++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-[...]
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index d591d556ad40..c4cc8bca85cc 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -463,12 +463,14 @@ static bool is_readonly_insn(const char *name)
+ }
+ 
+ static void update_call_insn_state(struct type_state *state,
+-				   struct data_loc_info *dloc,
++				   struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				   struct disasm_line *dl)
+ {
+ 	struct symbol *func = dl->ops.target.sym;
+ 	const char *call_name;
+ 	u64 call_addr;
++	struct type_state_reg *tsr;
++	Dwarf_Die type_die;
+ 	u32 insn_offset = dl->al.offset;
+ 
+ 	call_name = func ? func->name : dl->ops.target.name;
+@@ -487,6 +489,19 @@ static void update_call_insn_state(struct type_state *state,
+ 			continue;
+ 		invalidate_reg_state(reg);
+ 	}
++
++	/* Update register with the return type (if any) */
++	if (call_name && die_find_func_rettype(cu_die, call_name, &type_die)) {
++		tsr = &state->regs[state->ret_reg];
++		invalidate_reg_state(tsr);
++		tsr->type = type_die;
++		tsr->kind = TSR_KIND_TYPE;
++		tsr->offset = 0;
++		tsr->ok = true;
++
++		pr_debug_dtp("call [%x] return -> reg%d", insn_offset, state->ret_reg);
++		pr_debug_type_name(&type_die, tsr->kind);
++	}
+ }
+ 
+ /* Invalidate registers explicitly written by an unhandled instruction. */
+@@ -513,7 +528,7 @@ static void invalidate_unhandled_insn_regs(struct type_state *state,
+ }
+ 
+ static void update_insn_state_arm64(struct type_state *state,
+-				    struct data_loc_info *dloc, Dwarf_Die *cu_die __maybe_unused,
++				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				    struct disasm_line *dl)
+ {
+ 	struct annotated_insn_loc loc;
+@@ -526,7 +541,7 @@ static void update_insn_state_arm64(struct type_state *state,
+ 		return;
+ 
+ 	if (ins__is_call(&dl->ins))
+-		update_call_insn_state(state, dloc, dl);
++		update_call_insn_state(state, dloc, cu_die, dl);
+ 	else
+ 		invalidate_unhandled_insn_regs(state, dl, dst);
+ }
+-- 
+2.34.1
 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-
-Reviewed-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
