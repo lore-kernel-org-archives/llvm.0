@@ -1,76 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792461935;
-	b=rB4lYO+fx3vE2g2I/lFW+EkzUsDYwlCO8O2mAtn8jC1H46x5dtU+g318E7peF97aj3zm
-	 T3iD1G51Do6k4GXhsqkQtnv9TOj6SJR8HFwRKp9HhT35sFm3Q8a0J/9xMNJZP9QQ+Y4Nb
-	 E8xb16C3W2lGMRdt/77G9uwuS1y4ccd9KUAQOFLBGcQMUTW9M2EBF9dmn4HAgoYB7n5uY
-	 skNwZIdwuzRP3WIXoaBGsvIh6sOxAW6K/QAohGTGjwTPm05lSFvWIUoubTcwsKNXkEHOH
-	 mky8YzaRasxCqDGBmSgtIRZTFkrXVk/kh0KbI3+derWNEieim+sDi+f4g8qpS12UYpA==
+	t=1792462669;
+	b=LPYB2Qyh7RXJpUDeJulhMpoDG74E7VXGulrUmb3LjA4larn3VsxKYPGH86UdRVnij3cL
+	 itgfwU901nhMrpsu8dRzluBOV5ir8ON2Sx6vxYyushFVONsTIYw6zUkyepUZZCj4yGKuE
+	 WMFu8hEApZDfuqZyzuw4NDUTifMnnLxpEMhplKnA0UNI0vPwRaFXoD0SBlyAkTDbuyOhJ
+	 6YlqSqyXdc3XXQ0Zix6fUu/kVDpYNOByTwtGI/BKhZmfvM2OGno1/2mA14i0vhtuQ+AaG
+	 RiinLmnyPhIjRGFXcwzxxfJEgc1qoCtILp1zvQ861R5yce102GXXLOax+niXhYbSWGw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792461935;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792462669;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=xnJZ15KS4TYJMaU1eDR9zd5vS9ipPVJHhMtBkp123IM=;
-	b=cNTcyKrpdVn7mv8XpPyLDdiEk2InxTdy9q+FvZqugFWLbwQt2XP0raYNv3Oi00co2yVS
-	 g470ZfJvqV75ojWPysisqEWgeS3mcO2OCvCwFyiTpLZJ/XWxjRZS8uYew9Eu34M2ghFA3
-	 z4bnJHyR8fCUPmYoioG6sVIkhUNgMRh/+rA8847uVbk80RUvMJj9WN9bbtKigvTw3dcm5
-	 U7m+IHF0t/YMuJIMr4QdBzojnqgBVQbVbgOWpti0kiZFyy8tbyRGKY/X+Mtny1ctDZiOk
-	 Tnwnt5Dp+SBZT96znUpIbHmYR+yqw9oa+Ou/wb8K/uRj+mtQbsoujp4ReDK+ToRAVkQ==
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=9JTgDpDDwMXEKUT4yd6AOrd7DzQF1sh+HtTOxj0mdTc=;
+	b=LIOtil479bI0YOybG9rWrUZ19k9fW5V3Et5z7C6zXRib8dhzU/Zi9CjlXPFsiC2UhWSL
+	 8qE/ec6y46pBpubEW4+F+K/jB48L1/awt3YhC62z0HM/oufUAjY93lKp9gIOn1GSA4tUg
+	 mgUwgQUVEQUV7dlvNsqtCauAqW55TQgnFwYLE0Za/TgVXaPw39pv56Whzrufn2T/Fz5Rp
+	 xzqeybBZh3o4jfIAaBHSePqOp1mvnQOCAlxuxDSXMk0hIYgJqGNYGvCywX3dSbyUD1v8C
+	 rFRzReDc71vOZZ1MPfiA/X5ncxzinX9DuoYXkvHN/+C364L+K803Ph1+AbONet+Zi5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U4XztdjH;
-	arc=none smtp.remote-ip=192.198.163.7
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=W1A9vmgR;
+	arc=none smtp.remote-ip=198.175.65.15
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77330606A322;
-	Tue, 20 Oct 2026 02:05:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77330606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43718606A31B;
+	Tue, 20 Oct 2026 02:17:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43718606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U4XztdjH
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=W1A9vmgR
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792461934; x=1823997934;
-  h=date:from:to:cc:subject:message-id;
-  bh=4eX9K6NIFZtmF0Tfll+rIpMPL8Yw/fhscspaCCiG3sk=;
-  b=U4XztdjHo73UN7spQzzZ5jsA6dMnhHlguticKDMszGUXezz7/qyRNhMN
-   LYhmE7va6boR0zs2cfxdVynktVBJ3hATCQWFhFwMZ13Nq3Atl0uEQ/qXh
-   W0B7JdC5LOKerpk3b9EUtLNV1xV9aIMCGPEmRBQZ9CHmUii4gSO9nLstJ
-   JBylhkVPO+DMqU7mJi7R/jqAZBOfDt0avoRq3zttOig+W5FRybneFRmzU
-   ZimFAg9T0a0cuangeRWJghdiZK94w7d13ahT38oKB31H1+CoGoGhLMD41
-   R0Nd0DK2enqWuWj3OARF0i688gHdUTdc8uhl2JH8urbhPxbriCDZpHiw+
+  t=1792462669; x=1823998669;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oGm1k1Fx6NgBJcx5I2zgIIB14FL1PA/x50knBnXj7kc=;
+  b=W1A9vmgRkHq42CKk4zz2op9kY7WWZrjvbdwNpspSYTox5Mw/YQHoiMgM
+   bSP8sbJxyfBpZTMb1XgvaMWEkeYgOc3kLFyueJx0QaCzNpnvzK/vf/Wqc
+   YoPOewUaNhc7NvI1XwiP34LkURLrH5na0xb2zq6jAEocW0e0vSpsXCLZX
+   awma6BhrWXDMN3zAW1Xx+AygvOJpyGUIqY6KJT9/ftlg59Xik9Vr+YL1A
+   iKvZgRoONits/3vdizCHu4xQHIX/oRFFl2uxWT6WJoL72aOdZDcMb5ffz
+   LQSiNRcaDjJSC7bmjAWwEiqlXPC7kGRpTeN+BQ+F5ihmoDc21KtmvfXvS
    Q==;
-X-CSE-ConnectionGUID: 64Gs9j2NRLaE+hVW6oc6PQ==
-X-CSE-MsgGUID: OB2qEB6wSESF+k2Pg7KLDg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1060718"
+X-CSE-ConnectionGUID: nc4awr5YQOi5ii1FqRcunw==
+X-CSE-MsgGUID: Vc4Uz6IdSj2eJMPjW704Lg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1162279"
 X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="1060718"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 19:05:33 -0700
-X-CSE-ConnectionGUID: mDuMqh8gRJmA4FJx15VQPA==
-X-CSE-MsgGUID: LZ9o/13XQZCpeGI+qOrEwA==
+   d="scan'208";a="1162279"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 19:17:48 -0700
+X-CSE-ConnectionGUID: f/pxMlMvSTKi/qRoZOOMkQ==
+X-CSE-MsgGUID: VKslVvdaRkyzj1W+tnmR6w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="3097855"
+   d="scan'208";a="2704000"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 19 Oct 2026 19:05:30 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 19 Oct 2026 19:17:42 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xIzEG-00000000MjK-0boh;
-	Tue, 20 Oct 2026 02:05:28 +0000
-Date: Tue, 20 Oct 2026 10:05:09 +0800
+	id 1xIzQ3-00000000Ml8-28S5;
+	Tue, 20 Oct 2026 02:17:39 +0000
+Date: Tue, 20 Oct 2026 10:17:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ebiggers:wip-rm-mmx 1/1]
- lib/raid/xor/xor-core.c:58:undefined reference to `xor_block_sse'
-Message-ID: <202610200957.9LSVeYFv-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Kyle Switch <kyle.switch@motor-comm.com>, andrew@lunn.ch,
+	olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, mmyangfl@gmail.com,
+	horms@kernel.org, linux@armlinux.org.uk, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ming.xu@motor-comm.com, xiaolin.xu@motor-comm.com,
+	jianmin.wang@motor-comm.com, wei.zhang@gl-inet.com,
+	sijia.huang@gl-inet.com
+Subject: Re: [PATCH net-next v15 5/5] net: dsa: motorcomm: Add support for
+ Motorcomm YT922x
+Message-ID: <202610200942.aPmEAZ8C-lkp@intel.com>
+References: <20261019110543.2999419-6-kyle.switch@motor-comm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,69 +88,84 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261019110543.2999419-6-kyle.switch@motor-comm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git wip-rm-mmx
-head:   6f82cce65eef74ed32bdf4f86b884f3fabe950c6
-commit: 6f82cce65eef74ed32bdf4f86b884f3fabe950c6 [1/1] raid: remove MMX optimized code
-config: um-randconfig-1000-20261019 (https://download.01.org/0day-ci/archive/20261020/202610200957.9LSVeYFv-lkp@intel.com/config)
+Hi Kyle,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kyle-Switch/net-dsa-motorcomm-initialize-dsa_switch-based-on-chipid/20261019-190539
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20261019110543.2999419-6-kyle.switch%40motor-comm.com
+patch subject: [PATCH net-next v15 5/5] net: dsa: motorcomm: Add support for Motorcomm YT922x
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261020/202610200942.aPmEAZ8C-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610200957.9LSVeYFv-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610200942.aPmEAZ8C-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610200957.9LSVeYFv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610200942.aPmEAZ8C-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
-   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.o: in function `xor_register':
->> lib/raid/xor/xor-core.c:58:(.init.text+0x2ac): undefined reference to `xor_block_sse'
->> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:58:(.init.text+0x2b2): undefined reference to `xor_block_sse_pf64'
->> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:58:(.init.text+0x2b6): undefined reference to `xor_block_sse'
-   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:58:(.init.text+0x2bb): undefined reference to `xor_block_sse_pf64'
-   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.o: in function `xor_force':
->> lib/raid/xor/xor-core.c:72:(.init.text+0x2e4): undefined reference to `xor_block_avx'
->> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:72:(.init.text+0x2e9): undefined reference to `xor_block_avx'
-   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+>> drivers/net/dsa/motorcomm/chip.c:2755:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    2755 |         default:
+         |         ^
+   drivers/net/dsa/motorcomm/chip.c:2755:2: note: insert '__attribute__((fallthrough));' to silence this warning
+    2755 |         default:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/net/dsa/motorcomm/chip.c:2755:2: note: insert 'break;' to avoid fall-through
+    2755 |         default:
+         |         ^
+         |         break; 
+   1 warning generated.
 
 
-vim +58 lib/raid/xor/xor-core.c
+vim +2755 drivers/net/dsa/motorcomm/chip.c
 
-^1da177e4c3f41 drivers/md/xor.c        Linus Torvalds    2005-04-16  47  
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  48  /**
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  49   * xor_register - register a XOR template
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  50   * @tmpl:	template to register
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  51   *
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  52   * Register a XOR implementation with the core.  Registered implementations
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  53   * will be measured by a trivial benchmark, and the fastest one is chosen
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  54   * unless an implementation is forced using xor_force().
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  55   */
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  56  void __init xor_register(struct xor_block_template *tmpl)
-524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  57  {
-524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26 @58  	tmpl->next = template_list;
-524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  59  	template_list = tmpl;
-524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  60  }
-524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  61  
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  62  /**
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  63   * xor_force - force use of a XOR template
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  64   * @tmpl:	template to register
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  65   *
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  66   * Register a XOR implementation with the core and force using it.  Forcing
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  67   * an implementation will make the core ignore any template registered using
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  68   * xor_register(), or any previous implementation forced using xor_force().
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  69   */
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  70  void __init xor_force(struct xor_block_template *tmpl)
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  71  {
-a21921dd02d305 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27 @72  	forced_template = tmpl;
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  73  }
-35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  74  
-
-:::::: The code at line 58 was first introduced by commit
-:::::: 524ccdbdfb52608e9b98fcd64f4337add7009f41 crypto: xor - defer load time benchmark to a later time
-
-:::::: TO: Ard Biesheuvel <ardb@kernel.org>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+  2730	
+  2731	static int
+  2732	yt922x_port_config(struct yt921x_priv *priv, int port, unsigned int mode,
+  2733			   phy_interface_t interface)
+  2734	{
+  2735		struct device *dev = yt921x_priv_to_device(priv);
+  2736		const struct yt921x_info *info = priv->info;
+  2737		struct yt921x_port *pp = &priv->ports[port];
+  2738	
+  2739		if (BIT(port) & info->internal_mask) {
+  2740			if (interface != PHY_INTERFACE_MODE_INTERNAL)
+  2741				goto err;
+  2742			return 0;
+  2743		}
+  2744	
+  2745		switch (interface) {
+  2746		/* SERDES */
+  2747		case PHY_INTERFACE_MODE_SGMII:
+  2748		case PHY_INTERFACE_MODE_100BASEX:
+  2749		case PHY_INTERFACE_MODE_1000BASEX:
+  2750		case PHY_INTERFACE_MODE_2500BASEX:
+  2751		case PHY_INTERFACE_MODE_USXGMII:
+  2752			if (!(BIT(port) & info->serdes_mask))
+  2753				goto err;
+  2754			pp->serdes = true;
+> 2755		default:
+  2756			goto err;
+  2757		}
+  2758	
+  2759		return 0;
+  2760	
+  2761	err:
+  2762		dev_err(dev, "Wrong mode %d on port %d\n", interface, port);
+  2763		return -EINVAL;
+  2764	}
+  2765	
 
 --
 0-DAY CI Kernel Test Service
