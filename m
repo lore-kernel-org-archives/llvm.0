@@ -1,43 +1,44 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792503970;
-	b=a0XChJydkOXvheJqCdOvbBhqIlQwRC2v+9Owno8Bikn1591ic40GQan+xJGVcxNUHyW1
-	 YE/DcyGL8WTe8t8F11Mc1x2vjKhhJtRA4SLX/b1eC7yP9PBRYUjNpbdUtAevUanXk0yQS
-	 6It+xNTe6KoVcxRgqV4LhcnOk7lqQyA2xMFtM0e+qg8IPICSL06AQxuO6czBfHvPLxex/
-	 +W/B38IMQY18C0oSgOs2Cv56X/H0Z5Q5cZiPLeyoifoYuxGFwcPqKNK6Wkx1aLbv3Nf9x
-	 HQ4e96wVBXW7XJHxty2GVEIqphlqARVmm9iUAbQcVLntv8QWQyk/Itx445WcQs/1mFA==
+	t=1792503972;
+	b=WRBjCODOloxz+q7MNeNnatI6PoAt1P7a4fc+piZHZvCosEwZfF6a5yH9MQ0FUGUoR/7i
+	 P0FtET1mMYwldTyafghDNxdVtE4vCUrlt+bn5PjbiiVvQHHBux4hwwXKCAFiQQ5xxQmzg
+	 S2soz18PgpNr4XH8ggLlm1F9veh2J1/gKDXsc0ATvatuboTrlqam7j+M13SC1ObK+XX1R
+	 lQaCJY9+AHjJJvHPnLbnfPjxnQaVNrYtIC+xoSmvooZ1ihC2//RLqE60ciDGti9eXQ6VQ
+	 PMClz9x3VYdZPAW0kwu48Z6QEog0oVxAX/+TwKmcr7CqZP+DFmqlk7IAUDWywqxbL0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792503970;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792503972;
 	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=o+TLeUr9laZcQUrQM3aYZWu6M9JSdUwc6vEFggZYynA=;
-	b=p805qwVucUaE/LCn+BMyJ3sWT3esBvKEB3rVRJtxXtYZUCyyKXJ5q+idbq/BusJUWeug
-	 nxYa1P1eh0Rzq7A81kET3v+RcziD6scLGDPsF/tlKCKchBvesV1L3WXkRgNChvrlT+hJT
-	 mXjgauCnXzNcFZadAQeELFxOzflR0j69tgVzlOLZ8u97ml5IpQEmsxy6L0OPryyJWr+y2
-	 Ty1mfVYFi9WLEBICBGfUizbEcKzNwXK8dgxw0dULVl7HMJ4g14qeX+5fRe0JyGDNq2HDQ
-	 OMfM0i3SBeuR3rgYUQNkByUcpfVCmjOT7H8nAKn3Xwjoke7uFA0sQChxEARzwfS5HRg==
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=Dqtu552JqiJAiQn/3PkAS1LWwYw8EHyeuBVqHwQoPZc=;
+	b=I+A2LFRd9LQqjPR80qF8s9ndpXj9OZ24ifkGVrg4P8+f5rUVoe1+A1xapTMSLPlrkp2C
+	 VY4/xlt5jaIEPwYaXZ0onYC4UKFDaBR7TdDVPRJMsSDguW1EMFAcrhlbI72N0S6QbTyZE
+	 OCZzWCC143ALJ/7TM+0axTWhEF6V7/bq+yr0oQIDZq6h3UL1SUYFktxz/pqCxehjumHbo
+	 dmJvkpblcMgC9N62k51AN5WV9sYp9oWHmoMQPRZ0/Y4k5cIAsVWPUpl2mwosVYxy6uq9z
+	 Dr3XGtt1qyGaZ7ooHlULpV5FceIaxnEpSV6uhJS1xzMOays1URx2EIHzibb17yqz/1w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=huaweicloud.com;
 	spf=pass smtp.mailfrom=huaweicloud.com;
-	arc=none smtp.remote-ip=45.249.212.51
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	arc=none smtp.remote-ip=45.249.212.56
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1856606A319
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:46:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1856606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0CC606A333
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:46:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A0CC606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j8DFv3jf2zYQtsf
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:55 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4j8DFl6f36zKHMYP
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:47 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 80693407AF
+	by mail.maildlp.com (Postfix) with ESMTP id DB6E540A24
 	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:57 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3QOaGcNdq8xegBA--.22174S2;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3QOaGcNdq8xegBA--.22174S5;
 	Tue, 20 Oct 2026 21:45:57 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -60,10 +61,12 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v8 00/15] perf annotate arm64: Support instruction tracking for data type profiling
-Date: Tue, 20 Oct 2026 13:44:56 +0000
-Message-Id: <cover.1792411435.git.wutengda@huaweicloud.com>
+Subject: [PATCH v8 03/15] perf annotate-data: Add arch_get_reg_offset helper
+Date: Tue, 20 Oct 2026 13:44:59 +0000
+Message-Id: <f22d02ca275d647abfa459bdccd89cb23e63019f.1792411435.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1792411435.git.wutengda@huaweicloud.com>
+References: <cover.1792411435.git.wutengda@huaweicloud.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -74,157 +77,278 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB3QOaGcNdq8xegBA--.22174S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFyDuw4UXFWfury7Cw4UJwb_yoW7Zr43pa
-	93Cw1fJr1Utr409rnxJrW7Jr1aga1fX3y7Gryrta4Syw42yF9YyFykKF1FyFWfAr9xury7
-	Jw1vyF1DZayUuaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBCb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402
-	YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20x
-	yl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWU
-	JVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7V
-	AKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42
-	IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRQ2-0DUUUU
+X-CM-TRANSID:Syh0CgB3QOaGcNdq8xegBA--.22174S5
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF1xWw4DKr1DWr15WFW7Arb_yoWfAr15pa
+	98GFyrWr47Wr4fWrsrXF98Xr9Y9wsrGr93Cryq9wnIyFyaqr18Ka1vyryYk3yUJrZYyw17
+	J3W5tr47Xw47KaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+	Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+	6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x
+	02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl42xK
+	82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+	C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48J
+	MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJw
+	CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+	z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRNMKZ3UUUUU==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-This series adds arm64 support to perf's data type profiling by
-implementing instruction tracking for the arm64 architecture.
+Add a helper to compute the effective offset from a base register
+for instruction operands. Currently handles arm64 addressing modes
+including post-indexed, single-register, SIB-style indexed with
+shift/extension, and constant-offset register pairs.
 
-The main changes since v7 include:
-v7: https://lore.kernel.org/all/cover.1791629326.git.wutengda@huaweicloud.com/
+Fallback to instruction's raw offset for other architectures.
 
-  * Patch 02: Minor optimizations to update_insn_state_arm64 to facilitate
-    future extension, including:
-    - Encapsulating call instruction handling into update_call_insn_state()
-    - Encapsulating invalidate dst regs handling into invalidate_unhandled_insn_regs()
-    - Renaming is_readonly_branch_or_cmp() to is_readonly_insn()
-    No functional changes.
+Reviewed-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+---
+ tools/perf/util/annotate-data.c | 115 ++++++++++++++++++++++++++------
+ tools/perf/util/annotate-data.h |   4 +-
+ 2 files changed, 98 insertions(+), 21 deletions(-)
 
-  * Fix issues raised by Sashiko:
-    - Patch 06: Complete the status register invalidation logic for
-      exclusive stores.
-    - Patch 13 & 15: Complete the lifetime invalidation logic for adrp
-      and mrs instructions.
-    Regarding the status register invalidation issue for instructions
-    such as cas/swp as well, we plan to support this incrementally
-    after the relevant instructions are refined; this patch temporarily
-    ignores and does not handle it (a TODO marker has already been
-    reserved in patch 02)
-
-Patch organization
-==================
-
-  Patches 1-3:   Shared infrastructure. Extract invalidate_reg_state() as
-                 a common helper, add the arch_get_reg_offset() helper for
-                 computing operand base offsets, and wire up the arm64
-                 entry points (arch_supports_insn_tracking(),
-                 init_type_state(), and update_insn_state_arm64()).
-
-  Patches 4-6:   Core instruction tracking for arm64: function return
-                 types after calls, load instructions (ldr/ldp and their
-                 addressing modes), and store instructions (str/stp).
-
-  Patches 7-9:   Shared data structure improvements and an x86 fix.
-                 Expand type_state_reg.imm_value to u64 so 64-bit
-                 addresses can be tracked, preserve imm_value for stack
-                 variables, and delete stale stack state on store of an
-                 untracked register on x86.
-
-  Patches 10-15: Remaining arm64 patterns: stack variable tracking,
-                 'mov' (register and immediate forms), 'add' member
-                 address calculation, 'adrp' global variable tracking,
-                 per-cpu variable access, and 'mrs sp_el0' to resolve the
-                 'current' pointer.
-
-Each patch's type profiling results are as follows:
-
-Patch | Feature                    | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
-------+----------------------------+--------+--------+-------------+------------+------------+------
-base  | baseline                   | 6      | 493    | -           | -          | -          | 56.2%
-0002  | enable insn tracking       | 6      | 42     | 437         | 2          | 12         | 57.2%
-0005  | support 'load' insn        | 6      | 42     | 398         | 1          | 52         | 60.7%
-0006  | support 'store' insn       | 6      | 42     | 398         | 1          | 52         | 60.7%
-0010  | support stack variable     | 6      | 42     | 391         | 1          | 59         | 61.3%
-0011  | support 'mov' insn         | 6      | 42     | 372         | 3          | 76         | 62.8%
-0012  | support 'add' insn         | 6      | 42     | 318         | 7          | 126        | 67.2%
-0013  | support 'adrp' insn        | 6      | 42     | 238         | 8          | 205        | 74.2%
-0014  | support per-cpu variable   | 6      | 42     | 233         | 8          | 210        | 74.6%
-0015  | support 'mrs' insn         | 6      | 42     | 230         | 8          | 213        | 74.9%
-
-Testing
-=======
-
-Tested on arm64 (all passed):
-
-  # perf test -v "perf data type profiling tests"
-  81: perf data type profiling tests                                                                  : Ok
-
-  === Test Summary ===
-  Passed main tests : 1
-  Passed subtests   : 0
-  Skipped tests     : 0
-  Failed tests      : 0
-
-Tested on x86. The profiling results show no change before/after applying
-this patch series:
-
-  before : total 880, ok 711 (80.8%), bad 169 (19.2%)
-  after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
-
-Changelog
-=========
-v7 -> v8:
-  - v7: https://lore.kernel.org/all/cover.1791629326.git.wutengda@huaweicloud.com/
-  - Encapsulate invalidate dst regs handling into invalidate_unhandled_insn_regs()
-  - Encapsulate invalidate dst regs handling into invalidate_unhandled_insn_regs()
-  - Rename is_readonly_branch_or_cmp() to is_readonly_insn()
-  - Complete the status register invalidation logic for exclusive stores.
-  - Complete the lifetime invalidation logic for adrp and mrs instructions.
-v6 -> v7:
-  - v6: https://lore.kernel.org/all/cover.1789521520.git.wutengda@huaweicloud.com/
-  - Invalidate lifetime in propagate_load_reg_state().
-  - Remove the has_reg_type() guard in update_store_insn_state().
-  - Fix the issue where TSR_KIND_PERCPU_BASE fails to retry as expected.
-
-Please let me know if you have any feedback.
-
-Thanks,
-Tengda
-
-Tengda Wu (15):
-  perf annotate-data: Extract invalidate_reg_state() as a common helper
-  perf annotate-arm64: Enable instruction tracking support
-  perf annotate-data: Add arch_get_reg_offset helper
-  perf annotate-arm64: Track return type after call instructions
-  perf annotate-arm64: Support load instruction tracking
-  perf annotate-arm64: Support store instruction tracking
-  perf annotate-data: Expand type_state_reg imm_value to u64
-  perf annotate-data: Track imm_value for stack variables
-  perf annotate-x86: Delete stale stack state on store of untracked
-    register
-  perf annotate-arm64: Support stack variable tracking
-  perf annotate-arm64: Support 'mov' instruction tracking
-  perf annotate-arm64: Support 'add' instruction tracking
-  perf annotate-arm64: Support 'adrp' instruction to track global
-    variables
-  perf annotate-arm64: Support per-cpu variable access tracking
-  perf annotate-arm64: Support 'mrs' instruction to track 'current'
-    pointer
-
- .../perf/util/annotate-arch/annotate-arm64.c  | 774 ++++++++++++++++++
- tools/perf/util/annotate-arch/annotate-x86.c  |  38 +-
- tools/perf/util/annotate-data.c               | 209 ++++-
- tools/perf/util/annotate-data.h               |  14 +-
- 4 files changed, 987 insertions(+), 48 deletions(-)
-
-
-base-commit: 2efb7a11f1aa4d2dc285fe2680cca22cb9f72f64
+diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+index 398795ba3694..24d82739b2ec 100644
+--- a/tools/perf/util/annotate-data.c
++++ b/tools/perf/util/annotate-data.c
+@@ -1241,6 +1241,74 @@ static void setup_stack_canary(struct data_loc_info *dloc)
+ 	}
+ }
+ 
++int arch_get_reg_offset(const struct arch *arch, struct annotated_op_loc *op_loc,
++			int breg, struct type_state *state, bool apply_index,
++			int *offset)
++{
++	if (arch__is_arm64(arch)) {
++		int reg2;
++
++		/* Post-indexed addressing: offset is 0 when not applying index */
++		if (op_loc->addr_mode == PERF_AAM_POST_INDEX && !apply_index) {
++			*offset = 0;
++			return 0;
++		}
++
++		/* Single-register addressing: return the stored offset directly */
++		if (!op_loc->multi_regs) {
++			*offset = op_loc->offset;
++			return 0;
++		}
++
++		/*
++		 * SIB (Scale-Index-Base) style indexed addressing, e.g.:
++		 *   Array element load:  ldr  dst, [base, index, lsl #3]
++		 *   Array element load:  ldr  dst, [base, index, uxtw #3]
++		 *   Array address calc:  add  dst, base, index lsl #3
++		 *
++		 * The index reg only computes element offset without modifying
++		 * the underlying data type; the dst type is inherited from base.
++		 * Therefore, the base reg offset can be treated as 0.
++		 */
++		if (op_loc->extend_type || op_loc->shift_type) {
++			/* A memory reference implies breg is a pointer. */
++			if (op_loc->mem_ref) {
++				*offset = 0;
++				return 0;
++			}
++			/*
++			 * Otherwise, require breg to be a known pointer to avoid
++			 * treating integer arithmetic as indexed address calculation.
++			 */
++			if (has_reg_type(state, breg) && state->regs[breg].ok &&
++			    (state->regs[breg].kind == TSR_KIND_POINTER ||
++			     (state->regs[breg].kind == TSR_KIND_TYPE &&
++			      dwarf_tag(&state->regs[breg].type) == DW_TAG_pointer_type))) {
++				*offset = 0;
++				return 0;
++			}
++			return -1;
++		}
++
++		/*
++		 * For register-based addressing without shift/extension,
++		 * reg2 may be a constant offset. Use its value as the offset
++		 * from the base register.
++		 */
++		reg2 = op_loc->reg1 == breg ? op_loc->reg2 : op_loc->reg1;
++		if (has_reg_type(state, reg2) && state->regs[reg2].ok &&
++			state->regs[reg2].kind == TSR_KIND_CONST) {
++			*offset = (s64)state->regs[reg2].imm_value;
++			return 0;
++		}
++
++		return -1;
++	}
++
++	*offset = op_loc->offset;
++	return 0;
++}
++
+ /*
+  * It's at the target address, check if it has a matching type.
+  * It returns PERF_TMR_BAIL_OUT when it looks up per-cpu variables which
+@@ -1254,18 +1322,25 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ {
+ 	u32 insn_offset = dl->al.offset;
+ 	int reg = dloc->op->reg1;
+-	int offset = dloc->op->offset;
+-	const char *offset_sign = "";
++	int offset;
++	const char *offset_sign;
+ 	bool retry = true;
+ 
+-	if (offset < 0) {
+-		offset = -offset;
+-		offset_sign = "-";
++again:
++	if (arch_get_reg_offset(dloc->arch, dloc->op, reg, state, false, &offset)) {
++		/*
++		 * Fall back to the instruction's offset. This prevents the
++		 * register type of the instruction from being completely lost.
++		 * Compared to dropping this type inference entirely, providing
++		 * a rough type hint is likely more useful.
++		 */
++		offset = dloc->op->offset;
+ 	}
+ 
+-again:
++	offset_sign = offset < 0 ? "-" : "";
++
+ 	pr_debug_dtp("chk [%x] reg%d offset=%s%#x ok=%d kind=%d ",
+-		     insn_offset, reg, offset_sign, offset,
++		     insn_offset, reg, offset_sign, abs(offset),
+ 		     state->regs[reg].ok, state->regs[reg].kind);
+ 
+ 	if (!state->regs[reg].ok)
+@@ -1288,7 +1363,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		 */
+ 		ptr_type = die_get_pointer_type(&state->regs[reg].type, &ptr_die);
+ 		if (!ptr_type) {
+-			if (dloc->op->offset < 0 && reg != state->stack_reg)
++			if (offset < 0 && reg != state->stack_reg)
+ 				goto check_kernel;
+ 
+ 			return PERF_TMR_NO_POINTER;
+@@ -1298,7 +1373,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		if (__die_get_real_type(ptr_type, type_die) == NULL)
+ 			return PERF_TMR_NO_POINTER;
+ 
+-		dloc->type_offset = dloc->op->offset + state->regs[reg].offset;
++		dloc->type_offset = offset + state->regs[reg].offset;
+ 
+ 		if (dwarf_tag(type_die) == DW_TAG_typedef)
+ 			die_get_real_type(type_die, &sized_type);
+@@ -1322,7 +1397,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		 */
+ 		*type_die = state->regs[reg].type;
+ 
+-		dloc->type_offset = dloc->op->offset + state->regs[reg].offset;
++		dloc->type_offset = offset + state->regs[reg].offset;
+ 
+ 		return check_type_offset(type_die, dloc->type_offset);
+ 	}
+@@ -1336,7 +1411,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		 */
+ 		*type_die = state->regs[reg].type;
+ 
+-		dloc->type_offset = dloc->op->offset;
++		dloc->type_offset = offset;
+ 
+ 		if (check_type_offset(type_die, dloc->type_offset) != PERF_TMR_OK)
+ 			return PERF_TMR_BAIL_OUT;
+@@ -1358,7 +1433,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 	}
+ 
+ 	if (state->regs[reg].kind == TSR_KIND_PERCPU_BASE) {
+-		u64 var_addr = dloc->op->offset;
++		u64 var_addr = (s64) offset;
+ 		int var_offset;
+ 
+ 		pr_debug_dtp("percpu var");
+@@ -1385,7 +1460,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 
+ 	if (state->regs[reg].kind == TSR_KIND_CONST &&
+ 	    dso__kernel(map__dso(dloc->ms->map))) {
+-		if (dloc->op->offset < 0 && reg != state->stack_reg && reg != dloc->fbreg)
++		if (offset < 0 && reg != state->stack_reg && reg != dloc->fbreg)
+ 			goto check_kernel;
+ 	}
+ check_non_register:
+@@ -1394,7 +1469,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 
+ 		pr_debug_dtp("%s", reg == dloc->fbreg ? "fbreg" : "stack");
+ 
+-		stack = find_stack_state(state, dloc->type_offset);
++		stack = find_stack_state(state, offset);
+ 		if (stack == NULL) {
+ 			if (retry) {
+ 				pr_debug_dtp(" : retry\n");
+@@ -1417,7 +1492,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 
+ 		*type_die = stack->type;
+ 		/* Update the type offset from the start of slot */
+-		dloc->type_offset -= stack->offset;
++		dloc->type_offset = offset - stack->offset;
+ 
+ 		return PERF_TMR_OK;
+ 	}
+@@ -1435,7 +1510,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		if (reg != fbreg)
+ 			return PERF_TMR_NO_TYPE;
+ 
+-		stack = find_stack_state(state, dloc->type_offset - fboff);
++		stack = find_stack_state(state, offset - fboff);
+ 		if (stack == NULL) {
+ 			if (retry) {
+ 				pr_debug_dtp(" : retry\n");
+@@ -1458,7 +1533,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 
+ 		*type_die = stack->type;
+ 		/* Update the type offset from the start of slot */
+-		dloc->type_offset -= fboff + stack->offset;
++		dloc->type_offset = offset - fboff - stack->offset;
+ 
+ 		return PERF_TMR_OK;
+ 	}
+@@ -1472,7 +1547,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		    arch__is_x86(dloc->arch)) {
+ 			pr_debug_dtp("this-cpu var");
+ 
+-			addr = dloc->op->offset;
++			addr = (s64) offset;
+ 
+ 			if (get_global_var_type(cu_die, dloc, dloc->ip, addr,
+ 						&offset, type_die)) {
+@@ -1483,8 +1558,8 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		}
+ 
+ 		/* Access to global variable like "-0x7dcf0500(,%rdx,8)" */
+-		if (dloc->op->offset < 0 && reg != state->stack_reg) {
+-			addr = (s64) dloc->op->offset;
++		if (offset < 0 && reg != state->stack_reg) {
++			addr = (s64) offset;
+ 
+ 			if (get_global_var_type(cu_die, dloc, dloc->ip, addr,
+ 						&offset, type_die)) {
+diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
+index d0dc056fb13a..453efdf6afa6 100644
+--- a/tools/perf/util/annotate-data.h
++++ b/tools/perf/util/annotate-data.h
+@@ -274,7 +274,9 @@ bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
+ bool get_global_var_info(struct data_loc_info *dloc, u64 addr,
+ 				const char **var_name, int *var_offset);
+ void pr_debug_type_name(Dwarf_Die *die, enum type_state_kind kind);
+-
++int arch_get_reg_offset(const struct arch *arch, struct annotated_op_loc *op_loc,
++			int breg, struct type_state *state, bool apply_index,
++			int *offset);
+ #else /* HAVE_LIBDW_SUPPORT */
+ 
+ static inline struct annotated_data_type *
 -- 
 2.34.1
 
