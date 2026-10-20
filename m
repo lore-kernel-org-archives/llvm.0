@@ -1,88 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.251.105.195
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792459754;
-	b=f0oHzwdbF9jwd8Eu3sUPeyxqt1qx/nB3rdoU0Yal1+Ce5FBsrFSu+hvMRnGZxCcmovTY
-	 uqkud4BMVWI9EwUALZJtcQZDywxqjANHsBqQcKCbEMnmPOvTQ01fvsZtKPlQH47Bv0iqJ
-	 h9rxrs31KI7B0nK7bWpL8d/l7CnXMmxwDwv4e9loJrplv9b5yGWXKzQ/MSgomzgLBgxTI
-	 iMC5RtcdolkmDKnKih0X494yJobPrbn1ycpK5nZDFB+wM7YAUDioKIpMjIic4Uiswxr0Q
-	 7bjgP7WsR1ZI6L0XTqeREYVS5sC/AKmt1nFhvEvq3WZpTj7cebnAjVniSwSUTVfQGpQ==
+	t=1792460932;
+	b=O+2w8lVK/cYG2lJHoRi6AOkW9H/Lo8Bd+lWN2dy2fR8SbvSqmg1Y4Yuy8CYbr8xt2QNV
+	 foxboskF5w8Iuj4gfD2oV1sl64EmpP/NkRzc4LTBCm7M9P3ni0r9FiqzoN4KPXdt8Qe6U
+	 Inj1SN08XcycXvpaUW3fvzFmCM7UeKO5xUwLAfzMzHeZCHIjajlQPxQH456kMv7sGpbrw
+	 Bu5vjmjTFijeYMTWYJPv3g6WX4HT24BOpLpXGgmX0Cb19blq4dtdwsa8KddlPIol9zknH
+	 C+fwueRxIq8FtV3IEJIUOzCHNXlBFOO1c/h508HnwBzfsOOcptkg+76x8WFTzOdrQbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792459754;
-	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=fIqhj+O6y/smeL+V0+rXQRpO6E8ZU3+BVpVMiUWAO/k=;
-	b=xKPq2eX5yVKRAiWzuN7qoIpcprrX5gl/0yZlwLr1EMh2+65TSGpkTKe8OLlMql6N0DWy
-	 UaN1C1/5tIRGO7lojUo485XKVWKxa7+xY5Wlmp2taaxXy6amRQOLnkbaamWWm2MmSV27E
-	 N696ENY/sK1vWlRm3cI1Xb4OJC43FHEygfULByYeqJpn/55mOiROYLxtdoVdghBLdrxBH
-	 dncLwiBAixqyQOfLp/V972JbxoAz8G2Z9qky/RhokidGyrjR6ZK28TGi/ygCernDFPSHJ
-	 tmzzQsmkP/CdvJqyP0yySqbTfDyne5yf9oA5xiVWMiQIuuZLNRjOrRemGFSP2SgrgGg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792460932;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=xYUTNMkW2csshCK8Ys4wXnh9fdTf3ASbUgcj9fONDe0=;
+	b=scsp884zNxwS8SiYFdP2fozZOsaDT4FlbpZcjbB4yBY36E1qrWvfzC7LqkTopwzohJPi
+	 EN1r92hTTtYAPTRGmQYBQBC+MSAuSCjDCGA0IATJV+etUjsh13RXGfGRHSF2qj/KPJ3Cp
+	 IDMfW4UJ7XYR39ZQNfnYnnuiEYjfSnHM9NPEtH2k4vuMq0Wd5Muff9gCBgb//yAgUfzp0
+	 j+S2np+tV+qJRsqPuUJt3t0kcD7vlthvig/095aOEwQK8xKVWkS6GzxIJPX6Gjr94VnVI
+	 WjVRcZas7jtsJExvCV7g1qJr3n7fMH/Qw2puYcg84PhQCKvbAMkhJgvqQFE72GDoqhQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=alien8.de;
-	spf=pass smtp.mailfrom=alien8.de;
-	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=hMyrl7zK;
-	arc=none smtp.remote-ip=65.109.113.108
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	dmarc=pass header.from=collabora.com;
+	spf=pass smtp.mailfrom=collabora.com;
+	dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=OJYZ8vo1;
+	arc=none smtp.remote-ip=148.251.105.195
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D323606A31B
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 01:29:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D323606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61484606A319
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 01:48:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 61484606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key, unprotected) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=hMyrl7zK
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 32A0B40E00E8;
-	Tue, 20 Oct 2026 01:29:07 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 6m933wAgKqxb; Tue, 20 Oct 2026 01:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1792459744; bh=fIqhj+O6y/smeL+V0+rXQRpO6E8ZU3+BVpVMiUWAO/k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hMyrl7zK8vn3BRxJ5siMJZ9dgVt/ist2ggRRnhcznD2v4q9mQ+LP+uZxjAntElYpy
-	 L5TOleI0Ppx19biyjPfA9tmGNulUvUmV8N0zsfuPM/vYsJoiNRUoRd1gBLZQt5ikfv
-	 +NJDmceDKkoSI5B1fx+ij8UktCG2NJs4fyWApCZIfQKGM1Tk9W8SR/HPyUPIDnDrxa
-	 f6RbaKGBd5L6pF+6NSUIW6o1dQkPsNFDqytnTQ4OKkdxP7sSBgA+UFEPYrmZ/OO4EK
-	 cU460MeLAB+85/O233BHhdd+egn/pkUX/eOUoGDbRUqjnxZ9N0oVUKFWqJQrq1NOAB
-	 xXFdE8jVhZI7mj3qIVIpklCBH+L/Lqk2nplkjRtN09V4L+UAun6Bsls+vR3QIoaO3u
-	 Si/8DhgRTdGoOAi0GrXDWEFRQFCXOksbaP2ufAbDRoU4W+GXpKvyUivfMFotwfI52W
-	 cja0PK9sJ/PjcyBW6eptAdx7odedDXwHuvsPPWpbI50Ugz64y3CNTL4iPRlzfAZJhb
-	 m8aT4PO7Bnol8EMav0rqhaDJf51ac6yD+9FHrayuOt37nRlVfH9uq6pyQED8iLw+k7
-	 5G7QTEkR3Tr+62R/MDLM1+Pv2XGKwhlNj4kijS+h9HbrQDmmL3ERn18qIDRnSKrjeT
-	 s1fAgkTP01Y1bICQGVTbHYWU=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=OJYZ8vo1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1792460929;
+	bh=b8dt7ILauLndGVgIEIvkXYvCIjmzfLH15k6esv+BlNI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OJYZ8vo1r0xPuFH2vN/yTI3PXQrEXGJep0Zyzf8eKFVON/fPUVUh+sbdsH83cDPS8
+	 tOoGQcXvv0bcuP9uDn0T94v3lOOSgwCg+3etg0tEd32V1m7X7ytr0XXEUOqQZIVPr/
+	 KwH64gTgXyMzJLnkjzlWIlyjOh92VPX6jKxKNmWTNMykgjYgYQ0vxXRPvGhjMykitM
+	 YdvhHEQ4jNC4FPRSo76wK+NtYA19yxQBAXu3g1uj5hP+hWG5MqQJQuP8CXdHcAngQX
+	 Zk6oD5inHod2EZ4d2YvyFO+qqHtx8b6V6UqwLwAqX5D4PQBrovXxQuvd6ZCaAt/uSH
+	 zZ8L31OMdGwoQ==
+Received: from [100.64.0.157] (unknown [100.64.0.157])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 81C2340E015B;
-	Tue, 20 Oct 2026 01:28:47 +0000 (UTC)
-Date: Mon, 19 Oct 2026 18:28:44 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Rosen Penev <rosenp@gmail.com>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Florian Westphal <fw@strlen.de>, Julian Anastasov <ja@ssi.bg>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/csum: Relax the len and proto constraints in 32-bit
- csum_ipv6_magic()
-Message-ID: <20261020012844.GDatbDzDp1zC0NtI6k@fat_crate.local>
-References: <20261020003238.2823758-1-sashal@kernel.org>
- <CAKxU2N9paXhCuNknUzKx5dYxhXitLZ=OVVY7Sym1HV8Mow6cSQ@mail.gmail.com>
- <20261020011140.GCata_zHOTeTXLdlr2@fat_crate.local>
- <atbBFRU1Wm94oYB7@laps>
+	(Authenticated sender: vignesh)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id DF68117E0382;
+	Tue, 20 Oct 2026 03:48:46 +0200 (CEST)
+Message-ID: <533a80fb-86db-46a2-a627-7db37bd8cbb7@collabora.com>
+Date: Tue, 20 Oct 2026 07:18:44 +0530
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -92,27 +61,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <atbBFRU1Wm94oYB7@laps>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] drm/ci: Add CI pipeline for drm-misc branches
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Helen Koike <helen.fornazier@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev
+References: <20260911-drm-drm-misc-ci-v2-1-1847f89585cb@kernel.org>
+ <9e1fc5c6-53ff-4a4d-9744-77bcf6a0325e@collabora.com> <atYoMnjtOhDLJwza@houat>
+Content-Language: en-US
+From: Vignesh Raman <vignesh.raman@collabora.com>
+In-Reply-To: <atYoMnjtOhDLJwza@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 19, 2026 at 09:17:09PM -0400, Sasha Levin wrote:
-> I'm not stopping you from dropping it :)
+Hi Maxime,
 
-I'd love to.
+On 19/10/26 19:56, Maxime Ripard wrote:
+> Hi Vignesh,
+> 
+> On Mon, Oct 19, 2026 at 03:30:54PM +0530, Vignesh Raman wrote:
+>> Hi,
+>>
+>> On 11/09/26 17:48, Maxime Ripard wrote:
+>>> The DRM CI infrastructure builds upon Mesa's CI to run IGT tests on
+>>> hardware. Its focus is on functional testing on a selected number of
+>>> targets.
+>>>
+>>> The concern for drm-misc is different: it merges a large number of
+>>> patches across many platforms, and build or unit test breakages happen
+>>> on a regular basis. Adding build and unit testing for drm-misc has been
+>>> on the back of our minds, and a first attempt was made last year. The
+>>> feedback was to rely more on the existing infrastructure.
+>>>
+>>> Introduce a CI entry point that runs on pushes to drm-misc-next,
+>>> drm-misc-fixes, and drm-misc-next-fixes. It reuses kunit.yml,
+>>> check-devicetrees.yml, and the freedesktop ci-templates, while defining
+>>> build templates inline to avoid pulling in the Mesa pipeline.
+>>>
+>>> A single Debian container with LLVM handles cross-compilation to all
+>>> three architectures. The pipeline compiles the kernel using defconfigs
+>>> from the drm/tip rerere-cache branch, runs the DRM KUnit tests, and
+>>> checks device tree bindings.
+>>>
+>>> Link: https://lore.kernel.org/all/20250319-greedy-sturgeon-from-avalon-ac758f@houat/
+>>> Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
+>>> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+>>> ---
+>>> Changes in v2:
+>>> - Run dt_bindings_check
+>>> - Run on push instead of MR after some discussions with Dave and Sima
+>>> - Test run here: https://gitlab.freedesktop.org/mripard/kernel/-/pipelines/1744733
+>>> - Link to v1: https://lore.kernel.org/r/20260902-drm-drm-misc-ci-v1-1-49d05e228eab@kernel.org
+>>
+>> Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
+> 
+> Thanks for the review, see below
+> 
+>>> ---
+>>>    drivers/gpu/drm/ci/drm-misc-ci.yml | 147 +++++++++++++++++++++++++++++++++++++
+>>>    1 file changed, 147 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/ci/drm-misc-ci.yml b/drivers/gpu/drm/ci/drm-misc-ci.yml
+>>> new file mode 100644
+>>> index 000000000000..4ab87547794e
+>>> --- /dev/null
+>>> +++ b/drivers/gpu/drm/ci/drm-misc-ci.yml
+>>> @@ -0,0 +1,147 @@
+>>> +# CI pipeline for drm-misc-next, drm-misc-fixes, and drm-misc-next-fixes.
+>>> +#
+>>> +# Runs on pushes to drm-misc-next, drm-misc-fixes, and
+>>> +# drm-misc-next-fixes. Compiles the kernel for arm, arm64, and
+>>> +# x86_64, runs the DRM KUnit tests, and checks device tree bindings.
+>>> +#
+>>> +# A single container image is built using freedesktop ci-templates with
+>>> +# the packages needed for kernel compilation and LLVM for
+>>> +# cross-compilation. QEMU is installed at runtime by the KUnit jobs.
+>>> +#
+>>> +# check-devicetrees.yml and kunit.yml are included directly. build.yml
+>>> +# and the Mesa container/build pipelines are not:
+>>> +# they pull in hundreds of Mesa-specific jobs and templates that would
+>>> +# each need to be individually stubbed or disabled. The build templates
+>>> +# (.build:arm32, .build:arm64, .build:x86_64) are defined inline.
+>>> +
+>>> +variables:
+>>> +  CI_TEMPLATES_COMMIT: &ci-templates-commit aec7a6ce7bb38902c70641526f6611e27141784a
+>>> +  # Project whose container registry stores the built images
+>>> +  FDO_UPSTREAM_REPO: mripard/kernel
+>>> +  KERNEL_BUILD_CONTAINER_TAG: "2026-09-11-01"
+>>> +  LLVM_VERSION: "19"
+> 
+> I just realised there's still my personal repo being used as the
+> container registry. Are you ok if I change it to drm/misc/kernel when
+> applying?
 
-> Any objection to just taking Rosen's? Maybe with the tags I had on mine to make
-> tracking easier?
 
-Thanks, that's nice of you.
+Yes, please change it when applying. Thanks.
 
-I'd like to use a trimmed version of your commit message because it explains
-the big picture better as to why we need this in the first place.
+Regards,
+Vignesh
 
-Thx.
+> 
+> Thanks again,
+> Maxime
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
