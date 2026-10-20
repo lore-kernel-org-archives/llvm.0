@@ -1,57 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792460932;
-	b=O+2w8lVK/cYG2lJHoRi6AOkW9H/Lo8Bd+lWN2dy2fR8SbvSqmg1Y4Yuy8CYbr8xt2QNV
-	 foxboskF5w8Iuj4gfD2oV1sl64EmpP/NkRzc4LTBCm7M9P3ni0r9FiqzoN4KPXdt8Qe6U
-	 Inj1SN08XcycXvpaUW3fvzFmCM7UeKO5xUwLAfzMzHeZCHIjajlQPxQH456kMv7sGpbrw
-	 Bu5vjmjTFijeYMTWYJPv3g6WX4HT24BOpLpXGgmX0Cb19blq4dtdwsa8KddlPIol9zknH
-	 C+fwueRxIq8FtV3IEJIUOzCHNXlBFOO1c/h508HnwBzfsOOcptkg+76x8WFTzOdrQbA==
+	t=1792461935;
+	b=rB4lYO+fx3vE2g2I/lFW+EkzUsDYwlCO8O2mAtn8jC1H46x5dtU+g318E7peF97aj3zm
+	 T3iD1G51Do6k4GXhsqkQtnv9TOj6SJR8HFwRKp9HhT35sFm3Q8a0J/9xMNJZP9QQ+Y4Nb
+	 E8xb16C3W2lGMRdt/77G9uwuS1y4ccd9KUAQOFLBGcQMUTW9M2EBF9dmn4HAgoYB7n5uY
+	 skNwZIdwuzRP3WIXoaBGsvIh6sOxAW6K/QAohGTGjwTPm05lSFvWIUoubTcwsKNXkEHOH
+	 mky8YzaRasxCqDGBmSgtIRZTFkrXVk/kh0KbI3+derWNEieim+sDi+f4g8qpS12UYpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792460932;
-	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=xYUTNMkW2csshCK8Ys4wXnh9fdTf3ASbUgcj9fONDe0=;
-	b=scsp884zNxwS8SiYFdP2fozZOsaDT4FlbpZcjbB4yBY36E1qrWvfzC7LqkTopwzohJPi
-	 EN1r92hTTtYAPTRGmQYBQBC+MSAuSCjDCGA0IATJV+etUjsh13RXGfGRHSF2qj/KPJ3Cp
-	 IDMfW4UJ7XYR39ZQNfnYnnuiEYjfSnHM9NPEtH2k4vuMq0Wd5Muff9gCBgb//yAgUfzp0
-	 j+S2np+tV+qJRsqPuUJt3t0kcD7vlthvig/095aOEwQK8xKVWkS6GzxIJPX6Gjr94VnVI
-	 WjVRcZas7jtsJExvCV7g1qJr3n7fMH/Qw2puYcg84PhQCKvbAMkhJgvqQFE72GDoqhQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792461935;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=xnJZ15KS4TYJMaU1eDR9zd5vS9ipPVJHhMtBkp123IM=;
+	b=cNTcyKrpdVn7mv8XpPyLDdiEk2InxTdy9q+FvZqugFWLbwQt2XP0raYNv3Oi00co2yVS
+	 g470ZfJvqV75ojWPysisqEWgeS3mcO2OCvCwFyiTpLZJ/XWxjRZS8uYew9Eu34M2ghFA3
+	 z4bnJHyR8fCUPmYoioG6sVIkhUNgMRh/+rA8847uVbk80RUvMJj9WN9bbtKigvTw3dcm5
+	 U7m+IHF0t/YMuJIMr4QdBzojnqgBVQbVbgOWpti0kiZFyy8tbyRGKY/X+Mtny1ctDZiOk
+	 Tnwnt5Dp+SBZT96znUpIbHmYR+yqw9oa+Ou/wb8K/uRj+mtQbsoujp4ReDK+ToRAVkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=collabora.com;
-	spf=pass smtp.mailfrom=collabora.com;
-	dkim=pass header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=OJYZ8vo1;
-	arc=none smtp.remote-ip=148.251.105.195
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U4XztdjH;
+	arc=none smtp.remote-ip=192.198.163.7
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61484606A319
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 01:48:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 61484606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77330606A322;
+	Tue, 20 Oct 2026 02:05:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77330606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=OJYZ8vo1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1792460929;
-	bh=b8dt7ILauLndGVgIEIvkXYvCIjmzfLH15k6esv+BlNI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OJYZ8vo1r0xPuFH2vN/yTI3PXQrEXGJep0Zyzf8eKFVON/fPUVUh+sbdsH83cDPS8
-	 tOoGQcXvv0bcuP9uDn0T94v3lOOSgwCg+3etg0tEd32V1m7X7ytr0XXEUOqQZIVPr/
-	 KwH64gTgXyMzJLnkjzlWIlyjOh92VPX6jKxKNmWTNMykgjYgYQ0vxXRPvGhjMykitM
-	 YdvhHEQ4jNC4FPRSo76wK+NtYA19yxQBAXu3g1uj5hP+hWG5MqQJQuP8CXdHcAngQX
-	 Zk6oD5inHod2EZ4d2YvyFO+qqHtx8b6V6UqwLwAqX5D4PQBrovXxQuvd6ZCaAt/uSH
-	 zZ8L31OMdGwoQ==
-Received: from [100.64.0.157] (unknown [100.64.0.157])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: vignesh)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id DF68117E0382;
-	Tue, 20 Oct 2026 03:48:46 +0200 (CEST)
-Message-ID: <533a80fb-86db-46a2-a627-7db37bd8cbb7@collabora.com>
-Date: Tue, 20 Oct 2026 07:18:44 +0530
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U4XztdjH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792461934; x=1823997934;
+  h=date:from:to:cc:subject:message-id;
+  bh=4eX9K6NIFZtmF0Tfll+rIpMPL8Yw/fhscspaCCiG3sk=;
+  b=U4XztdjHo73UN7spQzzZ5jsA6dMnhHlguticKDMszGUXezz7/qyRNhMN
+   LYhmE7va6boR0zs2cfxdVynktVBJ3hATCQWFhFwMZ13Nq3Atl0uEQ/qXh
+   W0B7JdC5LOKerpk3b9EUtLNV1xV9aIMCGPEmRBQZ9CHmUii4gSO9nLstJ
+   JBylhkVPO+DMqU7mJi7R/jqAZBOfDt0avoRq3zttOig+W5FRybneFRmzU
+   ZimFAg9T0a0cuangeRWJghdiZK94w7d13ahT38oKB31H1+CoGoGhLMD41
+   R0Nd0DK2enqWuWj3OARF0i688gHdUTdc8uhl2JH8urbhPxbriCDZpHiw+
+   Q==;
+X-CSE-ConnectionGUID: 64Gs9j2NRLaE+hVW6oc6PQ==
+X-CSE-MsgGUID: OB2qEB6wSESF+k2Pg7KLDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1060718"
+X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
+   d="scan'208";a="1060718"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 19:05:33 -0700
+X-CSE-ConnectionGUID: mDuMqh8gRJmA4FJx15VQPA==
+X-CSE-MsgGUID: LZ9o/13XQZCpeGI+qOrEwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
+   d="scan'208";a="3097855"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 19 Oct 2026 19:05:30 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xIzEG-00000000MjK-0boh;
+	Tue, 20 Oct 2026 02:05:28 +0000
+Date: Tue, 20 Oct 2026 10:05:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ebiggers:wip-rm-mmx 1/1]
+ lib/raid/xor/xor-core.c:58:undefined reference to `xor_block_sse'
+Message-ID: <202610200957.9LSVeYFv-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -60,113 +79,70 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drm/ci: Add CI pipeline for drm-misc branches
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Helen Koike <helen.fornazier@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev
-References: <20260911-drm-drm-misc-ci-v2-1-1847f89585cb@kernel.org>
- <9e1fc5c6-53ff-4a4d-9744-77bcf6a0325e@collabora.com> <atYoMnjtOhDLJwza@houat>
-Content-Language: en-US
-From: Vignesh Raman <vignesh.raman@collabora.com>
-In-Reply-To: <atYoMnjtOhDLJwza@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Maxime,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git wip-rm-mmx
+head:   6f82cce65eef74ed32bdf4f86b884f3fabe950c6
+commit: 6f82cce65eef74ed32bdf4f86b884f3fabe950c6 [1/1] raid: remove MMX optimized code
+config: um-randconfig-1000-20261019 (https://download.01.org/0day-ci/archive/20261020/202610200957.9LSVeYFv-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610200957.9LSVeYFv-lkp@intel.com/reproduce)
 
-On 19/10/26 19:56, Maxime Ripard wrote:
-> Hi Vignesh,
-> 
-> On Mon, Oct 19, 2026 at 03:30:54PM +0530, Vignesh Raman wrote:
->> Hi,
->>
->> On 11/09/26 17:48, Maxime Ripard wrote:
->>> The DRM CI infrastructure builds upon Mesa's CI to run IGT tests on
->>> hardware. Its focus is on functional testing on a selected number of
->>> targets.
->>>
->>> The concern for drm-misc is different: it merges a large number of
->>> patches across many platforms, and build or unit test breakages happen
->>> on a regular basis. Adding build and unit testing for drm-misc has been
->>> on the back of our minds, and a first attempt was made last year. The
->>> feedback was to rely more on the existing infrastructure.
->>>
->>> Introduce a CI entry point that runs on pushes to drm-misc-next,
->>> drm-misc-fixes, and drm-misc-next-fixes. It reuses kunit.yml,
->>> check-devicetrees.yml, and the freedesktop ci-templates, while defining
->>> build templates inline to avoid pulling in the Mesa pipeline.
->>>
->>> A single Debian container with LLVM handles cross-compilation to all
->>> three architectures. The pipeline compiles the kernel using defconfigs
->>> from the drm/tip rerere-cache branch, runs the DRM KUnit tests, and
->>> checks device tree bindings.
->>>
->>> Link: https://lore.kernel.org/all/20250319-greedy-sturgeon-from-avalon-ac758f@houat/
->>> Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
->>> Signed-off-by: Maxime Ripard <mripard@kernel.org>
->>> ---
->>> Changes in v2:
->>> - Run dt_bindings_check
->>> - Run on push instead of MR after some discussions with Dave and Sima
->>> - Test run here: https://gitlab.freedesktop.org/mripard/kernel/-/pipelines/1744733
->>> - Link to v1: https://lore.kernel.org/r/20260902-drm-drm-misc-ci-v1-1-49d05e228eab@kernel.org
->>
->> Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
-> 
-> Thanks for the review, see below
-> 
->>> ---
->>>    drivers/gpu/drm/ci/drm-misc-ci.yml | 147 +++++++++++++++++++++++++++++++++++++
->>>    1 file changed, 147 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/ci/drm-misc-ci.yml b/drivers/gpu/drm/ci/drm-misc-ci.yml
->>> new file mode 100644
->>> index 000000000000..4ab87547794e
->>> --- /dev/null
->>> +++ b/drivers/gpu/drm/ci/drm-misc-ci.yml
->>> @@ -0,0 +1,147 @@
->>> +# CI pipeline for drm-misc-next, drm-misc-fixes, and drm-misc-next-fixes.
->>> +#
->>> +# Runs on pushes to drm-misc-next, drm-misc-fixes, and
->>> +# drm-misc-next-fixes. Compiles the kernel for arm, arm64, and
->>> +# x86_64, runs the DRM KUnit tests, and checks device tree bindings.
->>> +#
->>> +# A single container image is built using freedesktop ci-templates with
->>> +# the packages needed for kernel compilation and LLVM for
->>> +# cross-compilation. QEMU is installed at runtime by the KUnit jobs.
->>> +#
->>> +# check-devicetrees.yml and kunit.yml are included directly. build.yml
->>> +# and the Mesa container/build pipelines are not:
->>> +# they pull in hundreds of Mesa-specific jobs and templates that would
->>> +# each need to be individually stubbed or disabled. The build templates
->>> +# (.build:arm32, .build:arm64, .build:x86_64) are defined inline.
->>> +
->>> +variables:
->>> +  CI_TEMPLATES_COMMIT: &ci-templates-commit aec7a6ce7bb38902c70641526f6611e27141784a
->>> +  # Project whose container registry stores the built images
->>> +  FDO_UPSTREAM_REPO: mripard/kernel
->>> +  KERNEL_BUILD_CONTAINER_TAG: "2026-09-11-01"
->>> +  LLVM_VERSION: "19"
-> 
-> I just realised there's still my personal repo being used as the
-> container registry. Are you ok if I change it to drm/misc/kernel when
-> applying?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610200957.9LSVeYFv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.o: in function `xor_register':
+>> lib/raid/xor/xor-core.c:58:(.init.text+0x2ac): undefined reference to `xor_block_sse'
+>> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:58:(.init.text+0x2b2): undefined reference to `xor_block_sse_pf64'
+>> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:58:(.init.text+0x2b6): undefined reference to `xor_block_sse'
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:58:(.init.text+0x2bb): undefined reference to `xor_block_sse_pf64'
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.o: in function `xor_force':
+>> lib/raid/xor/xor-core.c:72:(.init.text+0x2e4): undefined reference to `xor_block_avx'
+>> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: lib/raid/xor/xor-core.c:72:(.init.text+0x2e9): undefined reference to `xor_block_avx'
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 
-Yes, please change it when applying. Thanks.
+vim +58 lib/raid/xor/xor-core.c
 
-Regards,
-Vignesh
+^1da177e4c3f41 drivers/md/xor.c        Linus Torvalds    2005-04-16  47  
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  48  /**
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  49   * xor_register - register a XOR template
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  50   * @tmpl:	template to register
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  51   *
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  52   * Register a XOR implementation with the core.  Registered implementations
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  53   * will be measured by a trivial benchmark, and the fastest one is chosen
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  54   * unless an implementation is forced using xor_force().
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  55   */
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  56  void __init xor_register(struct xor_block_template *tmpl)
+524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  57  {
+524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26 @58  	tmpl->next = template_list;
+524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  59  	template_list = tmpl;
+524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  60  }
+524ccdbdfb5260 crypto/xor.c            Ard Biesheuvel    2020-09-26  61  
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  62  /**
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  63   * xor_force - force use of a XOR template
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  64   * @tmpl:	template to register
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  65   *
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  66   * Register a XOR implementation with the core and force using it.  Forcing
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  67   * an implementation will make the core ignore any template registered using
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  68   * xor_register(), or any previous implementation forced using xor_force().
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  69   */
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  70  void __init xor_force(struct xor_block_template *tmpl)
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  71  {
+a21921dd02d305 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27 @72  	forced_template = tmpl;
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  73  }
+35ebc4de105989 lib/raid/xor/xor-core.c Christoph Hellwig 2026-03-27  74  
 
-> 
-> Thanks again,
-> Maxime
+:::::: The code at line 58 was first introduced by commit
+:::::: 524ccdbdfb52608e9b98fcd64f4337add7009f41 crypto: xor - defer load time benchmark to a later time
 
+:::::: TO: Ard Biesheuvel <ardb@kernel.org>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
