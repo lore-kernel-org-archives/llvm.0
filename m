@@ -1,97 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.175
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792492487;
-	b=wDV8ly3wBsVLE/GcHn66NzSG57Zi0JaOSRJui+3U4PYZWzeAvNuXRCbFrVoSoKSQfXka
-	 0QO6biIzekBsT5ucGo8FcJ7R7W7WE44fBwUwEn8DdQeE9Nc7P/JGDts4Fx2C5mjSGflPj
-	 uy73gh5xQ0QNbK+WqqZ9/n8HVJ6q+6fjYq31a6Q7oq7JDxqi09HdBDfvzkF5lwHF1cepF
-	 aaLBqxDUif8Eyrk6WAWrk6U7mFYLctyAPRViYruQq2XjVM3wR6jn6yvM6ImPtmbTz7Vxh
-	 R98oEyr4V5EX6upV2L26V6U+Q8yZTe3ubSDx5WJcd59d/kOYoZjOPRL+M52AgZGYzKw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792492487;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=7yqug8sdWoY+Xi/S1g7k8vlRdY1kPSN8O1HjSFthE/o=;
-	b=VU5fMr20h6zUTGS0KzKerINF9NqVCNPPxwOOXHvXQMBML0WJjgsDP3KznY0QW5JNq6tX
-	 ztlOccnH25FkXAy24GapnPT33lIvLM2wylFlU/wSOFhs+sirTBssztciTbAtaSmnwuGnM
-	 p11aWUuKGQ6hiviRvYDqBlOgncD6iOuEFmCBaJH6lVRvzP6dERrg10ph8B1aHccIROOcN
-	 +RUxzO6w768bgLxAOkdDtkKmMwLyKx14eUyVxdCsW52mncPjZsk6m76eZz3RGhQ10l5b7
-	 QC90vM8+tWjuVclaVOFy01ObJ8VrJlrTwEOs82pkVFCz+0NlrXRySuTo7FdENLTcOAg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.175
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792495931;
+	b=bjtFO4nBUh5eLCSOKY8KjGqrAbMIVL0IPlUB1FLObM4jawkQlLL4NQwzjwJgnBeWPP+2
+	 /0jbLj1aCciDiTJa5ywM/Il4gnA0/4kh6XVvIht8FBev4oPSfpA8UseejwzKz+Hn8YrQx
+	 sNafYo5dpRQFJ2nAfpqZR0TCt8QvKjgKuwWFTzjJ0Z4uQyaczJVJQOcr2QIaCurFEkI2m
+	 yB5ltOi8pw/XMpqaOs/OQltwwskkAdyPs01AwzYcIYx6MtqOTC7obo8Vs0PAkAt6nbOlp
+	 NGRagjMaFCCn95dExL80sL06UnYY3oc6zC9Ld5vP3C7vf1eC6nuLPMSxI+5dw4Koptg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792495931;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=Mgf339TQwuPr8j2J99LXGWXR6zRjUM8zAg5og24Ycnw=;
+	b=EWZqNAmO2tGsdcSO2FrQQ/lSFkddgsp2XiJBg4WdMZ70xhlNlQiXeOOAAUhy9hINjob/
+	 3+UAF6/nXe0LqRgFASoh3nCVDHkOhuPaNL4r0NEAr2sHSpcV5rae0/5RhsbKRsa9Hn7rB
+	 y7g/bZTIW6YVPaTNRGHnpGN8RWUPP+9mMqJuTUbGjWJJRaduYpq5G/9hlmt4x+QE2XwX5
+	 bNUqGtIbQOoMRob6pZ9hXLEgLQYQNNB0KBRpWQWex9dzyAKLtmPvkZF27QtuEVHsKQaLl
+	 ymxZ4wzVUZesilq3v0bHXk5sGltfGnm9waHqslI8QhuI1l+W5AEWI3xYSUa+sZUa6ng==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=O1E7GCgh;
+	arc=none smtp.remote-ip=192.198.163.17
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8AE606A320
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 10:34:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE8AE606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-35c76e9614aso5732239eec.0
-        for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 03:34:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792492486; cv=none;
-        d=google.com; s=arc-20260327;
-        b=eDc5RtP+ACyHTeDpj00gob5Gx6KeRKj9AJRRNSW4t5S908gSyAhdCkqCx5wnfS5rvv
-         dnr0NJvGqyAdaH4BrRdSgl0AKJjCiMr41WM9wIwXFO7zdd/He0vJ5ZJNZ9ZfcZRIvVVZ
-         QXVHfNDzCt0UwiaNGYcSDJ2ffH+SLw0OfFYPzLTK+9kuHicIgCkEmS4EKB9FDKLfQ9K3
-         +9/qdUWviruTted6ZZRdQNkabJYfoq5pcVKc9ParbCTm1vFRNf53JRN0mAtK5isVrFYB
-         ZlFBvUqLKSQ8YgJxZliE8f3qKFfDlPnkNGmOPgulI/xw6lBQdIHr2EemPrZCsajsDIKy
-         anKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=7yqug8sdWoY+Xi/S1g7k8vlRdY1kPSN8O1HjSFthE/o=;
-        fh=1Wrordfsu+Ez9n/fSjIOA3QoK8TI0O6IsZ8V1wHSyhU=;
-        b=PUPNDl+4WZwJ0Meo81OLc/l0MO7DyOgtkiZ4v4TOfFBzN6DIHjchgh7sJDkz/oPfWi
-         caNTNGO0siXWozWJaQ9fVfHFiu1632lRXDxxilHpNHahAquudL6AiqkPOUb4ECCnbgfc
-         YXZb9WHwtCVlZePoQ4qHBr7q8eXZwMlrWpUKGarCpFZB8xKXXKoSDEtQ705NcWM+JT7B
-         Ewh9briqdG7umMlASAMubtweyv0Hu+CPbo4r82S/tKc/FFnVKOL1IQSsh9O3R8h5EZ/E
-         R1NTrQVdjSrXi5pNOfiLLzD3FfmZlXFbJc4xgKAG7zoloyAFcjrSGkwCXvsikwa/D1cK
-         FrEw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792492486; x=1793097286; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7yqug8sdWoY+Xi/S1g7k8vlRdY1kPSN8O1HjSFthE/o=;
-        b=Blnk7Sx54v8QGfFdUNlkxpWMfIAj/UF4hk0o4UiziElvJdI/EgY72oau+oSHJ+2fYG
-         exiQ/5Gp/B+l6rLhxv68toW9GY2re6BdBkc/RO8aF4ygbU42G300Zj4PvyZp4ExTfKBQ
-         jq/AgdXJC/O7QBiZ5xPcVZCISQ9bVs4WSm/BnBVn8ZTSnwWKj6L9KzLD/++rvlodG3X6
-         INt/7t+pm6Wz4YyiU5rnwV7u7aj9yXX4e6jLXtSfgUWekUA47kGf5B17UWRGpVNy0VRz
-         ahrKsvia5631dlefVsW/B4v1xld80JmXOgkH4qVr5EvS5/a5XLxSRkjubCI0CnJlE3/T
-         fUQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792492486; x=1793097286;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7yqug8sdWoY+Xi/S1g7k8vlRdY1kPSN8O1HjSFthE/o=;
-        b=jAix6oqVYU/d66RbGUh8irgNiOF8HwdxrDAmkVJaoPiJCqpT7uXv2ToTWqF/RFvCww
-         0zNyLNYeNrfmeEWfrBa11AifBvXpp7mbG10jQqXbFkY2Sl5XpCL35zY3oigiGpIn5xpS
-         fgB8ot6o8WaKRXZHJsfzBJi4vsohStYvwe7t5dmH1tndEjZTZCLY+6RJBzP82j3Cc6S5
-         JMMEDTzALS9Q2f66TO75p9T/orJnhd0aWCUG56vLYU6jCUZ7Q2qKmgk1yHg29xqA2wCg
-         OramQvu7waejPyCNewWGCbk8d1VFlPbMLTPe2jP47F/be4DL/+1Bs+bM82ie+YqOwgJV
-         sFWg==
-X-Forwarded-Encrypted: i=1; AKwUvBwvUVInRYi+aiDxAzl7WyDZH2JN6cRpOUxeZ4VcUrExeaSMZ/W0D6RdibCQ6nPhtpk1RCL+@lists.linux.dev
-X-Gm-Message-State: AFq9FYKKI5tZ9OzvvvBBK5tmE4+c9h3OeaQ2Lz/SlJwSHympBKBjJCN/
-	MKdlpDb3IU0eBpwAB16t0M/FV6wVsUoTDGvu5BN70DfVFFuEhc9mu1HahxCk70fBuXZxam0m/UY
-	znLRbEqS86bEAauSRlcJSaNjObZVbm7g6isvIl3kW
-X-Gm-Gg: AYBFou0feErrpGPrh41j/+KJn/d9UiFlgtIan4gzkF9rxKS58kln5MRgyVoR7hUxroP
-	h3HAE/Q2LYF4wu0tMjiuJwhFkjPmOW0VXnEzxJ2PTeFKfXRC1dgAQCEMUTjdcAqJz8FufQzLvcc
-	28gFDI3Qz7uBFJ/sMaMda4AgXEc7XYIYCuvOAXph4L9ZQQSrEPSvt0wopKUUAwcfzJCoH8YeGLA
-	69jtLwex1r5wfYQ1oW8tdlI2V6XYdPUh3o4+6V3DYUDi6djbcKbn5TAbVPKiMdPcxAHly26k5in
-	YDu6bA49eB7cUBzbcfbzjwoe/6jXP/KZ+3ETHciGuIkarKIaLoYF1N2401K+LiOBfUdaH+f5j2W
-	JTTZulO5YOFAmnVa1UW+m6Q==
-X-Received: by 2002:a05:701b:4657:b0:183:bebb:e93b with SMTP id
- a92af1059eb24-1850d3705c0mr13844857c88.6.1792492484834; Tue, 20 Oct 2026
- 03:34:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBE9606A31E;
+	Tue, 20 Oct 2026 11:32:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDBE9606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=O1E7GCgh
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792495930; x=1824031930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nayHupzZTkRbxRCVzEKooOScyNX1Xe35sNlMf97+PR8=;
+  b=O1E7GCghq+/EWJAZ6HKrFsHP3V4JvTcnIhprW6Kmu2KmPEFLatI3n106
+   rvM1/1O1bYZaPdJKisLPhKb+ykw5fscQO2SoPv2FOqaw60zN1b/14ZQS+
+   swATcI4/eoP7P5yf8G+FWOly0WzKPp/a4QVGGEOnIgdfuLUgX4DvSwr+h
+   4/+M2IbqVcmu9sk4p3F58Nxuwb21k6SCsI9pm7uRVtTX42+8o+P8uPBmW
+   y4Ffs6kwfLbsb8cdTcnbwP+PKVQVZ6QoXmKJMsgNiO/lMiXqX/owTaxE2
+   t435mJ4lxQQV3CQku8EgoBf5n6z3G6mplvZtOaOK1eWY7BFD/43IHuYjl
+   w==;
+X-CSE-ConnectionGUID: 6ZpK0u3dRweEHHywIAEj1A==
+X-CSE-MsgGUID: gOK5LFmFQianrVMEjTQFDQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1194621"
+X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
+   d="scan'208";a="1194621"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2026 04:32:09 -0700
+X-CSE-ConnectionGUID: KCuaApEWSaqTzd376Dup4Q==
+X-CSE-MsgGUID: EB9Zs3RdQmWcphZHno1sBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
+   d="scan'208";a="2747223"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 20 Oct 2026 04:32:05 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xJ84Y-00000000NPi-3A5l;
+	Tue, 20 Oct 2026 11:32:02 +0000
+Date: Tue, 20 Oct 2026 19:31:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavitrakumar Managutte <pavitrakumarm@vayavyalabs.com>,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, herbert@gondor.apana.org.au,
+	robh@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, krzk@kernel.org,
+	conor+dt@kernel.org, ruud.derwig@gf.com, rbannerm@synopsys.com,
+	manjunath.hadli@vayavyalabs.com, adityak@vayavyalabs.com,
+	navami.telsang@vayavyalabs.com, bhoomikak@vayavyalabs.com,
+	nazim.khan@vayavyalabs.com,
+	Pavitrakumar Managutte <pavitrakumarm@vayavyalabs.com>
+Subject: Re: [PATCH v26 4/4] crypto: spacc - Add SPAcc Kconfig and Makefile
+Message-ID: <202610201938.pmiyNP1i-lkp@intel.com>
+References: <20261019162457.1000115-5-pavitrakumarm@vayavyalabs.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -101,61 +89,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261015145714.3327543-1-elver@google.com> <DM8X51YCN6AA.1HV7J3R3PIYY9@garyguo.net>
- <CANpmjNPALPJQDZFfNAqo8v0eu_0uNvj+rJ5xqeC3ZZSvs9zQwA@mail.gmail.com> <CANiq72mCixHhc5tU6ueiJNEfE7yHXHXekhWDcvhFdfd414Q3yw@mail.gmail.com>
-In-Reply-To: <CANiq72mCixHhc5tU6ueiJNEfE7yHXHXekhWDcvhFdfd414Q3yw@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Tue, 20 Oct 2026 12:34:07 +0200
-X-Gm-Features: AclHuK9vxwrK8NaLvu2ec0o5N9md4lXO8zMypsPDxXbgQlLlX57bi1hqfmPPF_I
-Message-ID: <CANpmjNNmnTMqxSJ_R+wYeAkFOxnJcUmwktNuG990GunjxhcvbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kbuild: rust: enable KCSAN support
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Gary Guo <gary@garyguo.net>, Alexander Potapenko <glider@google.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Asahi Lina <lina+kernel@asahilina.net>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Yury Norov <ynorov@nvidia.com>, David Gow <david@davidgow.net>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Alvin Sun <alvin.sun@linux.dev>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Petr Mladek <pmladek@suse.com>, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261019162457.1000115-5-pavitrakumarm@vayavyalabs.com>
 
-On Tue, 20 Oct 2026 at 12:27, Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Mon, Oct 19, 2026 at 11:59=E2=80=AFPM Marco Elver <elver@google.com> w=
-rote:
-> >
-> > Which tree should this go through? The Rust tree? Probably too late
-> > for this cycle.
->
-> I think you send KCSAN PRs, so I thought you would use that, thus the
-> Acked-bys (I suspect others thought the same). But the Rust or Kbuild
-> trees are also a possibility, yeah.
+Hi Pavitrakumar,
 
-Happy to take it - but in the interest of avoiding conflicts, thought
-it might be better suited for the Rust (or Kbuild trees).
+kernel test robot noticed the following build errors:
 
-> In any case, at least for Kbuild and Rust, the PRs were already sent
-> (and, generally speaking, I would have expected a patch like this to
-> be in the list for longer anyway).
+[auto build test ERROR on 178aff4cf425b3fc51ff09c571fa1bfbc1eb8ea4]
 
-Needs some -next time, too.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pavitrakumar-Managutte/dt-bindings-crypto-Document-support-for-SPAcc/20261019-215454
+base:   178aff4cf425b3fc51ff09c571fa1bfbc1eb8ea4
+patch link:    https://lore.kernel.org/r/20261019162457.1000115-5-pavitrakumarm%40vayavyalabs.com
+patch subject: [PATCH v26 4/4] crypto: spacc - Add SPAcc Kconfig and Makefile
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261020/202610201938.pmiyNP1i-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610201938.pmiyNP1i-lkp@intel.com/reproduce)
 
-If I don't hear otherwise, I'll pick it up later this week / next week.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610201938.pmiyNP1i-lkp@intel.com/
 
-Thanks,
--- Marco
+All errors (new ones prefixed by >>):
+
+>> drivers/crypto/dwc-spacc/spacc_ahash.c:827:11: error: expected '}'
+     827 |         return 0;
+         |                  ^
+   drivers/crypto/dwc-spacc/spacc_ahash.c:814:1: note: to match this '{'
+     814 | {
+         | ^
+   1 error generated.
+
+
+vim +827 drivers/crypto/dwc-spacc/spacc_ahash.c
+
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  812  
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  813  int spacc_unregister_hash_algs(struct spacc_priv *priv)
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  814  {
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  815  	struct spacc_alg *salg, *tmp;
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  816  
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  817  	if (!priv)
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  818  		return 0;
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  819  
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  820  	guard(mutex)(&priv->hash_alg_mutex);
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  821  
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  822  	list_for_each_entry_safe(salg, tmp, &priv->hash_alg_list, list) {
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  823  		list_del(&salg->list);
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  824  		crypto_engine_unregister_ahash(&salg->alg.hash);
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  825  	}
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19  826  
+756cf2497ce591 Pavitrakumar Managutte 2026-10-19 @827  	return 0;
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
