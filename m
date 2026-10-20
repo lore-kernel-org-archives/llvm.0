@@ -1,77 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792483359;
-	b=Dncw2ZKocfwfdkqwwHbrv02PgAaq+TR6fxqcxMYix4Vg5fZAji0M0gsMdYtLKgPXAmW2
-	 eGEgTW9Ku/zf1VBQlg1daopHnnw0lJ+/6XKmCLnViGDXSU1LvXssJy6hfHrmtOILx0kzH
-	 18r2s7r0PZnM4Xmew3Eo/iUADvV6WqzwVI9IDn29Fq1P4dAddt46MXeyfA7+C72uFAHtz
-	 dnfIs532QKHxadPJ+aOefHhri3CR0/J5GlMkM/kFthB4JYJXxhsxxj49xcQ4irpkqi5Ng
-	 YjKAiij0Y+tSk5EDui9ggFw9IBOXkC6P3BX2IMs80vztCV2H1xmcDcCz19y93F3Jgzw==
+	t=1792486560;
+	b=aYrV3YSDkGRwTjscCaYWnIb5xA1i3VgpmSUoJ7TWAAjlMWe6luiN9+A5kap0lKFYl+CC
+	 KJU5eZoK+QP6H+Mv8NAbYevyLlz+lGjEW64G+m7I91Za9zzWxh7czD2SEj45VhuIaEo3V
+	 zDBk3IsfiFo8H6xqVtsNrU0teGV0pdszFMwMQiJMK3pYH/H+3uOKWrM4HKALEWi3/+K4L
+	 UQ1f0rAN83qeQ60W0sUnE/mb5wF6QUW6yI8Dz0XSgmwqxsl46q7a526TiSTtGD2BAQUuf
+	 cu2GYLaEPUurukyz4qkW+/oWMJjzZFkkiLis9x6g/5rBqamS6OKBFlOIisl7tu/j4NA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792483359;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=H1H53f2tBYw7AlXIk6TsP4Y9NvtB9ypzC5m6clgaxO4=;
-	b=3sOTREU7LV0klFhKjzChQobL3pxn+J/6kUTms3Zbd43y+BncbxX2CLMJf3WcaDyNsQuq
-	 Eltj2loHZ3cbOcA+WjGgtT33Qezj3asIRT0aQYvKa+ECdpavcbVRkeSyi3L2NC+TGXcH2
-	 5MmIYVDejJruMkbUfa9eQSGVLPFUldihqR6iaMWKRN6x/wo65urtuNsTuOKnicwynDQim
-	 uVbaV8v8S+gmc5AvWXE9TDkEat7SMkdgCv45Qtx0AmocYJe0WJCDN8C6FY4Jq8yazSdII
-	 T2YysrJkcB/bKshRWjgHkqn+pSuIKHuf6QR0HK72g52WQ1wK1VopXMcj7I79NjFF3LQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792486560;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=sdNaoVSRuGZpGug/DK6AKDScm0L5vKpD110CMZcWZBE=;
+	b=UR9hS1lRAwI/OYlUnEiy8QdFZW7GueBjuR3Vnx5CYyTI+eq+3rtJfXBR1uQvPXnHNJgk
+	 5rB2o0riCT7irJ1Ugacj4ZSLqybOUK4UKwAfl14pi16giAMq3BfT/wJu3CU9Wdp57tsfa
+	 rl02nf00PgEIsfWv2raGT0L9i1rH1YepvWlTTAA6eRx0mEIXancs+lw1gg802Fk+wCScG
+	 DQB4uhsm6N63DL3zIh+fpmzEzU7MtWGhgOZh6ikncU6KT3Jfc05oYxvVxoiHkt6xrSEaA
+	 PbSMEsvwZXdKKe0l+6aj6DanSfhLjueaUQqRYIORXN+KgrzOOeIxZEfsRL858Ffc/1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YGqshRxr;
-	arc=none smtp.remote-ip=198.175.65.17
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nmWgsbwA;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDC2606A31B;
-	Tue, 20 Oct 2026 08:02:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCDC2606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3446606A319;
+	Tue, 20 Oct 2026 08:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YGqshRxr
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792483358; x=1824019358;
-  h=date:from:to:cc:subject:message-id;
-  bh=zQErPCxKGLshMLMVCuDm1Ugzlte1J2gCkM+PaHCLeY8=;
-  b=YGqshRxr+SKfbFlHV7rORSh8oQk/98iq9Qz4c30Ftjp39p/n9pNmxfPN
-   QPygXBk9v2oUdnWmg1cvmLy7EcjknZnoRPpQpPsuAQzaQKe6TIpAkVMSh
-   mOUY5FXPbp1C+FHtmRVjNtWD3FsotfTsdIn/ZF7zYhGQSDMuzpk53jCi/
-   Ep87ekjcxdWWNK5tXCRWuZ1XhKLnRzhFx0gCrDx2gEZY6eDHEof/RQVY8
-   oTt3kTM1J36w+p51/yvidNR2jTYaywvE5XYvoFeYGqByn2MKGW4EqQvTG
-   ysqvjhNN19Kv9/IDJ8gtfEaQ1UqXiIrzPMZj5vXTmVlKUdWwIWfsNDaQY
-   w==;
-X-CSE-ConnectionGUID: v8jg8WGPTNyZtZ7yQBSaBg==
-X-CSE-MsgGUID: JkwnHfe/T22qebbuAq5I2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1195770"
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="1195770"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2026 01:02:34 -0700
-X-CSE-ConnectionGUID: pIQ2ojDrSXCqCV67pUAfJQ==
-X-CSE-MsgGUID: vJbYO43ATl2eAcZ9Y9HGHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="2758735"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3c253b998be3) ([10.211.93.152])
-  by fmviesa004.fm.intel.com with ESMTP; 20 Oct 2026 01:02:33 -0700
-Received: from kbuild by 3c253b998be3 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xJ4nm-000000006B5-3VKS;
-	Tue, 20 Oct 2026 08:02:30 +0000
-Date: Tue, 20 Oct 2026 10:01:46 +0200
-From: kernel test robot <lkp@intel.com>
-To: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [daveh-devel:kss-2026-10-19 16/24]
- include/linux/thread_info.h:237:20: error: redefinition of
- 'arch_kernel_shstk_enabled'
-Message-ID: <202610200912.3obIPJfU-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nmWgsbwA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090AC1F000C4;
+	Tue, 20 Oct 2026 08:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792486559;
+	bh=sdNaoVSRuGZpGug/DK6AKDScm0L5vKpD110CMZcWZBE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=nmWgsbwAIgJnmmPfeTwzZvOKWfuxsBYnYGAP4QVf+75YOZKM+R4nz74AbmledcGnK
+	 gODFHcOXfzrNyZTjztWdT75yf2Naj7epndP0uzJBHLnvzYoZtNJXexcFLwO8paQ3Mm
+	 9z78gclw9xIVRIzPv2aoPROmFXQfAjmpZt9pSIwsOOVmPfW8DLpd+OGE+8uMRiV6J0
+	 Qmox650orB0WXCRXulBh5yMtyQARAcGbQdKoDH2B1L6hJ6Cxy2xVtudpoRpjWyy4eK
+	 cWJcyWCzqgVprWsd/fMCQIpzu0J3mtJHUu3LmzgUelf26MtAYUxxPeM5i6cgCkm/6N
+	 aWB4/OuuiiA3A==
+From: Maxime Ripard <mripard@kernel.org>
+To: Helen Koike <helen.fornazier@gmail.com>,
+	Vignesh Raman <vignesh.raman@collabora.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Maxime Ripard <mripard@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] drm/ci: Add CI pipeline for drm-misc branches
+Date: Tue, 20 Oct 2026 10:55:53 +0200
+Message-ID: <179248655167.2849206.582866226743194201.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260911-drm-drm-misc-ci-v2-1-1847f89585cb@kernel.org>
+References: <20260911-drm-drm-misc-ci-v2-1-1847f89585cb@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,224 +69,27 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git kss-2026-10-19
-head:   b28e7d03a8472efab137c77cbb5dd666fa08e9a7
-commit: 967449663fb3eb7dcca67c4652293712530809c8 [16/24] arch-shadow-stacks-enabled
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261020/202610200912.3obIPJfU-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610200912.3obIPJfU-lkp@intel.com/reproduce)
+On Fri, 11 Sep 2026 14:18:04 +0200, Maxime Ripard wrote:
+> The DRM CI infrastructure builds upon Mesa's CI to run IGT tests on
+> hardware. Its focus is on functional testing on a selected number of
+> targets.
+> 
+> The concern for drm-misc is different: it merges a large number of
+> patches across many platforms, and build or unit test breakages happen
+> on a regular basis. Adding build and unit testing for drm-misc has been
+> on the back of our minds, and a first attempt was made last year. The
+> feedback was to rely more on the existing infrastructure.
+> 
+> [...]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610200912.3obIPJfU-lkp@intel.com/
+Applied to misc/kernel.git (drm-misc-next)
 
-All errors (new ones prefixed by >>):
+[1/1] drm/ci: Add CI pipeline for drm-misc branches
+      commit: d1025d345b21261ddc10e598ec736aa5875aedbd
 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   In file included from include/linux/thread_info.h:62:
-   arch/x86/include/asm/thread_info.h:237:6: warning: no previous prototype for function 'arch_kernel_shstk_enabled' [-Wmissing-prototypes]
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   arch/x86/include/asm/thread_info.h:237:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     237 | bool arch_kernel_shstk_enabled(void)
-         | ^
-         | static 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   include/linux/thread_info.h:237:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |        ^
-   include/linux/compiler_types.h:235:23: note: expanded from macro 'inline'
-     235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                       ^
-   include/linux/compiler_attributes.h:165:56: note: expanded from macro '__gnu_inline'
-     165 | #define __gnu_inline                    __attribute__((__gnu_inline__))
-         |                                                        ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   include/linux/thread_info.h:237:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |        ^
-   include/linux/compiler_types.h:235:36: note: expanded from macro 'inline'
-     235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                                    ^
-   include/linux/compiler_types.h:257:31: note: expanded from macro '__inline_maybe_unused'
-     257 | #define __inline_maybe_unused __maybe_unused
-         |                               ^
-   include/linux/compiler_attributes.h:352:56: note: expanded from macro '__maybe_unused'
-     352 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   include/linux/thread_info.h:237:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |        ^
-   include/linux/compiler_types.h:235:58: note: expanded from macro 'inline'
-     235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                                                          ^
-   arch/x86/include/asm/linkage.h:9:32: note: expanded from macro 'notrace'
-       9 | #define notrace __attribute__((no_instrument_function))
-         |                                ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
->> include/linux/thread_info.h:237:20: error: redefinition of 'arch_kernel_shstk_enabled'
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |                    ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-
-
-vim +/arch_kernel_shstk_enabled +237 include/linux/thread_info.h
-
-e66101020b3651 Dave Hansen 2026-10-19  235  
-5daba193b8cf42 Dave Hansen 2026-10-19  236  #ifndef arch_kernel_shstk_enabled
-5daba193b8cf42 Dave Hansen 2026-10-19 @237  static inline bool arch_kernel_shstk_enabled(void)
-5daba193b8cf42 Dave Hansen 2026-10-19  238  {
-5daba193b8cf42 Dave Hansen 2026-10-19  239  	return false;
-5daba193b8cf42 Dave Hansen 2026-10-19  240  }
-5daba193b8cf42 Dave Hansen 2026-10-19  241  #endif
-5daba193b8cf42 Dave Hansen 2026-10-19  242  
-
-:::::: The code at line 237 was first introduced by commit
-:::::: 5daba193b8cf422043348d59ff40fbda09a528d7 kernel/task: Add "runtime" check for shadow stack support
-
-:::::: TO: Dave Hansen <dave.hansen@linux.intel.com>
-:::::: CC: Dave Hansen <dave.hansen@intel.com>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
+Maxime
