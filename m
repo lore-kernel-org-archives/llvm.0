@@ -1,72 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.56
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792503976;
-	b=5n49aZhwy+z+Q4QluiZ02/zsfBoqV5kMGaNWjga5OM8uCpZ8No2zukGTZ4rMFcddBVdA
-	 0WGEB2kekRremtP53NcsUsEirn/VJrK/mZutnlmN/CqJat6Glyd6zw4a/xAmg8OSZaWGP
-	 Xns4p0Cy01/od7BpdobJDT9dUu1qRUse8PYsQ+VTNm9SOLT+/MuzbENPTN2pQpF2z/+E9
-	 y2FigonjEFuN32PaUKCimXPk0J+rhEq6Y6qT9Pig0Evf9Pghdl2rXAjBH/QunrytIthQF
-	 7RLXkFhr8utyAEo6Shj2TkUJbpR0uAug063lrG5h/22hz2uWqkXgAXWXyuN5cZmTLIA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792503976;
-	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=o05/N5XctkzqpgC1ZA4yQ9odlH7Bn0l5cVVTJizsZfo=;
-	b=ph/yNFCuL+KwHXuNp0+lPzNhZiDP5Uh8x5rwCNztBZQOTuw4yFhoQJt3wG4oPkywm60p
-	 rSX0FyMlLQf8tNWR/Asa+WOEMimx4h5bGLlYAmVRFiVmNbUwjyQP5+axdJhRelYz9mvYE
-	 sq3V90g/F78pXEklR4+a5VyKiCcBaqJGnI0zWgCNLGKonj3lLDJqQ4OZys0pmHfJQZ3Xb
-	 hYo4YQHsPdjH0NAwA9ltMTsfKRK+aNvTI+J5LOqdyh8YdWkbXHJZ5O10WasCzS/XRABHq
-	 WCn39Ii2uQcf3kqM7X+u9ZDrbBxLVcKueoN8aAqbjtyTxGfOIGkoId8aFfrm2iKfTvQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=huaweicloud.com;
-	spf=pass smtp.mailfrom=huaweicloud.com;
-	arc=none smtp.remote-ip=45.249.212.56
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792504436;
+	b=UR/42WPVW/sSCNO0xT2ViDWm98YupCXTwuNn5fPqBfbMIkG0cpsH6vQzNstIS7dzBy0/
+	 EXv4y6Ugf0kGYfKx/N67j0Fm/B+of2l7Qgi23Xwb8UB/5rU4FtGvLg7vYZZ4wCgF1Njjj
+	 3iOT3ziayQqjrdgb4NNb60Tfwa7w4MxD6XRG/GZqE/lsF0OYGiLWO/lncigiJ0K9igxmK
+	 nlzbL4sLteMbA4FoVaVbMNYtdXWzSKUnFANHEhHj7tFpmeSW9hLH+uEPTjMyqh3UGHTd0
+	 IuVfKm1vFtKUGYHhyzbYKj1H2ZVdrIEDnXKRwOnyB+AZxVK0StqxTjVoMfCvin7gWZg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504436;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 Content-Transfer-Encoding:Content-Type:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=Yox76MmSLQNzY4vXnUV2RBx6MN/aCL79HirjtHAwi/A=;
+	b=qkQ4jBEaRgyOLrkdEAARjfaS2XSW1KJGF/MyeIdjmsue4BaYi3AKoy1YpDEGrrRY9Wfr
+	 Bx/csuDwPjGTEB7US3Exja3Fb4UpR+AIM92Mh0/7CdtaYCJz4hllcKOBTYxCUtFP1VhTV
+	 iN30ojWbsvt99OXsH8Sk5nKXrOOEcNXCVZ2PuIMVd2uhHUrmeMzZlb3jWURx5MeNmzECm
+	 0t1C1TiqVxRl00Kp0QX7+lhvi8LKbIyGB3T5fZEe1iRDxldWo/+YEDvFwYPm0ZMMdBUsw
+	 n3fUQvSM6G8pBDAXVJ3NdUtw3Hol6PcwXBPpg6CbIpiG/Qm4gaKvg3Rd9fd11IHia5w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ctwu0qRW;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.43
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010043.outbound.protection.outlook.com [52.101.85.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80B7606A331
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:46:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D80B7606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4j8DFm1RJlzKHMWr
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:48 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 2609E4056F
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 21:45:58 +0800 (CST)
-Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3QOaGcNdq8xegBA--.22174S7;
-	Tue, 20 Oct 2026 21:45:57 +0800 (CST)
-From: Tengda Wu <wutengda@huaweicloud.com>
-To: Namhyung Kim <namhyung@kernel.org>,
-	james.clark@linaro.org,
-	xueshuai@linux.alibaba.com,
-	Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	leo.yan@linux.dev,
-	Li Huafei <lihuafei1@huawei.com>,
-	Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ingo Molnar <mingo@redhat.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351DB606B646
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:53:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 351DB606B646
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ctwu0qRW
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=msJKkCowKtepx0cGK4KaYkLJyP/5Xl1Vv2uwKKS3QeWbZl36gp5V50LNYd4KG223W9sVkcojrqtinB62d5tDMkEBPjAgTUmsiJiEgsZHjimL6qZFSpyy9eIk1Htno+ExMF72rQ0iS3dTn5Ntm2m/h9fyfX/aiZWj6qn9MK0GsTo9zyFyLDW6DRhJVZL2S6ZcxdnWmgwclSlvvvorh4ldZF+qoX2Gp0I6EDHmLsI7FSt+zM5eKpCoUMnkA5mh7Rx6msqEt4r+JR0+XKB4huECnAiaK88FE7OA6gmNnNiPjLz2ywfgHeNHwUu7ie5URsKPHTX6Rwpvq4KEH34DavqnyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Yox76MmSLQNzY4vXnUV2RBx6MN/aCL79HirjtHAwi/A=;
+ b=O9ABi1z8z5cPpDkKX8fMKbzXeKQSNoc5VB2kGPgohl0ZFzYx/XXGHTQVF3k7Lym53h2CH2amf3T1b3MaCGOycrO46+2AXzieTNMNVysPD8/3Lv99Zmo43EhfEqXVtruLlhn4tIWCmxnxxCYz0LRut7zecNabVaWFuRth5TQqXnOjTBtXpUBEfC/zYOFr7sdojmQ6ck5F21AgeeCRiTrgyQH5M7GnakhppVBelF1Sl4vPvB7IVv2VWG0rtTpe4UaSg0UerXwmy9jACa0jYrbprIT78GQ8k+/feDxNlYzIwP07Se8fm283BSBXoxMOJvUg7QeuGhEXyoI5xtzfpJtErg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yox76MmSLQNzY4vXnUV2RBx6MN/aCL79HirjtHAwi/A=;
+ b=ctwu0qRWJq6o+atUjkudpkHYTyR3uM2tzs+ck9oaBpG/vkm7d4j+rGdtOpa6v4AiMbkfFRYSZzu1TaZdJTm9hLyK+0LyJJRYLfDXKSuUkOR7TqirFzdB5HaIyWbd8sH68WU51eVNS57650Km7vJQHvHaG3f3rmzNhiOhWJK6+GpfL8cOa/t3UJybmc7PjgmsaS4lOa5AZM46yO5zLtjJyRyvkSVlH7PwILGrVDefKwWfarnjwd9J0OnWNwxqS/V7p+FL2HsBwcXU7ZQWhuvj8gjkGvBBMlCw0xc/3n+X6Gf2iORDVJ4ZcnzmAU11XJnqOM/24JmYlbN5HtyQrPa+xA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19)
+ by PH8PR12MB6866.namprd12.prod.outlook.com (2603:10b6:510:1c9::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Tue, 20 Oct
+ 2026 13:53:52 +0000
+Received: from PH7PR12MB5974.namprd12.prod.outlook.com
+ ([fe80::f5a5:bbc3:e9da:f8a0]) by PH7PR12MB5974.namprd12.prod.outlook.com
+ ([fe80::f5a5:bbc3:e9da:f8a0%3]) with mapi id 15.21.0522.017; Tue, 20 Oct 2026
+ 13:53:52 +0000
+From: Adrian Ambrozewicz <aambrozewicz@nvidia.com>
+To: Linus Walleij <linusw@kernel.org>
+Cc: Bartosz Golaszewski <brgl@kernel.org>,
+	Donald Shannon <donalds@nvidia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>,
-	linux-perf-users@vger.kernel.org,
+	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-usb@vger.kernel.org,
 	llvm@lists.linux.dev,
-	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v8 05/15] perf annotate-arm64: Support load instruction tracking
-Date: Tue, 20 Oct 2026 13:45:01 +0000
-Message-Id: <a6085b6f08ba2ed533208ebe9227968770cd58ca.1792411435.git.wutengda@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1792411435.git.wutengda@huaweicloud.com>
-References: <cover.1792411435.git.wutengda@huaweicloud.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 06/11] gpio: Add NVIDIA LSTP GPIO driver
+Date: Tue, 20 Oct 2026 16:53:44 +0300
+Message-ID: <20261020135342.2963044-4-aambrozewicz@nvidia.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAD++jLkQd70V+wQhCaKES8LQqWoU+dmt=Dr0PgbA81xHh+hppw@mail.gmail.com>
+References: <20261012-lstp-usb-adapter-v1-0-aambrozewicz@nvidia.com> <20261012-lstp-usb-adapter-v1-6-aambrozewicz@nvidia.com> <CAD++jLkru2AL2_7ieOdbYrePAhNSFaa3wwEzCagiPsALgG2GwQ@mail.gmail.com> <20261016081917.1958681-4-aambrozewicz@nvidia.com> <CAD++jLkQd70V+wQhCaKES8LQqWoU+dmt=Dr0PgbA81xHh+hppw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TL2P290CA0017.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:3::7)
+ To PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,307 +104,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB3QOaGcNdq8xegBA--.22174S7
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xw1fWr13Kry7ZF4DWr43trb_yoWftrWfpF
-	WDC34UK3y7Ar4SgrsIqF48Wr9xuw4xWr15Cr98Z39IyF47trn5Ka93Kay2qF45GrZruw13
-	JwsFkr9xWw42kaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
-	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
-	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
-	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5974:EE_|PH8PR12MB6866:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd796df1-0e32-4508-9003-08df2eb1934f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|7416014|1800799024|366016|22082099003|18002099003|4143699003|11063799006|10067099003|261009223027099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	epUOf/Lr0j8aFEwqlFbOL9v4g85s/sxyQiNL/YgYwR7nKSmRqdoOa05hRpC2v04Tt+KM1JcnzRYNAxTj3XVLDlzsK/TKq4fRCMVXr4ZaxQAra4sgUq6ngq+saDrPHzxjxvvp6X4NWpNS2mXxxWob18x127CKPPMkpMmDB1D1DcS6QaquhMbslClafC9ueYbf/Tpd+sXs6XY7SLEeW82Y2tZ7oBXaDOcWi86+45iejqHwB0GybLFHTyJRKBfOAK4Cf8MgaP+uu8sffZCtsep3jUZAwhnROYuHahYPwKsskVpw6PX9mqU/wu3mBe2+UKT1Yxyh6TqBVs6jpJGUc9Vu+zDbC/rbfcBPU3M5VgfUKBg9WzXiOURPIn15XXZM149noX8DxaZTH/o7Kwmz2mZIkzYA+Vy2nqJ5095UE6w9Zr8RaDWo6Id32q0HaeIj36LsLMPrCTSvk5WO3zUjNtkhWc2c+d7fZZM2Mo+XkpHHiH+Gn1H5tR0omjlqtIcZxjAunrw3ciSsL68E0Ihf3spxdFnmwkJ10zT+lbZ724HYWjdCuG83E4OGd03GEC6gZetca89GiUbL00hQCgkK51IMI7Jx7lUSK0qAsq7PxGSDCQCfEiF1hutOyoCWOAmwgDw+aPHvMnbg6HTz678Ew60qbGfKCM2JQ68DSlVMe5CGfQg=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5974.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(1800799024)(366016)(22082099003)(18002099003)(4143699003)(11063799006)(10067099003)(261009223027099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?LMzreooZlVLk6ANcJ14QQ0Ng2UnuofLh7bSeew8PP6Giti7JrXmWeACuVPhy?=
+ =?us-ascii?Q?6vFOLh64Pbw+44bZcXwgf5zjrHmVrkElKrsqHv3Lfpx3L+lHjGC03vCU40vS?=
+ =?us-ascii?Q?8YLcfBrKh23WBJ0g+6HaSI/0B4YlK2MsbLlhFEas/CQqiofAXp0HHrJRP47L?=
+ =?us-ascii?Q?ov8TqC3md3OqAgAQnQj6TmvgJvaP+L6LlfFTWAihBNym7fQzYOKpwYNullPO?=
+ =?us-ascii?Q?XPdPd+F1yXEhHVOIEIeLpQxySbWny48ruOZX+l9L6nYxf+Kkg4FFY/ZARlDc?=
+ =?us-ascii?Q?8E7RLVR5REj9So8AgUf27PvMoglKZSAJdplbPcDmg6itkJuCmP43HQiXA5s0?=
+ =?us-ascii?Q?2A7bFFzDdoxDDRK+kcnU9FbtGo4OGhpcdbRl91ipj9DcozqZ4/U0+VL4QD+A?=
+ =?us-ascii?Q?94nrfpfFTmCSFJIW0RC47akalnQokGVgogPhqEh+bAQxMQbzr8R7FWLbDly+?=
+ =?us-ascii?Q?TRYhLaaRog9AyKePwIOdSWMula0vYWHMzTrbv//rrsSQArjv5/UNZBETg0l8?=
+ =?us-ascii?Q?5EvNFy2KwtFGItvNlKKTgnngNIO1OszZOvKnO+Xx6oGq95k9LGtjsGL0xaQa?=
+ =?us-ascii?Q?EgAnROUlGCZ9MPkNwKDcDtarhPk4DJr3b5lRMn5PBFaid55aCNQZTj+vVk1q?=
+ =?us-ascii?Q?K0NoCch0pl+KInIHzzfMyWaDS3tq5GO6yCFc2cWEIoLbt4aJgz14H0xXuHUu?=
+ =?us-ascii?Q?47rtin7BWdPHvVeGH4TuQaeMdvdSExpuLHUOCo2Ciw0oyD+VAhW3NcAG5Xma?=
+ =?us-ascii?Q?5iWPVteSfLpbLK204hY++N5gLuJipYStLvbStSv5VNQR9v+94yQj3hn39NRK?=
+ =?us-ascii?Q?d1mtGHGTr000ymRdKk+ZOjDpZKZj0pSKgxqdu3EwaD2tlhqrNdqsxddmhdZE?=
+ =?us-ascii?Q?QlvHUJpYYwVTqcFAXzyxiTxnOLv+ywT8PPR6SBLOfetAqG3v+PVVUAXvsoEw?=
+ =?us-ascii?Q?n7rsPxdJaBg2Qsfv4xUlOvnPFCk/Gqds7bCGXzzJGx/vf7dj0nqIXq+aDGL6?=
+ =?us-ascii?Q?AwJpa/FCHJwJ8HL+MJWYJITup7AVZrO0vY3lulIFVzKw1OiNHZ/CjQxTu9QX?=
+ =?us-ascii?Q?JYG8/yM8cL3hL7Tmydrfmup/eq8Ebcr2UOy07qUHwT3O08cv8LBahA1EsWwJ?=
+ =?us-ascii?Q?bb00JVbLfvkQlKScmLJOYzx+jk/iVg8K83vy8kYtnEh0RvCMnlL8/OZ++aIS?=
+ =?us-ascii?Q?05GZ/DTiyzs5gYEKLAPRSGsSua/dBMkA9llaojjJtfFFuMxTLvhWzRNB2Aqc?=
+ =?us-ascii?Q?9Rw/THNKKGH17LJPwuIvH3Vf+nzkqSvU1ZPjqL9aagY+f83VRpReKozJ0EDt?=
+ =?us-ascii?Q?MSZ+ZEEgqdS0cGgWqS3F4NM5j1+Xq1rbZBjf2MRx+Kkpe40VMUetIMq6dqKY?=
+ =?us-ascii?Q?1B1XKdYPzmGwB8UH5097AcpviLuW1g1L2kqU6XBDKAlJd9h+RLmZcQjvsKyw?=
+ =?us-ascii?Q?TtTX9Iq6GHoYP25Rks+rnvd/Z8foJ4d4b9u9HPMUzgWm1S0TfUuCBRa3zTcZ?=
+ =?us-ascii?Q?NyIiX5fV2nV63jZVooj2GmMmVUpwlJphVuq1O509LyKJlHSgTAnEogyYLfF4?=
+ =?us-ascii?Q?YxN4J0WbLelvIkE/eYNCKAA7KMSXzdYs6X/0JHm0lguAPT1UDmICYMKeYUu3?=
+ =?us-ascii?Q?J595Rp3/wVWmDbcveEL2DDQ4j5qb8JjqvIE0VLHzxgqCAI+uweFIrKiVfhpL?=
+ =?us-ascii?Q?mDJ5VBzsZNc1pB4k0ivBZkoMAC5QITj3/oR6cclKEpk0CBDCtKHosxV6MZq2?=
+ =?us-ascii?Q?xX4LXqjEzQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd796df1-0e32-4508-9003-08df2eb1934f
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5974.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2026 13:53:52.6541
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RAVK+E+dsP96gKZ82EoTFftH3RxsFJ3508c8Toqo1/CdvqGj+Q7FLHrfF49YxbiGjDoDJpFeDdZULSx+svcCLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6866
 
-Extend update_insn_state_arm64() to handle load instructions, tracking
-register state changes when data is loaded from memory to registers.
+Hi Linus,
 
-Two main categories are considered: standard load (e.g, ldr variants)
-and load pair (ldp), for example:
+On Fri, Oct 16, 2026 at 11:14 PM Linus Walleij <linusw@kernel.org> wrote:
+> > gpio-regmap has no get_multiple/set_multiple, while the device takes
+> > several pins in one request,
+>
+> So just add it (get/set_multiple) to gpio-regmap.c?
+>
+> There is a nice generic implementation of get/set_multiple in
+> drivers/gpio/gpio-mmio.c to draw on for inspiration.
+[...]
+> I don't quite get it, but I prefer gpio-regmap with an extended
+> gpio-regmap.
 
-  ldr dst, [src, #imm]
-  ldp dst1, dst2, [src, #imm]
+Thanks for the pointer to gpio-mmio.c. We are open to extending
+gpio-regmap and will evaluate this approach.
 
-For data type propagation, a load pair can be treated as two standard
-loads combined, first loading dst1 and then dst2. The difference is
-that when loading dst2, an additional memory spacing 'mem_spacing' after
-the first load must be added. This mem_spacing can be derived from the
-instruction mnemonic and the size of the dst register. Each load operation
-is handled by introducing propagate_load_reg_state().
-
-When processing a load pair, the case where dst and src registers are
-the same (e.g., ldp x0, x1, [x0]) also needs to be considered. Therefore,
-before propagating data types, a snapshot of the src register's state
-must be saved and then passed to propagate_load_reg_state().
-
-Finally, handle the side effects of pre-index and post-index addressing
-via adjust_reg_index_state().
-
-A real-world example is shown below:
-
-  ffff80008011f5b0 <pick_task_stop>:
-  ffff80008011f5b8:  ldr  x0, [x0, #2712] // x0: struct rq* -> task_struct*
-* ffff80008011f5c0:  ldr  w1, [x0, #104]
-
-Before this commit, the type of x0 was incorrectly inferred as 'struct rq':
-
-  find data type for 0x68(reg0) at pick_task_stop+0x10
-  var [8] reg0 offset 0 type='struct rq*'
-  chk [10] reg0 offset=0x68 ok=1 kind=1 (struct rq*) : Good!
-  final result:  type='struct rq'
-
-After this commit, the type of x0 is correctly inferred as 'struct task_struct':
-
-  find data type for 0x68(reg0) at pick_task_stop+0x10
-  var [8] reg0 offset 0 type='struct rq*'
-  ldr [8] 0xa98(reg0) -> reg0 type='struct task_struct*'
-  chk [10] reg0 offset=0x68 ok=1 kind=1 (struct task_struct*) : Good!
-  final result: type='struct task_struct'
-
-Reviewed-by: Ian Rogers <irogers@google.com>
-Reviewed-by: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
----
- .../perf/util/annotate-arch/annotate-arm64.c  | 204 ++++++++++++++++++
- 1 file changed, 204 insertions(+)
-
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index c4cc8bca85cc..0b5d1abbc575 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -527,11 +527,212 @@ static void invalidate_unhandled_insn_regs(struct type_state *state,
- 	/* TODO: Extend invalidation support to more special instructions. */
- }
- 
-+static int arm64__reg_size(const char *reg)
-+{
-+	if (!reg || !*reg || !arm64__is_reg(reg))
-+		return -1;
-+
-+	if (reg[0] == 'w')
-+		return 4;
-+
-+	if (reg[0] == 'x' || !strncmp(reg, "sp", 2))
-+		return 8;
-+
-+	return -1;
-+}
-+
-+/* Apply addressing mode (pre-index, post-index) to register state */
-+static void adjust_reg_index_state(struct type_state *state,
-+				   struct data_loc_info *dloc,
-+				   struct disasm_line *dl,
-+				   struct annotated_op_loc *op_loc)
-+{
-+	struct type_state_reg *tsr;
-+	int reg = op_loc->reg1;
-+	int offset;
-+
-+	if (op_loc->addr_mode != PERF_AAM_PRE_INDEX &&
-+	    op_loc->addr_mode != PERF_AAM_POST_INDEX)
-+		return;
-+
-+	if (!has_reg_type(state, reg) || !state->regs[reg].ok)
-+		return;
-+
-+	tsr = &state->regs[reg];
-+	tsr->copied_from = -1;
-+
-+	if (arch_get_reg_offset(dloc->arch, op_loc, reg, state, true, &offset)) {
-+		invalidate_reg_state(tsr);
-+		return;
-+	}
-+
-+	tsr->offset += offset;
-+
-+	pr_debug_dtp("%s [%x] %s-index %#x(reg%d) -> reg%d", dl->ins.name,
-+		     (u32) dl->al.offset, op_loc->addr_mode == PERF_AAM_PRE_INDEX ?
-+		     "pre" : "post", offset, reg, reg);
-+	pr_debug_type_name(&tsr->type, tsr->kind);
-+}
-+
-+/*
-+ * Match standard load variants (ldr, ldur, ldar, ldp) that follow
-+ * straightforward load semantics: memory source on the right
-+ * and target registers on the left (written). Excludes exclusive loads
-+ * (ldxr, ldxp, etc.) and acquire/exclusive combination variants.
-+ */
-+static bool is_standard_load_insn(const char *name)
-+{
-+	return !strncmp(name, "ldr", 3)  ||  /* ldr, ldrb, ldrh, ldrsb, ldrsh, ldrsw */
-+	       !strncmp(name, "ldur", 4) ||  /* ldur, ldurb, ldurh, ldursb, ldursh, ldursw */
-+	       !strncmp(name, "ldar", 4) ||  /* ldar, ldarb, ldarh */
-+	       !strncmp(name, "ldp", 3);     /* ldp, ldpsw */
-+}
-+
-+/*
-+ * For load insns: propagate type from source reg state @src_states to @dreg.
-+ *
-+ * @mem_spacing accounts for the additional in-memory spacing between the two
-+ * loads when handling multi-reg loads (e.g. the second target reg in 'ldp'),
-+ * which is added to the reg offset.
-+ */
-+static int propagate_load_reg_state(struct type_state *state,
-+				    struct data_loc_info *dloc,
-+				    struct disasm_line *dl, int dreg,
-+				    struct annotated_op_loc *src,
-+				    struct type_state_reg **src_states,
-+				    int mem_spacing)
-+{
-+	struct type_state_reg *tsr;
-+	struct type_state_reg *src_tsr = src_states[0];
-+	Dwarf_Die type_die;
-+	u32 insn_offset = dl->al.offset;
-+	int sreg = src->reg1;
-+	int reg_offset;
-+
-+	if (!has_reg_type(state, dreg))
-+		return -1;
-+
-+	tsr = &state->regs[dreg];
-+	tsr->copied_from = -1;
-+	tsr->lifetime_active = false;
-+	tsr->lifetime_end = 0;
-+
-+retry:
-+	if (arch_get_reg_offset(dloc->arch, src, sreg, state, false, &reg_offset))
-+		goto load_non_regoff;
-+
-+	reg_offset += mem_spacing;
-+
-+	if (!src_tsr || !src_tsr->ok)
-+		return -1;
-+
-+	/* Dereference the pointer if it has one */
-+	if (src_tsr->kind == TSR_KIND_TYPE &&
-+	    die_deref_ptr_type(&src_tsr->type,
-+			       src_tsr->offset + reg_offset, &type_die)) {
-+		tsr->type = type_die;
-+		tsr->kind = TSR_KIND_TYPE;
-+		tsr->offset = 0;
-+		tsr->ok = true;
-+
-+		pr_debug_dtp("%s [%x] %#x(reg%d) -> reg%d",
-+			     dl->ins.name, insn_offset, reg_offset, sreg, dreg);
-+		pr_debug_type_name(&tsr->type, tsr->kind);
-+		return 0;
-+	}
-+
-+	/* Handle dereference of TSR_KIND_POINTER registers */
-+	if (src_tsr->kind == TSR_KIND_POINTER &&
-+	    die_get_member_type(&src_tsr->type,
-+				src_tsr->offset + reg_offset, &type_die)) {
-+		tsr->type = src_tsr->type;
-+		tsr->kind = TSR_KIND_TYPE;
-+		tsr->offset = src_tsr->offset + reg_offset;
-+		tsr->imm_value = 0;
-+		tsr->ok = true;
-+
-+		pr_debug_dtp("%s [%x] addr %#x(reg%d) -> reg%d",
-+			     dl->ins.name, insn_offset, reg_offset, sreg, dreg);
-+		pr_debug_type_name(&tsr->type, tsr->kind);
-+		return 0;
-+	}
-+
-+load_non_regoff:
-+	/* Try another register if any */
-+	if (src->multi_regs && src->reg1 != src->reg2 && sreg != src->reg2 &&
-+	    !(src->extend_type || src->shift_type)) {
-+		sreg = src->reg2;
-+		src_tsr = src_states[1];
-+		goto retry;
-+	}
-+
-+	return -1;
-+}
-+
-+static void update_load_insn_state(struct type_state *state,
-+				   struct data_loc_info *dloc,
-+				   struct disasm_line *dl,
-+				   struct annotated_op_loc *src,
-+				   struct annotated_op_loc *dst)
-+{
-+	struct type_state_reg snapshots[2];
-+	struct type_state_reg *src_states[2] = {};
-+	int mem_spacing = 0;
-+
-+	if (!src->mem_ref ||  /* exclude PC-relative loads */
-+	    !has_reg_type(state, src->reg1)) {
-+		/* Invalidate tracked destination registers */
-+		if (has_reg_type(state, dst->reg1))
-+			invalidate_reg_state(&state->regs[dst->reg1]);
-+		if (dst->multi_regs && has_reg_type(state, dst->reg2))
-+			invalidate_reg_state(&state->regs[dst->reg2]);
-+		goto out_adjust;
-+	}
-+
-+	/*
-+	 * Snapshot source register states before updating destination registers.
-+	 * This preserves the original source state for aliased loads (e.g.,
-+	 * ldp x0, x1, [x0]), where updating the first destination may overwrite
-+	 * the source register.
-+	 */
-+	snapshots[0] = state->regs[src->reg1];
-+	src_states[0] = &snapshots[0];
-+	if (src->multi_regs && has_reg_type(state, src->reg2)) {
-+		snapshots[1] = state->regs[src->reg2];
-+		src_states[1] = &snapshots[1];
-+	}
-+
-+	/* Handle the first destination register */
-+	if (has_reg_type(state, dst->reg1)) {
-+		if (propagate_load_reg_state(state, dloc, dl, dst->reg1,
-+					     src, src_states, mem_spacing))
-+			invalidate_reg_state(&state->regs[dst->reg1]);
-+	}
-+
-+	if (!dst->multi_regs || !has_reg_type(state, dst->reg2))
-+		goto out_adjust;
-+
-+	/* Handle the second destination register */
-+	if (!strcmp(dl->ins.name, "ldpsw"))
-+		mem_spacing = 4;  /* ldpsw loads two 32-bit signed words (4-byte spacing) */
-+	else
-+		mem_spacing = arm64__reg_size(dl->ops.target.raw);
-+
-+	if (mem_spacing < 0 ||
-+	    propagate_load_reg_state(state, dloc, dl, dst->reg2,
-+				     src, src_states, mem_spacing))
-+		invalidate_reg_state(&state->regs[dst->reg2]);
-+
-+out_adjust:
-+	adjust_reg_index_state(state, dloc, dl, src);
-+}
-+
- static void update_insn_state_arm64(struct type_state *state,
- 				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				    struct disasm_line *dl)
- {
- 	struct annotated_insn_loc loc;
-+	struct annotated_op_loc *src = &loc.ops[INSN_OP_SOURCE];
- 	struct annotated_op_loc *dst = &loc.ops[INSN_OP_TARGET];
- 
- 	if (is_readonly_insn(dl->ins.name))
-@@ -542,6 +743,9 @@ static void update_insn_state_arm64(struct type_state *state,
- 
- 	if (ins__is_call(&dl->ins))
- 		update_call_insn_state(state, dloc, cu_die, dl);
-+	/* Memory to register transfers */
-+	else if (is_standard_load_insn(dl->ins.name))
-+		update_load_insn_state(state, dloc, dl, src, dst);
- 	else
- 		invalidate_unhandled_insn_regs(state, dl, dst);
- }
--- 
-2.34.1
-
+Thanks,
+Adrian
