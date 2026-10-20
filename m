@@ -1,85 +1,127 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.147
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792495931;
-	b=bjtFO4nBUh5eLCSOKY8KjGqrAbMIVL0IPlUB1FLObM4jawkQlLL4NQwzjwJgnBeWPP+2
-	 /0jbLj1aCciDiTJa5ywM/Il4gnA0/4kh6XVvIht8FBev4oPSfpA8UseejwzKz+Hn8YrQx
-	 sNafYo5dpRQFJ2nAfpqZR0TCt8QvKjgKuwWFTzjJ0Z4uQyaczJVJQOcr2QIaCurFEkI2m
-	 yB5ltOi8pw/XMpqaOs/OQltwwskkAdyPs01AwzYcIYx6MtqOTC7obo8Vs0PAkAt6nbOlp
-	 NGRagjMaFCCn95dExL80sL06UnYY3oc6zC9Ld5vP3C7vf1eC6nuLPMSxI+5dw4Koptg==
+	t=1792501701;
+	b=d7D7CXm/uB0HX3mkXg0Nm6655wFsPunYz8JyGrMxEjw8Ar+98K/reDPYMUMAhnKC/Bs+
+	 Pbt/xy/0tPwKIhBVdN5pHLJJHB4AbJeOxY9fnElYT2b5vPGtX2onEdBGWmr1Ad3PWUAYg
+	 +Y7qeYC5ad6HeanYTVSs/t7+C8J6fJmZC/ExCDx67gO6BTO8I28zwWkmd5Jpegznt0lL5
+	 AZxEouKD/9l8CP0+mx9t/11Xgih27jhKYscIwcL+slVxpUY2dR4fLND0eoeP67MDeNWjT
+	 3QOP9g7GVR0Ywl7Zq8Nqes1iR2yBUfv9DidBF02WofTDPuhdknRDAWz5WLG6sJH9uhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792495931;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=Mgf339TQwuPr8j2J99LXGWXR6zRjUM8zAg5og24Ycnw=;
-	b=EWZqNAmO2tGsdcSO2FrQQ/lSFkddgsp2XiJBg4WdMZ70xhlNlQiXeOOAAUhy9hINjob/
-	 3+UAF6/nXe0LqRgFASoh3nCVDHkOhuPaNL4r0NEAr2sHSpcV5rae0/5RhsbKRsa9Hn7rB
-	 y7g/bZTIW6YVPaTNRGHnpGN8RWUPP+9mMqJuTUbGjWJJRaduYpq5G/9hlmt4x+QE2XwX5
-	 bNUqGtIbQOoMRob6pZ9hXLEgLQYQNNB0KBRpWQWex9dzyAKLtmPvkZF27QtuEVHsKQaLl
-	 ymxZ4wzVUZesilq3v0bHXk5sGltfGnm9waHqslI8QhuI1l+W5AEWI3xYSUa+sZUa6ng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792501701;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
+	 Mime-Version:Content-Type:Content-Transfer-Encoding;
+	bh=1fcGJc2c43brIG56b/Qs+vdC5upkl+d6pZbJFXhZhs0=;
+	b=jsRDvROo1poeLVnnT7SnOLuf9mW95tId9hg36050kVRVEvjuE2xc1WyXw1GLqWFKgCCU
+	 u762hASCJraMoigikeWOeTB+hawQA/l64sDNQ5N6jIKrR5jPLHvNFuwA4bGqBR7y/+Qkx
+	 kR0K70boZzl9jwjAPGoskNuyZrEr/IQSBNvFB+RCKUfilqMKQtRKMFHJOj+5e1/Ksr+xZ
+	 hrjDxrcLHoInDEpb3biQI2byVN7eicdxIpsoh3ROUHoPkvn2bozrUmrdZsQaWYyyBc2+s
+	 owsr4eOInazctaPuU3tN+8KWjD3OS9Qeiu6EA6c+tE0flVz0GvWln0IqC8x5ubM1lVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=O1E7GCgh;
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=none header.from=flapping.org;
+	spf=pass smtp.mailfrom=flapping.org;
+	dkim=pass header.d=flapping.org header.i=@flapping.org header.a=rsa-sha256 header.s=fm1 header.b=aDarNfvv;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=pabgxph9;
+	arc=none smtp.remote-ip=103.168.172.147
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBE9606A31E;
-	Tue, 20 Oct 2026 11:32:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDBE9606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0FE606A31A
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:08:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E0FE606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=O1E7GCgh
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792495930; x=1824031930;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nayHupzZTkRbxRCVzEKooOScyNX1Xe35sNlMf97+PR8=;
-  b=O1E7GCghq+/EWJAZ6HKrFsHP3V4JvTcnIhprW6Kmu2KmPEFLatI3n106
-   rvM1/1O1bYZaPdJKisLPhKb+ykw5fscQO2SoPv2FOqaw60zN1b/14ZQS+
-   swATcI4/eoP7P5yf8G+FWOly0WzKPp/a4QVGGEOnIgdfuLUgX4DvSwr+h
-   4/+M2IbqVcmu9sk4p3F58Nxuwb21k6SCsI9pm7uRVtTX42+8o+P8uPBmW
-   y4Ffs6kwfLbsb8cdTcnbwP+PKVQVZ6QoXmKJMsgNiO/lMiXqX/owTaxE2
-   t435mJ4lxQQV3CQku8EgoBf5n6z3G6mplvZtOaOK1eWY7BFD/43IHuYjl
-   w==;
-X-CSE-ConnectionGUID: 6ZpK0u3dRweEHHywIAEj1A==
-X-CSE-MsgGUID: gOK5LFmFQianrVMEjTQFDQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1194621"
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="1194621"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2026 04:32:09 -0700
-X-CSE-ConnectionGUID: KCuaApEWSaqTzd376Dup4Q==
-X-CSE-MsgGUID: EB9Zs3RdQmWcphZHno1sBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,168,1787036400"; 
-   d="scan'208";a="2747223"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 20 Oct 2026 04:32:05 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xJ84Y-00000000NPi-3A5l;
-	Tue, 20 Oct 2026 11:32:02 +0000
-Date: Tue, 20 Oct 2026 19:31:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pavitrakumar Managutte <pavitrakumarm@vayavyalabs.com>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, herbert@gondor.apana.org.au,
-	robh@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, krzk@kernel.org,
-	conor+dt@kernel.org, ruud.derwig@gf.com, rbannerm@synopsys.com,
-	manjunath.hadli@vayavyalabs.com, adityak@vayavyalabs.com,
-	navami.telsang@vayavyalabs.com, bhoomikak@vayavyalabs.com,
-	nazim.khan@vayavyalabs.com,
-	Pavitrakumar Managutte <pavitrakumarm@vayavyalabs.com>
-Subject: Re: [PATCH v26 4/4] crypto: spacc - Add SPAcc Kconfig and Makefile
-Message-ID: <202610201938.pmiyNP1i-lkp@intel.com>
-References: <20261019162457.1000115-5-pavitrakumarm@vayavyalabs.com>
+	dkim=pass (2048-bit key, unprotected) header.d=flapping.org header.i=@flapping.org header.a=rsa-sha256 header.s=fm1 header.b=aDarNfvv;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=pabgxph9
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id 65970EC01CF
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 09:08:20 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Tue, 20 Oct 2026 09:08:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1792501700;
+	 x=1792588100; bh=1fcGJc2c43brIG56b/Qs+vdC5upkl+d6pZbJFXhZhs0=; b=
+	aDarNfvvr0kLe/bO0IaSvLGi6OcUKcKNqBtjJBqg0TgAw8HXysbvQm6oZJiqMT3W
+	lol8xoyBNPnnxRArytI7ONk/h76mpXq7cah0TPziusOe4upXTo7Va01Iuco/psLp
+	rmcRfTePJsDg4GnGkGziT3gUXo6xfkhua1etkAUrlIHGKDVb3OBMVpiZ+E7dDNgT
+	+I0KergP2AVyZHwV7Kbnt5080oRBe56/E7mvhQMjzz2MPThU+/f+emVvYuc+ehM9
+	bxkE+J6d3y9WWTBH4FEs54f/68c4jC83L2tPqg2SCZeBJqZXxoYpAsmX3H5t98Ll
+	IHUAWZCL6rKNBbMpyeGzfA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1792501700; x=
+	1792588100; bh=1fcGJc2c43brIG56b/Qs+vdC5upkl+d6pZbJFXhZhs0=; b=p
+	abgxph9NaRBzMq3cqxlMUiKldAFoNWK0KudahyDoRSwFVWpD5SZuXViyEqSr1kje
+	R6uFF4M9yK4ojE7xZtFYe1OybW4x85CP4mg96KTVVehtIc3UAvwq6mutvEyLvdhR
+	fAsePZfPQJ3OztNL0ZGCs4NEpZqi6VPKjs3RAN1EThJrZLyFBV3Wu7wLsQTPaY9B
+	sIvpttKSVA9zG31GP376I/bI24wTX5lCFn+vndSAOZ1b9Ep6YERuNm/75eOEW8s2
+	BBUPFTE0eAqCD5YvQ7Z7DHsyk/Ejme5yRT8amwuLLzCXSyup7lRVBNPSyiWfB+7O
+	cw0caPHxjuus3ev6s5EYw==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
+	action=sign d=flapping.org a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1792501700; d=flapping.org;
+	mf=PHRvbW9AZmxhcHBpbmcub3JnPg==;
+	rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm1:rsa-sha256:YemD28IzRWcT+D4dU/wS1Jp2BxqzdSitAPbX4M2+nzvEkFI
+	DROecqaIojDn9exq5pJ2WxgQyUpiwMfz9xOqKCccUEEt3K+sPlQec/6nZNKMLeMY
+	GlXx6BHeT+Ls/OFvRY8EMS4WTC/smn0cEYPbwWTD50Q1/CBvwMEw/p2XU2jgPyzx
+	O/KAV8b82Six7V3QPqGFQlDQcPhgqaMaNK7P9JiGtnrMF6scToO93RkMKJmSUrMO
+	iIkP+wTIAfIPE5ND78TsqkOo9reVLP4p2HPbQwm43qovAqXysOT1IGiQ/5q8oKni
+	PpR37dgc7tHdPDdqnQAdFT14qllmGHatcG3olbQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-08; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:qbAdh8kc4GucgXYVTMAxxYXxDzaYcIzpvoIZQKld124=:bj8Pu1kZXIF8fstaL/ijy72Wbk++onNXXF/YcEfAkj4=;
+X-ME-Sender: <xms:w2fXainD-oSzHvIF4Rqv_BoZw8v1Bw3spMtpNMcRf76vwkUMH0Yntw>
+    <xme:w2fXarOFAsQh7yvp5_bsUiizowUSplmzfQMjHLZV_MN-h_eEKvUcHEe30DKdduPBz
+    osMKxUekgunonjNCobOQY27Za6jwM8SmRZknuLS_DeLvQXGUtVfaNGS>
+X-ME-Received: <xmr:w2fXap5-7M9LPidJFaKJ0rG9l3LIe40frh1CL7x1XlhcaHODdJoBgivANbbn3oGrTKfkhxQ9p8NfZW9aOYBqrFwh>
+X-ME-Proxy-Cause: dmFkZTGNsYCO3d+S2Ruq5JOvFTJ8LPDRWNTJDw9ZkZQnBTLOz8nHQRJ90r1bviczDBcHa2
+    UdJ+HHvT6KFFj4hoNCup6OXiDDHyH5qrgDzlXtDOM7SdsJKyZ7z2tsMZHUCMPbllpkacbr
+    5Uas5qTEy7z5NeVbHthvWrm7iqo8WgBmHuuLR8Z9n9y7HCXb25dVqgeB2SK/qYMwfs/vKO
+    vmYvZQJCG+rPPlL0WmiZVFIPOA7+3vEk2Yb+UeKhIRNSz+Refur063HSbp5NUzhzYuAPuD
+    tElBWQPDmcMhbksp7MjVlr87m8brH0Oi+szAou2/o0RYBEnkByEelDtKhUJK686UnoBwLn
+    kA62GQEhps3EcWzhiQ97ddCDqcojQpdvXYf+Sp61qr0qtqHtBEmcnsnUky5wDAMBQ3rBuh
+    LuIF5EVN46Mb+4Vcz6hXN+DyDCdoJ1QwRKlPiJslER2jxPlHTQBa3oTpZ68jQubA0y/qRs
+    /5NpELOzRf6GXHoc7bdDio8ydgXsnEUS1x75+dKE1DHPHRmVZ1gmhp6osK2UXlugo6AuM/
+    Qeoh/THiGJDUkGXbHyGswMm+hivFGtmPH1G/yM1wW3SYe5T6vA465GnazPOhRoZNOfhuyQ
+    LEYsoiSf/OQbl2kM0AnjKDCz56d/pui6nxGSjm2wfgP3koOBLpq5wKNQspLg
+X-ME-Proxy: <xmx:w2fXau2TEsPo3vPF01z7zqtKobHAPkrhq0YUkY6ywTQqp63cjY77UA>
+    <xmx:w2fXanrz8bkYlFn4pzkgE_Nc5BQa1WSRkJ8J5D4fKqr2TOuDxYPqXg>
+    <xmx:w2fXaomkH-KFVkeLD2MzBcKJCQK8Yc4PUBNXt1R3MDW7LkBo0XmlqA>
+    <xmx:w2fXapR2h-MxItrABHW8aWy7h5v40L0VXi2qSDv3_6ejJ5TyzTOF9A>
+    <xmx:xGfXanwEg4N8vn2NHgtL_P42GzZv_sacNQYWeqP22L4vcKqIzcOFr7cS>
+Feedback-ID: i51fe4b43:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Oct 2026 09:08:15 -0400 (EDT)
+Date: Tue, 20 Oct 2026 22:08:13 +0900 (JST)
+Message-Id: <20261020.220813.1441983911289970850.tomo@flapping.org>
+To: ojeda@kernel.org
+Cc: nathan@kernel.org, boqun@kernel.org, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+ aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org,
+ daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com,
+ work@onurozkan.dev, rust-for-linux@vger.kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] rust: bug: hint `warn_on!` conditions as
+ unlikely
+From: FUJITA Tomonori <tomo@flapping.org>
+In-Reply-To: <20261016162446.121509-2-ojeda@kernel.org>
+References: <20261016162446.121509-1-ojeda@kernel.org>
+	<20261016162446.121509-2-ojeda@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -88,60 +130,30 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261019162457.1000115-5-pavitrakumarm@vayavyalabs.com>
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 
-Hi Pavitrakumar,
+On Fri, 16 Oct 2026 18:24:46 +0200
+Miguel Ojeda <ojeda@kernel.org> wrote:
 
-kernel test robot noticed the following build errors:
+> The C side `WARN_ON()` macro hints the compiler that its condition is
+> unlikely to be true, both for the branch that reports the warning and
+> for the value the macro evaluates to, so that callers such as:
+> 
+>     if (WARN_ON(x))
+>         return -EINVAL;
+> 
+> get the warning path laid out of line.
+> 
+> Now that `unlikely()` is available, do the same in `warn_on!`.
+> 
+> Suggested-by: Gary Guo <gary@garyguo.net>
+> Link: https://lore.kernel.org/rust-for-linux/DJUY1ZYYW5K6.39XJ3ZV7DGZQW@garyguo.net/
+> Assisted-by: LLM
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  rust/kernel/bug.rs | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-[auto build test ERROR on 178aff4cf425b3fc51ff09c571fa1bfbc1eb8ea4]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavitrakumar-Managutte/dt-bindings-crypto-Document-support-for-SPAcc/20261019-215454
-base:   178aff4cf425b3fc51ff09c571fa1bfbc1eb8ea4
-patch link:    https://lore.kernel.org/r/20261019162457.1000115-5-pavitrakumarm%40vayavyalabs.com
-patch subject: [PATCH v26 4/4] crypto: spacc - Add SPAcc Kconfig and Makefile
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261020/202610201938.pmiyNP1i-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261020/202610201938.pmiyNP1i-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610201938.pmiyNP1i-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/crypto/dwc-spacc/spacc_ahash.c:827:11: error: expected '}'
-     827 |         return 0;
-         |                  ^
-   drivers/crypto/dwc-spacc/spacc_ahash.c:814:1: note: to match this '{'
-     814 | {
-         | ^
-   1 error generated.
-
-
-vim +827 drivers/crypto/dwc-spacc/spacc_ahash.c
-
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  812  
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  813  int spacc_unregister_hash_algs(struct spacc_priv *priv)
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  814  {
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  815  	struct spacc_alg *salg, *tmp;
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  816  
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  817  	if (!priv)
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  818  		return 0;
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  819  
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  820  	guard(mutex)(&priv->hash_alg_mutex);
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  821  
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  822  	list_for_each_entry_safe(salg, tmp, &priv->hash_alg_list, list) {
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  823  		list_del(&salg->list);
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  824  		crypto_engine_unregister_ahash(&salg->alg.hash);
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  825  	}
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19  826  
-756cf2497ce591 Pavitrakumar Managutte 2026-10-19 @827  	return 0;
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
