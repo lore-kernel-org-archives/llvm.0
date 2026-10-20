@@ -1,100 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792504436;
-	b=UR/42WPVW/sSCNO0xT2ViDWm98YupCXTwuNn5fPqBfbMIkG0cpsH6vQzNstIS7dzBy0/
-	 EXv4y6Ugf0kGYfKx/N67j0Fm/B+of2l7Qgi23Xwb8UB/5rU4FtGvLg7vYZZ4wCgF1Njjj
-	 3iOT3ziayQqjrdgb4NNb60Tfwa7w4MxD6XRG/GZqE/lsF0OYGiLWO/lncigiJ0K9igxmK
-	 nlzbL4sLteMbA4FoVaVbMNYtdXWzSKUnFANHEhHj7tFpmeSW9hLH+uEPTjMyqh3UGHTd0
-	 IuVfKm1vFtKUGYHhyzbYKj1H2ZVdrIEDnXKRwOnyB+AZxVK0StqxTjVoMfCvin7gWZg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504436;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 Content-Transfer-Encoding:Content-Type:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=Yox76MmSLQNzY4vXnUV2RBx6MN/aCL79HirjtHAwi/A=;
-	b=qkQ4jBEaRgyOLrkdEAARjfaS2XSW1KJGF/MyeIdjmsue4BaYi3AKoy1YpDEGrrRY9Wfr
-	 Bx/csuDwPjGTEB7US3Exja3Fb4UpR+AIM92Mh0/7CdtaYCJz4hllcKOBTYxCUtFP1VhTV
-	 iN30ojWbsvt99OXsH8Sk5nKXrOOEcNXCVZ2PuIMVd2uhHUrmeMzZlb3jWURx5MeNmzECm
-	 0t1C1TiqVxRl00Kp0QX7+lhvi8LKbIyGB3T5fZEe1iRDxldWo/+YEDvFwYPm0ZMMdBUsw
-	 n3fUQvSM6G8pBDAXVJ3NdUtw3Hol6PcwXBPpg6CbIpiG/Qm4gaKvg3Rd9fd11IHia5w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ctwu0qRW;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.43
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010043.outbound.protection.outlook.com [52.101.85.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792508320;
+	b=ZjmTc+FyhnkVZCr9zGtRVNG41Uwza9ZS5gtnImpvECl6BVRMEBy2K8ExWlIf0YELj2bS
+	 OFRVk1JEPPSP/Q5FAhQzxipHXenF4ZnfsE4ca/OK1nTU9HHtUzmpRZXXCr2KOGfIgeGXP
+	 WV4YS053JVOOCGcF2k6bVrR3voMVwQxQdx7QPQfzF+oSCW+voce9I65nW9mU7RTX25n5B
+	 MBzbRjHW3juYa4CDNnasD3rZxRpURyAPq17ugx88x1cZkKBofBrPGtg2C2CK+3UySLPq7
+	 bh+Yi8eYDHGUM927dUXpkiMUIOJf6SJtp0fOs1ssr9oWpDvTkyBxdsGhMgGXUdNwcmw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792508320;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=gocN0lUv+ePHb7pN6LNyapCRmaF7S37bTOPeiY6oAS0=;
+	b=mswJDjreb4xU8MCDe5/+2B54y3Z0cCopNaXgLrYlEpCiqBddJJ4moqZZgMQJR56OYvNt
+	 xdB8TNLkB5R/s+JD91mFJqLwknyjVehID0nLW4AZecWknfaEXK2wMsyUCl9NZx73MReEy
+	 HVsIwRaq2J+MZhQ6U0N7o4UZF5LdweS581VURBI6z1e3aof3GoO8JQXU7I3RD8ozflBmX
+	 CmcOh8PdjXuuRt9G+51S8Q4yBEwuO8HsyhyD/diPPHkpCf83VLsGIMcXwPWqxIjFQV1nV
+	 WK0PMcqIDT14DDuodBb3o/tgWbFViKD2VVpu5pkwtB/WPrZtt0Cys/qWtC3BdQIrcoQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UDMnkWKC;
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351DB606B646
-	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 13:53:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 351DB606B646
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FFB60A3823
+	for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 14:58:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73FFB60A3823
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ctwu0qRW
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=msJKkCowKtepx0cGK4KaYkLJyP/5Xl1Vv2uwKKS3QeWbZl36gp5V50LNYd4KG223W9sVkcojrqtinB62d5tDMkEBPjAgTUmsiJiEgsZHjimL6qZFSpyy9eIk1Htno+ExMF72rQ0iS3dTn5Ntm2m/h9fyfX/aiZWj6qn9MK0GsTo9zyFyLDW6DRhJVZL2S6ZcxdnWmgwclSlvvvorh4ldZF+qoX2Gp0I6EDHmLsI7FSt+zM5eKpCoUMnkA5mh7Rx6msqEt4r+JR0+XKB4huECnAiaK88FE7OA6gmNnNiPjLz2ywfgHeNHwUu7ie5URsKPHTX6Rwpvq4KEH34DavqnyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yox76MmSLQNzY4vXnUV2RBx6MN/aCL79HirjtHAwi/A=;
- b=O9ABi1z8z5cPpDkKX8fMKbzXeKQSNoc5VB2kGPgohl0ZFzYx/XXGHTQVF3k7Lym53h2CH2amf3T1b3MaCGOycrO46+2AXzieTNMNVysPD8/3Lv99Zmo43EhfEqXVtruLlhn4tIWCmxnxxCYz0LRut7zecNabVaWFuRth5TQqXnOjTBtXpUBEfC/zYOFr7sdojmQ6ck5F21AgeeCRiTrgyQH5M7GnakhppVBelF1Sl4vPvB7IVv2VWG0rtTpe4UaSg0UerXwmy9jACa0jYrbprIT78GQ8k+/feDxNlYzIwP07Se8fm283BSBXoxMOJvUg7QeuGhEXyoI5xtzfpJtErg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yox76MmSLQNzY4vXnUV2RBx6MN/aCL79HirjtHAwi/A=;
- b=ctwu0qRWJq6o+atUjkudpkHYTyR3uM2tzs+ck9oaBpG/vkm7d4j+rGdtOpa6v4AiMbkfFRYSZzu1TaZdJTm9hLyK+0LyJJRYLfDXKSuUkOR7TqirFzdB5HaIyWbd8sH68WU51eVNS57650Km7vJQHvHaG3f3rmzNhiOhWJK6+GpfL8cOa/t3UJybmc7PjgmsaS4lOa5AZM46yO5zLtjJyRyvkSVlH7PwILGrVDefKwWfarnjwd9J0OnWNwxqS/V7p+FL2HsBwcXU7ZQWhuvj8gjkGvBBMlCw0xc/3n+X6Gf2iORDVJ4ZcnzmAU11XJnqOM/24JmYlbN5HtyQrPa+xA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19)
- by PH8PR12MB6866.namprd12.prod.outlook.com (2603:10b6:510:1c9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Tue, 20 Oct
- 2026 13:53:52 +0000
-Received: from PH7PR12MB5974.namprd12.prod.outlook.com
- ([fe80::f5a5:bbc3:e9da:f8a0]) by PH7PR12MB5974.namprd12.prod.outlook.com
- ([fe80::f5a5:bbc3:e9da:f8a0%3]) with mapi id 15.21.0522.017; Tue, 20 Oct 2026
- 13:53:52 +0000
-From: Adrian Ambrozewicz <aambrozewicz@nvidia.com>
-To: Linus Walleij <linusw@kernel.org>
-Cc: Bartosz Golaszewski <brgl@kernel.org>,
-	Donald Shannon <donalds@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 06/11] gpio: Add NVIDIA LSTP GPIO driver
-Date: Tue, 20 Oct 2026 16:53:44 +0300
-Message-ID: <20261020135342.2963044-4-aambrozewicz@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAD++jLkQd70V+wQhCaKES8LQqWoU+dmt=Dr0PgbA81xHh+hppw@mail.gmail.com>
-References: <20261012-lstp-usb-adapter-v1-0-aambrozewicz@nvidia.com> <20261012-lstp-usb-adapter-v1-6-aambrozewicz@nvidia.com> <CAD++jLkru2AL2_7ieOdbYrePAhNSFaa3wwEzCagiPsALgG2GwQ@mail.gmail.com> <20261016081917.1958681-4-aambrozewicz@nvidia.com> <CAD++jLkQd70V+wQhCaKES8LQqWoU+dmt=Dr0PgbA81xHh+hppw@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UDMnkWKC
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e60f9af6e6so26163405ad.3
+        for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 07:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792508319; x=1793113119; darn=lists.linux.dev;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gocN0lUv+ePHb7pN6LNyapCRmaF7S37bTOPeiY6oAS0=;
+        b=UDMnkWKCvhg7pLXix7OdT7QANC+O63owl0iL8cj/vS9xtw38UW44W6TbcSUpKdvC0M
+         0iW+U3s5UZr7RjDP1T9spwb73IPJ1vZ92rqvbFQ6Av2YZjz/4E1IHSwlxXz6mQGEcOfN
+         H6EPnqLV93mHemMYUiGqA5MQd0jIaR2Ieo0jccLFgR7QEnXvP0DuosXbfPLbEqKPpcQr
+         rH0/tZ198vQQyZQ4XppV2lMrXWfL9QY7tfuTGB/O+GyMGA6DMy4hFQp6qFdw8pU+oML7
+         yoYk+8nmXO4Wpoq89B/SCx7IAyi488tPSnU2kT4bf8fhiq1jRu4y1g5JXDGiy8nQuWCu
+         BKdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792508319; x=1793113119;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gocN0lUv+ePHb7pN6LNyapCRmaF7S37bTOPeiY6oAS0=;
+        b=Fd0H4CZNi5P1/8PYqNUplZuzGuMLF4j7zhgIh619tam6hk1ZWu82sSr+DxUFCbczaN
+         cRJvORAQ8V+DqGHCwuZ5BUazXGtLIHkcShQjMxCp0hvD5A+Hl3bHwhda4H/nPnoE6CUe
+         s3sNahjmQb2XswXyDxH6TrQzgEQVPT0+OrBENRq0EyUxQPTbt5ZKOQhgxJ+6LkWI4pCm
+         rMEuE7RRhaMu7xtVfT+yMuQNXfuQtYqr9aHoiwCnRCvTBMM6ZRt59CcCE/YozbbJnqRu
+         f7w7FZQ0PKh8pkbrIXqsfVzSRJ7ZTzUnsG9t83rIyWlQ/lFFuyX6zDIXIL59Itm5eQ2V
+         znlw==
+X-Forwarded-Encrypted: i=1; AKwUvBxZZ3Yc4mOF14UEQyw1Ze5DeYi0rGIlwnbleZUMMDJ8isH3oT5DzaI2sGXzJQVmks0LTpoY@lists.linux.dev
+X-Gm-Message-State: AFq9FYJsQ5zcf2ic01ZR8aHXVTTiTEw5Mf/WdZrlse4WUpq3nhTfoMkJ
+	NjuA258HjSGkVWmVo0IkJcTG7y+If8BSnMn/kYXZ4Sr6gBOxfFk0Z+24
+X-Gm-Gg: AYBFou0GU6E4EnOhTmomB6NZWN0W06P19/O+ILsQMQx/bn4ECQ+iMbfPa/T8Zvhwg9C
+	lf13xHb202YjSCg1E3tkgeavY5B1pif06O2dE88lrOOQyXuHmk/AEz27lFVYx8aC+t8Bt22HRye
+	rDnuWrjR7Qz8VJ0KlV8XJi5sAJEci1Eza6Tqs3jyNnQHy9IWhevT3I3/zOCxOHuGso4pWrp2QlB
+	0Nn7Nivfd9fR0aVmSP4LLubqPJRb4mr9W0Atku8vU2Aj7BLZeAALZRk+XGeJU5OfWNgWvZzJr/p
+	Nyazj3fcJ2WErTSoh7d/fQiWVlLo8oHbrBa/nXnXhvB1UHWlmivTJEuUTeUwdDsLaKfgZhy3FVd
+	fv0/+PQOCBPiY0uiBk+HTGcQZ3DKsvFhmH1hWJ6uoIx5INpOjICoUxuruQK8rfTpEQr5dIxCXnF
+	PnpWD2KIZGA2YKZnj5+faJxvFj1ycDzAgc/Qt07nZDL3oT0lQns491We7FBrgTaovawHZ+xp//z
+	2AGIF2AFaI/Gnn2BLdmUtvmKFx774vcVfpCoHbpF1M4KsV8mFeHjSFQ4JcMH7LpR105CnlRYNyA
+	Z3y1nQN6muGK8A==
+X-Received: by 2002:a17:903:2351:b0:2e9:9f14:c40 with SMTP id d9443c01a7336-2e9a684330amr96805845ad.6.1792508318588;
+        Tue, 20 Oct 2026 07:58:38 -0700 (PDT)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b40fe7fsm280255ad.13.2026.10.20.07.58.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 07:58:37 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 20 Oct 2026 14:58:36 +0000
+Message-Id: <DM9R60QEU8RP.2MWT9CY6J4ZVF@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <john.fastabend@gmail.com>,
+ <davem@davemloft.net>, <edumazet@kernel.org>, <pabeni@redhat.com>,
+ <horms@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
+ <morbo@google.com>, <justinstitt@google.com>, <menglong8.dong@gmail.com>,
+ <bestswngs@gmail.com>, <mattbobrowski@google.com>, <vega@nebusec.ai>,
+ <sashiko-bot@kernel.org>
+Subject: Re: [PATCH bpf v2 1/1] bpf: reject raw iteration over managed map
+ fields
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Zhiling Zou" <zhilinz@nebusec.ai>, <ameryhung@gmail.com>,
+ <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+In-Reply-To: <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
+References: <cover.1792217106.git.zhilinz@nebusec.ai> <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
+X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TL2P290CA0017.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:3::7)
- To PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,77 +109,202 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5974:EE_|PH8PR12MB6866:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd796df1-0e32-4508-9003-08df2eb1934f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|7416014|1800799024|366016|22082099003|18002099003|4143699003|11063799006|10067099003|261009223027099003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	epUOf/Lr0j8aFEwqlFbOL9v4g85s/sxyQiNL/YgYwR7nKSmRqdoOa05hRpC2v04Tt+KM1JcnzRYNAxTj3XVLDlzsK/TKq4fRCMVXr4ZaxQAra4sgUq6ngq+saDrPHzxjxvvp6X4NWpNS2mXxxWob18x127CKPPMkpMmDB1D1DcS6QaquhMbslClafC9ueYbf/Tpd+sXs6XY7SLEeW82Y2tZ7oBXaDOcWi86+45iejqHwB0GybLFHTyJRKBfOAK4Cf8MgaP+uu8sffZCtsep3jUZAwhnROYuHahYPwKsskVpw6PX9mqU/wu3mBe2+UKT1Yxyh6TqBVs6jpJGUc9Vu+zDbC/rbfcBPU3M5VgfUKBg9WzXiOURPIn15XXZM149noX8DxaZTH/o7Kwmz2mZIkzYA+Vy2nqJ5095UE6w9Zr8RaDWo6Id32q0HaeIj36LsLMPrCTSvk5WO3zUjNtkhWc2c+d7fZZM2Mo+XkpHHiH+Gn1H5tR0omjlqtIcZxjAunrw3ciSsL68E0Ihf3spxdFnmwkJ10zT+lbZ724HYWjdCuG83E4OGd03GEC6gZetca89GiUbL00hQCgkK51IMI7Jx7lUSK0qAsq7PxGSDCQCfEiF1hutOyoCWOAmwgDw+aPHvMnbg6HTz678Ew60qbGfKCM2JQ68DSlVMe5CGfQg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5974.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(1800799024)(366016)(22082099003)(18002099003)(4143699003)(11063799006)(10067099003)(261009223027099003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?LMzreooZlVLk6ANcJ14QQ0Ng2UnuofLh7bSeew8PP6Giti7JrXmWeACuVPhy?=
- =?us-ascii?Q?6vFOLh64Pbw+44bZcXwgf5zjrHmVrkElKrsqHv3Lfpx3L+lHjGC03vCU40vS?=
- =?us-ascii?Q?8YLcfBrKh23WBJ0g+6HaSI/0B4YlK2MsbLlhFEas/CQqiofAXp0HHrJRP47L?=
- =?us-ascii?Q?ov8TqC3md3OqAgAQnQj6TmvgJvaP+L6LlfFTWAihBNym7fQzYOKpwYNullPO?=
- =?us-ascii?Q?XPdPd+F1yXEhHVOIEIeLpQxySbWny48ruOZX+l9L6nYxf+Kkg4FFY/ZARlDc?=
- =?us-ascii?Q?8E7RLVR5REj9So8AgUf27PvMoglKZSAJdplbPcDmg6itkJuCmP43HQiXA5s0?=
- =?us-ascii?Q?2A7bFFzDdoxDDRK+kcnU9FbtGo4OGhpcdbRl91ipj9DcozqZ4/U0+VL4QD+A?=
- =?us-ascii?Q?94nrfpfFTmCSFJIW0RC47akalnQokGVgogPhqEh+bAQxMQbzr8R7FWLbDly+?=
- =?us-ascii?Q?TRYhLaaRog9AyKePwIOdSWMula0vYWHMzTrbv//rrsSQArjv5/UNZBETg0l8?=
- =?us-ascii?Q?5EvNFy2KwtFGItvNlKKTgnngNIO1OszZOvKnO+Xx6oGq95k9LGtjsGL0xaQa?=
- =?us-ascii?Q?EgAnROUlGCZ9MPkNwKDcDtarhPk4DJr3b5lRMn5PBFaid55aCNQZTj+vVk1q?=
- =?us-ascii?Q?K0NoCch0pl+KInIHzzfMyWaDS3tq5GO6yCFc2cWEIoLbt4aJgz14H0xXuHUu?=
- =?us-ascii?Q?47rtin7BWdPHvVeGH4TuQaeMdvdSExpuLHUOCo2Ciw0oyD+VAhW3NcAG5Xma?=
- =?us-ascii?Q?5iWPVteSfLpbLK204hY++N5gLuJipYStLvbStSv5VNQR9v+94yQj3hn39NRK?=
- =?us-ascii?Q?d1mtGHGTr000ymRdKk+ZOjDpZKZj0pSKgxqdu3EwaD2tlhqrNdqsxddmhdZE?=
- =?us-ascii?Q?QlvHUJpYYwVTqcFAXzyxiTxnOLv+ywT8PPR6SBLOfetAqG3v+PVVUAXvsoEw?=
- =?us-ascii?Q?n7rsPxdJaBg2Qsfv4xUlOvnPFCk/Gqds7bCGXzzJGx/vf7dj0nqIXq+aDGL6?=
- =?us-ascii?Q?AwJpa/FCHJwJ8HL+MJWYJITup7AVZrO0vY3lulIFVzKw1OiNHZ/CjQxTu9QX?=
- =?us-ascii?Q?JYG8/yM8cL3hL7Tmydrfmup/eq8Ebcr2UOy07qUHwT3O08cv8LBahA1EsWwJ?=
- =?us-ascii?Q?bb00JVbLfvkQlKScmLJOYzx+jk/iVg8K83vy8kYtnEh0RvCMnlL8/OZ++aIS?=
- =?us-ascii?Q?05GZ/DTiyzs5gYEKLAPRSGsSua/dBMkA9llaojjJtfFFuMxTLvhWzRNB2Aqc?=
- =?us-ascii?Q?9Rw/THNKKGH17LJPwuIvH3Vf+nzkqSvU1ZPjqL9aagY+f83VRpReKozJ0EDt?=
- =?us-ascii?Q?MSZ+ZEEgqdS0cGgWqS3F4NM5j1+Xq1rbZBjf2MRx+Kkpe40VMUetIMq6dqKY?=
- =?us-ascii?Q?1B1XKdYPzmGwB8UH5097AcpviLuW1g1L2kqU6XBDKAlJd9h+RLmZcQjvsKyw?=
- =?us-ascii?Q?TtTX9Iq6GHoYP25Rks+rnvd/Z8foJ4d4b9u9HPMUzgWm1S0TfUuCBRa3zTcZ?=
- =?us-ascii?Q?NyIiX5fV2nV63jZVooj2GmMmVUpwlJphVuq1O509LyKJlHSgTAnEogyYLfF4?=
- =?us-ascii?Q?YxN4J0WbLelvIkE/eYNCKAA7KMSXzdYs6X/0JHm0lguAPT1UDmICYMKeYUu3?=
- =?us-ascii?Q?J595Rp3/wVWmDbcveEL2DDQ4j5qb8JjqvIE0VLHzxgqCAI+uweFIrKiVfhpL?=
- =?us-ascii?Q?mDJ5VBzsZNc1pB4k0ivBZkoMAC5QITj3/oR6cclKEpk0CBDCtKHosxV6MZq2?=
- =?us-ascii?Q?xX4LXqjEzQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd796df1-0e32-4508-9003-08df2eb1934f
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5974.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2026 13:53:52.6541
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RAVK+E+dsP96gKZ82EoTFftH3RxsFJ3508c8Toqo1/CdvqGj+Q7FLHrfF49YxbiGjDoDJpFeDdZULSx+svcCLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6866
 
-Hi Linus,
+On Mon, Oct 19, 2026 at 11:35 PM Zhiling Zou <zhilinz@nebusec.ai> wrote:
+> Revalidate the replacement program against the map associated with an
+> iterator link before bpf_link_update() swaps programs. Add selftests for
+> allowed prefix access, rejected managed-field reads and writes, and link
+> updates that introduce managed-field access.
 
-On Fri, Oct 16, 2026 at 11:14 PM Linus Walleij <linusw@kernel.org> wrote:
-> > gpio-regmap has no get_multiple/set_multiple, while the device takes
-> > several pins in one request,
->
-> So just add it (get/set_multiple) to gpio-regmap.c?
->
-> There is a nice generic implementation of get/set_multiple in
-> drivers/gpio/gpio-mmio.c to draw on for inspiration.
+The sockmap iterator has the same hole.
+sock_map_iter_attach_target() checks max_rdonly_access against key_size
+at attach time only, so bpf_link_update() can still swap in a prog that
+reads past the key.
+
+No need for a new callback that each target has to remember to set.
+attach_target can record the limits in bpf_iter_aux_info and bpf_iter
+core can check them on attach and on replace. That covers all three
+targets. validate_prog, its typedef and the split of both attach
+functions go away. Selftests are left out below.
+
+Something like this (compile tested only):
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0ecb941..ffb6fee 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -544,6 +544,14 @@ static inline void check_and_init_map_value(struct bpf_map *map, void *dst)
+ 	bpf_obj_init(map->record, dst);
+ }
+
++/* Part of map value before the first special field. Fields are sorted by offset. */
++static inline u32 bpf_map_raw_value_size(const struct bpf_map *map)
++{
++	if (IS_ERR_OR_NULL(map->record))
++		return map->value_size;
++	return map->record->fields[0].offset;
++}
++
+ /* memcpy that is used with 8-byte aligned pointers, power-of-8 size and
+  * forced to use 'long' read/writes to try to atomically copy long counters.
+  * Best-effort only.  No barriers here, since it _will_ race with concurrent
+@@ -2992,6 +3000,9 @@ enum bpf_iter_task_type {
+ struct bpf_iter_aux_info {
+ 	/* for map_elem iter */
+ 	struct bpf_map *map;
++	/* how far a prog may access key and value of the map */
++	u32 max_rdonly_access;
++	u32 max_rdwr_access;
+
+ 	/* for cgroup iter */
+ 	struct {
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index b40eb40..6f3ae92 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -405,10 +405,21 @@ static void bpf_iter_link_dealloc(struct bpf_link *link)
+ 	kfree(iter_link);
+ }
+
++static int bpf_iter_check_access(const struct bpf_prog *prog,
++				 const struct bpf_iter_aux_info *aux)
++{
++	if (prog->aux->max_rdonly_access > aux->max_rdonly_access ||
++	    prog->aux->max_rdwr_access > aux->max_rdwr_access)
++		return -EACCES;
++	return 0;
++}
++
+ static int bpf_iter_link_replace(struct bpf_link *link,
+ 				 struct bpf_prog *new_prog,
+ 				 struct bpf_prog *old_prog)
+ {
++	struct bpf_iter_link *iter_link =
++		container_of(link, struct bpf_iter_link, link);
+ 	int ret = 0;
+
+ 	mutex_lock(&link_mutex);
+@@ -424,6 +435,10 @@ static int bpf_iter_link_replace(struct bpf_link *link,
+ 		goto out_unlock;
+ 	}
+
++	ret = bpf_iter_check_access(new_prog, &iter_link->aux);
++	if (ret)
++		goto out_unlock;
++
+ 	old_prog = xchg(&link->prog, new_prog);
+ 	bpf_prog_put(old_prog);
+
+@@ -570,6 +585,14 @@ int bpf_iter_link_attach(const union bpf_attr *attr, bpfptr_t uattr,
+ 		}
+ 	}
+
++	err = bpf_iter_check_access(prog, &link->aux);
++	if (err) {
++		if (tinfo->reg_info->detach_target)
++			tinfo->reg_info->detach_target(&link->aux);
++		bpf_link_cleanup(&link_primer);
++		return err;
++	}
++
+ 	return bpf_link_settle(&link_primer);
+ }
+
+diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
+index c19b360..9fd5920 100644
+--- a/kernel/bpf/map_iter.c
++++ b/kernel/bpf/map_iter.c
+@@ -101,7 +101,6 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
+ 			       union bpf_iter_link_info *linfo,
+ 			       struct bpf_iter_aux_info *aux)
+ {
+-	u32 key_acc_size, value_acc_size, key_size, value_size;
+ 	struct bpf_map *map;
+ 	bool is_percpu = false;
+ 	int err = -EINVAL;
+@@ -127,18 +126,12 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
+ 		 map->map_type != BPF_MAP_TYPE_RHASH)
+ 		goto put_map;
+
+-	key_acc_size = prog->aux->max_rdonly_access;
+-	value_acc_size = prog->aux->max_rdwr_access;
+-	key_size = map->key_size;
++	aux->max_rdonly_access = map->key_size;
++	/* percpu values are copied with special fields zeroed */
+ 	if (!is_percpu)
+-		value_size = map->value_size;
++		aux->max_rdwr_access = bpf_map_raw_value_size(map);
+ 	else
+-		value_size = round_up(map->value_size, 8) * num_possible_cpus();
+-
+-	if (key_acc_size > key_size || value_acc_size > value_size) {
+-		err = -EACCES;
+-		goto put_map;
+-	}
++		aux->max_rdwr_access = round_up(map->value_size, 8) * num_possible_cpus();
+
+ 	aux->map = map;
+ 	return 0;
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 1d295a8..44b7e61 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -863,11 +863,7 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
+ 	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
+ 		goto put_map;
+
+-	if (prog->aux->max_rdwr_access > map->value_size) {
+-		err = -EACCES;
+-		goto put_map;
+-	}
+-
++	aux->max_rdwr_access = bpf_map_raw_value_size(map);
+ 	aux->map = map;
+ 	return 0;
+
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 38df842..37144bf 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -1951,11 +1951,7 @@ static int sock_map_iter_attach_target(struct bpf_prog *prog,
+ 	    map->map_type != BPF_MAP_TYPE_SOCKHASH)
+ 		goto put_map;
+
+-	if (prog->aux->max_rdonly_access > map->key_size) {
+-		err = -EACCES;
+-		goto put_map;
+-	}
+-
++	aux->max_rdonly_access = map->key_size;
+ 	aux->map = map;
+ 	return 0;
+
+
+> Fixes: 9db44fdd8105 ("bpf: Support kptrs in local storage maps")
+
+Wrong tag. Iterators could write special fields from the start:
+commit d6c4503cc296 ("bpf: Implement bpf iterator for hash maps") and
+commit 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map").
+
 [...]
-> I don't quite get it, but I prefer gpio-regmap with an extended
-> gpio-regmap.
 
-Thanks for the pointer to gpio-mmio.c. We are open to extending
-gpio-regmap and will evaluate this approach.
+> +	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
+> +	if (map->record && value_acc_size > map->record->fields[0].offset)
 
-Thanks,
-Adrian
+This will crash. map->record is an ERR_PTR when btf_parse_fields()
+failed, and map_check_btf() still creates the map. A value with two
+struct bpf_timer gets -E2BIG, for example. That's why other users check
+IS_ERR_OR_NULL(). Attaching any iterator to such a map now faults on
+fields[0], whether the prog touches the value or not. Same in
+bpf_iter_sk_storage_map_check_prog().
+
+Percpu maps don't have this bug. Their iterator runs on
+percpu_value_buf: copy_map_value_long() skips special fields and
+check_and_init_map_value() zeroes them, so the prog sees zeros and
+writes to a temporary copy. This check rejects a prog that sums a
+counter over all cpus in a percpu hash that has a kptr, for no reason.
+
+It's an old bug, it needs root and the fix rejects progs that load
+today. Pls target bpf-next.
+
+pw-bot: cr
