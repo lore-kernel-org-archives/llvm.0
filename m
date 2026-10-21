@@ -1,47 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.100
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792549548;
-	b=1moEM5v+RUK1wxXXokPrlBRpTfm19TWyq2Zh2+4Xhp6givs4mSdtbbh9GC3/HxvJVDzB
-	 DhpR4F2OzBB+qcjTb6WDPmoiKruw/V6w6XlB/lQst9nmWBi8f0xVNpm2P+MrZuWsWem/o
-	 kkIo49AOSI2i35Km/Jc5AIbh6ZTUMnzcKf4jZZXAfgBSyc+CURe3JKnS4ZwOyK5jyrBRf
-	 2/uiS38MG5tvFzvBt7XioZ3Q+BgmT3EL6+fEB4o4xNofYwq7IyvJU+dpw1mgvQAlLhkoX
-	 CBxEjGYW2DqquIzO7guKiwdWm+hmnIYRNIJa9DaradFh0RhztfgxXEwxr+NMTr87biw==
+	t=1792553682;
+	b=DkIgrUTnft/nRpYwPfHSn+gU4YTRTS51u50iwOi2v89/Gaynfo97gTErOvl4o4xGUitw
+	 XpaKtqLFDykaSVTqRLXhLyZSDynwxOv0S8ULF3Y5pHpyXA/3wRLQi8StTO36z5Cj+HlRP
+	 lLiRd/dJeVfREHaKEfw0qvqHFJy5ge8r3qb3SUTXKqYT46HeEJQbcHQjdYRcJZnUAb81y
+	 l8GdHGfmrCdtuQfHzAtc2SUt28aouU9uDYu4YyJSOzrVXKCU9gdxWD2Xb/ed7nx/vooic
+	 4Iw4kliygNOi4/3DdzbkYMn02DinB2FTZ8+9uyTiKwS6jOMY02J9THclvL/3Qm4IPWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792549548;
-	h=DMARC-Filter:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=bUpuMLN+Hzel+rwIg8x/V4c7BZp7NFus4wb/KBKZts8=;
-	b=i8s4JlFH7X6K/T9VORJr/t8y9UDsx857xR55AS3c1+FJ+jKIxTSfaItkDOOIaENfhy3T
-	 bfeKx/bYa6BzvfC20/uph62B2R3CFCald7gmFw0csVvNEP6oSt55zKuxuQ+ALP42lIWLO
-	 /CIoc8V3WJpAjveJdF/i7y3OG0HlA00UgVxUSnasBlvGmsT9pUL2/n9ks0EgD+6qixO7m
-	 1pW764/e8e/eHcjUSs7zmQNk3iXIv2MVEjSjeMYHx6gkM1kfOD4GMndbZLKEaSVvljqIF
-	 iEXPfuJlugHUfvWciQ6NU7HY2/Qkd20gFsO6f4mQrSVDWsYO51cU7yLP+jI42LembAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792553682;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
+	 X-CFilter-Loop:Received:DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:X-DetectorID-Processed:
+	 Content-Type;
+	bh=wFCDZhCp3S75IMA9n0nbxCGxRMflpyvY3tS1A0YLVIs=;
+	b=1mpseGHFgVyFfKOsX/WnVr9N2DV3GEwAQGZ4Ei5/MxUeViMwrqLH0Xfad6gvRsGCAvk+
+	 DcOExMB4P8Usox7pT1abd5xi5SM4730+HBco7mcC9DgnXnqAFApqxwWsf0KG2gPpZ629E
+	 +G1VVYxBR2903Fl9J99zDhkLNi2Rb/DWf/WlibBkUbVvLJSG+QfNabXgumi6xOJYtG2kj
+	 Q1q97lY9HniULg7j65lBqEU28hT2iDTlFUSje84LI4DancxA0iWjrH7QopnDy+Y8ktz8X
+	 1ZtmnKDC5pUXXQVY4cc3nvvRz2Okgniz3mkNpBHUlXCFCIb5ym8WxXZblc4VN4He6oA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=huaweicloud.com;
-	spf=pass smtp.mailfrom=huaweicloud.com;
-	arc=none smtp.remote-ip=45.249.212.51
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=broadcom.com;
+	spf=fail smtp.mailfrom=broadcom.com;
+	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=NKEIfWPZ;
+	arc=none smtp.remote-ip=209.85.216.100
+Received: from mail-pj1-f100.google.com (mail-pj1-f100.google.com [209.85.216.100])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6DE606A31B
-	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 02:25:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F6DE606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j8Y6W3x8fzYQtFC
-	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 10:25:39 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 742724056D
-	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 10:25:42 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgBnMeekIthqMcbiBA--.26564S2;
-	Wed, 21 Oct 2026 10:25:42 +0800 (CST)
-Message-ID: <18de9e8f-3709-4bc9-b11b-3813e1ba98b7@huaweicloud.com>
-Date: Wed, 21 Oct 2026 10:25:40 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B94606A31B
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 03:34:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6B94606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=NKEIfWPZ
+Received: by mail-pj1-f100.google.com with SMTP id 98e67ed59e1d1-3ac451e128cso212807a91.1
+        for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 20:34:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792553681; x=1793158481;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:dkim-signature:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wFCDZhCp3S75IMA9n0nbxCGxRMflpyvY3tS1A0YLVIs=;
+        b=ibwR+UXq4ILYtjLz4flVRGskJ+YyLQGGFePA7/wnDi0CG8aoQlpwTUO1ryJclK5UtE
+         E+a7YC/aKVHEYUV9FLxlG0IDItp+1fN5WCGe00KpExHd7kxKol/Pzxxusz+oxEc+Uvy3
+         thkxOV1VFV4JqhCwDnb6LTJcks0diG5UCcOPum3E9ZlaGCosLMmJrKN0hQEoRzePsf2k
+         MaPnxZRxK9cPpr67QyhG6J61cmcglnJXpxwZ/WdEQv8UYDqOQloQTbiemONFBQHzTGoV
+         WkG7gjT4QwWjdE7mYa+IZzZrx03ia3Ryet+2QGFynT7YOkOSfJ7LTRF1mGr7CnRey/9s
+         F/hQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzQRUagSB1NhelYM4vVPrt4UQWrm9NwMiwFK1mWPwe5Dbo4DU750lfT/6FIFn6zcrx06fd8@lists.linux.dev
+X-Gm-Message-State: AFq9FYKnTmpDb2FmXMxR9zdSjAn52iGQbPvg0j9lTxD8Rh5f6EJeZHCd
+	WBUiHGuzuwozK51ulwy1dq1pkBV1bQtobIQQP0zTKJqQIjiwxqkJvXO7tCXf+6O4TPminvYItkI
+	gM10bdd6KKu2AO6GS7wwB40eaWoRjwjWtgBVyD9HyMVDHTkeBjLQKaX9rlVUO0O61x+DywbqtW3
+	RHjwmTb487mIpcDp0plEUA/H5uo1RF8J1xSjJA8E78cjSiN7290u3aZajKz44DVZUHBJa2PwIP1
+	n352Q==
+X-Gm-Gg: AYBFou1xC691KyfVfIZbofL1vkNm7A3H79/7wceI2D/V43gL5OUMkU5d/I6d1phV/+1
+	7fPnFaT5yKfkBUwJ+UL6BQTIv/+zboF3yOoxGm1o+ybCGfZvoEyzGNsBdRvedoRk+Q9wHRd8CGZ
+	2NteJRrhMWpAVDpmyqKvzoOgK+VOpYhtxBmTMz8NLDRmhThITa/NPEYuH5bfVpuZn6kTHKj7qvg
+	E1DhdCXPkYdBdjRmNpmRt3aAamlAst6EE4gdJ7KeeOgJPhSBB4dlllyrAw6ydB1/XjDLs2pa/12
+	Z1hQB9b9aV9tLyPj5oa/abxWHZFwEiQpDRKvCb8U0OSqrI45mQ7jYWwOosCM+JDLPt4AlCXcYTy
+	wD3m5RG7xuGqxCc+SJve2T2mt8txTFp5+la8VqBg4KjeixQJYf7P7JIDEVBlF+oa3mSJbmfdqP8
+	wO/U4OD+3nUwPoqdnnz8jXLX+j8bhKuxzb
+X-Received: by 2002:a17:90b:3f8b:b0:3a8:6045:5a24 with SMTP id 98e67ed59e1d1-3ad86ef28d0mr625638a91.38.1792553680577;
+        Tue, 20 Oct 2026 20:34:40 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-17.dlp.protect.broadcom.com. [144.49.247.17])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3ad85f956b4sm255241a91.2.2026.10.20.20.34.39
+        for <llvm@lists.linux.dev>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Oct 2026 20:34:40 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-3ab36a71c66so1514071fa.1
+        for <llvm@lists.linux.dev>; Tue, 20 Oct 2026 20:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1792553678; x=1793158478; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wFCDZhCp3S75IMA9n0nbxCGxRMflpyvY3tS1A0YLVIs=;
+        b=NKEIfWPZgImA/+cZ/N6NtnQmeZP2a+2mZm3jyRQf3B3vf1Ot6+Wn+ekpW5V0YmTB2/
+         g4NNrA+v2EV07jkA0Vj/EOrt+1+F0qF6H8j64m5nNrBcPBrviweSf/flUbacvGCeVIKx
+         ek8YIfk3pvUxFmj9So8ZvS/3s+Ve8iz3/4TyU=
+X-Forwarded-Encrypted: i=1; AKwUvBy3hq5fVhVNRoBVv/hANsvolb2k8g+d1p+8lHFO5obhLQMpB7z/7c4emYyfcgUvLSNl0Swt@lists.linux.dev
+X-Received: by 2002:a05:651c:a0c8:10b0:3ab:3b73:4560 with SMTP id 38308e7fff4ca-3ac4416514amr1399571fa.11.1792553678377;
+        Tue, 20 Oct 2026 20:34:38 -0700 (PDT)
+X-Received: by 2002:a05:651c:a0c8:10b0:3ab:3b73:4560 with SMTP id
+ 38308e7fff4ca-3ac4416514amr1399461fa.11.1792553677861; Tue, 20 Oct 2026
+ 20:34:37 -0700 (PDT)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -51,186 +98,161 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 00/15] perf annotate arm64: Support instruction
- tracking for data type profiling
-To: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
- xueshuai@linux.alibaba.com, Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
- Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
- Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <cover.1792411435.git.wutengda@huaweicloud.com>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <cover.1792411435.git.wutengda@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBnMeekIthqMcbiBA--.26564S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFyDuw43AF4rWrW3AF4DXFb_yoW7KrWkpa
-	93uw1fJryUtr4j9rnrJrZ7Xr43Wa1rXa4UGryrt34Syr12yF9YyF97K3WFyFWfAr98Cr17
-	Jw4vyFn8Xayj9aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+References: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
+In-Reply-To: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
+From: Zack Rusin <zack.rusin@broadcom.com>
+Date: Tue, 20 Oct 2026 23:34:23 -0400
+X-Gm-Features: AclHuK8ENfLisiIT_GEK1qalO15UCXsiYROrnCL-RUbBf_6CSo_GUxqkuPipUvI
+Message-ID: <CABQX2QMNetg9iYRRsQmeM3+1tnC94ccWM=450wMZL_sUbqAJtA@mail.gmail.com>
+Subject: Re: [PATCH v1] x86/vmware: Fix i386 high-bandwidth hypercall arguments
+To: Borislav Petkov <bp@alien8.de>, Ajay Kaher <ajay.kaher@broadcom.com>, 
+	Alexey Makhalov <alexey.makhalov@broadcom.com>, x86@kernel.org
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, 
+	virtualization@lists.linux.dev, bcm-kernel-feedback-list@broadcom.com, 
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="00000000000041aa5d065e516de7"
 
-Hi,
+--00000000000041aa5d065e516de7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/10/20 21:44, Tengda Wu wrote:
-> This series adds arm64 support to perf's data type profiling by
-> implementing instruction tracking for the arm64 architecture.
-> 
-> The main changes since v7 include:
-> v7: https://lore.kernel.org/all/cover.1791629326.git.wutengda@huaweicloud.com/
-> 
->   * Patch 02: Minor optimizations to update_insn_state_arm64 to facilitate
->     future extension, including:
->     - Encapsulating call instruction handling into update_call_insn_state()
->     - Encapsulating invalidate dst regs handling into invalidate_unhandled_insn_regs()
->     - Renaming is_readonly_branch_or_cmp() to is_readonly_insn()
->     No functional changes.
-> 
->   * Fix issues raised by Sashiko:
->     - Patch 06: Complete the status register invalidation logic for
->       exclusive stores.
->     - Patch 13 & 15: Complete the lifetime invalidation logic for adrp
->       and mrs instructions.
->     Regarding the status register invalidation issue for instructions
->     such as cas/swp as well, we plan to support this incrementally
->     after the relevant instructions are refined; this patch temporarily
->     ignores and does not handle it (a TODO marker has already been
->     reserved in patch 02)
-> 
-> Patch organization
-> ==================
-> 
->   Patches 1-3:   Shared infrastructure. Extract invalidate_reg_state() as
->                  a common helper, add the arch_get_reg_offset() helper for
->                  computing operand base offsets, and wire up the arm64
->                  entry points (arch_supports_insn_tracking(),
->                  init_type_state(), and update_insn_state_arm64()).
-> 
->   Patches 4-6:   Core instruction tracking for arm64: function return
->                  types after calls, load instructions (ldr/ldp and their
->                  addressing modes), and store instructions (str/stp).
-> 
->   Patches 7-9:   Shared data structure improvements and an x86 fix.
->                  Expand type_state_reg.imm_value to u64 so 64-bit
->                  addresses can be tracked, preserve imm_value for stack
->                  variables, and delete stale stack state on store of an
->                  untracked register on x86.
-> 
->   Patches 10-15: Remaining arm64 patterns: stack variable tracking,
->                  'mov' (register and immediate forms), 'add' member
->                  address calculation, 'adrp' global variable tracking,
->                  per-cpu variable access, and 'mrs sp_el0' to resolve the
->                  'current' pointer.
-> 
+On Thu, Sep 3, 2026 at 12:07=E2=80=AFPM Zack Rusin <zack.rusin@broadcom.com=
+> wrote:
+>
+> The high-bandwidth hypercall helpers push %ebp before loading the in6
+> operand into it. On i386 without frame pointers, both GCC and Clang can
+> address the memory-constrained operand relative to %esp. The push then
+> moves the stack and the helpers load the wrong value.
+>
+> Typical i386 configurations use the frame-pointer unwinder and happen to
+> address the operand through %ebp. However, UNWINDER_GUESS is available
+> with EXPERT and permits the affected frame-pointer-disabled configuration=
+.
+> vmwgfx is also available on i386 and calls both helpers.
+>
+> Stage in6 through %eax before changing either stack register, then save
+> %ebp and copy the staged value into it. Load the VMware magic immediately
+> before the string I/O instruction. Mark %eax early-clobber so it cannot
+> also provide in6 or an address register for it. Use the same sequence on
+> x86-64, where the full-width register preserves in6.
+>
+> Fixes: 34bf25e820ae ("x86/vmware: Introduce VMware hypercall API")
+> Cc: stable@vger.kernel.org # 6.11+
+> Signed-off-by: Zack Rusin <zack.rusin@broadcom.com>
 
-Just a quick note that this version of the patch series has addressed or
-clarified all the Sashiko review comments. I would appreciate it if you
-could take a look when you get a chance.
+Hi, Boris.
 
-Thanks,
-Tengda
+Gentle ping on this one. It's a stable fix for the i386 high-bandwidth
+hypercalls (vmwgfx uses them), Maaz reviewed it, and it still applies
+cleanly to v7.3. The hypercall cleanup series I'm about to post moves
+this assembly out of line and is based on it, so it would help to know
+whether it's queued or needs changes.
 
-> Each patch's type profiling results are as follows:
-> 
-> Patch | Feature                    | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
-> ------+----------------------------+--------+--------+-------------+------------+------------+------
-> base  | baseline                   | 6      | 493    | -           | -          | -          | 56.2%
-> 0002  | enable insn tracking       | 6      | 42     | 437         | 2          | 12         | 57.2%
-> 0005  | support 'load' insn        | 6      | 42     | 398         | 1          | 52         | 60.7%
-> 0006  | support 'store' insn       | 6      | 42     | 398         | 1          | 52         | 60.7%
-> 0010  | support stack variable     | 6      | 42     | 391         | 1          | 59         | 61.3%
-> 0011  | support 'mov' insn         | 6      | 42     | 372         | 3          | 76         | 62.8%
-> 0012  | support 'add' insn         | 6      | 42     | 318         | 7          | 126        | 67.2%
-> 0013  | support 'adrp' insn        | 6      | 42     | 238         | 8          | 205        | 74.2%
-> 0014  | support per-cpu variable   | 6      | 42     | 233         | 8          | 210        | 74.6%
-> 0015  | support 'mrs' insn         | 6      | 42     | 230         | 8          | 213        | 74.9%
-> 
-> Testing
-> =======
-> 
-> Tested on arm64 (all passed):
-> 
->   # perf test -v "perf data type profiling tests"
->   81: perf data type profiling tests                                                                  : Ok
-> 
->   === Test Summary ===
->   Passed main tests : 1
->   Passed subtests   : 0
->   Skipped tests     : 0
->   Failed tests      : 0
-> 
-> Tested on x86. The profiling results show no change before/after applying
-> this patch series:
-> 
->   before : total 880, ok 711 (80.8%), bad 169 (19.2%)
->   after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
-> 
-> Changelog
-> =========
-> v7 -> v8:
->   - v7: https://lore.kernel.org/all/cover.1791629326.git.wutengda@huaweicloud.com/
->   - Encapsulate invalidate dst regs handling into invalidate_unhandled_insn_regs()
->   - Encapsulate invalidate dst regs handling into invalidate_unhandled_insn_regs()
->   - Rename is_readonly_branch_or_cmp() to is_readonly_insn()
->   - Complete the status register invalidation logic for exclusive stores.
->   - Complete the lifetime invalidation logic for adrp and mrs instructions.
-> v6 -> v7:
->   - v6: https://lore.kernel.org/all/cover.1789521520.git.wutengda@huaweicloud.com/
->   - Invalidate lifetime in propagate_load_reg_state().
->   - Remove the has_reg_type() guard in update_store_insn_state().
->   - Fix the issue where TSR_KIND_PERCPU_BASE fails to retry as expected.
-> 
-> Please let me know if you have any feedback.
-> 
-> Thanks,
-> Tengda
-> 
-> Tengda Wu (15):
->   perf annotate-data: Extract invalidate_reg_state() as a common helper
->   perf annotate-arm64: Enable instruction tracking support
->   perf annotate-data: Add arch_get_reg_offset helper
->   perf annotate-arm64: Track return type after call instructions
->   perf annotate-arm64: Support load instruction tracking
->   perf annotate-arm64: Support store instruction tracking
->   perf annotate-data: Expand type_state_reg imm_value to u64
->   perf annotate-data: Track imm_value for stack variables
->   perf annotate-x86: Delete stale stack state on store of untracked
->     register
->   perf annotate-arm64: Support stack variable tracking
->   perf annotate-arm64: Support 'mov' instruction tracking
->   perf annotate-arm64: Support 'add' instruction tracking
->   perf annotate-arm64: Support 'adrp' instruction to track global
->     variables
->   perf annotate-arm64: Support per-cpu variable access tracking
->   perf annotate-arm64: Support 'mrs' instruction to track 'current'
->     pointer
-> 
->  .../perf/util/annotate-arch/annotate-arm64.c  | 774 ++++++++++++++++++
->  tools/perf/util/annotate-arch/annotate-x86.c  |  38 +-
->  tools/perf/util/annotate-data.c               | 209 ++++-
->  tools/perf/util/annotate-data.h               |  14 +-
->  4 files changed, 987 insertions(+), 48 deletions(-)
-> 
-> 
-> base-commit: 2efb7a11f1aa4d2dc285fe2680cca22cb9f72f64
+z
 
+--00000000000041aa5d065e516de7
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+6U6qgI8F5eiKsQyE0HgYrQJx/sDs9LLVZlaNiA3U8M8CgEnb8VhuH3BN/yXphhEQdJXb1TyaJA60
+SmHcZdEQZbl4EjwUcs3UIowmI/Mhi7ADQB7VNsO/BaOVBEQk53xH+4djY/cg7jvqTTeliY05j2Yx
+uwwXcDC4mWjGzxAT5DVqC8fKQvon1uc2heorHb555+sLdwYxAgMBAAGjggHYMIIB1DAOBgNVHQ8B
+Af8EBAMCBaAwgZMGCCsGAQUFBwEBBIGGMIGDMEYGCCsGAQUFBzAChjpodHRwOi8vc2VjdXJlLmds
+b2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3I2c21pbWVjYTIwMjMuY3J0MDkGCCsGAQUFBzABhi1o
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3I2c21pbWVjYTIwMjMwZQYDVR0gBF4wXDAJ
+BgdngQwBBQMBMAsGCSsGAQQBoDIBKDBCBgorBgEEAaAyCgMCMDQwMgYIKwYBBQUHAgEWJmh0dHBz
+Oi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwQQYDVR0fBDowODA2
+oDSgMoYwaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3I2c21pbWVjYTIwMjMuY3JsMCIG
+A1UdEQQbMBmBF3phY2sucnVzaW5AYnJvYWRjb20uY29tMBMGA1UdJQQMMAoGCCsGAQUFBwMEMB8G
+A1UdIwQYMBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1UdDgQWBBQNDn2m/OLuDx9YjEqPLCDB
+s/VKNTANBgkqhkiG9w0BAQsFAAOCAgEAF463syOLTQkWZmEyyR60W1sM3J1cbnMRrBFUBt3S2NTY
+SJ2NAvkTAxbPoOhK6IQdaTyrWi8xdg2tftr5FC1bOSUdxudY6dipq2txe7mEoUE6VlpJid/56Mo4
+QJRb6YiykQeIfoJiYMKsyuXWsTB1rhQxlxfnaFxi8Xy3+xKAeX68DcsHG3ZU0h1beBURA44tXcz6
+fFDNPQ2k6rWDFz+XNN2YOPqfse2wEm3DXpqNT79ycU7Uva7e51b8XdbmJ6XVzUFmWzhjXy5hvV8z
+iF+DvP+KT1/bjO6aNL2/3PWiy1u6xjnWvobHuAYVrXxQ5wzk8aPOnED9Q8pt2nqk/UIzw2f67Cn9
+3CxrVqXUKm93J+rupyKVTGgKO9T1ODVPo665aIbM72RxSI9Wsofatm2fo8DWOkrfs29pYfy6eECl
+91qfFMl+IzIVfDgIrEX6gSngJ2ZLaG6L+/iNrUxHxxsaUmyDwBbTfjYwr10H6NKES3JaxVRslnpF
+06HTTciJNx2wowbYF1c+BFY4r/19LHygijIVa+hZEgNuMrVLyAamaAKZ1AWxTdv8Q/eeNN3Myq61
+b1ykTSPCXjBq/03CMF/wT1wly16jYjLDXZ6II/HYyJt34QeqnBENU9zXTc9RopqcuHD2g+ROT7lI
+VLi5ffzC8rVliltTltbYPc7F0lAvGKAxggJXMIICUwIBATBiMFIxCzAJBgNVBAYTAkJFMRkwFwYD
+VQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBD
+QSAyMDIzAgxhPxw+eieHWB40hPkwDQYJYIZIAWUDBAIBBQCggccwLwYJKoZIhvcNAQkEMSIEILp+
+YS8IS4ny6z8YupvsGjeu4GQJnu7XOoFoKwZuI4WxMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
+HAYJKoZIhvcNAQkFMQ8XDTI2MTAyMTAzMzQzOFowXAYJKoZIhvcNAQkPMU8wTTALBglghkgBZQME
+ASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQcwCwYJ
+YIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAAQIOyY9umz0jGduAk7yJ7nOmFjrQb8Op/UZN/9r
+hgzl7KxRjd7M4hScN0XEoKJn4oJMfHdkGYc+07w9Io+UVVBkds18D4q7jOm/Ngym/BcKKjSgGv1z
+K1oIjZu1fcxIT2vJu17I5BYZcIXOMKL4bGs0EHAeAqdZPcciPq3vBD+2IpydG42u0n6sPD6mj8uH
+UMt6JbMLKivRZp/zEepKBPCripnp1ZGJwfsXG+8ya3/BgpzI7a1D6OEhtjklL0vAURHbNxwNCzGn
+Xro66AxXm5VK6KDDI+cegVCsd1foc2UYXb2Q5szyZtlnVaDG8vYy5oOVFzvMrYd4nASpHDkCwyE=
+--00000000000041aa5d065e516de7--
