@@ -1,55 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.157.188.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792599133;
-	b=yaFkqdtqCwFeqb6WcHP4NemUFgwMFhPetS8WCzh/CyBL7fIAndCfHY4yk0tupvm8dj06
-	 9u7TrC4SxjAyqCDLBWYrhJXZHGe77dFEFKI2Ha/CPZT9fATIijvTH0sSieY5QuXjpGroN
-	 UYCNn4VTYFVqItQETAv1Azi1276ZGqDI1JPCQh6APotAlTxz6Cf7njIqJAENm2uRGK5ml
-	 Bkaq8iG/s+PdQKt3LWV5En7lXkuTNW7z6sIex0YwUkZb3Av9rhn+L/V5RJ0mcBRkLSmDm
-	 hR2ChWHtaqUiOg7MRELaqrqMdGZivIoRXvG7Mpw17jnD/G5GLMkjMLhp0kMRy44qYjw==
+	t=1792599960;
+	b=zNIoi0p0tu6pqdJJ2dL07mi4MaXgHYr7lCDey5eniZEL7woEJn1B6OFa+H8N3FJw/eK1
+	 qaHPzRjnUKSudfwUDuUViQbT1xuSVYwMi6psK5FSCqF3Ew/QzGxuHRtx53tXLNw3XRo2t
+	 BvRhY5Kkqye2npd70rZdvFPhPbHw1Nv7qwe8vLnmoBPRy91OQ15Eh1oMitDFN1x1sS8vX
+	 lX4jmy2dD/U4zc4AcIRddvV1VEEP3LT/5nWswlAfHjorMCWqd2x/z7HAjYIx6nC/cY6oM
+	 0+3TgZq+2UqPPkn2U0XDsBw4+n9PtcZKCgPgH440ruFm3wmwBQTZbiu+O0Y17iJVsOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792599133;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Nv4dga8Beqk0UYUE4xptK3XxJoHuljS/2JzvfnhjtMU=;
-	b=Sex5FqipPpIASGKPf74UKP57f5TWUl+GRQkUA4XtbC8k1MvMcJ4b5gWpcuWNyUezmV83
-	 AN7Sbl96EUeXsz0XWNplnKGu2a0YMwNQMRH3zhkWBStRTobV4aXs3zDydtoD4KsZflZTf
-	 fXk9QPyr+uL6r6SMV4PVapXrxgHzYNIB5YCGdxEjHfThxwK1z/g8PjJHhSF8ykgtCehDz
-	 WRa6LFPPQ2xR84C6QjHKG6qejWmcjWI5c6b3+jRN6ArPoEKAocJce1gk0MPuOvLSo9rlp
-	 rU/7kNbBqk/ZJQOEeXE9tOJU5MSKA6OZjS+Ga+lc8KJ/dSStnHiz5jKitCg6s0QJJ5w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792599960;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Infomaniak-Routing;
+	bh=6aYN/2On4n7HGoJvZTU3OurKvF7SDr35YC5v5eCOowc=;
+	b=SKMnSM36bJlOX4uYitMsklSMDKJ9Xlry+TqLMD1wSH/meHZ7kbhGZsjoXtCDqVq6pO9s
+	 MHCJG7GlzoHZ2I9qYicDh0aY3aQtiOj7Kt5WVOLkraasi/zosoGC6Jtf4jz1dJm2se/OS
+	 cET9/2zhCtHNyiAxLbN+qqEwMuBzaN+4BoImIa4Bv8mDzkoRwVakj2mTli59KzfAUSjq0
+	 MyBcVdWXCtm3pjNU+sDnJWTRueSeVjyTJE8ti4h7sF2k6ndPBMUXrg0+jBTTJ6C6aGEOU
+	 P0ud8TJCneM/vkOi+igksTty3DMFjFE/iOnPiIFAZIS5yi6jLt+FFqeNyDDR958AYOA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Et7iQEWD;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=digikod.net;
+	spf=pass smtp.mailfrom=digikod.net;
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=EC2wy3Vz;
+	arc=none smtp.remote-ip=45.157.188.14
+Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7225606A319
-	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 16:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BC0606A31A
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 16:25:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6BC0606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Et7iQEWD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5AD1F000C2
-	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 16:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792599132;
-	bh=Nv4dga8Beqk0UYUE4xptK3XxJoHuljS/2JzvfnhjtMU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Et7iQEWDGAKMCS2o9c+29zSscUpl4CwbBKX8IxuAImdtHVYke6AKTJ4Jmc8+DZd4r
-	 b5l8l7eJ44H4jVM9hI5Oz26AfSTFROnUPh2PIGm5CaxcPeFsUbExbJGdlkIq3lNO6N
-	 k9NpiDRyq0YoGA1nwoUk4u4rRqN9E3Sea5xaTrM4UnAUX+kMx8oBz939fEbwdUxNC2
-	 bM8vAN8Rz5rEIqWgmnAIXI20slEs56wv09DKHMVMrZx+4gRZltyOqFa1jo9cSyGc7A
-	 /WU7qrG+JtyIbSG94Q2A7voiuFDI579PpwXaxYF5/jiEvuzD7+xKvHNFP0XDflg8wk
-	 +b5MbKEcqgBkg==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-48eee44b908so520753fac.1
-        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 09:12:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBx0Dfhe2kxcf88aHD3RbSwtDkx2j2Fs3FhbgxVOaZp1rUuSgcRie8m2XpXpd7f+Uclul4C7@lists.linux.dev
-X-Gm-Message-State: AFq9FYL0RmlD0EUx3Eu4bQE5ykNa3rnMzMhPvHqQLWWAI3z45vWl4BmY
-	LaGAWAO7Dxz1lmRuZtC6J08t0QY7YtQVKteMNf4o1/kL0uta/aJs6/eTzUDWzDDiVWCU/DeryJ4
-	nVe0ZgLJ9NoJIGXCol2En/mdiWS2GjGs=
-X-Received: by 2002:a05:6871:4e86:b0:49e:472c:6b12 with SMTP id
- 586e51a60fabf-4a7dc2bb889mr1367699fac.52.1792599131843; Wed, 21 Oct 2026
- 09:12:11 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=EC2wy3Vz
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4j8vlx1G6dz13rn;
+	Wed, 21 Oct 2026 18:25:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1792599948;
+	bh=6aYN/2On4n7HGoJvZTU3OurKvF7SDr35YC5v5eCOowc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EC2wy3Vz68NDCTpFJUzbNOPF0ExyqXqmkSSqPJKxsLmkFIaggjI9bgDaYHrXnsE7X
+	 he7TUnCvrwDqBOVaHcBYMyJ28azv87LBzc1dKEFzZ1SAImW3SH+waaIOxKlIcfXsIK
+	 EkkkpTFPrIBd2qBiCXR5XsDsgTs1EGqiRbBd6+TI=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4j8vlv58Kvz2Fl;
+	Wed, 21 Oct 2026 18:25:47 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Christian Brauner <brauner@kernel.org>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Haofeng Li <lihaofeng@kylinos.cn>,
+	Paul Moore <paul@paul-moore.com>,
+	Tingmao Wang <m@maowtm.org>,
+	Wang Yan <wangyan01@kylinos.cn>,
+	linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [GIT PULL] Landlock update for v7.4-rc1
+Date: Wed, 21 Oct 2026 18:25:38 +0200
+Message-ID: <20261021162538.1852602-1-mic@digikod.net>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -59,41 +70,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261021152658.2618709-1-gthelen@google.com>
-In-Reply-To: <20261021152658.2618709-1-gthelen@google.com>
-From: Eric Dumazet <edumazet@kernel.org>
-Date: Wed, 21 Oct 2026 18:12:00 +0200
-X-Gmail-Original-Message-ID: <CAL4Wiirq6kO+U+zMaKppTTx=4TBT0R4=TPT2qfFuN8U+N0Cz8A@mail.gmail.com>
-X-Gm-Features: AclHuK_w2i57ia4yV8d-q-ZdbSEDqvhVGU3hAiIbV2vwLx8691QNitdURm0Db6k
-Message-ID: <CAL4Wiirq6kO+U+zMaKppTTx=4TBT0R4=TPT2qfFuN8U+N0Cz8A@mail.gmail.com>
-Subject: Re: [PATCH net] selftests/net: tcp_mmap: remove unused -k option and keepflag
-To: Greg Thelen <gthelen@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Soheil Hassas Yeganeh <soheil@google.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-Le mer. 21 oct. 2026 =C3=A0 17:27, Greg Thelen <gthelen@google.com> a =C3=
-=A9crit :
->
-> Commit aacb0c2e524c ("selftests: net: tcp_mmap must use
-> TCP_ZEROCOPY_RECEIVE") removed the only read of keepflag in child_thread(=
-),
-> leaving the file-scope keepflag variable set by the -k option in main() b=
-ut
-> never read. This triggers a Clang 23 warning:
->
->   tcp_mmap.c:91:12: error: variable 'keepflag' set but not used
->   [-Werror,-Wunused-but-set-global]
->
-> Remove the unused keepflag variable and the dead -k getopt option.
->
-> Fixes: aacb0c2e524c ("selftests: net: tcp_mmap must use TCP_ZEROCOPY_RECE=
-IVE")
-> Signed-off-by: Greg Thelen <gthelen@google.com>
+Hi,
 
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+The main change adds composable Landlock controls for namespace types
+and Linux capabilities, thanks to new LSM hooks (merged via the LSM
+tree).  A umount race condition is also fixed.
 
-Thanks!
+Please pull these changes for v7.4-rc1 .  These commits merge cleanly
+with your master branch.  Kernel changes have been tested in the
+latest linux-next releases, and I recently fixed a new merge conflict
+(see the related merge commit message).
+
+Test coverage for security/landlock is 91.8% of 2864 lines according to
+LLVM 23, and it was 91.6% of 2625 lines before this PR.
+
+Regards,
+ Mickaël
+
+--
+The following changes since commit 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907:
+
+  Linux 7.3-rc7 (2026-10-11 20:04:55 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-7.4-rc1
+
+for you to fetch changes up to 3e271a27c46fd591d1011c7de5a644a41e2010f1:
+
+  landlock: Fix superblock use-after-free in release_inode() (2026-10-20 16:47:24 +0200)
+
+----------------------------------------------------------------
+Landlock update for v7.4-rc1
+
+----------------------------------------------------------------
+Christian Brauner (2):
+      ns: Free anonymous mount namespaces via ns_common_free()
+      lsm: add LSM blob and hooks for namespaces
+
+Günther Noack (1):
+      landlock: Fix superblock use-after-free in release_inode()
+
+Jann Horn (1):
+      cred: clarify that task_struct::cred is only for the current task
+
+Mickaël Salaün (10):
+      lsm: add LSM_AUDIT_DATA_NS for namespace audit records
+      Merge branch 'lsm/dev' into master
+      landlock: Rename quiet_masks to quiet_access
+      landlock: Wrap per-layer access masks in struct layer_config
+      landlock: Enforce namespace use restrictions
+      landlock: Enforce capability restrictions
+      selftests/landlock: Add namespace restriction tests
+      selftests/landlock: Add capability restriction tests
+      samples/landlock: Add capability and namespace restriction support
+      landlock: Add documentation for capability and namespace restrictions
+
+Paul Moore (1):
+      lsm: update the BUILD_BUG_ON() in audit_log_lsm_data()
+
+Wang Yan (1):
+      selftests/landlock: Fix snprintf truncation checks in test files
+
+ Documentation/admin-guide/LSM/landlock.rst     |   46 +-
+ Documentation/security/landlock.rst            |  177 +-
+ Documentation/trace/events-landlock.rst        |   66 +-
+ Documentation/userspace-api/landlock.rst       |  243 ++-
+ fs/namespace.c                                 |    3 +-
+ include/linux/cred.h                           |   17 +-
+ include/linux/landlock.h                       |   29 +-
+ include/linux/lsm_audit.h                      |    5 +
+ include/linux/lsm_hook_defs.h                  |    3 +
+ include/linux/lsm_hooks.h                      |    1 +
+ include/linux/ns/ns_common_types.h             |    3 +
+ include/linux/sched.h                          |    8 +-
+ include/linux/security.h                       |   20 +
+ include/trace/events/landlock.h                |  244 ++-
+ include/uapi/linux/landlock.h                  |  139 +-
+ include/uapi/linux/nsfs.h                      |    1 +
+ init/init_task.c                               |    2 +-
+ kernel/auditsc.c                               |    5 +-
+ kernel/cred.c                                  |    2 +-
+ kernel/nscommon.c                              |   17 +-
+ kernel/nsproxy.c                               |    6 +
+ samples/Kconfig                                |   13 +-
+ samples/landlock/Makefile                      |    5 +
+ samples/landlock/sandboxer.c                   |  269 ++-
+ security/landlock/Makefile                     |    4 +-
+ security/landlock/access.h                     |   61 +-
+ security/landlock/audit.c                      |   32 +-
+ security/landlock/cap.c                        |  159 ++
+ security/landlock/cap.h                        |   48 +
+ security/landlock/cred.h                       |    2 +-
+ security/landlock/domain.c                     |   13 +-
+ security/landlock/domain.h                     |   97 +-
+ security/landlock/fs.c                         |   12 +-
+ security/landlock/limits.h                     |    9 +
+ security/landlock/log.c                        |   53 +-
+ security/landlock/log.h                        |   10 +-
+ security/landlock/net.c                        |    2 +-
+ security/landlock/ns.c                         |  241 +++
+ security/landlock/ns.h                         |   18 +
+ security/landlock/ruleset.c                    |   27 +-
+ security/landlock/ruleset.h                    |   33 +-
+ security/landlock/setup.c                      |    4 +
+ security/landlock/syscalls.c                   |  217 +-
+ security/landlock/trace.c                      |   27 +-
+ security/lsm_audit.c                           |    6 +-
+ security/lsm_init.c                            |    5 +-
+ security/security.c                            |   72 +
+ tools/testing/selftests/landlock/audit_test.c  |    2 +-
+ tools/testing/selftests/landlock/base_test.c   |   21 +-
+ tools/testing/selftests/landlock/cap_test.c    | 1370 ++++++++++++
+ tools/testing/selftests/landlock/common.h      |   13 +
+ tools/testing/selftests/landlock/config        |    5 +
+ tools/testing/selftests/landlock/fs_test.c     |   13 +-
+ tools/testing/selftests/landlock/net_test.c    |    4 +-
+ tools/testing/selftests/landlock/ns_test.c     | 2647 ++++++++++++++++++++++++
+ tools/testing/selftests/landlock/ptrace_test.c |    2 +-
+ tools/testing/selftests/landlock/trace.h       |   52 +-
+ tools/testing/selftests/landlock/trace_test.c  |    8 +-
+ tools/testing/selftests/landlock/wrappers.h    |   29 +
+ 59 files changed, 6437 insertions(+), 205 deletions(-)
+ create mode 100644 security/landlock/cap.c
+ create mode 100644 security/landlock/cap.h
+ create mode 100644 security/landlock/ns.c
+ create mode 100644 security/landlock/ns.h
+ create mode 100644 tools/testing/selftests/landlock/cap_test.c
+ create mode 100644 tools/testing/selftests/landlock/ns_test.c
