@@ -1,50 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792541611;
-	b=WNap2quiDSXfBOpQ27M7eY+a/c5gBh9dT1VdkwEmY19imHzwYBzFvPjKq0OzFYmXDRO3
-	 p9RnZFNdl7aQWAb/aVsNRk++TzjPXA+cl2kF2o+51XyOBmI7LM0sja1pdIkLLFaQvvIJj
-	 sJAkMeVHy37xGZS1Ee6L5AMQ4u0UlXPnclSfqqf8BOalGfrMeXhAJTtYymEgtkzG7mal3
-	 LagOt2QewaOpiSHEHbcobgcnKvHrx0VvuF4HEyc9CqAlAcAvXNKp0EjfY9EZ9/HvdbTfq
-	 F95i9wuZ6qaQk4NSDhihteHtjytGC8oiWkIADheqF2lFIf2PGQdcib1x5a1rUUA0/Fg==
+	t=1792549548;
+	b=1moEM5v+RUK1wxXXokPrlBRpTfm19TWyq2Zh2+4Xhp6givs4mSdtbbh9GC3/HxvJVDzB
+	 DhpR4F2OzBB+qcjTb6WDPmoiKruw/V6w6XlB/lQst9nmWBi8f0xVNpm2P+MrZuWsWem/o
+	 kkIo49AOSI2i35Km/Jc5AIbh6ZTUMnzcKf4jZZXAfgBSyc+CURe3JKnS4ZwOyK5jyrBRf
+	 2/uiS38MG5tvFzvBt7XioZ3Q+BgmT3EL6+fEB4o4xNofYwq7IyvJU+dpw1mgvQAlLhkoX
+	 CBxEjGYW2DqquIzO7guKiwdWm+hmnIYRNIJa9DaradFh0RhztfgxXEwxr+NMTr87biw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792541611;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 MIME-Version:Content-Type:Content-Disposition;
-	bh=/EynJRX4SvYGjxKs3oCb/Z5/8kaPiUXEuG1TIZ3CstY=;
-	b=G1JUTD/L/3kAqX7YmuvwpTt6MUpF8gEuzop8JrYu2s/sKFhpZYS+e8C9KLWGf27nefw+
-	 J2QfFjNpJA08+T7X2pZZXd4+vuWGf7uuxlXQIXysixEKqJgHcOl+dqQOZ/8MyCrDOtYNp
-	 agux563gOdRgI10YOD4o0UQdA59Wqu90khC/aLCLbrK0Ywfbhk7sjV37DdBm6d92Ln6oR
-	 5zbEJ+1h+i/6wwooJ0/zMuStbm1pkfNzc0VhYz5FZ4oQJ2l2KyOzm7CiPegmzrSgb87i3
-	 YX1RpS0eOPoqQt+VGmYkM6ZGN2QHqqSHVqKN44NBO5dokPH5n7R8kbdRd3R45uxe2Tw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792549548;
+	h=DMARC-Filter:Received:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=bUpuMLN+Hzel+rwIg8x/V4c7BZp7NFus4wb/KBKZts8=;
+	b=i8s4JlFH7X6K/T9VORJr/t8y9UDsx857xR55AS3c1+FJ+jKIxTSfaItkDOOIaENfhy3T
+	 bfeKx/bYa6BzvfC20/uph62B2R3CFCald7gmFw0csVvNEP6oSt55zKuxuQ+ALP42lIWLO
+	 /CIoc8V3WJpAjveJdF/i7y3OG0HlA00UgVxUSnasBlvGmsT9pUL2/n9ks0EgD+6qixO7m
+	 1pW764/e8e/eHcjUSs7zmQNk3iXIv2MVEjSjeMYHx6gkM1kfOD4GMndbZLKEaSVvljqIF
+	 iEXPfuJlugHUfvWciQ6NU7HY2/Qkd20gFsO6f4mQrSVDWsYO51cU7yLP+jI42LembAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c2Z7WRpZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=huaweicloud.com;
+	spf=pass smtp.mailfrom=huaweicloud.com;
+	arc=none smtp.remote-ip=45.249.212.51
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAC3606A319;
-	Wed, 21 Oct 2026 00:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c2Z7WRpZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52741F000C9;
-	Wed, 21 Oct 2026 00:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792541610;
-	bh=/EynJRX4SvYGjxKs3oCb/Z5/8kaPiUXEuG1TIZ3CstY=;
-	h=Date:From:To:Cc:Subject;
-	b=c2Z7WRpZnZBWmRyd2jcLXN87jXg8F7k1Djggq9bpucpaEg5Rg9gv88DzjM9GAkzuA
-	 /dVhfSUBKFrDRS8ryhtIq29v+cq2QdCGKxh0T0BsW3Xu7oVOpGTwQWRM9dM557vA+7
-	 a/y3eHPGBcAhpVSIUWgcdwAdbYghRrm3k7JvF2i2RSDkIQCTaQuUHzRaxlegEQcIME
-	 zNBBilVV8K7zobqtAvHpaIUadbCI1TrqNIm6PuU0rSp1+3XiiSrI/Z1eUz2SIYKGwM
-	 DmcFGxXA0qMK9PShYLql/k9z2g+RadBI8ms39rr78pT7u2zX16JSS5yN9zcSlKoG38
-	 A+0c+ajsoopRQ==
-Date: Tue, 20 Oct 2026 17:13:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: ojeda@kernel.org
-Subject: Prebuilt LLVM 23.1.4 uploaded
-Message-ID: <20261021001327.GA2730064@ax162>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6DE606A31B
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 02:25:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F6DE606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j8Y6W3x8fzYQtFC
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 10:25:39 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 742724056D
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 10:25:42 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgBnMeekIthqMcbiBA--.26564S2;
+	Wed, 21 Oct 2026 10:25:42 +0800 (CST)
+Message-ID: <18de9e8f-3709-4bc9-b11b-3813e1ba98b7@huaweicloud.com>
+Date: Wed, 21 Oct 2026 10:25:40 +0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -54,18 +51,186 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 00/15] perf annotate arm64: Support instruction
+ tracking for data type profiling
+To: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
+ xueshuai@linux.alibaba.com, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
+ Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
+ Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <cover.1792411435.git.wutengda@huaweicloud.com>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <cover.1792411435.git.wutengda@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgBnMeekIthqMcbiBA--.26564S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuFyDuw43AF4rWrW3AF4DXFb_yoW7KrWkpa
+	93uw1fJryUtr4j9rnrJrZ7Xr43Wa1rXa4UGryrt34Syr12yF9YyF97K3WFyFWfAr98Cr17
+	Jw4vyFn8Xayj9aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Hi all,
+Hi,
 
-I have built and uploaded LLVM 23.1.4 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+On 2026/10/20 21:44, Tengda Wu wrote:
+> This series adds arm64 support to perf's data type profiling by
+> implementing instruction tracking for the arm64 architecture.
+> 
+> The main changes since v7 include:
+> v7: https://lore.kernel.org/all/cover.1791629326.git.wutengda@huaweicloud.com/
+> 
+>   * Patch 02: Minor optimizations to update_insn_state_arm64 to facilitate
+>     future extension, including:
+>     - Encapsulating call instruction handling into update_call_insn_state()
+>     - Encapsulating invalidate dst regs handling into invalidate_unhandled_insn_regs()
+>     - Renaming is_readonly_branch_or_cmp() to is_readonly_insn()
+>     No functional changes.
+> 
+>   * Fix issues raised by Sashiko:
+>     - Patch 06: Complete the status register invalidation logic for
+>       exclusive stores.
+>     - Patch 13 & 15: Complete the lifetime invalidation logic for adrp
+>       and mrs instructions.
+>     Regarding the status register invalidation issue for instructions
+>     such as cas/swp as well, we plan to support this incrementally
+>     after the relevant instructions are refined; this patch temporarily
+>     ignores and does not handle it (a TODO marker has already been
+>     reserved in patch 02)
+> 
+> Patch organization
+> ==================
+> 
+>   Patches 1-3:   Shared infrastructure. Extract invalidate_reg_state() as
+>                  a common helper, add the arch_get_reg_offset() helper for
+>                  computing operand base offsets, and wire up the arm64
+>                  entry points (arch_supports_insn_tracking(),
+>                  init_type_state(), and update_insn_state_arm64()).
+> 
+>   Patches 4-6:   Core instruction tracking for arm64: function return
+>                  types after calls, load instructions (ldr/ldp and their
+>                  addressing modes), and store instructions (str/stp).
+> 
+>   Patches 7-9:   Shared data structure improvements and an x86 fix.
+>                  Expand type_state_reg.imm_value to u64 so 64-bit
+>                  addresses can be tracked, preserve imm_value for stack
+>                  variables, and delete stale stack state on store of an
+>                  untracked register on x86.
+> 
+>   Patches 10-15: Remaining arm64 patterns: stack variable tracking,
+>                  'mov' (register and immediate forms), 'add' member
+>                  address calculation, 'adrp' global variable tracking,
+>                  per-cpu variable access, and 'mrs sp_el0' to resolve the
+>                  'current' pointer.
+> 
 
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-opportunity to get them fixed in main and backported before the 23.x
-series is no longer supported.
+Just a quick note that this version of the patch series has addressed or
+clarified all the Sashiko review comments. I would appreciate it if you
+could take a look when you get a chance.
 
-Cheers,
-Nathan
+Thanks,
+Tengda
+
+> Each patch's type profiling results are as follows:
+> 
+> Patch | Feature                    | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
+> ------+----------------------------+--------+--------+-------------+------------+------------+------
+> base  | baseline                   | 6      | 493    | -           | -          | -          | 56.2%
+> 0002  | enable insn tracking       | 6      | 42     | 437         | 2          | 12         | 57.2%
+> 0005  | support 'load' insn        | 6      | 42     | 398         | 1          | 52         | 60.7%
+> 0006  | support 'store' insn       | 6      | 42     | 398         | 1          | 52         | 60.7%
+> 0010  | support stack variable     | 6      | 42     | 391         | 1          | 59         | 61.3%
+> 0011  | support 'mov' insn         | 6      | 42     | 372         | 3          | 76         | 62.8%
+> 0012  | support 'add' insn         | 6      | 42     | 318         | 7          | 126        | 67.2%
+> 0013  | support 'adrp' insn        | 6      | 42     | 238         | 8          | 205        | 74.2%
+> 0014  | support per-cpu variable   | 6      | 42     | 233         | 8          | 210        | 74.6%
+> 0015  | support 'mrs' insn         | 6      | 42     | 230         | 8          | 213        | 74.9%
+> 
+> Testing
+> =======
+> 
+> Tested on arm64 (all passed):
+> 
+>   # perf test -v "perf data type profiling tests"
+>   81: perf data type profiling tests                                                                  : Ok
+> 
+>   === Test Summary ===
+>   Passed main tests : 1
+>   Passed subtests   : 0
+>   Skipped tests     : 0
+>   Failed tests      : 0
+> 
+> Tested on x86. The profiling results show no change before/after applying
+> this patch series:
+> 
+>   before : total 880, ok 711 (80.8%), bad 169 (19.2%)
+>   after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
+> 
+> Changelog
+> =========
+> v7 -> v8:
+>   - v7: https://lore.kernel.org/all/cover.1791629326.git.wutengda@huaweicloud.com/
+>   - Encapsulate invalidate dst regs handling into invalidate_unhandled_insn_regs()
+>   - Encapsulate invalidate dst regs handling into invalidate_unhandled_insn_regs()
+>   - Rename is_readonly_branch_or_cmp() to is_readonly_insn()
+>   - Complete the status register invalidation logic for exclusive stores.
+>   - Complete the lifetime invalidation logic for adrp and mrs instructions.
+> v6 -> v7:
+>   - v6: https://lore.kernel.org/all/cover.1789521520.git.wutengda@huaweicloud.com/
+>   - Invalidate lifetime in propagate_load_reg_state().
+>   - Remove the has_reg_type() guard in update_store_insn_state().
+>   - Fix the issue where TSR_KIND_PERCPU_BASE fails to retry as expected.
+> 
+> Please let me know if you have any feedback.
+> 
+> Thanks,
+> Tengda
+> 
+> Tengda Wu (15):
+>   perf annotate-data: Extract invalidate_reg_state() as a common helper
+>   perf annotate-arm64: Enable instruction tracking support
+>   perf annotate-data: Add arch_get_reg_offset helper
+>   perf annotate-arm64: Track return type after call instructions
+>   perf annotate-arm64: Support load instruction tracking
+>   perf annotate-arm64: Support store instruction tracking
+>   perf annotate-data: Expand type_state_reg imm_value to u64
+>   perf annotate-data: Track imm_value for stack variables
+>   perf annotate-x86: Delete stale stack state on store of untracked
+>     register
+>   perf annotate-arm64: Support stack variable tracking
+>   perf annotate-arm64: Support 'mov' instruction tracking
+>   perf annotate-arm64: Support 'add' instruction tracking
+>   perf annotate-arm64: Support 'adrp' instruction to track global
+>     variables
+>   perf annotate-arm64: Support per-cpu variable access tracking
+>   perf annotate-arm64: Support 'mrs' instruction to track 'current'
+>     pointer
+> 
+>  .../perf/util/annotate-arch/annotate-arm64.c  | 774 ++++++++++++++++++
+>  tools/perf/util/annotate-arch/annotate-x86.c  |  38 +-
+>  tools/perf/util/annotate-data.c               | 209 ++++-
+>  tools/perf/util/annotate-data.h               |  14 +-
+>  4 files changed, 987 insertions(+), 48 deletions(-)
+> 
+> 
+> base-commit: 2efb7a11f1aa4d2dc285fe2680cca22cb9f72f64
+
