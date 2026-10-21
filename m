@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792622402;
-	b=Repw/m+20hrkhB4Bt85rJeTem9OyiDLpkaUNBB8biSTcP7nVYoX0W0zfY5dyGpXvp59k
-	 FlELwXc1hUJELP7rOOEHtc/H1SNZVx1S0wmhkP6NEpz5V1X7+Y2k5M5OZpwRLxTgpqT9A
-	 K4WAQORsXW5sB13FWGLtTOD3PxBcHpatPce+2YGam5daDtUTgTP+2Am5gnH7AAPzzgd+w
-	 QOnMmiGw1g4KvPcrJG/DMrKycm1xI4xB9OIonVhYVVSAKH7hsmCsR1Jz7kaHUFt0oBrkE
-	 /yTzclDThR2LVEAKOH1+XRkbZelTpOyWOVRl7tOpVdD/Fzrw5l0Bqv/qq9qbBZUJMhw==
+	t=1792622405;
+	b=B43HPzV5ugKkE6c48Fd/P+SGzfenumq/dpfFYMyasa35PAO1cEwl/Xr9Gl2MIo5AEOwV
+	 ackXBXNmLRTSpuWNOgGmuVxbGZNEqptpW0H0K15UqNYhwEekUIAZkkRfSkfwq9ee2EmtM
+	 AEzuy5mKUlbLrcK9of9Y5w2OX3/XtplYAMQy4kyvYRv0df/62CSOj11xuLQ7oRBhuU97Y
+	 tkUxM+XPF3qtl6v4G3rl+NXAZpTm1A4g+e85s8fldOsJqLBBk+k7swhMXoGEUFUX2gqJA
+	 1E3WHTFBTmY2MKdFJWxl0u+fla6reTery8rgizdpFEo0oPS67DpI4sE5GIKs40gkvGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792622402;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792622405;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=hWjxxVnf6+rvs9+VH2b0tWRlqCblY3Ei4OgTiu2TIRo=;
-	b=vHZ9Qn1/AX4mbB8WZkbZ30Zbdu5mr+lMK4pYM51GK+8N2GrhfX34Kigx6W06YTU+OxAO
-	 51L5NIrKBKj8MWN8++R3N+0HjWVHw1UgxqWNTx6P3A4tDF5G/35qZ5RYc7pg///lMQgbX
-	 cKLk326I6doDxKISee9RpJ49E0TgWYf26qUYIzwN+pz66xpGmODydC2ZRZCka/udErZh7
-	 BeXMANfGXPV5/GR9/1o891neBL7Kd1FTi8P7G+Bpsqq7T3VZA0eE2YcGsL6XFvq2Rd7ql
-	 UAb2La9du3sLeU/g8qs8Vm3hK1IDO0pzIz3AiXi91pCvHL1DYX52fLxgvjFWCsuvWfA==
+	bh=4N6lG/9faT9ECF/bBopwnnQUqKUgvyQE1Rye5tZt4hw=;
+	b=RSYF4cqY7veLBYwB+V5udLQlIGmXXDiXrHhfyA/QpCFl4ADxv2718vpUn0wz4aFOW5zO
+	 L2/7NtKWG3kIoM2EpF0MCZQjjv+/GkKrBt9MC/Ik6C6lWvoecUI8OgzU960PXmUx6k0ED
+	 WznSzkQQI50VYjGYiO+TJ1sFeV8gUG3QaMT5mbirimYzHvaf1fEaWrEjuKqY9QB8aXUcE
+	 dP9cTVXrrLbX/O9Na4mRI19e8tqNOQOCG0ylP1c1lmEVq7EzoOLRejo6ZYRuLfYMy2ULj
+	 0a+X7m7JqmV9CJhs31E6kQn/6JgA9+mi918T5IIyNQNUhLahJuAiZIRajGj9EL86n0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=EqFzak7G;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=in5fndNa;
 	arc=none smtp.remote-ip=74.125.82.71
 Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AAA606A331
-	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 22:40:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47AAA606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042BD606A330
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 22:40:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 042BD606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=EqFzak7G
-Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-1383723dfddso2008156c88.0
-        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 15:40:02 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=in5fndNa
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-18b5ee75447so4599006c88.1
+        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 15:40:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792622401; x=1793227201; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1792622404; x=1793227204; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hWjxxVnf6+rvs9+VH2b0tWRlqCblY3Ei4OgTiu2TIRo=;
-        b=EqFzak7GRIZXpFjJj3NCO3bpIEi+ajTRi3wYO47H1imheWf289NaGmcebbgYRiI0U+
-         7CffkvPr5R4DKKmNX/mhy2374B1EiD39E8znPcWXxRmMW1k7geg8NNICK+Cgl9c6tR29
-         6jAf5qcZH5CCjU/6LK89r9pvhFdCljakRfsRZxaNTTybQApkw6jZtQGnTS8Y3DnHN6Y2
-         FNE9/xdqjdLmQBITQeQjEIok05hdD8UzzIIk67uFJi7jeaEP9rpxEBQ1Ba/Feb9Sg+R5
-         2Bgx4Wuu1FiqGKTIze7oAd1bK6AKmRNHmSihQ2jf4+HC2hzS8h16H1rdEvUROzAcUZpQ
-         PS8g==
+        bh=4N6lG/9faT9ECF/bBopwnnQUqKUgvyQE1Rye5tZt4hw=;
+        b=in5fndNaaZFCZAArAcdCeFE5RU8Ds79BUAfIPQq9tLIbzcTEJLrNsws5WzpPFgj/oI
+         NQ73YjU/ejXixslwrTJ53M1H11oYIXCulrwq6sEEOorX6DlqZtgN6m5XjhWSvZ67tVzT
+         4/+WxUzW1+ZV6uAFsYJeNfu22xLI4Zz6IpFk6QvtGSFouUcNo0+YyDKn/hKZXFbx3CJu
+         1WcAmCmkIL+JXZ3Q/niUA2MEZt/eGbDmL0cqr7KyU4nWcPyZW2yG1HpH912ZD6ahTZJz
+         tH8cacQ6x9471Z7hTYLQIUecDIuPG39BCUhxzQE6Ug1bXxNAq30+V13tcwNAG283ZoQu
+         njWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792622401; x=1793227201;
+        d=1e100.net; s=20260707; t=1792622404; x=1793227204;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=hWjxxVnf6+rvs9+VH2b0tWRlqCblY3Ei4OgTiu2TIRo=;
-        b=iU7bs/OfQIi3i8rDM5V/me64abK3PhmrfEc4aViQ6pLJwxtq0fqjsaYyDDyxSdi/bv
-         8waLH2QU4M63fagjwii31nd2wedT4narUnZ0mA4J3ACPtdWjGWg0vDXNUsYH6nE0RAMn
-         XV0C/NJgOJ0yZrfA7mLyJmf3P8+r39spL+ilEySyyLekoFHE/JNOvyKSITslSLvQuQRb
-         k+X/HYTZDrDr+Cz4bRlACqFVxIFAyIphSafjuw+lVT9yei/NLvgbh7VZuAQAKB5BeQmu
-         /uhtkFRKbUB6dGtVHXb/pg9zfQGv535FBrNEfjLCUII9w8ZDemzNZ+7fgfn237ar9shS
-         bWDg==
-X-Forwarded-Encrypted: i=1; AKwUvBxPRKIV6StjKPM0aouHzMXPMZp47Gh6tYxRu02acmO80h5XdZSadGz1lWjWXZK7STBv3Vkd@lists.linux.dev
-X-Gm-Message-State: AFq9FYJ87XoHEJGLxqsiQ9cQiW3w2j+MKIinHbm/8Usq6oTdS4NEph7M
-	eTJuz2Zd/aUUazZOFWeDaxIazksp1y023P6rcHrrXnT0+5e8fTW7QkvsqWQMAXe+KKfnYWD5Psq
-	/dlYiZoJNnQ==
-X-Received: from dldnz14.prod.google.com ([2002:a05:701a:ca0e:b0:183:f9d:1eaa])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:270b:b0:187:a2b1:7b3a
- with SMTP id a92af1059eb24-190a6adcc50mr4053293c88.41.1792622401048; Wed, 21
- Oct 2026 15:40:01 -0700 (PDT)
-Date: Wed, 21 Oct 2026 15:39:03 -0700
+        bh=4N6lG/9faT9ECF/bBopwnnQUqKUgvyQE1Rye5tZt4hw=;
+        b=UEpAO5UY1kjpjCRvDGpvgbO338X3ggR24C2oL+wTC85yDO/P1TnGBLXmmqXhibeXUE
+         6dysc6WOglU2zPNOOY7KBz2UNbpZpTiuF9Je4rOFW1sQnnlHtgNpJW37GB/tpJ67OBdO
+         sq+N04hQdbTPz5s+v57hjt2xAGxOmIULXHDlFrV6NakDXHzr5aar/PHGgRBxCi+m4BEU
+         biPAoWj8Ok1ewPMQoRJ/ne0EVyR8CaatCGqQDa9JUtdWfalp1ioHXEknZjcuGbUVnDEf
+         J0a4VQ2eyRg3RUAis7Q0P7SOgJKtVopwcGezBRu1dBcGgyQxQUVyXC+AFodf0BXJ8Bgt
+         co6w==
+X-Forwarded-Encrypted: i=1; AKwUvBxU72MiizGB3/gD9kCKN2l8cX3JNbHloYwygnuNQNlJT1EolDyX4Y6dJkt98alxWWb1mR5m@lists.linux.dev
+X-Gm-Message-State: AFq9FYLN73Fr+5e4dZ5lqlBU381uSLBNviPfkkUdqL1k8uL5ZodbZrAP
+	gpUnyY06Oo3ls1OrsBpc1W4OogjVY9IE41KwoHuyiEt4YNP8afNBZsBSU86+gNPmx0SK+nGDJ5V
+	spFjQivMvZQ==
+X-Received: from dlbsn13.prod.google.com ([2002:a05:7022:b90d:b0:14f:4204:735e])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:5f08:b0:177:9a5b:a89
+ with SMTP id a92af1059eb24-190a67fe0d1mr3720865c88.29.1792622403745; Wed, 21
+ Oct 2026 15:40:03 -0700 (PDT)
+Date: Wed, 21 Oct 2026 15:39:04 -0700
 In-Reply-To: <20261021223905.715051-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261021171044.155240-1-irogers@google.com> <20261021223905.715051-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.218.g1ec904b173-goog
-Message-ID: <20261021223905.715051-16-irogers@google.com>
-Subject: [PATCH v7 15/17] perf config, intel-tpebs, env: Add __guarded_by and
- __must_hold annotations
+Message-ID: <20261021223905.715051-17-irogers@google.com>
+Subject: [PATCH v7 16/17] perf maps: Fix lock inversion in maps__load_first()
+ and bounds check in __maps__remove()
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, elver@google.com, namhyung@kernel.org
 Cc: adrian.hunter@intel.com, james.clark@linaro.org, jolsa@kernel.org, 
@@ -93,265 +93,89 @@ Cc: adrian.hunter@intel.com, james.clark@linaro.org, jolsa@kernel.org,
 	ndesaulniers@google.com, peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add __guarded_by() and __must_hold() annotations to static parser and
-config state in util/config.c, TPEBS state in util/intel-tpebs.c, and
-bpf_progs and cgroups trees in struct perf_env.
+In maps__load_first(), take a reference to the first map and drop
+maps__lock(maps) before calling map__load() to avoid a read-to-write
+self-deadlock when loading kernel maps inserts extra trampoline maps.
+
+In __maps__remove(), check that the index returned by
+maps__by_address_index() and maps__by_name_index() is within nr_maps
+before indexing and removing the entry, and remove from maps_by_name
+before calling map__put(maps_by_address[address_idx]) so that callers
+such as maps__remove_maps() that pass maps_by_address[i] as map do not
+use a freed handle in maps__by_name_index() under REFCNT_CHECKING.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/bpf-event.h   |  5 ++--
- tools/perf/util/config.c      | 47 +++++++++++++++++++++--------------
- tools/perf/util/env.c         |  1 +
- tools/perf/util/env.h         | 19 ++++++++------
- tools/perf/util/intel-tpebs.c |  7 +++---
- 5 files changed, 48 insertions(+), 31 deletions(-)
+ tools/perf/util/maps.c | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
-index da4eeb4a1a73..3f3323f98f49 100644
---- a/tools/perf/util/bpf-event.h
-+++ b/tools/perf/util/bpf-event.h
-@@ -6,11 +6,11 @@
- #include <linux/rbtree.h>
- #include <api/fd/array.h>
- #include <stdio.h>
-+#include "env.h"
+diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
+index f808df2fe77b..e947506c60a5 100644
+--- a/tools/perf/util/maps.c
++++ b/tools/perf/util/maps.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <errno.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <linux/zalloc.h>
+ #include "debug.h"
+ #include "dso.h"
+@@ -548,20 +549,27 @@ static void __maps__remove(struct maps *maps, struct map *map)
  
- struct bpf_prog_info;
- struct machine;
- union perf_event;
--struct perf_env;
- struct perf_sample;
- struct perf_session;
- struct record_opts;
-@@ -42,7 +42,8 @@ int machine__process_bpf(struct machine *machine, union perf_event *event,
- int evlist__add_bpf_sb_event(struct evlist *evlist, struct perf_env *env);
- void __bpf_event__print_bpf_prog_info(struct perf_bpil *info_linear,
- 				      struct perf_env *env,
--				      FILE *fp);
-+				      FILE *fp)
-+	__must_hold_shared(&env->bpf_progs.lock);
- void bpf_metadata_free(struct bpf_metadata *metadata);
- #else
- static inline int machine__process_bpf(struct machine *machine __maybe_unused,
-diff --git a/tools/perf/util/config.c b/tools/perf/util/config.c
-index 287401f159e6..0e6b77a0a5e7 100644
---- a/tools/perf/util/config.c
-+++ b/tools/perf/util/config.c
-@@ -64,15 +64,29 @@ struct perf_stat_config stat_config = {
+ 	/* Slide later mappings over the one to remove */
+ 	address_idx = maps__by_address_index(maps, map);
+-	map__put(maps_by_address[address_idx]);
+-	memmove(&maps_by_address[address_idx],
+-		&maps_by_address[address_idx + 1],
+-		(nr_maps - address_idx - 1) * sizeof(*maps_by_address));
++	if (address_idx >= nr_maps)
++		return;
  
- char buildid_dir[MAXPATHLEN]; /* root dir for buildid, binary cache */
+ 	if (maps_by_name) {
+ 		unsigned int name_idx = maps__by_name_index(maps, map);
  
--static FILE *config_file;
--static const char *config_file_name;
--static int config_linenr;
--static int config_file_eof;
--static struct perf_config_set *config_set;
-+/* Parsing and rewriting share the static parser state. */
-+static DEFINE_MUTEX(config_mutex);
+-		map__put(maps_by_name[name_idx]);
+-		memmove(&maps_by_name[name_idx],
+-			&maps_by_name[name_idx + 1],
+-			(nr_maps - name_idx - 1) *  sizeof(*maps_by_name));
++		if (name_idx < nr_maps) {
++			map__put(maps_by_name[name_idx]);
++			memmove(&maps_by_name[name_idx],
++				&maps_by_name[name_idx + 1],
++				(nr_maps - name_idx - 1) * sizeof(*maps_by_name));
++		} else {
++			__maps__free_maps_by_name(maps);
++		}
+ 	}
+ 
++	map__put(maps_by_address[address_idx]);
++	memmove(&maps_by_address[address_idx],
++		&maps_by_address[address_idx + 1],
++		(nr_maps - address_idx - 1) * sizeof(*maps_by_address));
 +
-+/* Serializes whole perf_config__set_variable() updates. */
-+static DEFINE_MUTEX(config_update_mutex);
+ 	--RC_CHK_ACCESS(maps)->nr_maps;
+ }
+ 
+@@ -1459,10 +1467,15 @@ int maps__merge_in(struct maps *kmaps, struct map *new_map)
+ 
+ void maps__load_first(struct maps *maps)
+ {
+-	down_read(maps__lock(maps));
++	struct map *first = NULL;
+ 
++	down_read(maps__lock(maps));
+ 	if (maps__nr_maps(maps) > 0)
+-		map__load(maps__maps_by_address(maps)[0]);
+-
++		first = map__get(maps__maps_by_address(maps)[0]);
+ 	up_read(maps__lock(maps));
 +
-+/*
-+ * Protects the global config_set. Separate from config_mutex because
-+ * initializing config_set parses the config files, which acquires
-+ * config_mutex.
-+ */
-+static DEFINE_MUTEX(config_set_mutex);
-+
-+static FILE *config_file __guarded_by(&config_mutex);
-+static const char *config_file_name __guarded_by(&config_mutex);
-+static int config_linenr __guarded_by(&config_mutex);
-+static int config_file_eof __guarded_by(&config_mutex);
-+static struct perf_config_set *config_set __guarded_by(&config_set_mutex);
- 
- const char *config_exclusive_filename;
- 
- static int get_next_char(void)
-+	__must_hold(&config_mutex)
- {
- 	int c;
- 	FILE *f;
-@@ -99,8 +113,9 @@ static int get_next_char(void)
++	if (first) {
++		map__load(first);
++		map__put(first);
++	}
  }
- 
- static char *parse_value(void)
-+	__must_hold(&config_mutex)
- {
--	static char value[1024];
-+	static char value[1024] __guarded_by(&config_mutex);
- 	int quote = 0, comment = 0, space = 0;
- 	size_t len = 0;
- 
-@@ -170,6 +185,7 @@ static inline int iskeychar(int c)
- }
- 
- static int get_value(config_fn_t fn, void *data, char *name, unsigned int len)
-+	__must_hold(&config_mutex)
- {
- 	int c;
- 	char *value;
-@@ -201,6 +217,7 @@ static int get_value(config_fn_t fn, void *data, char *name, unsigned int len)
- }
- 
- static int get_extended_base_var(char *name, int baselen, int c)
-+	__must_hold(&config_mutex)
- {
- 	do {
- 		if (c == '\n')
-@@ -237,6 +254,7 @@ static int get_extended_base_var(char *name, int baselen, int c)
- }
- 
- static int get_base_var(char *name)
-+	__must_hold(&config_mutex)
- {
- 	int baselen = 0;
- 
-@@ -257,10 +275,11 @@ static int get_base_var(char *name)
- }
- 
- static int perf_parse_file(config_fn_t fn, void *data)
-+	__must_hold(&config_mutex)
- {
- 	int comment = 0;
- 	int baselen = 0;
--	static char var[MAXNAME];
-+	static char var[MAXNAME] __guarded_by(&config_mutex);
- 
- 	/* U+FEFF Byte Order Mark in UTF8 */
- 	static const unsigned char *utf8_bom = (unsigned char *) "\xef\xbb\xbf";
-@@ -549,12 +568,6 @@ int perf_default_config(const char *var, const char *value,
- 	return 0;
- }
- 
--/* Parsing and rewriting share the static parser state. */
--static DEFINE_MUTEX(config_mutex);
--
--/* Serializes whole perf_config__set_variable() updates. */
--static DEFINE_MUTEX(config_update_mutex);
--
- static int perf_config_from_file(config_fn_t fn, const char *filename, void *data)
- {
- 	int ret;
-@@ -737,6 +750,7 @@ static int set_value(struct perf_config_item *item, const char *value)
- 
- static int collect_config(const char *var, const char *value,
- 			  void *perf_config_set)
-+	__must_hold(&config_mutex)
- {
- 	int ret = -1;
- 	char *ptr, *key;
-@@ -853,11 +867,8 @@ struct perf_config_set *perf_config_set__load_file(const char *file)
- 	return set;
- }
- 
--/* Not config_mutex: building the set parses the config files, which takes it. */
--static DEFINE_MUTEX(config_set_mutex);
--
--/* Called with config_set_mutex held. */
- static int perf_config__init(void)
-+	__must_hold(&config_set_mutex)
- {
- 	if (config_set == NULL)
- 		config_set = perf_config_set__new();
-@@ -975,7 +986,7 @@ int perf_config__set_variable(const char *var, const char *value)
- 
- 	/* Static: the parser publishes it as config_file_name. */
- 	{
--		static char path[PATH_MAX];
-+		static char path[PATH_MAX] __guarded_by(&config_update_mutex);
- 		char *user_config = mkpath(path, sizeof(path), "%s/.perfconfig", getenv("HOME"));
- 
- 		config_filename = config_exclusive_filename ?: user_config;
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index 50993b0dedc5..9e8e5d1d822a 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -302,6 +302,7 @@ void perf_env__exit(struct perf_env *env)
- }
- 
- void perf_env__init(struct perf_env *env)
-+	__context_unsafe(/* initialization */)
- {
- 	memset(env, 0, sizeof(*env));
- #ifdef HAVE_LIBBPF_SUPPORT
-diff --git a/tools/perf/util/env.h b/tools/perf/util/env.h
-index 23d35425efe3..6b2083e3640c 100644
---- a/tools/perf/util/env.h
-+++ b/tools/perf/util/env.h
-@@ -139,16 +139,16 @@ struct perf_env {
- 	 */
- 	struct {
- 		struct rw_semaphore	lock;
--		struct rb_root		infos;
--		u32			infos_cnt;
--		struct rb_root		btfs;
--		u32			btfs_cnt;
-+		struct rb_root		infos __guarded_by(&lock);
-+		u32			infos_cnt __guarded_by(&lock);
-+		struct rb_root		btfs __guarded_by(&lock);
-+		u32			btfs_cnt __guarded_by(&lock);
- 	} bpf_progs;
- #endif // HAVE_LIBBPF_SUPPORT
- 	/* same reason as above (for perf-top) */
- 	struct {
- 		struct rw_semaphore	lock;
--		struct rb_root		tree;
-+		struct rb_root		tree __guarded_by(&lock);
- 	} cgroups;
- 
- 	/* For fast cpu to numa node lookup via perf_env__numa_node */
-@@ -223,7 +223,8 @@ int perf_env__nr_cpus_avail(struct perf_env *env);
- void perf_env__init(struct perf_env *env);
- #ifdef HAVE_LIBBPF_SUPPORT
- bool __perf_env__insert_bpf_prog_info(struct perf_env *env,
--				      struct bpf_prog_info_node *info_node);
-+				      struct bpf_prog_info_node *info_node)
-+	__must_hold(&env->bpf_progs.lock);
- bool perf_env__insert_bpf_prog_info(struct perf_env *env,
- 				    struct bpf_prog_info_node *info_node);
- struct bpf_prog_info_node *perf_env__find_bpf_prog_info(struct perf_env *env,
-@@ -233,9 +234,11 @@ void perf_env__iterate_bpf_prog_info(struct perf_env *env,
- 						void *data),
- 				     void *data);
- bool perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node);
--bool __perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node);
-+bool __perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
-+	__must_hold(&env->bpf_progs.lock);
- struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id);
--struct btf_node *__perf_env__find_btf(struct perf_env *env, __u32 btf_id);
-+struct btf_node *__perf_env__find_btf(struct perf_env *env, __u32 btf_id)
-+	__must_hold_shared(&env->bpf_progs.lock);
- #endif // HAVE_LIBBPF_SUPPORT
- 
- int perf_env__numa_node(struct perf_env *env, struct perf_cpu cpu);
-diff --git a/tools/perf/util/intel-tpebs.c b/tools/perf/util/intel-tpebs.c
-index 1812917bfb85..fb3127aa83ce 100644
---- a/tools/perf/util/intel-tpebs.c
-+++ b/tools/perf/util/intel-tpebs.c
-@@ -39,11 +39,11 @@
- bool tpebs_recording;
- enum tpebs_mode tpebs_mode;
- static DEFINE_MUTEX(tpebs_mtx);
--static LIST_HEAD(tpebs_results);
--static pthread_t tpebs_reader_thread;
-+static struct list_head tpebs_results __guarded_by(&tpebs_mtx) = LIST_HEAD_INIT(tpebs_results);
-+static pthread_t tpebs_reader_thread __guarded_by(&tpebs_mtx);
- static struct child_process tpebs_cmd;
- static int control_fd[2] = { -1, -1 }, ack_fd[2] = { -1, -1 };
--static bool tpebs_stopping;
-+static bool tpebs_stopping __guarded_by(&tpebs_mtx);
- 
- struct tpebs_retire_lat {
- 	struct list_head nd;
-@@ -63,6 +63,7 @@ static struct tpebs_retire_lat *tpebs_retire_lat__find(struct evsel *evsel)
- 	__must_hold(&tpebs_mtx);
- 
- static int evsel__tpebs_start_perf_record(struct evsel *evsel)
-+	__must_hold(&tpebs_mtx)
- {
- 	const char **record_argv;
- 	int tpebs_event_size = 0, i = 0, ret;
 -- 
 2.56.0.218.g1ec904b173-goog
 
