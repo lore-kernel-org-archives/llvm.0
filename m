@@ -1,66 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.157.188.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792599960;
-	b=zNIoi0p0tu6pqdJJ2dL07mi4MaXgHYr7lCDey5eniZEL7woEJn1B6OFa+H8N3FJw/eK1
-	 qaHPzRjnUKSudfwUDuUViQbT1xuSVYwMi6psK5FSCqF3Ew/QzGxuHRtx53tXLNw3XRo2t
-	 BvRhY5Kkqye2npd70rZdvFPhPbHw1Nv7qwe8vLnmoBPRy91OQ15Eh1oMitDFN1x1sS8vX
-	 lX4jmy2dD/U4zc4AcIRddvV1VEEP3LT/5nWswlAfHjorMCWqd2x/z7HAjYIx6nC/cY6oM
-	 0+3TgZq+2UqPPkn2U0XDsBw4+n9PtcZKCgPgH440ruFm3wmwBQTZbiu+O0Y17iJVsOg==
+	t=1792602655;
+	b=HNc2Xlf6CYVXN0jH7JuWLUpqRHSd+A7fcALUOrwc3dwIWAnrIsD5LTiaacAaTsxps1RY
+	 Pulg4QHJnomzkm8LlTtMkXo/Vg/fjmf+BuaKYf5y6nnX7hgkEfJuA5bsHWXvMb005eWuJ
+	 vUnJJAC1HX2e4PPmhLDY6/KW01QMCcoyFKTOn0/DReRjuGqZ6fJhhpuIBz4ogky6y+Ozt
+	 OQN53xraa/EPHJlLC/hbyBBIt1jbpkqPztndPcWFVqxMHCr05qaP5w/fGhQeofUlv3Vpw
+	 njxyRB7zWSLTOxIUg5cav/32c/4RQVnV2A+XuWSAirJsj9AowwUGVZ7UBLXry6W+Ndw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792599960;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Infomaniak-Routing;
-	bh=6aYN/2On4n7HGoJvZTU3OurKvF7SDr35YC5v5eCOowc=;
-	b=SKMnSM36bJlOX4uYitMsklSMDKJ9Xlry+TqLMD1wSH/meHZ7kbhGZsjoXtCDqVq6pO9s
-	 MHCJG7GlzoHZ2I9qYicDh0aY3aQtiOj7Kt5WVOLkraasi/zosoGC6Jtf4jz1dJm2se/OS
-	 cET9/2zhCtHNyiAxLbN+qqEwMuBzaN+4BoImIa4Bv8mDzkoRwVakj2mTli59KzfAUSjq0
-	 MyBcVdWXCtm3pjNU+sDnJWTRueSeVjyTJE8ti4h7sF2k6ndPBMUXrg0+jBTTJ6C6aGEOU
-	 P0ud8TJCneM/vkOi+igksTty3DMFjFE/iOnPiIFAZIS5yi6jLt+FFqeNyDDR958AYOA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792602655;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=HibgJhitNqYx90KHPc8hl4hJtyn8X6V6EDcChq4tAIE=;
+	b=AU2bnxd7SIsDU3V68QbcAqsoXruGBe0y6GLnP/hy1lcSCkW3ByoQJ4Avk0IHDiOP5s3n
+	 qGFp/Wjfur/HhhpkxH7oValuQX7UrqLaRsnsZxoEvsrc9/hLEV3y//uRsN2CfjjvewsBO
+	 yl70026KZKx2z4DEPA0292dKsMUFyo9KA51DglBd9/uLTfSB7W0DN5JUNu/+sLC/m56Sv
+	 +pWhWQqsMlYgKzc1sQV02SQrAKYHIh/wCj2UKFX50sb66YzcJ+qaXdrU2Zvu1CgnFlAjd
+	 Cp4qLwZbEyq+R80aDm0pdp9x5Y8Qg8puNK7hTt+XSnyK6euRzyezkg2yW9TrxKZgK4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=digikod.net;
-	spf=pass smtp.mailfrom=digikod.net;
-	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=EC2wy3Vz;
-	arc=none smtp.remote-ip=45.157.188.14
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=YSy7ZmB4;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BC0606A31A
-	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 16:25:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6BC0606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8D9606A31B
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 17:10:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E8D9606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=EC2wy3Vz
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4j8vlx1G6dz13rn;
-	Wed, 21 Oct 2026 18:25:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1792599948;
-	bh=6aYN/2On4n7HGoJvZTU3OurKvF7SDr35YC5v5eCOowc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EC2wy3Vz68NDCTpFJUzbNOPF0ExyqXqmkSSqPJKxsLmkFIaggjI9bgDaYHrXnsE7X
-	 he7TUnCvrwDqBOVaHcBYMyJ28azv87LBzc1dKEFzZ1SAImW3SH+waaIOxKlIcfXsIK
-	 EkkkpTFPrIBd2qBiCXR5XsDsgTs1EGqiRbBd6+TI=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4j8vlv58Kvz2Fl;
-	Wed, 21 Oct 2026 18:25:47 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Christian Brauner <brauner@kernel.org>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Haofeng Li <lihaofeng@kylinos.cn>,
-	Paul Moore <paul@paul-moore.com>,
-	Tingmao Wang <m@maowtm.org>,
-	Wang Yan <wangyan01@kylinos.cn>,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [GIT PULL] Landlock update for v7.4-rc1
-Date: Wed, 21 Oct 2026 18:25:38 +0200
-Message-ID: <20261021162538.1852602-1-mic@digikod.net>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=YSy7ZmB4
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-3425098ae4bso146765eec.0
+        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 10:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792602653; x=1793207453; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HibgJhitNqYx90KHPc8hl4hJtyn8X6V6EDcChq4tAIE=;
+        b=YSy7ZmB4Wio1J9RiAaUlHtinNyVdlxIed0A7IB2k278766XZ2pBDUsETmLE++LhGOw
+         Say89FyOyTiyEhzB6VblIg1gx7eT+SnoCqs+OGzgTaXcSiHOe+IGQWETgat2Y/tr0gvI
+         8ewpCtcwjUmNn2xBj4v/dTjFu8mA9hPJmm589t3H6JxEp/Yu+9tND9uF27Heu3ZW0ZH0
+         6E1BiVxOja263CRaGs1RuC2UGifRSjVDLxjTyzib0596MTHX8AU6JB6T0o8GJ9UuoCwd
+         X2QOBBRya4yU8R1c63BgMMIfwh2LmSx+o5B3BH035NsWYlmvj2L2N22LG/uFFJOwnTlI
+         PUzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792602653; x=1793207453;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=HibgJhitNqYx90KHPc8hl4hJtyn8X6V6EDcChq4tAIE=;
+        b=rZhj+GsMS9be+uuJip8lGX7NNkufOdzf6CXZXeVUFJ7mepI+x7lE6udZnr69LW4Im5
+         9wkHhGV2x6zcKwVfkJG40rENSs0OotFWmSvLbX200POEGbcb4DBBVYt9x7jkhDbfc3/D
+         i11CPczK5xukQjihfspKGBp/TLMHyoDefcXEqmg/v500qISMTNKDHz94dAkQ9F7/hPSN
+         GQzYkJ7paMnkB09xBvZ4Skrtax2LtqUJqd2F6ykDumc7rRsuSHMUQ3RR6gCDbNKZpscD
+         SQZQZwJEVjyYFgGz+rUsMm/vvTHhmIGVPdJwrnQNqddKGpTEXUuQYftBbcz+ZgQwjZtS
+         FlrQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz5DWEugjBVDxtZuTfiSDJfq/74zqQJxlt3ndnJRyiLXCw32PpMqobst8sDEtRlLO4szK/T@lists.linux.dev
+X-Gm-Message-State: AFq9FYL3cHSfz4gzMDLouDJsTHrvHTO+L+ZfQV0QWVJUXK0fFYJaTJdi
+	fn25oBqFZl5RQXqcXWbq89sQVenvt5XwIcGWhXYnQzTKJSUVJAXWGPBqDKAolk6AGGxsOea3HYI
+	8hynCOlWJdA==
+X-Received: from dlbtx6.prod.google.com ([2002:a05:7022:fc06:b0:168:b4b9:d783])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:689e:b0:158:b944:b15
+ with SMTP id a92af1059eb24-190a7c21cb9mr4649944c88.22.1792602652788; Wed, 21
+ Oct 2026 10:10:52 -0700 (PDT)
+Date: Wed, 21 Oct 2026 10:10:26 -0700
+In-Reply-To: <20261020163640.746159-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -69,136 +78,175 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Mime-Version: 1.0
+References: <20261020163640.746159-1-irogers@google.com>
+X-Mailer: git-send-email 2.56.0.218.g1ec904b173-goog
+Message-ID: <20261021171044.155240-1-irogers@google.com>
+Subject: [PATCH v6 00/17] tools/perf: Adopt kernel compiler-context-analysis.h annotations
+From: Ian Rogers <irogers@google.com>
+To: irogers@google.com, acme@kernel.org, elver@google.com, namhyung@kernel.org
+Cc: adrian.hunter@intel.com, james.clark@linaro.org, jolsa@kernel.org, 
+	justinstitt@google.com, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, ljs@kernel.org, llvm@lists.linux.dev, 
+	mingo@redhat.com, morbo@google.com, nathan@kernel.org, 
+	ndesaulniers@google.com, peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+The perf tool previously added Clang thread-safety annotations in
+tools/perf/util/mutex.h (GUARDED_BY, LOCKABLE, EXCLUSIVE_LOCK_FUNCTION,
+UNLOCK_FUNCTION, etc.). Since then, the Linux kernel has adopted a
+unified set of static context analysis macros and attributes in
+include/linux/compiler-context-analysis.h (context_lock_struct,
+__guarded_by, __acquires, __releases, __must_hold, etc.).
 
-The main change adds composable Landlock controls for namespace types
-and Linux capabilities, thanks to new LSM hooks (merged via the LSM
-tree).  A umount race condition is also fixed.
+This series makes tools/include/linux/compiler-context-analysis.h
+functional by synchronizing it and the required compiler_types.h helpers
+with the kernel headers, converts tools/perf from its custom mutex.h
+macros to the kernel-style compiler-context-analysis.h annotations, and
+expands context analysis coverage across comm, dso/dsos, thread/threads,
+config, intel-tpebs, env, and maps. Along the way, separate preparatory
+patches fix an unlocked __dsos__add() call and TOCTOU race in
+__machine__addnew_vdso(), avoid dropping _dso__data_open_lock in
+dso__list_del() under REFCNT_CHECKING, switch dso__data_open_lock and
+tpebs_mtx to DEFINE_MUTEX(), add a read-lock fast path to
+dsos__findnew_id(), fix an unlocked read of tpebs_reader_thread and
+double-close of tpebs_cmd.out in intel-tpebs, and avoid a potential
+read-to-write deadlock in maps__load_first() and out-of-bounds access in
+__maps__remove().
 
-Please pull these changes for v7.4-rc1 .  These commits merge cleanly
-with your master branch.  Kernel changes have been tested in the
-latest linux-next releases, and I recently fixed a new merge conflict
-(see the related merge commit message).
+This series was developed and reviewed with assistance from an AI coding
+agent (Gemini 3.1 Pro) and reviewed with Sashiko.
 
-Test coverage for security/landlock is 91.8% of 2864 lines according to
-LLVM 23, and it was 91.6% of 2625 lines before this PR.
+v6:
+  - Rebase onto perf-tools-next.
 
-Regards,
- Mickaël
+v5:
+  - Hold machine->dsos.lock in write mode across machine->vdso_info
+    initialization and temporary file creation in
+    machine__findnew_vdso() and __machine__findnew_compat(), and
+    annotate __machine__addnew_vdso() with
+    __must_hold(&machine->dsos.lock) (patches 7, 11).
+  - Reset tpebs_cmd.pid = 0 and return early without setting
+    t->started = true if start_command() fails in
+    evsel__tpebs_start_perf_record() (patch 13).
 
---
-The following changes since commit 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907:
+v4:
+  - Place the DSO loaded in addr_filter__resolve_syms() into a dsos
+    collection so dso__dsos(dso) is populated (patch 8).
+  - Join tpebs_reader_thread on error in evsel__tpebs_open(), document
+    why tpebs_cmd.pid is cleared before pthread_join() in tpebs_stop(),
+    and include <pthread.h> and <signal.h> in util/intel-tpebs.c
+    (patch 13).
+  - Include <string.h> in util/maps.c (patch 16).
 
-  Linux 7.3-rc7 (2026-10-11 20:04:55 -0700)
+v3:
+  - Rebase onto perf-tools-next (converting the newly added
+    dso__find_binary_type() lock annotations in util/dso.c).
+  - Separate bug fixes, DEFINE_MUTEX() cleanups, and improvements (vdso,
+    dso_data, dso__data_open_lock, dsos__findnew_id, intel-tpebs,
+    tpebs_mtx, maps) from the annotation patches.
+  - Move AI coding assistant attribution to the cover letter and drop
+    per-commit Assisted-by tags per linux-next
+    Documentation/process/coding-assistants.rst.
+  - Add Marco Elver's Reviewed-by to patch 1.
+  - Define __diag_clang_23() and Clang ASM_INPUT_G/ASM_INPUT_RM/
+    ASM_OUTPUT_RM overrides in tools/include/linux/compiler-gcc.h
+    (patch 2).
+  - Probe for -Wthread-safety-pointer/-Wthread-safety-beta in
+    Makefile.config (patch 5).
+  - Pass write_locked to __dsos__find() (patch 7).
+  - Pass struct dso_data * to close_data_fd() and dso__list_del() to
+    remove the REFCNT_CHECKING dso pointer from struct dso_data and
+    avoid dropping dso__data_open_lock in dso__list_del(), and include
+    <assert.h> in util/dso.c (patch 8).
+  - Re-validate DSO lookup under the write lock in dsos__findnew_id()
+    via __dsos__findnew_id(), and handle NULL dso_id in
+    dso__needs_improve_id(), __dso__improve_id(), and dso_id__cmp()
+    (patch 10).
+  - Reset tpebs_cmd.out = -1 if start_command() fails and include
+    <stdint.h>, <stdlib.h>, <string.h>, and <unistd.h> in
+    util/intel-tpebs.c (patch 13).
+  - Bounds-check the index in __maps__remove() (freeing maps_by_name if
+    out of bounds) (patch 16).
 
-are available in the Git repository at:
+v2:
+  - Use -c rather than -E when probing for
+    -fexperimental-late-parse-attributes in Makefile.config to avoid
+    -Werror,-Wunused-command-line-argument.
+  - Acquire machine->dsos.lock in write mode across duplicate checking,
+    dso__set_long_name(), and __dsos__add() in __machine__addnew_vdso().
+  - Avoid dropping dso__data_open_lock in dso__list_del() under
+    REFCNT_CHECKING.
+  - Pass tpebs_cmd.out directly to __sample_reader() and set
+    tpebs_cmd.out = -1 in evsel__tpebs_open() to avoid a double-close in
+    tpebs_stop(), and clarify the config_set_mutex comment.
+  - Drop maps__lock before calling map__load() in maps__load_first() to
+    avoid a read-to-write self-deadlock when loading kernel maps inserts
+    additional trampoline maps.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-7.4-rc1
+Ian Rogers (17):
+  compiler-context-analysis: Avoid unused parameter warning in
+    _context_unsafe_alias()
+  tools headers compiler: Synchronize compiler_types.h with the kernel
+    sources
+  tools headers: Synchronize linux/compiler-context-analysis.h with the
+    kernel sources
+  perf mutex: Use kernel style compiler-context-analysis.h annotations
+  perf build: Enable additional Clang thread-safety flags
+  perf comm: Add __guarded_by annotations to struct comm_strs
+  perf vdso: Fix unlocked __dsos__add() and race in
+    __machine__addnew_vdso()
+  perf dso: Pass dso_data to close_data_fd() and dso__list_del()
+  perf dso: Use DEFINE_MUTEX for dso__data_open_lock
+  perf dsos: Use read lock fast path in dsos__findnew_id()
+  perf dso: Expand context analysis annotations
+  perf thread: Expand context analysis annotations to threads and
+    namespaces_lock
+  perf intel-tpebs: Fix race in tpebs_stop() and tpebs_cmd.out fd
+    handling
+  perf intel-tpebs: Use DEFINE_MUTEX for tpebs_mtx
+  perf config, intel-tpebs, env: Add __guarded_by and __must_hold
+    annotations
+  perf maps: Fix lock inversion in maps__load_first() and bounds check
+    in __maps__remove()
+  perf maps: Add context analysis annotations
 
-for you to fetch changes up to 3e271a27c46fd591d1011c7de5a644a41e2010f1:
+ include/linux/compiler-context-analysis.h     |   2 +-
+ .../include/linux/compiler-context-analysis.h | 518 ++++++++++++++++--
+ tools/include/linux/compiler-gcc.h            |  72 ++-
+ tools/include/linux/compiler.h                |  50 +-
+ tools/include/linux/compiler_types.h          | 206 ++++++-
+ tools/perf/Makefile.config                    |   8 +-
+ tools/perf/builtin-sched.c                    |  16 +-
+ tools/perf/builtin-top.c                      |   4 +-
+ tools/perf/check-headers.sh                   |   1 +
+ tools/perf/tests/dso-data.c                   |   4 +
+ tools/perf/util/annotate.c                    |   4 +-
+ tools/perf/util/annotate.h                    |   8 +-
+ tools/perf/util/auxtrace.c                    |  16 +-
+ tools/perf/util/bpf-event.h                   |   5 +-
+ tools/perf/util/comm.c                        |  10 +-
+ tools/perf/util/config.c                      |  43 +-
+ tools/perf/util/dso.c                         | 140 +++--
+ tools/perf/util/dso.h                         |  15 +-
+ tools/perf/util/dsos.c                        |  31 +-
+ tools/perf/util/dsos.h                        |  12 +-
+ tools/perf/util/env.c                         |   1 +
+ tools/perf/util/env.h                         |  19 +-
+ tools/perf/util/intel-tpebs.c                 | 133 +++--
+ tools/perf/util/libbfd.c                      |   4 +-
+ tools/perf/util/maps.c                        | 148 +++--
+ tools/perf/util/mutex.c                       |   4 +-
+ tools/perf/util/mutex.h                       |  90 +--
+ tools/perf/util/rwsem.c                       |   8 +-
+ tools/perf/util/rwsem.h                       |  10 +-
+ tools/perf/util/thread.c                      |  10 +-
+ tools/perf/util/thread.h                      |  30 +-
+ tools/perf/util/threads.c                     |   4 +
+ tools/perf/util/threads.h                     |   6 +-
+ tools/perf/util/vdso.c                        |  53 +-
+ 34 files changed, 1204 insertions(+), 481 deletions(-)
 
-  landlock: Fix superblock use-after-free in release_inode() (2026-10-20 16:47:24 +0200)
+-- 
+2.56.0.218.g1ec904b173-goog
 
-----------------------------------------------------------------
-Landlock update for v7.4-rc1
-
-----------------------------------------------------------------
-Christian Brauner (2):
-      ns: Free anonymous mount namespaces via ns_common_free()
-      lsm: add LSM blob and hooks for namespaces
-
-Günther Noack (1):
-      landlock: Fix superblock use-after-free in release_inode()
-
-Jann Horn (1):
-      cred: clarify that task_struct::cred is only for the current task
-
-Mickaël Salaün (10):
-      lsm: add LSM_AUDIT_DATA_NS for namespace audit records
-      Merge branch 'lsm/dev' into master
-      landlock: Rename quiet_masks to quiet_access
-      landlock: Wrap per-layer access masks in struct layer_config
-      landlock: Enforce namespace use restrictions
-      landlock: Enforce capability restrictions
-      selftests/landlock: Add namespace restriction tests
-      selftests/landlock: Add capability restriction tests
-      samples/landlock: Add capability and namespace restriction support
-      landlock: Add documentation for capability and namespace restrictions
-
-Paul Moore (1):
-      lsm: update the BUILD_BUG_ON() in audit_log_lsm_data()
-
-Wang Yan (1):
-      selftests/landlock: Fix snprintf truncation checks in test files
-
- Documentation/admin-guide/LSM/landlock.rst     |   46 +-
- Documentation/security/landlock.rst            |  177 +-
- Documentation/trace/events-landlock.rst        |   66 +-
- Documentation/userspace-api/landlock.rst       |  243 ++-
- fs/namespace.c                                 |    3 +-
- include/linux/cred.h                           |   17 +-
- include/linux/landlock.h                       |   29 +-
- include/linux/lsm_audit.h                      |    5 +
- include/linux/lsm_hook_defs.h                  |    3 +
- include/linux/lsm_hooks.h                      |    1 +
- include/linux/ns/ns_common_types.h             |    3 +
- include/linux/sched.h                          |    8 +-
- include/linux/security.h                       |   20 +
- include/trace/events/landlock.h                |  244 ++-
- include/uapi/linux/landlock.h                  |  139 +-
- include/uapi/linux/nsfs.h                      |    1 +
- init/init_task.c                               |    2 +-
- kernel/auditsc.c                               |    5 +-
- kernel/cred.c                                  |    2 +-
- kernel/nscommon.c                              |   17 +-
- kernel/nsproxy.c                               |    6 +
- samples/Kconfig                                |   13 +-
- samples/landlock/Makefile                      |    5 +
- samples/landlock/sandboxer.c                   |  269 ++-
- security/landlock/Makefile                     |    4 +-
- security/landlock/access.h                     |   61 +-
- security/landlock/audit.c                      |   32 +-
- security/landlock/cap.c                        |  159 ++
- security/landlock/cap.h                        |   48 +
- security/landlock/cred.h                       |    2 +-
- security/landlock/domain.c                     |   13 +-
- security/landlock/domain.h                     |   97 +-
- security/landlock/fs.c                         |   12 +-
- security/landlock/limits.h                     |    9 +
- security/landlock/log.c                        |   53 +-
- security/landlock/log.h                        |   10 +-
- security/landlock/net.c                        |    2 +-
- security/landlock/ns.c                         |  241 +++
- security/landlock/ns.h                         |   18 +
- security/landlock/ruleset.c                    |   27 +-
- security/landlock/ruleset.h                    |   33 +-
- security/landlock/setup.c                      |    4 +
- security/landlock/syscalls.c                   |  217 +-
- security/landlock/trace.c                      |   27 +-
- security/lsm_audit.c                           |    6 +-
- security/lsm_init.c                            |    5 +-
- security/security.c                            |   72 +
- tools/testing/selftests/landlock/audit_test.c  |    2 +-
- tools/testing/selftests/landlock/base_test.c   |   21 +-
- tools/testing/selftests/landlock/cap_test.c    | 1370 ++++++++++++
- tools/testing/selftests/landlock/common.h      |   13 +
- tools/testing/selftests/landlock/config        |    5 +
- tools/testing/selftests/landlock/fs_test.c     |   13 +-
- tools/testing/selftests/landlock/net_test.c    |    4 +-
- tools/testing/selftests/landlock/ns_test.c     | 2647 ++++++++++++++++++++++++
- tools/testing/selftests/landlock/ptrace_test.c |    2 +-
- tools/testing/selftests/landlock/trace.h       |   52 +-
- tools/testing/selftests/landlock/trace_test.c  |    8 +-
- tools/testing/selftests/landlock/wrappers.h    |   29 +
- 59 files changed, 6437 insertions(+), 205 deletions(-)
- create mode 100644 security/landlock/cap.c
- create mode 100644 security/landlock/cap.h
- create mode 100644 security/landlock/ns.c
- create mode 100644 security/landlock/ns.h
- create mode 100644 tools/testing/selftests/landlock/cap_test.c
- create mode 100644 tools/testing/selftests/landlock/ns_test.c
