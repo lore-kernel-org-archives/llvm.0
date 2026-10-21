@@ -1,77 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792582762;
-	b=vfVtLEIrjYEqqJ1syNo3bZq7BQje7Qz4TWNBH6HB3tTF2ZGQrBkZw+nMJJQyE1wPFUTN
-	 GeoGORSqSIaeYRoycWxGYm1vOgulfDb0iGzTq7hsSi58/RF2XmiU2cZw9sxFLRszHejJS
-	 p7FVriHEfXWjXsSrVkFnUu24jVxpqxWHYZKtnktF/LjXczqOnEdbFiJ/ZRmK4+8Hn6Kcz
-	 ikEUzIisBCM/TjGf/ELpqvjwjj6U6y4fc5XEb5xJh64OdgN662+ihK0eIGEm/Y+Mtc6nd
-	 BIz3r8heDPhxBAPrZ0FaohuTtExvuDtEdRSxPwuvFjnGbfrU0rdwULgKkph8UEYe+Ig==
+	t=1792596439;
+	b=BwBHU8XXhdSZY7mcaHWcpZyRJqTbaLjU1gVMgCwvXIS/rEZ8K1Og+cQxJyjnOwzsbgAm
+	 2QOZkQYZ568dSrCfDBde48WiNGT516SBtjCGK7KT7Qr7moinqv/1Gse8zS70arr8CAPFk
+	 bRssvIj0STzoCO2LmCsaAk5VzkT/oWoJ2AJYJdYaFaZTi0gzaF89IfXgCMzLQo1NlIO9a
+	 pl2k3Pa750TrKz/2gNmHxmdrESBTO4yUy4C8inUxhavhYu9l5IPn0ijwfxMbnEKYHTh/K
+	 7yynABuDV6n3dxQqgle2WDADm/JqG/G0E79LbC/ODKeozFmoAZ3rlln2TnYwR9J3o5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792582762;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=QPNcD/BUBiidjkyP2LOhZ/njSh25ZE3K0q39XJXXp7o=;
-	b=Qsv15h9WYvwwio70mudFi6WbX7Ej4dOqF/zJR4xhNKo0C1INjYvgKR83Bwr8ywXdUlC1
-	 tGZvf4kjFLFlEAwdS9/S9t7TFaVSIJVePru/2q8eKC+G3pDRx6F3+OF0CpafQ+y/VdEGO
-	 5haEBXJj8JWAX4u4mN91z5UOZnclRCLjZefHdQOYcQFxLbr2cjFp+hpO8VR05JV6VXLmy
-	 QCuaPNei4KJVqhrvEDOvrhW3LAvOJcMLtIk3THgANTv9tNGFStTE12wdGWWWu4qFzBmgj
-	 rMTfdxXTUvFFu3cKmkcVFfxsqN8nomlxuazF8UQ2oLkpqjHANi8ltciBNh/2JLs+tcQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792596439;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=jgAnNPRw4bl7KLoUTwKbk6oRViEcdsIxPyek4/jTHZc=;
+	b=CClFa/dyh72Od9R+hJiK9PNUlWfNzs07+vBxYkv9LLCr4V3ckHIh5WqPxhQvmFQb5j3o
+	 pP2cOAnmjPaFimw3+uEW8cyl3GY+L6R95RBiyxRGjOVyY4W9aXQQYxyWyMPXUyzRjqoyi
+	 z6RoveIl1d3ScbhIVVsIgtvvY6LQT/lSti7IP7a3DNatEh92cVabpxghLZOxMmu4F2Bwh
+	 TUilL9RSyKSv7BRMEdx60w112zUdQIWDzxD6oy1Be96eE6aLQ3P+ViSoqGAuHLyThys8a
+	 PCIxn5GRbUTBF9IlHr2yOu6EmklFF5luzLhJIHXVxJwbIep5PD+7fCN+6c2cRMyZb2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XkW2kMdI;
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--gthelen.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Xy4lOznk;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B06606A32A;
-	Wed, 21 Oct 2026 11:39:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 17B06606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FFB606A323
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 15:27:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77FFB606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gthelen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XkW2kMdI
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792582761; x=1824118761;
-  h=date:from:to:cc:subject:message-id;
-  bh=rhuBNfQzaloR/dco56J8IFqfKS8LZdPnrIgxOh+z66s=;
-  b=XkW2kMdI/fz35n/hHPIgsHY7TbLoWOvR3Nrtgn70EKiRXO6QGMyrx5Z8
-   iHtXXwgA7Yur5ljgfnF2qSMOKHh7XPyaw3cs+fh/GK7IifqmrgAGYL0Pl
-   hz5G0fO2YMJbCgaKqafmJed/cH9UZeDT2oayx9EORHxoZ6bfnWSnJViZq
-   zdgGiYIZtxXoNGzLoaFsu+TJu58rjHMYldNTcqBnj1CMqwER+upskg84Q
-   RD8ceN6v6ked4WwAxo0XUDm1BydyL8Z/VogmLY9Sbip/0DsIKlPWTJa/R
-   1VKDXiwuk8EEFqXyDinOSUl9brHgIQ4wr/+q4sFzR6dHTtqjqSlHcmCBf
-   g==;
-X-CSE-ConnectionGUID: Xgx6JHJxTqKCa8zcMcqqtw==
-X-CSE-MsgGUID: /zlParlpT1eIYlaQfdG9JQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11941"; a="1305992"
-X-IronPort-AV: E=Sophos;i="6.27,170,1787036400"; 
-   d="scan'208";a="1305992"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2026 04:39:19 -0700
-X-CSE-ConnectionGUID: RFwX2m/2R0CQLk4EazI00w==
-X-CSE-MsgGUID: RNyOO3vJTdecD27C0/PRvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,170,1787036400"; 
-   d="scan'208";a="2955044"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 21 Oct 2026 04:39:18 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xJUf5-00000000PQ0-3UyI;
-	Wed, 21 Oct 2026 11:39:15 +0000
-Date: Wed, 21 Oct 2026 19:38:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [daveh-devel:kss-2026-10-19 16/24]
- include/linux/thread_info.h:237:20: error: redefinition of
- 'arch_kernel_shstk_enabled'
-Message-ID: <202610211957.fjqhvrV9-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Xy4lOznk
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-3510d0baf63so2015205eec.1
+        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 08:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792596439; x=1793201239; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jgAnNPRw4bl7KLoUTwKbk6oRViEcdsIxPyek4/jTHZc=;
+        b=Xy4lOznk4C7aNjRzxBzkntaDnfQXJbTX9sbWStHNreQ5KckoY5eK+BsYUEWBHCvUQp
+         VUPYpWRmGQDLu89d7yWniGfML7TQxmZOGa8QLLAZ6fXiybO6+J6Bn3S4ZxZWRjvL1L7p
+         FdfoXrwi+7OIdOFWKdcOfd16+35Yu1k5ZVJsPPBij5NlnJUFG3TKHrbzPJ75mkCSE+hi
+         EevZH4xHpebr2gLihWHykBcP6zN74SCV+elwGRYzoW0jXWMnBT/RKEnIvLf1A/y3ruV4
+         qMm874xn06kaimxs6vmbycp8C7QZ+yCSFM1kJFzAYW2lAlYEEgPr67+YfwGj+TCpQZO7
+         omHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792596439; x=1793201239;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jgAnNPRw4bl7KLoUTwKbk6oRViEcdsIxPyek4/jTHZc=;
+        b=zjyp3enYWDaCNEEGrHGlpCTTi0Sknr627SBJSSR9pXnmjUl/VG9xaqoLscy0EtBPN7
+         SYZlPnpP87EQTCBFi2IE5LhI90aGZUq3V1+7Bu254mUsIO5GhU6w67IbcoXiWy7jgUTI
+         bS8CxUJexzW8mlhOzUIxMGomXmV4dGd1kp5FUq0Z2NC/2brRDCVcEW6p6WfVM/Zv9JBL
+         ks7pZ8MHFTaw8QD7b+pEltXZmNgAGMmTLl6u8UvuR9+bp77Ed8Hj0m0+cMAsLmRN8Adr
+         ZsIZP/0BofN8/N6bvWXxveO7UxX1XWza+39Kx3sEZO1Pn1xwEwXWtjYfJsFs0qHvkIMH
+         SUrw==
+X-Forwarded-Encrypted: i=1; AKwUvByNK6YS/18Gwkh0Qjdt0DaMZ6S/8313/ia33VYyEP4FBzobW16F3QlGs871cmt9dpoSL760@lists.linux.dev
+X-Gm-Message-State: AFq9FYI+c5Dqh8oYzSmrqfwuGE3Tls4aia3b8JBPD+iwU9Z1LDnrpFUF
+	ifIynvdIw+PJpJe/Qa/rfmmn/I5QzCGMLnv4F+7T/MXxyPyMAWOKvxfOVulcDFB/c8tc7TwAGrP
+	Q47aC8PkGfw==
+X-Received: from dycpq4.prod.google.com ([2002:a05:7301:fd04:b0:34d:46b2:7513])
+ (user=gthelen job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:d185:b0:359:a6ed:41ab
+ with SMTP id 5a478bee46e88-3674db50cd0mr3750142eec.36.1792596438073; Wed, 21
+ Oct 2026 08:27:18 -0700 (PDT)
+Date: Wed, 21 Oct 2026 08:26:58 -0700
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,223 +75,65 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.212.g129ede20d9-goog
+Message-ID: <20261021152658.2618709-1-gthelen@google.com>
+Subject: [PATCH net] selftests/net: tcp_mmap: remove unused -k option and keepflag
+From: Greg Thelen <gthelen@google.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Soheil Hassas Yeganeh <soheil@google.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git kss-2026-10-19
-head:   b28e7d03a8472efab137c77cbb5dd666fa08e9a7
-commit: 967449663fb3eb7dcca67c4652293712530809c8 [16/24] arch-shadow-stacks-enabled
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261021/202610211957.fjqhvrV9-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261021/202610211957.fjqhvrV9-lkp@intel.com/reproduce)
+Commit aacb0c2e524c ("selftests: net: tcp_mmap must use
+TCP_ZEROCOPY_RECEIVE") removed the only read of keepflag in child_thread(),
+leaving the file-scope keepflag variable set by the -k option in main() but
+never read. This triggers a Clang 23 warning:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610211957.fjqhvrV9-lkp@intel.com/
+  tcp_mmap.c:91:12: error: variable 'keepflag' set but not used
+  [-Werror,-Wunused-but-set-global]
 
-All errors (new ones prefixed by >>):
+Remove the unused keepflag variable and the dead -k getopt option.
 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   In file included from include/linux/thread_info.h:62:
-   arch/x86/include/asm/thread_info.h:237:6: warning: no previous prototype for function 'arch_kernel_shstk_enabled' [-Wmissing-prototypes]
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   arch/x86/include/asm/thread_info.h:237:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     237 | bool arch_kernel_shstk_enabled(void)
-         | ^
-         | static 
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   include/linux/thread_info.h:237:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |        ^
-   include/linux/compiler_types.h:235:23: note: expanded from macro 'inline'
-     235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                       ^
-   include/linux/compiler_attributes.h:165:56: note: expanded from macro '__gnu_inline'
-     165 | #define __gnu_inline                    __attribute__((__gnu_inline__))
-         |                                                        ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   include/linux/thread_info.h:237:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |        ^
-   include/linux/compiler_types.h:235:36: note: expanded from macro 'inline'
-     235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                                    ^
-   include/linux/compiler_types.h:257:31: note: expanded from macro '__inline_maybe_unused'
-     257 | #define __inline_maybe_unused __maybe_unused
-         |                               ^
-   include/linux/compiler_attributes.h:352:56: note: expanded from macro '__maybe_unused'
-     352 | #define __maybe_unused                  __attribute__((__unused__))
-         |                                                        ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
-   include/linux/thread_info.h:237:8: warning: attribute declaration must precede definition [-Wignored-attributes]
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |        ^
-   include/linux/compiler_types.h:235:58: note: expanded from macro 'inline'
-     235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-         |                                                          ^
-   arch/x86/include/asm/linkage.h:9:32: note: expanded from macro 'notrace'
-       9 | #define notrace __attribute__((no_instrument_function))
-         |                                ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   In file included from include/linux/interrupt_rc.h:17:
-   In file included from include/linux/smp.h:118:
->> include/linux/thread_info.h:237:20: error: redefinition of 'arch_kernel_shstk_enabled'
-     237 | static inline bool arch_kernel_shstk_enabled(void)
-         |                    ^
-   arch/x86/include/asm/thread_info.h:237:6: note: previous definition is here
-     237 | bool arch_kernel_shstk_enabled(void)
-         |      ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
+Fixes: aacb0c2e524c ("selftests: net: tcp_mmap must use TCP_ZEROCOPY_RECEIVE")
+Signed-off-by: Greg Thelen <gthelen@google.com>
+---
+ tools/testing/selftests/net/tcp_mmap.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/net/tcp_mmap.c b/tools/testing/selftests/net/tcp_mmap.c
+index 487ae659a1f1..86241bed7f08 100644
+--- a/tools/testing/selftests/net/tcp_mmap.c
++++ b/tools/testing/selftests/net/tcp_mmap.c
+@@ -85,7 +85,6 @@ static int rcvbuf; /* Default: autotuning.  Can be set with -r <integer> option
+ static int sndbuf; /* Default: autotuning.  Can be set with -w <integer> option */
+ static int zflg; /* zero copy option. (MSG_ZEROCOPY for sender, mmap() for receiver */
+ static int xflg; /* hash received data (simple xor) (-h option) */
+-static int keepflag; /* -k option: receiver shall keep all received file in memory (no munmap() calls) */
+ static int integrity; /* -i option: sender and receiver compute sha256 over the data.*/
+ 
+ static size_t chunk_size  = 512*1024;
+@@ -456,7 +455,7 @@ int main(int argc, char *argv[])
+ 	int sflg = 0;
+ 	int mss = 0;
+ 
+-	while ((c = getopt(argc, argv, "46p:svr:w:H:zxkP:M:C:a:i")) != -1) {
++	while ((c = getopt(argc, argv, "46p:svr:w:H:zxP:M:C:a:i")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			cfg_family = PF_INET;
+@@ -490,9 +489,6 @@ int main(int argc, char *argv[])
+ 		case 'x':
+ 			xflg = 1;
+ 			break;
+-		case 'k':
+-			keepflag = 1;
+-			break;
+ 		case 'P':
+ 			max_pacing_rate = atoi(optarg) ;
+ 			break;
+-- 
+2.56.0.212.g129ede20d9-goog
 
-vim +/arch_kernel_shstk_enabled +237 include/linux/thread_info.h
-
-e66101020b3651 Dave Hansen 2026-10-19  235  
-5daba193b8cf42 Dave Hansen 2026-10-19  236  #ifndef arch_kernel_shstk_enabled
-5daba193b8cf42 Dave Hansen 2026-10-19 @237  static inline bool arch_kernel_shstk_enabled(void)
-5daba193b8cf42 Dave Hansen 2026-10-19  238  {
-5daba193b8cf42 Dave Hansen 2026-10-19  239  	return false;
-5daba193b8cf42 Dave Hansen 2026-10-19  240  }
-5daba193b8cf42 Dave Hansen 2026-10-19  241  #endif
-5daba193b8cf42 Dave Hansen 2026-10-19  242  
-
-:::::: The code at line 237 was first introduced by commit
-:::::: 5daba193b8cf422043348d59ff40fbda09a528d7 kernel/task: Add "runtime" check for shadow stack support
-
-:::::: TO: Dave Hansen <dave.hansen@linux.intel.com>
-:::::: CC: Dave Hansen <dave.hansen@intel.com>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
