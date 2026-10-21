@@ -1,78 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792620688;
-	b=HM3Y0E+daRAEIelBmaZNetMYbl0s3tO1e0Jf9IV+G4frunXAcl8WEZ1hIues0YaFJm0h
-	 UxgTgLN51zOI3TWJkiBHdAARRni2RBnN1wFW525LCG1kdXE023RsfYG1GRQkytPzpxILl
-	 cFb/IxXGBTug6aLMPvtMUM1ltTPPUHaz1P0jIpHW8jdj48Kr1Oi5QByhp8bAyoJR3+1ak
-	 HYHBC5riNuXNK6sK9z2o1ZJwpvEo4lirhrrPw/P0y1hcb/uAeNTEKJ1Fo/h7eGnif/vFx
-	 A2XYHPTBQ0hXksriNoKE2HPi70IuI/W5qXGAZ77wfBREH/C/qRBpdZi19sG26qd8aSw==
+	t=1792622353;
+	b=dLjZmycIiGUjdOm9m3m3o3+pg+H3wPnGs8Jv4lnQwtZvRXnjo4Vm4Wbu8QoFYqDMNqHl
+	 NXI7WC27Eqh6s+bsJpTuKfEr2VVVDCCBHh36iaAXa1hfc5hxmoe46Chdcd+04s249+gTM
+	 5zKxwq50u261yWTiam2wDvfp0dy60LkhmHwumgZrq5wMNN6ed4Qh9nQMsU1R9WyTmERxt
+	 /wK6srUAeEyyQkBIszuDDvcI/5eXECoTFtjK3u2hXoeyHCE2KT2RT20YQMESmeEbvYI5b
+	 zk5y0X6DPuwedANMwjQznQihlT5nC6Rm74h2ymRLcYkqPz2hPmLAZK63lm0u4dIG5uw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792620688;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=pgp21LlpniNONu1v9skxOon6YyG3CjMokylGRRXBzjw=;
-	b=FAkZrWewa9PyDFxuGEvgF5zOMjIWvEPcnlirHWaV4krLOJaa83MbEpLRGeQnuE1UbR58
-	 5iVUmKHimn23rt4NcEE+K3QnFeWei+53/4jot5+4DjDv12DiLDej4wNUmqYx1PmtG8AfP
-	 2LuAf7mLe/RlsWObRZdcSXRWykcK69haGZ11vuvvI1c7oPOPOkk6OueopcV68ve1jbM92
-	 KHmRfaSgRuNEpcoGopkJ17f2uJzlIa70oXmfQK4udtoWj70gbW+jOYbY9hyADx/lQ/gr7
-	 qscmM7sBDe69xYclzILhgZySRtPKX1opsPXe1ysrws0MQ/haf7Mq+axgrA9C4aIqhEg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792622353;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=YP/JfyOYWmz90m2NwbazrCLMBQ4ptjaQHMjiASdFN+Q=;
+	b=AaRT2kaXF1rAnaxDeGgfBLvbScoyYBgjN38fvxHU+VIKh1pMVnooGc3jhIOOLPjdyALi
+	 yemEd+kzUy8d3ihPF0C/3xtzm4/tMm3+u/cDauH9RczVdw4j7EqjYkboZNN6pblc/w4NQ
+	 dIOKQw1GXhh4869bRzn6u/ZRhYu4dHUWLzuT/QZT7xLdRus+xn7M2nBFQ4Cbk4RFcj3ue
+	 2kG1FYmZXr+AWDwdo7ebXP4xKDALLCwp6Tfc4RLlmyxsHV0wD8fpOMF9sLUljv8ogN06o
+	 57M5crjZG+2sCInQrJ2PRTpdWRzq9a0JVV9onSLIxsymN0mV1TsBCFJxk+zk+nWUXlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gxlguvmi;
-	arc=none smtp.remote-ip=192.198.163.7
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pg53IUHL;
+	arc=none smtp.remote-ip=74.125.82.71
+Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AAAC606A319;
-	Wed, 21 Oct 2026 22:11:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7AAAC606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A16606A319
+	for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 22:39:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85A16606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gxlguvmi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792620682; x=1824156682;
-  h=date:from:to:cc:subject:message-id;
-  bh=EDYQvvNbc/yTYM764RogEVKsHxM2Gy0uOXos/HPxGKw=;
-  b=GxlguvmikhW7joscEwvnpCiL11znDILGFYz9uQNAqskT19bPCwgyXbFr
-   gSDqr7x1tM5JZnZjXRoqHtr5B9FsD0g43lTxpm534Fy3ByL93tRmJubAO
-   riRYOD4KY6mAu2XwPF+u0VsZSMlBSpuqXoP7OAQr4ExIi4U2wW96kSKMb
-   CoMv+SHrKtiSOul4fmL3UBTv8KE8GnBgMNuu7NGzZbeigaicTxOgL1pJz
-   9gvKSJDNcb0hETSqoju3KS1LT8OR17cXCICIL85GCbGqvTzu9A0t7JPVM
-   Sti4Q8kEkXX0jHSrsQkcdV7QzJSpYitVXm9XOCd3XvVRMGyVAHRee+/02
-   w==;
-X-CSE-ConnectionGUID: SK3usHv3S/CJKOqKOqdGhA==
-X-CSE-MsgGUID: v13QLwd+ROCFCCwSSW7leA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11942"; a="1260501"
-X-IronPort-AV: E=Sophos;i="6.27,171,1787036400"; 
-   d="scan'208";a="1260501"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2026 15:11:20 -0700
-X-CSE-ConnectionGUID: gYnR4aIuQ7iVEe18Dq+OyQ==
-X-CSE-MsgGUID: qDfRhGpQT0GtCHDjV1VxVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,171,1787036400"; 
-   d="scan'208";a="3237307"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 21 Oct 2026 15:11:18 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xJeWi-00000000Q8g-0cz0;
-	Wed, 21 Oct 2026 22:11:16 +0000
-Date: Thu, 22 Oct 2026 06:10:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <lumag@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [lumag-msm:venus-8996-vmem 21/173]
- drivers/media/platform/qcom/venus/core.c:436:45: warning: diagnostic behavior
- may be improved by adding the 'format(printf, 2, 3)' attribute to the
- declaration of 'venus_fwtrace_add'
-Message-ID: <202610220601.FUv6hw4D-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pg53IUHL
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-1663fb7e005so1789715c88.0
+        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 15:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792622351; x=1793227151; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YP/JfyOYWmz90m2NwbazrCLMBQ4ptjaQHMjiASdFN+Q=;
+        b=pg53IUHLYWFXBStoQruMiif9om7Otwu0EvfncjvfFheINv0C+Su45ZvbyBpaGRstFV
+         lnumx02+I+OFEb0K23trR8IhxLUi6ALEVjhCXHk5EIJtMwpfZJneZWbl/UEC4XPGpwQN
+         /49RxLDNuIR2CKehWzAVMtCSlix7cyGTIMelwQ34oGGw9NjbldxSmBo6yoE9ZtsmvhGh
+         slBsmYab4RhGwdBjljv0XYXR+EMp4/QKqZVUrdX1gNMFxLzswh7QF3bTAesTCcLCvgev
+         VcrxbIwqiSDU7gmFTKS0RbUciCGAnnkqA3tGJspkDHrp3DGcLPb9UoPFy6MbCSMm9u6Z
+         cXCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792622351; x=1793227151;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YP/JfyOYWmz90m2NwbazrCLMBQ4ptjaQHMjiASdFN+Q=;
+        b=a44i7m0Yz3gmOGvCvQu0eCrNJFQPO7AAOMboCvbypAUfmuL9XVal3+wqKnqwWxxaou
+         /y1Xhc4qceCkc4JQlp8437xf3GbdwwpSiKcSuZSxHw+agpLHW/rXH5ZUWo+eMIwXpiC2
+         I1uwUSNcLT3/knfgkC+bsANspaAToUYNJ89IIBMsqaNoZ0V1R71zHUSrtJ/rJNh4PAya
+         4vkqxJssjxVdmlPx6KAuuc0YuoNYwzIr9OpewARkTM6hX4IT9i2N9uzhXtqnmpbW09xO
+         D8n8SXS1YHV6+GmgIGc+ZdiSbJNSO0JNTTBkz1jf8oRvU6fAXjw8YMoU3Q//oyofq78H
+         HVwQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz0BORsk6X0+FTNoeqxdV395YyM4cgXKhGMQxG2Qjr6o6AxM1drUv1e6vzTCuQRD37To5JZ@lists.linux.dev
+X-Gm-Message-State: AFq9FYIiplGvlEACstMRCVaCgQH8QkoYyZB+SrhYGKG/lWVtBU7YzKbH
+	8stuxdvyhD1PsIiGfu9uYb3VWroJJvmjf9wNPY1si9RDe+d1KHkmC4aFqBd76Ng4Zwi4aXrr/u2
+	6YQ32W2LxEA==
+X-Received: from dled6-n2.prod.google.com ([2002:a05:701b:42c6:20b0:191:8b40:a632])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:21db:b0:153:3c50:ab85
+ with SMTP id a92af1059eb24-190a456636fmr3329466c88.12.1792622350969; Wed, 21
+ Oct 2026 15:39:10 -0700 (PDT)
+Date: Wed, 21 Oct 2026 15:38:48 -0700
+In-Reply-To: <20261021171044.155240-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,59 +78,189 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+Mime-Version: 1.0
+References: <20261021171044.155240-1-irogers@google.com>
+X-Mailer: git-send-email 2.56.0.218.g1ec904b173-goog
+Message-ID: <20261021223905.715051-1-irogers@google.com>
+Subject: [PATCH v7 00/17] tools/perf: Adopt kernel compiler-context-analysis.h annotations
+From: Ian Rogers <irogers@google.com>
+To: irogers@google.com, acme@kernel.org, elver@google.com, namhyung@kernel.org
+Cc: adrian.hunter@intel.com, james.clark@linaro.org, jolsa@kernel.org, 
+	justinstitt@google.com, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, ljs@kernel.org, llvm@lists.linux.dev, 
+	mingo@redhat.com, morbo@google.com, nathan@kernel.org, 
+	ndesaulniers@google.com, peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://gitlab.freedesktop.org/lumag/msm venus-8996-vmem
-head:   4dff7b31dd13e97b8f7abab7bc115d2875afd5e8
-commit: 1c74759d645846cbcdd7907ffae600567bfdb220 [21/173] DEBUG: media: venus: trace firmware messages and HFI commands
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20261022/202610220601.FUv6hw4D-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2c419645e808a6667eee9dbb16c828f77e2fd2f0)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261022/202610220601.FUv6hw4D-lkp@intel.com/reproduce)
+The perf tool previously added Clang thread-safety annotations in
+tools/perf/util/mutex.h (GUARDED_BY, LOCKABLE, EXCLUSIVE_LOCK_FUNCTION,
+UNLOCK_FUNCTION, etc.). Since then, the Linux kernel has adopted a
+unified set of static context analysis macros and attributes in
+include/linux/compiler-context-analysis.h (context_lock_struct,
+__guarded_by, __acquires, __releases, __must_hold, etc.).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610220601.FUv6hw4D-lkp@intel.com/
+This series makes tools/include/linux/compiler-context-analysis.h
+functional by synchronizing it and the required compiler_types.h helpers
+with the kernel headers, converts tools/perf from its custom mutex.h
+macros to the kernel-style compiler-context-analysis.h annotations, and
+expands context analysis coverage across comm, dso/dsos, thread/threads,
+config, intel-tpebs, env, and maps. Along the way, separate preparatory
+patches fix an unlocked __dsos__add() call and TOCTOU race in
+__machine__addnew_vdso(), avoid dropping _dso__data_open_lock in
+dso__list_del() under REFCNT_CHECKING, switch dso__data_open_lock and
+tpebs_mtx to DEFINE_MUTEX(), add a read-lock fast path to
+dsos__findnew_id(), fix an unlocked read of tpebs_reader_thread and
+double-close of tpebs_cmd.out in intel-tpebs, and avoid a potential
+read-to-write deadlock in maps__load_first() and out-of-bounds access in
+__maps__remove().
 
-All warnings (new ones prefixed by >>):
+This series was developed and reviewed with assistance from an AI coding
+agent (Gemini 3.1 Pro) and reviewed with Sashiko.
 
->> drivers/media/platform/qcom/venus/core.c:436:45: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'venus_fwtrace_add' [-Wmissing-format-attribute]
-     436 |         vsnprintf(e->msg, sizeof(e->msg), fmt, args);
-         |                                                    ^
-   drivers/media/platform/qcom/venus/core.h:50:6: note: 'venus_fwtrace_add' declared here
-      50 | void venus_fwtrace_add(struct venus_core *core, const char *fmt, ...);
-         |      ^
-   1 warning generated.
+v7:
+  - Add newly created DSOs in machine__process_ksymbol_register() and
+    dso__split_kallsyms() to machine->dsos so assert(dso__dsos(dso)) in
+    dso__list_add() always holds (patch 8).
+  - Add __guarded_by(&config_mutex) to function-local static parser
+    buffers in parse_value() and perf_parse_file() (patch 15).
+  - Remove from maps_by_name before calling
+    map__put(maps_by_address[address_idx]) in __maps__remove() so
+    callers such as maps__remove_maps() that pass maps_by_address[i] as
+    map do not use a freed handle in maps__by_name_index() under
+    REFCNT_CHECKING (patch 16).
 
+v6:
+  - Rebase onto perf-tools-next.
 
-vim +436 drivers/media/platform/qcom/venus/core.c
+v5:
+  - Hold machine->dsos.lock in write mode across machine->vdso_info
+    initialization and temporary file creation in
+    machine__findnew_vdso() and __machine__findnew_compat(), and
+    annotate __machine__addnew_vdso() with
+    __must_hold(&machine->dsos.lock) (patches 7, 11).
+  - Reset tpebs_cmd.pid = 0 and return early without setting
+    t->started = true if start_command() fails in
+    evsel__tpebs_start_perf_record() (patch 13).
 
-   423	
-   424	void venus_fwtrace_add(struct venus_core *core, const char *fmt, ...)
-   425	{
-   426		struct venus_fwtrace_entry *e;
-   427		unsigned long flags;
-   428		va_list args;
-   429	
-   430		spin_lock_irqsave(&core->fwtrace_lock, flags);
-   431	
-   432		e = &core->fwtrace[core->fwtrace_head];
-   433		e->ts = local_clock();
-   434	
-   435		va_start(args, fmt);
- > 436		vsnprintf(e->msg, sizeof(e->msg), fmt, args);
-   437		va_end(args);
-   438	
-   439		core->fwtrace_head++;
-   440		if (core->fwtrace_head == VENUS_FWTRACE_ENTRIES) {
-   441			core->fwtrace_head = 0;
-   442			core->fwtrace_wrapped = true;
-   443		}
-   444	
-   445		spin_unlock_irqrestore(&core->fwtrace_lock, flags);
-   446	}
-   447	
+v4:
+  - Place the DSO loaded in addr_filter__resolve_syms() into a dsos
+    collection so dso__dsos(dso) is populated (patch 8).
+  - Join tpebs_reader_thread on error in evsel__tpebs_open(), document
+    why tpebs_cmd.pid is cleared before pthread_join() in tpebs_stop(),
+    and include <pthread.h> and <signal.h> in util/intel-tpebs.c
+    (patch 13).
+  - Include <string.h> in util/maps.c (patch 16).
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+v3:
+  - Rebase onto perf-tools-next (converting the newly added
+    dso__find_binary_type() lock annotations in util/dso.c).
+  - Separate bug fixes, DEFINE_MUTEX() cleanups, and improvements (vdso,
+    dso_data, dso__data_open_lock, dsos__findnew_id, intel-tpebs,
+    tpebs_mtx, maps) from the annotation patches.
+  - Move AI coding assistant attribution to the cover letter and drop
+    per-commit Assisted-by tags per linux-next
+    Documentation/process/coding-assistants.rst.
+  - Add Marco Elver's Reviewed-by to patch 1.
+  - Define __diag_clang_23() and Clang ASM_INPUT_G/ASM_INPUT_RM/
+    ASM_OUTPUT_RM overrides in tools/include/linux/compiler-gcc.h
+    (patch 2).
+  - Probe for -Wthread-safety-pointer/-Wthread-safety-beta in
+    Makefile.config (patch 5).
+  - Pass write_locked to __dsos__find() (patch 7).
+  - Pass struct dso_data * to close_data_fd() and dso__list_del() to
+    remove the REFCNT_CHECKING dso pointer from struct dso_data and
+    avoid dropping dso__data_open_lock in dso__list_del(), and include
+    <assert.h> in util/dso.c (patch 8).
+  - Re-validate DSO lookup under the write lock in dsos__findnew_id()
+    via __dsos__findnew_id(), and handle NULL dso_id in
+    dso__needs_improve_id(), __dso__improve_id(), and dso_id__cmp()
+    (patch 10).
+  - Reset tpebs_cmd.out = -1 if start_command() fails and include
+    <stdint.h>, <stdlib.h>, <string.h>, and <unistd.h> in
+    util/intel-tpebs.c (patch 13).
+  - Bounds-check the index in __maps__remove() (freeing maps_by_name if
+    out of bounds) (patch 16).
+
+v2:
+  - Use -c rather than -E when probing for
+    -fexperimental-late-parse-attributes in Makefile.config to avoid
+    -Werror,-Wunused-command-line-argument.
+  - Acquire machine->dsos.lock in write mode across duplicate checking,
+    dso__set_long_name(), and __dsos__add() in __machine__addnew_vdso().
+  - Avoid dropping dso__data_open_lock in dso__list_del() under
+    REFCNT_CHECKING.
+  - Pass tpebs_cmd.out directly to __sample_reader() and set
+    tpebs_cmd.out = -1 in evsel__tpebs_open() to avoid a double-close in
+    tpebs_stop(), and clarify the config_set_mutex comment.
+  - Drop maps__lock before calling map__load() in maps__load_first() to
+    avoid a read-to-write self-deadlock when loading kernel maps inserts
+    additional trampoline maps.
+
+Ian Rogers (17):
+  compiler-context-analysis: Avoid unused parameter warning in
+    _context_unsafe_alias()
+  tools headers compiler: Synchronize compiler_types.h with the kernel
+    sources
+  tools headers: Synchronize linux/compiler-context-analysis.h with the
+    kernel sources
+  perf mutex: Use kernel style compiler-context-analysis.h annotations
+  perf build: Enable additional Clang thread-safety flags
+  perf comm: Add __guarded_by annotations to struct comm_strs
+  perf vdso: Fix unlocked __dsos__add() and race in
+    __machine__addnew_vdso()
+  perf dso: Pass dso_data to close_data_fd() and dso__list_del()
+  perf dso: Use DEFINE_MUTEX for dso__data_open_lock
+  perf dsos: Use read lock fast path in dsos__findnew_id()
+  perf dso: Expand context analysis annotations
+  perf thread: Expand context analysis annotations to threads and
+    namespaces_lock
+  perf intel-tpebs: Fix race in tpebs_stop() and tpebs_cmd.out fd
+    handling
+  perf intel-tpebs: Use DEFINE_MUTEX for tpebs_mtx
+  perf config, intel-tpebs, env: Add __guarded_by and __must_hold
+    annotations
+  perf maps: Fix lock inversion in maps__load_first() and bounds check
+    in __maps__remove()
+  perf maps: Add context analysis annotations
+
+ include/linux/compiler-context-analysis.h     |   2 +-
+ .../include/linux/compiler-context-analysis.h | 518 ++++++++++++++++--
+ tools/include/linux/compiler-gcc.h            |  72 ++-
+ tools/include/linux/compiler.h                |  50 +-
+ tools/include/linux/compiler_types.h          | 206 ++++++-
+ tools/perf/Makefile.config                    |   8 +-
+ tools/perf/builtin-sched.c                    |  16 +-
+ tools/perf/builtin-top.c                      |   4 +-
+ tools/perf/check-headers.sh                   |   1 +
+ tools/perf/tests/dso-data.c                   |   4 +
+ tools/perf/util/annotate.c                    |   4 +-
+ tools/perf/util/annotate.h                    |   8 +-
+ tools/perf/util/auxtrace.c                    |  16 +-
+ tools/perf/util/bpf-event.h                   |   5 +-
+ tools/perf/util/comm.c                        |  10 +-
+ tools/perf/util/config.c                      |  47 +-
+ tools/perf/util/dso.c                         | 140 +++--
+ tools/perf/util/dso.h                         |  15 +-
+ tools/perf/util/dsos.c                        |  31 +-
+ tools/perf/util/dsos.h                        |  12 +-
+ tools/perf/util/env.c                         |   1 +
+ tools/perf/util/env.h                         |  19 +-
+ tools/perf/util/intel-tpebs.c                 | 133 +++--
+ tools/perf/util/libbfd.c                      |   4 +-
+ tools/perf/util/machine.c                     |  14 +-
+ tools/perf/util/maps.c                        | 157 ++++--
+ tools/perf/util/mutex.c                       |   4 +-
+ tools/perf/util/mutex.h                       |  90 +--
+ tools/perf/util/rwsem.c                       |   8 +-
+ tools/perf/util/rwsem.h                       |  10 +-
+ tools/perf/util/symbol.c                      |   4 +
+ tools/perf/util/thread.c                      |  10 +-
+ tools/perf/util/thread.h                      |  30 +-
+ tools/perf/util/threads.c                     |   4 +
+ tools/perf/util/threads.h                     |   6 +-
+ tools/perf/util/vdso.c                        |  53 +-
+ 36 files changed, 1224 insertions(+), 492 deletions(-)
+
+-- 
+2.56.0.218.g1ec904b173-goog
+
