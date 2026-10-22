@@ -1,79 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792668960;
-	b=qnYqGaMVmP2j6xkuseYHG6w1YwkhebnKLHwBNZKj0XKJACCMdQMlETiJDAZDh0gKKT5A
-	 iVD1J3xjXKRRzsE62ORBN4SchxjB353s0aEgIJcS9sSVDjj4QU6AV6HU285+GDq/LoVRc
-	 Xrg+9Va4e+sUFblJ8SjLupc1RSnQiFmPbWtQSxNrNja/1SVW4dWSFIlI71YdLXYz89Num
-	 PE5Q9/7YHTl+FiHNQoHKuE3k3i5eR/nTdVP3g9UZdp58kPw7v4QWH3MbCTjBySykeOZE+
-	 ndNWTq+4vL5zzNKPGi/Q//BaXePN5wldjqK6ps5afMaR3yBK8gvNVj+MM4fFt5YFMmA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792668960;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=l/uJoZh97KNA8KS5XGZcsBsVOhzLQylaAXwI7FTR4Uw=;
-	b=eBnIGhFoQ54uDIhedHmsd11v//rBhYtfZCM7HZopS7KCaEkmc26+KhXZDlLusCVhtTfD
-	 xSofKSiJZJxh84nnOeRxb8NY7g/evbLudJj2WCPE1iyCx0PYJHLnWP33r4y2hiMvfwPx7
-	 /CDgIbsajyAJw2yfu6sVodREEbwMXYkrEVXeFEcBR2gG3c/jyCrM2XyWKrEAUqzBWDSkr
-	 xCNe+Ouuz23ZW6UHkp9OtDuGiJvTgvrrhkPqi76s5pOl0Ul70Q/utCVgWQxa4Q/YEmtyT
-	 QnmkaLe3xK0QyG2UIAJ6f7E7MufYzXW3USNr3UhnZiSKYFdkM7XiQ5goKGnXPzLkCTg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VMOIRzvW;
-	arc=none smtp.remote-ip=198.175.65.19
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.214.170
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1792687598;
+	b=wi1gpoX93NrBxelrRcZq9l44jDrtuAETMIvZ5jr1sojhWKmVUxtFtLW0X7gNDhWled+q
+	 bBrY+r83HP+HbMGN7iyiJ9eR4WLZY881UDdSAVUdkOuhkLPEoRlLbfgWF3IIloLCEUZTR
+	 kaZi+Jwfiu5xJJTpF2g26z8ZSKQQzzx01Zwx54D4usJ/JIg6xEJTmqmLSPjGT80vpVlGP
+	 TL+RQO5SY2xBS4y6/cFMFohKZdN5S9aCoJn+UiBqO6KGrHTCigoXdBnXjJH0rLEKihU6e
+	 c0NgbSZl7SO4WGNAJxNlguWwT8vhy0yRmnOWVJHssMAQvQFDCJHKZtTkSsz5Y7FuFgQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792687598;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=uWReZSZPnxFWoJInKY4s3rEgmqruohf2mZWoSu7TMG0=;
+	b=YDWH+2Om9VIlkdkHC3TpZV8sNVYxnpgBZr9NpnJSt2fjRwAFw5Sm2/pOVsHQgjHTm2Nd
+	 X2d0evjRrfYRfCswnkNXCGKcrW5a4teytRpMJNkJwX50VpuEEBDQwumEiW6PvAurkK25C
+	 o3AnbGgcdEnkSR3LqY88ew7wlznQurlyTrfGDZD0AOMqBeWj4wTv+6V5zj4V2No8vD0Dy
+	 4Y4ehc2QXCa3jAJU6UBnrGKCmNoRSE+FCX36bK4pOwV3Q2AbVLn44h5GoiBgc1vw5uBnI
+	 HxcLMnZ5ET/rBScOussZDCS8PQsZ9Uye5hWX0EjWjhqlDkpyUuvaXAbbRRgevotSVkA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b="fWiv/6+i";
+	arc=fail smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D907606A319;
-	Thu, 22 Oct 2026 11:35:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D907606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE7B606A31F
+	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 16:46:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDE7B606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VMOIRzvW
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792668959; x=1824204959;
-  h=date:from:to:cc:subject:message-id;
-  bh=HMFusN3w/Rdfs2e+wd700w7KcXXZlTUF1n0txwbvpLE=;
-  b=VMOIRzvWo0cCddLqGxnvcIA19JS5N/rQSjqUa3RAtaX56zfThzc1kuSM
-   xaQz484X9J1Si5AITq5HoYBkSP8AyY5rJ0vwz4/fdlelok7BsfEMprZ90
-   Q/TDms69m7c7Mruni4x/CIzz+zZYzWqf+oB9uzbQTKmkzEf4VFHabCCi4
-   joI+dlNuVb4bER7v5xRlpcdjgGfxNmHbqPzQCNhsl6JrumxQrCI9ysBGw
-   tPv08XXOz2OwgZIPrVc+Pkh5eKCHUNAADU1JfQ2hkgpPlvnGZKxj/Sa6/
-   GAZUiJePNDkdsrzmlLr0ZSuwBtujWUJC+FXywB9DnhilAZoTiwo8K62Ua
-   g==;
-X-CSE-ConnectionGUID: PYfHm2/zQTW28CoGmn0OAg==
-X-CSE-MsgGUID: 0WKMhftVQ1SEhcZlnKd/0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11942"; a="1447458"
-X-IronPort-AV: E=Sophos;i="6.27,172,1787036400"; 
-   d="scan'208";a="1447458"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2026 04:35:59 -0700
-X-CSE-ConnectionGUID: tACmicGGRbeGnN5HUbagXA==
-X-CSE-MsgGUID: rwCWsMeuQdyNF+kA6kDYvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,172,1787036400"; 
-   d="scan'208";a="3219226"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 22 Oct 2026 04:35:57 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xJr5N-00000000QyE-3Z07;
-	Thu, 22 Oct 2026 11:35:53 +0000
-Date: Thu, 22 Oct 2026 19:34:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dmitry Baryshkov <lumag@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [lumag-msm:venus-8996-vmem 71/173] Warning:
- drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_domain_state' not
- described in 'qcom_cpufreq_soc_data'
-Message-ID: <202610221921.UCmDqhuq-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=fWiv/6+i
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2db33db4de9so85465ad.0
+        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 09:46:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792687597; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UMKmxH7ZkITQE4uXvS8MWICxJ4hJf7Ob/DW3obisJQpqoygKHekHfVk+G9JoKJ7PPX
+         1GjDR0ba17iyovCmeOT18+RdBbuLCkpeWNv0dgprCLisY77I/b82uFlpgwxxIgaBOEOI
+         4S8nBRDuDjGQlVhp1h+2ixCl11UFkG5i8CeLj4U9p0GHQeGpLI+OVqzORTVR6ZTJqfke
+         QAmOEY4GJEhFgT4+w8V8U8nPuWUoJfOj66M9csby1VHJ6GRym9GkBOaI5HxPI5k2f//q
+         scMBTBfgJdb9Ne/t/kqAtcoLbm7GcUWfq6WI3ulJkT5GA/NAUTe3wa0yy44SrxeZ7jbw
+         rz/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=uWReZSZPnxFWoJInKY4s3rEgmqruohf2mZWoSu7TMG0=;
+        fh=MI7ReI/oR3MqW9+4NYSA3Oc0syiEAylK+W50tPLpkRw=;
+        b=O3Td1sv9GVVJPYz2lhWmb7900FX1mq01f2f+9U0KuV/AB83djmb2NpphVF+wbKry+b
+         DAEmMrzf1R/xheruLHGDltvp8m6KgREssUksrAYc8yzMqR/91/f65a1ucv++/GnHNLye
+         303DcT6pSIS7tYm2IdkHETzzr8uSQ6nIB1hsyZTSeNv61aPfTJSJQK0m3+6u0LD1IsKO
+         GA9kB8tVYfFulQO1Ea7QIlcQFV5tgBLYG74ANI15RvEa+PXlhZ3u04jmIBORqFj3Akt7
+         CsLYLNfkb50LrQyXvgNHS1r9yt7kkM6ppkCl5/5g+BQBGHzDsqkH5xIl+nDZj/hYc1VO
+         VkWw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792687597; x=1793292397; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uWReZSZPnxFWoJInKY4s3rEgmqruohf2mZWoSu7TMG0=;
+        b=fWiv/6+iRBtZJjL3H+xnCmzvCKiEf6xAM4bSj9Gg7nmf2ejvBpMAzppahC3CjWJ9GL
+         CDWtmeXSNRHeG1+OzZ9zgO0kgA8rbPEPDYFT4u8NvaQ3WGKvBG4fNi8/mH3Ki9ROXxkR
+         3dh+/Q1T6sx6KeqZjASyVLJSsnJr0T9IpRSAIeGb71D2lDkJfVzrhnQfQyTWRSlDrw+Z
+         zVHdQyHN8LcJS1KaE/Dul60HPCl5gJRv1uBJ0y9MZg0qP7AJZyuGczdSoyCF58NQg2KB
+         4/5VHFV5Sq5hPI4VJf3dm03Zlp694Lv63v/MLZpsJ6bcwYY+34EUtlvVd5a5v0whsFT5
+         gtxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792687597; x=1793292397;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uWReZSZPnxFWoJInKY4s3rEgmqruohf2mZWoSu7TMG0=;
+        b=h5DmKNtatfha9i3Y/21F9PiP/asnFDkvukgnDiNiE7rcjypjmsljrl8ZYQ4VYyMnbO
+         9MxJ/Fwy+5/L7SojMS/J7S+icyY6tStg4vre04oJLjmBMMaGWF/EC9uQV5CoT6N6c2xh
+         ZL9/mg5q9p7FWOOumES0Yx/yDTakDAMW7bYx9h3aOgSQb21XI6ERI4XiR+43ro0UtEQw
+         K3boeJ6A6TlR+iQTAqL4H31SdfKK+ztZE+TysdgOyj45W+bYFSPnOAfz6CpOR4GuiR7X
+         nxP0qpONtN4DzTA9Ol5/gvjfprQvtCzFQIAVYj5cOWG1x2wZnNnWvFVtW87J4/ZiUAdk
+         0Gng==
+X-Forwarded-Encrypted: i=1; AKwUvBzzsVRs9LazcfyshP9O8qVMy0FUIKZjOXj0Tf/TqHTXhyUuw8KCNsjrdEoBCvVCeJFpA1CV@lists.linux.dev
+X-Gm-Message-State: AFq9FYJmaQCgAXSyRS5mpsBHeUfJ+3AHiF1nhYdIjOkc93sO4GoeoZnb
+	1DJpb9O+AmOxarnQpaF03sN+Kg0ZctnFgQ3yh7OaM3MvJvFXWMyt+uRqMgx5dLVL86Mv7Qs4d3P
+	9TNeTxuE0QmW5SSpopoY0G/6+4sZfWG8Q9YOyqsgx
+X-Gm-Gg: AYBFou2lH6gQDbzJI8B+zucKnGP5sH0rcaPsyvraMKA9QPYHa9WAM0TM19tE9iQwvkz
+	xT/OiKT4oY9jAmeUnjGsQKV7lIw4a0TPnXTTVClfCvCTu7nYtboSutj6DooC4VYE1gNEioq9vhI
+	pPkk0lIrIeoOnsDlBRgqXWW54nj+IeU+FU6zi56axTJFktdZlL3kVr8wWsYAjKoJQmHIj4vAUlT
+	GnUuCh793N42l7xrthwPMmDs8Z6ipvychqkWvq9Ft8wiU0RiV73OErpBQsR88JY8IxV7HKpvzhl
+	8dVGWwqVi7FfKfjjHqfHuEGz06i+Y3+RYusND1atzh9fTm91oZcMYa+H3mJXf9ZQP5r9aiopGej
+	ZPCxoQxhequp6C71Seh4I3DU7ufUX/IGxYRF2JUAWLTB4BuZLeVHKxLfnUapbkTNV0gvfNxQ7m4
+	YL4b9PmL1SH4C2GOeUZwFUOg==
+X-Received: by 2002:a17:902:db11:b0:2bd:3bfd:74f1 with SMTP id
+ d9443c01a7336-2ea63088254mr5085175ad.2.1792687596491; Thu, 22 Oct 2026
+ 09:46:36 -0700 (PDT)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,42 +104,29 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+References: <20261021162538.1852602-1-mic@digikod.net>
+In-Reply-To: <20261021162538.1852602-1-mic@digikod.net>
+From: Jann Horn <jannh@google.com>
+Date: Thu, 22 Oct 2026 18:45:59 +0200
+X-Gm-Features: AclHuK9zuGI6ax3vqvDDohM9t-hsk36f5joo8NmHv8Bwy_LXI-q37xMxgIQtv9M
+Message-ID: <CAG48ez3Rptvjvt=t_YEcBHHwYGD4zmPtc6tk+gPLtorZY7WEFg@mail.gmail.com>
+Subject: Re: [GIT PULL] Landlock update for v7.4-rc1
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Christian Brauner <brauner@kernel.org>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Haofeng Li <lihaofeng@kylinos.cn>, Paul Moore <paul@paul-moore.com>, Tingmao Wang <m@maowtm.org>, 
+	Wang Yan <wangyan01@kylinos.cn>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://gitlab.freedesktop.org/lumag/msm venus-8996-vmem
-head:   4dff7b31dd13e97b8f7abab7bc115d2875afd5e8
-commit: 4dc52647af19369bf871a1f23a66312351331ec8 [71/173] cpufreq: qcom-hw: Implement CPRh aware OSM programming
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261022/202610221921.UCmDqhuq-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261022/202610221921.UCmDqhuq-lkp@intel.com/reproduce)
+On Wed, Oct 21, 2026 at 6:28=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
+> Jann Horn (1):
+>       cred: clarify that task_struct::cred is only for the current task
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610221921.UCmDqhuq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_domain_state' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_dcvs_ctrl' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_intr_clr' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_current_vote' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'lut_max_entries' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'acd_data' not described in 'qcom_cpufreq_soc_data'
-   Warning: drivers/cpufreq/qcom-cpufreq-hw.c:416 function parameter 'cpu_dev' not described in 'qcom_cpufreq_update_opp'
-   Warning: drivers/cpufreq/qcom-cpufreq-hw.c:416 Excess function parameter 'policy' description in 'qcom_cpufreq_update_opp'
-   Warning: drivers/cpufreq/qcom-cpufreq-hw.c:587 function parameter 'index' not described in 'qcom_cpufreq_gen_params'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:1545 function parameter 'index' not described in 'qcom_cpufreq_hw_osm_setup'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_domain_state' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_dcvs_ctrl' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_intr_clr' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'reg_current_vote' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'lut_max_entries' not described in 'qcom_cpufreq_soc_data'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:342 struct member 'acd_data' not described in 'qcom_cpufreq_soc_data'
-   Warning: drivers/cpufreq/qcom-cpufreq-hw.c:416 function parameter 'cpu_dev' not described in 'qcom_cpufreq_update_opp'
-   Warning: drivers/cpufreq/qcom-cpufreq-hw.c:416 Excess function parameter 'policy' description in 'qcom_cpufreq_update_opp'
-   Warning: drivers/cpufreq/qcom-cpufreq-hw.c:587 function parameter 'index' not described in 'qcom_cpufreq_gen_params'
->> Warning: drivers/cpufreq/qcom-cpufreq-hw.c:1545 function parameter 'index' not described in 'qcom_cpufreq_hw_osm_setup'
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+FYI, that already is in mainline as
+https://git.kernel.org/linus/b030ffaedc1d638f232f6992406cdcdcc82d5602,
+it went through the LSM tree.
