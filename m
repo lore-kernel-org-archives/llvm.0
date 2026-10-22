@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792700123;
-	b=TIooXdwyL/g5s2tvbrFsD9PpT6ufjrqCD03rfwp0jCknPnjeD1ujcIFQxvKg8JXeNt1s
-	 EyeZaH4yaFQpVWn9FISw7SuPI8vjHxJ2iKDuRmLTciEsNyVV5xUBgWJ3b+qHym/DypOjp
-	 kjtmJf2qDt9kHSg70TtSt0vxEYCIctGCHz1HKwwtq7qf7zaYA1yomV5IlMRy/tdS2zDvK
-	 RlwupRT9IzkfFONJ7szWRGSoXA1oAmZNzXkj9D57Fa4rDRhbewwHGOwGqVUYEoFXMYBTx
-	 l5VuJwnwipnn43aGDbkN3lZ7JgEzqKQOIYbqM8b0pIw05HXL/iw/v5d0pRJVahrBrLg==
+	t=1792700120;
+	b=pXPEKVWQRaSH/fcTupBJXNh78FcFXb/dTLEGkmp/TW/C41eUw/VcsZVRqQ00vboUAaTB
+	 +hcNprXYg7F7rbZiuJVNtnFrELwoumh7tBmknzea8yT+Ksghfa1ZKNHfpAGYbK6acg4r1
+	 vRhi0ndftNkfzaaKsxZWzpnSq+tMZ+utrgrKCYbpJxuqMU6kG9veW4frX3OJfJ+bvvxi1
+	 l6tSeuRanwnDmAF/1sZcAyBsX07p0TT7DTm971k5T4y6x9nbiMY+Q5Flkod+24SPW1gyj
+	 OKW8tCw2FNuLPI1vh9cdmWQTlfYe9ZzSluZYHdLEkJ8Xl6iKPFPS8jQl6e735hr2xOQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792700123;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792700120;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=Bm5F5L/Tc7r70KhD0cqJblZLBdriiRHdrl4SVSE1UvA=;
-	b=vDoTqcFJ6rw0BHxsRpDgXa74wXoInwA30Duy85Xs4gRsRHNJhDtZ85qwOFz8AFKkSEgF
-	 ovcKjpCIjp4qpDHVTi4ylYntRjKrHM8jWy/HFTmNTffFXF1vib3sGoGe3LCCrDjxlHxZ3
-	 bghgh/vT93Y+4S9Q8Uqv/KUip7eDoGQd+6Dj7yTfWaQ+2/7rjp4Xvp3tWvBxOt7hrwdcT
-	 atW+dUzC6gXJJqS1+j4LE+QE1/pBiMzH8gfshf1+W3Zuez7AGDZrhLQTr26iqUtyVpNMb
-	 LnrrVoiLxeEcxzsBpMIBH8RSe1mNMe3mcFd5AVrLpd9zWLLXIAPTJJL/ECTiIQtkeVg==
+	bh=6JUxMMI/25kOrfypmhpeOOpRGxtyrkB4sVFmB/HCDt8=;
+	b=45xHQgPrO979aVNmYeU9TDri++erqNpF/LUgs/j+5jiAnnb4Z3WkUGzer0mRVP2zEbU4
+	 e5hT2IoidxymLufJlBRwIR1BkDx94SLF80X8T+Af4zPUNp47acBwjjAfQ3qprLVZYDcde
+	 jK1zb9b5qQHIzJg3tFUrSq2aE8OJqRpkR4R2cn2Sx4bxnegfAOTo87Kn+6XPCA/zMtbI5
+	 CzZgmTcGn3+VWnSDoKoI3i8PzSv8xfKSofg+NaROWjHqGhdSNrCkDY5+KO/3tuYEgBicZ
+	 TaIUs6e2dJfVmvpBZ3+D/Y4fNv1sTogW6+AwtQjc7DyOy+gPXvLf8SnJ+egMPE7pMYA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=O383pNsN;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=jEjE6DUF;
+	arc=none smtp.remote-ip=74.125.82.197
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5CE606A320
-	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 20:15:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F5CE606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA61606A33A
+	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 20:15:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EA61606A33A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=O383pNsN
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-16bc6f3fdb1so152496c88.0
-        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 13:15:23 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=jEjE6DUF
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-36998507c13so228510eec.0
+        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 13:15:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792700122; x=1793304922; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1792700119; x=1793304919; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Bm5F5L/Tc7r70KhD0cqJblZLBdriiRHdrl4SVSE1UvA=;
-        b=O383pNsNkXuLZgnuQp4hDM09oqAyOtxf6cxQRkiPTUn7PWZUlPJshzjRlVn/6U1Rt0
-         v8sWOkSO02hlr/hfohfSQASwSB2lQMhwmwGSmaW7EboTvKZUJL81vHQ42k9uxE0fzCBY
-         ge597ZvOl2/qOnHLQip2Ub3IiW/7q0oxVtqkx8enrW1rG+NLsJr6Q7oVmyQkrfRHzoF2
-         RxUsnhoy45xYC9fn2GPqrHdjmsOwAMdXja1upCgmAxeUzAx9kDv44MmjNTKQWnWqiOgn
-         2dDUtvnKGqdX94cXh8qPF03DniT9vO2vphbQ9snyI815n63oLb/34tIC5rrXuYNesh1N
-         ZLpg==
+        bh=6JUxMMI/25kOrfypmhpeOOpRGxtyrkB4sVFmB/HCDt8=;
+        b=jEjE6DUFLvTdhx57rrkH1Kxh36v2oVRkAInNvpYHBXe3jcJ0XyGrB5C4YvsAkeMp8e
+         7C8DtgoMrAJsZ9L1CF8gEmWGYMaatfdnkm4DXUZEVKj40tuI9AfAcgj7Z+qkZVRGUZrB
+         p30Bwo0YNOCdaPBivrg+M3wlBRPEAsdzP6frS7n+6ycX/fb5KtKaZHEOjWlecxgUcY2y
+         YX8w1O81JQZMlpct69xk/rGJZXJCsBN9XhS5S15JBrSDRqoe4nq2/zhpi6VPowJ1jv5Z
+         HSXDJLHqZpUSbsZXZLmiGwxSHsb9qgzzV1XAieo2jUjppXqxDYgDpTqmIspzJAsMCpz9
+         7GFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792700122; x=1793304922;
+        d=1e100.net; s=20260707; t=1792700119; x=1793304919;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Bm5F5L/Tc7r70KhD0cqJblZLBdriiRHdrl4SVSE1UvA=;
-        b=XuCLg8tgj9o7KghWSgXTIbVhRaHZ6TYnKaEbp/GKB/BVGs7D8gUW5QhZ3WXm2P4K7J
-         GiTsEgr58jTXsXXrdn6vP11u9GGjVC3FtD9Q88qh1ZPRaUtqmrQMURmLTrn29VD1o9Py
-         +4VAvXEHa3w5DCyL9H9QEOt1lUR0GWFEJ7PwaRwkNr6DRsP0C9UMGkay358rBM8Qa+Nl
-         DCd1ZEgw/DuT7758Ci9eVIo9T0MElYKUcxn3rAxGx1tzaro/pSGWRnk2FD8rloaXWgit
-         Dt4F6NABIMpR5o793vRJMQo8ZTrV0xbFDkiy+JXP2mBLA18A9v4RK+BWLZMWNexMOPmH
-         fHRg==
-X-Forwarded-Encrypted: i=1; AKwUvBw8u3rYMuAif2gBeq3xP1Uz30s45JiJvN1rQSj9ZzUtUvS8jcRufU9BP3eok3+cAJznZ/XA@lists.linux.dev
-X-Gm-Message-State: AFq9FYIfoapu9qoPLPrydsMYwv2G3xVsh0vDfQkwUyYxIbkmvqynSOIw
-	Zj+IVqMtUtlC47kvw8WjRjwWrnOnd9yoW1+Rgo52LX1p7EELtHiW2KeA2mL+fsmb8lwr4N2/LLY
-	jj04mGdLdWg==
-X-Received: from dlbpu2.prod.google.com ([2002:a05:7022:e882:b0:166:1a44:a89])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:2302:b0:168:3243:c91a
- with SMTP id a92af1059eb24-195c44b7990mr296334c88.13.1792700121995; Thu, 22
- Oct 2026 13:15:21 -0700 (PDT)
-Date: Thu, 22 Oct 2026 13:14:39 -0700
+        bh=6JUxMMI/25kOrfypmhpeOOpRGxtyrkB4sVFmB/HCDt8=;
+        b=pite3CF7F9ZgxQw9IY74ypkz+Vz1sfz1Sv55wcai4wjL1GUHSIURiXbcFG2VR7EGC9
+         pcuNXJAMnjQcnHT8GQKKSrdqYcHFJVwExU7sUF3miVpRpEK7FqyyVpCmxcBArvEPbu/C
+         34EyZQRYYIFVkBhnDNww3O1C/+Yv1txpphhf4VQfAkcCvKrFKFZXDGl7j42l9FMXJBbC
+         lksQplkXK3SuCyarY2z2miVGZNd63psnfoaAW0IkZopou6BFwYeyEX4X+mAO6vRYSEEx
+         H5vN+8oJTuF5BUKwtv4aA2bV8PtIZfrJnte91eHIPYTvjJ8Gl7Guozmzg6UTFjErBxav
+         V1IQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx874xqYH2O4U65whd8gPf883kjurK1CcbIW7UH0roSTNvdg8QaeBdNGuvQIxxYbjwaR1Rh@lists.linux.dev
+X-Gm-Message-State: AFq9FYJw/CCgEF83SinwW+qxziUBsp+3shKe7aB1HFxjuaENHQcrOx/0
+	DkYQuV9aHxRhJn+0yv8jQ3f55k7ncFMtBL0pqSkJ0tRK9webemUY2CxQapZBZGvGtKBQTk9i9Ow
+	VZvpNfI0lcA==
+X-Received: from dyev8.prod.google.com ([2002:a05:7300:4308:b0:368:d484:7709])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:6505:b0:366:fbdb:2070
+ with SMTP id 5a478bee46e88-369d989eb57mr380050eec.34.1792700119173; Thu, 22
+ Oct 2026 13:15:19 -0700 (PDT)
+Date: Thu, 22 Oct 2026 13:14:38 -0700
 In-Reply-To: <20261022201453.1717523-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261021223905.715051-1-irogers@google.com> <20261022201453.1717523-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
-Message-ID: <20261022201453.1717523-7-irogers@google.com>
-Subject: [PATCH v8 06/19] perf comm: Add __guarded_by annotations to struct comm_strs
+Message-ID: <20261022201453.1717523-6-irogers@google.com>
+Subject: [PATCH v8 05/19] perf build: Enable additional Clang thread-safety flags
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
 Cc: adrian.hunter@intel.com, elver@google.com, james.clark@linaro.org, 
@@ -92,32 +92,35 @@ Cc: adrian.hunter@intel.com, elver@google.com, james.clark@linaro.org,
 	ndesaulniers@google.com, peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Annotate strs, num_strs, and capacity in struct comm_strs with
-__guarded_by(&lock) and __pt_guarded_by(&lock) so Clang verifies all
-accesses hold comm_strs->lock.
+Align tools/perf's Clang thread-safety flags with the kernel's
+scripts/Makefile.context-analysis by adding -Wthread-safety-pointer,
+-Wthread-safety-beta, and (when supported by the compiler)
+-fexperimental-late-parse-attributes.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/comm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/Makefile.config | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/comm.c b/tools/perf/util/comm.c
-index 6343a3c9debe..9fc4e91a36e9 100644
---- a/tools/perf/util/comm.c
-+++ b/tools/perf/util/comm.c
-@@ -16,9 +16,9 @@ DECLARE_RC_STRUCT(comm_str) {
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 3eb8d095cda0..b50702bac53c 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -64,7 +64,13 @@ ifeq ($(CC_NO_CLANG), 0)
+   endif
  
- static struct comm_strs {
- 	struct rw_semaphore lock;
--	struct comm_str **strs;
--	int num_strs;
--	int capacity;
-+	struct comm_str **strs __pt_guarded_by(&lock) __guarded_by(&lock);
-+	int num_strs __guarded_by(&lock);
-+	int capacity __guarded_by(&lock);
- } _comm_strs;
+   # Enabled Wthread-safety analysis for clang builds.
+-  CFLAGS += -Wthread-safety -DWARN_CONTEXT_ANALYSIS
++  CFLAGS += -DWARN_CONTEXT_ANALYSIS -Wthread-safety
++  ifeq ($(shell $(CC) -Werror -Wthread-safety-pointer -Wthread-safety-beta -c -x c /dev/null -o /dev/null >/dev/null 2>&1 && echo 1), 1)
++    CFLAGS += -Wthread-safety-pointer -Wthread-safety-beta
++  endif
++  ifeq ($(shell $(CC) -Werror -fexperimental-late-parse-attributes -c -x c /dev/null -o /dev/null >/dev/null 2>&1 && echo 1), 1)
++    CFLAGS += -fexperimental-late-parse-attributes
++  endif
+ endif
  
- static void comm_strs__remove_if_last(struct comm_str *cs);
+ include $(srctree)/tools/scripts/Makefile.arch
 -- 
 2.56.0.307.g5fe7bd680c-goog
 
