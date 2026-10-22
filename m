@@ -1,47 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.71.93.112
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792631967;
-	b=tuS+AWC9kaV2A+v+ydx3MZ4iRknV6/FTjfB1hHKP6taniRKrrW7/BBhrNcl+DVzWJukb
-	 SaC0LD6l/J8VPXwFKPaudiCcj9FKOqLm9ygSIBwEO1AJ8DsP1nXdH98lszJfKkHlBw9DA
-	 YrYtDExKUuMYEJsHXgVXxatQXfB6bSh76DIuElxzqu7/F/U1sg0DwTPAxqtt/Xo564Ngm
-	 VTTGlx8N5lOTynkg5g8/u3UHJTvGSK7f2/LcHmoNV3OrlQjKIzPY+my2SORG0ZDuGvOai
-	 yjAEMy2dUU0aZZ92iROYyHdwMVurwyqrw2YvxRock0a72jw/ik8hiJJBjG6fDeRXKUA==
+	t=1792633327;
+	b=djHjMnEzkjObokxR7L/grkOjMnFlpfUy/mXlUNj9rpdjvG+RbAHBaJpKd1yVen/FDHKA
+	 a5jScMKQHP8dFKqp9ZohRWxX5BtTukOlBWTOeexU3XxNTvGtDyennmMv61RqAoPLdtjHv
+	 Ofnm6A4ETnBmYcHPqligfJyjgWWTDGBonlv+tbBkQlVcHDiEBVnsnHqhlW+LNbbrEiD2E
+	 LAtzflH6hAsZZbjte0KPLRrYnHXbIXzLcwBJcXKocFSU/2/6O+0302BEeyXD9wF6iBuHH
+	 TbBVjDajMsr+pNDDeuOgmT42FcWvcSV4EJkbjZMskZHZI/YsEkaFt/rnzGUiNrfx5HA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792631967;
-	h=DMARC-Filter:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=oWDWqU+fwBcVPLNxqHFARcWr0x+nxDFPaG05KLIUslA=;
-	b=PbyeQyYIJleUv6XP8Yx+SuJ1Kcmn0LGRrqDjh7H3qslh5ZtS0HSNkXke+NV3GzeCZA51
-	 cCRXr6re8uAhseWMAUaOHlS6IiCmxXqWPH7Vfpcs6rS+We7lDVQF/5ni4HOyrHtx0XL+8
-	 YrghD3DP2dJ7hLxq05NG9eFLJgLA6NGNevRKs/bvqk5IoLnH91BqVPAsg5H8g3N1q2cXG
-	 viXdP2BOpl3+DTwgtfHZ4YJeF53L1pgJOujbpQhhFrrKcid4Zu74xNokgf8SYKLxIRa99
-	 C+1WIC9uX9Fa8IX7PQzrJmN2JECexK4ag9O34NWGM6S/fWKhfMpTm963mu5Rhmson8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792633327;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=KboKhG+u8HiGyMUeQoJlf60E/FtBxEgdIbA8zYMnlk0=;
+	b=0+5IKx/xFhAKoIlp/J2pmt0ztWNtVmX6rfEVvE+dqbuEpNegjSyC5pjLw6blCXgJXa6y
+	 +yhfp/nZY2V0eDtUhTrvaj+gmT+jITU8AZ0JH+0EiQ5LyQXFT0iNkzdY72dz3x+OGQayg
+	 2ZpaDQbzmL/Xsq1YZCOcmikW+DoBIi8qOg4H0uLqqxxb1NbthVfrHwkKMFmvzsRdcAtB8
+	 NcjkSl9koV1XsmKlDsOE67hDncqcYVsD+zM67DBuTlRHR77lS8bVlpa6MXBdK5r988Gs9
+	 xkvkjE4nLzJT5kOZ/ymFuF+r+Sj1Hff6JlvxS3GW6iSy4HKbd7BJstKXQf0ELMsU5ZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=huaweicloud.com;
-	spf=pass smtp.mailfrom=huaweicloud.com;
-	arc=none smtp.remote-ip=124.71.93.112
-Received: from dggmsgout12.his.huawei.com (dggmsgout12.his.huawei.com [124.71.93.112])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ZqzTqnNF;
+	arc=none smtp.remote-ip=192.198.163.17
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4536B606A319
-	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 01:19:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4536B606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggmsgout12.his.huawei.com (SkyGuard) with ESMTP id 4j97bQ2P1Tz1yRJ
-	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 09:19:14 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 34F0D4056B
-	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 09:19:16 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgC3ufySZNlqx8pXBQ--.12560S2;
-	Thu, 22 Oct 2026 09:19:15 +0800 (CST)
-Message-ID: <b6c0b7b2-3ffa-4dd6-a4e0-23333e9b7d92@huaweicloud.com>
-Date: Thu, 22 Oct 2026 09:19:14 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BEB606A319;
+	Thu, 22 Oct 2026 01:42:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72BEB606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ZqzTqnNF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792633325; x=1824169325;
+  h=date:from:to:cc:subject:message-id;
+  bh=1zT58Oo4VfG7aEdKNS+2W+BKuTfsualaGBxInIodGOw=;
+  b=ZqzTqnNFzIksK9XeZaDhP+xN4+vn+q0ox1zzUO+wmP0lz3842HkctKP8
+   Ayq3MoE/PLi+CYG0ZhBJrLnLeh+lXgTmsy/wqPkzd7T/16YAHpgcAh0D4
+   Iq1Gsy2nFfzi0tmYJmCQbpbIPSdwQDdsQFdoCkyZbrgq9BOkS08tq4OhI
+   +R7VqfI4Pg8q0hkydK67UsmR4u/qWclo4azAD+BtayJcP0Nna4LoC9/KT
+   viVQjHlAsL3fjXbisA82E8fOMKs3+Q0zvIwNvH/F43xN1DZTS7BMMHUDd
+   GAnNIANiIyt41APHPrPoZPDurjmccA2qIkwW8OMUytpctZ3WSVqsia/8L
+   A==;
+X-CSE-ConnectionGUID: eHUH/v+8SLOVMrKS7RKqAg==
+X-CSE-MsgGUID: x/ZJ5amkSBCFnpBuHn9oAw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11942"; a="1377216"
+X-IronPort-AV: E=Sophos;i="6.27,171,1787036400"; 
+   d="scan'208";a="1377216"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2026 18:42:05 -0700
+X-CSE-ConnectionGUID: xehPM/52ToCc8ulPRwzdTg==
+X-CSE-MsgGUID: sLgnk31eR4e9kUQ/TCZNqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,171,1787036400"; 
+   d="scan'208";a="3155950"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 21 Oct 2026 18:42:04 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xJhof-00000000QMw-0Fdr;
+	Thu, 22 Oct 2026 01:42:01 +0000
+Date: Thu, 22 Oct 2026 09:41:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Woodhouse <dwmw@amazon.co.uk>
+Subject: [dwmw2:vsm 24/115] arch/loongarch/kvm/vcpu.c:167:53: error:
+ expected ')'
+Message-ID: <202610220917.Huyunnnm-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -50,87 +80,88 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 00/15] perf annotate arm64: Support instruction
- tracking for data type profiling
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
- xueshuai@linux.alibaba.com, Peter Zijlstra <peterz@infradead.org>,
- leo.yan@linux.dev, Li Huafei <lihuafei1@huawei.com>,
- Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
- Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <cover.1791629326.git.wutengda@huaweicloud.com>
- <atFdpZG-b2JPS1St@google.com>
- <8fdf2566-bbac-4854-8faf-0276af5f936e@huaweicloud.com> <atkzKm_TPnhyzgx3@x2>
- <atlO6EJswVvj76rN@google.com>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <atlO6EJswVvj76rN@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgC3ufySZNlqx8pXBQ--.12560S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7JryfXrykZrWUGFW7XFy3twb_yoW8JrW5pF
-	Z5J3W8tF4kXF4Iyrs5tr1UZF1FqFyxWr15W34rJw1FkFyq9r1Sgry2grWjg3s8Kr95Gr4I
-	9rya93WavFyDAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
-	e7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	jIksgUUUUU=
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+
+tree:   git://git.infradead.org/users/dwmw2/linux vsm
+head:   0d3b0d77a4f09382bf67c82ed7e64ff81d4fb803
+commit: e107e0e18513558d7ed0c750f6878d90a2f58a26 [24/115] KVM: Introduce kvm_check_gen()/kvm_memslots_check_gen()
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261022/202610220917.Huyunnnm-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261022/202610220917.Huyunnnm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610220917.Huyunnnm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/loongarch/kvm/vcpu.c:167:53: error: expected ')'
+     167 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+         |                                                                   ^
+   arch/loongarch/kvm/vcpu.c:166:5: note: to match this '('
+     166 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+         |            ^
+   arch/loongarch/kvm/vcpu.c:1834:53: error: expected ')'
+    1834 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+         |                                                                   ^
+   arch/loongarch/kvm/vcpu.c:1833:5: note: to match this '('
+    1833 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+         |            ^
+   2 errors generated.
 
 
+vim +167 arch/loongarch/kvm/vcpu.c
 
-On 2026/10/22 7:46, Namhyung Kim wrote:
-> On Wed, Oct 21, 2026 at 06:48:26PM -0300, Arnaldo Carvalho de Melo wrote:
->> On Fri, Oct 16, 2026 at 09:18:38AM +0800, Tengda Wu wrote:
->>> On 2026/10/16 7:11, Namhyung Kim wrote:
->>>>> Please let me know if you have any feedback.
->>>>
->>>> Thanks a lot for your work!  Assuming you'll fix the issues from Sashiko
->>>> in the next version, you can add my:
->>>>
->>>> Reviewed-by: Namhyung Kim <namhyung@kernel.org>
->>>>
->>>
->>> Yes, I'll address the issues reported by Sashiko and send a v8.
->>> Most of them are minor, and I'll fix them accordingly (or explain
->>> in the v8 thread if I think any of them is a false positive).
->>> I'll carry your Reviewed-by in the next version as agreed.
->>
->> I applied the first 5 patches that are sashiko-clean, will push soon to
->> tmp.perf-tools-next and then to perf-tools next after test building on
->> my containers.
-> 
-> There is v8 already which should have addressed the concerns.
-> 
-> https://lore.kernel.org/r/cover.1792411435.git.wutengda@huaweicloud.com
-> 
+   151	
+   152	static void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
+   153	{
+   154		u32 version;
+   155		u64 steal;
+   156		gpa_t gpa;
+   157		struct kvm_steal_time __user *st;
+   158		struct gfn_to_hva_cache *ghc;
+   159	
+   160		ghc = &vcpu->arch.st.cache;
+   161		gpa = vcpu->arch.st.guest_addr;
+   162		if (!(gpa & KVM_STEAL_PHYS_VALID))
+   163			return;
+   164	
+   165		gpa &= KVM_STEAL_PHYS_MASK;
+   166		if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+ > 167			     kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+   168			if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st))) {
+   169				ghc->gpa = INVALID_GPA;
+   170				return;
+   171			}
+   172		}
+   173	
+   174		st = (struct kvm_steal_time __user *)ghc->hva;
+   175		if (kvm_guest_has_pv_feature(vcpu, KVM_FEATURE_PREEMPT)) {
+   176			unsafe_put_user(0, &st->preempted, out);
+   177			vcpu->arch.st.preempted = 0;
+   178		}
+   179	
+   180		unsafe_get_user(version, &st->version, out);
+   181		if (version & 1)
+   182			version += 1; /* first time write, random junk */
+   183	
+   184		version += 1;
+   185		unsafe_put_user(version, &st->version, out);
+   186		smp_wmb();
+   187	
+   188		unsafe_get_user(steal, &st->steal, out);
+   189		steal += current->sched_info.run_delay - vcpu->arch.st.last_steal;
+   190		vcpu->arch.st.last_steal = current->sched_info.run_delay;
+   191		unsafe_put_user(steal, &st->steal, out);
+   192	
+   193		smp_wmb();
+   194		version += 1;
+   195		unsafe_put_user(version, &st->version, out);
+   196	out:
+   197		mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
+   198	}
+   199	
 
-Yes, applying based on v8 would be better. All Sashiko comments have been
-addressed in v8, so the whole series can be applied and tested as-is.
-
-Thanks a lot.
-
-Best regards,
-Tengda
-
-> Thanks,
-> Namhyung
-> 
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
