@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792646252;
-	b=LuIIQnC7S7V3GgO4NkLuRZI6R2aru9PR+jJv24EY+glzyIHueYH6JTy0jUZVxv0z3evC
-	 DiEiLoens3PxAoLdMsmkoVhiLkxuDkoMx8c806QrCh7MjPTpSuYT8PgwWbf4nFLHnTLHl
-	 Uz1Tm42ygGHN4mpZnOo05nxpzyvp9RpLXj474eYws7AhGPJG9yCIIZ9S1A7NiviFOQ3Px
-	 IyA6BILmbziQKBzUf02ats5/gHkmPu8aT0DQQ6PpKnR8e5T79sSuSfDmI3M8d5IzVAp4L
-	 xpXKJscb9gO+HMUMCobCgH0pjprM9snFQY6cK6SGLP1QNsmM+qzYhHVh+qAKQWkrk0Q==
+	t=1792646255;
+	b=m9vIBpmGsNey22kZgOxS4OPutvYlU2O/OWHQ+cfCyUcNk46yhjzZnfVsHGbI6Yn+EKd4
+	 y/3X8BRyhtFoCXd85hjdejf3IZCaytuDHrU3/0md2nHG8kbmclKdWx6MY4JTMJ8U5zABB
+	 eEzszbY0hQ4dpnAa0PGQxl4Cc0D7cqZbrfxe+PRl/nRdHFRXP+NkcIDldQyZSkPYv+CZ6
+	 m9nLeKO1LVQRO4M71lCLWWpLcK0FLe/m5PxNq/NeHSlZYYseTNniDu1WAPT36QV2bgC/M
+	 g5PiuyI4sKMEIMUQLJ8SGjYfFlhAyBOO7vQEBj/AsTX4d0awjn7UYh8h6rGUHrMwR0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792646252;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792646255;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=SgSVPju/oDwYCUMu1qXQuK1g6vGXDkUziO98RSaFsPc=;
-	b=C5WXkkyPedEDIioG4e762xCF4bkpsX6lO/FOXRVVr/JBsVEcWX/uo6jiG4djCQIoJCNS
-	 NkqaMLhJiLGUBHWK6ORADoCeBrY+A7LBxVSh8mg3qq2fMSzzWrfWsfOkH/jNx6SZ8INCg
-	 5aLZJmQg2I35RkaGLfTZYKMrkhW/KpCUVaRbEVFtZaK7BA3Q4hb4e4V0ZOSsPwsG80v+2
-	 4n4X8GOF9qB4RDm7pqyvvhdRkJ+qrom7qj7xI+5xkjU4ISOD+QXXKJRB4A6dhMCGtRxhQ
-	 iT93o1rljl4i8zNESwFkeaGUMkU/C41b/kM0l+LyGDhg443jK3pXZsCd8qrnftxb+FQ==
+	bh=o431Tw10LszC2V1Uv9HWe6VBCp/9n4XWQz8uJL/s53U=;
+	b=kayz5PBb05OSVrqlZtLNFHpd2A0l5Q0tMdht37LtW0mgkA5AHw1V5aBzK1VT9aZ4H1tc
+	 fwzNE6m3UofK++z4w43XD7k+0+P5TeDv//DnIDEwCeSwD2CH0ynX8Bf+sQ7Vt3O5eCGhF
+	 3tUYTDPKI7jiEFXKG1Aj1rRtf2A+uEwyH8c0pONE74uuWhlU+jZDlYyDQJBvczwq5Bm4/
+	 1UgISTymyU4W1Y4Cq/s/bxuS9fqcjNichCd5cVuQ5/QYfMwerVuo5nafcjs5GiGVWELCQ
+	 eko0bRAJqdMyh4NaDhCyNwNNh4ufuvbOH7f5KZ+fOI0X0P+Zk39nrlJrj0Lm7mci6xA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KYljh43v;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=RB6r5HHZ;
+	arc=none smtp.remote-ip=209.85.128.44
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9EB606A322
-	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 05:17:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E9EB606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7375460A2615
+	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 05:17:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7375460A2615
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KYljh43v
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a16aaf2067so16290345e9.0
-        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 22:17:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=RB6r5HHZ
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a1e266fca2so9649055e9.3
+        for <llvm@lists.linux.dev>; Wed, 21 Oct 2026 22:17:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792646251; x=1793251051; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1792646254; x=1793251054; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SgSVPju/oDwYCUMu1qXQuK1g6vGXDkUziO98RSaFsPc=;
-        b=KYljh43vcPj1aShabI9WT6rACHZqyNhY5Nyy8O7Pjy3c625vMyewpi5zLXum6iX0hc
-         SV7Vt44zy5ZlsOj6Pq03Dp49Wf3uh4YIVWTeRJIdGzodkxgE06w6iRhst0E38rou4Czw
-         +2Ktq2835BqqoOkPJLS1FCIL/3JjG5y67MgHHWP96oDrml+9kg/DFmQ+i8vyn7v3iSRw
-         I3SK46W90tMAF3Igf3Laxvvij42WX/UaOoEhztfolMswdcUF0AqY3M0r6oo40/IjJGCJ
-         I8USgpab6pnRbp+7pxeKlvlJgJI7FD0VzDDHKzyj9pZmxgqu8sDfN11CnPQipKJQaoev
-         XtUw==
+        bh=o431Tw10LszC2V1Uv9HWe6VBCp/9n4XWQz8uJL/s53U=;
+        b=RB6r5HHZr5iKJfOheN04qcXcOZL7XVnogvvgoQ1Y/+0va17M5w2lT9fIiuaeDPVFaX
+         VauSlIZVhUnjkiN9q9hEax/rJOxGLwYQPhZduPWsPn2Vuapw0keMZqd2M/T8el2pQFrm
+         /YQtzvhAl9masaX7zLkgeA4gugbvR25u5q/ldguAB1xjKSuNoior05Rl+g4xrDPohfSA
+         LMh87vakMBzeMbWADIUN5g1RRI8tGr0HXjTGAKxbRgZo4vVlCvfpyQ47G68Gn9NpQgDh
+         n6D6nDuvR9bFxQ2IZ4KezJuREZ0RsC7QEY7FWVaxSk3E/Dcfl51Cc6dKldhl6OR1DW/p
+         yx2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792646251; x=1793251051;
+        d=1e100.net; s=20260707; t=1792646254; x=1793251054;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SgSVPju/oDwYCUMu1qXQuK1g6vGXDkUziO98RSaFsPc=;
-        b=JNIKk86Jt1weAoIP+MDKNzXB/LO4Mx2CbELW2LZ6D8NvInxS8rutTj0o4/Eny2LGtr
-         emdb4du8NnfdLVWoOD8pcLANO9hXci9j/jnbEfTdN2SXQPwdHlby5O22vI7qKW7Mmcsg
-         NimawardNTr1xhICH/MQZzXKLEm8ohOeMy+LOzz443GpdM0N7sgdqSz0aJcTXKyRBEhi
-         dCikWSOOz1HhcciU78LJ5ztpibZ5nxbhosgYYWug7X/pggCmBIYjuNvT7QtG8zNyq+sf
-         TEnksy8ZGdsvMzIyHDX7FmVpW4QBY5LB/nn+ZH3Dv2+u7oImnLn/3J1FPOciBzr5WbAs
-         f2FA==
-X-Forwarded-Encrypted: i=1; AKwUvBw3AxniA8tyZZbA9n12a0qjoiQHiTMlOw2g8IJondczFMvBPU0faZazUHD4kWmwIXMYCc+B@lists.linux.dev
-X-Gm-Message-State: AFq9FYLSmrkSQMOYxfhaAt9KyoR8ceD89nlUHNYOl1rWGBsJc5XaoG+F
-	dpURqkWy1pJzkFw0iZUyxea3rK5NWGlUbqGHOIzTyOJ3BA7PJ5lNXETx
-X-Gm-Gg: AYBFou24xZggD7+t1BMoVnDa6Vo+Oxtq37Z3iHcMWX19zCSHsDUjQK61voAscXDXMnr
-	jNlI4eRXy2w0QiBHRhXACcQ4jBUqtgCMM/ElBZJkDIKfzTMoTp8GJgSwBFSNZebPQqnIB+ssc8I
-	ss/0Kjbhp6m9zUS6LwA11l0zbriuhULQjnBR40qfer5HXCSZPapDzYI/jEoyGnO/K8zevb5rI86
-	CD1M/RjG+YQNbZr6LPFbnDn3ldEyP87XQAEGUSHepAODZjbguHRn8X/DdqrkxagUbYivJ7RX5HH
-	4dKcRyflWmsi4aOHjA4E/tk4dMkGlmLmvwPKcuE2tzkKOqdwf3bQjQb3oKCazt3igzQBXc2RWmZ
-	COPVh4CuUfhQzURfwiZv3CzmyBjLuX7RxAaJOJF+ojaHSgbnhDll7hwICm8+J565V9cuu3ligZm
-	LC79yM7j0wGgFMntnPHSlRJwQJA5+H6jOcNS0gc9RNLuwbPyLLx153BlUs2OI245jCSZQLvjnV/
-	FJ21fRRdQGj28cSLa91beRbj/vU+YneEWhFtkyDA5jIQPMMLIx5OaaXecxfx+fVFQBmQaEiru8X
-	d8JK3T75WxI4ZuGtX8To8v2esGpJyI4F39vVzurMfjkuy5VnT5lFl0jHNGdVuaBaPPYNbEof02p
-	xYi2QLC130H0fR6iDjFOA6gdajcXoBxZ4buohEBhWiTgiuTRU4aJilp0nV/k=
-X-Received: by 2002:a05:600d:8653:20b0:4a2:5ca:767f with SMTP id 5b1f17b1804b1-4a205ca7975mr15129905e9.4.1792646250340;
-        Wed, 21 Oct 2026 22:17:30 -0700 (PDT)
+        bh=o431Tw10LszC2V1Uv9HWe6VBCp/9n4XWQz8uJL/s53U=;
+        b=B+soLQEps5rLTnElyaqBKC7DLmiXdqqa9de4uP5fpnWSP1QdKtjGhfWa365GUruHEY
+         w7k+i76ARMJEM/KHyM20XUfdlGUYMHDoZ16mgcsSDYmzTxqh+qIYWVTYF6PK/o3OMoCe
+         HMgtPhgYjRQu1Ke4sC2k6q+ABYRwIMPESwCOvIp9yEEZ7VKBjQJllHea4jip4+tMSpue
+         FdCgw8pMki2MbTNFyBQL1uBzIjSHqp6gvq93qtdPRQeoW4Vz1gmYsk2tfFJ4z7bw++hk
+         Gz6iGCdv4txLLQnMqpsal7KAuEXNZt/KdXbpaGQSKNdy7RpwbtWt9Wr2C5CY60qDwLPA
+         90qw==
+X-Forwarded-Encrypted: i=1; AKwUvBxTg4oTGiNZTcDO76X+ySXaxDbhVlQ7nOcqFx6uv3KENuKqUxye5QKP/X7kaYC04IjJZzLi@lists.linux.dev
+X-Gm-Message-State: AFq9FYI3R86X6S1hkeX1wcghQB0667uMamtUTmubqsRgUE0oaORdRoJF
+	1yr7cMnpCVJmrdsJvRdr480ZZCMkZaqKOmjylb0svK88f3lXiJTKWBaE
+X-Gm-Gg: AYBFou0YD6W4NzqCX/QjuiVqzyF7dYljiRjI6s1zgGxaJ+q/2iHKMIKo+lwJDSsPnsP
+	nvmlB15GvF51m5N0ANGhRjqwW4/7NEkdptZWHniZOyE0Ff31q1KBiqQNYezgBtCpNnkmV7q4mH8
+	+CaRJazMum0gTVvCMQbyxRsNOZoK0vAp6IHYz9vIurg2jlO1DkYy2C4H3dwShEMJFvi+QOMpUHM
+	8ghwFzLdtnnaQUHv6RVIEgFgufe+oe3sDez9b7BeG/1i4WtCT3K9vzBqKxXeYkgJMFj28oJQGID
+	FDjcWEsmu0mrxoPzM3YsPPczTkR1tRzGMbRkx4bNfO7i/CZKRF7EfV8yYGDBQ2eP6AIYJMzWFHa
+	hiuWwZank+t5WU5ibLbTS/P3ivRMBHCUkcofljMIc9ctQZjh51x0jCd2uFacgeunZBhsob1xInI
+	ArOkwE87hz6d5rO/pml8KoLKt54A6+uhOKMUjVvF40n5FmYhiVzTNzP30EkQXS2xJ3qsqgdC7K4
+	TvaePl0N9srLn+uth4VXkfdTzkL9b3ymsfdiqVP6cocVaamDCmmG/KHvAnLJoV8qoIFNYwhLIJj
+	uJpoPhJVoix5fmKIpiua2Kjgbj3F2H6czPvydo1bBHxnuJ3UZAMIz1G/i9iadvNOkvyMOq7iniM
+	Bu/RW3yPRBbep02o2U+Sv9gFliwTrnjRY+Q/5+uXKiMNV1k84knVCsRHJf8c=
+X-Received: by 2002:a05:600c:4e03:b0:49f:fe39:5bc8 with SMTP id 5b1f17b1804b1-4a1fdd14200mr75350095e9.12.1792646253837;
+        Wed, 21 Oct 2026 22:17:33 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-ad43-d501-2c28-bb72-120d-420e.310.pool.telefonica.de. [2a02:3100:ad43:d501:2c28:bb72:120d:420e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1fd0f4427sm90362275e9.3.2026.10.21.22.17.27
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1fd0f4427sm90362275e9.3.2026.10.21.22.17.30
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 21 Oct 2026 22:17:29 -0700 (PDT)
+        Wed, 21 Oct 2026 22:17:32 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -116,9 +116,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-doc@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 06/12] lockdep: Prepare IRQ-on state from a hardirq return tail
-Date: Thu, 22 Oct 2026 07:16:48 +0200
-Message-Id: <20261022051654.79224-7-kmehltretter@gmail.com>
+Subject: [RFC PATCH 07/12] entry: Carry ordinary-hardirq provenance through kernel return
+Date: Thu, 22 Oct 2026 07:16:49 +0200
+Message-Id: <20261022051654.79224-8-kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20261022051654.79224-1-kmehltretter@gmail.com>
 References: <20261022051654.79224-1-kmehltretter@gmail.com>
@@ -133,112 +133,81 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-lockdep_hardirqs_on_prepare() rejects any live hardirq context. An ordinary
-hardirq return tail needs to retain one synthetic hardirq nesting level
-through traceable IRQ-on preparation so callbacks remain classified as
-hardirq work.
+The entry state can cross hardirq teardown and a possible reschedule before
+the architecture completes its return tail. At that point preempt_count()
+no longer identifies whether the original entry was an ordinary hardirq, a
+synchronous exception, or an NMI-like event.
 
-Factor the common preparation and add a return-tail variant which accepts
-exactly one nesting level. Keep the ordinary helper restricted to zero.
-Neither helper changes IRQ or hardirq state. The caller must remove the
-tail context before lockdep_hardirqs_on().
+Record ordinary-hardirq provenance in irqentry_state_t and initialize it
+in every entry path. A later return tail can restore hardirq classification
+only for entries which established the pre-counted hardirq lifecycle.
 
 Assisted-by: LLM
 ---
- include/linux/irqflags.h |  2 ++
- kernel/locking/lockdep.c | 42 ++++++++++++++++++++++++++++------------
- 2 files changed, 32 insertions(+), 12 deletions(-)
+ include/linux/irq-entry-common.h | 4 ++++
+ kernel/entry/common.c            | 6 +++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
-index e98313a8ad307..c7601a173e55b 100644
---- a/include/linux/irqflags.h
-+++ b/include/linux/irqflags.h
-@@ -25,6 +25,7 @@ struct task_struct;
-   extern void lockdep_softirqs_on(unsigned long ip);
-   extern void lockdep_softirqs_off(unsigned long ip);
-   extern void lockdep_hardirqs_on_prepare(void);
-+void lockdep_hardirqs_on_prepare_irqtail(void);
-   extern void lockdep_hardirqs_on(unsigned long ip);
-   extern void lockdep_hardirqs_off(unsigned long ip);
-   extern void lockdep_cleanup_dead_cpu(unsigned int cpu,
-@@ -33,6 +34,7 @@ struct task_struct;
-   static inline void lockdep_softirqs_on(unsigned long ip) { }
-   static inline void lockdep_softirqs_off(unsigned long ip) { }
-   static inline void lockdep_hardirqs_on_prepare(void) { }
-+static inline void lockdep_hardirqs_on_prepare_irqtail(void) { }
-   static inline void lockdep_hardirqs_on(unsigned long ip) { }
-   static inline void lockdep_hardirqs_off(unsigned long ip) { }
-   static inline void lockdep_cleanup_dead_cpu(unsigned int cpu,
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 01dba8fb32a90..457bef3ea1689 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -4395,15 +4395,7 @@ static void __trace_hardirqs_on_caller(void)
- 		mark_held_locks(curr, LOCK_ENABLED_SOFTIRQ);
- }
+diff --git a/include/linux/irq-entry-common.h b/include/linux/irq-entry-common.h
+index 24c2b9fdff4f4..2ed637cf66b0c 100644
+--- a/include/linux/irq-entry-common.h
++++ b/include/linux/irq-entry-common.h
+@@ -333,6 +333,8 @@ static __always_inline void irqentry_exit_to_user_mode(struct pt_regs *regs)
+  *            exit path has to invoke ct_irq_exit().
+  * @lockdep: Used exclusively in the irqentry_nmi_*() calls; ensures that
+  *           lockdep state is restored correctly on exit from nmi.
++ * @hardirq: Records that irqentry_hardirq_enter() established this state for
++ *           an ordinary hard interrupt.
+  *
+  * This opaque object is filled in by the irqentry_*_enter() functions and
+  * must be passed back into the corresponding irqentry_*_exit() functions
+@@ -347,6 +349,7 @@ typedef struct irqentry_state {
+ 		bool	exit_rcu;
+ 		bool	lockdep;
+ 	};
++	bool		hardirq;
+ } irqentry_state_t;
+ #endif
  
--/**
-- * lockdep_hardirqs_on_prepare - Prepare for enabling interrupts
-- *
-- * Invoked before a possible transition to RCU idle from exit to user or
-- * guest mode. This ensures that all RCU operations are done before RCU
-- * stops watching. After the RCU transition lockdep_hardirqs_on() has to be
-- * invoked to set the final state.
-- */
--void lockdep_hardirqs_on_prepare(void)
-+static void __lockdep_hardirqs_on_prepare(unsigned int expected_context)
+@@ -396,6 +399,7 @@ __irqentry_enter_from_kernel_mode(struct pt_regs *regs, bool hardirq)
  {
- 	if (unlikely(!debug_locks))
- 		return;
-@@ -4442,10 +4434,11 @@ void lockdep_hardirqs_on_prepare(void)
- 		return;
+ 	irqentry_state_t ret = {
+ 		.exit_rcu = false,
++		.hardirq = hardirq,
+ 	};
  
  	/*
--	 * Can't allow enabling interrupts while in an interrupt handler,
--	 * that's general bad form and such. Recursion, limited stack etc..
-+	 * Ordinary IRQ enable requires no hardirq context. The interrupt return
-+	 * tail variant permits exactly the synthetic context it is about to
-+	 * remove.
- 	 */
--	if (DEBUG_LOCKS_WARN_ON(lockdep_hardirq_context()))
-+	if (DEBUG_LOCKS_WARN_ON(lockdep_hardirq_context() != expected_context))
- 		return;
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index 36c43d3c76eae..ba5959a84bc4a 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -112,6 +112,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+ 	if (user_mode(regs)) {
+ 		irqentry_state_t ret = {
+ 			.exit_rcu = false,
++			.hardirq = false,
+ 		};
  
- 	current->hardirq_chain_key = current->curr_chain_key;
-@@ -4454,8 +4447,33 @@ void lockdep_hardirqs_on_prepare(void)
- 	__trace_hardirqs_on_caller();
- 	lockdep_recursion_finish();
- }
-+
-+/**
-+ * lockdep_hardirqs_on_prepare - Prepare for enabling interrupts
-+ *
-+ * Invoked before a possible transition to RCU idle from exit to user or
-+ * guest mode. This ensures that all RCU operations are done before RCU
-+ * stops watching. After the RCU transition lockdep_hardirqs_on() has to be
-+ * invoked to set the final state.
-+ */
-+void lockdep_hardirqs_on_prepare(void)
-+{
-+	__lockdep_hardirqs_on_prepare(0);
-+}
- EXPORT_SYMBOL_GPL(lockdep_hardirqs_on_prepare);
+ 		irqentry_enter_from_user_mode(regs);
+@@ -140,6 +141,7 @@ noinstr irqentry_state_t irqentry_hardirq_enter(struct pt_regs *regs)
+ 	if (user_mode(regs)) {
+ 		irqentry_state_t ret = {
+ 			.exit_rcu = false,
++			.hardirq = true,
+ 		};
  
-+/**
-+ * lockdep_hardirqs_on_prepare_irqtail - Prepare an interrupt return tail
-+ *
-+ * Like lockdep_hardirqs_on_prepare(), but invoked while the single synthetic
-+ * lockdep hardirq context covering an interrupt return tail is still active.
-+ * The caller must remove that context before lockdep_hardirqs_on().
-+ */
-+void lockdep_hardirqs_on_prepare_irqtail(void)
-+{
-+	__lockdep_hardirqs_on_prepare(1);
-+}
-+
- void noinstr lockdep_hardirqs_on(unsigned long ip)
+ 		__enter_from_user_mode(regs, true);
+@@ -199,7 +201,9 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+ 
+ irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs)
  {
- 	struct irqtrace_events *trace = &current->irqtrace;
+-	irqentry_state_t irq_state;
++	irqentry_state_t irq_state = {
++		.hardirq = false,
++	};
+ 
+ 	irq_state.lockdep = lockdep_hardirqs_enabled_raw();
+ 
 -- 
 2.39.5 (Apple Git-154)
 
