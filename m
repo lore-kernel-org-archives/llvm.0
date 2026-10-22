@@ -1,100 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792709899;
-	b=QMSgpgw4CzB993X/5XuvOa8ke3ls713MQ7JyYyUXc00PzaOo02ETWj5rkvY9JXROHLB8
-	 djtvgA1R27yZGsT2NZ8rdf2kLh20sz4ytq8SzEVuU2WKKoNTwg74AyRWSTgMTX/tPizm4
-	 kgYJB9k9AjIejYgcHyqoeq6qz3AshmsOegOvyx08KvRkefEKXDFRdR8VA9bc6HKzSIFWC
-	 uYH10sVC6/jKlpsMjJbMP8aHyzbjthOUmvVcFNOa+q+G4RrSSH+8lSSwyVT+ztSAHHghT
-	 PusZjgm4PwyBkvaNZmBTsSfcgDyhfuh6KvFcVMmZj6bytbqCrTPO34dg5ldBfk0A+YQ==
+	t=1792711670;
+	b=LZOdUeS01OaB+HkMiQfFhYYAdq15SsCpii5uCzSlwTnLOuPTZdEnjVYEOSnwzbwlQacl
+	 w3ZMwBpf4XFaKVIqfwk56X98cJvsUbpcDw8dTKBFkcs/Aurwf/TjGRJppsjitNK7bB2oX
+	 qPthla3QGd1eGCMtjxYMFXmQUx3J5L61lrdcmTkW/zligzHjD4l7R2+kt7esipumtUnwp
+	 kMUZ+FXR7NMfcEIl4ZMuwe24B/mGfE05E0vbDXb9ojiHSXXD3T0Hx8Mt/KDYAHyJVGOi0
+	 z98SkW2rpeJs5b3ZU4A7I9j596T2EYkLNScdQTWGEDfqQWFSrjHmviv62D0hRG4pXnQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792709899;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=4h8EJtUuQDNTtWsFUTYQGXARXr8rvvu+aTdvO93crQM=;
-	b=ONu1VlCGfCgpIGuyRW22SAmTSv/zIYfLgTi2f4+Mzr7hPRpLNa+wOm+p4ExH5dJHDZwv
-	 qVe1K1hQEVel4sPL3cUA/Q9aZEOcgft1+n/MLVF48DaZbeSgZH/Au9lx02ShhPtp6/7hn
-	 beovekKO4symcM2geFxE7E0w0h42lARhH42/6FtKXwkAPszKuefWJDSpmRCA523kfh8+r
-	 7vle1GJl04xbonQMlWl7tpbKzdyIjgNck3OWIpEosQTjx5aLP73PQLBX+p5FbbPuP2Wej
-	 b8pVQv9BcC1nveYQtdxIYv9OE7BXLV9Sc7T2wEuYTnQK0gVBoiBroVxTwSBLTmJR1tQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792711670;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=c/PcMTlVSiDoElKibJKXS/wLSV8AGDaIx0CeSsAhKHo=;
+	b=VcXEGWxcbVG9vLRjck+3wUvjw2VTZ2wPvOROFi4j0ThuEnSzaV8ruJKATRLv5I8wpzxZ
+	 Re+mvh2zDUXg5yuPdW1uCDlrhaYrWM0BWJ3O2Zjwn2YMLkvf0XzrJECMaIFtf+I+MFlUt
+	 olsx1sGziRGXHCAKrAdTUf1kOgGnOr1yNWCx1q817GsYLeImeSsK6AonE7k29IVMz/MLU
+	 8+pey3NIbz/WpD4lOpneVhETKQn2C/5t24AZ+Z8K+S6c9en73sRgfIaygsnbK7+OmEoyO
+	 ljxiyZKY8B2cumhnJiWDk+zUARkKWMufoXhzkbYmRitvgTbXmgrIKnczi1eyqh9r4Ow==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=CPkDhxHo;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.43
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZQSKULeX;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88B3606A31A;
+	Thu, 22 Oct 2026 23:27:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZQSKULeX
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1792711669;
+	b=OdDnDGzY56DvWwp1T7EniCdmw5xdvE7vJTuSKosrNSp/5AWscd91/7h+sEnwRSj+xTG2
+	 a7bCfY4/zjzPnz9SKB9rnpjBDbqAXEf2bj3FeoEC5jj78POiBHpkDTOhVSE2c/5bx1Ou+
+	 FvOWuCZ0Pp1ONg0cKVLOQeZ1ZYfdolPZyfWxzFMFOIMkhkFfbW7EHbOTtgMdOtLbWgpBV
+	 FEOSSzdVs7TV9vq5uPmMts48HdWOkzMQayTzgwrofTGWrf3Sc8wqumAsStnszzZm2cnLX
+	 Uze+yd72D/Cdeyjuj8p1HAjttumFPyB1mmqRAs193fEp2/JG2GWYJ83WzfJHlljjtAQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792711669;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=c/PcMTlVSiDoElKibJKXS/wLSV8AGDaIx0CeSsAhKHo=;
+	b=vazLOo4FNvuZeDEN3cla2JHMcyVdZ6JD+Y+Tin39CdAOvsOqAP/LEkYyWBdJDw26TIOL
+	 hHDWaTWuRrfEwy3ZXnrLa1wWmDXT4WiSQp8+9kxVw0sxvyNFNrAaqk6+3Q6ocNpfm3gBI
+	 yh3Cc3APB7WZTsbFKN/XmiGlwWfK5IFFfp0+EpWAGmUVWKJaP34riVASSgZyoE88UJKfB
+	 kp6/8iEM5J0rXOP723hFqFIKJrmOBQSxI9GviW5uoego432m7wKnwN/GEwsFe+jeykCZu
+	 29n0m2cDQa0PWZkct19DZ1vazhOD6TmnKxW067AckI4BOesP55OsFtPUc9s7HoSUNjw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B332606A31D
-	for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 22:58:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B332606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=CPkDhxHo
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6afac79b3a3so1950a12.1
-        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 15:58:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792709896; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pTzT0jkwQ+Fo57ldks+80l21HsHHGDhF4lrneseK+EGj3GOy0QgtJ47cnoDRgyVzhP
-         Bn5qmQo/uGjzvud8/H9olCqF8EnJIcCcDM81nnIamV348LXNz05NAQhd+1mYrIEw7TMY
-         rHEz6AFScK1UC77m0bdeSYYwNcI5W7rmK8/v6FN1OXMEZRMD1nyLWKaxBWgC+pGkegNW
-         S0stK42bwn3Iw3oy0fWOTtbxCx3tRdm2r3nNbFWoEH/MkYeB8tKd5/ux8JvGR4q3Wlbp
-         Y7hE6HKVAD5Wr9QfpeSR0ynYudfqv0yDprFbblBxJorBPqfgAcKH/MsV+RLMlZfVNU9H
-         cVQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4h8EJtUuQDNTtWsFUTYQGXARXr8rvvu+aTdvO93crQM=;
-        fh=4SRPmKVH30RgDV+3pBFLBQVFUXfBQo6SvOeYkExiU/c=;
-        b=CvUnipEpjYmrdakhWhuPqTjGGXwXJ/i9YXgAicuPiA7loah9q6zBTLNEvfGTFN9Imp
-         uYyd61jcA5XxI3ZcjrkHUOWsz3r917VAMu7JHe3ISu2Kzb+aUwOsoX68X/FqVRXbHGnd
-         fvXJgxHnZ3B7EjgTv+FQUYdQeYNI8zp2XyFGR2VT5S3ccxAjM24Y+RXJToqJTRf8g5x2
-         xLqUzQd9Qgna0DhfNy20/XQ7GkzX/jSNlDCHp+4XMp+xRxUEkFagn9H3f2DF5vcGUts3
-         HeYH+/S51jyjnvTHbH9khnIxF4lOTFclyT9ltrkLL2Ao+bfcOUqG8b0yTAil9n+udrZE
-         LKUw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792709896; x=1793314696; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=4h8EJtUuQDNTtWsFUTYQGXARXr8rvvu+aTdvO93crQM=;
-        b=CPkDhxHoBQPPYPkZGcIOGiKjGgPw46j7OCu13nbhybp0CLedT+KkqgjSz7bX8kgUKx
-         qMScXzYJyd8Zr/wVfDf357TfnB3l+fV++I9izep6uGV0LXdEQwiIYtOm4QFLBXrRh3/Q
-         sNnQCgzSEo+4N+/y8YvlCXGVlvqI/gmhY9CP1zdDvevRV23BwyDGhzkut/5edk1CQYga
-         2ODDgtZjjlFoqvmGq2gvhQK5y6mvyVjogiKTZ+OHZw1yr3IcPN8FejYM/1oaAG5zYK6F
-         bP4apcyLLs/QyMxraE6a5P5VkBK/hfvpX+wXUjr+qJ8zoGgbQUWbYPvLnD5azVc3bRyb
-         t/Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792709896; x=1793314696;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4h8EJtUuQDNTtWsFUTYQGXARXr8rvvu+aTdvO93crQM=;
-        b=tC9A+Ppct+/KryLEcca4e77uV/ZGPT8gSZ49XMg2jooNtcxd+k1RoXmxL71zuwfAs7
-         W7Lp9mSNem2A+6w8E1lcy4POA0dC9v36+KRStOcC2AR1gk65aQ5XfkzJnIeaSZJgcWQj
-         kguhsADNwD9Y7mIbeYD7EuWDlheDsLdCKpB/J2SNH1Z0Zz/cA3wVD8adp+IjVYH/y+PU
-         3THT6j8SkUe7r/zUOciM3AoS5HYwDc07/hmUsnfNZ3yXS3I7L+x0caW+xUstKcrcYsTH
-         6lVnfj7GCPLPtQMMLaA6nK2ah+f5FD/ElWasJOqPqF8Vgu66+9Vn9AuJPAAKlXOnhe5T
-         RKxA==
-X-Forwarded-Encrypted: i=1; AKwUvBw/ghiEuhLFn3ceJXe+R0kAPI1VibX3wLnimNx8M8P2LBeeJ4aAzlGqYtBLPk0hm2hwa3wo@lists.linux.dev
-X-Gm-Message-State: AFq9FYI95iwZ0NoR989BUbniycgDJ+REF7bldpl2rvHDWYjfSZm9hmTJ
-	kSX6f2ZBdukiudD3z0DZE5KKps7NkL99wq/lAl3zu5J23Jbf7vBJ+C8wmKlaKXFZpwhspRQKRuw
-	tlh1mTvaWEGOCamW/aOzofsI9DMoNC7Etdk3oVB5A
-X-Gm-Gg: AYBFou39WAI/Rc6I4bNPh8xXDyOjLkBmYI2EkuRwZZaWV0PMdFSblkrEMsW5B949G+y
-	HnV8tjcRv1SoZ4OSWI1AiSpWNNI1O0vBIBeX7fRVnXlh+gxW5chlxCWUsEiiUlrmaFQ7VJKL0Qp
-	I3J2e5jQcWutHSjQiHHswqp57EblRGxNycD6GzyM8CN8pEEqluTvJHopWhVbA9IUkZvVEDzp08P
-	MG+dQSPNiOCGvt+HIqPQg75OulDz09m6Msy4yXaFCydYSnymT6C4UFKFdicWK7ADfBZeIbCUy7i
-	4iuFaHL6JTRPX6P+SCpRMo8ynmuVydPXuz6i7+f7jQCQ7sHxZujwn/RT+BytHHaKFP9z7jsHrRO
-	lA+zlx249UmM/+C0tchfQvX3OHVyuMub5Vg+h8P+FcZGhjDs4uUfrvdbcue/8gRaO
-X-Received: by 2002:a05:6402:20cc:20b0:6b1:a517:5bce with SMTP id
- 4fb4d7f45d1cf-6b43505cab5mr9309a12.16.1792709896086; Thu, 22 Oct 2026
- 15:58:16 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D8D641F031E1;
+	Thu, 22 Oct 2026 23:27:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792711669;
+	bh=c/PcMTlVSiDoElKibJKXS/wLSV8AGDaIx0CeSsAhKHo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=ZQSKULeXnXScbq7el8zdVZpkJ4TsdFH28e0FrTRaOeA5cfWnmSS3QuwU98oDrZxKr
+	 FnwxemLVFmqsHggH/zit2cS6iMXxsfeqoX/IUltqaTbPtCWiJKJdbalR93Iu2ps2pv
+	 +mrBKDVyE85rlBQhbKd+zp/dzKzlQzjYF7V6DfOEsy4sKR6KCCSpiFOKZi89PTcE2r
+	 UpW2/p8pFA5DUxGHo7LO7KWvX24MGBFsESXz7ah8CYy/Y23M0lI5gEPUN+KZu4whjb
+	 rNupZnuwugqT1wkU5rYDz773icp7ZX7J6SAzxvxD4h2a4yadhHBEu2B7I4Jau4Q96N
+	 edrYiTZY1O0tQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 41C5041FDA;
+	Thu, 22 Oct 2026 23:27:48 +0000 (UTC)
+From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
+Date: Thu, 22 Oct 2026 16:27:33 -0700
+Subject: [PATCH RFC v2 01/50] KVM: guest_memfd: Split folio allocation and
+ insertion in kvm_gmem_get_folio
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,73 +83,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261014-update-autofdo-split-machine-function-option-v1-1-5c71b3005e89@kernel.org>
-In-Reply-To: <20261014-update-autofdo-split-machine-function-option-v1-1-5c71b3005e89@kernel.org>
-From: Rong Xu <xur@google.com>
-Date: Thu, 22 Oct 2026 15:58:04 -0700
-X-Gm-Features: AclHuK8dO3MsAmO6cAa68r7ozQ6JK-D1flEqoU6M1Xnqf0FQ7RSBHTS-OpOYYkM
-Message-ID: <CAF1bQ=SN8wZ1hKDTtGspBiZ8VQBoUtQP6uNioO-ZOOvS2tLZAg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: AutoFDO: Update split machine function argument
- for upstream rename
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>, Han Shen <shenhan@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261022-gmem-alternative-providers-v2-1-5dd1dc6c660a@google.com>
+References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
+In-Reply-To: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
+To: Alex Williamson <alex@shazbot.org>, Alexander Graf <graf@amazon.de>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Alexey Kardashevskiy <aik@amd.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+ Ashish Kalra <ashish.kalra@amd.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Baolu Lu <baolu.lu@linux.intel.com>, Bill Wendling <morbo@google.com>, 
+ Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Christian Brauner <brauner@kernel.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Connor Williamson <connordw@amazon.com>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, 
+ Dave Jiang <dave.jiang@intel.com>, David Hildenbrand <david@kernel.org>, 
+ David Rientjes <rientjes@google.com>, David Woodhouse <dwmw2@infradead.org>, 
+ Erdem Aktas <erdemaktas@google.com>, Frank van der Linden <fvdl@google.com>, 
+ Fred Griffoul <fgriffo@amazon.co.uk>, Fred Griffoul <griffoul@gmail.com>, 
+ Gregory Price <gourry@gourry.net>, "H. Peter Anvin" <hpa@zytor.com>, 
+ Hugh Dickins <hughd@google.com>, Ingo Molnar <mingo@redhat.com>, 
+ Jacob Pan <jacob.pan@linux.microsoft.com>, 
+ James Houghton <jthoughton@google.com>, Jan Kara <jack@suse.cz>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Jianxiong Gao <jxgao@google.com>, 
+ Joerg Roedel <joro@8bytes.org>, Joey Gouly <joey.gouly@arm.com>, 
+ John Starks <John.Starks@microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Justin Stitt <justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>, 
+ Lorenzo Stoakes <ljs@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Michael Roth <michael.roth@amd.com>, Mike Rapoport <rppt@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Nicolin Chen <nicolinc@nvidia.com>, Oliver Upton <oupton@kernel.org>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Pratyush Yadav <pratyush@kernel.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Samiullah Khawaja <skhawaja@google.com>, 
+ Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+ Steffen Eiden <seiden@linux.ibm.com>, Steven Price <steven.price@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Tarun Sahu <tarunsahu@google.com>, Thomas Gleixner <tglx@kernel.org>, 
+ Tom Lendacky <thomas.lendacky@amd.com>, Tycho Andersen <tycho@kernel.org>, 
+ Vishal Annapurve <vannapurve@google.com>, 
+ Vlastimil Babka <vbabka@kernel.org>, Will Deacon <will@kernel.org>, 
+ Xu Yilun <yilun.xu@linux.intel.com>, Yan Zhao <yan.y.zhao@intel.com>, 
+ Zenghui Yu <yuzenghui@huawei.com>, x86@kernel.org, 
+ Shuah Khan <skhan@linuxfoundation.org>, Fuad Tabba <fuad.tabba@linux.dev>
+Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
+ Ackerley Tng <ackerleytng@google.com>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792711664; l=2189;
+ i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
+ bh=GfiMpI8weIzEfe3dYmoSriDA9qkD3c7kHqz6/C+y+ss=;
+ b=hnkT7p+18c3Sr3N7f/u3g+FKFjdGy3FOvIKfYK/1YmHBg8FczOXDkZtiTAqtDKGFzJtjTl5qg
+ X9gbb0h7mF2AhytYyzNbn1jwp69oDXywATpu4DdnG1D0luF/0cv4Pae
+X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
+ pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
+X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
+ auth_id=649
+X-Original-From: Ackerley Tng <ackerleytng@google.com>
+Reply-To: ackerleytng@google.com
+Content-Transfer-Encoding: 7bit
 
-This looks good to me. Thanks for fixing this.
+From: Ackerley Tng <ackerleytng@google.com>
 
-Reviewed-by: Rong Xu <xur@google.com>
+Separate __filemap_get_folio_mpol() call in kvm_gmem_get_folio() into two
+distinct steps:
 
--Rong
+1. Allocating a folio via filemap_alloc_folio() with the NUMA policy.
+2. Inserting the allocated folio into the inode filemap.
 
-On Wed, Oct 14, 2026 at 4:40=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> A recent LLVM commit [1] renamed the internal LLVM plugin option
-> '-split-machine-functions' to '-function-splitting=3Dall', breaking the
-> AutoFDO + ThinLTO build with:
->
->   ld.lld: error: -plugin-opt=3D-: ld.lld: Unknown command line argument '=
--split-machine-functions'.  Try: 'ld.lld --help'
->
-> The plugin option is needed for in-process ThinLTO, so handle the rename
-> accordingly using ld-option.
->
-> Cc: stable@vger.kernel.org
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2186
-> Fixes: 2fd65f7afd5a ("AutoFDO: Enable machine function split optimization=
- for AutoFDO")
-> Link: https://github.com/llvm/llvm-project/commit/3e6acc87c58843e551d6e8e=
-4bf06c26712b04622 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  scripts/Makefile.autofdo | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
-> index 1442043da139..57a3aba6ffc2 100644
-> --- a/scripts/Makefile.autofdo
-> +++ b/scripts/Makefile.autofdo
-> @@ -22,7 +22,7 @@ ifdef CONFIG_LTO_CLANG_THIN
->      KBUILD_LDFLAGS +=3D --lto-sample-profile=3D$(CLANG_AUTOFDO_PROFILE)
->    endif
->    KBUILD_LDFLAGS +=3D --mllvm=3D-enable-fs-discriminator=3Dtrue --mllvm=
-=3D-improved-fs-discriminator=3Dtrue -plugin-opt=3Dthinlto
-> -  KBUILD_LDFLAGS +=3D -plugin-opt=3D-split-machine-functions
-> +  KBUILD_LDFLAGS +=3D $(call ld-option,-plugin-opt=3D-function-splitting=
-=3Dall,-plugin-opt=3D-split-machine-functions)
->  endif
->
->  export CFLAGS_AUTOFDO_CLANG RUSTFLAGS_AUTOFDO_CLANG
->
-> ---
-> base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
-> change-id: 20261014-update-autofdo-split-machine-function-option-d4edb03d=
-370c
->
-> Best regards,
-> --
-> Cheers,
-> Nathan
->
+Handle -EEXIST from filemap_add_folio() by retrying filemap_lock_folio()
+safely to manage concurrent insertions.
+
+Decouple folio allocation from filemap insertion to prepare for supporting
+other memory providers.
+
+No functional change intended.
+
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+ virt/kvm/guest_memfd.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 93f3d29d5751a..f865fa0e46840 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -131,7 +131,9 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+ 	/* TODO: Support huge pages. */
+ 	struct mempolicy *policy;
+ 	struct folio *folio;
++	int r;
+ 
++retry:
+ 	/*
+ 	 * Fast-path: See if folio is already present in mapping to avoid
+ 	 * policy_lookup.
+@@ -141,10 +143,19 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+ 		return folio;
+ 
+ 	policy = mpol_shared_policy_lookup(&GMEM_I(inode)->policy, index);
+-	folio = __filemap_get_folio_mpol(inode->i_mapping, index,
+-					 FGP_LOCK | FGP_CREAT,
+-					 mapping_gfp_mask(inode->i_mapping), policy);
++	folio = filemap_alloc_folio(mapping_gfp_mask(inode->i_mapping), 0,
++				    policy);
+ 	mpol_cond_put(policy);
++	if (!folio)
++		return ERR_PTR(-ENOMEM);
++
++	r = filemap_add_folio(inode->i_mapping, folio, index, GFP_KERNEL);
++	if (r) {
++		folio_put(folio);
++		if (r == -EEXIST)
++			goto retry;
++		return ERR_PTR(r);
++	}
+ 
+ 	/*
+ 	 * External interfaces like kvm_gmem_get_pfn() support dealing
+@@ -153,7 +164,7 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+ 	 * to be updated for anything otherwise (e.g. page-clearing
+ 	 * operations).
+ 	 */
+-	WARN_ON_ONCE(!IS_ERR(folio) && folio_order(folio));
++	WARN_ON_ONCE(folio_order(folio));
+ 
+ 	return folio;
+ }
+
+-- 
+2.56.0.257.gf7497c7d27-goog
+
+
