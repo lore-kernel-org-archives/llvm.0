@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792714663;
-	b=NellT04PCHW04EKXOk9K63Hv+BzcHOUfZBK2SSKAnRha4THwNQ8gK/kGN6wq1vf8pI4J
-	 sX9pCzbCOXEK2QnbbFvF1pIUFuq7gyF3Ba8ylrHOQD6IS+dQt2VNSk5xptTTVA+RhQdFB
-	 NDKTE4LpHoyIrbROrJuiLJRhevADDTacdTt/g1+2HuxEKebMYJ0bdM6z/btyt9XEKII8c
-	 OQPWrc1SEY5MoW+84yl1DeoAEMQ894TadTq5oVbLXF3dFhHkiyc0STy9oy9pmLX9nYbo+
-	 INWkdVQiDFgxTBzNPzp6i/gCaWtZ13m1Qz0xiflkMzK6DhjlxNG1DA7HGVg/xQOG8Jg==
+	t=1792714659;
+	b=tjiAR1gmQf27cYFE6WPm821tq7aXLSfM+SpyEhbWw4Ij4EQDotOtO2gLf4B+WOBLWrOq
+	 vZIGqfX4mZ5cgEXliSb0uK9XQ7tDyc/WxkG3f8THUevw7TwT0x60velCeZS+/cPFraXjm
+	 QDyYnf3LkGq65d2Wv5xzD7qJx39Uus8Aw4pgxvn5LNbe6W8DNprHfACcO5tIjyfpiypHW
+	 qkwayp695Z8m/OYeSAGbn+C2Sme1m3UJJUAJZg76ztCAB8lakIcIKdYDblpGgwrEiM5/T
+	 nM0fykm7MxGuRU8pX45398QYwUkn+zQgxnzgtnKPU1R4+w+bX8k2enpVZgCqQj3mv4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792714663;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792714659;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=DqleeFdjbt6KHN7sXzWbOq4/x+wnYCrVXyGZTqdZ4EU=;
-	b=sJGgETCwydXcyI6WoryiPMmrQaCRsJPiM0zCID/UdwbD3qVJubB1jdzchRnacVboTtbX
-	 UtKS32yFuT1QzTVdsN81oNPGSJv+yKES7hFUoOkm0zWCcf08RaEiAGqIyZYrGetlmUhjv
-	 GfJjOtmAXAtJWSZf+4BW+S8wfMkdBeIarA7fKIBOypjKwvn29A3paAGZxkz46pMpJQE6Z
-	 VWU90J7JSPdjMeetHohvQgSdNlyMv9Q99VRIJt/dZLrQ/D6I9NUY4B+Rh7PXkFP3Hlp4T
-	 syIGSmtlOzTfeiFUEYGN7OXdDSSpzfgXC+Q5MuY8QfBf5LxaHvzoLHU8unw2UoCuOgQ==
+	bh=FGFVdcUD4uteaXAQypaWTmH+/zCVpgMAi79JFzYNdNI=;
+	b=YBeVMU+9W96+Hgqfxcxqfr46BX3Qv8zllEQjIMH1sVtpY1LB4X0zf9xPkkmizQ7KTXzJ
+	 nktV3DXVWz+9hUX6K3o/jNJIs7tOQuVt5k+uoOED9m2WrKwZi/FTuPAgbrYB0yU1Zz1yc
+	 sufLH6e51Kg/WmzjH6rxc79mDvwnGPAEEvEOQgx4BuYVnw9f53ZUM7A/miTVo5Q7jRcC/
+	 +QU7p3H75RJ2v97v+td3Cr4JfDBVRe7l1r2oak8jpOb5hrRz3D8lsRVYIXMc4pa9DJlal
+	 lBHAi0Um21BUedt+3UDCzJ7E/r6Xkx2fC1Y70PGVHVVc9lG0ewSBIPqY3qrZd8kYlKg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=i5IQ0xdq;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=XlKYV0qK;
+	arc=none smtp.remote-ip=74.125.82.200
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FB0606A331
-	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 00:17:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1FB0606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F653606A31B
+	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 00:17:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F653606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=i5IQ0xdq
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-33c35f5ca6cso563660eec.1
-        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 17:17:42 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=XlKYV0qK
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-341eff9e381so808279eec.1
+        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 17:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792714662; x=1793319462; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1792714651; x=1793319451; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DqleeFdjbt6KHN7sXzWbOq4/x+wnYCrVXyGZTqdZ4EU=;
-        b=i5IQ0xdqbqP71SkyrUeA/bj68tvKtLZ/0Uk/NUBzZqX/q6LP9d/IMYCwHRFJxHyqgg
-         T6/W9hYfP/PSm4Z9GokwEyOt891k4zatPuSKkwL0zgl2eSbNrbN643cWpAH/jjXKPShL
-         O5zXdlv4E8LA3f2jQWzBGV2vZMPZxm12RhSnaC4vv+0S30krkaCPATw2NrcBXLQwEuYL
-         FsyF3zVJ0pkvANDQrSPuI3uWvke0b/Svce2y6+Q9ylzBcMf366tZkxWusDIIANlKw3z3
-         +4AwBy7bdyL97L7xuO3rOZYe4I/plaUWpsAR2o5rzcgi84aYSjGz3P2rMmu5ucc57fGg
-         i4zw==
+        bh=FGFVdcUD4uteaXAQypaWTmH+/zCVpgMAi79JFzYNdNI=;
+        b=XlKYV0qKQNdzO2uc9MyVl/yUuFsETdzBt88cyW0HYNuYXAvPk4I5iNR3hjV8RJllsM
+         xdd5E9+BiZmBEZ2567VVoZJf2OzDeUQZ6S1DCJOuEEFsc2fsdT6Q3j90CyVw6gNAKL0u
+         SEBqGV7o/1dZ2R+ibXOLza4a0WpkyBkAekJF1nNf1Z1LSu3o7+HgvXnt+IupNfqzsczu
+         5zpOfKO0x+ll8FBQN2qK4yvSp+2wka9gfZG5I4zQwuQFcbmcFptLZFhN6XYbCxGaoKN2
+         nqGyr3n8Q1uaboU/FpDPgcAjTPnRH5CWLnWpDmU5SIYOkM1m/AX4oYx6mWfgpIju8ssN
+         gPYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792714662; x=1793319462;
+        d=1e100.net; s=20260707; t=1792714651; x=1793319451;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DqleeFdjbt6KHN7sXzWbOq4/x+wnYCrVXyGZTqdZ4EU=;
-        b=yqembxF2xeQ190lJa75e52M2qA2kfjkNuMKETgllLR/9sOGIELSdSKnririfshFZUp
-         GiAlkMpZqELtxfOIqEcr0bKWamM1T2KVhiX9qba0d8zahT04zhsDCd5wQ0Dg/QmxKMeS
-         5AveFrAd8E8MIABm3BNmY4dgEI5TtHAz7NFHUItgG2DI+WzKxxg3bIQn2uEoGLut2ngc
-         cmLNL2tv+CCSV0mG4e2PJwdjqGvVY1psYf/Q53KeO8OOHQ3A0QRwjDXDUdrEaT+22o+C
-         7qeTE63ZDuwBvTyg3PRU6sC7dUoowYgIEPlF+5AA5uMWXtt4hwAWXXbk4OxWc2FGxBVB
-         xFkg==
-X-Forwarded-Encrypted: i=1; AKwUvBxYTZ7nGRcwUYyXHy7eaeyprWmlQZwIo1COAXQfgd8xRNJXk56SzEZPuHZFqsKhN8YjUYYQ@lists.linux.dev
-X-Gm-Message-State: AFq9FYIuXTdjI4P9fSyycEC0h782TJ/0RyH6KPGeIkx9o9hAYLffoujR
-	4G05tcRR2xux1ujJ+n4W0lF5rp1wBZUE3RJ9YSXJyPMEfr4IPM+1uK7e5lTEbG0vjQxR25XZpb5
-	nXcLJBJqmjE8dnQ==
-X-Received: from dycam14.prod.google.com ([2002:a05:7300:fc0e:b0:369:739:9a00])
+        bh=FGFVdcUD4uteaXAQypaWTmH+/zCVpgMAi79JFzYNdNI=;
+        b=0qRW8qX0+/210NvjIyLv3zF5DOHJTFv+lhJd//Lhz5+mpH4B6pdGucO8JygYuYgGd9
+         KxvoMpKR68//fry/mC0V9Yb666J//zATvOlFbAl9bElFon+neAA1pYKE5AKnMVjhP7Bs
+         0R+Smgod0ZFVIZXLl2g1EpvR/102aTetkudlDyuPAJUPnPh31tiXXEZHvjX5NjpuBHtK
+         okgHbWvu458vxqKOBggWj3/G9gLYvesKOVcoiQZ4LS/e8z2Gw0LT9KI2owSpo0/nn7qO
+         3lqVIS+OC/BqDGIkxKC8kKdqcT+gnYRIkV1T3ZESJmg+8ztj/9nTENzt/0UKzbj2oR8J
+         aX9Q==
+X-Forwarded-Encrypted: i=1; AKwUvByxYxWKdkdx/HwgSVU5whVm6u6YQfeIyMjxWHsIc+0n4/yFZs1hozDcu//ZVyUCGvMKW5Vm@lists.linux.dev
+X-Gm-Message-State: AFq9FYJgkRId7HcfoiaiOzVIabIiw8GWNbBzI+fFPqD57M9DEn1eK5vK
+	7VJ4C5iCJGaKbZh2PA+PkhGiQvtHVnws+7uRw7R/l1UgEbvTkepeyDMcOKuOYLdb2hthtwUE3KF
+	HXPJqmoFxdKMG0g==
+X-Received: from dycuf12.prod.google.com ([2002:a05:7300:10c:b0:35a:6ed3:3ee9])
  (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:1c93:b0:366:703c:5ef8 with SMTP id 5a478bee46e88-369d9731914mr883157eec.7.1792714661530;
- Thu, 22 Oct 2026 17:17:41 -0700 (PDT)
-Date: Thu, 22 Oct 2026 17:16:06 -0700
+ 2002:a05:693c:83c3:10b0:367:185e:867a with SMTP id 5a478bee46e88-369d98e5b8cmr933601eec.38.1792714650260;
+ Thu, 22 Oct 2026 17:17:30 -0700 (PDT)
+Date: Thu, 22 Oct 2026 17:16:04 -0700
 In-Reply-To: <20261023001603.560210-8-wusamuel@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261023001603.560210-8-wusamuel@google.com>
 X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
-Message-ID: <20261023001603.560210-13-wusamuel@google.com>
-Subject: [PATCH bpf-next v2 5/6] selftests/bpf: Test typeless module ksym resolution
+Message-ID: <20261023001603.560210-11-wusamuel@google.com>
+Subject: [PATCH bpf-next v2 3/6] docs/procfs: Document KALLSYMS_QUERY ioctl on /proc/kallsyms
 From: Samuel Wu <wusamuel@google.com>
 To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
@@ -100,74 +100,49 @@ Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com,
 	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Typeless module ksyms are resolved through kallsyms, but the existing
-module ksym tests (ksyms_module, ksym_race) only use typed ksyms, which
-are resolved through BTF. With KALLSYMS_QUERY, libbpf resolves module
-symbols through the module lookup path of the ioctl.
-
-Add a weak typeless extern for bpf_testmod_ksym_percpu to the ksyms test
-and check that its address matches /proc/kallsyms when bpf_testmod is
-loaded.
+Document the existence of the KALLSYMS_QUERY ioctl() in the section
+describing the /proc/kallsyms file. Refer the user to the UAPI header
+for low-level details of this programmatic interface. Add a "kallsyms"
+row to the /proc file table.
 
 Signed-off-by: Samuel Wu <wusamuel@google.com>
 ---
- tools/testing/selftests/bpf/prog_tests/ksyms.c | 7 +++++++
- tools/testing/selftests/bpf/progs/test_ksyms.c | 3 +++
- 2 files changed, 10 insertions(+)
+ Documentation/filesystems/proc.rst | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-index dc7aab532fb1..62760284f746 100644
---- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-@@ -11,6 +11,7 @@ void test_ksyms(void)
- 	struct test_ksyms *skel;
- 	struct test_ksyms__data *data;
- 	__u64 link_fops_addr, per_cpu_start_addr;
-+	__u64 testmod_ksym_addr;
- 	struct stat st;
- 	__u64 btf_size;
- 	int err;
-@@ -48,6 +49,12 @@ void test_ksyms(void)
- 	ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
- 	ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per_cpu_start");
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index c102b62023cd..a0e2fe14a01a 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -761,6 +761,7 @@ files are there, and which are missing.
+  ioports      I/O port usage
+  irq 	      Masks for irq to cpu affinity			(2.4)(smp?)
+  isapnp       ISA PnP (Plug&Play) Info				(2.4)
++ kallsyms     Kernel symbol table with dynamic queries (see text)
+  kcore        Kernel core image (can be ELF or A.OUT(deprecated in 2.4))
+  kmsg         Kernel messages
+  ksyms        Kernel symbol table
+@@ -1368,6 +1369,20 @@ Provides counts of softirq handlers serviced since boot time, for each CPU.
+     HRTIMER:         0          0          0          0
+ 	RCU:      1678       1769       2178       2250
  
-+	if (env.has_testmod &&
-+	    ASSERT_OK(kallsyms_find("bpf_testmod_ksym_percpu", &testmod_ksym_addr),
-+		      "bpf_testmod_ksym_percpu: kallsyms_find"))
-+		ASSERT_EQ(data->out__bpf_testmod_ksym, testmod_ksym_addr,
-+			  "bpf_testmod_ksym_percpu");
 +
- cleanup:
- 	test_ksyms__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/testing/selftests/bpf/progs/test_ksyms.c
-index 6c9cbb5a3bdf..69309f2a2d0a 100644
---- a/tools/testing/selftests/bpf/progs/test_ksyms.c
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
-@@ -9,6 +9,7 @@ __u64 out__bpf_link_fops = -1;
- __u64 out__bpf_link_fops1 = -1;
- __u64 out__btf_size = -1;
- __u64 out__per_cpu_start = -1;
-+__u64 out__bpf_testmod_ksym = -1;
++kallsyms
++~~~~~~~~
++
++The /proc/kallsyms file lists all symbols in vmlinux and loaded modules.
++
++In addition to sequential text reading, /proc/kallsyms provides an ioctl()-based
++API (`KALLSYMS_QUERY`) for querying specific symbols and addresses. This
++interface is binary and is meant for efficient extraction of data without
++parsing the entire text file. `struct kallsyms_query`, defined in the
++linux/fs.h UAPI header, serves as the input/output argument to the
++`KALLSYMS_QUERY` ioctl() command. See comments in the linux/fs.h UAPI header
++for details on query semantics, supported flags, and return values.
++
+ 1.3 Networking info in /proc/net
+ --------------------------------
  
- extern const void bpf_link_fops __ksym;
- extern const void __start_BTF __ksym;
-@@ -16,6 +17,7 @@ extern const void __stop_BTF __ksym;
- extern const void __per_cpu_start __ksym;
- /* non-existing symbol, weak, default to zero */
- extern const void bpf_link_fops1 __ksym __weak;
-+extern const void bpf_testmod_ksym_percpu __ksym __weak;
- 
- SEC("raw_tp/sys_enter")
- int handler(const void *ctx)
-@@ -25,6 +27,7 @@ int handler(const void *ctx)
- 	out__per_cpu_start = (__u64)&__per_cpu_start;
- 
- 	out__bpf_link_fops1 = (__u64)&bpf_link_fops1;
-+	out__bpf_testmod_ksym = (__u64)&bpf_testmod_ksym_percpu;
- 
- 	return 0;
- }
 -- 
 2.56.0.257.gf7497c7d27-goog
 
