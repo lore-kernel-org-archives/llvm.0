@@ -1,45 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792716675;
-	b=ilqPX/OLqNsjaucBhmgvrWaj3VgWEWqlMHvCn8QP9zvlBd5/7vTaLwbn32sVV/rGvbuk
-	 SgC0oB46XuX0tFV/1Iuq7vGt7Vvki0ZXfTjl2hBK/JKYds8E7XXby4fcs7H/a3vboGtwd
-	 rL+VtEGSSkt8l4PTcdeTU7LLEoOsgd41pngsV/FkQKuRHZflg1uoxkHcbybM4KVKTGjn2
-	 97uHs500eO6edIAUkSfijiC4HjvBOlEcWqJ2c0CU5wAg6KFeYoM/XaZfGlb3ye7F6uFq+
-	 5uKY3cZtl9cnFo1WWOl2J6yF870SgRW3Q5NtebTWhY0EGmQddMgqv3poqgJgLQvYBdA==
+	t=1792738165;
+	b=XlF26bLtdU3v30mingVIhQge7GuFM7px8YY+I+mraOUUdeoR5oVG36uwd/O/cfWLFbKT
+	 B2mpKBjMYXRtJJ40+ejfpCjU9cWGAuffXj5Mk/fxnBWXnVvjw/4Jr6OhoPoqcJ42vbW7i
+	 H7jV4XU0otEHLIO16+vUSqDi0gxgVPq4SKqXeJ6hunxrFNNKEAF5HIwCHA0ykiCj8fkW8
+	 P32b7HlSpNMlpjdE9Ebie7BTYahdW0dNWSJvL0sGQgkxpJs0RQFf3kgPo0lNwgkBz5vK2
+	 cgd8GLIfwWGPJRqm1nZ6G34SdNw4kXHAzDLWhiNCwhRuJrx7hEtYKdyonbQi/5G/qLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792716675;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=X5GYCdh8xmF1VOcwMI9Rmm9Dlopew8Em98MYwDhZlz0=;
-	b=ENBJa2j/Vz0kXtjh+cviIoXgNfVccn14qTrgWtXFXMFyLqdoTVMv0m7ke99pVirHmJim
-	 Ld0atMM9AXndlA5vfInaCPp2XdyVzwfAtt69kxfIDBZrc2r9wK1HeXgz10VeZ6g9WtEjd
-	 CkjN/BD8RBbPcQ9cz+IrgdDLnXAMVJkfkG+ypeZ9tpZ2vfwsdQhE5DaX6L0d5kyt1eSYn
-	 Yq5xNmUw73I+rtpcnUZgjCWKxIrxIDHYYmUL6Rp4xCtbOdwTrua2vS94+Z3bldicUKo6H
-	 nUz6Xv2+5C8pTug6a2DFAK32aL69J/w9KUjX3szrPaXEkZmk5BtCWl/aesiFrUzjCwQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792738165;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:X-Scanned-By:X-Mimecast-MFC-PROC-ID:
+	 X-Mimecast-Originator:Content-Transfer-Encoding:content-type;
+	bh=Te/e0WFVqv5SNjVug7VJizYyRLpsYmXm4GZX821MDrs=;
+	b=LN6vUyrECgCGjkRxXGBkFqG4INvVHz93yqqzeSgQ9/TrtRNJWKoYzh0hOrEm3Ic7qRFc
+	 A5f8F/C7QxdAxS4FnOFX3mSlYzcZxeoYbJYTuumMDQUIzpoyFlQdH//r+fvMJ6JUFtRmF
+	 ccYwfq24DrAt23KeIOc4YiWyPKS+PPIwhrGwWJWxdIVKLjspkoyCof872W2Bp1aCswmL9
+	 U59ywCG1s6ZOkjPK1i77K9Z8FdtgVyhEhlXH7BSEi3FYwNfLFmTq80Jc6dSgrUnyvgAun
+	 7MFHZcCFw64RKDsOqjvFTcHMSGDHns0bhgZMn2E5xm7mhD2+1ObygXVx9GYHUxmVlBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PjdbaiF2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iCifbyIR;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F92606A320;
-	Fri, 23 Oct 2026 00:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BA6606A329
+	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 06:49:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52BA6606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PjdbaiF2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9401F01825;
-	Fri, 23 Oct 2026 00:51:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792716675;
-	bh=X5GYCdh8xmF1VOcwMI9Rmm9Dlopew8Em98MYwDhZlz0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=PjdbaiF2zllHQoqqlIrAUp9LjOt6GiwrLwHJUctXypc7wQuyWRR8+0Y34F6xNbbQi
-	 YMZJjhQb/GC54H5a+z/c6yMCNA2isQLWBgg3zeVk+dcAbBjPWhWFFFGOsf7oG0ydeX
-	 NO7pFbDj9Xf1psUs3tsGeyy0lM31+ziZUNurXLMoQDRV4hB6z5qMFMWC4NLWNI9+zE
-	 Ib3vVwSS8E5wWh4ETKbbsQUJOTP8c+Exxmtql3go55k/HllI7H0lkifDAt3nKSQtu2
-	 mbvqSKbndlGzOYDKdHzdqSrGt2Elee41qCu+sbkQ9+Bs8ZsfqQSfJDvHy36M38LyUI
-	 yEWeOozZ1qgxQ==
-Content-Type: multipart/mixed; boundary="===============0694406438474598081=="
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iCifbyIR
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792738164;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Te/e0WFVqv5SNjVug7VJizYyRLpsYmXm4GZX821MDrs=;
+	b=iCifbyIRGH5mRJnt5tCI91FrGpFLCzTrd2dh5KRobIDeSLaiDh5Tja8J2ZE5BWW5tJSzDT
+	x6VeWiLODOu7D5iWmd8eR2In5uSZUU3L/0gjy6BC0Pi56Ghr2+/3fpXD3syiAC3RXcOrND
+	N5pdawyss7XuKQQIeEerHKJxBw11Zbw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-497-Gi1PK2XUM7a0J1ACcijeaQ-1; Fri,
+ 23 Oct 2026 02:49:18 -0400
+X-MC-Unique: Gi1PK2XUM7a0J1ACcijeaQ-1
+X-Mimecast-MFC-AGG-ID: Gi1PK2XUM7a0J1ACcijeaQ_1792738156
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 357A31800663;
+	Fri, 23 Oct 2026 06:49:15 +0000 (UTC)
+Received: from thuth-p1g4.redhat.com (unknown [10.44.48.42])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 212681956095;
+	Fri, 23 Oct 2026 06:49:09 +0000 (UTC)
+From: Thomas Huth <thuth@redhat.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: soc@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v5 00/13] treewide: Replace __ASSEMBLY__ with __ASSEMBLER__ in header files
+Date: Fri, 23 Oct 2026 08:48:37 +0200
+Message-ID: <20261023064908.66707-1-thuth@redhat.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -49,182 +88,185 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <90371d2279a5eb08966a82325922e1f15eb93560d4019f5c9020956cadb4120a@mail.kernel.org>
-In-Reply-To: <20261023001603.560210-12-wusamuel@google.com>
-References: <20261023001603.560210-12-wusamuel@google.com>
-Subject: Re: [PATCH bpf-next v2 4/6] libbpf: Resolve typeless ksyms via KALLSYMS_QUERY ioctl
-From: bot+bpf-ci@kernel.org
-To: wusamuel@google.com,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,viro@zeniv.linux.org.uk,brauner@kernel.org,jack@suse.cz,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
-Cc: wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,linux-doc@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 23 Oct 2026 00:51:13 +0000 (UTC)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-Mimecast-MFC-PROC-ID: Se0A_5BDuZp6o4JFWC2K84JOXGRcyrMqdzi86nZNmHw_1792738156
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
---===============0694406438474598081==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+The kernel Makefiles define the __ASSEMBLY__ macro to provide
+a way to use headers in both, assembly and C source code.
+However, all the supported versions of the GCC and Clang compilers (and
+also other compilers like Tiny-C or PCC) define the macro __ASSEMBLER__
+automatically already when compiling assembly code, too, so some kernel
+headers are using __ASSEMBLER__ instead. With regards to userspace code,
+this seems also to be constant source of confusion, see for example these
+links here:
 
-> libbpf: Resolve typeless ksyms via KALLSYMS_QUERY ioctl
+ https://lore.kernel.org/kvm/20250222014526.2302653-1-seanjc@google.com/
+ https://stackoverflow.com/questions/28924355/gcc-assembler-preprocessor-not-compatible-with-standard-headers
+ https://forums.raspberrypi.com/viewtopic.php?p=1652944#p1653834
+ https://github.com/riscv-software-src/opensbi/issues/199
 
-TL;DR:
-- Possible regression: ioctl lookup ignores .llvm. suffixed symbols, so
-  typeless ksyms may fail to load or resolve to 0 on LTO kernels
-- Fallback to kallsyms parsing may miss -EACCES (SELinux/seccomp), failing
-  loads that worked before
+To avoid confusion in the future, it makes sense to standardize
+on the macro that gets defined by the compiler, so this patch series
+changes all occurrences of __ASSEMBLY__ into __ASSEMBLER__ and
+finally removes the -D__ASSEMBLY__ from the Makefiles.
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 8fcb8cf39cc0..0e94d2335bd7 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+I split the patches per architecture / maintained subsystem to ease
+the review, and I also split the uapi headers from the normal ones in
+case we ever decide that uapi needs to be treated differently from the
+normal headers here and the patches would need to get reverted.
 
-[ ... ]
+v5:
+- To ease the review, I split some huge patches into smaller patches
+  when there was a separate entry for the files in the MAINTAINERS file 
+- Dropped the patches that were already merged
+- Rebased the patches to the current master branch and fixed new
+  occurrences of __ASSEMBLY__
 
-> @@ -9644,8 +9662,64 @@ static int kallsyms_cb(unsigned long long sym_addr, char sym_type,
->  	return 0;
->  }
->
-> -static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-> +static int bpf_object__query_ksyms(struct bpf_object *obj)
-> +{
-> +	struct kallsyms_query q;
-> +	struct extern_desc *ext;
-> +	int err = 0;
-> +	int fd;
-> +	int i;
-> +
-> +	fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	for (i = 0; i < obj->nr_extern; i++) {
-> +		ext = &obj->externs[i];
-> +		if (ext->type != EXT_KSYM || ext->ksym.type_id)
-> +			continue;
-> +
-> +		q = (struct kallsyms_query){
-> +			.size = sizeof(q),
-> +			.query_flags = KALLSYMS_QUERY_BY_SYMBOL,
-> +			.sym_name_addr = ptr_to_u64(ext->name),
-> +		};
-> +
-> +		if (ioctl(fd, KALLSYMS_QUERY, &q) < 0) {
-> +			err = -errno;
-> +			if (err == -ENOENT) {
-> +				err = 0;
-> +				continue;
-> +			}
-> +			if (err == -EADDRNOTAVAIL)
-> +				pr_warn("extern (ksym) '%s': resolution is ambiguous\n",
-> +					ext->name);
-> +			break;
-> +		}
+Thomas Huth (13):
+  of: fdt: Replace __ASSEMBLY__ with __ASSEMBLER__ in of_fdt.h header
+    file
+  smccc: Replace __ASSEMBLY__ with __ASSEMBLER__
+  ARM: PXA: Replace __ASSEMBLY__ with __ASSEMBLER__
+  ARM: BCM7XXX: Replace __ASSEMBLY__ with __ASSEMBLER__
+  arm: Replace __ASSEMBLY__ with __ASSEMBLER__ in ptrace uapi header
+  arm: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+  hexagon: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
+  hexagon: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+  asm-generic: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
+  uapi: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
+  asm-generic: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi
+    headers
+  include: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+  treewide: Stop defining __ASSEMBLY__ for assembler files
 
-Can this regress typeless ksyms on CONFIG_LTO_CLANG kernels?  The old
-kallsyms_cb() deliberately matched data symbols that carry a suffix:
+ Documentation/dev-tools/checkuapi.rst          |  2 +-
+ Makefile                                       |  2 +-
+ arch/alpha/boot/compressed/Makefile            |  2 +-
+ arch/arm/include/asm/assembler.h               |  2 +-
+ arch/arm/include/asm/barrier.h                 |  4 ++--
+ arch/arm/include/asm/cache.h                   |  2 +-
+ arch/arm/include/asm/cp15.h                    |  4 ++--
+ arch/arm/include/asm/cputype.h                 |  4 ++--
+ arch/arm/include/asm/current.h                 |  4 ++--
+ arch/arm/include/asm/delay.h                   |  4 ++--
+ arch/arm/include/asm/domain.h                  |  8 ++++----
+ arch/arm/include/asm/fpstate.h                 |  2 +-
+ arch/arm/include/asm/ftrace.h                  |  6 +++---
+ arch/arm/include/asm/hardware/cache-b15-rac.h  |  2 +-
+ arch/arm/include/asm/hardware/cache-l2x0.h     |  4 ++--
+ arch/arm/include/asm/hardware/dec21285.h       |  2 +-
+ arch/arm/include/asm/hardware/ioc.h            |  2 +-
+ arch/arm/include/asm/hardware/iomd.h           |  4 ++--
+ arch/arm/include/asm/hardware/memc.h           |  2 +-
+ arch/arm/include/asm/hwcap.h                   |  2 +-
+ arch/arm/include/asm/irq.h                     |  2 +-
+ arch/arm/include/asm/kexec.h                   |  4 ++--
+ arch/arm/include/asm/kgdb.h                    |  4 ++--
+ arch/arm/include/asm/linkage.h                 |  4 ++--
+ arch/arm/include/asm/mach/arch.h               |  2 +-
+ arch/arm/include/asm/mcpm.h                    |  4 ++--
+ arch/arm/include/asm/memory.h                  |  4 ++--
+ arch/arm/include/asm/mpu.h                     |  4 ++--
+ arch/arm/include/asm/opcodes.h                 | 12 ++++++------
+ arch/arm/include/asm/page.h                    |  4 ++--
+ arch/arm/include/asm/pgtable-2level.h          |  4 ++--
+ arch/arm/include/asm/pgtable-3level.h          |  4 ++--
+ arch/arm/include/asm/pgtable-nommu.h           |  4 ++--
+ arch/arm/include/asm/pgtable.h                 |  8 ++++----
+ arch/arm/include/asm/probes.h                  |  4 ++--
+ arch/arm/include/asm/proc-fns.h                |  4 ++--
+ arch/arm/include/asm/ptrace.h                  |  4 ++--
+ arch/arm/include/asm/system_info.h             |  4 ++--
+ arch/arm/include/asm/system_misc.h             |  4 ++--
+ arch/arm/include/asm/thread_info.h             |  2 +-
+ arch/arm/include/asm/thread_notify.h           |  2 +-
+ arch/arm/include/asm/tlbflush.h                | 10 +++++-----
+ arch/arm/include/asm/tls.h                     |  4 ++--
+ arch/arm/include/asm/unified.h                 |  6 +++---
+ arch/arm/include/asm/unwind.h                  |  4 ++--
+ arch/arm/include/asm/v7m.h                     |  4 ++--
+ arch/arm/include/asm/vdso.h                    |  4 ++--
+ arch/arm/include/asm/vdso/cp15.h               |  4 ++--
+ arch/arm/include/asm/vdso/gettimeofday.h       |  4 ++--
+ arch/arm/include/asm/vdso/processor.h          |  4 ++--
+ arch/arm/include/asm/vfp.h                     |  2 +-
+ arch/arm/include/asm/virt.h                    |  4 ++--
+ arch/arm/include/uapi/asm/ptrace.h             |  4 ++--
+ .../mach-footbridge/include/mach/hardware.h    |  2 +-
+ arch/arm/mach-pxa/irqs.h                       |  2 +-
+ arch/arm/mach-pxa/pxa-regs.h                   |  2 +-
+ arch/arm/mach-sa1100/include/mach/bitfield.h   |  2 +-
+ arch/arm/mach-sa1100/include/mach/hardware.h   |  2 +-
+ arch/arm/tools/gen-mach-types                  |  2 +-
+ arch/arm64/kernel/vdso32/Makefile              |  1 -
+ arch/hexagon/include/asm/hexagon_vm.h          |  4 ++--
+ arch/hexagon/include/asm/mem-layout.h          |  6 +++---
+ arch/hexagon/include/asm/page.h                |  4 ++--
+ arch/hexagon/include/asm/processor.h           |  4 ++--
+ arch/hexagon/include/asm/thread_info.h         | 12 ++++++------
+ arch/hexagon/include/uapi/asm/registers.h      |  4 ++--
+ arch/loongarch/vdso/Makefile                   |  2 +-
+ arch/mips/boot/compressed/Makefile             |  2 +-
+ arch/mips/vdso/Makefile                        |  2 +-
+ arch/powerpc/boot/Makefile                     |  2 +-
+ arch/powerpc/platforms/cell/spufs/Makefile     |  2 +-
+ arch/s390/Makefile                             |  2 +-
+ arch/x86/boot/Makefile                         |  2 +-
+ arch/x86/boot/compressed/Makefile              |  2 +-
+ arch/x86/realmode/rm/Makefile                  |  2 +-
+ arch/xtensa/kernel/Makefile                    |  2 +-
+ drivers/firmware/efi/libstub/Makefile          |  2 +-
+ drivers/net/wan/Makefile                       |  2 +-
+ include/asm-generic/barrier.h                  |  4 ++--
+ include/asm-generic/bug.h                      |  4 ++--
+ include/asm-generic/current.h                  |  2 +-
+ include/asm-generic/error-injection.h          |  2 +-
+ include/asm-generic/int-ll64.h                 |  6 +++---
+ include/asm-generic/rwonce.h                   |  4 ++--
+ include/asm-generic/signal.h                   |  4 ++--
+ include/linux/amba/serial.h                    |  4 ++--
+ include/linux/annotate.h                       | 18 +++++++++---------
+ include/linux/arm-smccc.h                      | 10 +++++-----
+ include/linux/cfi_types.h                      |  6 +++---
+ include/linux/compiler.h                       |  4 ++--
+ include/linux/compiler_types.h                 |  8 ++++----
+ include/linux/edd.h                            |  4 ++--
+ include/linux/err.h                            |  2 +-
+ include/linux/export.h                         |  2 +-
+ include/linux/init.h                           |  6 +++---
+ include/linux/ioport.h                         |  4 ++--
+ include/linux/linkage.h                        |  6 +++---
+ include/linux/mem_encrypt.h                    |  4 ++--
+ include/linux/of_fdt.h                         |  4 ++--
+ include/linux/pe.h                             |  4 ++--
+ include/linux/platform_data/emif_plat.h        |  4 ++--
+ include/linux/ti-emif-sram.h                   |  2 +-
+ include/linux/types.h                          |  4 ++--
+ include/uapi/asm-generic/int-l64.h             |  4 ++--
+ include/uapi/asm-generic/int-ll64.h            |  4 ++--
+ include/uapi/asm-generic/signal-defs.h         |  2 +-
+ include/uapi/asm-generic/signal.h              |  4 ++--
+ include/uapi/linux/a.out.h                     |  4 ++--
+ include/uapi/linux/const.h                     |  4 ++--
+ include/uapi/linux/edd.h                       |  4 ++--
+ include/uapi/linux/hdlc/ioctl.h                |  4 ++--
+ include/uapi/linux/types.h                     |  4 ++--
+ scripts/Makefile.build                         |  2 +-
+ scripts/gfp-translate                          |  2 +-
+ scripts/headers_install.sh                     |  1 -
+ .../tests/cmd_graph/test_savedcmd_parser.py    |  2 +-
+ tools/include/asm-generic/barrier.h            |  4 ++--
+ tools/include/asm/alternative.h                |  2 +-
+ tools/include/linux/cfi_types.h                |  6 +++---
+ tools/include/linux/compiler.h                 |  4 ++--
+ tools/include/uapi/linux/const.h               |  4 ++--
+ .../testing/selftests/kvm/lib/riscv/handlers.S |  4 ----
+ .../testing/selftests/vDSO/vgetrandom-chacha.S |  2 --
+ 123 files changed, 229 insertions(+), 237 deletions(-)
 
-    res = strstr(sym_name, ".llvm.");
-    if (sym_type == 'd' && res)
-        ext = find_extern_by_name_with_len(obj, sym_name, res - sym_name);
+-- 
+2.56.0
 
-That was added by commit c56e59776f46 ("libbpf: Handle <orig_name>.llvm.<hash>
-symbol properly") after test_ksyms failed on a CONFIG_LTO_CLANG_THIN kernel,
-where bpf_link_fops had been renamed to bpf_link_fops.llvm.<hash>.  That
-commit also lists tk_core, fake_dst_ops and __fs_reclaim_map as real
-renamed symbols.
-
-On the kernel side, KALLSYMS_QUERY only matches names exactly:
-kallsyms_lookup_names() does a strcmp() on the expanded name, and
-kallsyms_mod_find_cb() also uses strcmp().  So a lookup for "bpf_link_fops"
-returns -ENOENT when only "bpf_link_fops.llvm.<hash>" exists.
-
-Here -ENOENT is treated as "not found", err is cleared and the loop
-continues.  bpf_object__resolve_typeless_ksyms() then falls back only on
--ENOTTY or -EPERM, so libbpf_kallsyms_parse() is never reached.  On a
-kernel that has this ioctl:
-
- - a strong "extern const void foo __ksym;" now makes bpf_object__load()
-   fail with "extern 'foo' (strong): not resolved" (-ESRCH), where it
-   loaded before
- - a weak one silently gets address 0 instead of the real address
-
-The selftests helper kallsyms_find() in trace_helpers.c still strips
-".llvm." from 'd' symbols, so it and libbpf now disagree about what
-test_ksyms (bpf_link_fops) should resolve to.
-
-The commit message notes this difference, but gives no reason for dropping
-behavior that libbpf added on purpose.  libbpf kept the .llvm. handling
-elsewhere to avoid regressions, and commit f8a05692de06 says "we'd like to
-not regress".
-
-Would it work to fall back to libbpf_kallsyms_parse() for typeless externs
-that are still unresolved after the ioctl pass?  That only costs extra time
-when a symbol is actually missing.  Alternatively, the kernel query could
-match the .llvm. suffix for data symbols.  I did not find a fix for this in
-the rest of the series.
-
-> +		ext->is_set = true;
-> +		ext->ksym.addr = q.sym_addr;
-> +		pr_debug("extern (ksym) '%s': resolved in kernel to 0x%llx\n",
-> +			 ext->name, ext->ksym.addr);
-> +	}
-> +	close(fd);
-> +	return err;
-> +}
-> +
-> +static int bpf_object__resolve_typeless_ksyms(struct bpf_object *obj)
->  {
-> +	int err;
-> +
-> +	err = bpf_object__query_ksyms(obj);
-> +	/*
-> +	 * Fall back to parsing /proc/kallsyms only if the ioctl is not
-> +	 * accessible: not present (-ENOTTY on older kernels) or kallsyms
-> +	 * addresses hidden from this opener (-EPERM, e.g. kptr_restrict).
-> +	 */
-> +	if (err != -ENOTTY && err != -EPERM)
-> +		return err;
-
-Does this fallback miss other ways the ioctl can be blocked while reading
-/proc/kallsyms is still allowed?
-
-The old code never issued an ioctl on this file.  Now every KALLSYMS_QUERY
-goes through security_file_ioctl().  For this command selinux_file_ioctl()
-takes the default case and calls ioctl_has_perm(cred, file, FILE__IOCTL,
-(u16)cmd), which returns -EACCES when the policy grants read on the
-kallsyms label but not ioctl, or limits ioctl commands with allowxperm.  A
-seccomp filter that makes ioctl() return an errno other than EPERM has the
-same effect.
-
-In those setups bpf_object__query_ksyms() returns -EACCES (or similar),
-bpf_object__resolve_typeless_ksyms() returns it as-is, and
-bpf_object__resolve_externs() turns it into -EINVAL:
-
-    err = bpf_object__resolve_typeless_ksyms(obj);
-    if (err)
-        return -EINVAL;
-
-So an object with any typeless ksym now fails to load, even though parsing
-the text file would have worked as it did before this patch.
-
-The failure is also hard to diagnose.  Apart from -EADDRNOTAVAIL, nothing
-from the ioctl or from open() is reported.  The open() failure path is a
-bare:
-
-    fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-    if (fd < 0)
-        return -errno;
-
-without the "failed to open /proc/kallsyms" pr_warn() that
-libbpf_kallsyms_parse() prints, so the user only sees "failed to load
-object".
-
-Should the fallback cover any error other than -EADDRNOTAVAIL (and other
-real lookup errors), or at least -EACCES as well, with a pr_warn() for the
-errors that are not handled?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39878338337
---===============0694406438474598081==--
