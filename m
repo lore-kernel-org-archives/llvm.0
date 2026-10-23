@@ -1,49 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792788792;
-	b=vzIm4/TOaFEeF8IGjf1j2HXwIEiWkA4IAOLs6I1FKzt65w8Xs0H6/RIgWyI4gfKjUe++
-	 b95WEY/SpKseZrEzWWc4XQVtnzRDgij/gZFVLz1uUF5erCPsKMQtI0tZeEtOEPQ4bHInd
-	 R5bG0jQ/KdN/8X6U09tq2zGQnTzgrnAf8psKeAXGwRF+1KykR5pJdY7JFxNhsrqxJ7stA
-	 SVv7nzcUYbg/NrvwFpwyC5k4jtvyvCdpQFhffjoU0rLQ0G+xnSc5WiJDiPQnvEWGo7Ey6
-	 KHuAitlKlhGLIQXXhQ0I0U0lMk8JIn3WX/1/YJO8J98GOlLtlKBjibY8rjMCcUL7shA==
+	t=1792789858;
+	b=U5m+C+N8W6G9NWkkE/N+UYRuiqN2GeafBszrCHynnGP0IBDyAFn7OM8xgdmpLdb+pJws
+	 7P2fT9pr5E7Jgp/0O9paiE2bmQVIyoiPLN3pirZhxB6e+eUsAVkC7ELIBGOZaEMjYuiWm
+	 97UEe7Xa4rQXVa3twINBlVKJKoL6f5wU2jcY1e+TVkqVzSM/a2/v84RF68VfznmHaH3A+
+	 zhjBN5evs4iL+5T0zo0EwsAj3RykyKzVmJpULcoNnng3VsdALjXgGh5PQA/v79NqHN5b/
+	 TnQe8SNCX0bEPjEw8R5eeMey6ZNoIqyI6Bly0ASAOZqGpvYXx3JZmvX95l0FD3/p81g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792788792;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=4HZ7/B6K41WI+OjSL2WoUlyq+xEMh77iLnsD3cjbDk8=;
-	b=aWkxPK2KNY7YGFCORy8tnhC16ErMOOt08WnwkCGAjiGPii9tAiz48a62r3JFlvl/Xavu
-	 MEDKt5CrLBehNDlE9JG3jaThtz/tqjw9jLoruxdoeYWjuMNDKuvrOqL5T3cYVxS+I32MM
-	 3iNz5ExwhyWa+awHFT+OezLrAzuAZNrA76HdU3iFMvv4NIJafnDfjE6QQYkUcUuVLM0FH
-	 k4JkJXS0O96egDpPCALz3meRdo+9Cn3q3INmyFmRPWtQvi6G1OIj18F15S0mp/qmi9qZZ
-	 EonDttNikN70I783wJvpWS/U1ox8fgsudIpZFW+Cfk+palX4GllXidTgGZjLJmHUEvQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792789858;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=/Ear0TtjhlAiqS6CrqG+r0TTFWuCTgvxoaHllRwPv7Y=;
+	b=2wP092kcdtIr0UTqV/wrkND0DHaP0lqcCth8pTfApqehtd+iHGXAmAqh3RU03shs2iAH
+	 ckLvNfRJyyBytHonUu6tFu2f7AmWpz0Fj11S0KBjkUq1+YJqzyayMLh77S1sXZqKgrmZU
+	 ePgc2gNzkp4MKQnJlXapnOpJF90Po/MnQb6UnMOsGJMTEyc2IOOXlnGB1MNWgosC4ew5c
+	 JoU7cx0CuyaMH/rHkWqc36P3sP/A1J/S8SH5w2vcxKq9O184xN7/Lk2zZtPcUFzu0hWAt
+	 9aaceU7crLYx4fSKCCl+aIWReo4Vmhwlj1FssVP/IogVgmFdhiSuW/rdT0zZ4/OTqEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TtqZjM5q;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nMQlj24t;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDB9606A326;
-	Fri, 23 Oct 2026 20:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E35606A31A;
+	Fri, 23 Oct 2026 21:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TtqZjM5q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE68C1F01829;
-	Fri, 23 Oct 2026 20:53:09 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nMQlj24t
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924671F01825;
+	Fri, 23 Oct 2026 21:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792788791;
-	bh=4HZ7/B6K41WI+OjSL2WoUlyq+xEMh77iLnsD3cjbDk8=;
-	h=From:Date:Subject:To:Cc;
-	b=TtqZjM5q5rNTZOxYZWGatBueLAxHHbgcjQW7YC1RebGfN6lAq7G8sg1yumKJJXxcK
-	 s8yFfp2NCSEgJGF1MG8fdFiVbKCyvRmIg9/fPHTxhgRNmx1kawAGtBIvF4MamHt4JW
-	 DcK0fU+XpSBJ/9nh/5zXkIAcq8iCy0C5pFgiqini/DmIHGFc0WuCq0J88RTfBp/h3/
-	 XxyfdCfopxLn2ptHJJJ2vtd5gqSAevMqSTbvf1tH08N1AdYmE0Jg05w0viyC1mBZik
-	 3efp4XBst+MSnb2A2SgUjBrcqU7+AzCLgnMLJvYwmyPR+UQhKbMumsgG2b4xmgAe/H
-	 UxudyA71+czfQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 23 Oct 2026 13:53:03 -0700
-Subject: [PATCH] ext2: Make sbi an proper alias for EXT2_SB(sb) in
- ext2_fill_super()
+	s=k20260515; t=1792789858;
+	bh=/Ear0TtjhlAiqS6CrqG+r0TTFWuCTgvxoaHllRwPv7Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nMQlj24t2G/JJHM133MVIE/WBHt/3jffoG0pURfV2wduSnEh9LpfciTqHpSQzgStq
+	 W6Vud3ipt5HSfLLWtFVs+txhLCIgEyp+tqaSrUaVkPAVe4zjXyDrEJKSebhx2evvWE
+	 RsIdg2nUbCW1+pmRa0W0q+4jSxJmAHHmNLN2NugASuVdaKiebXwQhIAOTOl5qngXGG
+	 Sgi1QHF6DIMhNiVUhioECgY57pfW4j4XcgktKlS59Nity32VENkBK6Q+8x1OfVtfON
+	 tb2UWePfnSwkgDCwfiDdgxSFxDVPyCxmNRZ3wMhcQiwFOk9C+E/L16TyqVrKlIyoXf
+	 I/PkC+Xo3pHNg==
+Date: Fri, 23 Oct 2026 18:10:54 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
+	xueshuai@linux.alibaba.com, Peter Zijlstra <peterz@infradead.org>,
+	leo.yan@linux.dev, Li Huafei <lihuafei1@huawei.com>,
+	Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v8 00/15] perf annotate arm64: Support instruction
+ tracking for data type profiling
+Message-ID: <atvNXkeWyJCGMrbF@phoenix2>
+References: <cover.1792411435.git.wutengda@huaweicloud.com>
+ <18de9e8f-3709-4bc9-b11b-3813e1ba98b7@huaweicloud.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,95 +68,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261023-ext2-fix-context-analysis-clang-24-v1-1-2b35c33cd0fa@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yXN2wrCMAwG4FcZuTbQpauIryJedG3UyOikqTIZe
- 3ejXn7wH1ZQrsIKx26Fyi9RmYuh33WQbrFcGSWbgRzte0ceeWmEF1kwzaUZMJY4vVUU02R5pAG
- DG8aQc/DOH8CGHpWt8Ds5nf/W53jn1L7LsG0f1qXLrYYAAAA=
-X-Change-ID: 20261023-ext2-fix-context-analysis-clang-24-504b5dd53038
-To: Jan Kara <jack@suse.com>
-Cc: Marco Elver <elver@google.com>, 
- Timothy Day <timday@thelustrecollective.com>, linux-ext4@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2862; i=nathan@kernel.org;
- h=from:subject:message-id; bh=CBjGob9Wbjsm2H69+Nh8omZetImtL3LfrjGHo1E6V5k=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFm3TxoltPQ8r4jJa/h1boOTnkO29vaAeZ+61eTZtirlu
- ftUNet1lLIwiHExyIopslQ/Vj1uaDjnLOONU5Ng5rAygQxh4OIUgImkbGH4K3BPbI/N+iuPPifv
- 9udfUrGU8V6Uw4rHc/7/t3YRXbazpoORYYIx1/8dD6NZmqr+fNNZ2n7LuqT7yJJdsk2XmFca5MX
- qcwIA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <18de9e8f-3709-4bc9-b11b-3813e1ba98b7@huaweicloud.com>
 
-A recent LLVM change to fix parsing and validating __guarded_by on
-structure members [1] reveals a couple of warnings in ext2_fill_super()
-from the annotations added by commit 023051c2d0f1 ("ext2: mark
-s_mount_state as guarded by s_lock") and commit c23746524faf ("ext2:
-annotate s_rsv_window_root as requiring s_rsv_window_lock"):
+On Wed, Oct 21, 2026 at 10:25:40AM +0800, Tengda Wu wrote:
+> Hi,
+> 
+> On 2026/10/20 21:44, Tengda Wu wrote:
+> > This series adds arm64 support to perf's data type profiling by
+> > implementing instruction tracking for the arm64 architecture.
+> > 
+> > The main changes since v7 include:
+> > v7: https://lore.kernel.org/all/cover.1791629326.git.wutengda@huaweicloud.com/
+> > 
+> >   * Patch 02: Minor optimizations to update_insn_state_arm64 to facilitate
+> >     future extension, including:
+> >     - Encapsulating call instruction handling into update_call_insn_state()
+> >     - Encapsulating invalidate dst regs handling into invalidate_unhandled_insn_regs()
+> >     - Renaming is_readonly_branch_or_cmp() to is_readonly_insn()
+> >     No functional changes.
+> > 
+> >   * Fix issues raised by Sashiko:
+> >     - Patch 06: Complete the status register invalidation logic for
+> >       exclusive stores.
+> >     - Patch 13 & 15: Complete the lifetime invalidation logic for adrp
+> >       and mrs instructions.
+> >     Regarding the status register invalidation issue for instructions
+> >     such as cas/swp as well, we plan to support this incrementally
+> >     after the relevant instructions are refined; this patch temporarily
+> >     ignores and does not handle it (a TODO marker has already been
+> >     reserved in patch 02)
+> > 
+> > Patch organization
+> > ==================
+> > 
+> >   Patches 1-3:   Shared infrastructure. Extract invalidate_reg_state() as
+> >                  a common helper, add the arch_get_reg_offset() helper for
+> >                  computing operand base offsets, and wire up the arm64
+> >                  entry points (arch_supports_insn_tracking(),
+> >                  init_type_state(), and update_insn_state_arm64()).
+> > 
+> >   Patches 4-6:   Core instruction tracking for arm64: function return
+> >                  types after calls, load instructions (ldr/ldp and their
+> >                  addressing modes), and store instructions (str/stp).
+> > 
+> >   Patches 7-9:   Shared data structure improvements and an x86 fix.
+> >                  Expand type_state_reg.imm_value to u64 so 64-bit
+> >                  addresses can be tracked, preserve imm_value for stack
+> >                  variables, and delete stale stack state on store of an
+> >                  untracked register on x86.
+> > 
+> >   Patches 10-15: Remaining arm64 patterns: stack variable tracking,
+> >                  'mov' (register and immediate forms), 'add' member
+> >                  address calculation, 'adrp' global variable tracking,
+> >                  per-cpu variable access, and 'mrs sp_el0' to resolve the
+> >                  'current' pointer.
+> > 
+> 
+> Just a quick note that this version of the patch series has addressed or
+> clarified all the Sashiko review comments. I would appreciate it if you
+> could take a look when you get a chance.
 
-  fs/ext2/super.c:1040:7: error: writing variable 's_mount_state' requires holding spinlock '_res->s_lock' exclusively [-Werror,-Wthread-safety-precise]
-   1040 |         sbi->s_mount_state = le16_to_cpu(es->s_state);
-        |              ^
-  fs/ext2/super.c:1040:7: note: found near match 'EXT2_SB(sb).s_lock'
-  fs/ext2/super.c:1138:8: error: writing variable 's_rsv_window_root' requires holding spinlock '_res->s_rsv_window_lock' exclusively [-Werror,-Wthread-safety-precise]
-   1138 |                 sbi->s_rsv_window_root = RB_ROOT;
-        |                      ^
-  fs/ext2/super.c:1138:8: note: found near match 'EXT2_SB(sb).s_rsv_window_lock'
+Merged now, test built and pushed to perf-tools-next/perf-tools-next for
+further build testing with linux-next, early next week I intend to push
+it out to Linus for 7.4.
 
-Context analysis does very minimal alias detection [2], so it is not
-able to figure out that sbi == sb->s_fs_info == EXT2_SB(sb). The only
-reason there were no warnings before the above LLVM change is because
-the annotation was not parsed and verified correctly.
-
-Rework the allocation and assignment of sbi to have a direct assignment
-of EXT2_SB(sb) to sbi so that the analysis knows that sbi and
-EXT2_SB(sb) refer to the same object, clearing up the warnings.
-
-Fixes: 9708538ba204 ("ext2: enable context analysis support for ext2 filesystem")
-Link: https://github.com/llvm/llvm-project/commit/217e229a1f32785fccdd3b3f51429f0d309dea45 [1]
-Link: https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#no-alias-analysis [2]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- fs/ext2/super.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/fs/ext2/super.c b/fs/ext2/super.c
-index fb217ef2d69f..b55f9ce3267f 100644
---- a/fs/ext2/super.c
-+++ b/fs/ext2/super.c
-@@ -883,17 +883,18 @@ static int ext2_fill_super(struct super_block *sb, struct fs_context *fc)
- 	__le32 features;
- 	int err;
- 
--	sbi = kzalloc_obj(*sbi);
--	if (!sbi)
-+	sb->s_fs_info = kzalloc_obj(*sb->s_fs_info);
-+	if (!sb->s_fs_info)
- 		return -ENOMEM;
-+	sbi = EXT2_SB(sb);
- 
- 	sbi->s_blockgroup_lock =
- 		kzalloc_obj(struct blockgroup_lock);
- 	if (!sbi->s_blockgroup_lock) {
--		kfree(sbi);
-+		kfree(sb->s_fs_info);
-+		sb->s_fs_info = NULL;
- 		return -ENOMEM;
- 	}
--	sb->s_fs_info = sbi;
- 	sbi->s_sb_block = sb_block;
- 
- 	guard(spinlock_init)(&EXT2_SB(sb)->s_lock);
-
----
-base-commit: 782654a3e9c4065dea2e9f10539899d348b7a1fc
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-change-id: 20261023-ext2-fix-context-analysis-clang-24-504b5dd53038
-
-Best regards,
---  
-Cheers,
-Nathan
-
+- Arnaldo
