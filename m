@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792776556;
-	b=GSVbpn7adCn1s5AEaANjWkXyHDhNuu7DHu2k4EeOhcYPFJfAjo2vHgKqFJCdmSDXDFet
-	 sxvLrPdWJXk8I3o7KTcHiAYeEbWANoh4vO831HMI663VCJubRQsp3bFeyOc625ZOccRK4
-	 ckNeJX/FlH1gAMCJuD3fURDVsss+Pn3qpsLWo4pRyWK0LgesstUZV1DeJvB835isGf4zK
-	 aFzAceRF3dJU4Pcw8Vj1cEGXqKQ63efV8JRhcdLKbGImmFKnDFnL//OnYRPUTpbT9cgzY
-	 eB5e39/wH/AzzdtqXw5qM4tJb1vVvhK1UVyogPDs78Gj2GbcSmjtVQ0qtur6L6HmPwg==
+	t=1792777343;
+	b=KVyrGJJX7HblBxCb25H1C2vyiiDlgVD41Bzbii38yEYkgxxEHLeESZ3PxxvsYsJ9Dftk
+	 DY0tAPAIb9xey4uz/VggAQdw5sKpKqgs8hbpdYgT/edS9BkBw6vot9+Mc+ahhte5XA4tq
+	 j1ZwXhDw+5F+etLb06evCBbQvsQIQjB1RfDW8clu8iUrxjT6eAZ8GI0yo+GTz1Hdzx3vm
+	 S44bp1VgJg6I3KMkEOmp+W0RFdu1IegdnQT5B4ieFjYZN7kata4AtwAwSHDv8gK8cdzvr
+	 SqwQkE4kZjizXlM8jAUCKoIMVDZ9rXblAxmBORKSCUsCEE8Kh076BaRtch2OwcbY+fQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792776556;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792777343;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=3Qj0y3/sB7EeSLYwSP8RPCK8AZrmLUoRtMMcxttoCbM=;
-	b=WyaeyZcdQVwN0hX+v2mdbmXnwXuZghjKoyy1lwHnPyP/DXu18U76LE85h12qYpjqqHQI
-	 yKI/3w/ix/zak9mvQnoj0s2gAina5CSSYiluNjA02iqOQnIo0Ey4i7+tKPYx6avMB4CJO
-	 PQEXtXHajbNJ34BAkkEADoi6xp8frfUaacPNV/NgvXhqKZO4IblYb5ObYdvp9n7FcpI7e
-	 bZ1XLunI+45Lujag8HBQS1vYYKteQk2bt2YiVnAjJFeCScz5L0G0yGFQtb+Cckfq0JFKG
-	 +/jx/ZHfS1UstFBU4V8A1ixAnEwJqPkP/MdN8OnscjFgy7L9yVncuY/ohI5UgPReAbA==
+	bh=IArJW2D7DC4NrWDvM238weKBxrWboHP+GmGljUSheNA=;
+	b=CU2LSzrB7yi8P4L5id5hlambVZ83sAJXsDCYW2+iXV1LdwlmWyDAIw6iE8NpaqQZxbn8
+	 eazNc2aLOlszKrGa25Pre1Z1myen4KY/+vyAmvS4ppwY2d51KJULn6AimVoVxnLezWEDX
+	 EV8HRT63e1trkU4rMwX0AGZ/tnTvgg/tdoRS5I7hext4gDGFrop6WlcJQVrmRNcmFzz2p
+	 A7qbaFW0PSCXWom4ulg0ZQ+GEpUOKE5IU/TgKQP1TPXQXE4j8GiBm0yub+ts/8QojhkNJ
+	 tUKSzeoKR1r458JpyfiwCmE+4pJIbfz8byZSSQZBbHIgOKubFpd7afxtuRZwG9tuGOw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=dHT738KT;
-	arc=none smtp.remote-ip=209.85.221.46
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qNIC0NLf;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CD5606A31D
-	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 17:29:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32CD5606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF10606A31B
+	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 17:42:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BAF10606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=dHT738KT
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-48df4e9d2d4so698192f8f.3
-        for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 10:29:16 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qNIC0NLf
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48df4f540ebso674825f8f.3
+        for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 10:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792776554; x=1793381354; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1792777341; x=1793382141; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3Qj0y3/sB7EeSLYwSP8RPCK8AZrmLUoRtMMcxttoCbM=;
-        b=dHT738KTUzTu4zhCB2JKp4NiLSptKyRTFJGIMNG9FEHHe3V5MBPK2pP9v0xBwjYuw5
-         kVBOhgI9WFq+TJU8yEmRlFXlnEjuDhHUf1eXssjPyjLdVd/sJrYQv97a7jy8xPy59htg
-         52S1xkpXhTcqwyyCJWXd8aNpoYEBnPDh3688tSCLu8CTLb1vDFuWXoIhGHts7u/ut04j
-         FLrGjZxsWZgE7VR0iZnP56z8uPQ3eflbJPS+KoTC5C2Fe7EByITBPScD585ObUA+3KB9
-         zYGodCJpEYC+GW2Q2UEBSIzzp7de3pGMtdEps3DhuGsMzIE8jU9mglBXlJIeHJKWp78W
-         QOIQ==
+        bh=IArJW2D7DC4NrWDvM238weKBxrWboHP+GmGljUSheNA=;
+        b=qNIC0NLfXvl5G2Cz8IbLj/voOkVHO2zU/rx4Mr6ZP4GgvrFmbRsdFe9rJHYad+hO9L
+         OsGuaF+3Xl2TQBPth6x/w2MzcXQhlNBUPYIiaB/R4PNfFEyrDJZJ50cncW1PdFtHMfIM
+         PBDKsH72l757lCpZXad49PaZ8T9yEBIUQPhs/oq8dwynRlCdaNGlDKLWhQGSYmVVSeTr
+         i+AbYz/x5M5SHJn6XgVn/AS38+Uj46WZuRrh+ehFvVhIhZjaJKmDCvuhCj/Q3tGpuOq5
+         kLeGRnBcKogqC5OYI0XnOUG2ZTYrCMx4yPbBRvhj7rH8/iB6AYWppCKA4E5//8ZG5O62
+         MJkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792776554; x=1793381354;
+        d=1e100.net; s=20260707; t=1792777341; x=1793382141;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3Qj0y3/sB7EeSLYwSP8RPCK8AZrmLUoRtMMcxttoCbM=;
-        b=Fpoz3qsbM27ujWv8EZkw+H3ZhLOpriLt/ibOk4O3LYbe914OuzuKjhgjhcrBpJ9FvA
-         Z4VoiZJpSf0XaeaMGBghTz6UhnOk4CpnX7+JdYJDBUZHJUJ0y8joERw4nvOBZHD/WDb0
-         vmiMn3IsIEF2tyHaVfSPOdMnjBR+0ROpgjJciRfEM8oQOnWxst6k/6rJQOTOZrUT9cMJ
-         Fbmcg/HlPoG3h4CdplGSSKyF7Mhf3qS7arnOd2QA+DX4ptNwgkF6k70FkRYS9YfSmNlQ
-         mh+kuPxVu2XXEjS1XhXjI5MwKeZ243l2EI7UXhNUqD6qgC9Xpz7LXhIyKwf73IrMdXal
-         wssw==
-X-Forwarded-Encrypted: i=1; AKwUvBzaMVA7R9rYvPPpMeQqYOkiM2mxEmUw6HE+C/tDdmhsyWRtT8in2GFPYrmw+cxNr3ONQyTB@lists.linux.dev
-X-Gm-Message-State: AFq9FYK7DwF1b6xThL6h13QM3os922BfShxZaqodEgwAZ2fVnPPRsLOI
-	QrM8sD/uH7IulyGIekKaPShXVsPKwPngPX+PyG3SSOv5lYHMpfaqfxGT
-X-Gm-Gg: AYBFou0qi9mbH6wCXnDDHV645p1r12P/YXuu9wbZJG0Z2v177POOZ91Khsak8qewaTD
-	mI0JNkrQOEvSGKFgUexJKQqGYtI93bbDA4eUZdovRuKPcwtoyKefyYjrLOOvbt8YiNc52XnTXWK
-	QmgLx2tckfmmQy2roLza30/Qb24DZvpQ3Yfs7rkJJlqYLQXAJIpWjzAOsOpY9Q6M5eTR/XIrWfM
-	+eXv3rPrL0Zyqvn5X0Uj6z3TpZaI0390riPHNFl+7xPc+oO1drNkoHsew8C5Qy4ehP6afoLJReJ
-	xI2mDXdb+gNhMHOtoJvVz8bnKLWj5oEVY+FpbB0UXxBgxXhVMrixk2t+34SCtUh1PSEXSf1Jl/T
-	Rr1Xug3heIqttcq6q2SSqlLDslK6qY58MKrmsOt4v+KSjlmE15actRtPunhT8hHk+mfOvVz0+sG
-	I1XW3viKvZPSwz/f7TZOlEEMZh+e0lLjndZ9pn7ovlvZogQyGoBCceQQQZ4muFga/NGpxtx2SiZ
-	VWB9dS0r5sfZnfwyu4990vZi2G6aZNKnhq4bZPnyLfuTqwim/U1etL6g8L4mmiy/4ClNglb5WT1
-	mARJ1k8+0xk5l/AD0d8jjYdivhSdYbiAf8I/BWEhWLaPnQGsDMNwlFjUorAOKFb9p3eUZIWrPLl
-	WaFFPPIH3IULCgSbl
-X-Received: by 2002:a05:6000:2004:b0:486:f9ea:796f with SMTP id ffacd0b85a97d-48e387d65ddmr4932292f8f.41.1792776554351;
-        Fri, 23 Oct 2026 10:29:14 -0700 (PDT)
+        bh=IArJW2D7DC4NrWDvM238weKBxrWboHP+GmGljUSheNA=;
+        b=RO1ogZf8RSioig53BySo6LMPDc05o+/+RchMDc1NB3oKPKbZNiP7NB7VVANAj9Qphy
+         2bBcSHpFOwUyKSHWbw1A0U8RXcMshiff78Il9lK9QVTuUR1HUQAwcEE7vZM0yNToODRY
+         COYfRMeQSxwmN1WKYqNuwUhpWSpEDwEFgVGQ8fqzeS2vWa9CSXcyY51b65IXFy552uz7
+         GsHI/teTLo2PqpNew+5aYMiiE6Q/sXBmRzFVHNLg1yafpX6jSi4k51uIMnJdErDpeQeI
+         FFfEo7IHptk4ciHHoV48m3asLrv/E09J3qRLRYRcAno6Ej3ThfigRvkS+yC9oJAqKnxW
+         kamw==
+X-Forwarded-Encrypted: i=1; AKwUvBzsXgt4NdmbP7sB9mWAVNa6dX8uUor3XWKM+UOXBlE1Mv0hPUOH09uoCVJmMlznRlIzUosk@lists.linux.dev
+X-Gm-Message-State: AFq9FYK7+p0EUJbq48B3R7Ri0xz/H9LIakd+ASzlhKFz6d36tPbtZ8X3
+	sYlhTs3ik0G65KZlHaIfQQUPwQfvz3VdNkKc4R/oXsaGcfRXOeAAee2W
+X-Gm-Gg: AYBFou3TJc+8M+mSiZTGAzyrNfn6nIfF5vC8uWbiZIxvSOt/SI9WocembcEgaVSmupb
+	g/QEe+hPLDSR71LmJPZ4AFFdgJ2vmh+Mkipe1JiasenxLSZMSZxeumVj02NWpqSIw2O57etT+3N
+	rR7lLhI2ADln5tTnzMpfOD4wJA50GPh5PZHV+i9SnycgGH+PXDCpMcMiEdgkC1gOTA5KdVXN6uu
+	ryl8S1UTnrK7oyAdyS6Q7gTOoI6iMi9sp3Nq8cFFX6vSDpMP1aYdpo78dxpEI20CMwy5Du+dGrt
+	QUAHcwhVq9Qdc2K9KNom3LBBondg+WIeGLJ4TkoJp6gICq211CzilFB+wU9lJ+Cz8JQfCvfnnK8
+	1ORARVTQqMROKPgZR2Mf3eF8EkuLrCxHJYrX7dfWkC6cM0m7Up7VGbzYnUll4C2L9Du/s1KFjSH
+	Z09W4FicZgCp1Cs7QqIhF3W3zw+nnAWXPQNwXl7GWYuLRlD+2oKIHl9al1dt+EcMTjBSX8V7XZB
+	o5RLseHr49r8oIBnefW5ElS2PMaXrk+TcNhrYxDdB91Q34Hn/pUO74o4sP/x+xbt9j+ksE31HOq
+	ciX0nWFXu+4szmIKMRnhpFaPxPI6+TRgfhFNJpHEbzkJs19O7gCdcjfKqe88kAoZ3J4g1O1J5zk
+	0We04Aa+AsWmUxc/b
+X-Received: by 2002:a05:6000:98e:b0:48d:ea67:79d4 with SMTP id ffacd0b85a97d-48e385af0d1mr4196895f8f.53.1792777340908;
+        Fri, 23 Oct 2026 10:42:20 -0700 (PDT)
 Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3d4144f8sm1120262f8f.41.2026.10.23.10.29.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3d40c182sm1118217f8f.34.2026.10.23.10.42.18
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Oct 2026 10:29:13 -0700 (PDT)
+        Fri, 23 Oct 2026 10:42:20 -0700 (PDT)
 From: Fred Griffoul <griffoul@gmail.com>
 To: Ackerley Tng <ackerleytng@google.com>
 Cc: Alex Williamson <alex@shazbot.org>,
@@ -156,12 +156,12 @@ Cc: Alex Williamson <alex@shazbot.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH RFC v2 34/50] KVM: guest_memfd: Skip checking outstanding references in PFN mode
-Date: Fri, 23 Oct 2026 17:29:11 +0000
-Message-ID: <20261023172911.17557-1-griffoul@gmail.com>
+Subject: Re: [PATCH RFC v2 31/50] KVM: guest_memfd: Support getting PFNs for stage 2 from providers
+Date: Fri, 23 Oct 2026 17:42:18 +0000
+Message-ID: <20261023174218.54790-1-griffoul@gmail.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261022-gmem-alternative-providers-v2-34-5dd1dc6c660a@google.com>
-References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com> <20261022-gmem-alternative-providers-v2-34-5dd1dc6c660a@google.com>
+In-Reply-To: <20261022-gmem-alternative-providers-v2-31-5dd1dc6c660a@google.com>
+References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com> <20261022-gmem-alternative-providers-v2-31-5dd1dc6c660a@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -173,23 +173,22 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> +		if (!kvm_gmem_is_pfn_mode(gi) &&
-> +		    kvm_gmem_has_outstanding_references(inode, start, nr_pages,
-> 							err_index)) {
+> +	if (kvm_gmem_is_pfn_mode(gi)) {
+> +		r = gmem_provider_get_pfn(gi, index, pfn, max_order);
+> +		if (r)
+> +			return ERR_PTR(r);
+> +		return NULL;
+> +	}
 
-In folio mode this check is also what guarantees that a private page
-belongs to the guest alone. In PFN mode there is nothing like it: if
-the provider also exposes the frame somewhere else, say a ring shared
-with a device, the VMM can still make it private.
+The order goes from the provider to the fault handler unchecked. MPS
+reports 0, but a provider with contiguous memory won't, and then a
+fault can map a block that the gfn and pfn aren't aligned to, one that
+mixes shared and private pages, or one that covers a page being revoked
+or converted at the same time: only that page's gfn is marked as being
+invalidated, so the fault doesn't retry.
 
-And it is not only this guest that suffers then. Whoever else uses the
-frame breaks: an RMP fault on SEV-SNP, a poisoned page or a machine
-check on TDX, a granule protection fault on CCA, or, with
-SW_PROTECTED, silent access to "private" memory.
-
-Only the provider knows about such frames. With an attributes output
-from get_pfn() (see my reply to 31/50), it could flag them as aliased,
-and guest_memfd would keep them shared: refuse the conversion, treat a
-private fault as a hole, and refuse populate.
+Clamping the order in kvm_gmem_get_pfn() to an aligned block of uniform
+attributes, and widening invalidations to the surrounding blocks, would
+cover it.
 
 Fred
