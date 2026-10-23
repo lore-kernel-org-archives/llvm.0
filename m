@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792714659;
-	b=tjiAR1gmQf27cYFE6WPm821tq7aXLSfM+SpyEhbWw4Ij4EQDotOtO2gLf4B+WOBLWrOq
-	 vZIGqfX4mZ5cgEXliSb0uK9XQ7tDyc/WxkG3f8THUevw7TwT0x60velCeZS+/cPFraXjm
-	 QDyYnf3LkGq65d2Wv5xzD7qJx39Uus8Aw4pgxvn5LNbe6W8DNprHfACcO5tIjyfpiypHW
-	 qkwayp695Z8m/OYeSAGbn+C2Sme1m3UJJUAJZg76ztCAB8lakIcIKdYDblpGgwrEiM5/T
-	 nM0fykm7MxGuRU8pX45398QYwUkn+zQgxnzgtnKPU1R4+w+bX8k2enpVZgCqQj3mv4g==
+	t=1792714669;
+	b=zHqFeN7yulhRl9MIxCrUHu7lGOgi7ucIpawK69Omff7hgvKpsEvIxjZx5jMkjVkVJBIU
+	 Gievheis35kybFs3w2UM7iCNyR2vQECrhxBh2zKDMSRbcSuyN2OlZU4c7uBvrU3eXubFm
+	 5JUNgF+WUrqtix7Qdb+HWpGcy8j1WO6Csf5/iTgERJxk6kxenYFjXk86/MAXTcpot0oiM
+	 UtBnlfn2aKhCed4sm2ax94lq9ydmztlQ0eLJnAySyAE29bUKf1D9GYRfqpYNoSY933TKs
+	 lCkzeFvxJbNjpIbr5nL95NlSvxkytn3YVDG33ZR6kn+TPAEcUCBU4SVllmPgBeLb46Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792714659;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792714669;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=FGFVdcUD4uteaXAQypaWTmH+/zCVpgMAi79JFzYNdNI=;
-	b=YBeVMU+9W96+Hgqfxcxqfr46BX3Qv8zllEQjIMH1sVtpY1LB4X0zf9xPkkmizQ7KTXzJ
-	 nktV3DXVWz+9hUX6K3o/jNJIs7tOQuVt5k+uoOED9m2WrKwZi/FTuPAgbrYB0yU1Zz1yc
-	 sufLH6e51Kg/WmzjH6rxc79mDvwnGPAEEvEOQgx4BuYVnw9f53ZUM7A/miTVo5Q7jRcC/
-	 +QU7p3H75RJ2v97v+td3Cr4JfDBVRe7l1r2oak8jpOb5hrRz3D8lsRVYIXMc4pa9DJlal
-	 lBHAi0Um21BUedt+3UDCzJ7E/r6Xkx2fC1Y70PGVHVVc9lG0ewSBIPqY3qrZd8kYlKg==
+	bh=7EFy5TBdHMksgH+69ZcrASpy/wdwGEGDCoyxJAdEsHI=;
+	b=41e+xMFt8peDDwCZvGAKTe2YXBjOQKuRPn6IUyZOTP1iSkpvKFPoyjly6AZJF3kOUt32
+	 PLAJ60cf1SeR68EOi9H0xfLFjLOg9iM6zR/yTbe1vNF3aXqdTYBYCn4LLfFa4kZhY8e4B
+	 KrwtWKFH7tzka8RHIKYUaIf5fVYiFOnNWf1A8A7xCeXh2F5ZW9Xu83ZCGC5CUvWmAKRDt
+	 IGJf6X43X024gRviJtbNZKZvVJr4n1Z57V4hUPmoDFgx0PlAPspaJIVWJjzgVxOaiQsQf
+	 Y4gJUEp3UpOEdfRb4ZSfkb/R9pGcOZDgeZbGwHLP+M1/SWPW6cHmvmECTQ4fsQwKN4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=XlKYV0qK;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=OAODv42M;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F653606A31B
-	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 00:17:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F653606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E26C606A328
+	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 00:17:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E26C606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=XlKYV0qK
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-341eff9e381so808279eec.1
-        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 17:17:31 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=OAODv42M
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-3580c07911eso1021095eec.0
+        for <llvm@lists.linux.dev>; Thu, 22 Oct 2026 17:17:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792714651; x=1793319451; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1792714668; x=1793319468; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FGFVdcUD4uteaXAQypaWTmH+/zCVpgMAi79JFzYNdNI=;
-        b=XlKYV0qKQNdzO2uc9MyVl/yUuFsETdzBt88cyW0HYNuYXAvPk4I5iNR3hjV8RJllsM
-         xdd5E9+BiZmBEZ2567VVoZJf2OzDeUQZ6S1DCJOuEEFsc2fsdT6Q3j90CyVw6gNAKL0u
-         SEBqGV7o/1dZ2R+ibXOLza4a0WpkyBkAekJF1nNf1Z1LSu3o7+HgvXnt+IupNfqzsczu
-         5zpOfKO0x+ll8FBQN2qK4yvSp+2wka9gfZG5I4zQwuQFcbmcFptLZFhN6XYbCxGaoKN2
-         nqGyr3n8Q1uaboU/FpDPgcAjTPnRH5CWLnWpDmU5SIYOkM1m/AX4oYx6mWfgpIju8ssN
-         gPYw==
+        bh=7EFy5TBdHMksgH+69ZcrASpy/wdwGEGDCoyxJAdEsHI=;
+        b=OAODv42M8mBfjUU1ZsiGamTQyNvVE1qY2yueoB3kfK2vmSFkvI0rZrv2UTM0QTgTkV
+         YRys+lDuhvZW59OkwMYqWIwN6xB0mEOwvdo515jI8oIRCJCwTnKYNaCJ57XE+MillILo
+         yX8EViwHGXNOXDuEKgzcDCMq1XD3aC+x5bUeMIJbYfD5hP9hPlRbWgb9Sn4fzcaz+CrX
+         WBDuKoVMV5I7nMSoRyZM2F9utLDyJUPZ3AoH6AaWvid49Jxk5qIhBKZvLIab8ImRmCOK
+         YlTpERK45zTpD/lbX+QO04MiYRVU2NsM83uZWHBFzuPvmAGEkBAzi1PtXNsCqpCRxzFE
+         oG4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792714651; x=1793319451;
+        d=1e100.net; s=20260707; t=1792714668; x=1793319468;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FGFVdcUD4uteaXAQypaWTmH+/zCVpgMAi79JFzYNdNI=;
-        b=0qRW8qX0+/210NvjIyLv3zF5DOHJTFv+lhJd//Lhz5+mpH4B6pdGucO8JygYuYgGd9
-         KxvoMpKR68//fry/mC0V9Yb666J//zATvOlFbAl9bElFon+neAA1pYKE5AKnMVjhP7Bs
-         0R+Smgod0ZFVIZXLl2g1EpvR/102aTetkudlDyuPAJUPnPh31tiXXEZHvjX5NjpuBHtK
-         okgHbWvu458vxqKOBggWj3/G9gLYvesKOVcoiQZ4LS/e8z2Gw0LT9KI2owSpo0/nn7qO
-         3lqVIS+OC/BqDGIkxKC8kKdqcT+gnYRIkV1T3ZESJmg+8ztj/9nTENzt/0UKzbj2oR8J
-         aX9Q==
-X-Forwarded-Encrypted: i=1; AKwUvByxYxWKdkdx/HwgSVU5whVm6u6YQfeIyMjxWHsIc+0n4/yFZs1hozDcu//ZVyUCGvMKW5Vm@lists.linux.dev
-X-Gm-Message-State: AFq9FYJgkRId7HcfoiaiOzVIabIiw8GWNbBzI+fFPqD57M9DEn1eK5vK
-	7VJ4C5iCJGaKbZh2PA+PkhGiQvtHVnws+7uRw7R/l1UgEbvTkepeyDMcOKuOYLdb2hthtwUE3KF
-	HXPJqmoFxdKMG0g==
-X-Received: from dycuf12.prod.google.com ([2002:a05:7300:10c:b0:35a:6ed3:3ee9])
+        bh=7EFy5TBdHMksgH+69ZcrASpy/wdwGEGDCoyxJAdEsHI=;
+        b=ifA/oWhRTSbYFlXCwWhOvqsXIYpy4A+B+ATFmiz+h+VE3jUTyL4ikTuHeInKP5rJWo
+         oPuuScrmydLnt7VXWqUpYgvwVn6sxpq4Roq3GzCmPN8FrqjYp6nsv2xxl6P3oKbsVQb1
+         NxyncuvTvSr829cgiSie8jaRMQcTFduQCLdfA9wZzDAk14lAwsRF3S7yU2bmRMgh+P8w
+         Ef9UxSyM+RTRAY3GVk2+1AJj7v0gqnLS+lOHCuFXtMREMSoujeVI8xwGYiBXfzZH3tSf
+         8eRZogcyMhiAIhOUXbGwnKNhaDP/KhV08spO8SCNcfQnBwEpKwFnEQ8a4kGsScg550MF
+         J1nw==
+X-Forwarded-Encrypted: i=1; AKwUvBz1/qktYgS2bFuqgj15tj81TksucdKccGXeXnM4KHQneWjxwmJT4Bcyyin8HVX2/S5xW1ou@lists.linux.dev
+X-Gm-Message-State: AFq9FYIaRXIXqR36iwTwab4O5uQZ/aI5DnCZjnTUKdcQJBRUy2p+rHu/
+	BnoQxw3G4x3ytf5Hd3ZcYTBXYncNQtHPTL+teTlesdAiTi9+H/StQUqz34VVplx4uDOcOcYCrcv
+	JBYTgi8lNEoh4og==
+X-Received: from dydr21.prod.google.com ([2002:a05:7300:50f5:b0:369:45ee:40a0])
  (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:693c:83c3:10b0:367:185e:867a with SMTP id 5a478bee46e88-369d98e5b8cmr933601eec.38.1792714650260;
- Thu, 22 Oct 2026 17:17:30 -0700 (PDT)
-Date: Thu, 22 Oct 2026 17:16:04 -0700
+ 2002:a05:693c:881c:20b0:366:c497:610c with SMTP id 5a478bee46e88-369d9833dfdmr918007eec.33.1792714667128;
+ Thu, 22 Oct 2026 17:17:47 -0700 (PDT)
+Date: Thu, 22 Oct 2026 17:16:07 -0700
 In-Reply-To: <20261023001603.560210-8-wusamuel@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261023001603.560210-8-wusamuel@google.com>
 X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
-Message-ID: <20261023001603.560210-11-wusamuel@google.com>
-Subject: [PATCH bpf-next v2 3/6] docs/procfs: Document KALLSYMS_QUERY ioctl on /proc/kallsyms
+Message-ID: <20261023001603.560210-14-wusamuel@google.com>
+Subject: [PATCH bpf-next v2 6/6] selftests/proc: Add KALLSYMS_QUERY tests
 From: Samuel Wu <wusamuel@google.com>
 To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
@@ -100,49 +100,268 @@ Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com,
 	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Document the existence of the KALLSYMS_QUERY ioctl() in the section
-describing the /proc/kallsyms file. Refer the user to the UAPI header
-for low-level details of this programmatic interface. Add a "kallsyms"
-row to the /proc file table.
+Add a selftest for the KALLSYMS_QUERY ioctl() on /proc/kallsyms.
+
+For symbol-to-address lookup (KALLSYMS_QUERY_BY_SYMBOL), cover valid
+lookups, missing symbols (-ENOENT), input validation (-EINVAL, -EFAULT,
+-ENAMETOOLONG, -E2BIG), and extensible struct size handling.
+
+For address-to-symbol lookup (KALLSYMS_QUERY_BY_ADDR), cover lookups at
+exact symbol start and interior offsets, buffer truncation
+(-ENAMETOOLONG), unmapped addresses (-ENOENT), and input validation
+(-EINVAL, -EFAULT).
 
 Signed-off-by: Samuel Wu <wusamuel@google.com>
 ---
- Documentation/filesystems/proc.rst | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/testing/selftests/proc/.gitignore       |   1 +
+ tools/testing/selftests/proc/Makefile         |   1 +
+ .../selftests/proc/proc-kallsyms-query.c      | 213 ++++++++++++++++++
+ 3 files changed, 215 insertions(+)
+ create mode 100644 tools/testing/selftests/proc/proc-kallsyms-query.c
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index c102b62023cd..a0e2fe14a01a 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -761,6 +761,7 @@ files are there, and which are missing.
-  ioports      I/O port usage
-  irq 	      Masks for irq to cpu affinity			(2.4)(smp?)
-  isapnp       ISA PnP (Plug&Play) Info				(2.4)
-+ kallsyms     Kernel symbol table with dynamic queries (see text)
-  kcore        Kernel core image (can be ELF or A.OUT(deprecated in 2.4))
-  kmsg         Kernel messages
-  ksyms        Kernel symbol table
-@@ -1368,6 +1369,20 @@ Provides counts of softirq handlers serviced since boot time, for each CPU.
-     HRTIMER:         0          0          0          0
- 	RCU:      1678       1769       2178       2250
+diff --git a/tools/testing/selftests/proc/.gitignore b/tools/testing/selftests/proc/.gitignore
+index 9c9735570abf..1762c28f524c 100644
+--- a/tools/testing/selftests/proc/.gitignore
++++ b/tools/testing/selftests/proc/.gitignore
+@@ -4,6 +4,7 @@
+ /fd-003-kthread
+ /proc-2-is-kthread
+ /proc-fsconfig-hidepid
++/proc-kallsyms-query
+ /proc-loadavg-001
+ /proc-maps-race
+ /proc-multiple-procfs
+diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
+index a7de2bb6d8be..dc3c28e6b83b 100644
+--- a/tools/testing/selftests/proc/Makefile
++++ b/tools/testing/selftests/proc/Makefile
+@@ -29,6 +29,7 @@ TEST_GEN_PROGS += setns-sysvipc
+ TEST_GEN_PROGS += thread-self
+ TEST_GEN_PROGS += proc-multiple-procfs
+ TEST_GEN_PROGS += proc-fsconfig-hidepid
++TEST_GEN_PROGS += proc-kallsyms-query
+ TEST_GEN_PROGS += proc-pidns
  
+ include ../lib.mk
+diff --git a/tools/testing/selftests/proc/proc-kallsyms-query.c b/tools/testing/selftests/proc/proc-kallsyms-query.c
+new file mode 100644
+index 000000000000..229cde432d6a
+--- /dev/null
++++ b/tools/testing/selftests/proc/proc-kallsyms-query.c
+@@ -0,0 +1,213 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Tests for KALLSYMS_QUERY ioctl() on /proc/kallsyms.
++ */
++#undef NDEBUG
++#include <assert.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/ioctl.h>
++#include <unistd.h>
++#include <linux/fs.h>
 +
-+kallsyms
-+~~~~~~~~
++#include "kselftest.h"
 +
-+The /proc/kallsyms file lists all symbols in vmlinux and loaded modules.
++#define KSYM_NAME_LEN 512
 +
-+In addition to sequential text reading, /proc/kallsyms provides an ioctl()-based
-+API (`KALLSYMS_QUERY`) for querying specific symbols and addresses. This
-+interface is binary and is meant for efficient extraction of data without
-+parsing the entire text file. `struct kallsyms_query`, defined in the
-+linux/fs.h UAPI header, serves as the input/output argument to the
-+`KALLSYMS_QUERY` ioctl() command. See comments in the linux/fs.h UAPI header
-+for details on query semantics, supported flags, and return values.
++struct kallsyms_query_ext {
++	struct kallsyms_query v0;
++	__u64 extra;
++};
 +
- 1.3 Networking info in /proc/net
- --------------------------------
- 
++static int do_query(int fd, void *q)
++{
++	return ioctl(fd, KALLSYMS_QUERY, q) < 0 ? -errno : 0;
++}
++
++static struct kallsyms_query sym_query(const char *name)
++{
++	return (struct kallsyms_query){
++		.size = sizeof(struct kallsyms_query),
++		.query_flags = KALLSYMS_QUERY_BY_SYMBOL,
++		.sym_name_addr = (__u64)(uintptr_t)name,
++	};
++}
++
++static int query_symbol(int fd, const char *name, struct kallsyms_query *q)
++{
++	*q = sym_query(name);
++	return do_query(fd, q);
++}
++
++static int query_addr(int fd, unsigned long long addr, char *buf,
++		      size_t buf_sz, struct kallsyms_query *q)
++{
++	*q = (struct kallsyms_query){
++		.size = sizeof(*q),
++		.query_flags = KALLSYMS_QUERY_BY_ADDR,
++		.sym_name_addr = (__u64)(uintptr_t)buf,
++		.sym_addr = addr,
++		.sym_name_size = buf_sz,
++	};
++	return do_query(fd, q);
++}
++
++static bool find_vmlinux_symbol(const char *target, unsigned long long *addr_out)
++{
++	char name[KSYM_NAME_LEN];
++	char line[1024];
++	char type;
++	char mod;
++	FILE *f;
++
++	f = fopen("/proc/kallsyms", "r");
++	if (!f)
++		return false;
++
++	while (fgets(line, sizeof(line), f)) {
++		if (sscanf(line, "%llx %c %511s %c", addr_out, &type, name, &mod) == 3 &&
++		    strcmp(name, target) == 0) {
++			fclose(f);
++			return true;
++		}
++	}
++	fclose(f);
++	return false;
++}
++
++int main(void)
++{
++	const char *sym_name = "vfs_read";
++	char resolved_name[KSYM_NAME_LEN];
++	char long_name[KSYM_NAME_LEN + 1];
++	size_t page_size = sysconf(_SC_PAGESIZE);
++	unsigned long long exp_addr;
++	struct kallsyms_query_ext q1;
++	struct kallsyms_query q;
++	char *page_buf;
++	int err;
++	int fd;
++
++	fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
++	if (fd < 0) {
++		if (errno == ENOENT)
++			return KSFT_SKIP;
++		ksft_exit_fail_msg("open(/proc/kallsyms) failed: %s\n",
++				   strerror(errno));
++	}
++
++	if (!find_vmlinux_symbol(sym_name, &exp_addr)) {
++		close(fd);
++		return KSFT_SKIP;
++	}
++
++	/* CASE 1: Valid vmlinux symbol query (or -EPERM when addresses are hidden) */
++	err = query_symbol(fd, sym_name, &q);
++	if (err == -ENOTTY) {
++		close(fd);
++		return KSFT_SKIP;
++	}
++	if (!exp_addr) {
++		assert(err == -EPERM);
++		close(fd);
++		ksft_exit_skip("kallsyms addresses are hidden, only -EPERM checked\n");
++	}
++	assert(err == 0);
++	assert(q.sym_addr == exp_addr);
++
++	/* CASE 2: Missing symbol returns -ENOENT */
++	assert(query_symbol(fd, "__nonexistent_kallsyms_symbol__", &q) == -ENOENT);
++
++	/* CASE 3: Empty symbol name returns -EINVAL */
++	assert(query_symbol(fd, "", &q) == -EINVAL);
++
++	/* CASE 4: NULL sym_name_addr returns -EFAULT */
++	assert(query_symbol(fd, NULL, &q) == -EFAULT);
++
++	/* CASE 5: Symbol name >= KSYM_NAME_LEN returns -ENAMETOOLONG */
++	memset(long_name, 'a', KSYM_NAME_LEN);
++	long_name[KSYM_NAME_LEN] = '\0';
++	assert(query_symbol(fd, long_name, &q) == -ENAMETOOLONG);
++
++	/* CASE 6: Symbol name == KSYM_NAME_LEN - 1 returns -ENOENT */
++	long_name[KSYM_NAME_LEN - 1] = '\0';
++	assert(query_symbol(fd, long_name, &q) == -ENOENT);
++
++	/* CASE 7: Zero, multiple, or unknown query_flags return -EINVAL */
++	q = sym_query(sym_name);
++	q.query_flags = 0;
++	assert(do_query(fd, &q) == -EINVAL);
++	q.query_flags = KALLSYMS_QUERY_BY_SYMBOL | KALLSYMS_QUERY_BY_ADDR;
++	assert(do_query(fd, &q) == -EINVAL);
++	q.query_flags = 1ULL << 63;
++	assert(do_query(fd, &q) == -EINVAL);
++
++	/* CASE 8: Non-zero output fields on input in symbol mode return -EINVAL */
++	q = sym_query(sym_name);
++	q.sym_addr = 1;
++	assert(do_query(fd, &q) == -EINVAL);
++	q = sym_query(sym_name);
++	q.sym_name_size = 1;
++	assert(do_query(fd, &q) == -EINVAL);
++
++	/* CASE 9: size < minimum size returns -EINVAL */
++	q = sym_query(sym_name);
++	q.size = KALLSYMS_QUERY_SIZE_VER0 - 8;
++	assert(do_query(fd, &q) == -EINVAL);
++
++	/* CASE 10: size > PAGE_SIZE returns -E2BIG */
++	q = sym_query(sym_name);
++	q.size = page_size + 8;
++	assert(do_query(fd, &q) == -E2BIG);
++
++	/* CASE 11: Larger extensible struct with zeroed trailing bytes succeeds */
++	q1 = (struct kallsyms_query_ext){ .v0 = sym_query(sym_name) };
++	q1.v0.size = sizeof(q1);
++	assert(do_query(fd, &q1) == 0);
++	assert(q1.v0.sym_addr == exp_addr);
++
++	/*
++	 * CASE 12: Larger struct with non-zero trailing bytes returns -E2BIG.
++	 * Set the last byte of a page-sized struct so that future fields do
++	 * not change the result.
++	 */
++	page_buf = calloc(1, page_size);
++	assert(page_buf);
++	q = sym_query(sym_name);
++	q.size = page_size;
++	memcpy(page_buf, &q, sizeof(q));
++	page_buf[page_size - 1] = 1;
++	assert(do_query(fd, page_buf) == -E2BIG);
++	free(page_buf);
++
++	/* CASE 13: Valid address-to-symbol query (exact start + interior offset) */
++	memset(resolved_name, 0, sizeof(resolved_name));
++	assert(query_addr(fd, exp_addr, resolved_name, sizeof(resolved_name), &q) == 0);
++	assert(strcmp(resolved_name, sym_name) == 0);
++	assert(q.sym_addr == exp_addr);
++	assert(q.sym_name_size == strlen(sym_name) + 1);
++
++	memset(resolved_name, 0, sizeof(resolved_name));
++	assert(query_addr(fd, exp_addr + 1, resolved_name, sizeof(resolved_name), &q) == 0);
++	assert(strcmp(resolved_name, sym_name) == 0);
++	assert(q.sym_addr == exp_addr + 1);
++	assert(q.sym_name_size == strlen(sym_name) + 1);
++
++	/* CASE 14: KALLSYMS_QUERY_BY_ADDR with buffer too small returns -ENAMETOOLONG */
++	assert(query_addr(fd, exp_addr, resolved_name, strlen(sym_name), &q) == -ENAMETOOLONG);
++
++	/* CASE 15: KALLSYMS_QUERY_BY_ADDR on unmapped address returns -ENOENT */
++	assert(query_addr(fd, ~0ULL, resolved_name, sizeof(resolved_name), &q) == -ENOENT);
++
++	/* CASE 16: KALLSYMS_QUERY_BY_ADDR invalid inputs return -EINVAL or -EFAULT */
++	assert(query_addr(fd, exp_addr, resolved_name, 0, &q) == -EINVAL);
++	assert(query_addr(fd, exp_addr, NULL, sizeof(resolved_name), &q) == -EFAULT);
++
++	close(fd);
++	return 0;
++}
 -- 
 2.56.0.257.gf7497c7d27-goog
 
