@@ -1,101 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.177
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792766805;
-	b=QLkA57BLT2hKrLRWntEF5eOXJ3cDoJzOVfDVcKXTBKjllsfVAnt1LQc8wY4cts78TJxe
-	 hFDVMiuQ8jmx8zcpNgCepk0hCqZUomyEJxnpkJCtfQf+78M4Y3F1JW3U981WaWi1dyfqV
-	 DmuzEf5tTIqNRFGBkQPw1o7MrQafjdaUrg3xGjbD+voieBRAi2EgF3GowNpbGoAxqRzUM
-	 rNoyaJUTyuPM2KEbBbdG5+G3p178wZ7ZNFB3lMxv7Oed5JS2TyeRAbXhDl3kAo2O+K+V/
-	 AgVXR+5Muz0WSm7TNruVPZZfogpsOowBczfcJcEJPr7DnCJxAA/sVwgi05glhgJOANQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792766805;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=QJW09rmXkrEkYFRlCkDFiS/aHyTVspbIpRwFPjx9KZY=;
-	b=rQ4lrdaRY3PlGyHTQBjvFZMYApWfoWnyrnZkLz88vDAZeqhfnKyDvtdbr4knshtYQVSH
-	 Qx6BdN2l1bgZl20I7+GL1Dy4qJkng/pc3Hl6XSn5m6yWEKuftzwfqM5aupEbIJZFB68q6
-	 xuMHe5VLPa1qJEtN1M/lSbvLMcPdZq+o3O5mW014LDR8dcgHvy+KgnzHCBFN6CcJbA7bU
-	 HiQfjwQ83fKmD06iiC4fA8+NJ4XWHVTcVwwSoqwjPLzGd+3FqZOtgyZn2PFxfmGofwv0w
-	 pQVak1IX/nJ7nIpvAINHSNX26A3VXVBg4fn/MNzAOFvh2YBTk+L/5ntDRAx/NPcdQkg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=YaFZvWqs;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.177
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=199.89.1.16
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792769637;
+	b=j9pjp7oFx3WojXedYhXbgFRjZmcpLtg2y7EXOf9liQhal3LtECddxJdfZPy0JYFLw69Z
+	 BzrKY/RKwSCk7me2+i4HJ1Z91oevgpWk0amFCyMhx4tC397LdiY0JQmDVOkFU//8ZG8Or
+	 L8cw/Rg1hNfvn8Z95Tb5ThzDaCqHvMvfU6EAgMzKH2uu82DEUr3kkZw/5H/J1W71wIBcE
+	 3OVnzuTLLzs/XDc3atNHQNoaL+WkbirEudPwu95042wNLT9HPM2odFWJMsrtmv34k0zA9
+	 WEeMzGMTEnneES/PfD5WN3g4X0h4A7404OLvM4QZZh7PDdYtgvHDUcwrwQbYmRaazPA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792769637;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Virus-Scanned:Received:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=7Wb1v2r/qYRtiPl0jIe1hNPHXwCTAadI+O91fZCXmrY=;
+	b=Jn15oz7rLsTzbDfS7096jbugDoHBAKahbGHaCeHCCzv0GoAB+kVAtd2qb/sz0DKO35RK
+	 /on5Q//CY/X7mOHT7GdY8hKKzytCyDUPvRLYJdPOv38NMRzexd3dm0bdt4lOUz6ffaiaY
+	 igto4mOh2Nzesvfd425DXUhD9MTsM+jC2DJeBucl2d2IjZf1ZQXkKfLnxDFXGsMYtkYTk
+	 VBgmJUlcD6MNhIJ5N7IDUX/pJoRUiSpMUPT0IMJ6t+dC/HN8xfiF3sFd+nHUkty2So0vS
+	 BP2JZTCBbaWomQRiMjO54V+rZahKJV1nhimrLHXQ7pyOCMEnq7XtgF7F61aT3Ykm3VA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=acm.org;
+	spf=pass smtp.mailfrom=acm.org;
+	dkim=pass header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=rCMuRByi;
+	arc=none smtp.remote-ip=199.89.1.16
+Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AE1606A32D
-	for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 14:46:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8AE1606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E92C606A31A;
+	Fri, 23 Oct 2026 15:33:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E92C606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=YaFZvWqs
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-35159e0092aso141844eec.2
-        for <llvm@lists.linux.dev>; Fri, 23 Oct 2026 07:46:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792766804; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kmhnUk0iym2xteH4SjJTkRn04dshv50MZbpOY3h8jlKQaWY2lL7cZOxCszVOdo1AJE
-         UGE+54eNujQyFHHDLViXfEaOlhFd2O6KBdrQUwlssTmWEaCH/rPmtN6JYZYOXb37EDu0
-         UqXb9usT4x8Idb27gQ6neYm4oNzfqC+ukP9j6dDfr/qp+bnqqtC0MjaOzHT/Vuv+FKM4
-         K9KlR3WNB5XI2JhbYLjSRiLVEBQB95jF5gpZVcnscMC74Aaqrn0Gwj6+cFj1v93TAhM9
-         MIBXULrfrWMgqUYiunzxlVc6HesBoCks46aooVNrKRQ05p7KQ5FM+13XeFHXPtjwDsu6
-         m6GQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QJW09rmXkrEkYFRlCkDFiS/aHyTVspbIpRwFPjx9KZY=;
-        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
-        b=hfTNh4J5sTIZX8pUxNUyBFWBeysIb/vqZwOXwwpdwqx8ccnGVaputBAksyQi/HWN2W
-         g2pvtFjlXyrvtbbrpu4mwfTemz+i/76jzdBNF2Kh6ZTMvbkyxDftnbiv4k4d2ZK2RY3J
-         VjHFXBl42HJ8zgv6WOu5XgQBrVebarw0TAOMC4iwg9HWZtbmG7oOdBB+/p1izPk+olUY
-         uZPzYd0GgqqKZGm8QPWoro1NmTEyZ7d7P+8Mrq3k8l0niMaHkAunU5PbH9QA/bSXR6kN
-         m1wbg83+dFCo07XlnB1BChDKZPPOMfG2BZv7LBAVNSnesld2pUTpy8uzSq2XZ/jqp7o8
-         /W8Q==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792766804; x=1793371604; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=QJW09rmXkrEkYFRlCkDFiS/aHyTVspbIpRwFPjx9KZY=;
-        b=YaFZvWqsIxoSuu5A29ByRSaTpkf+KxbDCec4plyB//3pfUOsP9B5fKQyB78OxZtce5
-         0g4nwEDheHuhDfntDywjYLDbZ6cLltqW5gJc3AfZEFgbJHzyPVAdsqyEuBfP0vHllVSM
-         74ojkpB26mQ0PZafwcB+7hOFstjyaxiUruyZDfFWaxkhNIlzo9/n3qHP9k75IZH413zV
-         j9osYmiCxr/pKwgcIHfg6fZVl8IkBu5nNo6vrwB1PiIsEjJmWclSM/VPRR9oOin29aEb
-         9a63arlAD5OdJamYCAGeX0wuKMZT4Fx3r/irDykyAFqH+MYaB+2zzczB+m/brBBNWGPU
-         vrEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792766804; x=1793371604;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QJW09rmXkrEkYFRlCkDFiS/aHyTVspbIpRwFPjx9KZY=;
-        b=P1GUq/0Fb3vXF5TI1w7GL330zp+4AWyaTIDMi02/5Ul1NWaVXENA9X10Jsb5wOHxmj
-         pfH91NjgtwDch2LbFynI46zm/xKTPPMJoRzDEXiRbm+3PdsIWejOAuNkXDbU+v0pGmcG
-         HeWsrVsT1ohW2vkC/zZDvp/PJNFVNuQEMJ12utK0WQsOQLrmgZ5pDMaNW86ze3/rb0MH
-         2N6rt9AdfOkH2SXTTq9+NpAFo4s8/WYBPebYm1LO//TMqrU9hL+7rEWl4tymSLw3rz8d
-         62ABDoP/I1rvCAK5KNcIAfQnjwBB7Yj6GHu4x+mAd6dIweRNxzdrX0LLhU51yBR+JH0N
-         /A1g==
-X-Gm-Message-State: AFq9FYIZhdl4yBWH3KFAD56mcVUZqiLLjaiWRAe/8ZgOGqzHKKKvxBsn
-	wxiWN/5y84gf5n0/Ic2rDnXwWi+KVIrI9htlylNXns9DOtNDNrPddz3PuVckZv9LPXfTmIbXxyi
-	3MXvMCX/7S1I3Z6TseW2i2caKtn5qs+Q=
-X-Gm-Gg: AYBFou1eGDEg65y1mqsJxZpTpvmFw7UNWIbEUfk09O8JkfV4f73hztbVCjLTEi7Tm/T
-	lagTk9NvMOLpPTDnPn5HvRt376VBXHrOuy0f6UjnKOt5focoSh8Np7wv16pONctam8wBx449duv
-	qLVmpozQAEwgWF3k24RnwOExOP7wWbnJuqQzFQ02RjsO5c14pdALxBonSW7zOvesJrFIuqFKDvy
-	qSVBNStp3FpgNM1TfxxHIMTsMGuUocqoHAFp3/ZUSYFq8vGdA4VmZSkrwHV8EigLfvd+69MhLO8
-	hv7osnquSsyTj1M7LPa+s7mX5W3BzAtpcC5losslQc9HI6sr+IPmOnDBI553oMf/W+QXgwrKdVj
-	McDWfTxSYjnURBSBWuJlSXwASEb9c1ca8e6GDEItrIgT9MMne61/GhRvCrSd52Q4DSSRYEAyblt
-	3pixU1YJ7+vJC5QVuKfLIq+PLC9bXXeotQ75xIIluXwd3ltXfh4ymaGlOqKQKmucailXg2SIP1r
-	RUQ7s87e7mJKT+qmkKwlExLwJjimrWEesSA
-X-Received: by 2002:a05:693c:88d4:10b0:369:289a:d31a with SMTP id
- 5a478bee46e88-369d8fb0485mr5202778eec.0.1792766803831; Fri, 23 Oct 2026
- 07:46:43 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=rCMuRByi
+Received: from localhost (localhost [127.0.0.1])
+	by 013.lax.mailroute.net (Postfix) with ESMTP id 4jB6W76QDmzlfvq1;
+	Fri, 23 Oct 2026 15:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1792769630; x=1795361631; bh=7Wb1v2r/qYRtiPl0jIe1hNPH
+	XwCTAadI+O91fZCXmrY=; b=rCMuRByiWmhZFjeZ5qLIAzfq617H+WMca34naCk3
+	+sjbZEgrMBWR+Rg+mW77Y00vOUwDFZ3llPkSwwu3j7QMahdVgK8PsPIA7qiToMLf
+	k+cyGtIzD49k1z3b/4X5J+ZB1t9Om2nf3PessiURNiiEmrpIbFEGJRGjMfDWAQyq
+	o4hfO4UV9XnA5aQYtlZwCBpO64jNHpP92IBp5+b8KSdUVnuQdmlMoX/wdTFzD/qL
+	+jckkjiweaK9ssfqz6B7WWwoROpJ8Myx6YEnrsnqxLltQRl4rxdFPdTQz/ajAtAD
+	5kHwdsIKjyHgm5Tz6FmyV0GwCQ0vaj3YB2M13viGoDLbEQ==
+X-Virus-Scanned: by MailRoute
+Received: from 013.lax.mailroute.net ([127.0.0.1])
+ by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id qHTd1dz6LMfl; Fri, 23 Oct 2026 15:33:50 +0000 (UTC)
+Received: from [192.168.51.14] (c-24-6-239-25.hsd1.ca.comcast.net [24.6.239.25])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4jB6W13c5Czlfvps;
+	Fri, 23 Oct 2026 15:33:49 +0000 (UTC)
+Message-ID: <9aa270db-bfc6-4a33-a7f1-225782e9226e@acm.org>
+Date: Fri, 23 Oct 2026 08:33:48 -0700
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -105,32 +70,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261021001327.GA2730064@ax162>
-In-Reply-To: <20261021001327.GA2730064@ax162>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 23 Oct 2026 16:46:31 +0200
-X-Gm-Features: AclHuK92RKUIr4fkuSKKQu6ug8T2C79gbzvQ8i9JmmXxl0iYsgxYP38OflibXxQ
-Message-ID: <CANiq72=X-DXrEZ=+1PWfY=sd0Tpo-WwScvUCKCsD5NcN1xd5Tw@mail.gmail.com>
-Subject: Re: Prebuilt LLVM 23.1.4 uploaded
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 12/13] include: Replace __ASSEMBLY__ with __ASSEMBLER__
+ in non-uapi headers
+To: Thomas Huth <thuth@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Chris Li <sparse@chrisli.org>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-sparse@vger.kernel.org, llvm@lists.linux.dev
+References: <20261023064908.66707-1-thuth@redhat.com>
+ <20261023064908.66707-13-thuth@redhat.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20261023064908.66707-13-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 21, 2026 at 2:13=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> I have built and uploaded LLVM 23.1.4 to
-> https://mirrors.edge.kernel.org/pub/tools/llvm/.
->
-> If there are any issues found, please let us know via email or
-> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-> opportunity to get them fixed in main and backported before the 23.x
-> series is no longer supported.
+On 10/22/26 11:48 PM, Thomas Huth wrote:
+> While the GCC and Clang compilers already define __ASSEMBLER__
+> automatically when compiling assembly code, __ASSEMBLY__ is a
+> macro that only gets defined by the Makefiles in the kernel.
+> This can be very confusing when switching between userspace
+> and kernelspace coding, or when dealing with uapi headers that
+> rather should use __ASSEMBLER__ instead. So let's standardize now
+> on the __ASSEMBLER__ macro that is provided by the compilers.
+> 
+> This is a completely mechanical patch (done with a simple "sed -i"
+> statement).
 
-Looks good, thanks!
+For future patch submissions, please include the command that has been
+used to modify the code in the patch description. Anyway:
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
-
-Cheers,
-Miguel
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
