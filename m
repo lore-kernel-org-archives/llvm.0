@@ -1,79 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792740799;
-	b=EExSkivrwAzzo1gUgb8ZAyUmyg3GHt/dlE0B8e/VDXDOvpfRcT4jxeqID0Sdlbmz+URO
-	 R2bXWWkeVW4/nJvBM2cpyo1mwNkyDera+EM4RVZj/u9NkTY40q4PFLpW9+SCtzWu/gFP0
-	 MVn90SJejeNhkgsV4GOXTirUqVloXWHBm38+iXWvlG21zLTRrVs0YNJnn/UjPhwSOj6mU
-	 t8TGrwwQacA5x9a49mrEZQoH0Z7SYvKNyi2FFr/ZvpJY1qIbBBUMFi6rxlFbrNZYdxWGe
-	 BgK2ZdSPHzAXcvirI65aBF8jPbO8cA31xBymke9m3p7pj3ANWMCuSX/kBlBZJWghj4A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792740799;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=DXlkibDr0eUyUlFexrKUMNsRMFOBJ97mIZORHlS7eX0=;
-	b=KTCmJkYtwZF2P3p7i8Coiq5dSYlS1SAhdFnRfq2OWMlyXkE46+P7deWqlU3I7YbtN527
-	 r+E52CIn2P2hHNB6R5/OGNVO11hjRh9/RunkbHW7WmjnrzfgYjkdpYJPOM7xvtwdRjckH
-	 eCVCbLW8Y/UpMyrij2bDKQYUB/J4Mhd5gyURyrX2IvLF5KiIWEKPQA/Osjp4+NmWO4YUM
-	 vyNTLRCqag57eVk5ZHcnpirHJncs1quLWgbvUqyiVAx/BWnA1u3XqrEYUe53cNQ6MFNxB
-	 LObyKQ1fJBfpGi1PohulMeIFSLkK36lx6OUy7cXr0ybHynaqAu1VcoT73PGitLrnLSg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZNfQvBY2;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792743774;
+	b=fs/zRyNFOOtDDDI33veJsj6inTy2bxm4D1n10kWtEKg1Z2/mZ8BAidK+0P6i84Rnk46M
+	 5xHIgQxVYrvTZxqOxdGi+uGpinkj7IrH0TNW3rV82nW6YD8sJyTSOztl7dy/EnRHHftw6
+	 TdAImT4XpDI0OYZWzxv+NL1lgt60XomoOQ2p6F6gr4VBL+5oVpTTih24ps78ug8KAlRp0
+	 xfT/CKdjrAwixQSXdhtYeWkldGYu83J5jmZKd9+iEsNj1joL7QYVjaC+ZE58RUkwsOVlc
+	 7MYjHv5xcz7tp5wXSoCRumPXEEZ8K65c8nQ++9LDhj5dXzDfG3HaOjZwpA2jbN8CIjQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792743774;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=rFwRLuEL800954vZgLUxCOGD08K0kEaYzdU27GRt4rQ=;
+	b=THVn9VKeatG+uMh1SL2qYhPFoKnHibfnb2lYWyIRM87z0rp+wEf8+hECkpHuXd9/W3Xb
+	 E8XfEKNKS8liRjSrcZCj8AOoX6+gNmQxIfVIkvriWJYpJ5K1goOxPFv94MNF5ts931iho
+	 YXAEsEgjrQFpVXhkLll3WgwbyDsQfwZbJfd4XUHwswu7IIzdP1whTUrumtL9k1s1x/bOp
+	 QPMGskPw8rhx5vEh7UxkYpUZL8IUUxOm+aAmIyLB/Scyt7Keq0I3F5ORmV0/HZtAF7mz3
+	 pDlmhUp/sxATDWsnhGEiIBErqrmZCi9L4j7OLk5jU3S1edKP+KgmcQCGkdLHO+9QvHg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Cw4EoFat;
+	arc=none smtp.remote-ip=198.175.65.9
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A79E606A324;
-	Fri, 23 Oct 2026 07:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5523D606A31B;
+	Fri, 23 Oct 2026 08:22:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5523D606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZNfQvBY2
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792740799;
-	b=rd7ue05xxdSpH4/mCZSXwKw66p1zO4BLOzmEWnMfSZkBKTVSdDoZxM0owAnUmhJy9gZc
-	 +t2gALfQ5IY6uiVFWgogQyvvMf97UHQVvtOutfs2csrwsxivmaenpJMHzwOJ2rLJkYifA
-	 WvfA+IFE+byaUYj39I/VoeFyn+V5PiBDbSpoURVrn/8AlNg7HicKo0sTdnH6F7UcDi6LA
-	 Yh7F3DjVH1+r3aNM3ynfUCRHTYJzWc/c2/07R7vMXvJ3/NK0lhxYY7UZru7NadmPJ7u09
-	 iZdOK00fhVnqF0hRzNmcazSZgltsWZXVbqxarFy0zicjA4URs0FjC1Ap6Z4qrcTmXjA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792740799;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=DXlkibDr0eUyUlFexrKUMNsRMFOBJ97mIZORHlS7eX0=;
-	b=MIo5Bm1knn8mQVToCCMd4Jn3pzQxoPhOWW29I9ErcfFKlcLWM+hm63lF1+MeKEva1Qd6
-	 NCzS4qBqAWGxe5c20Ri2wx6My9peuNvxUOGlah4VXZDXa8JJzpJ9oB8TVRgv8juL+QZCG
-	 68sqlFA8oAszWLYc8MO5rC67HN94oqZPtEenoSm2nz+SST4U8UPZdsgDPS5Eb7roOVWQw
-	 APV6sUe9kh5IFgBh9a8lkzfxyiwjiX2QubNlT4N75taFTvDyDUufMEChEXcczGs50Khhv
-	 Z4ISzpJWImX5QCqtyJ+m5l15KDEqyYX1osgG+tZuBuYjsccqWk4vzfN1dryos0UlSmw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF2971F031E2;
-	Fri, 23 Oct 2026 07:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792740799;
-	bh=DXlkibDr0eUyUlFexrKUMNsRMFOBJ97mIZORHlS7eX0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=ZNfQvBY2vmAQxxDMUzg3DBouLY9zqbB9yRtJuBS913YQL7RJZ8HKzQyrDDZM+72Pu
-	 ujvLKC7nkfPZUrLE2hpWBpUB0aNy1oVsyetC1Bo5OfhGumjbldEDv8a1JH3eqE1A2v
-	 buTwZ4TtFqvfmU1wFsiLXUbK6tC07yJRA7yzqUCjf1a/R8Lm6ttPHl00Emuyab9EPE
-	 v3ok1tvJapb3dRtG1PTdtpy733a3xI4RAluumV0vmQj2moqfNh7dxX8EVcNBctCd0J
-	 ypCnbMddeEXK6gh1C/znp9o0CD+grXlOuIPJTGLZrfx0O1ZZ0hNfQpHSHh/tCPOfWT
-	 kb/1MFbLb6+XQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 5AC29443EE;
-	Fri, 23 Oct 2026 07:33:17 +0000 (UTC)
-From: Han Gao via B4 Relay <devnull+gaohan.iscas.ac.cn@kernel.org>
-Date: Fri, 23 Oct 2026 15:33:16 +0800
-Subject: [PATCH 3/5] kexec_file: Honor the segment alignment for CMA
- allocations
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Cw4EoFat
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792743774; x=1824279774;
+  h=date:from:to:cc:subject:message-id;
+  bh=te2N4EHsIew9AcDES7tPdYN3OKpGCFwcOOw9pYOjA0Q=;
+  b=Cw4EoFat4vU8fRpqfOidYQVX/pw9OSOrw2MZCrigzKmKtupshDUEyT9+
+   vh0jJtNL1thzZAv9k3N7DjcZPoWYNVxzuOD4V0kQTqtYmdyiXolTXihU4
+   h29t5d3EIan8lSMUyllPwNQp9j+NDD/qm4zFI1PIRrf+lPM/y5t3QmBhD
+   6x9mQw2aCTsxcOKTJjbti4b1RBzqimjb3nGiSU7gUN/sDCm5fNNo4qDgA
+   OJHlSFWMZddijP2gCpYxj85d0IiDtqwVYUaraj7sy+pPCtAehjid1QpfO
+   4vYmnXiZErR0WOme9MExWvlUVxltJ90BUevnxoElfvChjwYKpN1K+J1wS
+   w==;
+X-CSE-ConnectionGUID: txT6VECqRNi+WXND8h1U3w==
+X-CSE-MsgGUID: xrMYMVBHTAGaAgmMukgVkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11943"; a="1381916"
+X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
+   d="scan'208";a="1381916"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 01:22:53 -0700
+X-CSE-ConnectionGUID: vfgmHO08SxmQCWMjUHzbUw==
+X-CSE-MsgGUID: sy4UbMw0RPWduvj1mvU1PQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,173,1787036400"; 
+   d="scan'208";a="3619693"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 23 Oct 2026 01:22:51 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xKAY4-00000000SLo-1Rf0;
+	Fri, 23 Oct 2026 08:22:48 +0000
+Date: Fri, 23 Oct 2026 16:22:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Link Mauve <linkmauve@linkmauve.fr>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+Subject: error: kernel-address sanitizer is not supported for this
+ target
+Message-ID: <202610231657.7LxpWzaj-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,75 +81,26 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261023-riscv-kexec-cma-fixes-v1-3-825b90ea23c4@iscas.ac.cn>
-References: <20261023-riscv-kexec-cma-fixes-v1-0-825b90ea23c4@iscas.ac.cn>
-In-Reply-To: <20261023-riscv-kexec-cma-fixes-v1-0-825b90ea23c4@iscas.ac.cn>
-To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Baoquan He <baoquan.he@linux.dev>, Mike Rapoport <rppt@kernel.org>, 
- Pasha Tatashin <pasha.tatashin@soleen.com>, 
- Pratyush Yadav <pratyush@kernel.org>, Yao Zi <me@ziyao.cc>
-Cc: Han Gao <rabenda.cn@gmail.com>, Han Gao <gaohan@iscas.ac.cn>, 
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, kexec@lists.infradead.org
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792740795; l=1480;
- i=gaohan@iscas.ac.cn; s=20261021; h=from:subject:message-id;
- bh=qJEDPA0ppewD/2akK6SOlKkXPbYM3Y6vYk6RoryMxR0=;
- b=k2WWS6RTJ6LmCg0h1zKhwYN75d0Cz5RFyTNujkDVbhWiDu1L84xl9pr9j0UyBeqXCXktEAl1S
- b8+pMaOPh4vB3By4HbvwIG+rIw9MQ2jqBYyRbEonik0/PRAt8W4WIsi
-X-Developer-Key: i=gaohan@iscas.ac.cn; a=ed25519;
- pk=J8WHEK3filS86QaCaIHDGafqhxKyQ4K7+vFgRirTIiY=
-X-Endpoint-Received: by B4 Relay for gaohan@iscas.ac.cn/20261021 with
- auth_id=1262
-X-Original-From: Han Gao <gaohan@iscas.ac.cn>
-Reply-To: gaohan@iscas.ac.cn
-Content-Transfer-Encoding: 7bit
 
-From: Han Gao <gaohan@iscas.ac.cn>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7be4bc52fd9e0e55dc9a2e0232b89427d2c4b614
+commit: 73b741adb264967093ef4eb59905618a7e0d0de0 rust: Add PowerPC support
+date:   3 months ago
+config: powerpc-randconfig-1001-20261022 (https://download.01.org/0day-ci/archive/20261023/202610231657.7LxpWzaj-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2c419645e808a6667eee9dbb16c828f77e2fd2f0)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261023/202610231657.7LxpWzaj-lkp@intel.com/reproduce)
 
-dma_alloc_from_contiguous() limits the requested alignment to
-CONFIG_CMA_ALIGNMENT without reporting it. kexec_alloc_contig() can
-therefore place a segment at a less aligned address than buf_align. On
-RISC-V with 4 KiB pages, the default 1 MiB limit is below the 2 MiB
-kernel alignment, and the new kernel stops at the setup_vm() BUG_ON for
-a misaligned physical address.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 73b741adb264 ("rust: Add PowerPC support")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610231657.7LxpWzaj-lkp@intel.com/
 
-Release such a block and fall back to the regular memory hole search,
-which honors the alignment.
+All errors (new ones prefixed by >>):
 
-Fixes: 07d24902977e ("kexec: enable CMA based contiguous allocation")
-Signed-off-by: Han Gao <gaohan@iscas.ac.cn>
----
- kernel/kexec_file.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+>> error: kernel-address sanitizer is not supported for this target
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 59fb9d71e9d8..6ce10e01414e 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -690,6 +690,13 @@ static int kexec_alloc_contig(struct kexec_buf *kbuf)
- 
- 	mem = page_to_boot_pfn(p) << PAGE_SHIFT;
- 
-+	/* dma_alloc_from_contiguous() caps the alignment at CONFIG_CMA_ALIGNMENT. */
-+	if (!IS_ALIGNED(mem, kbuf->buf_align)) {
-+		pr_debug("CMA block 0x%lx is not aligned to 0x%lx\n", mem, kbuf->buf_align);
-+		dma_release_from_contiguous(NULL, p, nr_pages);
-+		return -EINVAL;
-+	}
-+
- 	if (kimage_is_destination_range(kbuf->image, mem, mem + kbuf->memsz)) {
- 		/* Our region is already in use by a statically defined one. Bail out. */
- 		pr_debug("CMA overlaps existing mem: 0x%lx+0x%lx\n", mem, kbuf->memsz);
-
--- 
-2.55.0
-
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
