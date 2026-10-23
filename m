@@ -1,57 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792770436;
-	b=zOo823amkbekVbHbY0btaVYs5NrSZu0EkLbRgTGirZEw2wVft5MEr/0RJlc60kmaq74b
-	 PRJSyobOlim157kROCE868YRr/3RJfPhEpLrAnHoYeKHGVFq6SBYSr6XkKtxU+vJ12jzG
-	 8NQ3lqFlPpGOC9K/+I0ksgjwqbVGxvWZ9/P5E3LjUVpNMTE+Xby5Rm+iPjx7JqWZqVuRv
-	 +dd7/rOzdo4FB9GDg6yoyjvFa6RMZRXsbX4V2+PhHUfKnWUdce5j0FiUbENO8b7ANkrOi
-	 XRRfpjZBSnsRMmElLp1sHu/3mR9XEdP39eT9RE8aSsJIzNqOOw8bpKyT2b+ra4p6yiw==
+	t=1792770516;
+	b=ixGTpKvep69WRLE2FpzX7FaFMH2C0jDBnUZv8zPo4p55KWOhiTLd1xJZHyaKGf/dl5E1
+	 M4eAzWGnqgcf1Ov/1s1DJ9C0vKfTgViA5sYRBfdMbPOCWOBz6cPBaBX6BXs81u+Pjk72S
+	 3+apVPSR3JCSX27tvUI1MAtpaJi97TaGI7mhKLgUsbh7tpsEhwAwFvgYsAWMqmpQyaw8e
+	 6KR5JRmqRI1eKnXjYvT8yktAwkc0fo0NAL2BTnedGXm6u2PTbRuOUkRyEIMuEBn6e57p3
+	 wgvD+ChBdZUChifkVRu21uPYHZdFXzuedyNcKBFxOnDi8V0LhaRvTLsFxY8Lly8V25A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792770436;
-	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	a=rsa-sha256; c=relaxed/relaxed; t=1792770516;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=LBxLVBAzhD8PnAjoJ0Ac22ybO01a1W4k52zwzB7Vd/s=;
-	b=mm0MI4ZlHgvRa0h62aJmAJpmBzc5SyqBqQqE65r22ZBnw/RmWojZNewHVzsbypl5vPty
-	 5YtTrAL/UW6bbXg/v1SVT5oJ33MUqXG7tc8TciXW6Zfv8rFsEGF2J1mxAJBn3+39phWVg
-	 xTV3Cxs0YP4m8FeW81P5f6xGv/ouWTvKXnGhhyhZpeadpDK4GPnkGUi2/36Bs3LaJYx2U
-	 OcXOEPcENGDhIQOGECL9/Tp1Gib0chFM+V00zIy6JXc3IdJsXOz0NFNMGEaKSFb/l3H4z
-	 qhVjCiuEt58d6rEKN6H5JqljT2L0uNwoH7hazgMVNw96pZ6PSzxCt4hcFyxLOYlS8ag==
+	bh=c/nQuNgqr5JoF8kTf6JfE2TgPlE+md4SsGtiiJskVzI=;
+	b=TWhjC6Q57EQ90IDh0ENoOTM2gIhTFO1I5psTUDTvxR4e4PQxaJCKjbl2Pa0E6eWxOuHx
+	 kauDt56DGFRApWKwnf9VpTRcbceekUXyDBsXF+F3CCGWXt4vdp0uk/wXeKgo2Rs8qmqd7
+	 o2KWYEyUTd4P0W165kOnunsCa+CM9lKtUybcyJIINP50L8Tl0+fYWem6tPC5ksTvLjcpq
+	 Dh1CnHcJ/rG4QiTh44emtyUBKuTcw/Riz+vwyOb9qoUGywrhKPzri88XKYoLjfnYGCXXA
+	 jSa3IL1CEY95PxbI7RltvvGCpeQgXgeUpsP4YUFF2kXwa2Akt+zBVaMXIDZK+etIx0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=weissschuh.net;
-	spf=pass smtp.mailfrom=weissschuh.net;
-	dkim=pass header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=nr1MGqpR;
-	arc=none smtp.remote-ip=159.69.126.157
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O+o7Geem;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A99606A31A;
-	Fri, 23 Oct 2026 15:47:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41A99606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7747C606A31A;
+	Fri, 23 Oct 2026 15:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=nr1MGqpR
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1792770433;
-	bh=LBxLVBAzhD8PnAjoJ0Ac22ybO01a1W4k52zwzB7Vd/s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nr1MGqpRXovpKxwFNCUnab+BhHhBam7aazQ3MqZ5YGJMAII1f5QLuELu6yycitAAj
-	 ZqSg89TRyQNQ1F9CS/6kVMw3tnMnDT4mIAuVRRpctkDXxwUcDBqDPhgGisW6EAvhqK
-	 2MKmE7cEhfpeYz5/8Cs5AZeGWeYAm6lnSExusphw=
-Date: Fri, 23 Oct 2026 17:47:12 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Thomas Huth <thuth@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, soc@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-riscv@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 00/13] treewide: Replace __ASSEMBLY__ with
- __ASSEMBLER__ in header files
-Message-ID: <2aa62156-9139-42a1-b993-4e01ef408da0@t-8ch.de>
-References: <20261023064908.66707-1-thuth@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O+o7Geem
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CE01F01825;
+	Fri, 23 Oct 2026 15:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792770516;
+	bh=c/nQuNgqr5JoF8kTf6JfE2TgPlE+md4SsGtiiJskVzI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=O+o7GeemDORYEayoxdVGYJqXHNXKxOs12jZyfcrpJK/RooZ5Uw7tLWRqS3wKoxkFT
+	 vvf/iwbyZWtWPWRhCi3IjCLEfNCl+6BywDIPEVegSZ0k5e2oDRIdH40BmojDdEq+A0
+	 dLMYnVYt2ONxCVB58AvDs2AoIT4pTOyQcN+s/8B5/mMncMf/Wj3kWKBvVONsHXutuz
+	 Au/m5H3w3AAFPNsN9IltayQsSpSqB4V5FuZiYVD2lj9nE7/uK0N0Vxxz5K5pB83N4t
+	 7B6hWZiu45bzqx1669Zbx8LTqOBc59OyetyPGZ8vA4qcLbUfkDdTyyxDxYCxixK/kv
+	 +O27vwYwJ6LYg==
+Date: Fri, 23 Oct 2026 16:48:29 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: acme@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com, 
+	elver@google.com, james.clark@linaro.org, jolsa@kernel.org, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
+	mingo@redhat.com, morbo@google.com, nathan@kernel.org, ndesaulniers@google.com, 
+	peterz@infradead.org
+Subject: Re: [PATCH v8 00/19] tools/perf: Adopt kernel
+ compiler-context-analysis.h annotations
+Message-ID: <att_boYgsUyMVBQQ@gremlin>
+References: <20261021223905.715051-1-irogers@google.com>
+ <20261022201453.1717523-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -63,22 +63,17 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261023064908.66707-1-thuth@redhat.com>
+In-Reply-To: <20261022201453.1717523-1-irogers@google.com>
 
-On 2026-10-23 08:48:37+0200, Thomas Huth wrote:
-(...)
+It doesn't seem clear to me why you are constantly respinning this series
+without feedback since v2 (AFAICT)?
 
-> I split the patches per architecture / maintained subsystem to ease
-> the review, and I also split the uapi headers from the normal ones in
-> case we ever decide that uapi needs to be treated differently from the
-> normal headers here and the patches would need to get reverted.
+Also not sure if in-reply-to is perf style, but neomutt is struggling with
+this thread at this stage :)
 
-Nit:
+Anyway, it's no comment on the series, but my workload dictates I won't be
+able to review this unfortunately, so could you take me off cc- moving
+forwards? Thanks!
 
-The UAPI split doesn't really matter anymore, now that
-scripts/headers_install.sh normalizes all UAPI headers.
-
-(...)
-
-
-Thomas
+--
+Cheers, Lorenzo
