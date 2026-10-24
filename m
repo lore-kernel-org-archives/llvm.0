@@ -1,75 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792800258;
-	b=ydy6hYQsD3ZZ3aXU10ZyQTvlrL9dpJtvZu91eKpZUfKl7TzCnNcwqXFACvMvZ2xnjsEf
-	 +dOyeHOIapA9WLvf/5ZGeBKsAjFmIMjYp3hmieEQiccfl9qgMY0wCJtFF2d/I9YLYkq8q
-	 0/OqX/RrppPz73tXW8vmYw4X3l/PLfNWvnF4U5Wg8fhYPIeN0ByCaWBYZBG/cok9b5rGh
-	 fA5Ar358Tn+OH1kUZrbl4AXe4r0tb2pFi+gjJzVa4aUYwDa5VNQ2tKV8JX+d0PSE+DYuV
-	 IE2t8zwDePq6Ug1naXsp+RctnumqpRBh0z2WbERBHUy9w3b1lmp/4WnTFryKtHF7TJw==
+	t=1792803061;
+	b=Y85q+pXeubXF8Cx7L/5BG4JqvYFcAonqWQ98ThNX8ZYkIct5CHXj05NWsKYhqkdR4XXu
+	 QnwtDWnF+iopqqHVv9SUUCyZAgaSk9bTBZUy3EPguRTvx1IL1MYzi6A1HFCl+xmL0KSJ7
+	 byaPdWJjIkyqHTmmZgM6Af0gdx6/RKn6CFmO3lXuYfsLMEaLStUZsDCW6Nz/Kk2tfNa0/
+	 1Cp/3ojfdmRyfH98Oqmqtlg2WYS+QtFzPmsfhPqR098cDDkNi46em5FHVd/lrKdCaBlBk
+	 oytDXZ+rfQzsyjHo31haaLbw6pzCi6Msjq5YW/iC8WDl57xYLBlZcE/aP0jlhDnyh3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792800258;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792803061;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:User-Agent;
-	bh=ziYWLz9wM2tT4veM70p1I58aNnF0qcqrKAyoRgOGTlE=;
-	b=pgbyPx18U35M8E5LsY7Zu0ItFoFXmrfPfoce25uxowbrGfDXOxuyTNXZi3FxDEVX03x5
-	 aXzcsZ+XO/lhamAi8AaLFoHB/9WDvtCt4vKJ850xvwYGhx/GHxBKo8kLpOt9pgme2tO5x
-	 sZD4tDligWYIzqIkt3fZ/70XZ0LzI2yFDbSBI5WKvWMU6PFnK1MvUg9JtZWtkGVyOvBrW
-	 3oS6jOQpseXNndrvAl6UZzFldv0AZ2KJjcAVSsvh8S0wMNEcmtUyv/+uV5HP9DHgXhFDf
-	 lPeQGaEHaou8KE4i3nKRKqu9Wh+7UVc1c7eK1ul0l0tALrDh/hLyHRoQXN/3z10WePw==
+	bh=JSYUNar/tOY5LBdVqQGzlgZqoauQErcEV4DQhSpG4/k=;
+	b=EpNndPEPCmfapLBxxJcSLEqYt+OaPNUxV9Sq2dSy43SBqg1dpaDI2/ingWhNStPGygIf
+	 V+WoDPktDlLFwZDTItGwa8YtMu1a2aAYrli6gpy65CkfbS/xSm0GL+NRURsmki8sIQkFN
+	 yPR85S9kjHlSLGAHqvogOLJfJ8Q2nTXGKZqjXxItQp1nPdeKLH55aQtYMV+2wWSyUPa4i
+	 xXLQsEGhCXk4hwX3Pey1nZuVwXcsNnUYhYCy9ygvvpnz/K8gOA3OjKBLcrmIOB58lYQxQ
+	 RHBltGUFZjqA+aBOMnDpDfyEPrGFuhFqN47Ymor0haxwtlPoeCRUzFbFzWHlv3iE8Ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="N/HuAZsJ";
-	arc=none smtp.remote-ip=198.175.65.10
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dBLhPbJ6;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFCD606A321;
-	Sat, 24 Oct 2026 00:04:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EFCD606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB977606A31A;
+	Sat, 24 Oct 2026 00:50:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB977606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N/HuAZsJ
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dBLhPbJ6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792800257; x=1824336257;
+  t=1792803060; x=1824339060;
   h=date:from:to:cc:subject:message-id;
-  bh=AjEZFQzlNnZwW7yjYYp8BWuGXBYroqkYijbHuo5IdM0=;
-  b=N/HuAZsJhAyk1bZUGbdeliAhVA2vzj/FklqJY4GqAme/wdGkS+DLM43W
-   5NYVBAvvMerPhkAqOrfG/6Agh2PpoWNQp8D2EulL8rinIzaz58dFTALFI
-   q7dWhkmLHXIJI1T2U51T2UPTUgygfIvRxZ4qRJKSER7FtLwrH28u9adQW
-   dobGX3ES8RC0EsZ3VMFmlYFIm2MbVjhROuZHG2WwGG4RjCjFfI09AIsyS
-   ESNtFetB1pMpqRqjzgBWEBjW6EaofgCcY2N2AB+gJ5Ck+Y04PVXtIYI/R
-   gkezGfhRQqkaLTS4dM5/XHKGXkG9JFc2lVYjH4PQU1HBCtQBgvz1DUKSi
-   w==;
-X-CSE-ConnectionGUID: r6XGwDfwQxy5jkV2XQGpGQ==
-X-CSE-MsgGUID: eQazQvdWQfazbx7wQ6pbMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11944"; a="1451808"
+  bh=i2mXs0A1Tjh2gMr34iM1qofcVBU4Nir/APpZAYpWPeg=;
+  b=dBLhPbJ6GIro1T/2wiSsMA/syqIJ66ZA8tuA2VOF1c0IVMFlOQ7Bkyqb
+   tqnTMLqp6xlfyBPyWDMWPZCgDHxeEYvS32tWFNTgJ4Q1RiJzW0R6K8amg
+   5BPs+NfosmPjb+r941CPbW/aPeJq2/4xtM9xop3n2kHjujH3RwYxRqGG7
+   xN6DmMfzO1ASLjNTfDzcP5usbm2BQAUP/XjSYH5pwU5l3VchUCWkLXG80
+   O45AFtex55J1hhw8wOtF6m38uKyChiNb2mbIEL/etr6/wmHwPp6I4CMxZ
+   /eTOViGECmkgvq8HE/j8QZNMDvxCtSoihb38G/L+GKN6vYfBfNAb3PY9i
+   A==;
+X-CSE-ConnectionGUID: 6V7nWnijTZ6rSuWxBEd83Q==
+X-CSE-MsgGUID: 66BkM+NeQ1iI/61b8F0T7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11944"; a="1553095"
 X-IronPort-AV: E=Sophos;i="6.27,175,1787036400"; 
-   d="scan'208";a="1451808"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 17:04:16 -0700
-X-CSE-ConnectionGUID: /AZfbux8RIG3EoZ5oJB+Tw==
-X-CSE-MsgGUID: ighPofzrT2yFjntMxOxPYw==
+   d="scan'208";a="1553095"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2026 17:50:59 -0700
+X-CSE-ConnectionGUID: ar5DtkqwQZ6i8obyb3UGHQ==
+X-CSE-MsgGUID: 3oe/jp87Sz6OL5rN8/tKtw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,175,1787036400"; 
-   d="scan'208";a="4158445"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 23 Oct 2026 17:04:13 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+   d="scan'208";a="3791521"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by fmviesa004.fm.intel.com with ESMTP; 23 Oct 2026 17:50:59 -0700
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xKPF4-00000000TO0-3hW5;
-	Sat, 24 Oct 2026 00:04:10 +0000
-Date: Sat, 24 Oct 2026 08:03:34 +0800
+	id 1xKPyJ-000000002vT-3jsS;
+	Sat, 24 Oct 2026 00:50:55 +0000
+Date: Sat, 24 Oct 2026 02:50:51 +0200
 From: kernel test robot <lkp@intel.com>
-To: Brian Cain <brian.cain@oss.qualcomm.com>
+To: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bcain:hexagon 2/82] drivers/video/fbdev/udlfb.c:370:52:
- error: use of undeclared identifier 'PAGE_SHARED'
-Message-ID: <202610240743.6bfk7K8M-lkp@intel.com>
+Subject: [daveh-devel:kss-2026-10-23 25/25]
+ arch/x86/kernel/cet.c:330:6: error: redefinition of
+ 'arch_kernel_stack_lock_current'
+Message-ID: <202610240248.jnn1TnCR-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,79 +81,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git hexagon
-head:   35ab1dadb94646b74469738c1741f68e8c6aac3d
-commit: a068d81e03bf28e40eceb94bc49e122f09177d70 [2/82] hexagon: fix the page table model for the Hexagon VM
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261024/202610240743.6bfk7K8M-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261024/202610240743.6bfk7K8M-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git kss-2026-10-23
+head:   b6fa923e47fcecf329844fd91ed615de35478ea3
+commit: b6fa923e47fcecf329844fd91ed615de35478ea3 [25/25] x86/boot: Add CPU shadow stack bootstrapping
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261024/202610240248.jnn1TnCR-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261024/202610240248.jnn1TnCR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610240743.6bfk7K8M-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610240248.jnn1TnCR-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/video/fbdev/udlfb.c:370:52: error: use of undeclared identifier 'PAGE_SHARED'
-     370 |                 if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
-         |                                                                  ^~~~~~~~~~~
-   1 error generated.
+   arch/x86/kernel/cet.c:277:17: warning: no previous prototype for function 'kshstk_build' [-Wmissing-prototypes]
+     277 | asmlinkage void kshstk_build(unsigned long *root_sp)
+         |                 ^
+   arch/x86/kernel/cet.c:277:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     277 | asmlinkage void kshstk_build(unsigned long *root_sp)
+         |            ^
+         |            static 
+>> arch/x86/kernel/cet.c:330:6: error: redefinition of 'arch_kernel_stack_lock_current'
+     330 | void arch_kernel_stack_lock_current(void)
+         |      ^
+   arch/x86/include/asm/shstk.h:49:20: note: previous definition is here
+      49 | static inline void arch_kernel_stack_lock_current(void) {}
+         |                    ^
+>> arch/x86/kernel/cet.c:351:18: error: no member named 'kshstk_ssp' in 'struct thread_struct'
+     351 |         current->thread.kshstk_ssp = kshstk_enable_current();
+         |         ~~~~~~~~~~~~~~~ ^
+>> arch/x86/kernel/cet.c:351:31: error: call to undeclared function 'kshstk_enable_current'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     351 |         current->thread.kshstk_ssp = kshstk_enable_current();
+         |                                      ^
+   1 warning and 3 errors generated.
 
 
-vim +/PAGE_SHARED +370 drivers/video/fbdev/udlfb.c
+vim +/arch_kernel_stack_lock_current +330 arch/x86/kernel/cet.c
 
-8de779dc40d35d drivers/video/fbdev/udlfb.c   Rajat Gupta        2026-05-03  342  
-4574203f45eb26 drivers/staging/udlfb/udlfb.c Bernie Thompson    2010-02-15  343  static int dlfb_ops_mmap(struct fb_info *info, struct vm_area_struct *vma)
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  344  {
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  345  	unsigned long start = vma->vm_start;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  346  	unsigned long size = vma->vm_end - vma->vm_start;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  347  	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  348  	unsigned long page, pos;
-8de779dc40d35d drivers/video/fbdev/udlfb.c   Rajat Gupta        2026-05-03  349  	struct dlfb_data *dlfb = info->par;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  350  
-5905585103276b drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2022-04-29  351  	if (info->fbdefio)
-5905585103276b drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2022-04-29  352  		return fb_deferred_io_mmap(info, vma);
-5905585103276b drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2022-04-29  353  
-76f92201b821dd drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2023-11-27  354  	vma->vm_page_prot = pgprot_decrypted(vma->vm_page_prot);
-76f92201b821dd drivers/video/fbdev/udlfb.c   Thomas Zimmermann  2023-11-27  355  
-04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  356  	if (vma->vm_pgoff > (~0UL >> PAGE_SHIFT))
-04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  357  		return -EINVAL;
-04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  358  	if (size > info->fix.smem_len)
-04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  359  		return -EINVAL;
-04f8afbec37f63 drivers/video/udlfb.c         Tomi Valkeinen     2013-04-18  360  	if (offset > info->fix.smem_len - size)
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  361  		return -EINVAL;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  362  
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  363  	pos = (unsigned long)info->fix.smem_start + offset;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  364  
-5865889fe43194 drivers/video/fbdev/udlfb.c   Ladislav Michl     2018-01-16  365  	dev_dbg(info->dev, "mmap() framebuffer addr:%lu size:%lu\n",
-2685cffa9e7992 drivers/staging/udlfb/udlfb.c Bernie Thompson    2010-09-05  366  		pos, size);
-2685cffa9e7992 drivers/staging/udlfb/udlfb.c Bernie Thompson    2010-09-05  367  
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  368  	while (size > 0) {
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  369  		page = vmalloc_to_pfn((void *)pos);
-f05e0575ed334a drivers/staging/udlfb/udlfb.c Greg Kroah-Hartman 2009-06-03 @370  		if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  371  			return -EAGAIN;
-f05e0575ed334a drivers/staging/udlfb/udlfb.c Greg Kroah-Hartman 2009-06-03  372  
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  373  		start += PAGE_SIZE;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  374  		pos += PAGE_SIZE;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  375  		if (size > PAGE_SIZE)
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  376  			size -= PAGE_SIZE;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  377  		else
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  378  			size = 0;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  379  	}
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  380  
-8de779dc40d35d drivers/video/fbdev/udlfb.c   Rajat Gupta        2026-05-03  381  	vma->vm_ops = &dlfb_vm_ops;
-8de779dc40d35d drivers/video/fbdev/udlfb.c   Rajat Gupta        2026-05-03  382  	vma->vm_private_data = dlfb;
-8de779dc40d35d drivers/video/fbdev/udlfb.c   Rajat Gupta        2026-05-03  383  	atomic_inc(&dlfb->mmap_count);
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  384  	return 0;
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  385  }
-88e58b1a42f8c1 drivers/staging/udlfb/udlfb.c Roberto De Ioris   2009-06-03  386  
-
-:::::: The code at line 370 was first introduced by commit
-:::::: f05e0575ed334a23dad91b8f6ed0ac42a3996b8d Staging: udlfb: clean up checkpatch warnings in udlfb.c
-
-:::::: TO: Greg Kroah-Hartman <gregkh@suse.de>
-:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
+   266	
+   267	/*
+   268	 * Use the unwinder infrastructure to walk back up the regular stack
+   269	 * and mirror all the return addresses over to the shadow stack.
+   270	 *
+   271	 * root_sp is captured in assembly before calling here to prevent the
+   272	 * compiler from messing with it. There may be additional frames or
+   273	 * other gunk on the stack below root_sp by the time the unwinder
+   274	 * starts, but those will ignored. All that matters is that the stack
+   275	 * is back to "root_sp" when shadow stacks are enabled.
+   276	 */
+ > 277	asmlinkage void kshstk_build(unsigned long *root_sp)
+   278	{
+   279		unsigned long ents[KSHSTK_MAX_ENTS];
+   280		struct unwind_state state;
+   281		unsigned long *ro_slot;
+   282		unsigned long *rw_slot;
+   283		int n = 0;
+   284	
+   285		/*
+   286		 * Use the unwinder to find the return addresses of callers.
+   287		 * Note that ents[0] is the most recent call. The is the
+   288		 * opposite of stacks. ents[] is tempoarary "upside down"
+   289		 * storage that will be reversed when copied to the shadow
+   290		 * stack.
+   291		 */
+   292		for (unwind_start(&state, current, NULL, root_sp);
+   293		     !unwind_done(&state) && n < KSHSTK_MAX_ENTS;
+   294		     unwind_next_frame(&state))
+   295			ents[n++] = unwind_get_return_address(&state);
+   296	
+   297		BUG_ON(n == KSHSTK_MAX_ENTS);
+   298	
+   299		/* Transfer the return addresses to the shadow stack: */
+   300		ro_slot = task_shstk_slot(0);
+   301		rw_slot = shstk_alias(ro_slot);
+   302		for (int i = n - 1; i >= 0; i--) {
+   303			*rw_slot = ents[i];
+   304			rw_slot--;
+   305			ro_slot--;
+   306		}
+   307		/* Put a restore token in the last slot: */
+   308		shstk_create_restore_token(ro_slot);
+   309	}
+   310	
+   311	static void kshstk_prepare_pages(void)
+   312	{
+   313		/*
+   314		 * Necessary for the init_task shadow stack on the boot CPU,
+   315		 * but not the secondary CPUs which have normal vmap'd stacks.
+   316		 */
+   317		set_memory_shstk_noalias((unsigned long)task_shadow_stack(current),
+   318					 shadow_stack_size() / PAGE_SIZE);
+   319	}
+   320	
+   321	/*
+   322	 * This "locks" the stack in place and does not allow any control
+   323	 * flow manipulation to occur because of changes to the stack.
+   324	 *
+   325	 * CPU enters with shadow stacks disabled and leaves with them
+   326	 * enabled.
+   327	 *
+   328	 * Must be called before the CPU does its first context switch.
+   329	 */
+ > 330	void arch_kernel_stack_lock_current(void)
+   331	{
+   332		unsigned long flags;
+   333	
+   334		if (!cpu_feature_enabled(X86_FEATURE_KERN_SHSTK))
+   335			return;
+   336	
+   337		kshstk_prepare_pages();
+   338	
+   339		/*
+   340		 * Regular interrupts are delivered on stack level 0. There
+   341		 * is a window within the enabling where CET_SHSTK_EN=1 but
+   342		 * SSP is not yet set. If an interrupt is delivered in that
+   343		 * window, it would try to push on to this stack. Disable
+   344		 * regular interrupts over this window.
+   345		 *
+   346		 * Interrupts that use other stack levels (like NMI) are OK
+   347		 * because FRED switches stacks for them and does not push
+   348		 * on stack level 0.
+   349		 */
+   350		local_irq_save(flags);
+ > 351		current->thread.kshstk_ssp = kshstk_enable_current();
 
 --
 0-DAY CI Kernel Test Service
