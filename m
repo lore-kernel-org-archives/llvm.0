@@ -1,96 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792966279;
-	b=fKkiqSHTPn8ClqoZ37pyUMtw3Frqj2jyCVrhDtrbwqkFUw6+nh3yutTPY9cdHHQaHBmz
-	 Ni/QstQgtGH9qy6JRGNSOodRfNYksYLpZ6fSiHdKsvk1xrGmW8nSPjX3i8NQzylFUuFe6
-	 TE3xeHeCRpvBtISxGi3newM3Kiwg02W4T2hiQ6kJJIgA9Tyr6NLnSjqhp46bljdD+LfJ6
-	 fcETQ3TsVgS8G7V9J+4zCcDNpUYrE497uqYaXnkBJi/Veoq4ei0ag/ieaFNsJdK6QvU+z
-	 B1HpXbdD0a8W5avgS/Q6FgAEe4d5AGa9YbFIK4iC6thrcQ47pfkTLmD/JB8maHUsRKw==
+	t=1792970966;
+	b=dLPIiEOw8fy2f7IwgoskqaaXcC+SN/vHe03zPMI+S+SCTFHfKue45mOdY7A9c7R3G4ic
+	 cDZILyX3q9qY4j5X6LCqmbtobIbmEJy+QPCwlKYWJjfvsfLtnW8lr6gxq+fKxfQask7+Z
+	 hJ13cd6tK4Ohr0mUn+V4XKAtd4Eie67eGm7x+zYPy04IGNwP830clGdvTlfOV75upgwAa
+	 UetBUGrTjVNaMhhg+4+TIO9HtU5tmFqy3qwkhAsle3rbNtrfg3zujS9iTXbspGhJg8BW0
+	 3by8znuZWV8cia7KAecRC6u/41ywHID2sQCax/bGwIda/YXYPuCmIzDQCgFWyC+c9ew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792966279;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=RbskrtRSFQKpXX2TVUnJjsMMRjXACIHvuNFaGQl3KOY=;
-	b=fJPqsn0r897m1AEOcHKlZBkMjJUWVlXF7fjEeU86gin7qIY9e+Zd/JBAnOOuxggVH/kY
-	 LWunkWsq6j9nW/sh3sYB0S/u7d37kaY2RM/Q+AP3FXzFqelZH5W3jLIRmdpuuHSOa+B2O
-	 +A5AYVE+w3m2en/n7a0LA88iTzoKNA/vAfHZ7kyqMB1cx6BhyOteDd+ZVRjHp2Xr+eUyI
-	 N2MMI2z0O3ZaB/tYUeBjD5lN8sAOLHdfecl0bI1lYcH7qPsgDc4v3ert44BgTygffdzYj
-	 E/sWsyTN9MaDCUJDtR248ANor9aynIS361Vb72SFgRZGaJeH9TCbSIaHDraIhKxJlLw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792970966;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=jYOFBLSGEnNdhnGY76tZesZu7gNZ9rzFYzDOwois3Cg=;
+	b=Y84H3Hoc4cvqS6X2INPxAaI4mEry4SIJ0tOV+9JN3GFFj7nGnreoxjikh9/eYtcl3x7B
+	 w/xhXvnzzpYtx1vYp98dRZ9eYrmS3WQvr9nBsYWqesA9H6iSEV0PaVboX64cbYLVrGKOO
+	 i7vWU9gRhc1fXRG962dNqGbgy1p1hqWvI2fW+vtAr7RezoRipgFQ+PSWU886t24XHHGqt
+	 kgV0G4RwNkc3YjeUx8Ijb7CQTvh2LVvrA0FodqccoxVuIGgDvlCB/LrM775aKB7NqRfXB
+	 ZoHlWStpbJeKa9MXKi2hACdjKgxzXQvI/wY7mClWEfPcV4kZBeqsDIS/msfPn2lSpiQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=C73HCDx9;
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=IMTZvbtA;
+	arc=none smtp.remote-ip=198.137.202.133
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB65F606A31B;
-	Sun, 25 Oct 2026 22:11:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB65F606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FEF606A31A;
+	Sun, 25 Oct 2026 23:29:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1FEF606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=C73HCDx9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792966278; x=1824502278;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SvvFyjxTb+lI7eFPlaBGniMfSYQ5Hlh9HQr+bDAhB9A=;
-  b=C73HCDx96WLkay6CakySx1CazQMX2a2yY31Uuvxu/PceSIGKWAt56LTn
-   Khe1cI/rrBfzyKTeIhvjIKdfsP6b2HGaU+HvaM9vX5zpE8jZwEblriurR
-   DQzHM52tvvIdZTaQyYNxmfDvxQPXfPKmDUIEXmS5sM3fLhQBuQC52YcwV
-   eKHSNAIUWV25e2wJph4yiAWw/gz/1/GZ97paoq/BMhfmYvfBETd3s1xqr
-   +eEhBlgrsYFvR/TcTE2Njks9maDfjP+D8Tn6GjpNkax5QBNvILB47Ego+
-   o7rCvXgVe03YyU/L6+GSgVEjifCUXg0Q49+GkSwT9OivTY+0y+CpkxSHG
-   A==;
-X-CSE-ConnectionGUID: zPxeOLKoTeCWa/Yv+Gl6SA==
-X-CSE-MsgGUID: k85oYd6XRrOPFr3HltIRig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11946"; a="1720264"
-X-IronPort-AV: E=Sophos;i="6.27,178,1787036400"; 
-   d="scan'208";a="1720264"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2026 15:11:17 -0700
-X-CSE-ConnectionGUID: WDJ+oOdBR7yGTPf6fHnIlg==
-X-CSE-MsgGUID: uvV5O+jKRce54uh3Wj/RwA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,178,1787036400"; 
-   d="scan'208";a="4458231"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Oct 2026 15:11:11 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xL6Qm-00000000VCU-1YQH;
-	Sun, 25 Oct 2026 22:11:08 +0000
-Date: Mon, 26 Oct 2026 06:10:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>,
-	Andre Eikmeyer <dev@deq.rocks>, Bjorn Helgaas <helgaas@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"(maintainer:X86 ARCHITECTURE \\(32-BIT AND 64-BIT\\))" <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <siqueira@igalia.com>,
-	Kenneth Feng <kenneth.feng@amd.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-pci@vger.kernel.org,
-	"(open list:X86 ARCHITECTURE \\(32-BIT AND 64-BIT\\))" <linux-kernel@vger.kernel.org>,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 03/13] platform/apple-gmux: Fix MMIO interface
-Message-ID: <202610260503.TQjc0Dfl-lkp@intel.com>
-References: <20261025040046.1602-4-atharvatiwarilinuxdev@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=IMTZvbtA
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=jYOFBLSGEnNdhnGY76tZesZu7gNZ9rzFYzDOwois3Cg=; b=IMTZvbtAq5pXyO+aBUA877UWDg
+	2eh195KrazJoEWqz+idrnFJeg7qYmOnC81FS2AWuaKFwlxwUpwUgyxE1Ff+t9uWC3DR70JeMJSbV4
+	QdUOUF+BBYD08pSfkr/KkK9wBpcU2tyuRjxzWrxWWEdYfc5+5qOsvIxDBbUDeCsmhVmIPcYz4ECqy
+	XSpJH2J7PMetNL7E5PcwEC0AcFLuDGMh8h7zQ5HL2NcXKGzz4ksUAzU1D/58oH0rMjSKcK9dmFGYi
+	i6Xuo13E1yUWZfJ56oMA/jCIgCES+8pmH/62YIc1NhS6rPBzDza82rggebR2j2Tp36DGe6kKjoMDW
+	5iSta3yA==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xL7eL-00000001VBZ-2PkI;
+	Sun, 25 Oct 2026 23:29:13 +0000
+Message-ID: <94b36a91-4fe8-480e-a49a-23a81cdcdc60@infradead.org>
+Date: Sun, 25 Oct 2026 16:29:11 -0700
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -100,88 +58,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261025040046.1602-4-atharvatiwarilinuxdev@gmail.com>
-
-Hi Atharva,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on v7.3]
-[also build test WARNING on next-20261023]
-[cannot apply to drm-misc/drm-misc-next pci/next pci/for-linus linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Atharva-Tiwari/platform-apple-gmux-Fix-power-for-MMIO-systems/20261024-235937
-base:   v7.3
-patch link:    https://lore.kernel.org/r/20261025040046.1602-4-atharvatiwarilinuxdev%40gmail.com
-patch subject: [PATCH 03/13] platform/apple-gmux: Fix MMIO interface
-config: x86_64-randconfig-1017-20261025 (https://download.01.org/0day-ci/archive/20261026/202610260503.TQjc0Dfl-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261026/202610260503.TQjc0Dfl-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610260503.TQjc0Dfl-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/platform/x86/apple-gmux.c:253:6: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     253 |         if (gmux_mmio_wait(gmux_data)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/apple-gmux.c:263:9: note: uninitialized use occurs here
-     263 |         return val;
-         |                ^~~
-   drivers/platform/x86/apple-gmux.c:253:2: note: remove the 'if' if its condition is always true
-     253 |         if (gmux_mmio_wait(gmux_data)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/apple-gmux.c:250:8: note: initialize the variable 'val' to silence this warning
-     250 |         u8 val;
-         |               ^
-         |                = '\0'
-   drivers/platform/x86/apple-gmux.c:290:6: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     290 |         if (gmux_mmio_wait(gmux_data)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/apple-gmux.c:301:9: note: uninitialized use occurs here
-     301 |         return val;
-         |                ^~~
-   drivers/platform/x86/apple-gmux.c:290:2: note: remove the 'if' if its condition is always true
-     290 |         if (gmux_mmio_wait(gmux_data)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/platform/x86/apple-gmux.c:286:9: note: initialize the variable 'val' to silence this warning
-     286 |         u32 val;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to
+ /proc/kallsyms
+To: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261023001603.560210-8-wusamuel@google.com>
+ <20261023001603.560210-9-wusamuel@google.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20261023001603.560210-9-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +253 drivers/platform/x86/apple-gmux.c
 
-   247	
-   248	static u8 gmux_mmio_read8(struct apple_gmux_data *gmux_data, int port)
-   249	{
-   250		u8 val;
-   251	
-   252		mutex_lock(&gmux_data->index_lock);
- > 253		if (gmux_mmio_wait(gmux_data)) {
-   254			iowrite8((port & 0xff), gmux_data->iomem_base + GMUX_MMIO_PORT_SELECT);
-   255			iowrite8(GMUX_MMIO_READ | sizeof(val),
-   256				gmux_data->iomem_base + GMUX_MMIO_COMMAND_SEND);
-   257			if (!gmux_mmio_wait(gmux_data))
-   258				return 0;
-   259			val = ioread8(gmux_data->iomem_base);
-   260		}
-   261		mutex_unlock(&gmux_data->index_lock);
-   262	
-   263		return val;
-   264	}
-   265	
+On 10/22/26 5:16 PM, Samuel Wu wrote:
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+...
+> ---
+>  include/uapi/linux/fs.h |  41 +++++++++++++
+>  kernel/kallsyms.c       | 132 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 173 insertions(+)
+> 
+> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
+> index 34c6f219462a..b43f227dad0e 100644
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -674,6 +674,47 @@ struct procmap_query {
+>  	__u64 build_id_addr;		/* in */
+>  };
+>  
+> +/* /proc/kallsyms ioctl */
+> +#define KALLSYMS_QUERY	_IOWR(PROCFS_IOCTL_MAGIC, 18, struct kallsyms_query)
+...
+
+
+Documentation/userspace/ioctl/ioctl-number.rst doesn't seem to know
+about PROCFS_IOCTL_MAGIC and what range of @nr values that it uses.
+
+Please update it.
+
+-- 
+~Randy
+
