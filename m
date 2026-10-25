@@ -1,83 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792863757;
-	b=w1kDKy1bz/eAB4QCWxf99EohI+0fLRpAmRjsomk8M6xRbU45Xu6+Fk3G0lsAGXlbUt86
-	 4g+TcZf2wo/ERx5rO+7JMEmmOwAYCWutDur3zN0MtZL7rjgyoU8WoGhC+TzddRfsuPu0A
-	 BPfsJJiRK577DB9gM0p1WYroQB3XJ5buWVHNhvjgUbQE2pS9/TjT7i2l8lEhQC+RcTcVf
-	 0xljQm+ySotBbzqCfFD6xuyps7pT3AWl8NMfaJEvmjzrGSP7oUECxnogceUegfpNeR3Fx
-	 4cRqHmmGdYvFC/dLCqTzk/9arp+LlORaaHSEgqHuVvClw7FCyYjJ81243wS6pQJGGYA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792863757;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=BuZ1t5C7X+sSlJUKEoZNCJc0nbbvghvhuZ0zbUxxORM=;
-	b=nVUzDRj9LIsZMpiUaf+oyMZDKmUCU6CHOnH3pmiqKshF/0sBYSGI6mI7+c55qOuARwq7
-	 KsW+KaAlIMfdg2rk+s3uN4H+yQxMsm3ujjUr/rB9orpDCV5xeAqmeQ9/QSp0SDAtFSNyV
-	 AcZ1kmxOjlXFLFfkk2ftT6Bj/wFW24wt+tForS6cBAbyrZkkv9iL9dHnR/WIOxijFZ+af
-	 CQnw4vKaiMlAr3dQZgOgGgB5MWcrYJXYJ/QeauwXkoeL2NlT+lQ3FWTeGV0I+O0zzIbhQ
-	 sCGF/JFUpyvKMFgkMc/ghM+YqpKXWcE0H8OFfaxH35Lm64upbgcptuMc27gXnJ1nh9Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=fyJ0Oph1;
-	arc=none smtp.remote-ip=198.175.65.9
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792892796;
+	b=2MD9pcTQWQIspseY4oBCpDbrD12ED+OFVfk5XnBJzvmcWCz7PU85twlM5TbWmtQZRFu1
+	 74hRD1R6ggXic5oLJBTOPos+rOVPS4U2E0by2dbgBD3tVI6/iuQfq2XmB+vYvx70MPZZ2
+	 PqhhGSljz7C06N6YoQRDESJ0KqnvSvpbgSDxd/cXKY45jCa/SgD8GZpZbZDDvor/XCqqg
+	 Ysekl2ppq0TDhF3mJ8Ju5OTrsBbPpLIUFpobCYlfDY2Fsum5phdUV/8cBqiYTHanipqXp
+	 dIKV36TJFG1OmbE0bpPYA+VpeWH7r7j+BR2oLpSDJ8EPRwVCYgtAPxf3z7v2znKWAlg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792892796;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=QcG7EDrZJCeBr6j9nSXrB32MYK9BIbSMPV1LPwAiErE=;
+	b=zIUBWsJaAviHPva3uH+OTmRHY09s1tQq8LlmCBEAdkwAQdBRlUUdOf6fBTIYzI/vW+im
+	 NrwurLNJ6Nhou7ls+GB6585hwRn+UTOJFwd5HshDoxlsGTJfuubQDapKwN9ShV7BM0v8t
+	 BD2AOJtGjmZ4Q9aYNQkXylI2JqPVAKuDeh2uxS1mEzeTjXklh+cyN8nw3C5+R88YQL6g7
+	 wTQ8fUHomqBZfX/ruddFIGj3Y4QIrIqSxMkxINRBC9EQcxPk9zzxYwx/dEfZugdEoL67J
+	 AumOGQYedoVpC3OWg37GwcZhZwkEAN9CnvT0rTGKTYAskX899t/3wVueJ8HaR3/UMnw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="f03Pq/C0";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEC3606A31A;
-	Sat, 24 Oct 2026 17:42:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9AEC3606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1EB606A31A;
+	Sun, 25 Oct 2026 01:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=fyJ0Oph1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792863754; x=1824399754;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8vNrTE29DnPOhUoUbcQAhuV/RJaOFG+RLJlehh9FQn4=;
-  b=fyJ0Oph1du/s8g1KSUDFOKoY88kjZE+pJLWEL2dRto838761xsywg67B
-   3twdNjPcJZe5i8gTgPICv8CO5lLrOt0Y3JHsfjLuRsqcMjX7d9HpSpZd/
-   5l1pThimy5+dbiwTmHgzFT5Jg34e/9VB7C7ByBBEVRSgvWECBNw0b1NNx
-   Nfm0q8ZGu7RRGN9LuQAIRnOsOOp+RRPlAywA6uE4b501aJCwEiT0XNqQz
-   sVRVf4MJAUjSLnI3q7pxG6Sq2DjFdwIlaAnTsLfmA/oqchG9bouv7bsDV
-   oBvskF5plW5dbFWUEhdUdWFPo9V0KmKQCskfHeX2bNyLjGWzQPRpwno16
-   Q==;
-X-CSE-ConnectionGUID: 4c93dIkvQDue6P13tiUZRg==
-X-CSE-MsgGUID: ZUDF6/EPRTmQhcjRAZDQOA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11945"; a="1468459"
-X-IronPort-AV: E=Sophos;i="6.27,176,1787036400"; 
-   d="scan'208";a="1468459"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2026 10:42:34 -0700
-X-CSE-ConnectionGUID: eJZY8DdJSTC/QSpw94f05w==
-X-CSE-MsgGUID: 3ONycMUWSKq+6Lkg09qGPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,176,1787036400"; 
-   d="scan'208";a="4013537"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Oct 2026 10:42:30 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xKflD-00000000U6o-1dkn;
-	Sat, 24 Oct 2026 17:42:27 +0000
-Date: Sun, 25 Oct 2026 01:42:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: ChunAn Wu <an.wu@canonical.com>, linux-serial@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, markus.probst@posteo.de,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, hansg@kernel.org,
-	ilpo.jarvinen@linux.intel.com, mpearson-lenovo@squebb.ca,
-	derekjohn.clark@gmail.com
-Subject: Re: [PATCH v4] platform/x86: dell-uart-backlight: Bind through
- normal serdev matching
-Message-ID: <202610250118.t0UAW41j-lkp@intel.com>
-References: <20261024022930.2704030-3-an.wu@canonical.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f03Pq/C0
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1792892795;
+	b=MDlGhA+KoMF9CEdp2p6E/bj0OyDR1vTmV7dgz5IycglrK7D11kY9GgtqMnJSZBojy1kP
+	 z7fsjlieVDxyAHIUY4jGrc3x8wUNUqPKYtGUWScZPJiHSK4FbB6LhHWDbnydx+55ufpG6
+	 1L98c8CGzFyupEZRW/MryPNJx6bSzwWGnEOcZMV/cNP6DgAltlg6cO22V4tyVhbtGG251
+	 nmzE0buEG0TrIFEIfXx2a03vsmVNEhLMIs0HxpLtlILfay1mMowGmgA4nwtigXpY78yQG
+	 Vspv9wMGzgxjIGDRcHvw/f6XiTG7IL17sEWIXiCU0LOalk9ZULpWa+BuJyq5P/Adpmw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792892795;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=QcG7EDrZJCeBr6j9nSXrB32MYK9BIbSMPV1LPwAiErE=;
+	b=rUQpDVY4z6A2DTJTUnem49tPUaq2z6RJAYtmptb/KHJDMtVsn2uNts7WFSGe/S5fFBOT
+	 aTiwxRMVroLGHuL/OjQ93VKQXUFf5pAuPq7IE4lupWAucwBMfmMX9n6cc1v9PHbm2M4JA
+	 wE7YMt2gWXAlAw6vdUXCOt6Nuw75M6YUwzzfsCZK1piveN/FWX1NrAdA9EuJp3+1tgKmI
+	 VbZ2NokVulZ8x82IpmDbWt/gncFJCxVKQJRId6BK37HXDcuOXjM8E5f4pHm369Kps2sUL
+	 jP04v/FF6FhmZ5ygsCR3r5akTkGRIQXvqXxTBQAliW9gDUZPbs7Kz9o2LQ4FHUnToDw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 51B441F01825;
+	Sun, 25 Oct 2026 01:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792892795;
+	bh=QcG7EDrZJCeBr6j9nSXrB32MYK9BIbSMPV1LPwAiErE=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=f03Pq/C0oInPgoEfKlRRS/XTqWbJmTCbo8KJRLxhMkMf/QQ0GzeqJDnqKKhYKbKPC
+	 G193+FP1o5sO86o6Mwg9cVnDgG14HuzSOEw/0XRk7TcsDgXkGUqYF3xGGtMQyGkSKo
+	 maC2RLK2jq4a0bV22euov6boFfl1AmZ9cj1TOAK1daMQDd5b1T7VFpLU4IEk+E1BAW
+	 chPpYUtKiBtLbej4hnTJbHntdalitZZzuqvlvvDOdDa8yV3sH8UP059wHzZaamy19R
+	 +sUk9FSbYCJdECCve4Ree174Gzgl/vpR1iTrylmrvh03sINvl5ukBZddlqm7lc6FFG
+	 ZcBnDNIrRFE+w==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id C4EF844924;
+	Sun, 25 Oct 2026 01:46:34 +0000 (UTC)
+From: Cytops via B4 Relay <devnull+cyridge.proton.me@kernel.org>
+Date: Sat, 24 Oct 2026 18:46:33 -0700
+Subject: [PATCH] x86/kcfi: Don't emit KCFI_REFERENCE() in modules
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,112 +82,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261024022930.2704030-3-an.wu@canonical.com>
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261024-kcfi-reference-modules-v1-1-43c2a4a9e657@proton.me>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMSw7CMAyE4atUXmPJCRELroJYFHcC5pGiuEVIV
+ e9OgOUnzfwLOarBad8tVPEyt7E0hE1HeunLGWxDM0WJuyAx8U2zcUVGRVHwYxzmO5wl6TaKpD6
+ nQO38bBN7/8KH498+n67Q6Vujdf0A+zirNnoAAAA=
+X-Change-ID: 20261024-kcfi-reference-modules-04c32004af41
+To: x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, Chris Li <sparse@chrisli.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-sparse@vger.kernel.org, Cytops <cyridge@proton.me>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792892794; l=3893;
+ i=cyridge@proton.me; s=20261025; h=from:subject:message-id;
+ bh=Fe94LxVGlnE7TJPGMDWrW2p2gjEVsTcy+l0YVlT+XbQ=;
+ b=3ms2BQ7UUfPIgKWFHNG+ZqtmWMnXu2DPdyGZKqyMErCmt0kQPJuLnEUKY5NtqR9dver0GC+24
+ NBd3966TkZ0DVDNh+Pey0aXFAh127ip+BSYSSfVGwmtE+nJBiqYDd2p
+X-Developer-Key: i=cyridge@proton.me; a=ed25519;
+ pk=vUzN9FERlHN1g72uX883qK0g48rf4ZgAQ82J2Aieyyo=
+X-Endpoint-Received: by B4 Relay for cyridge@proton.me/20261025 with
+ auth_id=1315
+X-Original-From: Cytops <cyridge@proton.me>
+Reply-To: cyridge@proton.me
+Content-Transfer-Encoding: 7bit
 
-Hi ChunAn,
+From: Cytops <cyridge@proton.me>
 
-kernel test robot noticed the following build errors:
+KCFI_REFERENCE() takes the address of a symbol so that the compiler
+emits its __kcfi_typeid_ symbol, which the SYM_TYPED_FUNC_START()
+assembly implementing it needs. It is used from arch/x86 headers for
+__clear_pages_unrolled(), copy_page(), __memset() and __memmove(), and
+all of that assembly is built into vmlinux.
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v7.3 next-20261023]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Modules include the same headers, so with CONFIG_CFI=y every module
+also gets an __ADDRESSABLE() reference to each of these symbols in
+.discard.addressable. This serves no purpose there, and since
+__clear_pages_unrolled() is EXPORT_SYMBOL_GPL, modpost now rejects any
+GPL-incompatible module that includes <linux/mm.h>:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ChunAn-Wu/platform-x86-dell-uart-backlight-Bind-through-normal-serdev-matching/20261024-102929
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20261024022930.2704030-3-an.wu%40canonical.com
-patch subject: [PATCH v4] platform/x86: dell-uart-backlight: Bind through normal serdev matching
-config: x86_64-randconfig-1014-20261024 (https://download.01.org/0day-ci/archive/20261025/202610250118.t0UAW41j-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261025/202610250118.t0UAW41j-lkp@intel.com/reproduce)
+  ERROR: modpost: GPL-incompatible module repro.ko uses GPL-only
+  symbol '__clear_pages_unrolled'
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610250118.t0UAW41j-lkp@intel.com/
+even though the module never uses the symbol. This makes OpenZFS
+impossible to build against CFI kernels; its configure checks fail
+in the same way and are misreported as CONFIG_DEBUG_LOCK_ALLOC.
 
-All errors (new ones prefixed by >>):
+Only emit the reference when building vmlinux.
 
->> drivers/platform/x86/dell/dell-uart-backlight.c:328:60: error: array has incomplete element type 'const struct serdev_device_id'
-     328 | static const struct serdev_device_id dell_uart_bl_serdev_id[] = {
-         |                                                            ^
-   drivers/platform/x86/dell/dell-uart-backlight.c:328:21: note: forward declaration of 'struct serdev_device_id'
-     328 | static const struct serdev_device_id dell_uart_bl_serdev_id[] = {
-         |                     ^
->> drivers/platform/x86/dell/dell-uart-backlight.c:363:34: error: too many arguments to function call, expected 1, have 2
-     363 |         ret = serdev_device_add(serdev, KBUILD_MODNAME);
-         |               ~~~~~~~~~~~~~~~~~         ^~~~~~~~~~~~~~
-   <command line>:8:24: note: expanded from macro 'KBUILD_MODNAME'
-       8 | #define KBUILD_MODNAME "dell_uart_backlight"
-         |                        ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/serdev.h:161:5: note: 'serdev_device_add' declared here
-     161 | int serdev_device_add(struct serdev_device *);
-         |     ^                 ~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+Tested on x86_64 with clang 23.1.3, CONFIG_CFI=y and
+CONFIG_LTO_CLANG_FULL=y (the configuration from the Fixes: commit):
+vmlinux links without warnings and still contains
+__kcfi_typeid___clear_pages_unrolled, __kcfi_typeid_copy_page,
+__kcfi_typeid___memset and __kcfi_typeid___memmove. It boots in QEMU
+with no CFI failures. A minimal module with MODULE_LICENSE("Proprietary")
+including <linux/mm.h> fails modpost before this change and builds and
+loads after it. OpenZFS builds against a CFI kernel with this change,
+and its pool, encryption, checksum and send/recv operations run with
+CONFIG_CFI_PERMISSIVE=y without CFI failures.
+
+Fixes: 9b041a4b66b3 ("x86/mm: Ensure clear_page() variants always have __kcfi_typeid_ symbols")
+Link: https://github.com/openzfs/zfs/issues/18092
+Assisted-by: LLM
+Signed-off-by: Cytops <cyridge@proton.me>
+---
+Notes for reviewers:
+
+- The fix was found and written with an AI coding assistant (Claude
+  Opus 5.5, Claude Code). It started from "CONFIG_CFI breaks
+  OpenZFS"; the assistant traced that to the modpost failure,
+  wrote this change, and ran the tests described in the changelog.
+  I have reviewed it and take responsibility for it.
+- An alternative would be wrapping the KCFI_REFERENCE() lines in
+  arch/x86/include/asm/page_64.h in #ifndef MODULE, as suggested in
+  the OpenZFS report; doing it in the macro covers all users.
+- Only x86_64 was tested; it is the only architecture using
+  KCFI_REFERENCE(). Tested with CONFIG_LTO_CLANG_FULL=y on this tree
+  and with LTO disabled on v7.3; not tested with
+  CONFIG_LTO_CLANG_THIN=y. In-tree modules were built but not loaded.
+- checkpatch reports "Non-standard signature: Assisted-by:", which
+  conflicts with Documentation/process/coding-assistants.rst.
+---
+ include/linux/compiler.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 0ea7150db..ea161a72d 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -258,10 +258,13 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 
+ #endif /* __KERNEL__ */
+ 
+-#if defined(CONFIG_CFI) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
++#if defined(CONFIG_CFI) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO) && \
++	!defined(MODULE)
+ /*
+  * Force a reference to the external symbol so the compiler generates
+- * __kcfi_typid.
++ * __kcfi_typid. Only vmlinux needs it, as that is where the assembly
++ * using the typeid lives; in a module it would only add a reference to
++ * the symbol, which fails modpost if the symbol is GPL-only.
+  */
+ #define KCFI_REFERENCE(sym) __ADDRESSABLE(sym)
+ #else
+
+---
+base-commit: 6fba331225f5040e93d0947d1027e9712238291f
+change-id: 20261024-kcfi-reference-modules-04c32004af41
+
+Best regards,
+--  
+Cytops <cyridge@proton.me>
 
 
-vim +328 drivers/platform/x86/dell/dell-uart-backlight.c
-
-   327	
- > 328	static const struct serdev_device_id dell_uart_bl_serdev_id[] = {
-   329		{ KBUILD_MODNAME },
-   330		{ }
-   331	};
-   332	
-   333	static struct serdev_device_driver dell_uart_bl_serdev_driver = {
-   334		.probe = dell_uart_bl_serdev_probe,
-   335		.driver = {
-   336			.name = KBUILD_MODNAME,
-   337		},
-   338		.id_table = dell_uart_bl_serdev_id,
-   339	};
-   340	
-   341	static int dell_uart_bl_pdev_probe(struct platform_device *pdev)
-   342	{
-   343		enum acpi_backlight_type bl_type;
-   344		struct serdev_device *serdev;
-   345		struct device *ctrl_dev;
-   346		int ret;
-   347	
-   348		bl_type = acpi_video_get_backlight_type();
-   349		if (bl_type != acpi_backlight_dell_uart) {
-   350			dev_dbg(&pdev->dev, "Not loading (ACPI backlight type = %d)\n", bl_type);
-   351			return -ENODEV;
-   352		}
-   353	
-   354		ctrl_dev = get_serdev_controller("DELL0501", NULL, 0, "serial0");
-   355		if (IS_ERR(ctrl_dev))
-   356			return PTR_ERR(ctrl_dev);
-   357	
-   358		serdev = serdev_device_alloc(to_serdev_controller(ctrl_dev));
-   359		put_device(ctrl_dev);
-   360		if (!serdev)
-   361			return -ENOMEM;
-   362	
- > 363		ret = serdev_device_add(serdev, KBUILD_MODNAME);
-   364		if (ret) {
-   365			dev_err(&pdev->dev, "error %d adding serdev\n", ret);
-   366			serdev_device_put(serdev);
-   367			return ret;
-   368		}
-   369	
-   370		ret = serdev_device_driver_register(&dell_uart_bl_serdev_driver);
-   371		if (ret)
-   372			goto err_remove_serdev;
-   373	
-   374		/* So that dell_uart_bl_pdev_remove() can remove the serdev */
-   375		platform_set_drvdata(pdev, serdev);
-   376		return 0;
-   377	
-   378	err_remove_serdev:
-   379		serdev_device_remove(serdev);
-   380		return ret;
-   381	}
-   382	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
