@@ -1,78 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792921732;
-	b=VgXwGri7t/95n0/Rysi0PNlyUXJjkYEDL2uKz+s6SygkOvk4HCpZ9w+yrKPuWwXDxBAk
-	 BS7emxgANOJ291Oji9tff9KsjempKxcIpBGV/JHlMY/GvjNXdtXMgyr6HnELTmvJu2rTg
-	 0YW//F16D3JHSL4EFuQlK1Bz6Bn9njFrJ6DKKoBX5hDFOIpErmopDDv/yd54ysNkeDgGf
-	 qM1dGKJBP0nNPnjYB7MaA0Uc3+ef7SuwxTwPM7OysAO0yUJ2q6tdzkgBiQV7vIanhCKfC
-	 3CyJAoa09CNTpuE+AbfdREejEHto/HJz+c156wfjUkNsdHAWmJnv77N1HDxDjaVZq6w==
+	t=1792931890;
+	b=kPv6Bjt6T7x5/szwwyBlfHSnjzYLceHORkJKui+rKsSWxGfIOJJXrLN0p+uCD5DA10wE
+	 3kguJNrlu16yK+4QRL1l89oj/Nz7do8YFpibmGcxtY0Wxqag2wDPIka0C57drCR28oiAZ
+	 idccIlIPKcA5xkyubwmqkznYG6f8/3C3YoKGPgVcNhXSSThyrWyp1BYe7I8QvaymeiQzm
+	 Kns0eIC/dRlJpNCcX86toFkvKpNB5MWYg7NfkmqDvkhQJOU/s3MYLHQLz2Q6LMgo6jooF
+	 plr9gADEbzp2ONYXHemQxEZ/2n3rhARdeBFWmpFV9ZKWWoNR3xydJ5zfg70z+xVqvIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792921732;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792931890;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=kgQ3FbKJprxc3vcZIzoYw5NtolkEXueSdGobmtDOSJc=;
-	b=ki+6wws4x/lQ92TfpE1zk3o7DrBxXb9BjGGqzrfFS+qeUs5I862LC1VISYlFigWG0zzB
-	 mIQgkypyXTvasuNw+p41Un03ZOgwI8O8+ZNl/ohgExLt058cOxpw7Ntv7RoQyKtFScttc
-	 wwAc/CkHf7hyQepJehtCydVnnXjCQdmVKEyvaA2AA0AeIN3e+u25sycVUVGSHjSCt4Fa2
-	 fWGANl/sE7DXcafFle2j5DucPTIr4/1vuFYpDBMPsm8UCYxIh7KJ36W1+zCu4FhiDkKa2
-	 2b+t7qwlyjdU7ckLImrQLcLPwPe6Ff/lZJlXw8Y2+3SPFJrrGzI+639OPHTIyTiZ7EA==
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=z1SpQxB5Ess7dALeSWN+4SAMzldkGG6Z/Hgr02jRRfE=;
+	b=p/ESvtQ28lOyVAeGHoBFtG3ZjNjDKtbNVOreg4vb3czaPPFLYxGcf6iWN+u6WDusON78
+	 q/8Tp6VKCPbTNQPIfeOEDttoGDc8zMsMtoPX8Uf4Qwajr475nbe0E0G6uNmxxFql9vtpT
+	 2PE1sP1zFxhOkhGO6EToaTSnGG9xu+eta/6u3ryCHXHhyGQn0gUJTxF3+J7vtb3nUoSAT
+	 2mGbuNNfInuKLF6VHzM1WYMxi+K3Ehv93OBNb0478mx7aNv7jMoOQZONdmBP3ytDzYbzK
+	 R4Gblibc7BKEYxIar0gSq8A3LSuaO6D8qf+2jPhT+ICBZp981VSLl4PELbd/a4DOVKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="NzEd/I6+";
-	arc=none smtp.remote-ip=198.175.65.15
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Tly1JwI2;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C254606A31A;
-	Sun, 25 Oct 2026 09:48:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C254606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A41A606A31A;
+	Sun, 25 Oct 2026 12:38:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A41A606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=NzEd/I6+
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Tly1JwI2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792921730; x=1824457730;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ajxfWfwQAaedcTF4TPRskwOc5EGNyPBcpOAN46bXcxQ=;
-  b=NzEd/I6+h5jE+0Bk8yzQ0267hi7cwljSmuvpZmsSYeGqW6exumR8G5IU
-   C9lews2RW9IqhFd2sU5jZBU6x7uWmmrnxGKW4RgP7/8PC+YQCyq2Pq5Vu
-   hcgMQ1Up5FtHMpQS8nUm5QwY+Hv+hDEy/NJCpTxQgnUd2i2KUiYfyuDKH
-   mKYV//7VMo1mHqmkWESGy1Z+6J0xS5Nfy5SqECczvspCuCYGO3L/bAl9w
-   pN5VsPfZQS4rYC9ESNoHcoQRkqAWCuoyYUPSBVwnlN5Z9WjF3A4UrthBz
-   aroEDEJYhIMNaPSPxOk06vRpXecS8DjN9hdVa79X0+136Vu3OWm8E4J4i
+  t=1792931889; x=1824467889;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=skIGnWUAUpC6Z7NNMtPWZU6rkNUUSmPTq5BdQ4vTsOo=;
+  b=Tly1JwI2oUzPK/Pp8s983hDPznFVMsJeVX+IdD50zR4O3RgJ9ZcePbJC
+   47ApaqSAagjsY9XpSWkg9F3YKkh9SetmNxlI9wT4gdaaPS7iQah+9kLsl
+   2spOJ8qNsZl4+aidsbcWhHV3OT3CkPC9EPxlMJUL4+u2KK61TFoovU83X
+   vIa/oNG0hAYpADZRS4B5DGJGp3nYFViIsuaheFRE2oqfMUC68+g1xN/Ml
+   qkQudieASMIXhxidSn1i0vyG4Jw0NS6YWhzcLzNIJRwIUmKUfPyrRoeuY
+   esOe1+LksiopUheCtGVbdEcJ5ih+9gGQrXIALST3wNv3VbrmalUY1ZAEL
    w==;
-X-CSE-ConnectionGUID: XVwBu3x+ToqkRGOOD/misw==
-X-CSE-MsgGUID: sZ0bSqVwRLStiOnNim1Wtw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11945"; a="1614584"
+X-CSE-ConnectionGUID: keL8m82RQMeOcOyivZS6Rw==
+X-CSE-MsgGUID: FUMFvrwkT+Sch8Gi+/GANQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11945"; a="1605108"
 X-IronPort-AV: E=Sophos;i="6.27,177,1787036400"; 
-   d="scan'208";a="1614584"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2026 02:48:50 -0700
-X-CSE-ConnectionGUID: xjPoVInqRUiyi+MX6BGktA==
-X-CSE-MsgGUID: 1Q0wmF48SPGT1K5hZem6kQ==
+   d="scan'208";a="1605108"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2026 05:38:08 -0700
+X-CSE-ConnectionGUID: k+gHluimRfeABcsMa3XqGQ==
+X-CSE-MsgGUID: /PczsrsqTh+AxzZoqgctsw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,177,1787036400"; 
-   d="scan'208";a="4390057"
+   d="scan'208";a="3981230"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 25 Oct 2026 02:48:49 -0700
+  by orviesa003.jf.intel.com with ESMTP; 25 Oct 2026 05:38:02 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xKuqL-00000000Uhi-2sOG;
-	Sun, 25 Oct 2026 09:48:45 +0000
-Date: Sun, 25 Oct 2026 17:48:33 +0800
+	id 1xKxU6-00000000UmU-1LTn;
+	Sun, 25 Oct 2026 12:37:58 +0000
+Date: Sun, 25 Oct 2026 20:37:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
-Subject: [linux-next:master 19256/19841]
- drivers/gpio/gpio-sim.c:1394:3: error: field designator 'ct_attrs_const' does
- not refer to any field in type 'const struct config_item_type'
-Message-ID: <202610251714.Sht9doVs-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, chrisl@kernel.org,
+	kasong@tencent.com, hannes@cmpxchg.org, mhocko@kernel.org,
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev, yosry@kernel.org,
+	david@kernel.org, muchun.song@linux.dev, shikemeng@huaweicloud.com,
+	baoquan.he@linux.dev, baohua@kernel.org, youngjun.park@lge.com,
+	chengming.zhou@linux.dev, ljs@kernel.org, liam@infradead.org,
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+	qi.zheng@linux.dev, axelrasmussen@google.com, yuanchu@google.com,
+	weixugc@google.com, riel@surriel.com, gourry@gourry.net,
+	haowenchao22@gmail.com, corbet@lwn.net, hughd@google.com,
+	baolin.wang@linux.alibaba.com
+Subject: Re: [PATCH v6 04/12] mm, swap: support physical swap as a vswap
+ backend
+Message-ID: <202610252016.SuCWXL35-lkp@intel.com>
+References: <20261021060323.553433-5-nphamcs@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -83,48 +93,60 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261021060323.553433-5-nphamcs@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   20a33c6b6cbe7e4805dfb6cd68816937443aa148
-commit: b57f502a681296be357e5c9dc72b53b083b26472 [19256/19841] gpio: sim: constify struct configfs_attribute
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261025/202610251714.Sht9doVs-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261025/202610251714.Sht9doVs-lkp@intel.com/reproduce)
+Hi Nhat,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 4dbe24720eb3811563cd56b35d87ddf3f9beed2a]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/mm-swap-add-virtual-swap-device-infrastructure/20261020-230312
+base:   4dbe24720eb3811563cd56b35d87ddf3f9beed2a
+patch link:    https://lore.kernel.org/r/20261021060323.553433-5-nphamcs%40gmail.com
+patch subject: [PATCH v6 04/12] mm, swap: support physical swap as a vswap backend
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20261025/202610252016.SuCWXL35-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261025/202610252016.SuCWXL35-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610251714.Sht9doVs-lkp@intel.com/
-
-Note: the linux-next/master HEAD 20a33c6b6cbe7e4805dfb6cd68816937443aa148 builds fine.
-      It may have been fixed somewhere.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610252016.SuCWXL35-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpio/gpio-sim.c:1394:3: error: field designator 'ct_attrs_const' does not refer to any field in type 'const struct config_item_type'
-    1394 |         .ct_attrs_const = gpio_sim_hog_config_attrs,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:1448:3: error: field designator 'ct_attrs_const' does not refer to any field in type 'const struct config_item_type'
-    1448 |         .ct_attrs_const = gpio_sim_line_config_attrs,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:1509:3: error: field designator 'ct_attrs_const' does not refer to any field in type 'const struct config_item_type'
-    1509 |         .ct_attrs_const = gpio_sim_bank_config_attrs,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:1564:3: error: field designator 'ct_attrs_const' does not refer to any field in type 'const struct config_item_type'
-    1564 |         .ct_attrs_const = gpio_sim_device_config_attrs,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+   In file included from mm/workingset.c:19:
+>> mm/swap_table.h:418:10: error: call to undeclared function 'swp_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     418 |         return (swp_offset(entry) << SWP_TB_VSWAP_MARK_BITS) | SWP_TB_VSWAP_MARK;
+         |                 ^
+>> mm/swap_table.h:427:9: error: call to undeclared function 'swp_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     427 |         return swp_entry(vswap_si->type, offset);
+         |                ^
+>> mm/swap_table.h:427:9: error: returning 'int' from a function with incompatible result type 'swp_entry_t'
+     427 |         return swp_entry(vswap_si->type, offset);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
-vim +1394 drivers/gpio/gpio-sim.c
+vim +/swp_offset +418 mm/swap_table.h
 
-  1391	
-  1392	static const struct config_item_type gpio_sim_hog_config_type = {
-  1393		.ct_item_ops	= &gpio_sim_hog_config_item_ops,
-> 1394		.ct_attrs_const	= gpio_sim_hog_config_attrs,
-  1395		.ct_owner	= THIS_MODULE,
-  1396	};
-  1397	
+   415	
+   416	static inline unsigned long swp_entry_to_swp_tb_vswap(swp_entry_t entry)
+   417	{
+ > 418		return (swp_offset(entry) << SWP_TB_VSWAP_MARK_BITS) | SWP_TB_VSWAP_MARK;
+   419	}
+   420	
+   421	static inline swp_entry_t swp_tb_vswap_to_swp_entry(unsigned long swp_tb)
+   422	{
+   423		unsigned long offset;
+   424	
+   425		VM_WARN_ON(!swp_tb_is_vswap(swp_tb));
+   426		offset = (swp_tb & SWP_RMAP_ENTRY_MASK) >> SWP_TB_VSWAP_MARK_BITS;
+ > 427		return swp_entry(vswap_si->type, offset);
+   428	}
+   429	
 
 --
 0-DAY CI Kernel Test Service
