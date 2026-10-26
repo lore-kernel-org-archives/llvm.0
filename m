@@ -1,113 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793006906;
-	b=36ldLiXD/bidvGTY4HDzbrF8SMaB6qnc6MHQV0lz2fB6/5xAkQbL6XXcK4qoI4kQp/65
-	 fMXdvcS3qftKvTHxBWPgdU6QirI7HhsdjHR6giEzLlA5A1b60kylWCLOOcI74MQLS5fcJ
-	 EWm4jjABcMiU744y+SfucbhJc36ihckxsuU6Ao1xUoNS+zlImzwVOp5PZYAnYtHPMPF/P
-	 eE7IpsorntVjV19EXd3h8pKujZr5UdgH6UVd7A6pbLI9ngYDAmKxYr2jBzh5BZn4gRhYJ
-	 wF+STKuMd20UFejlLUslHnpN9xeBlMMq5GsPZEA/nbCNjrWu4bfwVgZaAUUnE7aIX6w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793006906;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793009350;
+	b=SBMPWz4fbtXHZVm7jcKTrc7KyKXcI2kh5z27mltKjAJxCSgg9O7OCjZ7YQ6ZQDMxsLrL
+	 UBdxlpoHmgXYEBqgsf/kC36oEcVOI8DatEamQHFTR1vUOn1Tqs7pDoMbfwLqtTwp5XmvV
+	 L/gwZhgyjQjobWCHIyOdBKQoZxBQCJe6ueGlGVr17s1MUhHZSafGq+0nmhARyGvNjjRxT
+	 bodoTxJsnlYFB7UTMcWkMtHANrRi9kPo6IE0nMmrLkOvaa8Jt6Hj4eXWlTCDFiqgR7+od
+	 GIZR67hTKjiowII2CoSgZr0yZeT81/IjOCqX1MRSxIAXQC1u+COrCB0Ob6jZ+mOmeOA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793009350;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=6Q5jKmXgzoo+WiVGo4LfNDJTiePFUGEuuUfFv2a/kxQ=;
-	b=e1HIacCSMoOLHJRWbViVVU06rQES34n26wU1o4N+d+abE0wC+Ixivn0luU0VXm9kaxb8
-	 ipI8Tl+ECiZhCosByzWE/VN2L9iE+zTRvKuaxKDqMKdwwv/Xt+gyyvidT5BLg0nZtJTXN
-	 +pVftHBp7oiXSUL2XLdlRBHVlgJ3aJiN/2PdfjyHJM8ngdAuWz7YLhk63kyD/oUImFBc3
-	 UjHPgB2w1827saX+9xM8ycdDs1kBciXHwXrsLLT+9OMnoRUeXOaNePNL+36xcRDaYaRLl
-	 BWS+k88UYqc83fo3U1N6FqJMQDsFMTsDb9+jWjLK/7du/dWt22B9M7HruKdMJRnsV6Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HTWyYNZ5;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=lqgswGVrjDSSdxxGQJBHiCq23U2S/DjC2jo9ZomP9DE=;
+	b=D0tUfO+YB0O3QHPXPu9HNv2C4kYaJDAMccpvY0AdijimjOl8eyxx4+7Od3RZcIlYcfLv
+	 L3EPAWK0ndAB5X2kkZlN4XFQgU/fTiKAyKeOL+baIg9Ucc2hiwm0X5QuvBEjtQW6jCK8B
+	 JC1INB6vmSr+h4n5E0SKeMoXgxD9o1pxeq9lFF7YlVOcrPwk3BQ3nxA1lOFtPEYYB8sBD
+	 +fotlG71p9cFObVJGF9hCQVgSUoX1krH4Uyl+guYNdcfb7uLqK5XYmB3XxUAHGdcEcRZ0
+	 0uhMC7egJkP/lC/htumrzowjt5VQi9M8oPrnExwDtX0KKFA5DbZq4pPHtfk6w+vDY1A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pt20n6gu;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.41
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20375606A327
-	for <llvm@lists.linux.dev>; Mon, 26 Oct 2026 09:28:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20375606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2117C606A323
+	for <llvm@lists.linux.dev>; Mon, 26 Oct 2026 10:09:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2117C606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HTWyYNZ5
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a5720b0a57so4529915e9.0
-        for <llvm@lists.linux.dev>; Mon, 26 Oct 2026 02:28:24 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=pt20n6gu
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-15ea896ddc8so4806644c88.0
+        for <llvm@lists.linux.dev>; Mon, 26 Oct 2026 03:09:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793009348; cv=none;
+        d=google.com; s=arc-20260327;
+        b=K9U0H5xXQ6a3mj1ktTnnV4xIgPa+dpZSpHNQRpy27xgO2VeMwEciwrVAdhMiFmzHPy
+         GJjjvOsoWEVWDTU9+18hUQSFllQa+OohkoePnhtrt01kCpU3FCOCIco8GkFQzZKPHzk4
+         IddH+HnFoNVLeO7eX9ypAqfma95gYj8DkLHNrrLWVzxXYXJg6S22bzNwQ3wd59uQREFt
+         PrOIYVj+iSEck17Kdm3eTtNZwKTGpWwHiL2mfNH/6RPQUuKBBHcoknrk/6k/Ibtgkk4j
+         sMrPxBef6QH1KCy0MRD0Hh/G08cXp7InzkWUm+CYJtDz0otSp8Yf4+67/gac3wk7mTCJ
+         rKAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=lqgswGVrjDSSdxxGQJBHiCq23U2S/DjC2jo9ZomP9DE=;
+        fh=i2qX9iNQ+kv3Zil53Gj0kotVEl80DLesbmayhgUQNqc=;
+        b=QVCs6TMdFlfm5Thx1kypfWVjKo8y8Eqh++eHz8cgalgmtf9sZbnMHd0e3LE8Ai+uY6
+         NbdVATJizY8dZN/4JEt+h10Y+/2mZ7nKtFEYnw7bdBDsUrLp3zvwnJ+2Q3RJA1N7YPgG
+         lSzAfOfQAiOeSRBdm1CmznI1lc9sN60Y/cmQnOf2Epi+bbsdfQ4DAhFcsN/kPbLoZFyh
+         ErtkO6lxxUKZjeMalKb/VvmI0di7WepdgCeR91SGAvGgibYYEQn5YgEtLRVw3JOo6HuU
+         2Io77HLZ8JR+BNi5b4/dkeofb0U+nt3OECKUH6kqxooqDxyMw9lrGX95xnH0zDtRdbtO
+         ak7A==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793006903; x=1793611703; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6Q5jKmXgzoo+WiVGo4LfNDJTiePFUGEuuUfFv2a/kxQ=;
-        b=HTWyYNZ5ugarr6Js6kFahl0p2/ohRp7MBOOCQlKqerq7h79YAl2yvOGbwFIOmiO+Hy
-         CYS5HcTxI4k/Wynuq45BbJK6EBBFHr+JP1OVOua05LnMCrsFx2vMrZ89SZ1PqReyFQL2
-         W4nSzuKwDq7rEtzobYVNwL/g3bu7w6KNaP6FUKNBUN06qs9okTFp4n+5QMlqx4qqSN5V
-         vQEfcqZaqobeu3WSM26dIDCfNZ9DaJh7C0yg6Kr9AXHM5BAzHxAGKItKFSixty6RWUbu
-         8UwDef+M5mt2GMwq3BiMh2yZGd1aBp8ptTxV/SXvWFf59uz2sFT4Lly0Gqg3O56rmSDB
-         vakg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793006903; x=1793611703;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1793009348; x=1793614148; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6Q5jKmXgzoo+WiVGo4LfNDJTiePFUGEuuUfFv2a/kxQ=;
-        b=C7TxUCrxJnvjnHkpOBz6jS4fmXS8iRdbF4lb8NynrNQzgQAL7CBPvgovrAObgD8rEH
-         ilsPGEFemvmsSclwl79QVydML4rm+92jv1mvnIogEo3yYWjmFZF73sPolkoatwbjSLLc
-         J9p6jUn3RMpJAxMPPA7E0KzAdQTKmor3OBRxh+YY/eJ2oX0KBAbBVnEbjHrHamIYmarx
-         Qbg8IV9TLLtRxmWd6WsXs/Cu9wS/G3jC456+3tmGckV8419fBm6rtj+ZEU3l8hLSY7bo
-         cIdKrQ5LgFkd+sxdUDKHhUHSqSglas1nUnVTf3dPgG4hOJrfW8GHFLgCrCDZS57Ssc/h
-         5I7Q==
-X-Forwarded-Encrypted: i=1; AKwUvBw18LDzpclJ/I7+W6rFXlS7LrTat7+5qPslKzlSP+in/AaU59Lz5CGN854I+KOlGxTVOgrO@lists.linux.dev
-X-Gm-Message-State: AFq9FYJKBLmRTZoOsFZNNECucKcnBpxUP1hqxN/mCqhN4YNAJ0+hPxo7
-	7Zrt4liNRzmCFVbsXdTRA+BTwaPzUcUVZpZ+afS5TfuZZH6b2om/QSPL
-X-Gm-Gg: AYBFou1IQzWiOAkjRiwRfW2aJaRZ0lyfToBoxzBL738+eOkoYWaIuocCPgJfKLNxuoQ
-	XF4dNUejPv+l0TYlNp8ioOiAD+3ZzKJJ45ghFaiIM2KZjsow8twmXPOiqzg4zJK3eGkocwVozuq
-	spg7VwJy1ciB3vGPUtu0ujWxOXh6NoyWQbQZchR4+U7xUnNLBTYA/hLaBbQh4F6osIzlQt5HcaV
-	T++YpuvN5lImUdvoJv+j7ZD65dg8v0kMoTi+UCgxwYfNg7P+6HYq4wslBV94ROzpXg3s+YM4VNb
-	ImuwFHoaAddVqX4hj/aIfyxAMLMl/TSJrvuC8M5zMGYqAzwZsKmlLmoKXM5Jt/0EEbkSROjozwD
-	a6eWtzc4hsTa3Xuy02VvuY+00Oe2Sbo/mIoF/3IlMG8z0ZLgfBF3cFQfV+QR13J+hZk4sNqvjLc
-	TFTD7leBikhaipuSMtJONS5dsqyeP/UNVe8nMvF8JcnnaRJloQjIL6Vw1tvv5KJ136E3gpq5uVc
-	PqVPiLm5XAdLLFQCppso6jM8+67
-X-Received: by 2002:a05:600c:3553:b0:4a0:20b4:ba93 with SMTP id 5b1f17b1804b1-4a35aead203mr116295105e9.16.1793006903112;
-        Mon, 26 Oct 2026 02:28:23 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::25dc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a359ff2189sm215058535e9.1.2026.10.26.02.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 02:28:22 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 26 Oct 2026 10:28:20 +0100
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 4/6] libbpf: Resolve typeless ksyms via
- KALLSYMS_QUERY ioctl
-Message-ID: <at8dNNb4vwovNZcZ@krava>
-References: <20261023001603.560210-8-wusamuel@google.com>
- <20261023001603.560210-12-wusamuel@google.com>
+        bh=lqgswGVrjDSSdxxGQJBHiCq23U2S/DjC2jo9ZomP9DE=;
+        b=pt20n6guQUVZg6awndzSTJ3oxKP34XfrLgB+3cKO+zVvEdVpfV8vcgv1onfXB6mOtD
+         WzhpvKf1Cj6q+6qBPPOe6cJKPuuzsCW7zIwTMMJl+9efCjVd1yZoEJJy+KRew0DiRHKt
+         iEmSmT/URUq2Q0VZkBH8yKTXIexf1tEb7l30C7zMvsEPQkovEnfyVbLiJAXvIA9cfog9
+         5m4xCtmKCeqp1MKXJUxPF+676S61HimPPiAJaoiHozPJ5L/h35ibikyzAn87L2aQ3sra
+         5/L6ve1NtmY88SswBWCBoDt8jUiBApGVavacNnlmpXQOaEmxdCGtdDGLfrBalcepvscW
+         HeBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793009348; x=1793614148;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=lqgswGVrjDSSdxxGQJBHiCq23U2S/DjC2jo9ZomP9DE=;
+        b=KmliH3yqTBXQj4yNk6obFcP++kr6kRb/mn1Fu3tZFlbx0Fm27lF/2A5EtM14tUljub
+         4C7KimyJAtYMYZfSkMD8w8a+lXJtnjvMA+5dvlv8QyaeSG6h7x5bY00eMuWxOnPaQ2GX
+         AUsHKmdKLqOCkmKbcT4XDVPWBcDK9S9cS46MZTg5zKxlWCMPZbZw+HnklddQgJpFENL6
+         RRY0nlnu+5KRk2AViJijVX+YMDP9AdPC07WvE2kYTlclOohC8jYUnmqpqzzlXr9SNGAE
+         NrMQHqvI5otEy4q91xKtciYQVNGRowCsLR+9UBwNgvjye8YUOkduv2UvwHoHzPGpth6X
+         6tcg==
+X-Forwarded-Encrypted: i=1; AKwUvBygwb71MsZ7dvSI7DKZraD9UkJnST4M4v4S2KFgM540LMDU4t5LSCJjtCiQ5r1wTJoctNk2@lists.linux.dev
+X-Gm-Message-State: AFq9FYKSp2Gm6/Xi9pRqFU2Fld4zF68yYtqvKxtY6mKOsEtTN+ayQErb
+	NHI3j4uzGq+wy4Jz111jDHr+RjBgVZ/+HAQgMlcqiaGnCFiA+5ElDEPMjbVPLOIvq0qilT6pAsO
+	rVJZ06O5mMoBz8fT53XQ0PY4wKWqjVzMNJZHuY7cW
+X-Gm-Gg: AYBFou2E5iLQpQywzY8dNX2vWy09eDTnUj2H+xqyoDPbEl9coRne1shMYoaFG1JD6Kv
+	z70mQReUtzv7AJ7pSkVi7vQzXfEDVLw8CUG9vxu3gN8UA4/jacVRJVnF1z6RYTXspkRtp/mlZ2l
+	4f6eFvo8vu8RD9UxjYQ7Xz7pxYQAS8ZjQMXR/uSOR6PT1VygeT65pBW3r3/6bnEvU47+wdBEMWS
+	WHUrAhOka/pwgG+SEdbFQMfrGKGHJjnx0KhsiRkx/ZgYU958pYJouURPH8/xRbeXGuMWMdznHyg
+	/pCFrYAi5FCtJUzUoJqBcEecRQgPy++oCS584GQuDU/T/QEx4VsvxBVM5Q88nh9zVRfFoe5V0rv
+	SzOx1O90zwzyHqdSrZz2fJwERGcsqJq7WyI/yITQ7gK2ckgZYc+f270sWJkYDIkMWhru9
+X-Received: by 2002:a05:701b:230e:b0:18c:640f:7f48 with SMTP id
+ a92af1059eb24-19936b56ab7mr8768054c88.44.1793009347392; Mon, 26 Oct 2026
+ 03:09:07 -0700 (PDT)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -117,93 +103,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261023001603.560210-12-wusamuel@google.com>
+References: <20261023-ext2-fix-context-analysis-clang-24-v2-1-a33961453899@kernel.org>
+In-Reply-To: <20261023-ext2-fix-context-analysis-clang-24-v2-1-a33961453899@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Mon, 26 Oct 2026 11:08:30 +0100
+X-Gm-Features: AclHuK-_bb8psGiBbD_JTWNAC_hBLtM-Cc7GOo20LnSEwgov2hxqFzjQ2_-lDFU
+Message-ID: <CANpmjNODG_MBuSJvRkzUjwWqeD=hSQLWtHkre8=9Z6-3ZmTKEA@mail.gmail.com>
+Subject: Re: [PATCH v2] ext2: Make sbi an proper alias for EXT2_SB(sb) in ext2_fill_super()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jan Kara <jack@suse.com>, Timothy Day <timday@thelustrecollective.com>, 
+	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 22, 2026 at 05:16:05PM -0700, Samuel Wu wrote:
+On Fri, 23 Oct 2026 at 23:25, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> A recent LLVM change to fix parsing and validating __guarded_by on
+> structure members [1] reveals a couple of warnings in ext2_fill_super()
+> from the annotations added by commit 023051c2d0f1 ("ext2: mark
+> s_mount_state as guarded by s_lock") and commit c23746524faf ("ext2:
+> annotate s_rsv_window_root as requiring s_rsv_window_lock"):
+>
+>   fs/ext2/super.c:1040:7: error: writing variable 's_mount_state' requires holding spinlock '_res->s_lock' exclusively [-Werror,-Wthread-safety-precise]
+>    1040 |         sbi->s_mount_state = le16_to_cpu(es->s_state);
+>         |              ^
+>   fs/ext2/super.c:1040:7: note: found near match 'EXT2_SB(sb).s_lock'
+>   fs/ext2/super.c:1138:8: error: writing variable 's_rsv_window_root' requires holding spinlock '_res->s_rsv_window_lock' exclusively [-Werror,-Wthread-safety-precise]
+>    1138 |                 sbi->s_rsv_window_root = RB_ROOT;
+>         |                      ^
+>   fs/ext2/super.c:1138:8: note: found near match 'EXT2_SB(sb).s_rsv_window_lock'
+>
+> Context analysis does very minimal alias detection [2], so it is not
+> able to figure out that sbi == sb->s_fs_info == EXT2_SB(sb). The only
 
-SNIP
+Right, though function-local aliases are resolved. We just aren't able
+to figure out aliases that propagate through non-local variables.
 
-> +static int bpf_object__query_ksyms(struct bpf_object *obj)
-> +{
-> +	struct kallsyms_query q;
-> +	struct extern_desc *ext;
-> +	int err = 0;
-> +	int fd;
-> +	int i;
-> +
-> +	fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	for (i = 0; i < obj->nr_extern; i++) {
-> +		ext = &obj->externs[i];
-> +		if (ext->type != EXT_KSYM || ext->ksym.type_id)
-> +			continue;
-> +
-> +		q = (struct kallsyms_query){
-> +			.size = sizeof(q),
-> +			.query_flags = KALLSYMS_QUERY_BY_SYMBOL,
-> +			.sym_name_addr = ptr_to_u64(ext->name),
-> +		};
-> +
-> +			err = -errno;
-> +			if (err == -ENOENT) {
-> +				err = 0;
-> +				continue;
-> +			}
-> +			if (err == -EADDRNOTAVAIL)
-> +				pr_warn("extern (ksym) '%s': resolution is ambiguous\n",
-> +					ext->name);
-> +			break;
-> +		}
-> +		ext->is_set = true;
-> +		ext->ksym.addr = q.sym_addr;
-> +		pr_debug("extern (ksym) '%s': resolved in kernel to 0x%llx\n",
-> +			 ext->name, ext->ksym.addr);
-> +	}
-> +	close(fd);
-> +	return err;
-> +}
-> +
-> +static int bpf_object__resolve_typeless_ksyms(struct bpf_object *obj)
->  {
-> +	int err;
-> +
-> +	err = bpf_object__query_ksyms(obj);
+> reason there were no warnings before the above LLVM change is because
+> the annotation was not parsed and verified correctly.
+>
+> Rework the allocation and assignment of sbi to have a direct assignment
+> of EXT2_SB(sb) to sbi so that the analysis knows that sbi and
+> EXT2_SB(sb) refer to the same object, clearing up the warnings.
+>
+> Fixes: 9708538ba204 ("ext2: enable context analysis support for ext2 filesystem")
+> Link: https://github.com/llvm/llvm-project/commit/217e229a1f32785fccdd3b3f51429f0d309dea45 [1]
+> Link: https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#no-alias-analysis [2]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-hi,
-we could also add similar support for libbpf_available_kallsyms_parse and
-probably in some other places like bpf_get_ksyms.. which makes me think it
-could be useful to have KALLSYMS_QUERY support for multiple symbols
+Reviewed-by: Marco Elver <elver@google.com>
 
-thanks,
-jirka
+Additional note: This was uncovered by an unstable Clang 24
+(unreleased) change, which was meant to make the analysis more precise
+[1], yet stumbled over this. This change is needed to prepare for
+Clang 24.
 
+Thanks!
 
-> +	/*
-> +	 * Fall back to parsing /proc/kallsyms only if the ioctl is not
-> +	 * accessible: not present (-ENOTTY on older kernels) or kallsyms
-> +	 * addresses hidden from this opener (-EPERM, e.g. kptr_restrict).
-> +	 */
-> +	if (err != -ENOTTY && err != -EPERM)
-> +		return err;
-> +
-> +	pr_debug("KALLSYMS_QUERY unavailable (%s), falling back to /proc/kallsyms\n",
-> +		 errstr(err));
->  	return libbpf_kallsyms_parse(kallsyms_cb, obj);
->  }
->  
-> @@ -9922,7 +9996,7 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
->  			return -EINVAL;
->  	}
->  	if (need_kallsyms) {
-> -		err = bpf_object__read_kallsyms_file(obj);
-> +		err = bpf_object__resolve_typeless_ksyms(obj);
->  		if (err)
->  			return -EINVAL;
->  	}
-> -- 
-> 2.56.0.257.gf7497c7d27-goog
-> 
+> ---
+> Changes in v2:
+> - Fix allocation size (Sashiko). I thought that I checked that they
+>   were equivalent but I guess not :/
+> - Link to v1: https://patch.msgid.link/20261023-ext2-fix-context-analysis-clang-24-v1-1-2b35c33cd0fa@kernel.org
+> ---
+>  fs/ext2/super.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+> index fb217ef2d69f..bde5b433776c 100644
+> --- a/fs/ext2/super.c
+> +++ b/fs/ext2/super.c
+> @@ -883,17 +883,18 @@ static int ext2_fill_super(struct super_block *sb, struct fs_context *fc)
+>         __le32 features;
+>         int err;
+>
+> -       sbi = kzalloc_obj(*sbi);
+> -       if (!sbi)
+> +       sb->s_fs_info = kzalloc_obj(*sbi);
+> +       if (!sb->s_fs_info)
+>                 return -ENOMEM;
+> +       sbi = EXT2_SB(sb);
+>
+>         sbi->s_blockgroup_lock =
+>                 kzalloc_obj(struct blockgroup_lock);
+>         if (!sbi->s_blockgroup_lock) {
+> -               kfree(sbi);
+> +               kfree(sb->s_fs_info);
+> +               sb->s_fs_info = NULL;
+>                 return -ENOMEM;
+>         }
+> -       sb->s_fs_info = sbi;
+>         sbi->s_sb_block = sb_block;
+>
+>         guard(spinlock_init)(&EXT2_SB(sb)->s_lock);
+>
+> ---
+> base-commit: 782654a3e9c4065dea2e9f10539899d348b7a1fc
+> base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> change-id: 20261023-ext2-fix-context-analysis-clang-24-504b5dd53038
+>
+> Best regards,
+> --
+> Cheers,
+> Nathan
+>
