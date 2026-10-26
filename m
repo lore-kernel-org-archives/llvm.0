@@ -1,85 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793019082;
-	b=gCm1r8O+2/ckln4DzAMMjA3fGGyfKX8H4/tlmGcIO5TzK7c+Nw+qbjKJvfeZDhF8YZbe
-	 ZB/xs7IFfwrNgHhmteVQze6c0lM57X3YpAGjzWUitV2/hxvKgD0xZNLNHmwHVLmumGWq6
-	 jOAjU3Zk+J1l4wuzaNBbRIWqoNkGfJmc1hIy9JJDjV43RuAAd+/P8iFnt194jrR0T5MuI
-	 s7jDBIEW31LMD9vv8Ks3AOmVTZS3I53tX2vOZcXy5CbkcD9yRmnCV9xRBePfvMPVSr9Qa
-	 LycQuSab44CBvojbb/S41P6BkuaCnOMJRO0IyyoneUhS6y+7iVA94jhs1X8FFPvjqsQ==
+	t=1793023731;
+	b=WPcCaYqmDy9ive9RysNN6SY4xwSo0IW5q3yjpbgzkCaA/iUz0gMkjW1mEp1KKj632Nxx
+	 Na+q8mASzZlFiGm7ixNXBYHWQSg6EFf1iNoMaUycvEWr4Vc0D2pKBLtK1XUWcpwXIQ8oE
+	 Wlg8qQuF+e2WmDi/IHV0rqvQvqaYN2aZ+Ul5vxBa8uBpoCiNf/Os+T9fG2LzcZVvnrE+2
+	 CZNtBP1sQd2cTkXkfXKw5DNs3wpC6djWbHlKv5zMTVFRweFFKGZdA0MjBBvz9TRr8Tljd
+	 1DcaMJMSt9K1udmEtuo/CceooizVH+wHBi4ld46mGBXKlG00D9erLtZRqlJoO7vS3ZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793019082;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=F8szgZKbup36rnTjzztsF3nyDIrjVIlZaiGjJwJeU/U=;
-	b=Euwxnr0HaCr3Dle8vtnyhHf9y7HHZGo4RaJjO9MdyLJxyTJMMUo6wtI7fzeiVWwRK9va
-	 eOW3zh3joQwgta2guskQS/a7f7ltwa/F1TxBrE+CU1PcoeFA317ztXqc7scs7cG6YtXKY
-	 mcasrHjJgxZxNEWfYXN4Ss4S+4Qg70e9FJPv2FxwqvRiUMCroQXAmI86QCO5A0AtpZHKd
-	 juRegjZsQ3Mllpzs7Jf2hHXBYVSX+sOeLkJNZP8DIcDaRYNsTddmppV8G9Hwxh/bvmVrH
-	 cbO8ePSpK3ee+KOChtXd5HOxPL6MkXPt4SNXrIw33sYiQTtCPLCDa/pD8MtB9YWb5pQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793023731;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
+	 X-Authority-Analysis:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=3+mGpR/2FcDneFgY44HK0X4qXpztWCSnCE/KMlqe350=;
+	b=BOdqNViw0UaC3s/6MYO4zeStwfPORkIBzQmFcWubLKCD2bHZUMmszzG9sheIXwf/wIHG
+	 pblNU430AYJzgzXWPuSHz3Diva0tziEH2C7iJ+kFMu9ddenrvHKs9o88TOqjLL6IkKt2k
+	 FCoPFten9PkEeIDwSreJZZG0GmXxJsb7DsJeHLlnSxs1yAVit+g7A8kRRmmMVFNt16pP4
+	 xcbRmTB+lbM2h3oIzCszPtxNVpq6y/gmqES8tu4ui1K/P7Yql2QshGGnyCC+aNHM+N0Xx
+	 PGy8y5ha3tKeZTQECHXXPE1FW6LMqWdt+0ThDVjhcA+RiSgJjVNUklaXoSsDxu7pY3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=WzIebW9M;
-	arc=none smtp.remote-ip=198.175.65.17
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b="Qg/aaj7m";
+	arc=none smtp.remote-ip=148.163.158.5
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0740F606A31B;
-	Mon, 26 Oct 2026 12:51:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0740F606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19987606A31A;
+	Mon, 26 Oct 2026 14:08:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19987606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=WzIebW9M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793019081; x=1824555081;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pFxTYZtPPSR39b79kBl6/XP9+bGJX6+0ouOVT2RXIAw=;
-  b=WzIebW9MxCG4J+E5XdGF6l85+R1H2D9u+T7gEyo6rAjdb7EsHt0H37wf
-   M3fR1BFRydRHHm2FLYNNQeDqD+TTgDx57ukV91TUTfjJl6qK3M6+QHIGc
-   W1AezsCREu+qmamnRTjSp8O/DusiqOuTutQkWAj4cr5KpRR5OMEXgqHkK
-   eW4bmrZ12SlU7ZN/bh1TrniNZKllqAerQbF2e4n2siaxan4ybZYjLRfJP
-   /vy1kNMXmCO6WUFJefQPKzETR4FZ77xhMvaAF1hALp/RM5eXicw2BtpDk
-   OwXoyLyjZvyFPWYwHd6QCgdF0QpnnDYMBiHs9gWtnidBbLj5UrjIzjnRG
-   Q==;
-X-CSE-ConnectionGUID: dD7fzNCoQCezH94AaBbJwQ==
-X-CSE-MsgGUID: 7B9W8HyxSsKI3a7eKZv/JQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11946"; a="1697214"
-X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
-   d="scan'208";a="1697214"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 05:51:20 -0700
-X-CSE-ConnectionGUID: pKJqMod6Txq9jUGATxrGaA==
-X-CSE-MsgGUID: UDRXdixbRPOZRpsaO+UvLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
-   d="scan'208";a="4653784"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 26 Oct 2026 05:51:17 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xLKAT-00000000Vvq-2mhi;
-	Mon, 26 Oct 2026 12:51:13 +0000
-Date: Mon, 26 Oct 2026 20:51:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: "H. Nikolaus Schaller" <hns@goldelico.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Paul Burton <paulburton@kernel.org>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-	"H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: Re: [PATCH 3/6] MIPS: Ingenic: Add cpu-probe setup for XBurst and
- XBurst II R2
-Message-ID: <202610262006.fTqK3Ge7-lkp@intel.com>
-References: <1658997f198411f20bc5a489e9488800e4597e19.1792956055.git.hns@goldelico.com>
+	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=Qg/aaj7m
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69QBEHRj3357275;
+	Mon, 26 Oct 2026 14:08:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=3+mGpR
+	/2FcDneFgY44HK0X4qXpztWCSnCE/KMlqe350=; b=Qg/aaj7mqQbaMqj5BSK2C1
+	d291cgfJezV987SektdL6Sj+jW/TzLuc4ZYpqYczdxzRo1UXe9QR/C/i7Nfa7TJi
+	38s/uzrHaloXVDl7vCcdJ81qPFv1M2/IThufy7j5regMWxOD9O8f+jAZQ87LfGvB
+	YJVKlTYR17qi2FJFqiIJSPmdbwiPdyJo5yO49XZXMenRdBLwAv4ubKBz28G3vrz/
+	yWSYlLE2Kr1oFia5cNBDnjtmimAaU1dinBM0tfgJNwg3jnLrc4Km85fwIi6PFFRW
+	qsZQyFiHkGH/H0HWgBF3oO84nDBxdSXzBUlR13uAT+c1Sc6HfcDOufZGQKeFUPlg
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4hgmav9yqu-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 26 Oct 2026 14:08:43 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 69QB5JWV2503050;
+	Mon, 26 Oct 2026 14:08:43 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4hh9py606e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 26 Oct 2026 14:08:43 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 69QE8fvD51249534
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 26 Oct 2026 14:08:41 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1FC5A58052;
+	Mon, 26 Oct 2026 14:08:41 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D90335805D;
+	Mon, 26 Oct 2026 14:08:39 +0000 (GMT)
+Received: from [9.61.99.193] (unknown [9.61.99.193])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 26 Oct 2026 14:08:39 +0000 (GMT)
+Message-ID: <fefd4df9-4777-450c-9078-718f8ea55308@linux.ibm.com>
+Date: Mon, 26 Oct 2026 10:08:39 -0400
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -89,149 +85,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1658997f198411f20bc5a489e9488800e4597e19.1792956055.git.hns@goldelico.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 03/15] s390/vfio-ap: Functions to initialize/release
+ vfio device migration data
+To: kernel test robot <lkp@intel.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jjherne@linux.ibm.com,
+        borntraeger@de.ibm.com, mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex@shazbot.org, kwankhede@nvidia.com, fiuczy@linux.ibm.com,
+        pbonzini@redhat.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com,
+        agordeev@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com
+References: <20261023174349.3545941-4-akrowiak@linux.ibm.com>
+ <202610241421.XoTPxllD-lkp@intel.com>
+Content-Language: en-US
+From: Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <202610241421.XoTPxllD-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=P8SvFSAu c=1 sm=1 tr=0 ts=6adf5eec cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=anyJmfQTAAAA:8
+ a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=i3X5FwGiAAAA:8
+ a=QyXUC8HyAAAA:8 a=GX393M_rzUjNoeBSXGMA:9 a=QEXdDO2ut3YA:10
+ a=mmqRlSCDY2ywfjPLJ4af:22
+X-Proofpoint-GUID: -5bIaNUMOoDmAkLjAiBf99pFTxTmbYko
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI2MDA1NCBTYWx0ZWRfX0q7Lf+DA0KS7
+ o92Oa2f7gw94b2cNVVG1uweteovYfJBviUkQDeGEJed3OLxOTE6/a8idnwNi9aro3664pyr9ktW
+ Ob/6WIL2h/eV5YxOWc5fWDag+EqhA4I=
+X-Proofpoint-ORIG-GUID: -5bIaNUMOoDmAkLjAiBf99pFTxTmbYko
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI2MDA1NCBTYWx0ZWRfX4eVOuz7xwFlw
+ dJAly447spu7ECGoCdz4Z8sdoYT7XX5yNAYq3tzP/JxvqcnXsSDD7cnKdzqjL+GoEOYO4fjIz5V
+ q8BhhxgH9b0lg9JMjpXrSeDG+/AUG+tg/1YJI1g/2Swz6XVhRxRfRlZx04xQxyPWUh6pL/+ZfDd
+ /teRbSYWbcnBigcaGhDMXLdxomz9dualO97pXhaJeqd1mqYHQ2zqKQ/pE3Ed8XOFirUrULghcAJ
+ qiI+7msSmtqEgKPHtrTSr66uR9TQrHiljl0bp43PTRC8GGZAJk7zFIKS4s0x9tazphL1hxtq7Wh
+ stVGFnNpfsMrrXtEE+zo3wVg3V9xg2oniCY/P9vws/Y9Y3g4fSMreywzDXcipOkcGbTeZ4vevjh
+ jI2tDkYKSOvWnSdBTV2quh421OBLUHhmTKgG3eConQ+AdAggytlw/0aKlU+fDJl3Q+GESiAXUBq
+ tLM/5y2kxE+GLA22n6g==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-26_02,2026-10-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 malwarescore=0 phishscore=0 spamscore=0
+ clxscore=1011 bulkscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
+ definitions=main-2610260054
 
-Hi Nikolaus,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.3 next-20261023]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/H-Nikolaus-Schaller/MIPS-Ingenic-Fix-inverted-MIPS_NO_APPENDED_DTB-logic-in-Kconfig/20261025-202050
-base:   linus/master
-patch link:    https://lore.kernel.org/r/1658997f198411f20bc5a489e9488800e4597e19.1792956055.git.hns%40goldelico.com
-patch subject: [PATCH 3/6] MIPS: Ingenic: Add cpu-probe setup for XBurst and XBurst II R2
-config: mips-bcm47xx_defconfig (https://download.01.org/0day-ci/archive/20261026/202610262006.fTqK3Ge7-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261026/202610262006.fTqK3Ge7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610262006.fTqK3Ge7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/mips/kernel/cpu-probe.c:1840:16: error: use of undeclared identifier 'CPU_XBURST2'; did you mean 'CPU_XBURST'?
-    1840 |                 c->cputype = CPU_XBURST2;
-         |                              ^~~~~~~~~~~
-         |                              CPU_XBURST
-   arch/mips/include/asm/cpu.h:317:32: note: 'CPU_XBURST' declared here
-     317 |         CPU_BMIPS4380, CPU_BMIPS5000, CPU_XBURST, CPU_LOONGSON32, CPU_M14KC,
-         |                                       ^
-   1 error generated.
 
 
-vim +1840 arch/mips/kernel/cpu-probe.c
+On 10/24/26 3:11 AM, kernel test robot wrote:
+> Hi Anthony,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on kvms390/next]
+> [also build test WARNING on s390/features mst-vhost/linux-next linus/master v7.3 next-20261022]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anthony-Krowiak/s390-vfio-ap-Provide-function-to-get-the-number-of-queues-assigned-to-mdev/20261023-134335
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git next
+> patch link:    https://lore.kernel.org/r/20261023174349.3545941-4-akrowiak%40linux.ibm.com
+> patch subject: [PATCH v10 03/15] s390/vfio-ap: Functions to initialize/release vfio device migration data
+> config: s390-defconfig (https://download.01.org/0day-ci/archive/20261024/202610241421.XoTPxllD-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261024/202610241421.XoTPxllD-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202610241421.XoTPxllD-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>     Warning: drivers/s390/crypto/vfio_ap_migration.c:208 function parameter 'matrix_mdev' not described in 'vfio_ap_release_migration_data'
+>>> Warning: drivers/s390/crypto/vfio_ap_migration.c:208 Excess function parameter 'mdev' description in 'vfio_ap_release_migration_data' (did you mean one of: 'matrix_mdev')
+>     Warning: drivers/s390/crypto/vfio_ap_migration.c:208 function parameter 'matrix_mdev' not described in 'vfio_ap_release_migration_data'
+>>> Warning: drivers/s390/crypto/vfio_ap_migration.c:208 Excess function parameter 'mdev' description in 'vfio_ap_release_migration_data' (did you mean one of: 'matrix_mdev')
 
-  1751	
-  1752	static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
-  1753	{
-  1754		decode_configs(c);
-  1755	
-  1756		/*
-  1757		 * XBurst misses a config2 register, so config3 decode was skipped in
-  1758		 * decode_configs().
-  1759		 */
-  1760		decode_config3(c);
-  1761	
-  1762		/* XBurst does not implement the CP0 counter. */
-  1763		c->options &= ~MIPS_CPU_COUNTER;
-  1764		BUG_ON(__builtin_constant_p(cpu_has_counter) && cpu_has_counter);
-  1765	
-  1766		/* XBurst has virtually tagged icache */
-  1767		c->icache.flags |= MIPS_CACHE_VTAG;
-  1768	
-  1769		switch (c->processor_id & PRID_IMP_MASK) {
-  1770	
-  1771		/* XBurst®1 with ISA */
-  1772		case PRID_IMP_XBURST:
-  1773			c->cputype = CPU_XBURST;
-  1774			c->writecombine = _CACHE_UNCACHED_ACCELERATED;
-  1775			__cpu_name[cpu] = "Ingenic XBurst";
-  1776			break;
-  1777	
-  1778		/* XBurst®1 with MXU1.0/MXU1.1 SIMD ISA */
-  1779		case PRID_IMP_XBURST_REV1:
-  1780	
-  1781			/*
-  1782			 * The XBurst core by default attempts to avoid branch target
-  1783			 * buffer lookups by detecting & special casing loops. This
-  1784			 * feature will cause BogoMIPS and lpj calculate in error.
-  1785			 * Set cp0 config7 bit 4 to disable this feature.
-  1786			 */
-  1787			set_c0_config7(MIPS_CONF7_BTB_LOOP_EN);
-  1788	
-  1789			switch (c->processor_id & PRID_COMP_MASK) {
-  1790	
-  1791			/*
-  1792			 * The config0 register in the XBurst CPUs with a processor ID of
-  1793			 * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2 compatible,
-  1794			 * but they don't actually support this ISA.
-  1795			 */
-  1796			case PRID_COMP_INGENIC_D0:
-  1797				c->isa_level &= ~MIPS_CPU_ISA_M32R2;
-  1798	
-  1799				/* FPU is not properly detected on JZ4760(B). */
-  1800				if (c->processor_id == 0x2ed0024f)
-  1801					c->options |= MIPS_CPU_FPU;
-  1802	
-  1803				fallthrough;
-  1804	
-  1805			/*
-  1806			 * The config0 register in the XBurst CPUs with a processor ID of
-  1807			 * PRID_COMP_INGENIC_D0 or PRID_COMP_INGENIC_D1 has an abandoned
-  1808			 * huge page tlb mode, this mode is not compatible with the MIPS
-  1809			 * standard, it will cause tlbmiss and into an infinite loop
-  1810			 * (line 21 in the tlb-funcs.S) when starting the init process.
-  1811			 * After chip reset, the default is HPTLB mode, Write 0xa9000000
-  1812			 * to cp0 register 5 sel 4 to switch back to VTLB mode to prevent
-  1813			 * getting stuck.
-  1814			 */
-  1815			case PRID_COMP_INGENIC_D1:
-  1816				write_c0_page_ctrl(XBURST_PAGECTRL_HPTLB_DIS);
-  1817				break;
-  1818	
-  1819			default:
-  1820				break;
-  1821			}
-  1822			fallthrough;
-  1823	
-  1824		/* XBurst®1 with MXU2.0 SIMD ISA */
-  1825		case PRID_IMP_XBURST_REV2:
-  1826			/* Ingenic uses the WA bit to achieve write-combine memory writes */
-  1827			c->writecombine = _CACHE_CACHABLE_WA;
-  1828			c->cputype = CPU_XBURST;
-  1829			__cpu_name[cpu] = "Ingenic XBurst";
-  1830			break;
-  1831	
-  1832		/* XBurst®2 with MXU2.1 SIMD ISA */
-  1833		case PRID_IMP_XBURST2:
-  1834			c->cputype = CPU_XBURST;
-  1835			__cpu_name[cpu] = "Ingenic XBurst II";
-  1836			break;
-  1837	
-  1838		/* XBurst®2 with MXU3.0 SIMD ISA */
-  1839		case PRID_IMP_XBURST2_R2:
-> 1840			c->cputype = CPU_XBURST2;
-  1841			c->writecombine = _CACHE_UNCACHED_ACCELERATED;
-  1842			__cpu_name[cpu] = "Ingenic XBurst II R2";
-  1843			break;
-  1844	
-  1845		default:
-  1846			panic("Unknown Ingenic Processor ID!");
-  1847			break;
-  1848		}
-  1849	}
-  1850	
+Yes, it should be matrix_mdev .. to be fixed.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+
