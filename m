@@ -1,72 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793011068;
-	b=QGQIRkSrSloqVxplqcBDRnNIsWSB/9Wpf3BHGQzjw0GPyX82Pv/JUYJLQje0nG0dxWbN
-	 bRhY06xB9ljIA+upjf0uD9M+ye4/l6HjOT+z7FHpg2Qi2F8OgqCMaewkYZmpIInTqPENP
-	 FmD73wjofMOxYevPcEpikLxNaBGwTzNr6FJ67xr5b3FlZwEX4lGY5TI//EaXmfIwCk0uX
-	 C91YZbOu1i94NEPO0oYbU4nsyy0aynM76+iqR8o0dq4yOuWWqseNJq0wpCbwPs6bhkLYk
-	 s8R2iQTVKbEtT7PgjZgx50aJ++k+k7Zrj8k0qdy8ccNYqGztAqybzhRejFmDao7vMrw==
+	t=1793013651;
+	b=wJ+fSzGHib4Es6QOm8k5Msjevg/M9gmY2RPgbzruMawRwgASvV90L2fovpNntaJ9zZ20
+	 VWf8NOcnwtbQjOkTv41JCI2DV3N9kbhDo+Eu9Wy9wbYvHqIqEweTzCGSw37wBHdp1ldEw
+	 ISPyoTswd4Z2VznLJ6LUxFMSrzb3QT2TMq9IxI7V0Ib3cr+Uv3iR5uGg0OvUwozGxipMf
+	 JrbXpONs/ZUXbO0JDdQ+N+ATNCvz22/pu76KtqRJIhH1mTqsNqh+rx6k+nNLw/TzNKqWo
+	 AVursrmBmjujWnWuksDO19Aiw0GsAXjushnj/YDipjTMEI7OX5Sf/Zl/U51srj6u+Jw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793011068;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=3tXVXe1rkE4tmPDMwOPvFXht8hFaTtpquz82OtPBAM4=;
-	b=j/o1XO9GSqAcpyxI4mTrwh9sK3L0IoFj7FHQnFOX0pzZs+GturLLnyvx+pE6MsVbSqe7
-	 ukuBGzXmJ2jNOOy9DrENSb0qxjvtccixCPNgRKR+mKO1z9foR5c/sTvbHYgqTrucPu3ty
-	 Z4koU3xcNpoVLUJClBZbFulGvjdF09+Hf8UFTRwHF10JbFHctTljxtv1/lmIxldfNLNdl
-	 lmsVMyeU29WlTaJJZY/SJDwvE0BiqqoVeopEkXCD820C6BdcE42za3TI2e0G69zhGN+5B
-	 16tTtrd445sJlowHdMH6odxGlKYTtdKKTNNGFpDVU2mO+c2V1TBzWkeQl/FyXsGbR5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793013651;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=xmg2mS39hpCYA1Z3AM0sPBkLEA8uAYpfPLsJJ//wi3w=;
+	b=lzmiPCIG9sAJqVYdLGWTTsq5ytHuTZCrfeAVT3AAhz+8xw6T2j2zb1rmfQQ3hMJ+HZJd
+	 yN1VJmUdcFvyx5SRfs1GrkxcozbW/a9jEPq8UfT+eFYtMAeAWSIxu+98M175r1Mn+KMly
+	 wKG9AmX6FcVT1DgORakT2ramdCCVNnvmFvdq0C6pvQNROP2EK9HbqUiodpou7gaJd955A
+	 oblyF8HnBWI8zV5Io+/9lLb+O9z+z5ymNMOu28bsYvCSX7cyh9OaMiNK9kTytcMvin36P
+	 jqmmgq8bbqyyd1kJiMORKdjt6Y6M3xIXDPWG4/vWRlBq0fIFYfoLweanOHtSGnMmLZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b="X/41D4qD";
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BxzYzrT5;
+	arc=none smtp.remote-ip=198.175.65.17
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56359606A31A;
-	Mon, 26 Oct 2026 10:37:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56359606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F052606A31A;
+	Mon, 26 Oct 2026 11:20:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F052606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=X/41D4qD
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=3tXVXe1rkE4tmPDMwOPvFXht8hFaTtpquz82OtPBAM4=; b=X/41D4qDMWfqB+Aqwg1zD6FNwM
-	MSlYWqKMVNYBgAXtECkOf8t1z6ICQH8Gd38Pg0difYZ9JO5bqwKh+7NVgbR3cuK9+wLj99yQY8iaO
-	CAZbioLAzZXkRbfoheTVcVpOAX0W3o/9knMKw7AJdQFa8msbccgIM8g1g2x/f3NtxZLjBk1BCKAuy
-	E1q5ZkoG8jeajKeuaI3PUphWROV9rx+UtmM7tDkkbKBYpcEKOLUE7mL9fcP9qbfNqkpxuz7ub1EdA
-	xpeM1SmKKS25Ewy2MrtMctqx7ry6CjP9oy6r8ZqTKbJaDzDYlzurSfr+hXVOWY19T+6Q81wO8JI4+
-	kN2HdKhQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xLI5I-0000000Dhy4-2KvS;
-	Mon, 26 Oct 2026 10:37:44 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9B2B8300DB9; Mon, 26 Oct 2026 11:37:43 +0100 (CET)
-Date: Mon, 26 Oct 2026 11:37:43 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: cyridge@proton.me
-Cc: x86@kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Chris Li <sparse@chrisli.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-sparse@vger.kernel.org
-Subject: Re: [PATCH] x86/kcfi: Don't emit KCFI_REFERENCE() in modules
-Message-ID: <20261026103743.GD2668200@noisy.programming.kicks-ass.net>
-References: <20261024-kcfi-reference-modules-v1-1-43c2a4a9e657@proton.me>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BxzYzrT5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793013650; x=1824549650;
+  h=date:from:to:cc:subject:message-id;
+  bh=iCglwzwjvzyhgl7CC1BSULErpRK6VGP/OGBu0WumKS0=;
+  b=BxzYzrT5SxFzeLZVlSBjyKDLo74wVxLPAIuHoQlp74w9Eukg7+iJbl/A
+   LvHukRPYQCUF6MtVzzmTPyR2MgpwWswFN6rIK0OMrM+scaqOgLJC2JQIZ
+   qMzBm/o/E5K9xLAyefs0c5AHzKX/Ddlg51h88TV6FFHiI2ct2LSkFnVXr
+   hyrI9M8N2c6lxjhPqLpaTSLr982mPxD3S/BMs6p6mcEo8gBhz3+EWMiqX
+   HtqkQUB1O6hkKYM1k+IlFbqHspCTgSVJRJDZStrMiuxC4djc4SY/1wK06
+   4ZsXzoVrc0RAU/TyTvIX5XY47UAI8o4TS61N1TPQHXfwHhFOg1XytDlID
+   g==;
+X-CSE-ConnectionGUID: c6z+jAigSDCVWq0twN64hA==
+X-CSE-MsgGUID: xFAiVSiUSj6MMyjKnP77hQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11946"; a="1689436"
+X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
+   d="scan'208";a="1689436"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 04:20:50 -0700
+X-CSE-ConnectionGUID: 7H4Su7U9R/eK/vHb0SRxbQ==
+X-CSE-MsgGUID: D/858oBmTpuHgpzTYDfj0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
+   d="scan'208";a="6061994"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by fmviesa013.fm.intel.com with ESMTP; 26 Oct 2026 04:20:48 -0700
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xLIkv-0000000045r-2RT5;
+	Mon, 26 Oct 2026 11:20:45 +0000
+Date: Mon, 26 Oct 2026 12:20:01 +0100
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bvanassche:thread-safety 89/133] net/core/devmem.c:77:2:
+ warning: ignoring return value of function declared with 'warn_unused_result'
+ attribute
+Message-ID: <202610261208.1M0H73SK-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -75,49 +80,67 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261024-kcfi-reference-modules-v1-1-43c2a4a9e657@proton.me>
 
-On Sat, Oct 24, 2026 at 06:46:33PM -0700, Cytops via B4 Relay wrote:
-> From: Cytops <cyridge@proton.me>
-> 
-> KCFI_REFERENCE() takes the address of a symbol so that the compiler
-> emits its __kcfi_typeid_ symbol, which the SYM_TYPED_FUNC_START()
-> assembly implementing it needs. It is used from arch/x86 headers for
-> __clear_pages_unrolled(), copy_page(), __memset() and __memmove(), and
-> all of that assembly is built into vmlinux.
-> 
-> Modules include the same headers, so with CONFIG_CFI=y every module
-> also gets an __ADDRESSABLE() reference to each of these symbols in
-> .discard.addressable. This serves no purpose there, and since
-> __clear_pages_unrolled() is EXPORT_SYMBOL_GPL, modpost now rejects any
-> GPL-incompatible module that includes <linux/mm.h>:
-> 
->   ERROR: modpost: GPL-incompatible module repro.ko uses GPL-only
->   symbol '__clear_pages_unrolled'
-> 
-> even though the module never uses the symbol. This makes OpenZFS
-> impossible to build against CFI kernels; its configure checks fail
-> in the same way and are misreported as CONFIG_DEBUG_LOCK_ALLOC.
-> 
-> Only emit the reference when building vmlinux.
-> 
-> Tested on x86_64 with clang 23.1.3, CONFIG_CFI=y and
-> CONFIG_LTO_CLANG_FULL=y (the configuration from the Fixes: commit):
-> vmlinux links without warnings and still contains
-> __kcfi_typeid___clear_pages_unrolled, __kcfi_typeid_copy_page,
-> __kcfi_typeid___memset and __kcfi_typeid___memmove. It boots in QEMU
-> with no CFI failures. A minimal module with MODULE_LICENSE("Proprietary")
-> including <linux/mm.h> fails modpost before this change and builds and
-> loads after it. OpenZFS builds against a CFI kernel with this change,
-> and its pool, encryption, checksum and send/recv operations run with
-> CONFIG_CFI_PERMISSIVE=y without CFI failures.
-> 
-> Fixes: 9b041a4b66b3 ("x86/mm: Ensure clear_page() variants always have __kcfi_typeid_ symbols")
-> Link: https://github.com/openzfs/zfs/issues/18092
-> Assisted-by: LLM
-> Signed-off-by: Cytops <cyridge@proton.me>
+tree:   https://github.com/bvanassche/linux thread-safety
+head:   09aab91c2fcb166bfe35c0f9c2c5b6b960722087
+commit: 138228c4404c30f42ca28639aeab8f8a1f92d07a [89/133] dma-resv: Make checking the dma_resv_lock() return value mandatory
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261026/202610261208.1M0H73SK-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261026/202610261208.1M0H73SK-lkp@intel.com/reproduce)
 
-Yeah, I suppose this will do. Thanks.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610261208.1M0H73SK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/core/devmem.c:77:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+      77 |         dma_resv_lock(binding->dmabuf->resv, NULL);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/devmem.c:246:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+     246 |         dma_resv_lock(dmabuf->resv, NULL);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/core/devmem.c:359:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+     359 |         dma_resv_lock(dmabuf->resv, NULL);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +/warn_unused_result +77 net/core/devmem.c
+
+5c024716f52bb8b Bobby Eshleman     2026-01-07  66  
+bd61848900bff59 Mina Almasry       2025-05-08  67  void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
+170aafe35cb98e0 Mina Almasry       2024-09-10  68  {
+bd61848900bff59 Mina Almasry       2025-05-08  69  	struct net_devmem_dmabuf_binding *binding = container_of(wq, typeof(*binding), unbind_w);
+bd61848900bff59 Mina Almasry       2025-05-08  70  
+083e64a3af77173 Stanislav Fomichev 2026-09-17  71  	if (binding->freelist)
+13648ba787223c8 Stanislav Fomichev 2026-09-17  72  		WARN(binding->free_count != binding->area.num_niovs,
+1cf2f913b3dd934 Stanislav Fomichev 2026-09-25  73  		     "destroying dmabuf binding with outstanding net_iovs: total=%zu, free=%u",
+13648ba787223c8 Stanislav Fomichev 2026-09-17  74  		     binding->area.num_niovs, binding->free_count);
+170aafe35cb98e0 Mina Almasry       2024-09-10  75  
+13648ba787223c8 Stanislav Fomichev 2026-09-17  76  	kvfree(binding->area.niovs);
+69ab87acc614cbe Erfan Sharafzadeh  2026-10-13 @77  	dma_resv_lock(binding->dmabuf->resv, NULL);
+69ab87acc614cbe Erfan Sharafzadeh  2026-10-13  78  	dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+fa516c0d8bf90da Jakub Kicinski     2025-07-31  79  				 binding->direction);
+69ab87acc614cbe Erfan Sharafzadeh  2026-10-13  80  	dma_buf_unpin(binding->attachment);
+69ab87acc614cbe Erfan Sharafzadeh  2026-10-13  81  	dma_resv_unlock(binding->dmabuf->resv);
+170aafe35cb98e0 Mina Almasry       2024-09-10  82  	dma_buf_detach(binding->dmabuf, binding->attachment);
+170aafe35cb98e0 Mina Almasry       2024-09-10  83  	dma_buf_put(binding->dmabuf);
+170aafe35cb98e0 Mina Almasry       2024-09-10  84  	xa_destroy(&binding->bound_rxqs);
+5c024716f52bb8b Bobby Eshleman     2026-01-07  85  	percpu_ref_exit(&binding->ref);
+083e64a3af77173 Stanislav Fomichev 2026-09-17  86  	kvfree(binding->freelist);
+bd61848900bff59 Mina Almasry       2025-05-08  87  	kvfree(binding->tx_vec);
+170aafe35cb98e0 Mina Almasry       2024-09-10  88  	kfree(binding);
+170aafe35cb98e0 Mina Almasry       2024-09-10  89  }
+170aafe35cb98e0 Mina Almasry       2024-09-10  90  
+
+:::::: The code at line 77 was first introduced by commit
+:::::: 69ab87acc614cbe0bd08a65ece6e1aabee805106 net: devmem: allow peer-to-peer dma-buf attach for bindings
+
+:::::: TO: Erfan Sharafzadeh <erfansh@meta.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
