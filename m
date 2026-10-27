@@ -1,78 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793140170;
-	b=qgasH/GKdxLURQ8xzZ+JRjQNcx5SvW2STcISl22oe9O8esxEYjl0lS4L7e8QHnH065K5
-	 tzCym3J9GZFuHiN7peG0h/OwfsGkcvqr0prgVChE+nOxosMETbXt/lhAdzRqlxMGVbDLp
-	 QEXRTK3784Wbe65313cs612syZEO9FPVsEqdWg7H9KV9QEhzUSnFMpaz+khrSWNLuoz1n
-	 ULmCE3O9VtO39J5c3bXlvg085Ddl70V7iNo4pvkI7xDk4sbXE6klBLfuM12Zo/uDcQImR
-	 68Gy3zNl3KQXlwzBatFLDpUZx7cVqcjtCCPmohOdG8cTVsxGw0ehGH4CpjEDfpXezyw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793140170;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=BTq7gwM4UUjUNsaagWtNQITr0gTEM8STP6VyWZ/jCrU=;
-	b=Q18/DlpBvwaRv4w+QW93YqvXoSP//csv3Nx3td93GV+aoN76kOuw57QMOXc/R/Pw1Ccr
-	 kx8tD+dJei67YgizeCdgSpBKs7IroKkotiH9ENcTJjGpRGKMXGYNQfesWY0sjn2HdpSlN
-	 1umV3QxpLavZ8XLmsloID3YPEw1/BXhU+wmpAd4NYqopgYBYiDeZ8CM9P+ocueCnUSEFl
-	 U8IpXeHNTOJMTZU/My1unvwvF4F2YiAPui7UpUDLldTL+9Ub5q32FIjyQ6rI0beykoMV8
-	 EBmUFyirDKvljXfRxDJcu3N5xZIX2AuJYdkPAMC2BvM2Abyni5e1g/Q/N/r+6aJDKyw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lda0oYKo;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E75606A31D;
-	Tue, 27 Oct 2026 22:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lda0oYKo
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793140170;
-	b=QRKD8mr662oH+WfeCsOOyDPkEuEM9gtKIA/Kc3W0fpwrLBaKJlVNcMfZANCDw4P8RBe7
-	 1Brr1bZ6rvTHIjTJ/qBvZtd5qwiBGPQ/kxDBR43qrx0Xm3DzthiISeT2KzfWysh8zPx5h
-	 ml4XAyFMWepDh/2rY1WMEuzKd8jpkaON87ZxJ7Y4iTpRE67tSpo13TKebetWT9v1MDqzF
-	 MfR+PdLTwxpUZYq3ViQYNFTY97VVR1Ftm8Gu2mojyAhUYv/yRcEPMKHkyOVDRHnto5AYc
-	 K6p+az67ZFgLMSff6WuMa1H3nZdDWs01c+fc6oXUicCzncEGMxdYPi5asvLdgQ3WrIA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793140170;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=BTq7gwM4UUjUNsaagWtNQITr0gTEM8STP6VyWZ/jCrU=;
-	b=tgNIY1IiwYp8qCND+zfHQAImqIzKxc5lyabyww0RXKLWQKqAeFHdDoyOANvr/LfbyHra
-	 f1FWggJp6m+iiHs4p69xaIyTNORjzThJ+mj8EOqI+xDDQK307YWuPxL+1e9myFICovuT1
-	 4t/1SlmJHshbYA5+Y7nWpJNPJGO/hdNdp1fiVC7oezNkADNmn9lqG99JK3H2QPG74FoaD
-	 pdXjLZx0IzrlUH2wnlNDKHDGFzHnjCvR1FCrNpNq+nmxMy7DVIeOvaxDBdRnZAsH1JYPI
-	 nW9Rq+KhkXy+5z3qY6iZLobcmDJZ7RJwA2eVpe+9brcy5OuqNTgN55OSvwX1+JIvPIQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.71
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793140751;
+	b=FrWS6q8t/g8dmapsRYBiDxHw+8eO2BcqMOleio6k6Zl3ErhP9xFswUezi0VHwFdc/UkP
+	 zFv2tgW2sNVeaafD4gSaS+Mfpia72ZsOZWUGDur2TdB99on8UPCiwTl2MtiQaBWUbJ7tb
+	 8GRYBlsQ1MSPV2YKfLxs1GQa2rA1LARidQ5gN5KYPC8JbKyka/rK8qpEu83Z6KvFEku/j
+	 fAjVQukZicMXNWo688HljGX+q7gdbnHoBzAA2Apbm0M/CQPMM4m8HvfLo9/ew4f+OUPZh
+	 QlFJ2gKUkKDbj6i6zdZfPERZS6mp19kEgIZHwamVU+qqZ4dRLT88DQXrsmWJAwXW1AQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793140751;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=pEmx5PL3tlnBiGr2rjVOl0G+YHkBW7VB5cziBEiH9l0=;
+	b=SjLTfJzSD51gTpEX0TL5SD/WB8f06hRCZhEDZ4XGb/cjswa/dJDnYCeyIa3iclERHe/s
+	 1D0wVmyCfe5PrI7QVNJ/LjU5vp3uJL7bDI9mskh2QVXrWd973ZBu0qotnwF6vpcac/cES
+	 3Mybk+3cfiV7mJlaal1TeQuD6Kj3yemv7UA0ocIDjhv/cDQ4XeiUt0uuBx0fVQa5f6cDy
+	 qWIaEfk2Kiv6clziIzUpbDz/tATMtubXi62nLX1EqL2L70qLXuqk6pfROywoIxqZGICh4
+	 RYtbrVURWTG/TRafPe74KSz2AsKb60EydyZ6sbgGp6yy50GURktcoKINSfuGzpnLdRQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XJaJkdhg;
+	arc=none smtp.remote-ip=74.125.82.71
+Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 459E61F01825;
-	Tue, 27 Oct 2026 22:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793140170;
-	bh=BTq7gwM4UUjUNsaagWtNQITr0gTEM8STP6VyWZ/jCrU=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=Lda0oYKo0qJXuEvsALaPmYE+8M1YlLyZ1K9AyECvtZFEXnRvk5SmFFVKxx9gC1x1j
-	 Cu59RWiCECWiwC1i0xClCNmMLj5EmR77GjIczSxRuOqHUW+FXPOSj6FfULwWmrj+VA
-	 8oUArtkftoZAHLgkjzvUbK6pWRFFmhaffmfbicxaX9F1Bp8tqulG0ge3Mcl8HCBqZt
-	 lExo8KfAeOPhcIp3J7i9K1fPdIszTwqI/CZvMO9sfEwuVrWMtFZz/u9p0JvEvoceDN
-	 vl9cU755gadyVe1YIO1LX8wPasOmliJpo596m1zkV3Fk0Sn/AgnPxF6mcaHffPh/pT
-	 APKAAG/WHwXyw==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 99753452B9;
-	Tue, 27 Oct 2026 22:29:28 +0000 (UTC)
-From: Ridge Lomont via B4 Relay <devnull+cyridge.proton.me@kernel.org>
-Date: Tue, 27 Oct 2026 15:29:21 -0700
-Subject: [PATCH v2] x86/kcfi: Don't emit KCFI_REFERENCE() in modules
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1FD606A325
+	for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 22:39:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D1FD606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XJaJkdhg
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-1a2f2ea3c3cso596007c88.0
+        for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 15:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793140749; x=1793745549; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pEmx5PL3tlnBiGr2rjVOl0G+YHkBW7VB5cziBEiH9l0=;
+        b=XJaJkdhg84MLpX8NxKKJxamSxHst5QbgFMJp7i+SzxoMRLRHDOHuYTvYQFkPmtugtQ
+         alVv7aiCD7yW6CWvl3x+VvG/cmEoG8IkPp0F/QQ93J4XG0jbOa3MEvuT0keoH9i+ejG1
+         faTbzJUrfdbTeHyBs/Q5UkIVM97x26I+QWyFRBNVtBEwQj5BvSbigBQWtt49ffr3/CXc
+         ypIClmIjN/6OM3frPT0mayS6UGTn+dBDptUIPzBmjezlFSA0PbPy4KOmYcdnl0MGL6iI
+         PLjcc1YYbYOT66g/XVc/9UWm8XsCtpxdzudeZoLv1C+fvijjrGH5zyzIAO7g1XaWDcuC
+         rVOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793140749; x=1793745549;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pEmx5PL3tlnBiGr2rjVOl0G+YHkBW7VB5cziBEiH9l0=;
+        b=rHj8N+Z9NBL+oLStvNMLlGlkZCpuY3GjVbzlTKKHcFEwA2UnLZcQwoEf5eWouUclmO
+         Y+IBMCsLJhOgG3vnc078lTPpEi2DMl2Ik2HfG8P0g7gkfhS7ISRz4jpm9tOddzcu45MJ
+         HP3iUoeoTkvvQt6VzbesWwKqFyT68OWHZVPnFcCMIjiL6iWQD0N+mP1d4JgLzWKc7UCD
+         zqUd2KRhcmpDIZM6B3li6p1w/1p9N7QjQRzj4WkZSHpTPDNLFwewiLUB5tnu5b/91S9a
+         3fjfCTXul1cMkj2mos7jM/WpeJcSB42rfAHvHKLDJWhwHpqo9SED2W54+xcPgt2kC7p6
+         3l3Q==
+X-Forwarded-Encrypted: i=1; AKwUvBybDDB/KXT0bGQeevh7NoKD83+T6Nf1yXUHfWGkdpNN4uUdRa0lKTSvE1E4dcnSZcH+9TmW@lists.linux.dev
+X-Gm-Message-State: AFq9FYI6HtRtlSrKv9cO/IjbM4in9W7rqLRaWRPQ/wx4ROYJoeR8pyCv
+	lMrIo4Pd7qNLknFZoSN1mwaIWhwaaBJbzKvyZWwFdBq7SU+KUIe1+igB78B2NZCWfMxtwuuPeAC
+	XrZLRmLhj5Q==
+X-Received: from dli9.prod.google.com ([2002:a05:7022:289:b0:1a1:da78:f9b9])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6989:b0:165:90af:a25f
+ with SMTP id a92af1059eb24-1a6cfa0c447mr941563c88.41.1793140748444; Tue, 27
+ Oct 2026 15:39:08 -0700 (PDT)
+Date: Tue, 27 Oct 2026 15:38:35 -0700
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,138 +75,152 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261027-kcfi-reference-modules-v2-1-3a3247f15806@proton.me>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNQQ6CMBBFr0Jm7Zi2VIyuvIdhUcsgo9KSthAN4
- e4WPIDLl7z//gyRAlOEczFDoIkje5dB7QqwnXF3Qm4ygxKqkkJpfNqWMVBLgZwl7H0zviii0LZ
- UQmjTagl5PGSF31v4Wv84jrcH2bTWVqPjmHz4bM+TXL2/J5NEibq0ymhzoupwvAzBJ+/2PUG9L
- MsXINswks4AAAA=
-X-Change-ID: 20261024-kcfi-reference-modules-04c32004af41
-To: x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, Chris Li <sparse@chrisli.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-sparse@vger.kernel.org, Ridge Lomont <cyridge@proton.me>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793140168; l=4583;
- i=cyridge@proton.me; s=20261025; h=from:subject:message-id;
- bh=OQJeHIflLTXu8GG/soe5gJtL1JN4lbjLzWGutcYzYdg=;
- b=6F9puhQ8giJgHtu2O11XOMl3gX9kmfChhfvdlW1snl0do298NDHav1MNEv1s4gxln4pPHnqpX
- fFSoz5RncMyBEr/G0tGtiNgwPwfHc2yfiDKs5l+daJQ8Rg6y32rWe10
-X-Developer-Key: i=cyridge@proton.me; a=ed25519;
- pk=vUzN9FERlHN1g72uX883qK0g48rf4ZgAQ82J2Aieyyo=
-X-Endpoint-Received: by B4 Relay for cyridge@proton.me/20261025 with
- auth_id=1315
-X-Original-From: Ridge Lomont <cyridge@proton.me>
-Reply-To: cyridge@proton.me
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.313.g2479322e68-goog
+Message-ID: <20261027223847.652884-1-irogers@google.com>
+Subject: [PATCH v2 0/9] Add __must_init and require explicit kobj_type::release
+From: Ian Rogers <irogers@google.com>
+To: Kees Cook <kees@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Zhihao Cheng <chengzhihao1@huawei.com>, 
+	Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>, Sumanth Korikkar <sumanthk@linux.ibm.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, 
+	linux-s390@vger.kernel.org, gfs2@lists.linux.dev, 
+	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Ridge Lomont <cyridge@proton.me>
+Clang supports the 'require_explicit_initialization' attribute on struct
+fields to enforce that the field is explicitly initialized when an
+aggregate object is constructed, emitting -Wuninitialized-explicit-init
+(enabled by default) if the field is omitted.
 
-KCFI_REFERENCE() takes the address of a symbol so that the compiler
-emits its __kcfi_typeid_ symbol, which the SYM_TYPED_FUNC_START()
-assembly implementing it needs. It is used from arch/x86 headers for
-__clear_pages_unrolled(), copy_page(), __memset() and __memmove(), and
-all of that assembly is built into vmlinux.
+Following discussion at the Linux Plumbers Conference [1], patch 1 adds
+the attribute to include/linux/compiler_attributes.h as __must_init. In
+v1 it was called __require_explicit_initialization. Kees picked up that
+patch with a first seq_file user [2], and in that thread Greg suggested
+the shorter __must_init spelling, which Kees and Miguel agreed to. As
+the attribute did not land in the v7.4 merge window, Kees asked that
+this series carry the renamed attribute. The Acked-by/Reviewed-by tags
+on patch 1 were given for the original spelling; the rename is
+mechanical.
 
-Modules include the same headers, so with CONFIG_CFI=y every module
-also gets an __ADDRESSABLE() reference to each of these symbols in
-.discard.addressable. This serves no purpose there, and since
-__clear_pages_unrolled() is EXPORT_SYMBOL_GPL, modpost now rejects any
-GPL-incompatible module that includes <linux/mm.h>:
+As Documentation/core-api/kobject.rst notes:
+  "One important point cannot be overstated: every kobject must have a
+  release() method, and the kobject must persist (in a consistent state)
+  until that method is called. If these constraints are not met, the
+  code is flawed."
 
-  ERROR: modpost: GPL-incompatible module repro.ko uses GPL-only
-  symbol '__clear_pages_unrolled'
+Annotating struct kobj_type::release caught struct kobj_type definitions
+across the tree that omitted .release:
+- Patches 2-8 fix struct kobj_type definitions where dynamically
+  allocated kobjects, ksets, or enclosing structures were either leaked
+  on kobject_put(), freed prematurely before kobject release, or missing
+  proper static initializers.
+- Patch 9 annotates struct kobj_type::release with __must_init and
+  explicitly sets .release = NULL (with explanatory comments prefixed
+  with "Pre-existing:") on the remaining legacy struct kobj_type
+  definitions whose kobjects are static, per-CPU, permanent firmware
+  structures, or embedded in devm- or parent-managed structures.
 
-even though the module never uses the symbol. This makes OpenZFS
-impossible to build against CFI kernels; its configure checks fail
-in the same way and are misreported as CONFIG_DEBUG_LOCK_ALLOC.
+Note on tool use: An LLM coding assistant was used to help audit the
+compiler diagnostics across the tree, draft the fixes and changelog
+descriptions, and verify builds and review feedback.
 
-scripts/module.lds.S does not help here: modpost checks <module>.o
-before the final link, and even after it the discarded section only
-loses its relocations, the undefined symbols stay in .symtab, where
-the module loader resolves them with the same license check.
-
-Only emit the reference when building vmlinux.
-
-Tested on x86_64 with clang 23.1.3 and CONFIG_CFI=y, with both
-CONFIG_LTO_CLANG_FULL=y (the configuration from the Fixes: commit) and
-CONFIG_LTO_CLANG_THIN=y: vmlinux links without warnings and still contains
-__kcfi_typeid___clear_pages_unrolled, __kcfi_typeid_copy_page,
-__kcfi_typeid___memset and __kcfi_typeid___memmove. It boots in QEMU
-with no CFI failures. A minimal module with MODULE_LICENSE("Proprietary")
-including <linux/mm.h> fails modpost before this change and builds and
-loads after it. OpenZFS builds against a CFI kernel with this change,
-and its pool, encryption, checksum and send/recv operations run
-without CFI failures, in QEMU and on a desktop with CFI enforcing.
-
-Fixes: 9b041a4b66b3 ("x86/mm: Ensure clear_page() variants always have __kcfi_typeid_ symbols")
-Link: https://github.com/openzfs/zfs/issues/18092
-Assisted-by: LLM
-Signed-off-by: Ridge Lomont <cyridge@proton.me>
-Acked-by: Nathan Chancellor <nathan@kernel.org>
----
-Notes for reviewers:
-
-- The fix was found and written with an AI coding assistant (Claude
-  Opus 5.5, Claude Code). It started from "CONFIG_CFI breaks
-  OpenZFS"; the assistant traced that to the modpost failure,
-  wrote this change, and ran the tests described in the changelog.
-  I have reviewed it and take responsibility for it.
-- An alternative would be wrapping the KCFI_REFERENCE() lines in
-  arch/x86/include/asm/page_64.h in #ifndef MODULE, as suggested in
-  the OpenZFS report; doing it in the macro covers all users.
-- Only x86_64 was tested; it is the only architecture using
-  KCFI_REFERENCE(). Tested with CONFIG_LTO_CLANG_FULL=y and
-  CONFIG_LTO_CLANG_THIN=y on this tree and with LTO disabled on v7.3.
-  In-tree modules were built but not loaded.
-- checkpatch reports "Non-standard signature: Assisted-by:", which
-  conflicts with Documentation/process/coding-assistants.rst.
----
 Changes in v2:
-- Sign off with my real name (Peter, Borislav).
-- Explain in the changelog why module.lds.S discarding
-  .discard.addressable does not help (Nathan).
-- Also tested with CONFIG_LTO_CLANG_THIN=y.
-- Add Nathan's Acked-by.
-- Link to v1: https://patch.msgid.link/20261024-kcfi-reference-modules-v1-1-43c2a4a9e657@proton.me
----
- include/linux/compiler.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+- Rebased on v7.3-16928-g83f32c773255 (v7.4 merge window).
+- Patch 1: Rename __require_explicit_initialization to __must_init per
+  Greg Kroah-Hartman; document the Clang >= 20 requirement per Miguel
+  Ojeda; note the Clang gap for file-scope objects without an
+  initializer reported by Kees Cook; add tags from v1 and from Kees's
+  posting.
+- Move LLM assistance attribution from Assisted-by tags to this cover
+  letter per commit 1e035297ffda ("docs: remove Assisted-by
+  references").
+- Patch 4 (cpufreq): Use "cpufreq: governor:" prefix, drop Fixes tag,
+  fix typo, and remove the redundant runtime assignment in
+  cpufreq_dbs_governor_init() per Zhongqiu Han.
+- Dropped v1 patch 5 (ACPI: CPPC), already fixed upstream by
+  commit 27954e29d7de ("ACPI: CPPC: Release CPC descriptors through
+  kobject").
+- Patch 5 (dlm): Call kobject_del() before dlm_recoverd_stop() in
+  release_lockspace() and the new_lockspace() error path, and wait on a
+  new ls_kobj_done completion before freeing the lockspace or dropping
+  the module reference, avoiding races with delayed kobject release.
+- Dropped v1 patch 8 (s390/sclp_mem) per Sumanth Korikkar: the
+  /sys/firmware/memory/memoryX kobjects are permanent, so sclp_mem.c is
+  folded into patch 9 with .release = NULL.
+- Patch 7 (ubifs): Add Tested-by and Reviewed-by from Zhihao Cheng.
+- Patch 8 (drm/amdkfd): Check q->kobj.state_in_sysfs before
+  kobject_del() in kfd_procfs_del_queue().
+- Patch 9 (kobject): Cover sclp_mem.c and the new amdgpu_ualink.c
+  ualink_xcp_info_ktype, fix the overlay-sysfs.c comment, and prefix
+  legacy .release = NULL comments with "Pre-existing:".
+- Patch 9 (kobject): The ioat, kunpeng_hccs and omapfb display comments
+  now say that the existing teardown can use-after-free under
+  CONFIG_DEBUG_KOBJECT_RELEASE (reported by Sashiko). Fixing those
+  drivers is left to follow-up patches.
 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 0ea7150db..ea161a72d 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -258,10 +258,13 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- 
- #endif /* __KERNEL__ */
- 
--#if defined(CONFIG_CFI) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
-+#if defined(CONFIG_CFI) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO) && \
-+	!defined(MODULE)
- /*
-  * Force a reference to the external symbol so the compiler generates
-- * __kcfi_typid.
-+ * __kcfi_typid. Only vmlinux needs it, as that is where the assembly
-+ * using the typeid lives; in a module it would only add a reference to
-+ * the symbol, which fails modpost if the symbol is GPL-only.
-  */
- #define KCFI_REFERENCE(sym) __ADDRESSABLE(sym)
- #else
+v1: https://lore.kernel.org/all/20261013223946.1836757-1-irogers@google.com/
+[1] https://lpc.events/event/20/contributions/2392/
+[2] https://lore.kernel.org/lkml/20261014225811.i.852-kees@kernel.org/
 
----
-base-commit: 6fba331225f5040e93d0947d1027e9712238291f
-change-id: 20261024-kcfi-reference-modules-04c32004af41
+Ian Rogers (9):
+  Compiler Attributes: Add __must_init macro
+  powerpc/secvar: Add missing kobject release callback to secvar_ktype
+  sh: sq: Add missing kobject release callback to ktype_percpu_entry
+  cpufreq: governor: Initialize kobj_type release callback statically
+  dlm: Free dlm_ls in kobject release callback
+  xen/sys-hypervisor: Add release callback to hyp_sysfs_kobj_type
+  ubifs: sysfs: Use kset_create_and_add() for ubifs_kset
+  drm/amdkfd: Free queue in procfs_queue_type kobject release callback
+  kobject: Require explicit initialization of struct kobj_type::release
 
-Best regards,
---  
-Ridge
+ Documentation/conf.py                         |  1 +
+ arch/arm64/kernel/cpuinfo.c                   |  5 ++++
+ arch/powerpc/kernel/secvar-sysfs.c            |  6 +++++
+ arch/sh/kernel/cpu/sh4/sq.c                   |  6 +++++
+ drivers/acpi/sysfs.c                          |  2 ++
+ drivers/cpufreq/cpufreq_conservative.c        |  5 +++-
+ drivers/cpufreq/cpufreq_governor.c            |  4 +--
+ drivers/cpufreq/cpufreq_governor.h            |  1 +
+ drivers/cpufreq/cpufreq_ondemand.c            |  5 +++-
+ drivers/dma/ioat/sysfs.c                      |  7 +++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ualink.c    |  5 ++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_xcp.c       | 10 +++++++
+ drivers/gpu/drm/amd/amdkfd/kfd_process.c      | 12 ++++++---
+ drivers/gpu/drm/amd/amdkfd/kfd_queue.c        |  5 +++-
+ drivers/infiniband/hw/hfi1/sysfs.c            |  5 ++++
+ drivers/infiniband/hw/usnic/usnic_ib_sysfs.c  |  2 ++
+ drivers/parisc/pdc_stable.c                   |  5 ++++
+ drivers/power/supply/ab8500_fg.c              |  5 ++++
+ drivers/s390/char/sclp_mem.c                  |  2 ++
+ drivers/soc/hisilicon/kunpeng_hccs.c          | 21 +++++++++++++++
+ .../fbdev/omap2/omapfb/dss/display-sysfs.c    |  7 +++++
+ .../fbdev/omap2/omapfb/dss/manager-sysfs.c    |  5 ++++
+ .../fbdev/omap2/omapfb/dss/overlay-sysfs.c    |  5 ++++
+ drivers/xen/sys-hypervisor.c                  |  6 +++++
+ fs/dlm/dlm_internal.h                         |  1 +
+ fs/dlm/lockspace.c                            | 26 ++++++++++++++-----
+ fs/erofs/sysfs.c                              | 10 +++++++
+ fs/f2fs/sysfs.c                               | 15 +++++++++++
+ fs/ocfs2/cluster/masklog.c                    |  5 ++++
+ fs/ubifs/sysfs.c                              | 24 +++++------------
+ include/linux/compiler_attributes.h           | 12 +++++++++
+ include/linux/kobject.h                       |  2 +-
+ scripts/checkpatch.pl                         |  1 +
+ tools/lib/python/kdoc/xforms_lists.py         |  1 +
+ 34 files changed, 202 insertions(+), 32 deletions(-)
 
+
+base-commit: 83f32c773255720a661aa45d83e36278135f23f5
+-- 
+2.56.0.313.g2479322e68-goog
 
