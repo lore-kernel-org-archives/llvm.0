@@ -1,73 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.10
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793095344;
-	b=Q2cjyYL/BZtGXFNipO3GSC8VxcjL1AiAuJZQYo/u/jylcY+H8ssdsg+5hNqS7JEryX7Z
-	 FUm7HzkXjZhl8te5U/PMU+5htAXFTDUp7g/78/vYwjraQXNvORWiyfGs7QulJDoMXcZp1
-	 OAuMsd9L8+RxZc6RkmiIbsVn6qmhzXSspUNUk3fg6R+HYQB7MIE+GdzRDHljo5oWPGCzw
-	 11J7fgjCWbYz+LBikNF5W7bEPyKTnw2kJafwbAWqyk9rOsJV3w+usC1f50/t4ggEdDJBG
-	 86DU2BNQhfZiffga6SIrVaIPk/A3krNI1+FwQ6S+Zz6JSVXjznqrLn3mhAPs80yj42Q==
+	t=1793095793;
+	b=SBW9GkZ7MxlmHHd7N+YPYq7lIQ/+fRNKjQKeHdF6bu+jNw3KcRiCH7fwOv9/gKHvDP7o
+	 MIH7q4C0O66R7yvsiItxpNnja2L+Mv55MgsSLdClD9dyPCX+f2bBaKa94nFWkmb1mF/jI
+	 xWgS3Q4HZd7jiTTo62Mt/mU67yVJwjaDprRd1WNUQAb93Upfbl4ajWxGWd8b3CO6VeKV9
+	 p0SMpm8+Yce+1ZHR5VEX6G6YwgxGN7igrXq1V69OJ9LwYF82KM8FE9ED2weLXwA0gxoKj
+	 YJgZi+dR2y04Oc1NSRcg4dfG7y7oneyYsvph598SM5wahnPfKnJJ+h2EWhYNH7GExTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793095344;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793095793;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=8YlZ90uAKR6aXs1DTGP4PKrRtdPIJ2caVM2+niiG2is=;
-	b=Rw3jQwB1EELgdFk2G1rVbnRa1wwOmOmAV0rGz0fhB7XNa/vPKDJlkyUg1lGkNRJwul1m
-	 ir/7JIG+MVX7mOap9otzCnUlwV+NxZtDNOBQSvNzMBlt2n7SgU6K2CtUEWsOcFiTQpDqS
-	 KwcWrwi9rinvwxSmDghcXfnhd3osc9gkSL+pEAc7LjY5rtOuorm5fNazy4/1ZFlEFKqpi
-	 GqL0CnScZMjfm6Fcg3/mF3leNaz/cBb7u1HoB2luCO/bXDkiYytMsBlRszuYd7YyHSyLE
-	 KQ6XPW6WiFfurVAf/Zjkte9F31sCjXqch4nmoWxb19MpoYcewHcXK42WAg6iNnYbKUw==
+	bh=h8ENibmIFki4VGKF3LZNT00zbW3vGGJjBzXkJFPQYIM=;
+	b=Nr7PeMVLjGZUYH6tTzNResogLnqerKNBCEMb6GR1FBHufg3xD2j5VpDsmBcEdQM7a71e
+	 LV3KdbctV55GzmjnaJsEdfKHwBGSkYjAaNLnjfdbfLjYLeb0AlDbm1D69XbpG1pDvnA1g
+	 JeKVedLHTSjlPKxUmocsnsCvHbN2UlYxg1SLL2KO137G47dw40W/6CM32T2A2Y88Mu8X6
+	 Q9tOd/wfXrkS/MvXXkIUgC3+txnAQtNAIPRYtUrUxfumpW1lLqdESlBC4PMcjbF0rV+ON
+	 jl7Q9CnkpEfqVuIc5IBamcCIpLeSvHFV82PBKd0iLJp773YM1X7on5SUsXtkT10OMgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=CC01RG9y;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=C2tho6SN;
+	arc=none smtp.remote-ip=198.175.65.10
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C51606A31A;
-	Tue, 27 Oct 2026 10:02:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B9C51606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F65606A31B;
+	Tue, 27 Oct 2026 10:09:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55F65606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=CC01RG9y
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=8YlZ90uAKR6aXs1DTGP4PKrRtdPIJ2caVM2+niiG2is=; b=CC01RG9yCK1JUck1nuLgczlS3P
-	ryLsu1zlOTJtr8NEfdW2Qo8pchXHOz4UsESUenllIoa0gbAsKZW/5WulZWrfM6uM3ttLpaxGI1kTM
-	PEvsEC2Vqmte58VHit57QQyi7nuBRPPNOxFJj4XqX1fsI31af7iGTNtZJYQm8f2Y2DUv27HJoHgbp
-	BMVHTdOnyV5fslU6ICouaKU4PRBuje2dsnS3kTL3phA3LgTyucDLLC1+nWpgZqaTM3VhPgRO/ty49
-	d4M45efYTP096PvzUTotc8iOlKr2yp+VniyEdl4VHmI9h1UzLP5MTXU82WaihTDyfMZFtPGr+1AdU
-	+48KcZmw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xLe0W-0000000EhbJ-3Yzd;
-	Tue, 27 Oct 2026 10:02:17 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 31058300DB9; Tue, 27 Oct 2026 11:02:15 +0100 (CET)
-Date: Tue, 27 Oct 2026 11:02:15 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: cyridge@proton.me
-Cc: x86@kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Chris Li <sparse@chrisli.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-sparse@vger.kernel.org
-Subject: Re: [PATCH] x86/kcfi: Don't emit KCFI_REFERENCE() in modules
-Message-ID: <20261027100215.GA2668804@noisy.programming.kicks-ass.net>
-References: <20261024-kcfi-reference-modules-v1-1-43c2a4a9e657@proton.me>
- <20261026103743.GD2668200@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=C2tho6SN
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793095794; x=1824631794;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TPETQnYxAC5OM2l73sWPjeuHD6cHSvfGUmQvfnhKiBM=;
+  b=C2tho6SNKSiTStD1F8UBPdofFndb+Giw/RZKqJ/ysUrKolwmtwaYbPex
+   s5AHouO8nq+ibR7zvB+i4QuSKgmd8KfPb2py92cUTqB+g/iguGtq/z+q2
+   PnQG8hKmhiUd+CXQfq/wE4b+bY/txyi6ya68jAr4nqGsrnFxMCWcm1U6Y
+   zreOTnpNp16sl69ou6jV26yNRpPndiFcydSM3lREfzlw9qOhLIyD6DObF
+   BGxErPPAaZqMY692wQIb/vv38u0if+o7nWYcPahgortD5ZkqQi/mlVzBK
+   l4ZhSPT9C9r63ya1ECWiOVUsS5j09NOWN17eZFYtuuj6dIsIQuWcJza8S
+   Q==;
+X-CSE-ConnectionGUID: tsMxuaoxR8yG1s1j4JD1HQ==
+X-CSE-MsgGUID: cARcdtQAQi6AWKd/UaDrgg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11947"; a="1681719"
+X-IronPort-AV: E=Sophos;i="6.27,181,1787036400"; 
+   d="scan'208";a="1681719"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2026 03:09:53 -0700
+X-CSE-ConnectionGUID: NVNl+TBZTOawIM0zJbkXOQ==
+X-CSE-MsgGUID: OvyN5Zy4RWyzHsCHPAWS8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,181,1787036400"; 
+   d="scan'208";a="4898247"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 27 Oct 2026 03:09:50 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xLe7n-00000000X6K-1nkB;
+	Tue, 27 Oct 2026 10:09:47 +0000
+Date: Tue, 27 Oct 2026 18:09:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Carstens <hca@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 4/4] s390/maccess: Remove spinlock from
+ __s390_kernel_write()
+Message-ID: <202610271725.YBK6zlkf-lkp@intel.com>
+References: <20261026120329.1792436-5-hca@linux.ibm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,49 +90,150 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261026103743.GD2668200@noisy.programming.kicks-ass.net>
+In-Reply-To: <20261026120329.1792436-5-hca@linux.ibm.com>
 
-On Mon, Oct 26, 2026 at 11:37:43AM +0100, Peter Zijlstra wrote:
-> On Sat, Oct 24, 2026 at 06:46:33PM -0700, Cytops via B4 Relay wrote:
-> > From: Cytops <cyridge@proton.me>
-> > 
-> > KCFI_REFERENCE() takes the address of a symbol so that the compiler
-> > emits its __kcfi_typeid_ symbol, which the SYM_TYPED_FUNC_START()
-> > assembly implementing it needs. It is used from arch/x86 headers for
-> > __clear_pages_unrolled(), copy_page(), __memset() and __memmove(), and
-> > all of that assembly is built into vmlinux.
-> > 
-> > Modules include the same headers, so with CONFIG_CFI=y every module
-> > also gets an __ADDRESSABLE() reference to each of these symbols in
-> > .discard.addressable. This serves no purpose there, and since
-> > __clear_pages_unrolled() is EXPORT_SYMBOL_GPL, modpost now rejects any
-> > GPL-incompatible module that includes <linux/mm.h>:
-> > 
-> >   ERROR: modpost: GPL-incompatible module repro.ko uses GPL-only
-> >   symbol '__clear_pages_unrolled'
-> > 
-> > even though the module never uses the symbol. This makes OpenZFS
-> > impossible to build against CFI kernels; its configure checks fail
-> > in the same way and are misreported as CONFIG_DEBUG_LOCK_ALLOC.
-> > 
-> > Only emit the reference when building vmlinux.
-> > 
-> > Tested on x86_64 with clang 23.1.3, CONFIG_CFI=y and
-> > CONFIG_LTO_CLANG_FULL=y (the configuration from the Fixes: commit):
-> > vmlinux links without warnings and still contains
-> > __kcfi_typeid___clear_pages_unrolled, __kcfi_typeid_copy_page,
-> > __kcfi_typeid___memset and __kcfi_typeid___memmove. It boots in QEMU
-> > with no CFI failures. A minimal module with MODULE_LICENSE("Proprietary")
-> > including <linux/mm.h> fails modpost before this change and builds and
-> > loads after it. OpenZFS builds against a CFI kernel with this change,
-> > and its pool, encryption, checksum and send/recv operations run with
-> > CONFIG_CFI_PERMISSIVE=y without CFI failures.
-> > 
-> > Fixes: 9b041a4b66b3 ("x86/mm: Ensure clear_page() variants always have __kcfi_typeid_ symbols")
-> > Link: https://github.com/openzfs/zfs/issues/18092
-> > Assisted-by: LLM
-> > Signed-off-by: Cytops <cyridge@proton.me>
-> 
-> Yeah, I suppose this will do. Thanks.
+Hi Heiko,
 
-Borislav reminded me that we need a real identity for SoB.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on s390/features]
+[also build test ERROR on trace/for-next bpf-next/master bpf/master linus/master v7.3 next-20261026]
+[cannot apply to bpf-next/net]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Carstens/s390-jump_label-Serialize-text-patching-with-text_mutex/20261026-130326
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
+patch link:    https://lore.kernel.org/r/20261026120329.1792436-5-hca%40linux.ibm.com
+patch subject: [PATCH 4/4] s390/maccess: Remove spinlock from __s390_kernel_write()
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20261027/202610271725.YBK6zlkf-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261027/202610271725.YBK6zlkf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610271725.YBK6zlkf-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/mm/maccess.c:9:
+>> include/linux/text-patching.h:10:9: error: call to undeclared library function 'memcpy' with type 'void *(void *, const void *, __size_t)' (aka 'void *(void *, const void *, unsigned long)'); ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      10 |         return memcpy(dst, src, len);
+         |                ^
+   include/linux/text-patching.h:10:9: note: include the header <string.h> or explicitly provide a declaration for 'memcpy'
+   In file included from arch/s390/mm/maccess.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/mm/maccess.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/mm/maccess.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/mm/maccess.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/mm/maccess.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/mm/maccess.c:15:
+   In file included from include/linux/cpu.h:17:
+
+
+vim +10 include/linux/text-patching.h
+
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23   6) 
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23   7) #ifndef text_poke_copy
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23   8) static inline void *text_poke_copy(void *dst, const void *src, size_t len)
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23   9) {
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23 @10) 	return memcpy(dst, src, len);
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23  11) }
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23  12) #define text_poke_copy text_poke_copy
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23  13) #endif
+0c3beacf681ec8 Mike Rapoport (Microsoft  2024-10-23  14) 
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
