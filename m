@@ -1,101 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793139903;
-	b=WZM2xfieXDqKnG5SlKwBjL9+Qtm2k550kot/OLMwyFuWD+pTsRIlZeizm84peFoJdG13
-	 wnkLZvQONhqIr35uqXyBNvZxiJyLwu0vgp6jPvcOLln6uMCNVn19ytlyKcMyBlrGgEl6o
-	 boySWb2hjG3MCVstWNqS9+Rpk+oqhjtUKd/JWaxnB8eCOoNFhxcvVxorw3dtNe+FSH8xC
-	 aS2OfnWUbVSJB6P84782EVtR9qzJsBhtN0PmmFojreg41kVylqzaPfOjhz35YgXWKsx/k
-	 y7bnwVNswICsAtqdrOg/kpjbeqiPeSFq5zADI7gF5DkSIhJAN/rLpRRqHx6A158jChw==
+	t=1793140170;
+	b=qgasH/GKdxLURQ8xzZ+JRjQNcx5SvW2STcISl22oe9O8esxEYjl0lS4L7e8QHnH065K5
+	 tzCym3J9GZFuHiN7peG0h/OwfsGkcvqr0prgVChE+nOxosMETbXt/lhAdzRqlxMGVbDLp
+	 QEXRTK3784Wbe65313cs612syZEO9FPVsEqdWg7H9KV9QEhzUSnFMpaz+khrSWNLuoz1n
+	 ULmCE3O9VtO39J5c3bXlvg085Ddl70V7iNo4pvkI7xDk4sbXE6klBLfuM12Zo/uDcQImR
+	 68Gy3zNl3KQXlwzBatFLDpUZx7cVqcjtCCPmohOdG8cTVsxGw0ehGH4CpjEDfpXezyw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793139903;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZEKOi1PwMO6a+hswERjow4zduMtspY4e9rbrauVqOm4=;
-	b=HNOVjWmr7G6snul52+SDgifD3i2PgQW+XZkPemuZgN6u1I3BDiVmr3n/z8bJkpiC2u+x
-	 MVEGsf03KccUDXfeF4dyhuvhWYs+wFWrWiBVfIF955tlpmKqYMTRpba7RVScufbsQqIBt
-	 kU03llwiN6Qwr9iH1hAQ9nNiswXe2Td5yqkS2drdzeVpu507x0mUqLESMuKspK3l41xM3
-	 E5S2cu5Tl5g/KFgfpXGYFXagykOhWmJOuUfc2r0v0nGXdBPom5aha9Ye+sF0NQjW51d65
-	 qUBUhMbIPQQLWSFQ153ylKK+/86hWZZfCzrneJ5aHrcRJJdB9Q+8Ofq0/eyPhq2nw1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793140170;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=BTq7gwM4UUjUNsaagWtNQITr0gTEM8STP6VyWZ/jCrU=;
+	b=Q18/DlpBvwaRv4w+QW93YqvXoSP//csv3Nx3td93GV+aoN76kOuw57QMOXc/R/Pw1Ccr
+	 kx8tD+dJei67YgizeCdgSpBKs7IroKkotiH9ENcTJjGpRGKMXGYNQfesWY0sjn2HdpSlN
+	 1umV3QxpLavZ8XLmsloID3YPEw1/BXhU+wmpAd4NYqopgYBYiDeZ8CM9P+ocueCnUSEFl
+	 U8IpXeHNTOJMTZU/My1unvwvF4F2YiAPui7UpUDLldTL+9Ub5q32FIjyQ6rI0beykoMV8
+	 EBmUFyirDKvljXfRxDJcu3N5xZIX2AuJYdkPAMC2BvM2Abyni5e1g/Q/N/r+6aJDKyw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ozEpJtxa;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.174
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lda0oYKo;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E75606A31D;
+	Tue, 27 Oct 2026 22:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lda0oYKo
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793140170;
+	b=QRKD8mr662oH+WfeCsOOyDPkEuEM9gtKIA/Kc3W0fpwrLBaKJlVNcMfZANCDw4P8RBe7
+	 1Brr1bZ6rvTHIjTJ/qBvZtd5qwiBGPQ/kxDBR43qrx0Xm3DzthiISeT2KzfWysh8zPx5h
+	 ml4XAyFMWepDh/2rY1WMEuzKd8jpkaON87ZxJ7Y4iTpRE67tSpo13TKebetWT9v1MDqzF
+	 MfR+PdLTwxpUZYq3ViQYNFTY97VVR1Ftm8Gu2mojyAhUYv/yRcEPMKHkyOVDRHnto5AYc
+	 K6p+az67ZFgLMSff6WuMa1H3nZdDWs01c+fc6oXUicCzncEGMxdYPi5asvLdgQ3WrIA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793140170;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=BTq7gwM4UUjUNsaagWtNQITr0gTEM8STP6VyWZ/jCrU=;
+	b=tgNIY1IiwYp8qCND+zfHQAImqIzKxc5lyabyww0RXKLWQKqAeFHdDoyOANvr/LfbyHra
+	 f1FWggJp6m+iiHs4p69xaIyTNORjzThJ+mj8EOqI+xDDQK307YWuPxL+1e9myFICovuT1
+	 4t/1SlmJHshbYA5+Y7nWpJNPJGO/hdNdp1fiVC7oezNkADNmn9lqG99JK3H2QPG74FoaD
+	 pdXjLZx0IzrlUH2wnlNDKHDGFzHnjCvR1FCrNpNq+nmxMy7DVIeOvaxDBdRnZAsH1JYPI
+	 nW9Rq+KhkXy+5z3qY6iZLobcmDJZ7RJwA2eVpe+9brcy5OuqNTgN55OSvwX1+JIvPIQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F81D606A321
-	for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 22:25:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F81D606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ozEpJtxa
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cd6028ff33fso234592a12.0
-        for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 15:25:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793139902; cv=none;
-        d=google.com; s=arc-20260327;
-        b=CMxdof5AQQ9ZFZ1tfAJ+1evTqpSHSSdhPaG8o70ei7brcgCTSNgI2+DwnPXl8y378F
-         02R4bSPsxO82XuiKGa5Ty1CFliF0FXxczZDOvCp4w+mBmc+FRNeyc1rYyouLL6wGd6bx
-         X0e6z0kSmj4lxsK7WaAdx/nRR92qmPNJ5vnCEzYrPpeHKsAuMhoaR3dIDcHBDue0AJ/C
-         lS6xbAM5m6RtRwhlZz+Ese3yth+ZzFBZYL7YKA1lSxaQHGNUdVeUTkvI5pmAQ/fJNT2q
-         QpyOXNFTyUWKCQTYzc4rQIDRJ0LibtrMa4g/S93xa5zeKUeL93GJiZI56xEOaWbp8VxH
-         OrQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZEKOi1PwMO6a+hswERjow4zduMtspY4e9rbrauVqOm4=;
-        fh=DOOVoY68mu2jMmPKqAbRtOsc7pIotNKg0JDfmcfyRrQ=;
-        b=fjorvP1QT9CStVGTaOlEJDrU9Vcm19ZgtRngQKv/TMOOJHA/XQ66DtS1eDcyuEeYlw
-         bq4qILA4A8PEWqnyJYnZx15CfWX6eVVF3CwgSGgNEm3QofwRrCylJ4QY5ZxyIlFNwYdV
-         GoUP4sup1TV4Bk2T5niOc9k28mFRuPlDKuCa+XR7hGJfN5Md4+bfKQlUPxe7Lx3dRuUm
-         XB+9Ue9aOpog00iI6bihi4i26FBA+PTGV2ReBa92i/CsDOrvwWh0EduLXbzm48KfsALL
-         cIdnifQzP+vfwGnjD7joRxLG6u9B+weg/f4gCwsWZ5KZwwc4ASyS3sYrY3rtA3/lLz2D
-         NQZQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793139902; x=1793744702; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ZEKOi1PwMO6a+hswERjow4zduMtspY4e9rbrauVqOm4=;
-        b=ozEpJtxatgLZ4iBqoYrLcpQ4oGmg64bdYsGfZX1/VQQwZ+B+EyIt2th2Bq69P1BLzD
-         Dm0uO5b1HmMevk68+J1LK2J517TexaUgY0Lr1H0FWbx6v6v0FlT6K6IQ4ZhQlz1Z5B3v
-         XF5BDLpo0veaxxPtmptMeq7SbkdVjQj+vG+7qVWsYPJTlh9bNyqAyRzovJmXYvUVmm/K
-         dvjVNrO2XoI8IMPfm8NxZPVLcZU9cHwR7DwahH9NSUDwtHv+7o0MlUI1V8D3j9ieJDnI
-         PSJHBDy4C5r0HMsa/n5+/hLTJm2vPX0UqIxPbQECDJieocEtYpkOclkL/W5yfUHe4e2c
-         tKqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793139902; x=1793744702;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZEKOi1PwMO6a+hswERjow4zduMtspY4e9rbrauVqOm4=;
-        b=ZXUONC+4DewP2249GB39XqZzw6Euto3RjyS9N4ikIrNg2OH5WvHLQGJw3dIwEY/Xo4
-         yiyQ4uGdUoNVUSgngz76z1R7fVdvWVviYdMYdGelHJb4KPzDJOHMbDx/pKvzolNGUvxw
-         w+29BFLZrZoIIk9ewAjFlU0Q2CmXGBSbzZWNwgVftAjnUCJqEOLtDOetWbOGCsAgyvLO
-         RSu/sS6h1N7Nn8nW03XyCqZ5qkg40v+jJMCmbPEuWj3UU65UuPzj/Tk40SfspRvvwTf3
-         xNfz7OM1B/Buc899czP55/1H277CJgtoVGg/S4rH6rFeUZtWK9un+ShNNfXBfstGr+kh
-         Z9Hg==
-X-Forwarded-Encrypted: i=1; AKwUvBw7CDQIrESklaeLb9QM+W6ObGa+tjGu51z8CMtsefgAcU13oErwpepnqd3KeZJDB0suEWI8@lists.linux.dev
-X-Gm-Message-State: AFq9FYINpIrhFoDInByW23yEWaV1s27YuHNMAU+sLde+YSWxZQ+6F4z+
-	QGiPf5/9X86ByqTgZ150KnWTyHr6M41jxg/6h1n8znNjD0a56m9HkdNZ6FgIb7pJkeR0qX+3bTP
-	9X6ZIVMB95EOVgRiPDbvpMZXcDUGg+BY=
-X-Gm-Gg: AYBFou0e1Rg2Hxk1RibqOOIihsnGFfJXFosxj4LPl9RY6kBBf6xu6lPYxYNP4eWTCqH
-	I7HbpfXHivPtOgfdSwgE3V64jwKJRFCKEkxrzKg5TpCw3GHuy7c0o+9kPnon/62kN8coAd+/18m
-	kOS8VovZZO+F+FzWeH8sYb1zHvLlJmwDt2z/LYWXk4xLsPm/JNgv4a9WyRuzrJ7rBf4cAAhqgZE
-	tQC5SQXD5OnVMQz1NJbkKkvOkgauo+Z1d2zK6UDmBPW0EjJHyljEIWpEIJtCgQL2a7j90X0JxsR
-	HkSu44u7bUAV3MhKFqPK+2/nUXXiNC8llVs3JSE6tT7lqgdhgLitLZbtTvCSOx2IUaZjl/ADOOy
-	t3BMmJKkfrEIGP1ifSG8ct7TdUETCt8C9yVKlG+b/J7FkpN64CtZiOxMVH5B+NkTNYiywzsXZfj
-	g06YbNzWwz4Lg+S8w4l3qG7wIjf3LQKoX9KA==
-X-Received: by 2002:a17:90b:3b85:b0:3ac:9259:122c with SMTP id
- 98e67ed59e1d1-3ae58241dccmr307011a91.40.1793139902173; Tue, 27 Oct 2026
- 15:25:02 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 459E61F01825;
+	Tue, 27 Oct 2026 22:29:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793140170;
+	bh=BTq7gwM4UUjUNsaagWtNQITr0gTEM8STP6VyWZ/jCrU=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=Lda0oYKo0qJXuEvsALaPmYE+8M1YlLyZ1K9AyECvtZFEXnRvk5SmFFVKxx9gC1x1j
+	 Cu59RWiCECWiwC1i0xClCNmMLj5EmR77GjIczSxRuOqHUW+FXPOSj6FfULwWmrj+VA
+	 8oUArtkftoZAHLgkjzvUbK6pWRFFmhaffmfbicxaX9F1Bp8tqulG0ge3Mcl8HCBqZt
+	 lExo8KfAeOPhcIp3J7i9K1fPdIszTwqI/CZvMO9sfEwuVrWMtFZz/u9p0JvEvoceDN
+	 vl9cU755gadyVe1YIO1LX8wPasOmliJpo596m1zkV3Fk0Sn/AgnPxF6mcaHffPh/pT
+	 APKAAG/WHwXyw==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 99753452B9;
+	Tue, 27 Oct 2026 22:29:28 +0000 (UTC)
+From: Ridge Lomont via B4 Relay <devnull+cyridge.proton.me@kernel.org>
+Date: Tue, 27 Oct 2026 15:29:21 -0700
+Subject: [PATCH v2] x86/kcfi: Don't emit KCFI_REFERENCE() in modules
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -105,282 +82,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
-In-Reply-To: <20261023001603.560210-9-wusamuel@google.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 27 Oct 2026 15:24:50 -0700
-X-Gm-Features: AclHuK_SsI0sp6o_bhNEekYUJ22um4BFp-_z7npxEVXNceFMnfOEnPql-EZ_y5k
-Message-ID: <CAEf4Bzb--Jzz696u057G9_CgQN7zf6ksvoL80KJacKO2CorsnQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261027-kcfi-reference-modules-v2-1-3a3247f15806@proton.me>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNQQ6CMBBFr0Jm7Zi2VIyuvIdhUcsgo9KSthAN4
+ e4WPIDLl7z//gyRAlOEczFDoIkje5dB7QqwnXF3Qm4ygxKqkkJpfNqWMVBLgZwl7H0zviii0LZ
+ UQmjTagl5PGSF31v4Wv84jrcH2bTWVqPjmHz4bM+TXL2/J5NEibq0ymhzoupwvAzBJ+/2PUG9L
+ MsXINswks4AAAA=
+X-Change-ID: 20261024-kcfi-reference-modules-04c32004af41
+To: x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, Chris Li <sparse@chrisli.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-sparse@vger.kernel.org, Ridge Lomont <cyridge@proton.me>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793140168; l=4583;
+ i=cyridge@proton.me; s=20261025; h=from:subject:message-id;
+ bh=OQJeHIflLTXu8GG/soe5gJtL1JN4lbjLzWGutcYzYdg=;
+ b=6F9puhQ8giJgHtu2O11XOMl3gX9kmfChhfvdlW1snl0do298NDHav1MNEv1s4gxln4pPHnqpX
+ fFSoz5RncMyBEr/G0tGtiNgwPwfHc2yfiDKs5l+daJQ8Rg6y32rWe10
+X-Developer-Key: i=cyridge@proton.me; a=ed25519;
+ pk=vUzN9FERlHN1g72uX883qK0g48rf4ZgAQ82J2Aieyyo=
+X-Endpoint-Received: by B4 Relay for cyridge@proton.me/20261025 with
+ auth_id=1315
+X-Original-From: Ridge Lomont <cyridge@proton.me>
+Reply-To: cyridge@proton.me
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 22, 2026 at 5:17=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
-te:
->
-> Add an extensible KALLSYMS_QUERY ioctl() interface to /proc/kallsyms
-> to support fast point queries without scanning the entire text file.
-> Exactly one query mode must be set in query_flags.
->
-> When KALLSYMS_QUERY_BY_SYMBOL is set in query_flags, KALLSYMS_QUERY
-> resolves a NUL-terminated symbol name in vmlinux or loaded modules and
-> then populates sym_addr:
-> - Searches vmlinux first via kallsyms_lookup_names() (binary search),
->   which takes precedence over loaded modules, and falls back to
->   module_kallsyms_on_each_symbol() under module_mutex for module
->   symbols
-> - Matches names exactly, like kallsyms_lookup_name(), disregarding the
->   .llvm.<hash> matching, following precedent set by commit fb6a421fb615
->   ("kallsyms: Match symbols exactly with CONFIG_LTO_CLANG")
-> - Resolves 0x0 symbol addresses in both vmlinux and modules
-> - Rejects ambiguous symbols (multiple entries with the same name at
->   different addresses within vmlinux, or across loaded modules) with
->   -EADDRNOTAVAIL, while allowing same-address aliases
->
-> Userspace symbolizers resolve kernel addresses to symbol names with
-> /proc/kallsyms. This is typically done by reading the entire
-> /proc/kallsyms text file, and keeping a compressed sorted copy of it in
-> order to resolve addresses at runtime.
->
-> When KALLSYMS_QUERY_BY_ADDR is set in query_flags, KALLSYMS_QUERY
-> resolves one address to the symbol that contains it:
-> - sym_addr holds the address to resolve on input.
-> - sym_name_addr must point to a user buffer of sym_name_size bytes
->   that receives the NUL-terminated symbol name. On output,
->   sym_name_size holds the number of bytes written (including the
->   terminating NUL). -ENAMETOOLONG is returned if the buffer is too
->   small; a buffer of KSYM_NAME_LEN (512 at the time of writing) bytes
->   is always large enough.
-> - Symbols are resolved via kallsyms_lookup(), the same lookup as %pS,
->   covering vmlinux, loaded modules, BPF JIT images, and freed module
->   init functions still tracked by ftrace.
->
-> On an 8 CPU Cuttlefish (x86-64 VM), using this patchseries to load a BPF
-> program with 11 typeless ksyms has ~220x speedup (157ms -> 0.7ms).
->
-> On an 8 CPU x86-64 VM with a 175k line kallsyms, there are broad
-> performance and memory savings for the symbolization and callstack
-> sampling tool, Perfetto:
-> - Init time: ~350x speedup (155.7ms -> 0.44ms)
-> - 50k symbolizations: ~12x speedup (25.2ms -> 2.2ms)
-> - VmRSS: -68% (15.1MB -> 4.8MB)
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Samuel Wu <wusamuel@google.com>
-> ---
->  include/uapi/linux/fs.h |  41 +++++++++++++
->  kernel/kallsyms.c       | 132 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 173 insertions(+)
->
-> diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-> index 34c6f219462a..b43f227dad0e 100644
-> --- a/include/uapi/linux/fs.h
-> +++ b/include/uapi/linux/fs.h
-> @@ -674,6 +674,47 @@ struct procmap_query {
->         __u64 build_id_addr;            /* in */
->  };
->
-> +/* /proc/kallsyms ioctl */
-> +#define KALLSYMS_QUERY _IOWR(PROCFS_IOCTL_MAGIC, 18, struct kallsyms_que=
-ry)
-> +
-> +/* Exactly one query mode must be set in query_flags. */
-> +enum kallsyms_query_flags {
-> +       /*
-> +        * Look up a symbol in vmlinux or loaded modules (vmlinux first; =
-BPF
-> +        * and ftrace symbols are not searched) by exact NUL-terminated n=
-ame
-> +        * at sym_name_addr and return sym_addr. sym_addr and sym_name_si=
-ze
-> +        * must be 0 on input.
-> +        */
-> +       KALLSYMS_QUERY_BY_SYMBOL =3D 0x01,
-> +       /*
-> +        * Look up the symbol covering sym_addr and write its NUL-termina=
-ted
-> +        * name to the sym_name_addr buffer of sym_name_size bytes. The s=
-ame
-> +        * symbols as %pS are searched: vmlinux, loaded modules, BPF JIT
-> +        * images, and freed module init functions still tracked by ftrac=
-e.
-> +        * A buffer of KSYM_NAME_LEN (512 at the time of writing) bytes i=
-s
-> +        * always enough. On success, sym_name_size is set to the number =
-of
-> +        * bytes written (including the terminating NUL).
-> +        */
-> +       KALLSYMS_QUERY_BY_ADDR =3D 0x02,
-> +};
-> +
-> +/*
-> + * Returns -ENOENT if no symbol matches, -EADDRNOTAVAIL if the name maps=
- to
-> + * more than one address, -ENAMETOOLONG if the name does not fit in
-> + * KSYM_NAME_LEN (512 at the time of writing) or sym_name_size bytes, an=
-d
-> + * -EPERM if kallsyms addresses are hidden from the opener of /proc/kall=
-syms
-> + * (e.g. kptr_restrict).
-> + */
-> +struct kallsyms_query {
-> +       __u64 size;             /* in - struct size for compatibility */
-> +       __u64 query_flags;      /* in - query mode (enum kallsyms_query_f=
-lags) */
-> +       __u64 sym_name_addr;    /* in - address of symbol name buffer */
-> +       __u64 sym_addr;         /* out (BY_SYMBOL) / in (BY_ADDR) */
-> +       __u64 sym_name_size;    /* in/out - name buffer size / bytes writ=
-ten */
-> +};
+From: Ridge Lomont <cyridge@proton.me>
 
-it might be smart to have QUERY_BY_ADDR and QUERY_BY_NAME to be two
-separate ioctl commands with its own query in/out struct. This would
-remove addr vs name ambiguity in sym_name_addr field, and will allow
-us to evolve APIs independently, if necessary. They should still
-probably reuse the same type to represent symbol information, and have
-kallsyms_query struct provide a pointer to that struct (and its
-maximum size), which the kernel will fill out and set the size it
-actually knows about.
+KCFI_REFERENCE() takes the address of a symbol so that the compiler
+emits its __kcfi_typeid_ symbol, which the SYM_TYPED_FUNC_START()
+assembly implementing it needs. It is used from arch/x86 headers for
+__clear_pages_unrolled(), copy_page(), __memset() and __memmove(), and
+all of that assembly is built into vmlinux.
 
-struct kallsyms_query_by_addr {
-    __u64 size;
-    __u64 query_flags;
-    __u64 sym_addr; /* in */
-    struct kallsyms_sym *sym; /* out */
-    __u64 sym_len;
-};
+Modules include the same headers, so with CONFIG_CFI=y every module
+also gets an __ADDRESSABLE() reference to each of these symbols in
+.discard.addressable. This serves no purpose there, and since
+__clear_pages_unrolled() is EXPORT_SYMBOL_GPL, modpost now rejects any
+GPL-incompatible module that includes <linux/mm.h>:
 
-struct kallsyms_sym {
-    __u64 sym_addr;
-    __u64 sym_name;
-    __u64 sym_name_len;
-    __u64 sym_module;
-    __u64 sym_module_len; /* if zero, no module requested/available */
-};
+  ERROR: modpost: GPL-incompatible module repro.ko uses GPL-only
+  symbol '__clear_pages_unrolled'
 
-e.g. for symbol you'd want to return its name, address, but also
-module name. and we should leave a way to extend it further with more
-optional information (that's the kallsyms extensibility bit I was
-talking about).
+even though the module never uses the symbol. This makes OpenZFS
+impossible to build against CFI kernels; its configure checks fail
+in the same way and are misreported as CONFIG_DEBUG_LOCK_ALLOC.
 
-aslo, we should think about adding ways to paginate (or at least leave
-a possibility of that in the future) if there are multiple matches
-(e.g., for static functions with the same name resolving to multiple
-addresses); not sure how it should look like API wise, but it would be
-good to still return "any" or "first" match, but let user know there
-are multiple, so user can decide how to proceed...
+scripts/module.lds.S does not help here: modpost checks <module>.o
+before the final link, and even after it the discarded section only
+loses its relocations, the undefined symbols stay in .symtab, where
+the module loader resolves them with the same license check.
 
-on input I'd also add module name as optional input argument, with
-"vmlinux" limiting to just vmlinux, set module name to just that name,
-and NULL/zero meaning "we don't care"
+Only emit the reference when building vmlinux.
+
+Tested on x86_64 with clang 23.1.3 and CONFIG_CFI=y, with both
+CONFIG_LTO_CLANG_FULL=y (the configuration from the Fixes: commit) and
+CONFIG_LTO_CLANG_THIN=y: vmlinux links without warnings and still contains
+__kcfi_typeid___clear_pages_unrolled, __kcfi_typeid_copy_page,
+__kcfi_typeid___memset and __kcfi_typeid___memmove. It boots in QEMU
+with no CFI failures. A minimal module with MODULE_LICENSE("Proprietary")
+including <linux/mm.h> fails modpost before this change and builds and
+loads after it. OpenZFS builds against a CFI kernel with this change,
+and its pool, encryption, checksum and send/recv operations run
+without CFI failures, in QEMU and on a desktop with CFI enforcing.
+
+Fixes: 9b041a4b66b3 ("x86/mm: Ensure clear_page() variants always have __kcfi_typeid_ symbols")
+Link: https://github.com/openzfs/zfs/issues/18092
+Assisted-by: LLM
+Signed-off-by: Ridge Lomont <cyridge@proton.me>
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+---
+Notes for reviewers:
+
+- The fix was found and written with an AI coding assistant (Claude
+  Opus 5.5, Claude Code). It started from "CONFIG_CFI breaks
+  OpenZFS"; the assistant traced that to the modpost failure,
+  wrote this change, and ran the tests described in the changelog.
+  I have reviewed it and take responsibility for it.
+- An alternative would be wrapping the KCFI_REFERENCE() lines in
+  arch/x86/include/asm/page_64.h in #ifndef MODULE, as suggested in
+  the OpenZFS report; doing it in the macro covers all users.
+- Only x86_64 was tested; it is the only architecture using
+  KCFI_REFERENCE(). Tested with CONFIG_LTO_CLANG_FULL=y and
+  CONFIG_LTO_CLANG_THIN=y on this tree and with LTO disabled on v7.3.
+  In-tree modules were built but not loaded.
+- checkpatch reports "Non-standard signature: Assisted-by:", which
+  conflicts with Documentation/process/coding-assistants.rst.
+---
+Changes in v2:
+- Sign off with my real name (Peter, Borislav).
+- Explain in the changelog why module.lds.S discarding
+  .discard.addressable does not help (Nathan).
+- Also tested with CONFIG_LTO_CLANG_THIN=y.
+- Add Nathan's Acked-by.
+- Link to v1: https://patch.msgid.link/20261024-kcfi-reference-modules-v1-1-43c2a4a9e657@proton.me
+---
+ include/linux/compiler.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 0ea7150db..ea161a72d 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -258,10 +258,13 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 
+ #endif /* __KERNEL__ */
+ 
+-#if defined(CONFIG_CFI) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO)
++#if defined(CONFIG_CFI) && !defined(__DISABLE_EXPORTS) && !defined(BUILD_VDSO) && \
++	!defined(MODULE)
+ /*
+  * Force a reference to the external symbol so the compiler generates
+- * __kcfi_typid.
++ * __kcfi_typid. Only vmlinux needs it, as that is where the assembly
++ * using the typeid lives; in a module it would only add a reference to
++ * the symbol, which fails modpost if the symbol is GPL-only.
+  */
+ #define KCFI_REFERENCE(sym) __ADDRESSABLE(sym)
+ #else
+
+---
+base-commit: 6fba331225f5040e93d0947d1027e9712238291f
+change-id: 20261024-kcfi-reference-modules-04c32004af41
+
+Best regards,
+--  
+Ridge
 
 
-for QUERY_BY_ADDR we should have a flag saying whether an exact match
-by address is requested or we should find a symbol that covers the
-address (that's most useful for symbolization). maybe even "at or
-after" address mode, so you can paginate (though probably explicitly
-designed batch API would be even more useful later)
-
-
-tl;dr, this is the right direction, but I think we should polish API a
-bit more to be more universally useful and extensible
-
-> +
-> +#define KALLSYMS_QUERY_SIZE_VER0       40 /* sizeof first published stru=
-ct */
-> +
->  /*
->   * Shutdown the filesystem.
->   */
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index aec2f06858af..7caaf3e421c7 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -31,6 +31,7 @@
->  #include <linux/kernel.h>
->  #include <linux/bsearch.h>
->  #include <linux/btf_ids.h>
-> +#include <linux/uaccess.h>
->
->  #include "kallsyms_internal.h"
->
-> @@ -922,11 +923,142 @@ const char *kdb_walk_kallsyms(loff_t *pos)
->  }
->  #endif /* CONFIG_KGDB_KDB */
->
-> +struct kallsyms_mod_find_ctx {
-> +       const char *name;
-> +       unsigned long addr;
-> +       bool found;
-> +};
-> +
-> +static int kallsyms_mod_find_cb(void *data, const char *name, unsigned l=
-ong addr)
-> +{
-> +       struct kallsyms_mod_find_ctx *ctx =3D data;
-> +
-> +       if (strcmp(name, ctx->name) !=3D 0)
-> +               return 0;
-> +       if (ctx->found && ctx->addr !=3D addr)
-> +               return -EADDRNOTAVAIL;
-> +       ctx->found =3D true;
-> +       ctx->addr =3D addr;
-> +       return 0;
-> +}
-> +
-> +static int do_kallsyms_query(struct kallsym_iter *iter, void __user *uar=
-g)
-> +{
-> +       char namebuf[KSYM_NAME_LEN];
-> +       struct kallsyms_query karg;
-> +       unsigned long addr;
-> +       unsigned int start;
-> +       unsigned int end;
-> +       unsigned int i;
-> +       __u64 usize;
-> +       long len;
-> +       int err;
-> +
-> +       BUILD_BUG_ON(sizeof(struct kallsyms_query) !=3D KALLSYMS_QUERY_SI=
-ZE_VER0);
-> +
-> +       /*
-> +        * The text interface shows zero addresses to openers without per=
-mission.
-> +        * A zeroed point query result is useless (and an address-to-symb=
-ol query
-> +        * would leak KASLR), so fail instead.
-> +        */
-> +       if (!iter->show_value)
-> +               return -EPERM;
-> +       if (copy_from_user(&usize, uarg, sizeof(usize)))
-> +               return -EFAULT;
-> +       if (usize > PAGE_SIZE)
-> +               return -E2BIG;
-> +       if (usize < KALLSYMS_QUERY_SIZE_VER0)
-
-PROCMAP_QUERY uses offsetofend() for the last defined field, any
-reason to have this #define and BUILD_BUG_ON here?
-
-> +               return -EINVAL;
-> +
-> +       err =3D copy_struct_from_user(&karg, sizeof(karg), uarg, usize);
-> +       if (err)
-> +               return err;
-> +
-
-[...]
