@@ -1,82 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793083803;
-	b=uPGBF1KCwORX+1GpI9gQe/2oFM9tk+Ib4R/2ZsVDk/Q84dh5uTIvDba1kYZvg6wVHokg
-	 EMgVunHl9V6SDH5LGTAYA01AN/03/0YGVA8S6nrzJmcgx2dGRFdi46xk8YJpjVUiewXkL
-	 ENa6Xn+yEsHfhsObGYJ6tp0VnpOYFbpZgrz5tA1ITmq1SFrtx6dyOqKiM5w8DTOrFLeW+
-	 v9M3kcpmQWj9HA2vTSH9FTJw1L606cswQVgNKKge6wfEJaS+9dcBVxYbjBzK9tZbrN0KD
-	 wlUvilQiYnPesL1s/V6svOSzPt4F53DoMgZuhVSUd1y3+wHJS0gFZYKb7gtDjp7KlKQ==
+	t=1793085205;
+	b=G2n+B5g4atfQka42ec6u/jFwxSt/p6WXrNuc448WisBavbvjBWt5CSgxeykf+RqVm2wr
+	 CpOLBBWVwqK6AGTEP9Yn6Dv9AIjF6RMQQAGvKN5CTXtZsakEte45yTsfwi/XnMOoQlb3H
+	 NsFiq5UyOdrNR0xZ5j9wlrXaGh7VrQQBLEBDoY4Zu4zdBoA89iqnCJVRIGVmbUZYNOeX5
+	 pOq5x6nKqYPvSFrG3i06o8+XyEP2j4dA51avFvVyaotg57eeZoFW+0onptB4fQ2g8iVNV
+	 d5qlUl6Vw+HvtdS1LRqllKbWiL0JvrSuBmoa/lEZSVapSvisNaZVf3zP9IETQGl3gFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793083803;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
-	 Received:From:To:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-Spamd-Result:X-Rspamd-Server:
-	 X-Rspamd-Action:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Rspamd-Queue-Id;
-	bh=1HRwFL/X+Yo433nwT87No4TbiieWWRYwZ7jbvTvbfOg=;
-	b=D3WcjVlUOfCEilJgO5Ep5sDq3iM0kC0DV3LMql3rfA7A8MiD2DpZFw2ZtIG0EFB7WSiU
-	 HjL611SELvHHNh20EbX7etxxi4yHU0SWEo3s9Grohv8FD4TigtDfRrF+pfPiVwboPAck9
-	 z9/QOB8WdXSUKbZZgo2gF2MkaPzdyi4QsahXmL92mZWaBl3NrVI0HZ+MTtKbcJrKeRTmg
-	 B2Pr1eQRqvKyhoByIwE7koVQQNBU1AhYAliPKzw9ZEmK5T2d+PqYkmYfJLGrDjbNFOmXp
-	 dq6WDQGELYkUO776A4mt1z/B3co+BhiKssl3Aa/bT1xbRgmbHKIDqg1Q7aJPZeayuJQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793085205;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=HWgjXNcJc0ErmZfb38tok7MP8/rKkpuVGXulwc3v14Q=;
+	b=cBEA2deUhcENpqd8QskqS/iD49rlvM4rjajACrmOmHjtyvNtKreZ+tjmCM9gKR4y04qr
+	 seDys0uZ/FTgwNWV9qmF/2EH5I1gQr1FYb3DqSyPhB+GvBFOYrWN0VnBog0fSPdynbHNB
+	 I8nUDvQZOU7AaBm3wxJjywjUzvQjMJDg5z0XeUFk9rMk+faXwg4+hIX0wYpBiRUmkIoUd
+	 9G+ep6IkGwIHEnot41/dBUPe3xInfhzWn6mVAWAPODfyeedPSeV6MDNFDEZr6DfQPY47+
+	 mS2yNmHQwd+4kJQ/7zKVqOaeL2A3sIAGDwxt8jUQeMP/fuxK/aJ6hBW9kAeWx/1OTNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=hUaLliOq;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=hUaLliOq;
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Dh9fHFM5;
+	arc=none smtp.remote-ip=192.198.163.9
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC10606A31A
-	for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 06:50:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AFC10606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07168606A31A;
+	Tue, 27 Oct 2026 07:13:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07168606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=hUaLliOq;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=hUaLliOq
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 5A67D1F7C9;
-	Tue, 27 Oct 2026 06:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1793083795; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=1HRwFL/X+Yo433nwT87No4TbiieWWRYwZ7jbvTvbfOg=;
-	b=hUaLliOqk7Whqztn4yobSj0gYrJpiBI9Nogt2G50HSjXuL6rkWySNleyrzdkMMGSHxAm6t
-	S+MeVwUT8Yh1NSBwLfaCTWladsOMJ0weIjkG1c65BNoAXEyRO93BJcPPUug4ksfyQ3S7QO
-	Rp3JD03L++DqHaC6I1qhL3XZ/k28NZ8=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=hUaLliOq
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1793083795; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=1HRwFL/X+Yo433nwT87No4TbiieWWRYwZ7jbvTvbfOg=;
-	b=hUaLliOqk7Whqztn4yobSj0gYrJpiBI9Nogt2G50HSjXuL6rkWySNleyrzdkMMGSHxAm6t
-	S+MeVwUT8Yh1NSBwLfaCTWladsOMJ0weIjkG1c65BNoAXEyRO93BJcPPUug4ksfyQ3S7QO
-	Rp3JD03L++DqHaC6I1qhL3XZ/k28NZ8=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 94C8413319;
-	Tue, 27 Oct 2026 06:49:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Pcp+OZBJ4GqfKwAAD6G6ig
-	(envelope-from <wqu@suse.com>); Tue, 27 Oct 2026 06:49:53 +0000
-From: Qu Wenruo <wqu@suse.com>
-To: linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] .gitignore: ignore GNUmakefile
-Date: Tue, 27 Oct 2026 17:19:35 +1030
-Message-ID: <9024da8d008cebcca6e8bccc0d3cc2d6473e4193.1793083694.git.wqu@suse.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Dh9fHFM5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793085203; x=1824621203;
+  h=date:from:to:cc:subject:message-id;
+  bh=hHiBp++D3KCKr11uTuusU7oBz5xeKoYFLFSyfaq9YLs=;
+  b=Dh9fHFM5K5JZwuNnVC2iOZ3YtfKMpkUlb0mxdPMuroURiSYFwxtKFtl+
+   7mac4ZTQn6UUD+girOr6YC0WLHncAFOsPX4CQCzf2qcV37INp32u73/oe
+   dCK8ymQdADvoDfeM/RS73V1xdQivQ7aBCDzDi1vgFJN3ztMONZ/R5jnqn
+   lC13zpy+To+uAJXn2C1VrHIJAZYRy9Rh3Xyg7G71inypMDVVc7jLZ7y5o
+   sP+1D1ZVj0QiyN+63WW8lJaVzgrgc2s1uWSGSj/vxnXC9BBSWsK7/mhNo
+   hoaX0JIwTgI0Kl8QbmJrSnoCIcYyGIaRpheh0f+y6K0bCL3BWdL6KZ2b8
+   g==;
+X-CSE-ConnectionGUID: B5CjVnowTDaPMFdTbhbDyg==
+X-CSE-MsgGUID: p8d1qx+cQsG745cjerFiwQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11947"; a="1661994"
+X-IronPort-AV: E=Sophos;i="6.27,180,1787036400"; 
+   d="scan'208";a="1661994"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2026 00:13:22 -0700
+X-CSE-ConnectionGUID: aYxc9cquR1upwgoiTY8ApQ==
+X-CSE-MsgGUID: hi1rab1eTjWhJ/WAEUf4tw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,180,1787036400"; 
+   d="scan'208";a="4428112"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 27 Oct 2026 00:13:21 -0700
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xLbN0-000000004QN-1R8H;
+	Tue, 27 Oct 2026 07:13:18 +0000
+Date: Tue, 27 Oct 2026 08:12:21 +0100
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bvanassche:thread-safety 129/136] ld.lld: error: duplicate
+ symbol: nvfnic_get_nvmef_info
+Message-ID: <202610270846.9XBmt5M3-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -85,80 +79,87 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-12.01 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:dkim];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_THREE(0.00)[3];
-	DKIM_TRACE(0.00)[suse.com:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -12.01
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 5A67D1F7C9
 
-I use GNUmakefile to shorten the command of "make".
+tree:   https://github.com/bvanassche/linux thread-safety
+head:   1141c3e597e1907335770dd641e3d8ace70aa9eb
+commit: c16b21bc4a9bdd1f692264353000bf1d0553a609 [129/136] scsi: fnic: Include fnic_nvme.h at the end of fnic.h
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261027/202610270846.9XBmt5M3-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261027/202610270846.9XBmt5M3-lkp@intel.com/reproduce)
 
-E.g. for my arm64 worktree, I have a GNUmakefile with:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610270846.9XBmt5M3-lkp@intel.com/
 
- export ARCH := arm64
- export LLVM := 1
- export PACMAN_PKGBASE := linux-arm64-custom
- export PACMAN_EXTRAPACKAGES :=
- export PKGEXT := .pkg.tar
- MAKEFLAGS += -j12
- include Makefile
+All errors (new ones prefixed by >>):
 
-And for my x86_64 worktree, it looks a little simpler:
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_pci_subsys_devid.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_debugfs.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_attrs.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_trace.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_scsi.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fdls_disc.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_fcs.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_res.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_nvme.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_main.o:(.text+0x10)
+--
+>> ld.lld: error: duplicate symbol: nvfnic_get_nvmef_info
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fip.o:(nvfnic_get_nvmef_info)
+   >>> defined at fnic_nvme.h:208 (drivers/scsi/fnic/fnic_nvme.h:208)
+   >>>            drivers/scsi/fnic/fnic_isr.o:(.text+0x10)
 
- export LLVM := 1
- export PACMAN_PKGBASE := linux-custom
- export PACMAN_EXTRAPACKAGES :=
- export PKGEXT := pkg.tar
- MAKEFLAGS += -j12
- include Makefile
-
-So at least in my case, GNUmakefile is really a shortcut to specify
-extra environment variables and build flags.
-Thus it should be added to gitignore.
-
-Signed-off-by: Qu Wenruo <wqu@suse.com>
----
- .gitignore | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/.gitignore b/.gitignore
-index 9875120ea7bd..400caf6bce9a 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -194,3 +194,6 @@ sphinx_*/
- 
- # bc language scripts (not LLVM bitcode)
- !kernel/time/timeconst.bc
-+
-+# GNUmakefile, mostly to export extra env variables or build flags
-+GNUmakefile
--- 
-2.56.0
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
