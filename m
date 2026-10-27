@@ -1,83 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793063329;
-	b=PeilPl2SnTubipJiruCS66hizVORUBioMF7N9mkmREDIFSy6v1p9KDcpOUlGhwAtDWZX
-	 jm+AUCSMANueEiSMvptj9+USRkTU1SEhGLQgA5TH7DqgLFlw+LdIYKivyqHQj1KsxU1TU
-	 umtB5O5vVcN8O4Q/amcJoGt9gktqATmxgPKToJ3TRRskkiHsP9J3nM0CUudmITJEbjYtU
-	 +DWGg9A4hClK1uPuGS5Z6cUtQU/jR7ZGOrqnKCMREyD6mhKX15tR5+wRC7sUUTBSeWuv7
-	 KV312yRrSJeGSNlpPTc3HSAbvCvjFKs0AO/Tpvx3DG86D5EEiC8Jk9LMAgcoqQ5Q0tg==
+	t=1793077469;
+	b=ceVcDSLWK/GWdKA2rO2QXKKcvlm0ZpmA0IsMN74wWej+f0UpGw2ITr96VksPN4eONeSJ
+	 w96UQzPS5f8+yZrEEq3Sjx7ofMTmTFwR7bJZxK/lsCg8xx8nC+rQBFhOvh3emw0dQqnLK
+	 lvInfW2RCoIQagpv0NEzU2HjO9vrdndmnonxVDMB6uGeErPdzvxM6AeqHtONMVcT3QmY2
+	 X2i8+BIpSM/eBzop3TPfox30ot16UQ9HEx9A2FQnmusiM0DOyRmIMloFoxsBjc/H5Za2+
+	 ORzPm3tqyV02EoNb8MzdGFHukNe9hwpNHjszGAUtl1hRFKsbRuiSt7Q93UxHvVV6+WQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793063329;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793077469;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=N+FY3Xyt9LRFMWhhSp5zYlqrMv7mXqtxBXgGwZ12aGc=;
-	b=NaSXGSjO+D9w7McjumrwmN3rUPXQGEFlKjktYGxoa5LQQrIEjQ0LsBp4k0sUWCpKuLv3
-	 sVKBYhhROx5DST+Wj7AYiidqsZfzvJ8OlPFJ6gLfAf/dxlGW71/WOh/l+ihpBxCXMIib7
-	 njJGLpiYJSxZj9QmT0S70QBFrqarI1Ox5gxjf2cbpy3drvJVLYplx9yeZMaYc+uMZsnzK
-	 gsKMp/cnewCnwC05nD6L3fpyMdP2+xbCsXHBZ16ng/Vim9/3+rPsBJ5O667r1dtsJiHi2
-	 s0LqdVKTe2MFDQsaX8oVs+2hxXavIekMbMkm1TGvaFKHuX3LIuHyi66kaIVMC/DClyw==
+	bh=Ai6yw3OuibhURm/WO66vXn3DXBjDe0k2rnzBv97yR0A=;
+	b=UAFjT4lYoljh23Kd1eiJbuENxMUn8fq2ZedzE1myZusFvjRZXFlm8lS2Jdy9HUm9qlQd
+	 PLhBtF1o3TRnU3SVQoq0OO59K1oCxF7a+hWOMX4QWYOPLsru8RraGB0KZrcLFxYrIQEl/
+	 s03MwIk+3saAj6KEFrhX+ESpETDcM7EO63ErfpVQXWhleST7TtlgMWY2p3LHTuaHH9rJ+
+	 syV/aj8okTY0JjQ0q0a+hMGle8DSEjr1Ce0r4GoD4D3pBdEwAz4jHLlPEt5LhwAxL7Kjg
+	 oY/h1v9ksmQgUrPJgouEa17dK79SebZdHsiWHOLfp8Vi4vr3J8gDcJNJbm9uicUrAjg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=bB5YVJUC;
-	arc=none smtp.remote-ip=198.175.65.10
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UhGqxwCm;
+	arc=none smtp.remote-ip=192.198.163.18
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA760606A31B;
-	Tue, 27 Oct 2026 01:08:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA760606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4520D606A31B;
+	Tue, 27 Oct 2026 05:04:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4520D606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=bB5YVJUC
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UhGqxwCm
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793063328; x=1824599328;
+  t=1793077467; x=1824613467;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oV4ISgvIUb/za+DawkDMzX6NLsw6XNdYHJqPyp8mAoA=;
-  b=bB5YVJUC8rfgKqSRevLb3DPNjDffoEs7H7S1Js97opFix8Xs2/r4XY5b
-   DGInkfYx1VXgGan3Hl+JciEoCbJ2pCPpUtynewbyLFtK0dyJ1djd0OhSZ
-   bO9aCBZXPtA//Yeysz3L88fF+0GsOFh8fOtyLk4Q6sWXO/1RZOjtRGdjv
-   MJMbfOAlxrnpsAQGW7grnl68mpG2pTpbE3pR6MC5FQH/bIrkXngwRn+9z
-   oyACUoGKKBdUG6YZYI+Zj2J4xxdXKufx+wxJ2vSKEJ7WbYm8binpYsA63
-   q9MJiUcsHJgDvboWmoVq7aa0GuKvQRcBCxjuepkrB+HABueD/WMMrN9l3
-   Q==;
-X-CSE-ConnectionGUID: foBGKl4UR+WRuZJEX9Pcgg==
-X-CSE-MsgGUID: 8QqBLbPjRxCqPKUHOzztyA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11947"; a="1642311"
+  bh=HAhrArfOGx4d2m+iNXRk5VLLSvyuYaHbyyD0xEP12kY=;
+  b=UhGqxwCmc3z1LpSG4EUSUyCFCEx9cbQwPK5uuGJGiEfQeXIHqQO8pt14
+   5A71N9XiErTpRAtNv+xgexTQStlc9JGaVMItg7mFZydcfysf/T22kheFR
+   6AzRmn0bvpt3vAC2SYGiL1FgL3hOd4lsIOyCstEFjfeTuLNbNG/P3UWuF
+   9EuETMtlmhHk03qCY9cH+4tUNuSEtvcqAVps1CUTpqVJzcliFz6QI/TGM
+   p6gTG9HSX0o6v+hrd+PhNoFtL5XrwXNCRBip3dFUtahraCP4HKxM55jI2
+   Uze4rJi8dyONO24zvrm1yIbI3MtkZBqe8m7iEZfOcVTJPjoRQHImzQN4t
+   g==;
+X-CSE-ConnectionGUID: 6kybuR/GTyWE3qPU2NpHiw==
+X-CSE-MsgGUID: nwXS/fHcSxO/imxiKF5HCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11947"; a="1800152"
 X-IronPort-AV: E=Sophos;i="6.27,180,1787036400"; 
-   d="scan'208";a="1642311"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 18:08:48 -0700
-X-CSE-ConnectionGUID: bbmpIGSAQZ2xxEwuKNnKQg==
-X-CSE-MsgGUID: 4EBT/wssT+mH4Px8zY9Pgw==
+   d="scan'208";a="1800152"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 22:04:26 -0700
+X-CSE-ConnectionGUID: GCpDDQhAQtuGSgdOwwRe2g==
+X-CSE-MsgGUID: mzaicXv/SACWC/OGO9hrOA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,180,1787036400"; 
-   d="scan'208";a="4318562"
+   d="scan'208";a="4843596"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 26 Oct 2026 18:08:45 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 26 Oct 2026 22:04:20 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xLVgA-00000000Wey-1k3D;
-	Tue, 27 Oct 2026 01:08:42 +0000
-Date: Tue, 27 Oct 2026 09:08:17 +0800
+	id 1xLZM8-00000000WrA-3Kg9;
+	Tue, 27 Oct 2026 05:04:16 +0000
+Date: Tue, 27 Oct 2026 13:04:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Konrad Dybcio <konradybcio@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Radu Rendec <radu@rendec.net>,
-	Stephen Boyd <swboyd@chromium.org>, Marc Zyngier <maz@kernel.org>,
-	Lina Iyer <ilina@codeaurora.org>
+To: David Matlack <dmatlack@google.com>, kexec@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Abel Vesa <abel.vesa@oss.qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH] irqchip/qcom-pdc: Handle ESPIs in qcom,pdc-ranges
-Message-ID: <202610270827.7SxHabHO-lkp@intel.com>
-References: <20261022-topic-pdc_map_espi-v1-1-7c481a42bac5@oss.qualcomm.com>
+	Alexander Graf <graf@amazon.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Christian Brauner <brauner@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Hugh Dickins <hughd@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v2 07/10] mm/shmem_luo: Retrieve tmpfs files onto a tmpfs
+ mount chosen by userspace
+Message-ID: <202610271253.yDB2IOkw-lkp@intel.com>
+References: <20261022225035.377445-8-dmatlack@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -89,41 +104,51 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261022-topic-pdc_map_espi-v1-1-7c481a42bac5@oss.qualcomm.com>
+In-Reply-To: <20261022225035.377445-8-dmatlack@google.com>
 
-Hi Konrad,
+Hi David,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 2efb7a11f1aa4d2dc285fe2680cca22cb9f72f64]
+[auto build test WARNING on 80cf37169daef112b6bea9ae7d9808355a045475]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/irqchip-qcom-pdc-Handle-ESPIs-in-qcom-pdc-ranges/20261022-104402
-base:   2efb7a11f1aa4d2dc285fe2680cca22cb9f72f64
-patch link:    https://lore.kernel.org/r/20261022-topic-pdc_map_espi-v1-1-7c481a42bac5%40oss.qualcomm.com
-patch subject: [PATCH] irqchip/qcom-pdc: Handle ESPIs in qcom,pdc-ranges
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261027/202610270827.7SxHabHO-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261027/202610270827.7SxHabHO-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Matlack/liveupdate-Pass-user-argument-to-file-preserve-and-retrieve/20261022-225026
+base:   80cf37169daef112b6bea9ae7d9808355a045475
+patch link:    https://lore.kernel.org/r/20261022225035.377445-8-dmatlack%40google.com
+patch subject: [PATCH v2 07/10] mm/shmem_luo: Retrieve tmpfs files onto a tmpfs mount chosen by userspace
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20261027/202610271253.yDB2IOkw-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261027/202610271253.yDB2IOkw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610270827.7SxHabHO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610271253.yDB2IOkw-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/irqchip/qcom-pdc.c:12:
->> include/linux/irqchip/arm-gic-v3.h:605:10: fatal error: 'asm/arch_gicv3.h' file not found
-     605 | #include <asm/arch_gicv3.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> mm/shmem.c:5867:6: warning: no previous prototype for function 'shmem_inode_on_internal_mount' [-Wmissing-prototypes]
+    5867 | bool shmem_inode_on_internal_mount(const struct inode *inode)
+         |      ^
+   mm/shmem.c:5867:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    5867 | bool shmem_inode_on_internal_mount(const struct inode *inode)
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +605 include/linux/irqchip/arm-gic-v3.h
+vim +/shmem_inode_on_internal_mount +5867 mm/shmem.c
 
-7e5802781c3e109 Andre Przywara        2014-11-12  604  
-7936e914f7b0827 Jean-Philippe Brucker 2015-10-01 @605  #include <asm/arch_gicv3.h>
-021f653791ad17e Marc Zyngier          2014-06-30  606  
+  5862	
+  5863	/*
+  5864	 * Whether @inode is on the internal shmem mount, which is used by
+  5865	 * shmem_file_setup() and thus by memfd_create().
+  5866	 */
+> 5867	bool shmem_inode_on_internal_mount(const struct inode *inode)
+  5868	{
+  5869		return inode->i_sb == shm_mnt->mnt_sb;
+  5870	}
+  5871	
 
 --
 0-DAY CI Kernel Test Service
