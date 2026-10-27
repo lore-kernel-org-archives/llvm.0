@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793116039;
-	b=G7zwuOzIw/uxxMnWOw6gu9s+LCEpRVE6sQnNUy6bOiykVB/KJDv2Q2ZJ14VV3yBAfM8K
-	 eGSjDLSna39vLyrgR214Czj7HVVcfp4A9nW57JNV3z6rdn5+rwOT5QjNbH7f50ZKZU+Xb
-	 mHxbzGTA1NOmnrdmnzWyUbhJi2oytcdVYvFGXrLlrVNNerzVdh4ktjb1SU6e32a3e327i
-	 ptA1NfOW8QF/WJLDFvbeuuwfAeSI0hu7/1I+KokPyaInP7Tqw0z0fqW4jpQ/WQa3ZEzFH
-	 4MizkddvaYAkd7juxT8TGtAV5GiiVhfte30j+KH7ws0+bcuD5I5XHCxgrdWlIlrOMKA==
+	t=1793116043;
+	b=Rt8L/QLA5Y/C5pehbtzS5OxtcvsT5Nl2xVLw5ljwLWh4OAPpgWAB90XRFfSnunnhB0N8
+	 6ZpSZQd1J5SO6tdj0XTLBqFJhZ2rF5r1vkeREdh6U7fu0FGxNVJny5iz7EIoeX8HGqcKz
+	 0eTLbNRVIcGhZ2ROmXYU2SbpPvb9grtqZCJXTCHeJulGi4Q7IfqgNrGO7pJeemsOb1XSK
+	 jb8bQNrPxcBeekMqQlBqKhlnYgkJE9yYv5Qbe/tfN/437CCNMSuW8xeFSexSa8/FhcL6a
+	 4wOWuK8FNZFw1bx3Ww8UE/HFUaqL/mZo4QTirfG1WNxKQY+9WYWgTvb9kmlHJLcn5YQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793116039;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793116043;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=4B5d9m5IGzIPEeB3GJQ3GiQrHdJ7xnPhjgrZIgnZaI8=;
-	b=4xq33YebCSNwag7LtkfTCrNY4xzJDd2byZZI+VV1aj9JIQGpzs75OOyILAdNl18vf+1k
-	 hPp9TfNno2Sw82+A7zvRIo18tsDnSPVsOX/xV3g6PqBqC0arWsGXIUNpsuxWwrBgo9yIm
-	 AlBzdErLc99Z/OiYjCIh78J+KHSOf7QENHknu5LFAmHEQkyk2loN+fvYhnmQN+AXb+6Qn
-	 aCSPgh0ZZltjXWv2bCG8gLoDEqfU5/062IeR1+E/+Hitj31hjaQifukPsCKVmrCvFFZ8h
-	 IpzIQOPzcM469c3O/RzcyECIpgOKwl0lIuYCEOxA8f4nuXTpqtGyqyEvYzha3Jur6Mg==
+	bh=6vMAPCp1wpjFuFIUnktZkIDiiA7zyUFU2h3UC7p8Or8=;
+	b=P5a0ghCzG4gV6dtkrkbPaoYZjRlwWWK6+iDwr3oktnsMAkSxJJj6NavEyPlwcUn3vXSe
+	 x0l6PHukYm0kdSreAlsF4PumxMyMvL8+T/4xJoPDbczjw6Jsy3UtmhwQOGvBCHpikUue3
+	 mkCbOEeEhaGX1oxa7PrXUSDBPHMsrRHORqjSGRmu0jtKqSiyCFgS+XKQV2HbRfunE882h
+	 yCs8lbUQ3DewBWnCF5+kVIk8/luBnNXectjYpZHZ59hfsKWIjLfjGX98bQewciTR6fZzL
+	 s8/EXPvdijZVjdrUyVODvfkiOQNtPvsvTmDFBtd5jNFqxr22A8DJk9ZBJAJeN1NxdKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BAf0RfTp;
-	arc=none smtp.remote-ip=209.85.221.45
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z2PT2nY8;
+	arc=none smtp.remote-ip=209.85.221.48
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862AA60A2616
-	for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 15:47:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 862AA60A2616
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A36606E6D2
+	for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 15:47:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01A36606E6D2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BAf0RfTp
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48afcd7ba9bso2651780f8f.3
-        for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 08:47:19 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z2PT2nY8
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48df4f540ebso2143258f8f.3
+        for <llvm@lists.linux.dev>; Tue, 27 Oct 2026 08:47:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793116038; x=1793720838; darn=lists.linux.dev;
+        d=gmail.com; s=20260707; t=1793116040; x=1793720840; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4B5d9m5IGzIPEeB3GJQ3GiQrHdJ7xnPhjgrZIgnZaI8=;
-        b=BAf0RfTpmbr0zvBH7zXvHnvK1uMQ6sR+k+g39kdARfHKVSeYj7TULtBVT7GH2/a+eF
-         Zo7FVMGsZSZD+qWcZB4BdswoNrMbylWdS4MbY5nGZ4minz028d/ljv0gV/mlux7jCUxM
-         pmbx/QdU/6qgwKu/rWWEDxXPq+H+fO8h97PmJ0aV0bZWXKJ65tgGE6+s/NqLKUXDsAjD
-         cdGcWNnIR/SkRechMfWbTUUEGcRG2B+86rDhRprn0HoOHTTI2OgmAZOx6RDczxkeFuso
-         MuM1LhdVF2Ofzb9fhpQdxkF9ViqQW9EGoEv8t/7r2+i+TNo9f6W8l1gN9m4Ar3os2CIv
-         8iHg==
+        bh=6vMAPCp1wpjFuFIUnktZkIDiiA7zyUFU2h3UC7p8Or8=;
+        b=z2PT2nY83/njFzHIYyown+SgveU/Wu8ny1yZ3r6oWHINPUrO578frOqABbldez7Iyj
+         NhFlTHfYafxkHhtoja0DtS8OWvgUcmBNJ1JOgVfrCZgc+3WdsFYD9pmW0i9mS62LXgHm
+         XfnWQ6FA599Lw4qe+FIcXWRxwFPcxreeyOaPEOQhznyMQPtCIcD9DhiBRf4dLKp4v7bS
+         OphwDmTzbUc3CvuCRn5ou2ENgtBAuJck5A3LMHXArCD+djRbjE5J5dub/aybjGaJ50yp
+         aLs4CwbrTgnr7xFQ9doIw3NcI9rekvE5Zt0Pc9ke7QBjRF+z47JohmGFtFGVmjgPQC3K
+         UnAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793116038; x=1793720838;
+        d=1e100.net; s=20260707; t=1793116040; x=1793720840;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4B5d9m5IGzIPEeB3GJQ3GiQrHdJ7xnPhjgrZIgnZaI8=;
-        b=K4ioTjvEdAtPg9TXnfj8BWRtkPUakvJ35xs2szTqXvwyYKE2aEwOaMs9YOpdHIZZMW
-         HfYqPSCMrd5qG9Yncx+01VU4X7xcu3VWe1TfBimB85FO4wEzxdrj0Gh9mq6YhTXSNqAp
-         qsZIhHkSDwekBXrbOmtuuSpWV8bwPejWKygBJ29W+7m9IbXTDA4MLQC9jmqvI9VB7UAR
-         soCjHY7CHwt9I6anoMCUVMtxVlCZL6nmUN1uLIwCNuyFp11gveNYpx+wzc/RFK6amDKg
-         mXQ93yBVbX5cCRGy0BgVfRwIuJRsNDq1eLtF3TV7hS8qpviiS7XgGoBYLOf44tQdSKTz
-         EKFQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy5rbAEcid8eMZK8gIDgxDnoxXeDPeM63tEit0+a1V8UYZNDwAc1jI78SKDIDTgPQhe/9iV@lists.linux.dev
-X-Gm-Message-State: AFq9FYKfFgfFivYV4jQyEbLPIoK9Q2fDShOwR7AN/gs1HdyDzDcyE6M/
-	dxrt1yGdhNRDiML25nisgKyrZflmJsLqGAlc56ef1UhOCamLFINFowCb
-X-Gm-Gg: AYBFou3avYap5WdwLEZea2hEv27ABkA6uLNCfcfWP7gUVEOkFEYyXfSollPYe+XNvl0
-	rEqwgu+pVWFzw26a+VhGIBAXwcSs+lhDho+MarwZdC2JQ6i3Y13LA+AiXG86gdOn4XmtBYXXQdG
-	URvOagNC37ImMjtlY4PbWVAIizNHCzJnVgYXeztzCzOQ4idd+5rDVSN3cdeHE7xjAmuJQovxZQd
-	Pu4Dl8aDauLUQjw0PlPIZp23W9ErCWusO4J4z7er0SXWUQdQIu/LAd5iY0/KOB5bylLt4+CQngi
-	vOFvt/uqZ3vHdAkXJPSUnFYZvfSFMyzVmjnfufVwgBb9ROMMQz0dLFu2LO1r124fP263KhU22Mh
-	DvCX1HpZY6IuhcKTbzU2v9GFjP5zzw89Zkk7VNkS1ZTwsVTlyh0uDNp3Zj64z3l4XClI82D5kqH
-	31oz0M++bhTOiEEQCq8rHh/gLRTX2lhaae6R9O8u7QWIHoP4FFtcejDRvLqrrR5ccWtHAy0hkFE
-	hBqFriQUbEoG8uRbYGuW6uNvlJ1xXZYYaBiX+4XpCzxB31KLyJS1o/iJ2IBDM6n7/Edr8KJIB9G
-	2/2HMUs98lnTFXVEK+1DVCw5nw88a9wPNP6yC7vySSfljcDwTKUQ7c47niB1metKQB2DQvyf8Ky
-	gIuOUAgU59HU/XC6Q
-X-Received: by 2002:a05:6000:2312:b0:48d:ee59:3a30 with SMTP id ffacd0b85a97d-48e3eb8b4c5mr20222645f8f.22.1793116037586;
-        Tue, 27 Oct 2026 08:47:17 -0700 (PDT)
+        bh=6vMAPCp1wpjFuFIUnktZkIDiiA7zyUFU2h3UC7p8Or8=;
+        b=QQkHKOO6WX2/KBf6TxRgL2+Dsiv43wJA2cG0Zt3+lYGstaWobtNceFGaduiwrytGMW
+         mGZTbsDbwsdtBzFdXC2qCahpm9kbZiVR7UKypugrn/0pgrXDaunpC01FgFhKLL06aW8A
+         PY1evWVrY3k2kUn+DYpx45veOSZnobDlCtFGo/Bs31PP1n1Ey3KJajb0jWkH6T5AxcEW
+         M49HL27Ugkrf8pNmhv5FWhXuQ4Cnt5C4s43+UTDPQxvD2zSK7UROYyJeF0xy9giZrJim
+         hLcwe0rHGvxFxY2S7eKQuc9kEsotXnfrpS4fbHkdB+RNCDEUyBb9vzzGjlyJrjIInR4C
+         kInQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy8ILnIdDpDc4dOW8BpmU5/reSQET57rekYo0COknQzocT2io2P/6TgfIgOV/K32c9G4nWN@lists.linux.dev
+X-Gm-Message-State: AFq9FYKnnIUfiC0ZfpHqqaLB1PWVHLYSWhP2enOolGrgVrma3/93m/rs
+	rE/HvXkDyrJMLYWIxE+mtEdAFSdwNb/m6TRyiIo2FstRREHZUS+hR4iZ
+X-Gm-Gg: AYBFou1uqyilCRDxdb7VIRPIFc8ECyqgGfOFNrUbNDFf3xg1BfVIr6aUPA9iqnc9OcZ
+	iWM21PgehCbr/FidChYpOwb7dDjB1wewrwrfAma0zpvlwKqCW/BtiouQMY8nmf2Vz34NJ6I3LVK
+	aWSL78PPVX8krCWUfV+rN9oWQ/qXgFaptUryszDqTlF+OI3SH29PhbsKZhI8u8eYlJajgzaL39l
+	K3wJj1UABC4oEO/2r70HmqAaCxr4I8MzD+YIwNRSndbYWfwYKaSrmg5lK9E/np0dJV8YEMC8Cev
+	JgzXqS6f1FfYX0rS6XPYziQC+Rz8Ttdaj6r5S/kWn8iPzm+HbkD6S1SZYTcToqNnbG29dgK2S/f
+	ItbaL63O9vPEr/kc+UG5evjyk5Ebh4wdB11gfYGbb57VJ770gnuUjTzNB2F2JDLBET+HmJNtQce
+	Cy2g1pf3O/8mEHwTdICv77NzAjLv4RXHDZaj6mP9x82QQMrbSs198yly/J+/i139A9nEl9FMXIL
+	sRcTOW6bVfD+VfW+IxUZO1YpZe9Dgq8Z1Fe+Tbxg/aLhkknrhWO3uaS0JouvWGuvzdllHERmf+9
+	XJqPioetk50cJlTRz15NZxho+aGRr15jN3aSaP4IsGrDcgceDtSWH80/9q3aixfwznes7vZNmWg
+	43ZBXKr1p3E6hyk2j18KRehVrlM2P57bFp6Ui6g==
+X-Received: by 2002:a5d:5d0b:0:b0:48d:f39b:83de with SMTP id ffacd0b85a97d-48e3eb46758mr20927440f8f.3.1793116040069;
+        Tue, 27 Oct 2026 08:47:20 -0700 (PDT)
 Received: from dev-dsk-fgriffo-1c-93421965.eu-west-1.amazon.com (54-240-197-234.amazon.com. [54.240.197.234])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebcb958sm23845574f8f.21.2026.10.27.08.47.15
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebcb958sm23845574f8f.21.2026.10.27.08.47.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Oct 2026 08:47:17 -0700 (PDT)
+        Tue, 27 Oct 2026 08:47:19 -0700 (PDT)
 From: Fred Griffoul <griffoul@gmail.com>
 To: Ackerley Tng <ackerleytng@google.com>,
 	Paolo Bonzini <pbonzini@redhat.com>,
@@ -157,9 +157,9 @@ Cc: Alex Williamson <alex@shazbot.org>,
 	linux-mm@kvack.org,
 	llvm@lists.linux.dev,
 	iommu@lists.linux.dev
-Subject: [RFC PATCH 10/14] iommufd/selftest: Add mock-domain IOVA queries
-Date: Tue, 27 Oct 2026 15:46:45 +0000
-Message-ID: <20261027154649.91571-11-griffoul@gmail.com>
+Subject: [RFC PATCH 11/14] KVM: guest_memfd: Add kvm_gmem_restore() for PFN mode providers
+Date: Tue, 27 Oct 2026 15:46:46 +0000
+Message-ID: <20261027154649.91571-12-griffoul@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261027154649.91571-1-griffoul@gmail.com>
 References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
@@ -177,204 +177,158 @@ Content-Transfer-Encoding: 8bit
 
 From: Fred Griffoul <fgriffo@amazon.co.uk>
 
-Tests of guest_memfd mappings cannot know in advance which frame an
-IOVA reaches, since a revoke can unmap or replace it, and
-IOMMU_TEST_OP_MD_CHECK_MAP only compares a range against a user buffer.
+A device cannot fault, so when a PFN mode provider gives frames to pages
+that had none, or makes a read-only frame writable, a subsystem that
+maps the file must be told. kvm_gmem_revoke() does not fit: it would
+zap the guest's and the VMM's mappings and reclaim frames that a guest
+may already use.
 
-Add IOMMU_TEST_OP_MD_CHECK_MAPPED, which checks that a range of a mock
-domain is all mapped or all unmapped, and IOMMU_TEST_OP_MD_IOVA_TO_PHYS,
-which returns the physical address behind an IOVA. They hold
-domains_rwsem for writing, so that a userspace unmap cannot free a
-page-table level during the walk; they are not safe against a
-concurrent guest_memfd update or dma-buf revoke, which the selftests do
-not do.
+Add kvm_gmem_restore(), the counterpart to kvm_gmem_revoke() that the
+sample provider leaves for users that cannot fault. It only updates the
+exports, under the shared invalidate lock.
 
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
 ---
- drivers/iommu/iommufd/iommufd_test.h |  18 ++++
- drivers/iommu/iommufd/selftest.c     | 125 +++++++++++++++++++++++++++
- 2 files changed, 143 insertions(+)
+ arch/x86/kvm/Makefile       |  1 +
+ include/linux/guest_memfd.h | 37 ++++++++++++++++++++++---------------
+ virt/kvm/guest_memfd.c      | 35 +++++++++++++++++++++++++++++++++--
+ 3 files changed, 56 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index 52b78cbcc920..3fffcb2b20d7 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -31,6 +31,8 @@ enum {
- 	IOMMU_TEST_OP_PASID_CHECK_HWPT,
- 	IOMMU_TEST_OP_DMABUF_GET,
- 	IOMMU_TEST_OP_DMABUF_REVOKE,
-+	IOMMU_TEST_OP_MD_CHECK_MAPPED,
-+	IOMMU_TEST_OP_MD_IOVA_TO_PHYS,
- };
+diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+index 25fb3d6e2032..3255280884b5 100644
+--- a/arch/x86/kvm/Makefile
++++ b/arch/x86/kvm/Makefile
+@@ -63,6 +63,7 @@ exports_grep_trailer := --include='*.[ch]' -nrw $(srctree)/virt/kvm $(srctree)/a
+ 				-e kvm_write_track_remove_gfn \
+ 				-e kvm_file_to_kvm_fn \
+ 				-e kvm_gmem_revoke \
++				-e kvm_gmem_restore \
+ 				-e kvm_gmem_export
  
- enum {
-@@ -193,6 +195,22 @@ struct iommu_test_cmd {
- 			__s32 dmabuf_fd;
- 			__u32 revoked;
- 		} dmabuf_revoke;
-+		struct {
-+			/*
-+			 * 1: every page in [iova, iova+length) must be mapped;
-+			 * 0: none of them may be. Any page in the other state
-+			 * fails with -ENOENT. Any other value, or a non-zero
-+			 * __reserved, is -EINVAL.
-+			 */
-+			__u32 mapped;
-+			__u32 __reserved;
-+			__aligned_u64 iova;
-+			__aligned_u64 length;
-+		} check_mapped;
-+		struct {
-+			__aligned_u64 iova;
-+			__aligned_u64 out_phys;	/* 0 if unmapped */
-+		} iova_to_phys;
- 	};
- 	__u32 last;
- };
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index ee706f18f7e9..378d7c46327e 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -2068,6 +2068,122 @@ static int iommufd_test_dmabuf_get(struct iommufd_ucmd *ucmd,
- 	return rc;
- }
- 
-+/*
-+ * True if [iova, iova + length) lies inside the domain's aperture.  An IOVA
-+ * that the domain cannot map would read as unmapped, so the queries refuse
-+ * it rather than report it as such.
-+ */
-+static bool mock_domain_covers(struct mock_iommu_domain *mock,
-+			       unsigned long iova, size_t length)
-+{
-+	struct iommu_domain_geometry *geo = &mock->domain.geometry;
-+	unsigned long last;
-+
-+	if (check_add_overflow(iova, length - 1, &last))
-+		return false;
-+	return iova >= geo->aperture_start && last <= geo->aperture_end;
-+}
-+
-+/*
-+ * iova_to_phys() walks the page table, so it must not run while an unmap
-+ * frees a level of it.  A userspace unmap holds the IOAS domains_rwsem for
-+ * reading while it unmaps the domains, so holding it for writing keeps such
-+ * unmaps away.  A guest_memfd update, e.g. on a conversion or a punch hole,
-+ * and a dma-buf revoke unmap under their pages mutex only, so tests must not
-+ * run these queries while one is in progress.  A range can cross several
-+ * areas and holes, so the queries take one IOAS-wide lock rather than the
-+ * pages mutex of each area.
-+ */
-+static struct rw_semaphore *
-+mock_domain_unmap_lock(struct iommufd_hw_pagetable *hwpt)
-+{
-+	return &to_hwpt_paging(hwpt)->ioas->iopt.domains_rwsem;
-+}
-+
-+/*
-+ * Report the physical address the mock domain resolves @iova to, or 0 if
-+ * it is unmapped.  Lets a test check that two IOVAs share one frame, or that
-+ * an IOVA moved to another frame, without knowing the frames in advance.
-+ * Not safe against a concurrent guest_memfd update or dma-buf revoke; see
-+ * mock_domain_unmap_lock().
-+ */
-+static int iommufd_test_md_iova_to_phys(struct iommufd_ucmd *ucmd,
-+					unsigned int mockpt_id,
-+					unsigned long iova)
-+{
-+	struct iommu_test_cmd *cmd = ucmd->cmd;
-+	struct iommufd_hw_pagetable *hwpt;
-+	struct mock_iommu_domain *mock;
-+	unsigned int page_size;
-+	int rc;
-+
-+	hwpt = get_md_pagetable(ucmd, mockpt_id, &mock);
-+	if (IS_ERR(hwpt))
-+		return PTR_ERR(hwpt);
-+
-+	page_size = 1 << __ffs(mock->domain.pgsize_bitmap);
-+	if (iova % page_size || !mock_domain_covers(mock, iova, page_size)) {
-+		rc = -EINVAL;
-+		goto out_put;
-+	}
-+	down_write(mock_domain_unmap_lock(hwpt));
-+	cmd->iova_to_phys.out_phys =
-+		mock->domain.ops->iova_to_phys(&mock->domain, iova);
-+	up_write(mock_domain_unmap_lock(hwpt));
-+	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-+out_put:
-+	iommufd_put_object(ucmd->ictx, &hwpt->obj);
-+	return rc;
-+}
-+
-+/*
-+ * Check that [@iova, @iova + @length) is fully mapped or fully unmapped.  Not
-+ * safe against a concurrent guest_memfd update or dma-buf revoke; see
-+ * mock_domain_unmap_lock().
-+ */
-+static int iommufd_test_md_check_mapped(struct iommufd_ucmd *ucmd,
-+					unsigned int mockpt_id,
-+					unsigned long iova, size_t length,
-+					u32 mapped, u32 reserved)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+	struct mock_iommu_domain *mock;
-+	unsigned int page_size;
-+	int rc = 0;
-+
-+	if (mapped > 1 || reserved)
-+		return -EINVAL;
-+
-+	hwpt = get_md_pagetable(ucmd, mockpt_id, &mock);
-+	if (IS_ERR(hwpt))
-+		return PTR_ERR(hwpt);
-+
-+	page_size = 1 << __ffs(mock->domain.pgsize_bitmap);
-+	if (iova % page_size || length % page_size || !length ||
-+	    !mock_domain_covers(mock, iova, length)) {
-+		rc = -EINVAL;
-+		goto out_put;
-+	}
-+
-+	down_write(mock_domain_unmap_lock(hwpt));
-+	for (; length; length -= page_size, iova += page_size) {
-+		bool is_mapped =
-+			mock->domain.ops->iova_to_phys(&mock->domain, iova) != 0;
-+
-+		if (is_mapped != mapped) {
-+			rc = -ENOENT;
-+			break;
-+		}
-+		/* A huge-page mock domain spans 2^38 bytes. */
-+		cond_resched();
-+	}
-+	up_write(mock_domain_unmap_lock(hwpt));
-+
-+out_put:
-+	iommufd_put_object(ucmd->ictx, &hwpt->obj);
-+	return rc;
-+}
-+
- static int iommufd_test_dmabuf_revoke(struct iommufd_ucmd *ucmd, int fd,
- 				      bool revoked)
+ # Force grep to emit a goofy group separator that can in turn be replaced with
+diff --git a/include/linux/guest_memfd.h b/include/linux/guest_memfd.h
+index f8e89723dd68..45572d929bd7 100644
+--- a/include/linux/guest_memfd.h
++++ b/include/linux/guest_memfd.h
+@@ -75,12 +75,18 @@ struct guest_memfd_provider_operations {
+ #ifdef CONFIG_KVM_GUEST_MEMFD
+ int kvm_gmem_revoke(struct inode *inode, pgoff_t start, size_t nr_pages,
+ 		    const unsigned long *pfn);
++void kvm_gmem_restore(struct inode *inode, pgoff_t start, size_t nr_pages);
+ #else
+ static inline int kvm_gmem_revoke(struct inode *inode, pgoff_t start, size_t nr_pages,
+ 				  const unsigned long *pfn)
  {
-@@ -2180,6 +2296,15 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
- 		return iommufd_test_dmabuf_revoke(ucmd,
- 						  cmd->dmabuf_revoke.dmabuf_fd,
- 						  cmd->dmabuf_revoke.revoked);
-+	case IOMMU_TEST_OP_MD_CHECK_MAPPED:
-+		return iommufd_test_md_check_mapped(ucmd, cmd->id,
-+						    cmd->check_mapped.iova,
-+						    cmd->check_mapped.length,
-+						    cmd->check_mapped.mapped,
-+						    cmd->check_mapped.__reserved);
-+	case IOMMU_TEST_OP_MD_IOVA_TO_PHYS:
-+		return iommufd_test_md_iova_to_phys(ucmd, cmd->id,
-+						    cmd->iova_to_phys.iova);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
+ 	return -EOPNOTSUPP;
+ }
++
++static inline void kvm_gmem_restore(struct inode *inode, pgoff_t start,
++				    size_t nr_pages)
++{
++}
+ #endif
+ 
+ /*
+@@ -90,14 +96,15 @@ static inline int kvm_gmem_revoke(struct inode *inode, pgoff_t start, size_t nr_
+  * nor fault them.  It attaches to the file, looks up the frame behind each
+  * shared page without taking a reference, and guest_memfd calls its update()
+  * whenever what a lookup returns for a range may have changed: conversions,
+- * punch holes, memory failure, a provider's kvm_gmem_revoke(), fallocate() and
+- * pages getting their first frame.  update() makes the consumer's mappings of
+- * the range match what a lookup returns now: a frame, or a hole for a private
+- * page or a page without a frame.  It may be called for pages that did not
+- * change, and for ranges that do not follow the blocks that lookups report:
+- * the consumer may then remap whole blocks, also outside the range, e.g. to
+- * merge them into larger mappings.  A consumer that can fault may instead only
+- * remove its mappings of the range.
++ * punch holes, memory failure, a provider's kvm_gmem_revoke() or
++ * kvm_gmem_restore(), fallocate() and pages getting their first frame.
++ * update() makes the consumer's mappings of the range match what a lookup
++ * returns now: a frame, or a hole for a private page or a page without a
++ * frame.  It may be called for pages that did not change, and for ranges that
++ * do not follow the blocks that lookups report: the consumer may then remap
++ * whole blocks, also outside the range, e.g. to merge them into larger
++ * mappings.  A consumer that can fault may instead only remove its mappings of
++ * the range.
+  *
+  * Until update() returns, the frames it replaces stay valid, so a consumer
+  * may switch each mapping to its new target in one step; once it returns,
+@@ -106,14 +113,14 @@ static inline int kvm_gmem_revoke(struct inode *inode, pgoff_t start, size_t nr_
+  * beforehand.
+  *
+  * guest_memfd calls update() with its invalidate lock held, exclusive when it
+- * takes frames away or pages convert, and shared when pages only gain frames
+- * and on memory failure, possibly with a folio of the file locked; so update()
+- * may only call kvm_gmem_export_lookup_pfn().  Under the shared lock, updates
+- * may run at the same time, also for overlapping ranges.  The consumer holds a
+- * lock across a lookup and the mapping it installs, which update() also takes.
+- * Lock order:
++ * takes frames or write access away or pages convert, and shared when pages
++ * only gain frames or write access and on memory failure, possibly with a
++ * folio of the file locked; so update() may only call
++ * kvm_gmem_export_lookup_pfn().  Under the shared lock, updates may run at the
++ * same time, also for overlapping ranges.  The consumer holds a lock across a
++ * lookup and the mapping it installs, which update() also takes.  Lock order:
+  *
+- *   PFN mode provider lock (across kvm_gmem_revoke())
++ *   PFN mode provider lock (across kvm_gmem_revoke() and kvm_gmem_restore())
+  *     guest_memfd invalidate lock
+  *       consumer lock
+  *         provider leaf lock (get_pfn(), lookup_pfn_range())
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 42bb5f263e23..37ff2fae89ae 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -431,8 +431,8 @@ static void kvm_gmem_invalidate_end(struct inode *inode, pgoff_t start,
+ 
+ /*
+  * What a lookup returns for [start, end) may have changed: exclusive lock when
+- * frames were taken away or pages converted, at least shared when pages only
+- * gained frames and on memory failure.
++ * frames or write access were taken away or pages converted, at least shared
++ * when pages only gained frames or write access and on memory failure.
+  */
+ static void kvm_gmem_update_exports(struct inode *inode, pgoff_t start,
+ 				    pgoff_t end)
+@@ -592,6 +592,37 @@ int kvm_gmem_revoke(struct inode *inode, pgoff_t start, size_t nr_pages,
+ }
+ EXPORT_SYMBOL_GPL(kvm_gmem_revoke);
+ 
++/**
++ * kvm_gmem_restore - Tell guest_memfd that memory of a range is now available.
++ * @inode:    The guest_memfd inode.
++ * @start:    Starting page index within the file.
++ * @nr_pages: Number of pages.
++ *
++ * A PFN mode provider calls this when it gives frames to pages that had none,
++ * unless get_pfn() does so for the block it reports, and when it makes a
++ * read-only frame writable.  Nothing is taken away, so the guest and the VMM
++ * need nothing: they fault the pages in, or get write access on their next
++ * write.  The subsystems that map the file cannot, and are told to map the
++ * range again.  A change that takes something away, a frame or write access,
++ * needs kvm_gmem_revoke() instead, which updates them too.  Does nothing past
++ * the end of the file.
++ *
++ * Context: May sleep.  Must not be called with the provider's leaf lock held.
++ */
++void kvm_gmem_restore(struct inode *inode, pgoff_t start, size_t nr_pages)
++{
++	pgoff_t max_pages = i_size_read(inode) >> PAGE_SHIFT;
++
++	if (start >= max_pages)
++		return;
++	nr_pages = min_t(size_t, nr_pages, max_pages - start);
++
++	filemap_invalidate_lock_shared(inode->i_mapping);
++	kvm_gmem_update_exports(inode, start, start + nr_pages);
++	filemap_invalidate_unlock_shared(inode->i_mapping);
++}
++EXPORT_SYMBOL_GPL(kvm_gmem_restore);
++
+ /*
+  * Zero a folio on its first use.  Lookups find it from then on, with no
+  * reference held, so mark it dirty: memory-failure handling drops clean
 -- 
 2.47.3
 
