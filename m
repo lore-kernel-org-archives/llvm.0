@@ -1,55 +1,111 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793187552;
-	b=jOlhsqkgPYBWJ7YciO5G/sER8ehChZ/ie50sWtlygyRatfXO3Hi3cIWuXjVhpRC9J/tR
-	 pswigbacrJpuv6Gnglaez+QsY4orupvAIi5zkhLv9XO8WHz4Ir7lN3cP+UYQSVilFyz3R
-	 xTzO+18gPbbZYWZoqvpv4rLPZ/4OobNOiDFeyLX+KjOt+y7ydeicPKDi9QI8LED8m0hKb
-	 Jj/dH2V+lysaug9CUaNwH0UzoUfdRrBUhz/a5abMXUg6Afl2UZJF9WCIHDoIm3vFHaZtj
-	 kKcMw6k3OOGghTWUphTHIFX/HAar75Tw0MSy3U84v5SyaFE4WKjByGXJDa80BeBPZbg==
+	t=1793188841;
+	b=VP/hCT22U1+rCeg3wGytg1AhcKXOhGhD09e/a6gbT/qdytlsPQNvgjmr0d85S2Z42OeR
+	 ru49n2O04+R5XlfGX/MAfolK+8lyBztvBX85KycikZgTEKQbUazFoK3DWxAtdcVaCwzmQ
+	 jjWhBUXO5uSrOB+0TzxZu61spLi0LzWgtI0jJRVeiffZMd3yRNjveTP5J8PmGyc+PJqgn
+	 PToaOhVFeSurLcc72624/Je6ydoS1ia90jNRCusl20xjOvjrW9IAx4PSdewb45jyDIlWL
+	 0XH9vWhE7ImqqHho2j2+OB1Iu/jpHC0JXseCJs3daKVb97g5RT8G/M6srXdMsh+uybw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793187552;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=sOScShlNJOoFQgumDsqaC2sVgmpV4+y6Yzg+EW5P6X4=;
-	b=G0Or3Lt/5/FpqhAH2vAVSBsaCtYlps9ZW7xRw5ulmxoNLgTfM9vjGEsZ4vkXTIp87MYn
-	 /bzNc98dps6+wzo+NMZBKC33Hpnbd0J52Qxe7jJTJ+/Z0JyMRkZeU8mB4uQ6oN43Iu6Mq
-	 ddSt4O9/b4BO6mB3IQ/VHGnZRWtNDFiEupso6ubcnruqK+JYpQ3XWh7RmbNwflFCIeJrZ
-	 vAn+MwpizvkD9ma0yTvu0Wyv/rC4DpZP010pCfxvGtVD9t+651NRwRPKQ9WOwbuGaW55R
-	 ByheefVoBKXAmB4+23dP1r+juqDwMXraKdA6GJlIEyBoFrEM7TJyjy9NDc645M7ftOw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793188841;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=9LDhZK1T6m8HsEM5XkfB4j7Ba0Dw0HSkS/FtB/D3TxU=;
+	b=RocCapd9+EKb9N6I070850ihuEFbWnC8kL9N+Akx3I+yeNW/XxlEiM8Xn2KZRnDl++tj
+	 SL4VawCe6SxVwI7+uKHIYCHcVrzcDnyZx/wDrFsVsN/3nfBwoFxu3ETROqIJc7Dmu9SqG
+	 xY1gE2xrgrlCheC4atpRL2tBBDwn9NVDWfP+nXSCcF+7Llx2eaMYafU69PBZgHOImw9vx
+	 Bvy8TraWcqqDHccfxOEfSgaH55Ds0GsoEUCSR9ieXuOMHRXkeGJCr1LmVwf6IWlwx62IR
+	 EialsurntFlhzRoyTr+X7r0P92nRxqSdfhq95y/0ZtfaP/475lID+p4l0tZtzQFAoIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V3aBNqqF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DPscgP4J;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C331606A320
-	for <llvm@lists.linux.dev>; Wed, 28 Oct 2026 11:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C10606A31A;
+	Wed, 28 Oct 2026 12:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V3aBNqqF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61961F031E8
-	for <llvm@lists.linux.dev>; Wed, 28 Oct 2026 11:39:10 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DPscgP4J
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 887FB1F01828;
+	Wed, 28 Oct 2026 12:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793187550;
-	bh=sOScShlNJOoFQgumDsqaC2sVgmpV4+y6Yzg+EW5P6X4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=V3aBNqqFFHK8/iCpvfjUC4nqv71d4gzLapwxCef4YXC24PEvK5vHB+xdOeL7szLll
-	 P+FI7kOVX15iyVgW6L5BqB5j66cUsU58EFNBVc4ed1gRumoqiCbC4e+4/fMtoPPsBi
-	 389uKh3znOcDxhFOO4xeIVuJHUWRavRXaxLHJn2UManYPCHBMECjV9wAGJYHfg7uRm
-	 oE9BZ712DtB2yvqohWmRmnKolH9LeojudIZ3GAkE5g2bjpf6/E/ujmhxw0Acr5Ue7J
-	 /SryS8fSPLV7LahdfJR0nny8tZNZQ0l6lyXB4kclXqeLy9UOpL1SeAi4UciWGJrnY9
-	 J8Z5+YeM8O4VQ==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5bb7c6980f1so957773e87.2
-        for <llvm@lists.linux.dev>; Wed, 28 Oct 2026 04:39:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBy8HkDBFq2leZZSsJSV5WDZm8bOxdzg/gOn+wCFXgOfE/X/7Pn/gg+lx7iv/ejh/syuVhMc@lists.linux.dev
-X-Gm-Message-State: AFq9FYKePevuBfDIVBuUVBlPiUU5H7ZlQyx57uIJsh/lPADbhSTeYB95
-	LjOZurHpJz5h9pNZT3xYfRDjvXwiSegWp5jdkZBNGIOTCDSToT5MARHp4CjfJk/eyvXOyN60Dcb
-	KHylwgWfOeeVdnGECrzm+idDjJhgS/yk=
-X-Received: by 2002:a05:6512:1111:b0:5b9:6603:d451 with SMTP id
- 2adb3069b0e04-5bfcad31c8emr697328e87.3.1793187548999; Wed, 28 Oct 2026
- 04:39:08 -0700 (PDT)
+	s=k20260515; t=1793188841;
+	bh=9LDhZK1T6m8HsEM5XkfB4j7Ba0Dw0HSkS/FtB/D3TxU=;
+	h=From:To:Cc:Subject:Date;
+	b=DPscgP4JuYpQgqqvyPcXYYjMtMtd5iN6P/KxSoy6BIx7EqQvXCcl5/k6tnE2eqyPr
+	 dlVZEHFSp5S5ENdZH1KrjuNx/XqWF+wqMLF+yOawBB3FoxWvt+bK2PSwy++wMoADRS
+	 A+W4s8FzJmLzptvwcPAze+I0DhU2neIBLnqa4GIX8XYVL69LKU+4dI0if9VQf5b1EN
+	 7SCwg2bQfcBMOYOMTcVHK635Cp9JaZBPgADGHWmCuAqsDsoFDFj+xokYH7bBMHESGu
+	 xA0EQ9RAH9JpF1IRlyLrCfg2mM+BtRT70DmloN2EhzUBFaDNfnM3fMQKR0RrnruVrw
+	 Xo5mMxSZ7OWJQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Potapenko <glider@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Ben Segall <bsegall@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Boqun Feng <boqun@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Chuck Wolber <chuck@wolber.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Frantisek Hrbata <fhrbata@redhat.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ian Rogers <irogers@google.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	James Clark <james.clark@linaro.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Julian Braha <julianbraha@gmail.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Justin Stitt <justinstitt@google.com>,
+	kasan-dev@googlegroups.com,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Marco Elver <elver@google.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Mel Gorman <mgorman@suse.de>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nsc@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Peter Oberparleiter <oberpar@linux.ibm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Waiman Long <longman@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	x86@kernel.org
+Subject: [RFC PATCH 00/20] Unify code coverage and add Clang source-based coverage with MC/DC
+Date: Wed, 28 Oct 2026 07:59:24 -0400
+Message-ID: <20261028120034.871983-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -59,141 +115,265 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261027223847.652884-1-irogers@google.com> <20261027223847.652884-5-irogers@google.com>
-In-Reply-To: <20261027223847.652884-5-irogers@google.com>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Wed, 28 Oct 2026 12:38:56 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0juvZ2ZVRBkY6FxBM=NhPt9vMA3+yRugXc5u=U1jO9AXg@mail.gmail.com>
-X-Gm-Features: AclHuK-NXF3tWCMDzaNjIN417c7ZMuQGYjVHoQ_x6BSITeW_KdKoI_jbnClXt6k
-Message-ID: <CAJZ5v0juvZ2ZVRBkY6FxBM=NhPt9vMA3+yRugXc5u=U1jO9AXg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] cpufreq: governor: Initialize kobj_type release
- callback statically
-To: Ian Rogers <irogers@google.com>
-Cc: Kees Cook <kees@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>, 
-	Sumanth Korikkar <sumanthk@linux.ibm.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-sh@vger.kernel.org, linux-s390@vger.kernel.org, gfs2@lists.linux.dev, 
-	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org, 
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 27, 2026 at 11:39=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
->
-> Export cpufreq_dbs_data_release() and set .kobj_type.release statically
-> in the ondemand and conservative governors so their gov_attr_set
-> kobjects have a valid release callback statically initialized, matching
-> cpufreq_governor_dbs. Remove the redundant runtime assignment in
-> cpufreq_dbs_governor_init().
->
-> This prepares for annotating struct kobj_type::release with
-> __must_init.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+The previous postings of Clang's source-based code coverage [1][2] drew
+objections [3][4]: rather than a third coverage implementation with its
+own interface next to gcov and KCOV, reviewers asked for a unified
+coverage interface, and for coverage instrumentation to honour noinstr.
+This series first restructures the existing coverage support into one
+framework, then adds source-based coverage and MC/DC as part of it.
 
-Do you want stuff to be picked up by maintainers, or do you want to
-route it yourself?
+Architecture
+============
 
-> ---
->  drivers/cpufreq/cpufreq_conservative.c | 5 ++++-
->  drivers/cpufreq/cpufreq_governor.c     | 4 ++--
->  drivers/cpufreq/cpufreq_governor.h     | 1 +
->  drivers/cpufreq/cpufreq_ondemand.c     | 5 ++++-
->  4 files changed, 11 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpu=
-freq_conservative.c
-> index 02bfd46543e9..146a2353b1a2 100644
-> --- a/drivers/cpufreq/cpufreq_conservative.c
-> +++ b/drivers/cpufreq/cpufreq_conservative.c
-> @@ -318,7 +318,10 @@ static void cs_limits(struct cpufreq_policy *policy)
->
->  static struct dbs_governor cs_governor =3D {
->         .gov =3D CPUFREQ_DBS_GOVERNOR_INITIALIZER("conservative"),
-> -       .kobj_type =3D { .default_groups =3D cs_groups },
-> +       .kobj_type =3D {
-> +               .release =3D cpufreq_dbs_data_release,
-> +               .default_groups =3D cs_groups,
-> +       },
->         .gov_dbs_update =3D cs_dbs_update,
->         .alloc =3D cs_alloc,
->         .free =3D cs_free,
-> diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq=
-_governor.c
-> index f3bd3dbe7c41..f8b5aca09b6b 100644
-> --- a/drivers/cpufreq/cpufreq_governor.c
-> +++ b/drivers/cpufreq/cpufreq_governor.c
-> @@ -419,7 +419,7 @@ static void free_policy_dbs_info(struct policy_dbs_in=
-fo *policy_dbs,
->         gov->free(policy_dbs);
->  }
->
-> -static void cpufreq_dbs_data_release(struct kobject *kobj)
-> +void cpufreq_dbs_data_release(struct kobject *kobj)
->  {
->         struct dbs_data *dbs_data =3D to_dbs_data(to_gov_attr_set(kobj));
->         struct dbs_governor *gov =3D dbs_data->gov;
-> @@ -427,6 +427,7 @@ static void cpufreq_dbs_data_release(struct kobject *=
-kobj)
->         gov->exit(dbs_data);
->         kfree(dbs_data);
->  }
-> +EXPORT_SYMBOL_GPL(cpufreq_dbs_data_release);
->
->  int cpufreq_dbs_governor_init(struct cpufreq_policy *policy)
->  {
-> @@ -488,7 +489,6 @@ int cpufreq_dbs_governor_init(struct cpufreq_policy *=
-policy)
->         policy->governor_data =3D policy_dbs;
->
->         gov->kobj_type.sysfs_ops =3D &governor_sysfs_ops;
-> -       gov->kobj_type.release =3D cpufreq_dbs_data_release;
->         ret =3D kobject_init_and_add(&dbs_data->attr_set.kobj, &gov->kobj=
-_type,
->                                    get_governor_parent_kobj(policy),
->                                    "%s", gov->gov.name);
-> diff --git a/drivers/cpufreq/cpufreq_governor.h b/drivers/cpufreq/cpufreq=
-_governor.h
-> index 806d8fb4dff1..1026712bb79b 100644
-> --- a/drivers/cpufreq/cpufreq_governor.h
-> +++ b/drivers/cpufreq/cpufreq_governor.h
-> @@ -150,6 +150,7 @@ static inline struct dbs_governor *dbs_governor_of(st=
-ruct cpufreq_policy *policy
->  }
->
->  /* Governor callback routines */
-> +void cpufreq_dbs_data_release(struct kobject *kobj);
->  int cpufreq_dbs_governor_init(struct cpufreq_policy *policy);
->  void cpufreq_dbs_governor_exit(struct cpufreq_policy *policy);
->  int cpufreq_dbs_governor_start(struct cpufreq_policy *policy);
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq=
-_ondemand.c
-> index 9942dbb38dae..7386d043c665 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.c
-> +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> @@ -374,7 +374,10 @@ static struct od_ops od_ops =3D {
->
->  static struct dbs_governor od_dbs_gov =3D {
->         .gov =3D CPUFREQ_DBS_GOVERNOR_INITIALIZER("ondemand"),
-> -       .kobj_type =3D { .default_groups =3D od_groups },
-> +       .kobj_type =3D {
-> +               .release =3D cpufreq_dbs_data_release,
-> +               .default_groups =3D od_groups,
-> +       },
->         .gov_dbs_update =3D od_dbs_update,
->         .alloc =3D od_alloc,
->         .free =3D od_free,
-> --
-> 2.56.0.313.g2479322e68-goog
->
->
+Today, each coverage implementation brings its own plumbing. gcov has its
+compiler flags in the top-level Makefile, the GCOV_PROFILE annotations,
+its options under "General architecture-dependent options" and
+/sys/kernel/debug/gcov/. KCOV has scripts/Makefile.kcov, KCOV_INSTRUMENT,
+its options under "Kernel hacking" and /sys/kernel/debug/kcov. Anything
+that depends on the kernel being built with coverage instrumentation
+spells it GCOV_KERNEL, and the earlier source-based coverage postings
+added a third copy of all of it.
+
+This series turns that into one framework, kernel/coverage/:
+
+  kernel/coverage/
+    core.c, coverage.h   debugfs root, backend registration, common reset
+    gcov/                gcov backend (moved from kernel/gcov/)
+    llvm/                Clang source-based coverage backend (new)
+    kcov.c               KCOV (moved from kernel/kcov.c)
+
+A code coverage measurement implementation, or backend, only provides
+what is specific to its toolchain:
+
+- its compiler flags, as CFLAGS_COVERAGE in scripts/Makefile.<backend>,
+  including the ones for MC/DC;
+- a struct coverage_backend registered with the core: its name, its
+  enabled features and how to reset its data;
+- its data, reachable under /sys/kernel/debug/coverage/;
+- its capabilities: the architectures it supports, and whether it can
+  instrument modules.
+
+Everything else is shared by all backends:
+
+- Configuration: one "Code coverage" menu with a choice of backend (none,
+  gcov or Clang source-based coverage, as each data format is defined by
+  its toolchain), CONFIG_COVERAGE_KERNEL for anything that depends on
+  coverage instrumentation (LTO, KCFI, ...), CONFIG_COVERAGE_PROFILE_ALL,
+  the per-subsystem CONFIG_COVERAGE_PROFILE_<subsystem> options and
+  CONFIG_COVERAGE_MCDC. Existing configurations are migrated.
+- Build control: COVERAGE_PROFILE[_obj.o] decides what gets instrumented,
+  whichever backend is selected. Kbuild applies the backend's flags,
+  leaves modules alone for backends that can't export their data, and
+  sets up objtool accordingly.
+- Runtime interface: /sys/kernel/debug/coverage/, with "backend" naming
+  the backend and its features, "reset" resetting its data, and the
+  backend's data files. The existing gcov and kcov entries stay where
+  they are, for lcov and syzkaller, and are linked from there.
+- noinstr: one mechanism for all backends, enforced by objtool, see
+  below.
+
+With that in place, adding source-based coverage (patch 14) only takes
+the backend specific parts.
+
+KCOV is a per-task tracing interface for fuzzers with its own UAPI, so it
+is not a backend: it moves into kernel/coverage/, the same menu, the same
+debugfs root and the same documentation, and its noinstr handling is
+unified, but it keeps its UAPI and KCOV_INSTRUMENT, whose exclusions serve
+the fuzzing signal and the KCOV runtime rather than marking code that
+can't be instrumented.
+
+noinstr
+=======
+
+gcov and source-based coverage instrument the code before inlining, so
+__always_inline helpers carried their counters into noinstr code: in an
+x86 build, 2833 relocations in .noinstr.text and .cpuidle.text referenced
+coverage counters. objtool didn't notice, as these are plain memory
+updates rather than calls. KCOV instruments after inlining and was not
+affected.
+
+- Patch 4 stops instrumenting __always_inline functions in coverage
+  builds, which costs about 1-2% of the coverage data.
+- Patches 5-10 make the empty stubs that noinstr code calls
+  __always_inline, and switch the GHCB accessors to the arch_ bitops.
+- Patch 11 makes objtool report coverage counter updates in noinstr code.
+- Patches 12 and 13 drop the coverage exclusions that only existed for
+  noinstr: arch/x86/coco/sev/noinstr.o, added by 9efb74f84ba8
+  ("x86/sev: Disable GCOV on noinstr object"), and the KCOV exclusion of
+  the x86 entry code. The generic entry code stays excluded from KCOV for
+  a different reason, which patch 13 documents.
+
+Source-based coverage and MC/DC
+===============================
+
+Patches 14-20 add Clang's source-based code coverage for code built into
+the kernel image (raw profile formats of Clang 19-22 and 23+), enable it
+on x86_64, add MC/DC measurement for it and for gcov with GCC 14+ [5],
+including the gcov merge fix MC/DC needs, and document the result.
+
+Testing
+=======
+
+- x86_64 with CONFIG_DEBUG_ENTRY, gcov with GCC 16 and Clang 22, and
+  source-based coverage with Clang 19, 22 and 24, including MC/DC, on
+  configurations toggling lockdep, context tracking, SEV and rseq:
+  objtool is clean and no coverage counter is left in noinstr code.
+- KCOV with GCC 16 and Clang 22: the noinstr functions of the x86 entry
+  code have no KCOV calls, and system call traces don't pick up
+  interrupt code.
+- Booted in a VM: gcov and source-based coverage data, reset, MC/DC
+  reports from llvm-cov and gcov --conditions, gcov data persistence
+  across module reloads, and KCOV.
+- Every patch builds, kernels without coverage produce identical
+  compiler invocations, and arm64, i386 and UML build with coverage.
+
+[1] https://lore.kernel.org/all/20240905043245.1389509-1-wentaoz5@illinois.edu/
+[2] https://lore.kernel.org/all/20251014232639.673260-1-sashal@kernel.org/
+[3] https://lore.kernel.org/all/20251015073701.GZ3419281@noisy.programming.kicks-ass.net/
+[4] https://lore.kernel.org/all/20251218092439.GL3707891@noisy.programming.kicks-ass.net/
+[5] https://lore.kernel.org/all/20260314141749.3382679-1-sashal@kernel.org/
+
+Sasha Levin (20):
+  coverage: move gcov and kcov under kernel/coverage/
+  kbuild: unify static coverage instrumentation as COVERAGE_PROFILE
+  coverage: add a common debugfs interface
+  compiler_types.h: Don't instrument __always_inline functions for
+    coverage
+  context_tracking: Always inline the empty stubs called from noinstr
+    code
+  lockdep: Always inline the empty stubs called from noinstr code
+  perf: Always inline the empty perf_lopwr_cb() stub
+  rseq: Always inline the empty rseq_note_user_irq_entry() stub
+  x86: Always inline empty stubs called from noinstr code
+  x86/sev: Use non-instrumented bitops in the GHCB accessors
+  objtool: Detect code coverage instrumentation in noinstr code
+  x86/sev: Stop excluding noinstr.o from code coverage
+  x86/entry: Stop excluding the entry code from KCOV
+  coverage: add Clang's source-based code coverage
+  x86: Enable Clang's source-based code coverage
+  coverage: add MC/DC measurement
+  gcov: fix gcov_info_add() merge semantics for IOR counters
+  kconfig: add CC_HAS_CONDITION_COVERAGE for MC/DC support detection
+  gcov: add MC/DC condition coverage support
+  Documentation: dev-tools: document the common code coverage interface
+
+ Documentation/dev-tools/coverage.rst          | 158 ++++++++++++
+ Documentation/dev-tools/gcov.rst              |  46 +++-
+ Documentation/dev-tools/index.rst             |   1 +
+ Documentation/dev-tools/kcov.rst              |   3 +
+ .../translations/zh_CN/dev-tools/gcov.rst     |  16 +-
+ .../translations/zh_TW/dev-tools/gcov.rst     |  16 +-
+ MAINTAINERS                                   |  20 +-
+ Makefile                                      |  23 +-
+ arch/Kconfig                                  |   8 +-
+ arch/alpha/boot/compressed/Makefile           |   2 +-
+ arch/parisc/kernel/vdso32/Makefile            |   2 +-
+ arch/parisc/kernel/vdso64/Makefile            |   2 +-
+ arch/powerpc/kernel/Makefile                  |   6 +-
+ arch/powerpc/kernel/trace/Makefile            |   4 +-
+ arch/powerpc/kexec/Makefile                   |   2 +-
+ arch/powerpc/xmon/Makefile                    |   2 +-
+ arch/s390/boot/Makefile                       |   2 +-
+ arch/s390/kernel/Makefile                     |   2 +-
+ arch/sh/mm/Makefile                           |   2 +-
+ arch/x86/Kconfig                              |   2 +
+ arch/x86/coco/sev/Makefile                    |   2 -
+ arch/x86/entry/Makefile                       |   1 -
+ arch/x86/include/asm/processor.h              |   2 +-
+ arch/x86/include/asm/sev.h                    |   6 +-
+ arch/x86/include/asm/svm.h                    |   8 +-
+ arch/x86/kernel/vmlinux.lds.S                 |   2 +
+ arch/x86/platform/efi/Makefile                |   2 +-
+ arch/x86/um/vdso/Makefile                     |   4 +-
+ arch/xtensa/boot/lib/Makefile                 |   2 +-
+ drivers/gpu/drm/amd/amdgpu/Kconfig            |  12 +-
+ drivers/gpu/drm/amd/amdgpu/Makefile           |   4 +-
+ .../gpu/drm/amd/display/amdgpu_dm/Makefile    |   2 +-
+ drivers/gpu/drm/i915/Makefile                 |   2 +-
+ drivers/gpu/drm/xe/Makefile                   |   2 +-
+ drivers/s390/char/Makefile                    |   2 +-
+ include/asm-generic/vmlinux.lds.h             |  36 +++
+ include/linux/compiler_types.h                |  13 +
+ include/linux/context_tracking.h              |   8 +-
+ include/linux/irqflags.h                      |   6 +-
+ include/linux/lockdep.h                       |   4 +-
+ include/linux/perf_event.h                    |   2 +-
+ include/linux/rseq_entry.h                    |   2 +-
+ include/linux/sched.h                         |   2 +-
+ init/Kconfig                                  |   9 +-
+ io_uring/Makefile                             |   4 +-
+ kernel/Makefile                               |  15 +-
+ kernel/coverage/Kconfig                       | 226 ++++++++++++++++++
+ kernel/coverage/Makefile                      |  18 ++
+ kernel/coverage/core.c                        |  71 ++++++
+ kernel/coverage/coverage.h                    |  22 ++
+ kernel/{ => coverage}/gcov/Makefile           |   0
+ kernel/{ => coverage}/gcov/base.c             |   0
+ kernel/{ => coverage}/gcov/clang.c            |   2 +-
+ kernel/{ => coverage}/gcov/fs.c               |  22 +-
+ kernel/{ => coverage}/gcov/gcc_4_7.c          |  25 +-
+ kernel/{ => coverage}/gcov/gcc_base.c         |   0
+ kernel/{ => coverage}/gcov/gcov.h             |   0
+ kernel/{ => coverage}/kcov.c                  |   3 +
+ kernel/coverage/llvm/Makefile                 |   4 +
+ kernel/coverage/llvm/fs.c                     | 202 ++++++++++++++++
+ kernel/coverage/llvm/llvm-cov.h               | 139 +++++++++++
+ kernel/entry/Makefile                         |   3 +
+ kernel/gcov/Kconfig                           |  55 -----
+ kernel/trace/Kconfig                          |   9 +-
+ kernel/trace/Makefile                         |   4 +-
+ lib/Kconfig.debug                             |  61 +----
+ lib/Makefile                                  |   2 +-
+ lib/crypto/Makefile                           |   2 +-
+ net/bridge/Makefile                           |   8 +-
+ net/bridge/netfilter/Makefile                 |   4 +-
+ net/ipv4/Makefile                             |   4 +-
+ net/ipv4/netfilter/Makefile                   |   4 +-
+ net/ipv6/Makefile                             |   4 +-
+ net/ipv6/netfilter/Makefile                   |   4 +-
+ net/netfilter/Kconfig                         |   9 +-
+ net/netfilter/Makefile                        |   4 +-
+ net/netfilter/ipset/Kconfig                   |   9 +-
+ net/netfilter/ipset/Makefile                  |   4 +-
+ net/netfilter/ipvs/Kconfig                    |   9 +-
+ net/netfilter/ipvs/Makefile                   |   4 +-
+ net/rds/Kconfig                               |   9 +-
+ net/rds/Makefile                              |   4 +-
+ scripts/Kconfig.toolchain                     |   3 +
+ scripts/Makefile.gcov                         |  25 ++
+ scripts/Makefile.lib                          |  19 +-
+ scripts/Makefile.llvm-cov                     |  11 +
+ scripts/Makefile.modfinal                     |   2 +-
+ scripts/sbom/sbom/environment.py              |   2 +-
+ tools/objtool/check.c                         |  53 ++++
+ tools/testing/selftests/net/rds/config.sh     |   9 +-
+ tools/testing/selftests/net/rds/rds_run.sh    |   8 +-
+ tools/unittests/test_cmatch.py                |   2 +-
+ 92 files changed, 1245 insertions(+), 312 deletions(-)
+ create mode 100644 Documentation/dev-tools/coverage.rst
+ create mode 100644 kernel/coverage/Kconfig
+ create mode 100644 kernel/coverage/Makefile
+ create mode 100644 kernel/coverage/core.c
+ create mode 100644 kernel/coverage/coverage.h
+ rename kernel/{ => coverage}/gcov/Makefile (100%)
+ rename kernel/{ => coverage}/gcov/base.c (100%)
+ rename kernel/{ => coverage}/gcov/clang.c (99%)
+ rename kernel/{ => coverage}/gcov/fs.c (97%)
+ rename kernel/{ => coverage}/gcov/gcc_4_7.c (94%)
+ rename kernel/{ => coverage}/gcov/gcc_base.c (100%)
+ rename kernel/{ => coverage}/gcov/gcov.h (100%)
+ rename kernel/{ => coverage}/kcov.c (99%)
+ create mode 100644 kernel/coverage/llvm/Makefile
+ create mode 100644 kernel/coverage/llvm/fs.c
+ create mode 100644 kernel/coverage/llvm/llvm-cov.h
+ delete mode 100644 kernel/gcov/Kconfig
+ create mode 100644 scripts/Makefile.gcov
+ create mode 100644 scripts/Makefile.llvm-cov
+
+
+base-commit: 83f32c773255720a661aa45d83e36278135f23f5
+-- 
+2.53.0
+
