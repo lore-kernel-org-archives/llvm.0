@@ -1,71 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793196712;
-	b=ndsfwL4iklh3LjrSCEmN7dXExfsF+5WcfgFxG2mwvKb7X/9DrK6NrhF5zNgS2+2eo5oq
-	 /ayl6F8mqbll0C5UXT7jZ95I0uMs0aDQG3p3agUNxp6YugBHTkBAi4S68Q04kLLSkgIrI
-	 5qK0aFW2VPetyl/RgMmMbGrxosSb/9LpscmFoBL0ZP8gfo9Jk8YfQanXYT3iL2YT7SdwL
-	 B6X6QG6uxsi2/8mAimLGvSbOQb6tEIMnalH2ilVzu9kKExm6Bhd5PzD06Z+OCJeH/od1k
-	 vo6C4IMfAh7XrogDeHlC+tzr6d3RL81HVTA6ZxHuSlK70e2mkFN1aKoep8+e9zBrgBw==
+	t=1793197411;
+	b=pM8WUhofyeaHHGM3cUV+udtFWXX3fWfP/mcC7CUmqwswzXc+jCagjADoojAOy6tpzq08
+	 S78Wv40SIzd4ZgJot30ZiFO3wUxlWcX2h15yqMXsM/L39uJ97ekbljiFW3qbHRmON1me1
+	 wyO3P1Lx8PnAZqxMXY8rg4lVEBy3KPPgvoQ8X+OUVVWvxMLrfgfiFJiU3yWYNc3fwVR5w
+	 NP1KikkKgSN/2T16SMY9Isdin8BQjSlVEV2aoGHdbnP7+Ih+XIRUz5us/w50JOXUlZSRL
+	 L5ZkSlxZrcTXURX/BpUz5QMRNxBTeySPZpGI3n8qlXhNmdvsptvCMVj3yjyd/h1iqaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793196712;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=JBajJS2Cb5COg7/6bYodYxyuwbqhfYKEOKgSd/X0w/Y=;
-	b=zfUuG3nXONN8HfJ/DVaqk8uFYnv3d5By6AJ7KKtM4eN31YZYVitt6nR4lAF2b4HnoWPA
-	 ePtJzFQWGfaO4fOmT4OxAQDblHpL/ze8r3DRaW/O7uZy2J6a+eiGo642EgXfm3y1SxW7i
-	 Dz8LgoUsEFdAJLwTafdGIj3hwhEQUPK8NdJSam0KaH2T7YqZPLS7Y6zrZewK0/f9RnT70
-	 Wal8tEvWutWPqcT3Ux3PWsS649C9tPv3z5GasLVo+poaH7oSkUvF/CdTtxxiRBB3IoFv0
-	 UrWPMlDWglVecyBgesbv2kL0+WUREM+od+uRmGRxWSedz3djDokyJ03dmwiXDzIxcPg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793197411;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=2NdrZAkAz7heaa42OfUL91fExS8Tds1gie9XHu1AeFI=;
+	b=Vn5pDRpM623baUsjJfA3QLp8CA4xKh3CZc3Uutmz4b4gQRy6vQofyEMCMAolkcRXtwJO
+	 6R23Cu88Ku0PVgL7QQd39Ov/6x+bclcgwkFrDjna/oj5pSD9goJ9o76XhCeYEb6gl5Vqp
+	 25GraLRa9wwgKDLhN00DiPifNOKZEmamov0o+gw/uuPrf+qcIRFGksdYMnZcI8PwEBuKE
+	 QEQgRRw5EUfNbLowofJ6fGMd1MeZruSzLKQWagSqKBaiYwOFr+2YrlRQGvTE7bCIeKouH
+	 07s5MXvSgJ+NAYCtc5dqbsEon1/fpwryMaj1AaN6bA+1bROWvoIV1HWuskJ/SyycZUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=YO0Upq03;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kkB8J+Ly;
+	arc=none smtp.remote-ip=198.175.65.12
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A44606A31D;
-	Wed, 28 Oct 2026 14:11:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36A44606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC5460A380B;
+	Wed, 28 Oct 2026 14:23:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5DC5460A380B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=YO0Upq03
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=JBajJS2Cb5COg7/6bYodYxyuwbqhfYKEOKgSd/X0w/Y=; b=YO0Upq035Shjp6fT/zLdHvtzR2
-	yJiEKxsEFo7wGGeZBLsHKaP+BK6T30CqkgpqGUW2+abqosz1W72rnwyCR04n4P2wg1mlHhz2BElSW
-	O6cw9kp87nERS4Z+6BVydoMcJG9TUpPc3qX3HxGQTjij/V8edp2VnTC7p4AC/CKaEOj8Nl7fQfkE7
-	YCgA8i5iCimmfsji+adFFENTeImUeSPAuerjF1xR8FZOya3wLMcV+F8p35DaOJ6ILIro8BYtLtT9/
-	BGyC4+ewhQjNEbTMSpjzRfoTXS74GiYO1v5j8dKKHW0rXZ3BslbQfAiwHPbu5jYdtlb4CJXqy/fEW
-	qOorq8Cw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xM4NY-00000003xkc-3REh;
-	Wed, 28 Oct 2026 14:11:48 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 6050030030F; Wed, 28 Oct 2026 15:11:48 +0100 (CET)
-Date: Wed, 28 Oct 2026 15:11:48 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
-	Chuck Wolber <chuck@wolber.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	Marco Elver <elver@google.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@kernel.org>
-Subject: Re: [RFC PATCH 11/20] objtool: Detect code coverage instrumentation
- in noinstr code
-Message-ID: <20261028141148.GT2668564@noisy.programming.kicks-ass.net>
-References: <20261028120034.871983-1-sashal@kernel.org>
- <20261028120034.871983-12-sashal@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kkB8J+Ly
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793197410; x=1824733410;
+  h=date:from:to:cc:subject:message-id;
+  bh=n/azdzmJ94M4g+CyGtjLKBZf2SVDWtbyTXshttQ7Qe0=;
+  b=kkB8J+LyoO3nPQThoouqYPN4mX7VHWigw2N3hdYBxN7LMy2QVMlmDX65
+   Djq6FdGGQEYGsNTi7MRJ4LgHztd1g8WPo/uNDOx5bJCEh9Ar4XHghdc9Y
+   SmyFGWn/bnOes5MdwUKUFt7G5TkKZhAbWodblNltHhFEpsQRFCL7cHvtY
+   3tSdUeF1tner+RdQkknXlAOiYJv9y8lUkKyEXXjJ+7fOQ+z8NJbHoRXR0
+   Q+0pjdXsYe0l2BOkSsBP9s2U/EFuyMOqUBNmxLDIkvVqHaY8L3W59CbOO
+   V5Sk0QctlAv2UhOwwu6ciPAZ7+H3eGbCT3U/ntzUwmHzMld23e3SxA5fp
+   g==;
+X-CSE-ConnectionGUID: 7u4PHRD8Qcug3MakPLRBmA==
+X-CSE-MsgGUID: f3QeJqWUR/SeCNdxOirVVg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1799542"
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="1799542"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 07:23:30 -0700
+X-CSE-ConnectionGUID: R/tn64d4QWidz3UVmQPuug==
+X-CSE-MsgGUID: uaJzQ5kATOOvAxLEKvge5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="5174543"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 28 Oct 2026 07:23:27 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xM4Ym-00000000YqO-3dbR;
+	Wed, 28 Oct 2026 14:23:24 +0000
+Date: Wed, 28 Oct 2026 22:22:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-pm@vger.kernel.org
+Subject: [amd-pstate:superm1/lockdown-iommu 3/3]
+ security/lockdown/lockdown.c:217:8: error: call to undeclared function
+ 'iommu_is_available'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202610282110.ZVggpdqM-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -74,108 +82,55 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261028120034.871983-12-sashal@kernel.org>
 
-On Wed, Oct 28, 2026 at 07:59:35AM -0400, Sasha Levin wrote:
-> gcov and Clang's source-based code coverage update their counters
-> inline, rather than by calling into a runtime like KCOV does, so
-> coverage instrumentation in noinstr code goes unnoticed by the noinstr
-> validation of call destinations.
-> 
-> Flag instructions in noinstr code, outside of instrumentation_begin()
-> and instrumentation_end() sections, that reference coverage counters:
-> GCC's __gcov<N>.* counters (including the MC/DC counters), Clang's gcov
-> __llvm_gcov_ctr* counters, and the __llvm_prf_cnts and __llvm_prf_bits
-> sections of Clang's source-based code coverage.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/lockdown-iommu
+head:   74b0183524154e17897a7789da06a937eaf8b2b7
+commit: 74b0183524154e17897a7789da06a937eaf8b2b7 [3/3] security: lockdown: Prevent boot with lockdown but no IOMMU
+config: arm64-randconfig-1003-20261028 (https://download.01.org/0day-ci/archive/20261028/202610282110.ZVggpdqM-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1da436a23e613c425fc9b868fc8deb979ede47a4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261028/202610282110.ZVggpdqM-lkp@intel.com/reproduce)
 
-Nice!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610282110.ZVggpdqM-lkp@intel.com/
 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  tools/objtool/check.c | 53 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index 464f6c9d9ff0b..6382d2a44ef2b 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -4,6 +4,7 @@
->   */
->  
->  #define _GNU_SOURCE /* memmem() */
-> +#include <ctype.h>
->  #include <fnmatch.h>
->  #include <string.h>
->  #include <stdlib.h>
-> @@ -3507,6 +3508,52 @@ static inline bool noinstr_call_dest(struct objtool_file *file,
->  	return false;
->  }
->  
-> +/*
-> + * Code coverage instrumentation (gcov, Clang's source-based coverage) updates
-> + * its counters inline rather than through calls, so it can't be caught by
-> + * checking the call destinations of noinstr code.
-> + */
-> +static bool is_coverage_counter(struct symbol *sym)
-> +{
-> +	if (!strcmp(sym->sec->name, "__llvm_prf_cnts") ||
-> +	    !strcmp(sym->sec->name, "__llvm_prf_bits"))
-> +		return true;
-> +
-> +	return (strstarts(sym->name, "__gcov") && isdigit((unsigned char)sym->name[6])) ||
-> +	       strstarts(sym->name, "__llvm_gcov_ctr");
-> +}
-> +
-> +static bool insn_updates_coverage(struct objtool_file *file,
-> +				  struct instruction *insn)
-> +{
-> +	struct symbol *sym;
-> +	struct reloc *reloc;
-> +
-> +	for (reloc = insn_reloc(file, insn);
-> +	     reloc;
-> +	     reloc = find_reloc_by_dest_range(file->elf, insn->sec,
-> +					      reloc_offset(reloc) + 1,
-> +					      insn->offset + insn->len -
-> +					      (reloc_offset(reloc) + 1))) {
-> +
-> +		sym = reloc->sym;
-> +		if (!sym->sec)
-> +			continue;
-> +
-> +		if (is_sec_sym(sym)) {
-> +			sym = find_symbol_containing(sym->sec,
-> +						     arch_insn_adjusted_addend(insn, reloc));
-> +			if (!sym)
-> +				sym = reloc->sym;
-> +		}
-> +
-> +		if (is_coverage_counter(sym))
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
+All errors (new ones prefixed by >>):
 
-Since you can have many relocations to the same symbol; does it make
-sense to cache the results of those many strcmp()s in symbol::coverage
-or something? We have plenty bits left in struct symbol.
+>> security/lockdown/lockdown.c:217:8: error: call to undeclared function 'iommu_is_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     217 |                 if (!iommu_is_available()) {
+         |                      ^
+   security/lockdown/lockdown.c:217:8: note: did you mean 'slab_is_available'?
+   include/linux/slab.h:283:6: note: 'slab_is_available' declared here
+     283 | bool slab_is_available(void);
+         |      ^
+   1 error generated.
 
-> +
->  static int validate_call(struct objtool_file *file,
->  			 struct instruction *insn,
->  			 struct insn_state *state)
-> @@ -3680,6 +3727,12 @@ static int validate_insn(struct objtool_file *file, struct symbol *func,
->  	if (statep->noinstr)
->  		statep->instr += insn->instr;
->  
-> +	if (statep->noinstr && statep->instr <= 0 &&
-> +	    insn_updates_coverage(file, insn)) {
-> +		WARN_INSN(insn, "coverage counter update in .noinstr.text section");
-> +		return 1;
-> +	}
 
-Perhaps merge with the previous conditional?
+vim +/iommu_is_available +217 security/lockdown/lockdown.c
+
+   197	
+   198	/*
+   199	 * Late init call to verify IOMMU availability when lockdown is active.
+   200	 * This catches cases where:
+   201	 *  - IOMMU hardware is absent on the platform
+   202	 *  - IOMMU was disabled by driver initialization failure
+   203	 *  - IOMMU was not detected (e.g. broken firmware, missing ACPI tables)
+   204	 *
+   205	 * On x86, we also check no_iommu here as a double-check. The early check
+   206	 * in lockdown_lsm_init() catches 'iommu=off' from the cmdline before
+   207	 * lockdown_lsm_init() runs, but this late check covers any missed cases.
+   208	 */
+   209	static int __init lockdown_check_iommu(void)
+   210	{
+   211		if (kernel_locked_down > LOCKDOWN_NONE) {
+   212			/*
+   213			 * Check generic IOMMU availability (all architectures).
+   214			 * iommu_is_available() returns true if any IOMMU driver
+   215			 * registered successfully.
+   216			 */
+ > 217			if (!iommu_is_available()) {
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
