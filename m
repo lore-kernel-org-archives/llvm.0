@@ -1,72 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.98
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793188897;
-	b=uNQlahCMXChVOHpH88TeIDLWCddFEeiQbrMed3PS7c+fNkoVbYdCadOfUlXfb3g0UmB3
-	 ga/QYBMl873nZTB3pp6xw6OSAXaOVFb0E9ZuDcwNOtlSuubx0FocwLqmoA7hu40Ha5bqZ
-	 uOnSoljt9RyOrfCt1UkMUSTKlIcjFgxLqTjHxTFFFPo8RQY116wNUc9/yo/sogv0FGSh2
-	 ZNlVfdQ7o7xj0YXQCbXuSverkr9EK6JITZHfvxQB7LnhaAQq1jVEoqvOOq0tWPo0v7Vha
-	 1LrQk58vSG68g7UM7inIyrb/qMfiAyH+Pi4+F70t2cYLQB0L5GdcuX2+Lz4lLZ9vfYQ==
+	t=1793188990;
+	b=BAxR4ADbhDkuC5+JwdwjqcL1+oVA+7GWjn/kRygA/+rvE/+bHEw8+H8r1bxeYtztXeXW
+	 Cuy3FZ7LG2Ik60i4yIXbfhpwx5AdPy285HiexYqqOaIJbM4zsW0gi1VLctK1pAmVwdX78
+	 DcuGYlma9CQPzxU3vI2LYXBRWzke6TgHH1HwEXeLstNoguE3cArct6Rk8JViDdX7ITmcE
+	 SVLezeTbDhn5CaSaNNCggnENMz8n9DPuRtQTZOYJ64VFIesd+quO+Y1d8bYgu5S/uX5rr
+	 XVA4na/hMBtJGdLgK3SGRfy42wIsrUify8+y1GDIT4KBvKpbbNiVILjoI3T42ji7c3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793188897;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=KSAfAdmkLzgs7oG/P0lPnMVbpcKomfX4CP2cVdP4kI8=;
-	b=MMrRYhimmVzs/FJq8qodYeWLUDrnfhvq8rEOPTtwVQyKR/3GlioZoRd9cdOMG8W6Q2SA
-	 ujQ12Ep1g18Mqsu0zBoiv4xW6nR97g+t5yjpjeQOfOLxcMLb/nT6VoTs0j/rdBBVVpGDm
-	 AEYtUzk266mRVvniGfjtUT9+p3rmLLdqyLBDsROCFNDYAsrQrwtuL0aNRfCmffwH+UJv9
-	 n2dTBFNFph5w0mlSkcgiEt56J9jBJIIP6rAISE6Ns43qR1eIPDYbifJjc9/PoFK4XO1LC
-	 j/jvdCeZ+vw9kfYlHTiPPzhiv6eVmoUx0k9ZJlBnlLiLRwv4utxS+4qc//qUgIGd9qw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793188990;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
+	 X-CFilter-Loop:Received:DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:X-DetectorID-Processed:
+	 Content-Type;
+	bh=sRuYQD9BVF3ypOz2OEAn5GyBooDBohKU08p6HoeOMOo=;
+	b=RoDxSq8CfhQplK5aWYl+RaFNtpEHc/CW/lM5RBfYKPKYJUPXPtF23vngMni5m3jGpqmH
+	 Zat1fOh/ZVI07SuKaQrg9oVabV/N4sJ7NRJL2X0LmRi2UVFTSK+2w1xkYS6k8hnVbzBk6
+	 aQxfYsIbnVdq8wd11fGdR+XIvwhZb2eGmkxd//RQEOSPJuqHktzDr/gDPfNhMij5jfAQ1
+	 +QQH/F3rm3sSsrT4DE90YuBDxL8iTtDzm02DU3nj11NMvwj9kmXKRD+6XYyz/upx2a6o+
+	 aob35I/fFRwOKdCqash4X0/D0Iq7eRjB1shPnHZMsSQm8a492FGxJ70APBQwZeo0xQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EHVHJunT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=broadcom.com;
+	spf=fail smtp.mailfrom=broadcom.com;
+	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=aC5nQ6qu;
+	arc=none smtp.remote-ip=209.85.216.98
+Received: from mail-pj1-f98.google.com (mail-pj1-f98.google.com [209.85.216.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C56B60A2618;
-	Wed, 28 Oct 2026 12:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C4D606A31A
+	for <llvm@lists.linux.dev>; Wed, 28 Oct 2026 12:03:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25C4D606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EHVHJunT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC9C1F01828;
-	Wed, 28 Oct 2026 12:01:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793188896;
-	bh=KSAfAdmkLzgs7oG/P0lPnMVbpcKomfX4CP2cVdP4kI8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=EHVHJunTm8Nv+lnKG6uLDqasPxtmijWw4ksHgJ+5YvhykX5BgEuvWrM29x7Kiulyd
-	 aWQPYOeJpW43gt3k5a3HeXSh8eqGsksK/9WLEOm21ShuJjO5+dQSGsbVKd5Gh/CW2G
-	 uQ09EOFUrt33u1z6HeINlkYmIQ02bLlR1n0fraHaTz8a+QfSpcwz3LbABvRm9ClRTQ
-	 3WprqdvmO5vADnePnsEjB4HLUzn0zqP3mfPlACvEWQeiUFH3SwbV6EqDtCVcWy9K1q
-	 L5g26l2DrI+YxGBSwVpO/hAjccICmuT85zoYrHXBanoqshyScCo80qYqFhi7DvY0PM
-	 WOzimJDWvssIQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Chuck Wolber <chuck@wolber.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Justin Stitt <justinstitt@google.com>,
-	kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Marco Elver <elver@google.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Oberparleiter <oberpar@linux.ibm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	workflows@vger.kernel.org
-Subject: [RFC PATCH 20/20] Documentation: dev-tools: document the common code coverage interface
-Date: Wed, 28 Oct 2026 07:59:44 -0400
-Message-ID: <20261028120034.871983-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261028120034.871983-1-sashal@kernel.org>
-References: <20261028120034.871983-1-sashal@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=aC5nQ6qu
+Received: by mail-pj1-f98.google.com with SMTP id 98e67ed59e1d1-3ac451e128cso638903a91.1
+        for <llvm@lists.linux.dev>; Wed, 28 Oct 2026 05:03:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793188989; x=1793793789;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:dkim-signature:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=sRuYQD9BVF3ypOz2OEAn5GyBooDBohKU08p6HoeOMOo=;
+        b=zq6eISs+ybwcD7x8MvUhczfBldRYDvhd/uDnmhLxR7RJWYwmtwobanZlOaUZjj0ufs
+         xvbWys2Nds2A9CY6LP6avhza0yceg+Tlw8FBXQRGfRrn43sMRWNWsxPelD3Ap7eBWJhc
+         lVRqDaKJ80EQ5GQ6f/qaUkHr9i1SikxX3ClIo14S1gNmA2XhrAkE9QTLDk7fn2N/V2H0
+         Wy99qUTBK/x0HzsqO9T8nlBgS77/D4TbQyHwceyQ8vc959jW11kBm4OetjQMzxbXLgXu
+         0guAE+0VLt2/WkQhEkkDJ8CR2JFq+L2MiM3tVVKf6fvByBq4LBl6/IqrjtBeSPPEz5Ga
+         NV3g==
+X-Forwarded-Encrypted: i=1; AKwUvByS73WPKRhxpUiaTMbzkhlOZHf8dran99UzIbgSX7JAVk3Ge8qcD9rqYwMacroWMbDO8Voa@lists.linux.dev
+X-Gm-Message-State: AFq9FYI5e0bd6PCDBjZE1Byw9f5niPow9C9uY0QHcMQqyTT+s4vzxlAJ
+	9o8OHxrH6uViXzzRwZq88dNkM+K7v3iU3DAwBqU/SU46KAp0ThJLzj8z0kKxFHziXJyC8CX7Rm5
+	jSfsaCexGliRNyAg5t7E7LoKsYEo3/cdW8g5SJ8iUC42X+cnCvawrBp59ZPnuMUE5jhNsVN56yf
+	aZnXXfnL6Njsct7DVIwXsjEG1RmZOYLQGdccwNG8G1sbk40IlPRHAPKVZinLFOQxlNTMrSjEGCo
+	XfD8w==
+X-Gm-Gg: AYBFou2zecxhFcfbaKfM8AK7Vdol9hfsjmslAl+OUiCDCeVtae3dDi3rwzJXD7oNhM+
+	fBKTesFsk9DTpVjw5SkYLsLxhSDQwLMSA//Jh/9kzVBSxVtjO/nefPj689XPGBeML3VGMFPVVZh
+	qbT115V6YsDSORVPyKxt3x/F/5mOO0IYEFpJH9yoT9Uj8S/+vZt7rUF1HTDoRaua36S7bbxuIpy
+	NBpSA7TPBVrYhztFNdiDEnQBEsu6vhpjM947zzWP8j4q+4HQ9jBcVpCg8Hk3r8RHYI3xgRBiWLQ
+	R+wW91sHs0fsDDZxt6OIR6sFGJMQjwlPpF7nrulT00HzYPZ4qzcWIukDEjNwR+NE+paTnRKcnYP
+	UBtgLvkB+Lukwn/F8Lk7LdcriBkDfziYPGSKlqk3Y/lWvtl/l46FLupoMKdlCODQqzC/jo2nU/o
+	IroRm2PiukALnB8yh6qY6lZkyv7NhQ2wbJ
+X-Received: by 2002:a17:90b:5242:b0:3ac:7556:8eda with SMTP id 98e67ed59e1d1-3ae58100ac6mr1321690a91.26.1793188989321;
+        Wed, 28 Oct 2026 05:03:09 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-28.dlp.protect.broadcom.com. [144.49.247.28])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3ae57b98875sm774305a91.4.2026.10.28.05.03.08
+        for <llvm@lists.linux.dev>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Oct 2026 05:03:09 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-3ab357a21adso4150621fa.3
+        for <llvm@lists.linux.dev>; Wed, 28 Oct 2026 05:03:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1793188987; x=1793793787; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sRuYQD9BVF3ypOz2OEAn5GyBooDBohKU08p6HoeOMOo=;
+        b=aC5nQ6quU3yrtUFwHdSY4imn3yAMlh0mtmvp9xP1ri369MOggWMDt725H3/O8B8Kk6
+         USDd25G1OHaj+Zhh5cafinj38ucfHHL8/K6g6fgRxppGgks+STTB4jubyttgH3HavF1X
+         5qVxoIILs0U4Z3u0Dtu7CW9TXoB4l456tX4vQ=
+X-Forwarded-Encrypted: i=1; AKwUvBxDfXVW1MMQarBttFUzZQ4AwhalmCQ5apu6bQs2JaVbptUgmTcQzTsZj/wxbf5N4B4YIkhz@lists.linux.dev
+X-Received: by 2002:a05:651c:2101:b0:3ab:47e4:9a9c with SMTP id 38308e7fff4ca-3ac9ce3407dmr4767701fa.3.1793188986789;
+        Wed, 28 Oct 2026 05:03:06 -0700 (PDT)
+X-Received: by 2002:a05:651c:2101:b0:3ab:47e4:9a9c with SMTP id
+ 38308e7fff4ca-3ac9ce3407dmr4767351fa.3.1793188986322; Wed, 28 Oct 2026
+ 05:03:06 -0700 (PDT)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,272 +98,158 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
+ <CABQX2QMNetg9iYRRsQmeM3+1tnC94ccWM=450wMZL_sUbqAJtA@mail.gmail.com> <20261028060042.GCauGPirK7ePNeTGF0@fat_crate.local>
+In-Reply-To: <20261028060042.GCauGPirK7ePNeTGF0@fat_crate.local>
+From: Zack Rusin <zack.rusin@broadcom.com>
+Date: Wed, 28 Oct 2026 08:02:52 -0400
+X-Gm-Features: AclHuK8GKefxAuouxabHPgUXz1TuCwIBoofaMi9ek3JpE85x7Tutg-n7QSry9co
+Message-ID: <CABQX2QP=cpMfFTdmxdQr6uVnJSF5uVQj7F6bdGwpdb1BT_UtJQ@mail.gmail.com>
+Subject: Re: [PATCH v1] x86/vmware: Fix i386 high-bandwidth hypercall arguments
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.makhalov@broadcom.com>, 
+	x86@kernel.org, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, 
+	virtualization@lists.linux.dev, bcm-kernel-feedback-list@broadcom.com, 
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000999035065ee55873"
 
-Describe the code coverage implementations and what they share: the
-Kconfig options, the COVERAGE_PROFILE annotations, the
-/sys/kernel/debug/coverage/ interface, MC/DC measurement, and how they
-deal with noinstr code. Point to it from the gcov and KCOV
-documentation, and document gcov's MC/DC support.
+--000000000000999035065ee55873
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/dev-tools/coverage.rst | 158 +++++++++++++++++++++++++++
- Documentation/dev-tools/gcov.rst     |  28 +++++
- Documentation/dev-tools/index.rst    |   1 +
- Documentation/dev-tools/kcov.rst     |   3 +
- MAINTAINERS                          |   1 +
- 5 files changed, 191 insertions(+)
- create mode 100644 Documentation/dev-tools/coverage.rst
+On Wed, Oct 28, 2026 at 2:01=E2=80=AFAM Borislav Petkov <bp@alien8.de> wrot=
+e:
+>
+> On Tue, Oct 20, 2026 at 11:34:23PM -0400, Zack Rusin wrote:
+> > Gentle ping on this one. It's a stable fix for the i386 high-bandwidth
+> > hypercalls (vmwgfx uses them), Maaz reviewed it, and it still applies
+> > cleanly to v7.3. The hypercall cleanup series I'm about to post moves
+> > this assembly out of line and is based on it, so it would help to know
+> > whether it's queued or needs changes.
+>
+> Sashiko complains about some pre-existing issues:
+>
+> https://sashiko.dev/#/patchset/4ab10678a8f50053934b62b56af81f881c1d3798.1=
+788414669.git.zack.rusin%40broadcom.com
+>
+> Please address them: if valid, you should see about fixing them, if not,
+> explain why they don't need to be fixed.
 
-diff --git a/Documentation/dev-tools/coverage.rst b/Documentation/dev-tools/coverage.rst
-new file mode 100644
-index 0000000000000..547863b2afd6d
---- /dev/null
-+++ b/Documentation/dev-tools/coverage.rst
-@@ -0,0 +1,158 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=============
-+Code coverage
-+=============
-+
-+The kernel can be instrumented to find out which parts of it get executed.
-+This serves two different purposes:
-+
-+* Measuring code coverage, e.g. to assess and improve a test suite, or to
-+  show the structural coverage required by safety standards. This is done by
-+  one of the code coverage measurement implementations described below.
-+
-+* Guiding fuzzers. This is done by KCOV, which collects coverage per task;
-+  see Documentation/dev-tools/kcov.rst.
-+
-+All of them are configured in the "Kernel hacking -> Kernel Testing and
-+Coverage -> Code coverage" menu, live in ``kernel/coverage/``, and share the
-+``/sys/kernel/debug/coverage/`` debugfs directory.
-+
-+
-+Code coverage measurement
-+=========================
-+
-+The implementation is selected by the "Code coverage measurement" choice:
-+
-+============================  ==============  ================================
-+Option                        Compilers       Data
-+============================  ==============  ================================
-+``CONFIG_GCOV_KERNEL``        GCC, Clang      gcov ``.gcda`` files, see
-+                                              Documentation/dev-tools/gcov.rst
-+``CONFIG_LLVM_COV_KERNEL``    Clang 19 and    LLVM raw profile of the kernel
-+                              later           image (``.profraw``)
-+============================  ==============  ================================
-+
-+The instrumentation and the format of the data are defined by the toolchain,
-+so only one implementation can be used at a time. Both only instrument C
-+code.
-+
-+Clang's source-based code coverage (``CONFIG_LLVM_COV_KERNEL``) instruments
-+the code in the compiler front end. Its data therefore maps back to the source
-+code exactly, regardless of the optimizations applied, and it can show the
-+coverage of every condition of a decision. It only instruments code built into
-+the kernel image. gcov also supports modules.
-+
-+
-+Selecting the code to instrument
-+--------------------------------
-+
-+``CONFIG_COVERAGE_PROFILE_ALL`` instruments the entire kernel. On architectures
-+that don't support it, or to instrument only parts of the kernel, add a line
-+like the following to the respective Makefile.
-+
-+For a single file (e.g. main.o)::
-+
-+	COVERAGE_PROFILE_main.o := y
-+
-+For all files in one directory::
-+
-+	COVERAGE_PROFILE := y
-+
-+To exclude files from being instrumented even when
-+``CONFIG_COVERAGE_PROFILE_ALL`` is enabled, use::
-+
-+	COVERAGE_PROFILE_main.o := n
-+
-+and::
-+
-+	COVERAGE_PROFILE := n
-+
-+The per-file setting takes precedence over the per-directory one, which takes
-+precedence over ``CONFIG_COVERAGE_PROFILE_ALL``.
-+
-+Only exclude code that can't work when instrumented, for example because it
-+runs before the kernel is relocated or is copied elsewhere. Code that must not
-+be instrumented for correctness reasons, such as the entry code, is annotated
-+``noinstr`` instead; see `noinstr`_.
-+
-+
-+Interface
-+---------
-+
-+``/sys/kernel/debug/coverage/`` contains:
-+
-+``backend``
-+	The name of the selected implementation, ``gcov`` or ``llvm``, followed by
-+	``mcdc`` when MC/DC is measured.
-+
-+``reset``
-+	Writing to this file resets all coverage data of the selected
-+	implementation. It does not affect KCOV.
-+
-+``gcov``
-+	A symlink to ``/sys/kernel/debug/gcov``, where gcov keeps its data (see
-+	Documentation/dev-tools/gcov.rst).
-+
-+``llvm/profraw``
-+	The raw profile of the kernel image, for Clang's source-based code
-+	coverage.
-+
-+``kcov``
-+	A symlink to ``/sys/kernel/debug/kcov`` (see
-+	Documentation/dev-tools/kcov.rst).
-+
-+The instrumented code updates the coverage data without synchronizing with
-+readers, so reading the data while other CPUs execute instrumented code
-+doesn't give an atomic snapshot, and the same applies to a reset.
-+
-+With Clang's source-based code coverage, convert the raw profile and create a
-+report with the ``llvm-profdata`` and ``llvm-cov`` tools of the LLVM version
-+that built the kernel, since the raw profile format changes between releases::
-+
-+	# cp /sys/kernel/debug/coverage/llvm/profraw vmlinux.profraw
-+	$ llvm-profdata merge vmlinux.profraw -o vmlinux.profdata
-+	$ llvm-cov report -instr-profile=vmlinux.profdata vmlinux
-+	$ llvm-cov show -instr-profile=vmlinux.profdata vmlinux kernel/fork.c
-+
-+
-+MC/DC
-+-----
-+
-+Modified condition/decision coverage (MC/DC) verifies that each condition of a
-+boolean decision has been shown to independently affect the outcome of the
-+decision. It is required by safety standards such as DO-178C (avionics) and
-+ISO 26262 (automotive). Enable it with ``CONFIG_COVERAGE_MCDC``:
-+
-+* With Clang's source-based code coverage, decisions with more than
-+  ``CONFIG_LLVM_COV_MCDC_MAX_CONDITIONS`` conditions are not measured. Show
-+  the results with ``llvm-cov show -show-mcdc`` and
-+  ``llvm-cov report -show-mcdc-summary``.
-+
-+* With gcov, GCC 14 or later is required, and decisions with more than 64
-+  conditions are not measured. Show the results with ``gcov --conditions``.
-+
-+The compiler warns about every decision it doesn't instrument.
-+
-+
-+noinstr
-+=======
-+
-+Code annotated ``noinstr`` must not be instrumented; this includes the code
-+running on kernel entry and exit, and in NMI context. Outside of
-+``instrumentation_begin()``/``instrumentation_end()`` sections, ``noinstr``
-+functions may only call other ``noinstr`` functions and ``__always_inline``
-+functions.
-+
-+The code coverage measurement implementations insert their instrumentation
-+before functions get inlined, which would carry the instrumentation of an
-+``__always_inline`` function into the ``noinstr`` code it is inlined into. To
-+avoid that, ``__always_inline`` functions are not instrumented when one of them
-+is enabled, and as a consequence they don't show up in the coverage data.
-+
-+With ``CONFIG_NOINSTR_VALIDATION``, objtool reports coverage counters that get
-+updated by ``noinstr`` code outside of such sections.
-+
-+KCOV instruments the code after inlining and honours ``noinstr`` through the
-+``no_sanitize_coverage`` attribute with Clang and GCC 12 or later; with older
-+GCC, objtool removes its calls from ``noinstr`` code.
-diff --git a/Documentation/dev-tools/gcov.rst b/Documentation/dev-tools/gcov.rst
-index b6910c3fc00dd..d2950070f3ca4 100644
---- a/Documentation/dev-tools/gcov.rst
-+++ b/Documentation/dev-tools/gcov.rst
-@@ -22,6 +22,9 @@ Possible uses:
- * minimizing kernel configurations (do I need this option if the
-   associated code is never run?)
- 
-+See Documentation/dev-tools/coverage.rst for the options and interfaces shared
-+with the other code coverage implementations.
-+
- .. _gcov: https://gcc.gnu.org/onlinedocs/gcc/Gcov.html
- .. _lcov: https://github.com/linux-test-project/lcov
- 
-@@ -180,6 +183,31 @@ b) gcov is run on the BUILD machine
-       [user@build] gcov -o /tmp/coverage/tmp/out/init main.c
- 
- 
-+MC/DC Coverage
-+--------------
-+
-+When using GCC 14 or later with ``CONFIG_COVERAGE_MCDC=y``, Modified
-+Condition/Decision Coverage (MC/DC) data is collected alongside standard
-+branch coverage. MC/DC verifies that each condition in a decision
-+independently affects the decision's outcome.
-+
-+To view MC/DC data, use::
-+
-+    gcov --conditions -o /sys/kernel/debug/gcov/path/to/dir file.c
-+
-+MC/DC coverage is required by safety standards such as DO-178C
-+(avionics) and ISO 26262 (automotive).
-+
-+GCC's condition coverage implementation has a limit of 64 conditions per
-+boolean expression, due to the use of 64-bit bitmasks internally.
-+Expressions exceeding this limit cannot be instrumented and will produce
-+a compiler warning. This does not affect the correctness of the kernel;
-+those expressions simply will not have MC/DC coverage data.
-+
-+Note that MC/DC instrumentation increases binary size and execution
-+overhead compared to standard gcov profiling.
-+
-+
- Note on compilers
- -----------------
- 
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-index 59cbb77b33ff4..d670c1398e495 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -23,6 +23,7 @@ Documentation/process/debugging/index.rst
-    coccinelle
-    context-analysis
-    sparse
-+   coverage
-    kcov
-    gcov
-    kasan
-diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-index 1a739290c8ecc..98a30a1a3f88a 100644
---- a/Documentation/dev-tools/kcov.rst
-+++ b/Documentation/dev-tools/kcov.rst
-@@ -12,6 +12,9 @@ To achieve this goal, it does not collect coverage in soft/hard interrupts
- (unless remove coverage collection is enabled, see below) and from some
- inherently non-deterministic parts of the kernel (e.g. scheduler, locking).
- 
-+KCOV is configured next to the other code coverage implementations, see
-+Documentation/dev-tools/coverage.rst.
-+
- Besides collecting code coverage, KCOV can also collect comparison operands.
- See the "Comparison operands collection" section for details.
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 506f25cfc3e85..ff9b355c2fc0d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6592,6 +6592,7 @@ F:	drivers/media/platform/chips-media/coda
- CODE COVERAGE
- M:	Sasha Levin <sashal@kernel.org>
- S:	Maintained
-+F:	Documentation/dev-tools/coverage.rst
- F:	kernel/coverage/Kconfig
- F:	kernel/coverage/Makefile
- F:	kernel/coverage/core.c
--- 
-2.53.0
+I haven't seen this. I need to update my kernel setup to fetch those
+muted Sashiko reports. Anyway, both are valid but they're preexisting
+issues in vmwgfx. I was planning to rip out most of that code in
+vmwgfx but I can provide fixes for these two. We could land them via
+your tree if you need them as a prerequisite for landing the above,
+I'll just make sure nothing touches that code via the drm tree while
+the changes are staged in yours. Or I can send out the vmwgfx fixes to
+dri-devel and land them in parallel via the regular drm tree. Let me
+know what you prefer.
 
+z
+
+--000000000000999035065ee55873
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIVIgYJKoZIhvcNAQcCoIIVEzCCFQ8CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghKPMIIGqDCCBJCgAwIBAgIQfofDCS7XZu8vIeKo0KeY9DANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNTNaFw0yOTA0MTkwMDAwMDBaMFIxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBS
+NiBTTUlNRSBDQSAyMDIzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwjAEbSkPcSyn
+26Zn9VtoE/xBvzYmNW29bW1pJZ7jrzKwPJm/GakCvy0IIgObMsx9bpFaq30X1kEJZnLUzuE1/hlc
+hatYqyORVBeHlv5V0QRSXY4faR0dCkIhXhoGknZ2O0bUJithcN1IsEADNizZ1AJIaWsWbQ4tYEYj
+ytEdvfkxz1WtX3SjtecZR+9wLJLt6HNa4sC//QKdjyfr/NhDCzYrdIzAssoXFnp4t+HcMyQTrj0r
+pD8KkPj96sy9axzegLbzte7wgTHbWBeJGp0sKg7BAu+G0Rk6teO1yPd75arbCvfY/NaRRQHk6tmG
+71gpLdB1ZhP9IcNYyeTKXIgfMh2tVK9DnXGaksYCyi6WisJa1Oa+poUroX2ESXO6o03lVxiA1xyf
+G8lUzpUNZonGVrUjhG5+MdY16/6b0uKejZCLbgu6HLPvIyqdTb9XqF4XWWKu+OMDs/rWyQ64v3mv
+Sa0te5Q5tchm4m9K0Pe9LlIKBk/gsgfaOHJDp4hYx4wocDr8DeCZe5d5wCFkxoGc1ckM8ZoMgpUc
+4pgkQE5ShxYMmKbPvNRPa5YFzbFtcFn5RMr1Mju8gt8J0c+dxYco2hi7dEW391KKxGhv7MJBcc+0
+x3FFTnmhU+5t6+CnkKMlrmzyaoeVryRTvOiH4FnTNHtVKUYDsCM0CLDdMNgoxgkCAwEAAaOCAX4w
+ggF6MA4GA1UdDwEB/wQEAwIBhjBMBgNVHSUERTBDBggrBgEFBQcDAgYIKwYBBQUHAwQGCisGAQQB
+gjcUAgIGCisGAQQBgjcKAwwGCisGAQQBgjcKAwQGCSsGAQQBgjcVBjASBgNVHRMBAf8ECDAGAQH/
+AgEAMB0GA1UdDgQWBBQAKTaeXHq6D68tUC3boCOFGLCgkjAfBgNVHSMEGDAWgBSubAWjkxPioufi
+1xzWx/B/yGdToDB7BggrBgEFBQcBAQRvMG0wLgYIKwYBBQUHMAGGImh0dHA6Ly9vY3NwMi5nbG9i
+YWxzaWduLmNvbS9yb290cjYwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjYuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yNi5jcmwwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEBDAUAA4IC
+AQCRkUdr1aIDRmkNI5jx5ggapGUThq0KcM2dzpMu314mJne8yKVXwzfKBtqbBjbUNMODnBkhvZcn
+bHUStur2/nt1tP3ee8KyNhYxzv4DkI0NbV93JChXipfsan7YjdfEk5vI2Fq+wpbGALyyWBgfy79Y
+IgbYWATB158tvEh5UO8kpGpjY95xv+070X3FYuGyeZyIvao26mN872FuxRxYhNLwGHIy38N9ASa1
+Q3BTNKSrHrZngadofHglG5W3TMFR11JOEOAUHhUgpbVVvgCYgGA6dSX0y5z7k3rXVyjFOs7KBSXr
+dJPKadpl4vqYphH7+P40nzBRcxJHrv5FeXlTrb+drjyXNjZSCmzfkOuCqPspBuJ7vab0/9oeNERg
+nz6SLCjLKcDXbMbKcRXgNhFBlzN4OUBqieSBXk80w2Nzx12KvNj758WavxOsXIbX0Zxwo1h3uw75
+AI2v8qwFWXNclO8qW2VXoq6kihWpeiuvDmFfSAwRLxwwIjgUuzG9SaQ+pOomuaC7QTKWMI0hL0b4
+mEPq9GsPPQq1UmwkcYFJ/Z4I93DZuKcXmKMmuANTS6wxwIEw8Q5MQ6y9fbJxGEOgOgYL4QIqNULb
+5CYPnt2LeiIiEnh8Uuh8tawqSjnR0h7Bv5q4mgo3L1Z9QQuexUntWD96t4o0q1jXWLyrpgP7Zcnu
+CzCCBYMwggNroAMCAQICDkXmuwODM8OFZUjm/0VRMA0GCSqGSIb3DQEBDAUAMEwxIDAeBgNVBAsT
+F0dsb2JhbFNpZ24gUm9vdCBDQSAtIFI2MRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpH
+bG9iYWxTaWduMB4XDTE0MTIxMDAwMDAwMFoXDTM0MTIxMDAwMDAwMFowTDEgMB4GA1UECxMXR2xv
+YmFsU2lnbiBSb290IENBIC0gUjYxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2Jh
+bFNpZ24wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQCVB+hzymb57BTKezz3DQjxtEUL
+LIK0SMbrWzyug7hBkjMUpG9/6SrMxrCIa8W2idHGsv8UzlEUIexK3RtaxtaH7k06FQbtZGYLkoDK
+RN5zlE7zp4l/T3hjCMgSUG1CZi9NuXkoTVIaihqAtxmBDn7EirxkTCEcQ2jXPTyKxbJm1ZCatzEG
+xb7ibTIGph75ueuqo7i/voJjUNDwGInf5A959eqiHyrScC5757yTu21T4kh8jBAHOP9msndhfuDq
+jDyqtKT285VKEgdt/Yyyic/QoGF3yFh0sNQjOvddOsqi250J3l1ELZDxgc1Xkvp+vFAEYzTfa5MY
+vms2sjnkrCQ2t/DvthwTV5O23rL44oW3c6K4NapF8uCdNqFvVIrxclZuLojFUUJEFZTuo8U4lptO
+TloLR/MGNkl3MLxxN+Wm7CEIdfzmYRY/d9XZkZeECmzUAk10wBTt/Tn7g/JeFKEEsAvp/u6P4W4L
+sgizYWYJarEGOmWWWcDwNf3J2iiNGhGHcIEKqJp1HZ46hgUAntuA1iX53AWeJ1lMdjlb6vmlodiD
+D9H/3zAR+YXPM0j1ym1kFCx6WE/TSwhJxZVkGmMOeT31s4zKWK2cQkV5bg6HGVxUsWW2v4yb3BPp
+DW+4LtxnbsmLEbWEFIoAGXCDeZGXkdQaJ783HjIH2BRjPChMrwIDAQABo2MwYTAOBgNVHQ8BAf8E
+BAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUrmwFo5MT4qLn4tcc1sfwf8hnU6AwHwYD
+VR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwDQYJKoZIhvcNAQEMBQADggIBAIMl7ejR/ZVS
+zZ7ABKCRaeZc0ITe3K2iT+hHeNZlmKlbqDyHfAKK0W63FnPmX8BUmNV0vsHN4hGRrSMYPd3hckSW
+tJVewHuOmXgWQxNWV7Oiszu1d9xAcqyj65s1PrEIIaHnxEM3eTK+teecLEy8QymZjjDTrCHg4x36
+2AczdlQAIiq5TSAucGja5VP8g1zTnfL/RAxEZvLS471GABptArolXY2hMVHdVEYcTduZlu8aHARc
+phXveOB5/l3bPqpMVf2aFalv4ab733Aw6cPuQkbtwpMFifp9Y3s/0HGBfADomK4OeDTDJfuvCp8g
+a907E48SjOJBGkh6c6B3ace2XH+CyB7+WBsoK6hsrV5twAXSe7frgP4lN/4Cm2isQl3D7vXM3PBQ
+ddI2aZzmewTfbgZptt4KCUhZh+t7FGB6ZKppQ++Rx0zsGN1s71MtjJnhXvJyPs9UyL1n7KQPTEX/
+07kwIwdMjxC/hpbZmVq0mVccpMy7FYlTuiwFD+TEnhmxGDTVTJ267fcfrySVBHioA7vugeXaX3yL
+SqGQdCWnsz5LyCxWvcfI7zjiXJLwefechLp0LWEBIH5+0fJPB1lfiy1DUutGDJTh9WZHeXfVVFsf
+rSQ3y0VaTqBESMjYsJnFFYQJ9tZJScBluOYacW6gqPGC6EU+bNYC1wpngwVayaQQMIIGWDCCBECg
+AwIBAgIMYT8cPnonh1geNIT5MA0GCSqGSIb3DQEBCwUAMFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
+ExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBDQSAy
+MDIzMB4XDTI0MTEyODA2NTUwOVoXDTI2MTEyOTA2NTUwOVowgaUxCzAJBgNVBAYTAlVTMRMwEQYD
+VQQIEwpDYWxpZm9ybmlhMREwDwYDVQQHEwhTYW4gSm9zZTEZMBcGA1UEYRMQTlRSVVMrREUtNjYx
+MDExNzEWMBQGA1UEChMNQlJPQURDT00gSU5DLjETMBEGA1UEAxMKWmFjayBSdXNpbjEmMCQGCSqG
+SIb3DQEJARYXemFjay5ydXNpbkBicm9hZGNvbS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQCwQ8KpnuEwUOX0rOrLRj3vS0VImknKwshcmcfA9VtdEQhJHGDQoNjaBEFQHqLqn4Lf
+hqEGUo+nKhz2uqGl2MtQFb8oG+yJPCFPgeSvbiRxmeOwSP0jrNADVKpYpy4UApPqS+UfVQXKbwbM
+6U6qgI8F5eiKsQyE0HgYrQJx/sDs9LLVZlaNiA3U8M8CgEnb8VhuH3BN/yXphhEQdJXb1TyaJA60
+SmHcZdEQZbl4EjwUcs3UIowmI/Mhi7ADQB7VNsO/BaOVBEQk53xH+4djY/cg7jvqTTeliY05j2Yx
+uwwXcDC4mWjGzxAT5DVqC8fKQvon1uc2heorHb555+sLdwYxAgMBAAGjggHYMIIB1DAOBgNVHQ8B
+Af8EBAMCBaAwgZMGCCsGAQUFBwEBBIGGMIGDMEYGCCsGAQUFBzAChjpodHRwOi8vc2VjdXJlLmds
+b2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3I2c21pbWVjYTIwMjMuY3J0MDkGCCsGAQUFBzABhi1o
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3I2c21pbWVjYTIwMjMwZQYDVR0gBF4wXDAJ
+BgdngQwBBQMBMAsGCSsGAQQBoDIBKDBCBgorBgEEAaAyCgMCMDQwMgYIKwYBBQUHAgEWJmh0dHBz
+Oi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwQQYDVR0fBDowODA2
+oDSgMoYwaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3I2c21pbWVjYTIwMjMuY3JsMCIG
+A1UdEQQbMBmBF3phY2sucnVzaW5AYnJvYWRjb20uY29tMBMGA1UdJQQMMAoGCCsGAQUFBwMEMB8G
+A1UdIwQYMBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1UdDgQWBBQNDn2m/OLuDx9YjEqPLCDB
+s/VKNTANBgkqhkiG9w0BAQsFAAOCAgEAF463syOLTQkWZmEyyR60W1sM3J1cbnMRrBFUBt3S2NTY
+SJ2NAvkTAxbPoOhK6IQdaTyrWi8xdg2tftr5FC1bOSUdxudY6dipq2txe7mEoUE6VlpJid/56Mo4
+QJRb6YiykQeIfoJiYMKsyuXWsTB1rhQxlxfnaFxi8Xy3+xKAeX68DcsHG3ZU0h1beBURA44tXcz6
+fFDNPQ2k6rWDFz+XNN2YOPqfse2wEm3DXpqNT79ycU7Uva7e51b8XdbmJ6XVzUFmWzhjXy5hvV8z
+iF+DvP+KT1/bjO6aNL2/3PWiy1u6xjnWvobHuAYVrXxQ5wzk8aPOnED9Q8pt2nqk/UIzw2f67Cn9
+3CxrVqXUKm93J+rupyKVTGgKO9T1ODVPo665aIbM72RxSI9Wsofatm2fo8DWOkrfs29pYfy6eECl
+91qfFMl+IzIVfDgIrEX6gSngJ2ZLaG6L+/iNrUxHxxsaUmyDwBbTfjYwr10H6NKES3JaxVRslnpF
+06HTTciJNx2wowbYF1c+BFY4r/19LHygijIVa+hZEgNuMrVLyAamaAKZ1AWxTdv8Q/eeNN3Myq61
+b1ykTSPCXjBq/03CMF/wT1wly16jYjLDXZ6II/HYyJt34QeqnBENU9zXTc9RopqcuHD2g+ROT7lI
+VLi5ffzC8rVliltTltbYPc7F0lAvGKAxggJXMIICUwIBATBiMFIxCzAJBgNVBAYTAkJFMRkwFwYD
+VQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBD
+QSAyMDIzAgxhPxw+eieHWB40hPkwDQYJYIZIAWUDBAIBBQCggccwLwYJKoZIhvcNAQkEMSIEIBFt
+ESD21beC83Gb0OReQ1IePOf2bAibVghchBQwPU3TMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
+HAYJKoZIhvcNAQkFMQ8XDTI2MTAyODEyMDMwN1owXAYJKoZIhvcNAQkPMU8wTTALBglghkgBZQME
+ASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQcwCwYJ
+YIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAEXZB4tRhPKV5CXI1idgRkejQHr+LjxREK/qzBGC
++/8PDd7XJy5osqg0Gy2iSMXvsW99ulrzC0kjnY4NA8hWlPYPk/bZRq+npGKi1bVS5L4PiUL2g8bT
+NV0uRX47ff1LkuXM4W1EfQvn1E0MZRdP/9zk1DDhDIIp25hAVaAvDECeghDLmqPVFEg00QDFSSYi
+HssbPGn8vcZpo2pQxr4b2W3g1yHY5cg9uq8k2m0LeA+2Sv5J8+5QYrm8pjNV+dKCcwQf6kNU+ozF
+8WqXvRVfj27y3QpvOUrYg0yDjm56Zn/2OgXJ4YFnIuN9M55DIVxroduOAGdELkD1dTp8U9I35BY=
+--000000000000999035065ee55873--
