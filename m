@@ -1,79 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793197411;
-	b=pM8WUhofyeaHHGM3cUV+udtFWXX3fWfP/mcC7CUmqwswzXc+jCagjADoojAOy6tpzq08
-	 S78Wv40SIzd4ZgJot30ZiFO3wUxlWcX2h15yqMXsM/L39uJ97ekbljiFW3qbHRmON1me1
-	 wyO3P1Lx8PnAZqxMXY8rg4lVEBy3KPPgvoQ8X+OUVVWvxMLrfgfiFJiU3yWYNc3fwVR5w
-	 NP1KikkKgSN/2T16SMY9Isdin8BQjSlVEV2aoGHdbnP7+Ih+XIRUz5us/w50JOXUlZSRL
-	 L5ZkSlxZrcTXURX/BpUz5QMRNxBTeySPZpGI3n8qlXhNmdvsptvCMVj3yjyd/h1iqaw==
+	t=1793200409;
+	b=KD079KtYmcj9WKhRHYn+i37ZXNJFE4j9yhM2r35wlv1uIzO1waQkpgjubKpdO2Xl/j+3
+	 9pCs4dMZ5ZzYpfgF39DbdErFm/Uk550O926tiPApkRdHsy1dAMd3gMHHLewtytR3jQ1L1
+	 sKeyVOZhiaohW9o8+N1cqnW/MihFd/hWTEeDt24Z8Ur5YqHHQqyEWv6pEAUth8riL7q35
+	 cC4EJWiYr192EztiqLH7dvGTKLMYA2XK1mW9piicBmpq5sUa2AbeVqDXjQkWRTB+al/5R
+	 1abDR5nJqTc6At8vkZhR0th5TIwyEpsljkqhoaHeF83AsYBZDoMfjbWvQXv/kQi6Hig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793197411;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=2NdrZAkAz7heaa42OfUL91fExS8Tds1gie9XHu1AeFI=;
-	b=Vn5pDRpM623baUsjJfA3QLp8CA4xKh3CZc3Uutmz4b4gQRy6vQofyEMCMAolkcRXtwJO
-	 6R23Cu88Ku0PVgL7QQd39Ov/6x+bclcgwkFrDjna/oj5pSD9goJ9o76XhCeYEb6gl5Vqp
-	 25GraLRa9wwgKDLhN00DiPifNOKZEmamov0o+gw/uuPrf+qcIRFGksdYMnZcI8PwEBuKE
-	 QEQgRRw5EUfNbLowofJ6fGMd1MeZruSzLKQWagSqKBaiYwOFr+2YrlRQGvTE7bCIeKouH
-	 07s5MXvSgJ+NAYCtc5dqbsEon1/fpwryMaj1AaN6bA+1bROWvoIV1HWuskJ/SyycZUQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793200409;
+	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=3imGrkEpHkRRFSltzD9nwj900Qui8XtxzswH1nxg748=;
+	b=laSh3tHgJ+4brZiZB00boN6ppeNvBCVc2sSC0Tx9iRFN1q0kLsZjnNjkPv/TMilSaZsa
+	 vUjWVzxBQO/tvTSOxhU1e73kha380sSyX4+PZCSNIvqpt4tB+ybnBL8pb+r5uTVBZziYf
+	 tZE78tkCSf7k5F1Vf8ofLSE0FTnNUcJOAFpri9ZTTolotsOmxw+3tXX4eCU9bMGiFEPJK
+	 VUcEj32lPEHphQCC1ofHlj1ZRIUVeG1Mhv4vSFEcBQ+lE0vX8vQ//3CjwRFwz5HD1MDHp
+	 uaUISm9asL4WOgGrUmLM7Z3ZGMOPJXQewL2+b7/BJn7XdFmZ+CgUm2pZojQ1LPJN5rw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kkB8J+Ly;
-	arc=none smtp.remote-ip=198.175.65.12
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=alien8.de;
+	spf=pass smtp.mailfrom=alien8.de;
+	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b="ZgDL/Nzd";
+	arc=none smtp.remote-ip=65.109.113.108
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC5460A380B;
-	Wed, 28 Oct 2026 14:23:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5DC5460A380B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203F6606A31E;
+	Wed, 28 Oct 2026 15:13:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 203F6606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kkB8J+Ly
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793197410; x=1824733410;
-  h=date:from:to:cc:subject:message-id;
-  bh=n/azdzmJ94M4g+CyGtjLKBZf2SVDWtbyTXshttQ7Qe0=;
-  b=kkB8J+LyoO3nPQThoouqYPN4mX7VHWigw2N3hdYBxN7LMy2QVMlmDX65
-   Djq6FdGGQEYGsNTi7MRJ4LgHztd1g8WPo/uNDOx5bJCEh9Ar4XHghdc9Y
-   SmyFGWn/bnOes5MdwUKUFt7G5TkKZhAbWodblNltHhFEpsQRFCL7cHvtY
-   3tSdUeF1tner+RdQkknXlAOiYJv9y8lUkKyEXXjJ+7fOQ+z8NJbHoRXR0
-   Q+0pjdXsYe0l2BOkSsBP9s2U/EFuyMOqUBNmxLDIkvVqHaY8L3W59CbOO
-   V5Sk0QctlAv2UhOwwu6ciPAZ7+H3eGbCT3U/ntzUwmHzMld23e3SxA5fp
-   g==;
-X-CSE-ConnectionGUID: 7u4PHRD8Qcug3MakPLRBmA==
-X-CSE-MsgGUID: f3QeJqWUR/SeCNdxOirVVg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1799542"
-X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
-   d="scan'208";a="1799542"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 07:23:30 -0700
-X-CSE-ConnectionGUID: R/tn64d4QWidz3UVmQPuug==
-X-CSE-MsgGUID: uaJzQ5kATOOvAxLEKvge5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
-   d="scan'208";a="5174543"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 28 Oct 2026 07:23:27 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xM4Ym-00000000YqO-3dbR;
-	Wed, 28 Oct 2026 14:23:24 +0000
-Date: Wed, 28 Oct 2026 22:22:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-pm@vger.kernel.org
-Subject: [amd-pstate:superm1/lockdown-iommu 3/3]
- security/lockdown/lockdown.c:217:8: error: call to undeclared function
- 'iommu_is_available'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202610282110.ZVggpdqM-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (4096-bit key, unprotected) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=ZgDL/Nzd
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A263D40E04D4;
+	Wed, 28 Oct 2026 15:13:20 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id PN37A0igGQJR; Wed, 28 Oct 2026 15:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1793200397; bh=3imGrkEpHkRRFSltzD9nwj900Qui8XtxzswH1nxg748=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZgDL/NzdjfjcID7q6Un7LHdLo5v4QtGZunYdgEtimMn5nectyejEi2phvkYOVTRr+
+	 X3GDSw4Bb2yjzV/O+o8+g1RbnblWQ6teLJ4VxqFdxAi4vLIyssJ/J8g5TH6/5afH9t
+	 U55k8+ZCMGC6mfytYVdMeRdBslAAYegc6OocXV6hu7XLMjfLevW4Ha9REXYIvYI2We
+	 KIHE0KeZByp7xz4LTsEXKA0xPZya0y2WnpCeq5xbYNdPEwvJ+gaCXprzC+atFUsLso
+	 xilfumHoqEEgYOU0Spy3JraRVAj5lmo4tM3hymr7kP/oJyefDWvGF97szsa4NNFjVf
+	 JS2LnnR7Oo2Dm6Gy6+E2fvAU5id58CrNooWEH7Z2U+Ww3iyUyC6OgIjfNVruxrcGK+
+	 2y68BZ0OzeM539hJ/H3IaNA4caWb2AGaCLvPKoz0InGBU5dcXWTSS0vf0GodHeeKhA
+	 cQr0It+PAjeuV1mZhduJL6WOteYQ9ZCS0geEwFyXbmpEF5xtgUyN/8NZ0AEP+bij6q
+	 WeJ5WK77dIo58MUL9jOxjWVd+nwd64gifdgqk2slOT/Uo1LebHMbME1EkuQRAjv/C/
+	 IBZRa1mGtS2C1IQc4SYbnNgJZnkIVhTeSgy0Zar0UylGfGwMcFVNcDgbzTnrb6/Qih
+	 coBRoAVVkHrnuTQ2TY6Za6os=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::48])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C445A40E04CF;
+	Wed, 28 Oct 2026 15:13:01 +0000 (UTC)
+Date: Wed, 28 Oct 2026 08:12:58 -0700
+From: Borislav Petkov <bp@alien8.de>
+To: Zack Rusin <zack.rusin@broadcom.com>
+Cc: Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>, x86@kernel.org,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>, virtualization@lists.linux.dev,
+	bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v1] x86/vmware: Fix i386 high-bandwidth hypercall
+ arguments
+Message-ID: <20261028151258.GAauIQ-vbIjX2xuQXd@fat_crate.local>
+References: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
+ <CABQX2QMNetg9iYRRsQmeM3+1tnC94ccWM=450wMZL_sUbqAJtA@mail.gmail.com>
+ <20261028060042.GCauGPirK7ePNeTGF0@fat_crate.local>
+ <CABQX2QP=cpMfFTdmxdQr6uVnJSF5uVQj7F6bdGwpdb1BT_UtJQ@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,55 +89,35 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CABQX2QP=cpMfFTdmxdQr6uVnJSF5uVQj7F6bdGwpdb1BT_UtJQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/lockdown-iommu
-head:   74b0183524154e17897a7789da06a937eaf8b2b7
-commit: 74b0183524154e17897a7789da06a937eaf8b2b7 [3/3] security: lockdown: Prevent boot with lockdown but no IOMMU
-config: arm64-randconfig-1003-20261028 (https://download.01.org/0day-ci/archive/20261028/202610282110.ZVggpdqM-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1da436a23e613c425fc9b868fc8deb979ede47a4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261028/202610282110.ZVggpdqM-lkp@intel.com/reproduce)
+On Wed, Oct 28, 2026 at 08:02:52AM -0400, Zack Rusin wrote:
+> I haven't seen this. I need to update my kernel setup to fetch those
+> muted Sashiko reports. Anyway, both are valid but they're preexisting
+> issues in vmwgfx. I was planning to rip out most of that code in
+> vmwgfx but I can provide fixes for these two. We could land them via
+> your tree if you need them as a prerequisite for landing the above,
+> I'll just make sure nothing touches that code via the drm tree while
+> the changes are staged in yours. Or I can send out the vmwgfx fixes to
+> dri-devel and land them in parallel via the regular drm tree. Let me
+> know what you prefer.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610282110.ZVggpdqM-lkp@intel.com/
+Oh, I was actually only pointing them out and they're not really
+a prerequisite.
 
-All errors (new ones prefixed by >>):
+I thought you guys should see this if you haven't and perhaps take a look at
+fixing them or documenting them, as this is our main modus operandi right now,
+in the age of AI-finds-bugs-in-code.
 
->> security/lockdown/lockdown.c:217:8: error: call to undeclared function 'iommu_is_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     217 |                 if (!iommu_is_available()) {
-         |                      ^
-   security/lockdown/lockdown.c:217:8: note: did you mean 'slab_is_available'?
-   include/linux/slab.h:283:6: note: 'slab_is_available' declared here
-     283 | bool slab_is_available(void);
-         |      ^
-   1 error generated.
+But ripping them out is the best fix anyway! :)
 
+Thx.
 
-vim +/iommu_is_available +217 security/lockdown/lockdown.c
+-- 
+Regards/Gruss,
+    Boris.
 
-   197	
-   198	/*
-   199	 * Late init call to verify IOMMU availability when lockdown is active.
-   200	 * This catches cases where:
-   201	 *  - IOMMU hardware is absent on the platform
-   202	 *  - IOMMU was disabled by driver initialization failure
-   203	 *  - IOMMU was not detected (e.g. broken firmware, missing ACPI tables)
-   204	 *
-   205	 * On x86, we also check no_iommu here as a double-check. The early check
-   206	 * in lockdown_lsm_init() catches 'iommu=off' from the cmdline before
-   207	 * lockdown_lsm_init() runs, but this late check covers any missed cases.
-   208	 */
-   209	static int __init lockdown_check_iommu(void)
-   210	{
-   211		if (kernel_locked_down > LOCKDOWN_NONE) {
-   212			/*
-   213			 * Check generic IOMMU availability (all architectures).
-   214			 * iommu_is_available() returns true if any IOMMU driver
-   215			 * registered successfully.
-   216			 */
- > 217			if (!iommu_is_available()) {
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+https://people.kernel.org/tglx/notes-about-netiquette
