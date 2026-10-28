@@ -1,55 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793195506;
-	b=k3qYWuI6bhlyWqIJ4to0UMqFRm0SUzQxcltjLtcQfScUAGh5iF0tOnCMp6Ka/gpZiFKR
-	 NYf4PdNYbR1jEqsyDBEQipYrEzcIL714VRaPAEj8cNtXNt7xHVXnAkV07nAXbnXq15sZp
-	 SWk9aiGHZVBXTT/R3W/ScDx7Wnoif80VGgqtaw5QgHbiuYr8chJRZvxdZarpMR2nU49im
-	 cNb5c2UmOHmMJAxabNnKnv68sxbx6xf4wdQLurXY3w6v5MCC3ivjBzQt735emp4aYS7En
-	 95qiDW2A7J867bv09nDfFMtWGNJg/Xx7RiM3/BNTY04awoqoxw0ib0ES1Hm7amLx0Qg==
+	t=1793196084;
+	b=rejEPYcwdx5agOdSsl9drHObOX+Lhqu4B6ihkTucH0LPxV8LOd8dnFOB9uAd+MJ2JWlq
+	 G8LVcbdBF5dpcHAXYB7MIvnwcJ0FdAg/8hGD4GFXReNbq2oTjGbeRB7ER98Jm83A9aYTo
+	 0hyW7W99aHu0i36sNdFlGHhuWwzw2D1NxQnj6t6qg6ZU78YtwfP2EPqBdUwC+S+xxDyUT
+	 3jxcckzaAZyl8vCVwaXHnfSptYfv5qjFHOyHCWbXF2A/9lD14zDfvaqeGiORXboCp9Ult
+	 //gtkdlvq7KNwuaZDFDGQmcFP3+lmT+COPQBNFgJy3Sv7PTXvkAdPoP/XdtM7ku7Hqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793195506;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793196084;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=zQlXmXYTkgfNOfmm6yNdecZYQl94g3efh2/fiLodwH0=;
-	b=lGAiWILDkhSyAfhT7uePqvVL4Yo5t2vbwzy5gUXVCO0uYyw89q7la8b8zli7FnAJZZ8H
-	 dbTimv4369XOy6o4KH07PAr08z44YgzYXniQVqwIYZsvQTWhwkonktBwKZInk8AqPGPW7
-	 5RFcZFfkKaLuJ/a1HXrdh1x730w5EuE8+79mieJXlCDm5OTAC+MDLYheAJhpoONzCwCX6
-	 Jlc7E7xEjcKCzGowii4f77dfUAUOXi2/pcbDemzHYMQQpp7YFKouiPhzFHCuMBfUKk8Oi
-	 f6MMODzYZDPM+dkK6MSYa0azkYmHYJj/Hj7IKz97lCpSB3lBga9KcTMFgCIP8MPq0/Q==
+	bh=7oKYpNLC6QpjoQHhArnb4nSVmzireQmey97xX/rrfrI=;
+	b=ZJVK2DWHVYC0h9GX48T+8meQr3brzdsnDPYdZeTZfT99nO3RKg48VnBRfuR5xDq7P8VG
+	 Nj6rFsBgsjhrZ9jFMhHGoad3N3Aa1qJCPmF+vqoSvTsp533/4QHeLXtZHUTFkefPpNwpB
+	 r964oFd+BbeWkvDv0+4CnRg4ENeLxe5B01o4ZSmFLyU3sPb643ob+i8HF3VZqKgSG51od
+	 6Ws6yuTVBU7b/DMoBm9AwTmAp74Vdeb4bZ5uc4a/HsElxm0FFBezQbYRjRogxKjz4qHRv
+	 Mj5atmnoXFbp1X0qNMA5QvusPCPD4c/Cd5EZUTZUuTicIX4AugVZ00NLnaG0K123CXg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
 	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=GX+boivv;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=M7pVidc1;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AEC606A320;
-	Wed, 28 Oct 2026 13:51:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72AEC606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88238606A31A;
+	Wed, 28 Oct 2026 14:01:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88238606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=GX+boivv
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=M7pVidc1
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zQlXmXYTkgfNOfmm6yNdecZYQl94g3efh2/fiLodwH0=; b=GX+boivv95JPabLTQ7+d3I0KeJ
-	+5/Ho5KK307hq2afJ98ij+CKvzWSkWPpYnSnJg+u0gTNE3XGTGnT9fTlOu2tgcU2QGtHMxxCzIp8V
-	NwulC69cHzzCZfKKywbsqkm+jAmCY5oAhGM4zqtd0ie2g0JDecdDb9OhmTKweanoqWi/g8aY+B56m
-	eW7EqzyM9fWJefNBgFFf/U6ww/o6b+bf7p1H0XqGhuRbnvE1sXNfTAruu69yzUC0BesSvvK/Ox8US
-	tKg2H+V/oIHBa1Nq7yjKxTXJsL5dmvZ031Fdgjtq9SQbyAF0ya2K3afZEmjtmof+DdpqeQlIsXQm5
-	o2QvF/vw==;
+	bh=7oKYpNLC6QpjoQHhArnb4nSVmzireQmey97xX/rrfrI=; b=M7pVidc11VHTsqY0TikHhmXRpC
+	kW90g1tsdnBPcIYInzBcLFsvOqBPhBp9P32B4e6VAWf87lPahDXbcnQvgndK8nhEZQU+J1Ksvxna4
+	KsRKaKVTGiQzLKbckEJPdpWTz+2aMb26CRp0otJDgjnb8PdKiS1qncecV8zMNcQANJYrEQ2ih7Qee
+	q9zhYVR+qQGJ8aPZQOHquMau5d1k0Fbb3ZhXX8zRFQ7ZYw4qqfXJ/7y2P+00xLrmgtItCHD0S8KzD
+	5C/FMJoxjF9p4wJau+ZEhFNjlsREq0BqIxwoS78k7o5dSFdPsB6EWM4rS3jzCoHhtV9vAyuq73pVP
+	5lBTXDWQ==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xM445-0000000G1q5-0rPP;
-	Wed, 28 Oct 2026 13:51:41 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xM4DP-00000003uVU-08eA;
+	Wed, 28 Oct 2026 14:01:19 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 3F552302F53; Wed, 28 Oct 2026 14:51:40 +0100 (CET)
-Date: Wed, 28 Oct 2026 14:51:40 +0100
+	id 9518930030F; Wed, 28 Oct 2026 15:01:18 +0100 (CET)
+Date: Wed, 28 Oct 2026 15:01:18 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: Sasha Levin <sashal@kernel.org>
 Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
@@ -61,12 +61,14 @@ Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Thomas Gleixner <tglx@kernel.org>, wentaoz5@illinois.edu,
-	chuck.wolber@boeing.com, steven.h.vanderleest@boeing.com
+	chuck.wolber@boeing.com, steven.h.vanderleest@boeing.com,
+	Josh Poimboeuf <jpoimboe@redhat.com>
 Subject: Re: [RFC PATCH 04/20] compiler_types.h: Don't instrument
  __always_inline functions for coverage
-Message-ID: <20261028135140.GR2668564@noisy.programming.kicks-ass.net>
+Message-ID: <20261028140118.GB2669272@noisy.programming.kicks-ass.net>
 References: <20261028120034.871983-1-sashal@kernel.org>
  <20261028120034.871983-5-sashal@kernel.org>
+ <20261028135140.GR2668564@noisy.programming.kicks-ass.net>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,83 +80,47 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261028120034.871983-5-sashal@kernel.org>
+In-Reply-To: <20261028135140.GR2668564@noisy.programming.kicks-ass.net>
 
-On Wed, Oct 28, 2026 at 07:59:28AM -0400, Sasha Levin wrote:
-> noinstr code may only call other noinstr functions and __always_inline
-> functions. gcov and Clang's source-based code coverage insert their
-> instrumentation before inlining, so the instrumentation of an
-> __always_inline function ends up in every noinstr function it gets
-> inlined into. With Clang's source-based coverage on x86, 2500 of the
-> 3449 relocations in .noinstr.text and 333 of the 451 in .cpuidle.text
-> of vmlinux.o point to coverage counters or MC/DC bitmaps. GCC's gcov
-> does the same. Since these are plain memory updates rather than calls,
-> objtool's noinstr validation doesn't notice them.
+On Wed, Oct 28, 2026 at 02:51:40PM +0100, Peter Zijlstra wrote:
+> On Wed, Oct 28, 2026 at 07:59:28AM -0400, Sasha Levin wrote:
+> > noinstr code may only call other noinstr functions and __always_inline
+> > functions. gcov and Clang's source-based code coverage insert their
+> > instrumentation before inlining, so the instrumentation of an
+> > __always_inline function ends up in every noinstr function it gets
+> > inlined into. With Clang's source-based coverage on x86, 2500 of the
+> > 3449 relocations in .noinstr.text and 333 of the 451 in .cpuidle.text
+> > of vmlinux.o point to coverage counters or MC/DC bitmaps. GCC's gcov
+> > does the same. Since these are plain memory updates rather than calls,
+> > objtool's noinstr validation doesn't notice them.
+> > 
+> > KCOV doesn't have this problem, as it instruments the code after
+> > inlining and checks the attributes of the function that the code ends
+> > up in.
+> > 
+> > Make __always_inline imply __no_profile when a code coverage
+> > measurement implementation is enabled, so that no noinstr code carries
+> > coverage instrumentation. The cost is that __always_inline functions
+> > don't show up in the coverage data at all, including at their callers
+> > outside of noinstr code. For an x86_64 configuration built with Clang 22
+> > and MC/DC, that removes 556 of 60788 functions (0.9%), 29261 of 1598305
+> > regions (1.8%), 11067 of 591108 branches (1.9%) and 445 of 36561 MC/DC
+> > conditions (1.2%) from the coverage data.
 > 
-> KCOV doesn't have this problem, as it instruments the code after
-> inlining and checks the attributes of the function that the code ends
-> up in.
+> This is pretty vile. But also, since people were trying to use MC/DC for
+> validation efforts and the like, how does this impact them? If I
+> understand correctly their previous emails on the topic, this means they
+> have to go manually audit every single __always_inline function.
 > 
-> Make __always_inline imply __no_profile when a code coverage
-> measurement implementation is enabled, so that no noinstr code carries
-> coverage instrumentation. The cost is that __always_inline functions
-> don't show up in the coverage data at all, including at their callers
-> outside of noinstr code. For an x86_64 configuration built with Clang 22
-> and MC/DC, that removes 556 of 60788 functions (0.9%), 29261 of 1598305
-> regions (1.8%), 11067 of 591108 branches (1.9%) and 445 of 36561 MC/DC
-> conditions (1.2%) from the coverage data.
-
-This is pretty vile. But also, since people were trying to use MC/DC for
-validation efforts and the like, how does this impact them? If I
-understand correctly their previous emails on the topic, this means they
-have to go manually audit every single __always_inline function.
-
-Now; I understand this is a tool limitation and there really must not be
-instrumentation in noinstr code, since that can run before things like
-page-tables are complete (consider the PTI case). So this is the best
-option.
-
-Still, I'm left wondering if these tools should be fixed. For instance,
-while the front-end emits this instrumentation, the backend could easily
-remove it again when it finds itself in the context of a noinstr
-function after inlining.
-
-> Leave unoptimized objects alone: GCC refuses to inline an
-> __always_inline function across a no_profile_instrument_function
-> mismatch at -O0, and those objects don't contain noinstr code.
-
-We have -O0 code? I thought we hard relied on building with at least
--O1, we often get 'fixes' to enable code to build with -O0.
-
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  include/linux/compiler_types.h | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+> Now; I understand this is a tool limitation and there really must not be
+> instrumentation in noinstr code, since that can run before things like
+> page-tables are complete (consider the PTI case). So this is the best
+> option.
 > 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index c5921f1390079..c3298d29a9425 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -246,6 +246,19 @@ struct ftrace_likely_data {
->   */
->  #define __inline__ inline
->  
-> +/*
-> + * noinstr code may only call noinstr and __always_inline functions. Code
-> + * coverage instrumentation is added before inlining, so the counters of an
-> + * __always_inline function would end up in the noinstr code it gets inlined
-> + * into: don't instrument __always_inline functions. GCC refuses to inline
-> + * across a no_profile_instrument_function mismatch without optimization, so
-> + * leave the rare unoptimized objects alone; they don't contain noinstr code.
-> + */
-> +#if defined(CONFIG_COVERAGE_KERNEL) && defined(__OPTIMIZE__)
-> +#undef __always_inline
-> +#define __always_inline inline __attribute__((__always_inline__)) __no_profile
-> +#endif
-> +
->  /*
->   * GCC does not warn about unused static inline functions for -Wunused-function.
->   * Suppress the warning in clang as well by using __maybe_unused, but enable it
-> -- 
-> 2.53.0
-> 
+> Still, I'm left wondering if these tools should be fixed. For instance,
+> while the front-end emits this instrumentation, the backend could easily
+> remove it again when it finds itself in the context of a noinstr
+> function after inlining.
+
+Ah, also, we have objtool's hack_noinstr :/ But sssh, don't tell Josh
+about that.
