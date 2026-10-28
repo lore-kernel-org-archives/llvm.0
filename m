@@ -1,84 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793167273;
-	b=3oqmboT8GXyOtTAWQmK+unuG7Ume/aFvt7G7mMPzNQcAz8+1fVZuI9dkvjxf2I8SGVnP
-	 k9NbmfYd6Dj6aZcFnHVq3sMBiLaloUEEyXEaXgA3o4dAgCnASHdRITy8aF1jj+4okCdAA
-	 A1GKhWhumVcElmV1qeuc7U3auLlLSXQaf/qMWzna8nv5jasOeRkypdy/g3d0V38BAkktw
-	 NcRocQsuxvfgdR4+yO0Pb7HTqE4jH85NQkcAUx7ZiQfk4W8QZQa8cjd2068U71ss67YtI
-	 4Zb/GNWq/hRdiiR0rhPDl75vtFaz0cE4LiFRdNLu69INVPmRU7krW4MpoUgkxO69cLg==
+	t=1793172548;
+	b=Pqp+q5aJKFormQXJ8BV+OkrqMr05urF9BjzEtMIy54tu5r/sXEXNg7dlpuJwTq3ebcUq
+	 5z9WjWuOJJH0Q9ZFwna1wrIot5VkKKvbUjt1ANfnFBVy9Yj9dbpO96DEDOvQQFtdJsWmO
+	 W7nlZS4oR9xITkUwkK1tDoeHF1echz+k0WxBM6uL3lfVQ+WOWJCvAEgqp8OFQILcLCjdj
+	 zy4inP33G5+H66eZv+woYZC6kXjLYiHvT0L/aNwusbnAqSkgxVCbRKLAOou+Pnj1VzHrO
+	 mTgBcs5+mBQRZcgTas1te3wyKQBRpiVAzHqdcZmEgwEh6I2vD/6ohKDvNm5ARBjSmxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793167273;
-	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=StQGvmW5dHLeZF+Vv+JIk9DEZOtfvNHFy4b+UUnTT8E=;
-	b=ACrmVkuMvt1hSiD/CrcoYGvRfSikv2d80QFS3Be3MGxuADY1Trr+8YYPX8AH9luEj+uC
-	 40FXfqqZztuZ4rRUM4z5w/5oe2ZEV7bNRGcevnwAmkV6+tDjZH+SJOaXWYWoGZznrhO61
-	 CvPAg89ftoymRo4LoGmoVDggTpsklyzPiSv6czn593gkPW5fViOaeAHPtFKskKgX+Jfr2
-	 SGlOU6T8FNM/5Lc7Xs9ALm/qDn4YEFDQlefgni0OB0nN64XCnBGCAiyE2gRsBH1MH17jo
-	 f2cVw+/KSsOifSObBeVojaZe5k49vXdydq/JPbysK48baPsN+bI0Kp5seM3ZFHt3jxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793172548;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=N9gBy32Umx1KK8RH0X7KkA8q7a84CegEqG9LxghN33w=;
+	b=cwb8YxwIKRDcTc7s6jo/95luqIOYdTb9p4258/LE5kON2qR2caTCy+g/gJsuPxvjZWrn
+	 SCme7SMap484hjLHc8OBjOwsrZd13fvKPQH2jMOMpfTi0tdK5xRuW+EuJfISQM7LwGct1
+	 tPPHaLZ7Xezsmfz/3Nnz+Nx2Z7KXIcph5QD0o+9lbJGj1cmWIO8thShfWDSGaE+j+M8K/
+	 aoPtjC0lJ3B1O40UF5217oZm8FwT4WyddPy/29pZJMgpO1ilA7FvZK222gpEAvVcBl5xr
+	 rYSrOyrybHAbNRcYGCnLs2CnNY6CxThyHjsItKbXXjfKPdWDhoQTzhxGBJ3czZ/o14g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=alien8.de;
-	spf=pass smtp.mailfrom=alien8.de;
-	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=Da4zzXf3;
-	arc=none smtp.remote-ip=65.109.113.108
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QstgLqVe;
+	arc=none smtp.remote-ip=198.175.65.9
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FA5606A321;
-	Wed, 28 Oct 2026 06:01:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84FA5606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC97606A31A;
+	Wed, 28 Oct 2026 07:29:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DC97606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key, unprotected) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=Da4zzXf3
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id BD4D540E040C;
-	Wed, 28 Oct 2026 06:01:04 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 2D_q4lpLQLMK; Wed, 28 Oct 2026 06:01:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1793167261; bh=StQGvmW5dHLeZF+Vv+JIk9DEZOtfvNHFy4b+UUnTT8E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Da4zzXf3iJuEucJqmcEj+hezNaO8/B3DiVQ0cnTB5YJnrPdfTmHmxdxqrRbPbG1Ql
-	 vUbTtVGcNEGwFcUe8YB4qlW56/D1j7NBBILTfbdTbNzufyiTShYDxA+6UkBACH4/CB
-	 lld/XEuX9T4wHFI8osFB7Rmh4YoQ/x8p30Lfma8yXQ2ModJt0McAOet/FvZ1hweqUM
-	 ikAA7cowsWywEhdPfChzfN7soMJjhchMYb1N9Q/YbDRiwa+l3xq8NNxH3vo1ARWiw5
-	 xl0xmKPd7R3M8G6vCddFP0RFh0Al/AB3ejKzfpmrXnTFQ0MwRc9pEUgyWrKC1qb/nz
-	 1jEK8fAm9h4u2ybJsVq+o4b5dsj5ERs53OoaY4RTXRm/up525lBk+6C3F6zanWqK+Z
-	 d7DYSYWQ61evsjB9BwsxXOZrrdkb9ewjovzq0E29fAFt24QIyQFDVUs7aURfeoBRxo
-	 sMOyf5amfs6eoGZ+eqLuiScylHWpikLxLpRXOPquQZRd4aaj3d8kcZ1PCe+gOYqZ47
-	 5Ohuu2s/vM/FHRuV52ATuZUfjTnMgrRUcHddFrjSxkB9R5iMareOJDZD5YOtLeslVi
-	 1HN1UIrI0FM0Y5Ktvtr9rMljtv0BXQYoB0TuWrnfn23w6Em42NZ2I/SblBgwhVhYyy
-	 VMPxCRxj2fh7qnvjWhteZB+4=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8CD2A40E021A;
-	Wed, 28 Oct 2026 06:00:45 +0000 (UTC)
-Date: Tue, 27 Oct 2026 23:00:42 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Zack Rusin <zack.rusin@broadcom.com>
-Cc: Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>, x86@kernel.org,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>, virtualization@lists.linux.dev,
-	bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v1] x86/vmware: Fix i386 high-bandwidth hypercall
- arguments
-Message-ID: <20261028060042.GCauGPirK7ePNeTGF0@fat_crate.local>
-References: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
- <CABQX2QMNetg9iYRRsQmeM3+1tnC94ccWM=450wMZL_sUbqAJtA@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QstgLqVe
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793172548; x=1824708548;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3rO83+6ZiPbQh0ra3NNYRzFCPQ7QM/wKotP9MQYg5uU=;
+  b=QstgLqVeJIM9cwRtdS+Ad1Eyi6UyD48JScFue+r3BZSIJdoheidfpBGg
+   ZhaIaLYP5EH4zj+8dOo4wUMAiVH+kgXo0LIdAK25y/759o9/onB4Nq6mm
+   2YA+AKI74r/pNdFXvPD4HjRVqwfQ4JQNRKETbhz2d5BARKwIMasohX1L9
+   okTfKZZDZOE2pFXao0zRGX6QRv28XuKFzk/ow7AkUn00fdNiVZEmoOOp4
+   27ipWksY7Klk9IsE4ZupSQnyHdzA5T6q/BFSbxnxxJg5iXxIVWAaw1POA
+   zPEBy3FOe7jCZtU9OshpoCdGDov5Y4nzxOEl5hkgOPcwK5zAsCSijg7tx
+   g==;
+X-CSE-ConnectionGUID: U/7vMd4ZSl+FtDFkCNjdzA==
+X-CSE-MsgGUID: il10GVLaTjixRb39pMFR1A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11948"; a="1767482"
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="1767482"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 00:29:07 -0700
+X-CSE-ConnectionGUID: pJBqjxOOQdeCRpcIm+CX0Q==
+X-CSE-MsgGUID: /B5GbNDIRyy+HTbdg+QbCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="4847384"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 28 Oct 2026 00:29:04 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xLy5k-00000000YRI-1vsi;
+	Wed, 28 Oct 2026 07:29:00 +0000
+Date: Wed, 28 Oct 2026 15:28:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+	David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	keyrings@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Thomas Graf <tgraf@suug.ch>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] KEYS: Replace assoc_array with rhashtable
+Message-ID: <202610281546.OMDCubFW-lkp@intel.com>
+References: <20261025001105.1824178-6-jarkko@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -88,28 +91,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABQX2QMNetg9iYRRsQmeM3+1tnC94ccWM=450wMZL_sUbqAJtA@mail.gmail.com>
+In-Reply-To: <20261025001105.1824178-6-jarkko@kernel.org>
 
-On Tue, Oct 20, 2026 at 11:34:23PM -0400, Zack Rusin wrote:
-> Gentle ping on this one. It's a stable fix for the i386 high-bandwidth
-> hypercalls (vmwgfx uses them), Maaz reviewed it, and it still applies
-> cleanly to v7.3. The hypercall cleanup series I'm about to post moves
-> this assembly out of line and is based on it, so it would help to know
-> whether it's queued or needs changes.
+Hi Jarkko,
 
-Sashiko complains about some pre-existing issues:
+kernel test robot noticed the following build errors:
 
-https://sashiko.dev/#/patchset/4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin%40broadcom.com
+[auto build test ERROR on linus/master]
+[cannot apply to akpm-mm/mm-nonmm-unstable manguebit/cifs-next manguebit/cifs-fixes device-mapper-dm/for-next fsverity/for-next fsverity/for-current shuah-kselftest/next shuah-kselftest/fixes dhowells-fs/fscache-next dhowells-fs/keys-next v7.3 next-20261027]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Please address them: if valid, you should see about fixing them, if not,
-explain why they don't need to be fixed.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sakkinen/KEYS-Expand-key-datalen-quotalen-to-unsigned-int/20261025-031009
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20261025001105.1824178-6-jarkko%40kernel.org
+patch subject: [PATCH v3 5/6] KEYS: Replace assoc_array with rhashtable
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261028/202610281546.OMDCubFW-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261028/202610281546.OMDCubFW-lkp@intel.com/reproduce)
 
-Thx.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610281546.OMDCubFW-lkp@intel.com/
 
--- 
-Regards/Gruss,
-    Boris.
+All errors (new ones prefixed by >>):
 
-https://people.kernel.org/tglx/notes-about-netiquette
+>> kernel/bpf/keys.c:32:30: error: no member named 'keys' in 'struct key'
+      32 |         if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+         |                        ~~~~~~~~~~~  ^
+>> kernel/bpf/keys.c:32:30: error: no member named 'keys' in 'struct key'
+      32 |         if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+         |                        ~~~~~~~~~~~  ^
+>> kernel/bpf/keys.c:32:30: error: no member named 'keys' in 'struct key'
+      32 |         if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+         |                        ~~~~~~~~~~~  ^
+>> kernel/bpf/keys.c:32:30: error: no member named 'keys' in 'struct key'
+      32 |         if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+         |                        ~~~~~~~~~~~  ^
+>> kernel/bpf/keys.c:32:30: error: no member named 'keys' in 'struct key'
+      32 |         if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+         |                        ~~~~~~~~~~~  ^
+>> kernel/bpf/keys.c:32:30: error: no member named 'keys' in 'struct key'
+      32 |         if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+         |                        ~~~~~~~~~~~  ^
+>> kernel/bpf/keys.c:32:30: error: no member named 'keys' in 'struct key'
+      32 |         if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+         |                        ~~~~~~~~~~~  ^
+   7 errors generated.
+
+
+vim +32 kernel/bpf/keys.c
+
+abaa0835b4f3810 Daniel Borkmann 2026-08-28  25  
+264d8fd2794fabe Daniel Borkmann 2026-08-28  26  struct bpf_key *bpf_lookup_keyring(void)
+264d8fd2794fabe Daniel Borkmann 2026-08-28  27  {
+264d8fd2794fabe Daniel Borkmann 2026-08-28  28  	struct bpf_key *bkey;
+264d8fd2794fabe Daniel Borkmann 2026-08-28  29  
+264d8fd2794fabe Daniel Borkmann 2026-08-28  30  	if (!bpf_keyring)
+264d8fd2794fabe Daniel Borkmann 2026-08-28  31  		return NULL;
+264d8fd2794fabe Daniel Borkmann 2026-08-28 @32  	if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+264d8fd2794fabe Daniel Borkmann 2026-08-28  33  	    !READ_ONCE(bpf_keyring->restrict_link))
+264d8fd2794fabe Daniel Borkmann 2026-08-28  34  		return NULL;
+264d8fd2794fabe Daniel Borkmann 2026-08-28  35  
+264d8fd2794fabe Daniel Borkmann 2026-08-28  36  	bkey = kmalloc_obj(*bkey);
+264d8fd2794fabe Daniel Borkmann 2026-08-28  37  	if (!bkey)
+264d8fd2794fabe Daniel Borkmann 2026-08-28  38  		return NULL;
+264d8fd2794fabe Daniel Borkmann 2026-08-28  39  
+264d8fd2794fabe Daniel Borkmann 2026-08-28  40  	bkey->key = bpf_keyring;
+264d8fd2794fabe Daniel Borkmann 2026-08-28  41  	bkey->has_ref = false;
+264d8fd2794fabe Daniel Borkmann 2026-08-28  42  	return bkey;
+264d8fd2794fabe Daniel Borkmann 2026-08-28  43  }
+264d8fd2794fabe Daniel Borkmann 2026-08-28  44  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
