@@ -1,76 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793214163;
-	b=nAVdgo6GxcspWa6H3qj5KQJuwGoF75YnjafaYAiQYlKAsHT8HuVdLSYzVIY1KCID+6eD
-	 JkND+bBdLA1baHgKD3GGCUrRjavBI+uZspT7mWHTVembcuubfFHrNbq15lx5F359/it6B
-	 CxZYb4slH46DtPJWL1a89ZAarPrzjdzD/ZJ4XvkTtxWSrdLhIQ5DGtBywXtcUgGMrXN6P
-	 ywgk0a5f67l1cR1kX6wtXfKluku3Pzfbd0Hz3hyRSX3BkoQ0q/akAeR1K9on7yF4Am/uT
-	 2Q63bZQxgEOHVyMReOTIMIrMcPhIBI+GXMqqaMMabRWvPBkE3VcMeUn4y+D+AuMYwCg==
+	t=1793214649;
+	b=GoDHuc65HNIb+gvQnqynvubndHdiP9sN/Ofwa47ZjxJH+lz0SSxwGCZDLM1RjLblPnV8
+	 1UPlhIO9CDZH4ksUcZwgbgoks4PeL7ssFRAY8/gLA/scTF+XeFf4ipAu45D1twl/uYBtS
+	 TBtPyGQLVjiMKRDoQfqRYFNo5FXLahq2NT3cPbTvevFxJ7Tb0iNGa4HRkNvpYpF1sYhwQ
+	 ZmNR5xUlnvFwXdF6EDhl+zD3Gqb2CF+SkZdxMdaqHmvsz7UYHJ2gjvvdPu1HY3P8VBUiX
+	 tdPZJJxyiGUEc0koEDWinoSJ5bHIe5YjtvsjB8/1OPl2wci6TA80qq/3LdgPbm04+uQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793214163;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=YGMMhhJbzgW/QzPBpPTTD30RztuRbfCJwa//1MZPoEw=;
-	b=4z8npSAVoAynBFjo96uPwbyFG3ipqyhg4+LS99kroI+qlacsQ4quEmwJTVHUSqxgHqi0
-	 d+NnYdJIfxSzodmhg+q89f/9xy+FetT2k0PvXX30Iw+DF7vSPPUqftxMaKnvgVeJ6t5jg
-	 h8nsqsxhmOgFG6o8lldnI8NQPt/dmedTrz1nuDhmczEbqjzobAYzm9ZfCGQPOjoZKDJX2
-	 TSOP4kFy1C0os/c9tiXHgb7UUyNpDDrshRgcJKkdsjPVF/lhZejlGUr2Mwhg3VW4V5Iez
-	 bIN0t51A+0WCXhxZno7T7REB4dGuzkKE/2j4NeuUTuIcOyY1PThtOv2g9oo58oYk35w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793214649;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=0Sk1y8mnCQ7/wBJzu1WuZEta74bHDesvUVbnwAKRUs0=;
+	b=ncZ8XnLBSXL85Q29U00psB0v3CnxfTBG6hJ9HCR//W2SuxA39aX+jaJi0Uf9Lb7gYGBn
+	 Ez/WmwaBNamCX5HGTUNPrUhiZSZK+ZPk3SvKi1gFq14KveJLUsISSzLG6PHmvd36mUNuJ
+	 uxO32eY0go2pv/Q7UN1qBj4mZln4HbOw5qf6zoI74I36yzQC/e1RTviMe3qcfaCSTAaVN
+	 K6aWN4tm9oE5RBOZVYM5zaB9/ww0LKqMl0XeHO1Za8IeLkSXxVXJgrMeX240AW6F7u1i+
+	 gSlVpgHRg0CtuY1pDUbMzTC4UXxMLbfkIGkpycPrAo9hR18A8cPji5f8GkB9mzfSrzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T+yeLqAF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=EPyjBoM1;
+	arc=none smtp.remote-ip=198.175.65.18
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0489C606A31D;
-	Wed, 28 Oct 2026 19:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C02D606A32D;
+	Wed, 28 Oct 2026 19:10:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C02D606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T+yeLqAF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF981F01828;
-	Wed, 28 Oct 2026 19:02:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793214162;
-	bh=YGMMhhJbzgW/QzPBpPTTD30RztuRbfCJwa//1MZPoEw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=T+yeLqAFaIV5ugdB5NjhA61e12w1L+BSrYB7OFrpfAcIR2R3bvk8VTeuph4Z05PLq
-	 lcmoQ2GTvN7w8itK8z23Fb7CvX7UrXcLfbyTBM3+olmVREQ8OYm4Vt9S2hUlYCCwvh
-	 YoLN/FbwlRtpVeWgrBQUKtpCMq2aSk6BZ96fzAPA1Zh/BUv05xwNUJnUgjyW+0NxCu
-	 MFHryYeChyS2NXG+hd5tU1QFjVZnyNZfQFjz6S4tMUSJw3XSKUGdfABAiPkqNVvbJb
-	 9OHQv7qk/nx3jGBDgbUSjb7yK9vqoj5fsPWRjo8ypvHtUbGQp1971XrK08vO1X/XlJ
-	 WlJINox/ORLVA==
-Date: Wed, 28 Oct 2026 12:02:33 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Ian Rogers <irogers@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>,
-	Sumanth Korikkar <sumanthk@linux.ibm.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-	linux-s390@vger.kernel.org, gfs2@lists.linux.dev,
-	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>
-Subject: Re: [PATCH v2 1/9] Compiler Attributes: Add __must_init macro
-Message-ID: <20261028190233.GA669046@ax162>
-References: <20261027223847.652884-1-irogers@google.com>
- <20261027223847.652884-2-irogers@google.com>
- <202610281155.4D2AA663@keescook>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=EPyjBoM1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793214647; x=1824750647;
+  h=date:from:to:cc:subject:message-id;
+  bh=aKLR/f190e8+2IMZITKKO4iudwp7EDYKEGW5uLDdX9c=;
+  b=EPyjBoM1aRMeB6Y753lB8ok4Ki+bj6/USYjaQJBxi/FhXapobjrkfRUT
+   DEguo11RpwRw8am1cSK2qg77dDmhOoXDNmji7w7WkMPe9UwqlQtaHWHmg
+   I95gGyOxFD3tvzIaTD+BxZWvY5Gn0aUyZcTWeDMvX6TanNjLlRJdx+w7G
+   gSDzQbLXD84sTooCGLiBoxcX/WnuXLTFsQukJCjW9J2bu/ZCIK98NCdPK
+   xibKiTJmulcl/Mph6fmkfyAzfy3fbqywbRHnNXKlIreVjvvNySlJ5u2qd
+   zVWzGDk3AW+gRJcgtlUjk00HyHKLf4KWmaW6ax2tSITp6r9tXd+88NJQW
+   w==;
+X-CSE-ConnectionGUID: qamFHy13TOSvonnubNG4aQ==
+X-CSE-MsgGUID: UFQo951DSNytgcXOYIN0pA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1960775"
+X-IronPort-AV: E=Sophos;i="6.27,183,1787036400"; 
+   d="scan'208";a="1960775"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 12:10:46 -0700
+X-CSE-ConnectionGUID: qPpn16mcQ/yOed7vFcPbiQ==
+X-CSE-MsgGUID: hYfqyVPASJSipPh6smiG9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,183,1787036400"; 
+   d="scan'208";a="5292106"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 28 Oct 2026 12:10:44 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xM92n-00000000Z8w-3gcF;
+	Wed, 28 Oct 2026 19:10:41 +0000
+Date: Thu, 29 Oct 2026 03:10:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luca Leonardo Scorcia <l.scorcia@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org,
+ Daniel Lezcano <daniel.lezcano@kernel.org>
+Subject: vmlinux.o: warning: objtool: mtk_timer_probe+0x23: no-cfi
+ indirect call!
+Message-ID: <202610290223.iOEGeDs2-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,25 +81,31 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202610281155.4D2AA663@keescook>
 
-On Wed, Oct 28, 2026 at 11:56:08AM -0700, Kees Cook wrote:
-> On Tue, Oct 27, 2026 at 03:38:36PM -0700, Ian Rogers wrote:
-> > Note that Clang does not yet diagnose file-scope objects declared
-> > without any initializer (initializers at file scope that omit the field
-> > are diagnosed), see https://github.com/llvm/llvm-project/issues/232483.
-...
-> As part of this, can you open a Clang bug for the lack of detecting
-> global initializers? It'd be nice to get that fixed.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   65ba8f34ec886ec72b2c07ddc8cf3d815c32869d
+commit: 7a097aba725501c399b5e93d0199aa3a2f6e9c88 clocksource/drivers/timer-mediatek: Convert to OF probing
+date:   2 weeks ago
+config: x86_64-buildonly-randconfig-1001-20261028 (https://download.01.org/0day-ci/archive/20261029/202610290223.iOEGeDs2-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261029/202610290223.iOEGeDs2-lkp@intel.com/reproduce)
 
-Is that this linked issue or a different one? Looks like you filed that
-one and it got fixed in clang ToT about a week ago:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 7a097aba7255 ("clocksource/drivers/timer-mediatek: Convert to OF probing")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610290223.iOEGeDs2-lkp@intel.com/
 
-  https://github.com/llvm/llvm-project/commit/58936cb3678b4b5b96177f24cac3940b9a389fe3
+All warnings (new ones prefixed by >>):
 
--- 
-Cheers,
-Nathan
+>> vmlinux.o: warning: objtool: mtk_timer_probe+0x23: no-cfi indirect call!
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+   Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
+   Selected by [m]:
+   - COMMON_CLK_MT8173_MFGTOP [=m] && COMMON_CLK [=y] && (ARCH_MEDIATEK || COMPILE_TEST [=y]) && COMMON_CLK_MT8173 [=m] && PM [=y]
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
