@@ -1,75 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.147
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793277586;
-	b=cl3L3u+/zznxnxn2yY7HP+esP2XkcDc0Xj1k+CrTXZljbKljArRo5ItFy7hQbnUubYVj
-	 lCGnUSCDQoI9RlwrgalPFPtMoCimClmskDtOxidl5w3oYx8Al1J48xcrmT/455Uhwf9bI
-	 vZPdEt8qnDfuhK6uHX6HJjfdIlA/Aa2Qd5x18nmVruWuvOWOm9lSXY8c+iMy6mJtv6qQm
-	 cvYOraA5jnCIjeUWJzyboXv+vV8Jg3abLYJ1hug9+aOXVx5d909syYayfK4oikbcF0kS9
-	 eaPYO8pOO5v5lT1VaFQT3Rrqx/I9Qmei/ZJCnJ7KFS2wvvmkpTnEC7aHGFkTQtPER6g==
+	t=1793277735;
+	b=3eCGU4E4THj5TPGPYsVdVauhQfmlBsXWZCYStK3itpeWnKeJNg251036t+TST7dXcJ0w
+	 qjQj/YfFfJM/DJxg9tlBL0tVizmmg5U3SacAgI7Tm72SiSkX9ccwMTbIPugPTkRHyluHr
+	 osXWU18+T7CKcwaMvCt2k3wubvIMfYY0HBbO1ix7aJ813vlEkLczTMwLQklBZkF+iQuZN
+	 UbIY+8YjpIqI40XLLBqjFVEwBeVsU5TOZqTmC/++mqunyKhBrXpd46UuIMSPsGzTpJkRq
+	 NXBpQKG31+MXkrKu3Eij3Y29rwC5PvYoBO1DgDlHz3OVST/aW+/31xwa/7as+0hKdxg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793277586;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=8QpU4Pn+1DJj4PNQiajvyOF9nu660N/WWYTEj5PETZc=;
-	b=HNgCwwk2zw85mUGoJEftlbEFLkvZkoZorH7z8cWpbjYEBiJ+rxLscM08sQ0M8/Rzv/VP
-	 JLMLTxcUUhTs82OuAtxyNvN6XPXhgIaFuPkAhQ/h6uG6mW+Snzsu0XPj16OmP0gHaPNgl
-	 0fymXNBZEwqxf9Gsm+EaOTJ8FO8nsgC/ECV/JZk5MwDFpncfnh9VTQAfkvbVXl1+/A/El
-	 /XVpNa3F/S6B0/RmOgV/wqVd5N5IC1K8Yb5VDPwnWphGm9veCJ/dN1fpme1D2tDYEYfaH
-	 97sdRAQ4nf/w/oJb4uybvFtRbQ5FV5Putc1JS2WYR2XNpPoiFnxuPKXdBa/ErwYbUIw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793277735;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=d66C6wv4DLzU4mI043VbebszTBlofQJOPgwX8Cd6dwM=;
+	b=fbcrVGX6mX0ZVN56nSlGDtTB7onXOgCiAuw8mrPhbVlVn0YIZ+SGYuJrR0QALnd+EcwK
+	 wE/gXHIRjXQwJeBkfyYEp+3ynEDyeIfhFqEnjiZtX67/+shdW6BjEwILDOsBSjJYHCgGI
+	 tHal+YGCnzrpRk/JJoG/QCZTUIEVf5qnD7QRY5LqpYErGDhSPTcNrY1BLMF5ZcpwW8a92
+	 ACWoo4wUtr9GZEsC65A2qUTx5QQfWJcU0tDYcEAP1gFNoLJ/3RLEjV/NMb3FqDaBhreB7
+	 0XFa8wvf9aUapK2OBG9fpuA42Cv0jNeWnUE0cgYdITJxKl1XtuWQ/3gqNxyZhfRiOiw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=iy1mfYZb;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=mdWwyzmu;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=WuArQmNM;
+	arc=none smtp.remote-ip=202.12.124.147
+Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F7F606A31A;
-	Thu, 29 Oct 2026 12:39:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89F7F606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E05F606A31F
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 12:42:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E05F606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=iy1mfYZb
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=8QpU4Pn+1DJj4PNQiajvyOF9nu660N/WWYTEj5PETZc=; b=iy1mfYZb+71jxBenkjCENAAZON
-	2No1qgOBJc/TNdetu+OUtN7AS/MdFZS+U5xSzBBxNtralcqsbsxT6XTTM5y3xHD3pPXOq7MI0AVkd
-	VpcuVFDeNkCFSIrcBNQqfbU5B5Y64hWb0ENwMH7LA+onG4SwWXIzESdFtdONPVSVOsoqO2AfPFPOk
-	SGPqaUS1AA6BFNGx0HzahGLJJ77RBUH4PMVau6f3tON/V4JSEamJAWbVnWW5cRLMhXK6Gh+kUkME+
-	7TS5VCumXmLN1/YxrMfVsoHL10zas9O7n6ZrBlqM0c0mELJ0Ei5Fulh/3Xs6ezAtvbnFCuv9mfL9B
-	1nvF1VZQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xMPPw-0000000GyEe-0Izb;
-	Thu, 29 Oct 2026 12:39:40 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9EE86300312; Thu, 29 Oct 2026 13:39:37 +0100 (CET)
-Date: Thu, 29 Oct 2026 13:39:37 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel-team@meta.com
-Subject: Re: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when
- Spectre v2 and BHI are off
-Message-ID: <20261029123937.GD1813469@noisy.programming.kicks-ass.net>
-References: <20261029-syscall-table-dispatch-v1-1-bca9dbb886de@debian.org>
- <20261029104938.GC1813469@noisy.programming.kicks-ass.net>
- <auM6mSXz-BVIjYBc@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=mdWwyzmu;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=WuArQmNM
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfout.stl.internal (Postfix) with ESMTP id 12CA71D00052
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 08:42:12 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Thu, 29 Oct 2026 08:42:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793277726;
+	 x=1793364126; bh=d66C6wv4DLzU4mI043VbebszTBlofQJOPgwX8Cd6dwM=; b=
+	mdWwyzmuwDTzAvUsxCtWbuMCcTKNS4bJzaY2TEeIJrI7yuOx+1wIj7unZryo+WQB
+	XMhpAa1cMaIixs85Y+pZ+n39ksYgSfcGdeTl3QocE/6oFU1GZY+wWZJLzfe5UPrj
+	RlxUCaMP7bE6IEXHdu8grAu0AcWetmyHunksqNFfzkLCI7Mi6CwHhTAwJfKHXDPe
+	e3Z3SzujDe5G9YaWhA5JuHlyJF3CeRwS3L84HJBtOJaKKfJNPa4hQooyxJgcnCYK
+	XcvcxgL6r9Aif9Qgzzu0gvkovzR2Br2DU0YiTbeCmmpo+VlJuyfkkaEsu3ahM2y6
+	ees+Y8fHHDuDkAduUCqpWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793277726; x=
+	1793364126; bh=d66C6wv4DLzU4mI043VbebszTBlofQJOPgwX8Cd6dwM=; b=W
+	uArQmNM2TdA/7IGGj8PR5oVaLYbgV0+e6zFBBnA/tb2D3vszfX+Wbo1Z+KKtli5l
+	gAJ6+abnCgQPC7ansT10lcjTIsfVjbCLd6NNYM4126zLf3AuuVJLtl7ZdOS2cmPl
+	tQLHLq+QaKTG3B86cdjNS4+1kCjLLctfMiEdEf1qd9PXhFxtY+TUxcNBReuC5T8z
+	mrrh0V/Bq5LBWCuiFzDv3BREQFjfiH6EUL9YojdnM5ViGUn3UGG9TJmIXLQc5ngp
+	pYQOUfQrGIQREYDkjxMVSb1n4QaDPTZQdRs/W4bi/h4C3iYSv+qw9s3et/4JUeYz
+	c+mj6fwLRpDOhjJDAj2Mw==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793277726; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm2:rsa-sha256:kLHl/h2itWZSosLXTFHz2zyKKp+W00RF79Q9/TNfeWSpcB4
+	x/ckQUY/XwoFgQP0M9OFgFcQg2FzUGW03bfXGrAUiTu1PUUCoDlIwUvqlRdkFYt7
+	wg5H4J1SlHPnEWCWlcF1mq4Db0gxl97oXoETLy9gikcWPCm3fH5mGfyc54w5kZKm
+	1VBbjWNeq+cqoIEtd+mDivgt4al1ix+hcQ1DJ3RRE4A0Ay0414i+/HmuErpr9gT6
+	rnucL0gVWDhoTpyLJK6AFjlV0b6JsqpbUGNCkUhD/vXjqsxieDYQIpyj0jjHaItd
+	tSPyWI5avjxFxDZiDeNICecsoeH7LPdocK0kXWg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:pa8id8lezNHZnkKCJdOaeGBTdvPO8v5XG/p8liF/bjw=:zS2WM14JlEd46YHq+76lHPH8OxosPMsFWFrHE0AZa5U=;
+X-ME-Sender: <xms:GD_jars-SiAZ94GhE4p5hGsN425X319VhlpSOuAvB0LAROqjAyGhDA>
+    <xme:GD_janSL602wCkOQBa2SEr4zFhG4eIMO8EKrbNAwWQFXh8GcwITo-tvIXnuq3t91s
+    2LNX1sux-UXIYBpnlfhlpQplJRFIWpWAEkb5bnqK5fMK67C7I5OS9EI>
+X-ME-Proxy-Cause: dmFkZTF1xeXukoYxtIemiSr7RmgPQKVnIlQT+D5fkGBom82nl7QChx9FOS7mWdlUT9+ErJ
+    kw8oCVFb8WcQicGskO3E4Bh8+FW6iiADuk0vexDdjlt6X6rnIPM/vaAWSAPvg7m32O14hd
+    4D6mdwnuYRucC5ycg1z5ZC0g+33fkdixQJ9HuIlbPD33vvSXXoIUXMZOQMIkhblzBPz2Vn
+    7Ha5MO8EXCdb4tOozCTfzfSXc6MQGpeRgufwg7Qs3KqpNn/Vbvhv7sWjDtPhqOMGV2TXho
+    fhLYxhQuYIqSHePKOBrv13qC0NDIX5Uce4IQBcqlvqWT7EvTBRwO0UPSz2t1/wqZMVf5Cn
+    SeLTQy1cF4VBH0fDdeKaDRkjA/3wX1svU9lp9S8/oBjK8016WKz/aMHS6UQ5HgnaN0bY6t
+    xaibeWvLblU9HiJXGCl4QjQq8Q7Qr1N1Mbuia8GstGHix762UveSr7WaxKt5RQDa94+WKT
+    REql0mFBWF+Zk4InDt1jMYAGzfcfJowE47U6LsU0UVP+dwSwIpxwH0G2GqUD6rwOC1twnu
+    6nOMfTmidcHMDvAxPUsoJqNL/9IqnryByrUiikyPrZUsuxmBlyw/HoV37yo32VLdxhBvep
+    VBZx4EE37nNZMEGfrSEVJvVvvB/Rv5Ojdcee0+nR3b5Z1dC+aT0kKBQp/2Cw
+X-ME-Proxy: <xmx:Gj_jaqSh7hEkubgpWYjB74-ubspQz37C-J7HMabAvLe7G8X6oqIluA>
+    <xmx:Gj_jaj7N-fx7uAIOncAl0IKrd2aD2t_4ZwXY3qeB0UT0gsn4Nj8pzg>
+    <xmx:Gj_jak3WLme5pxtj055C-QzyS0Ylbif5tgmetW7xpsnzy4QLdxNDzA>
+    <xmx:Gj_jagkJWBtj3aPUQBTOXlRTD9KYjJd5p28VQdS-a5WImaSxJDjchg>
+    <xmx:Hj_jauxjz1r3cHXoIDfeJxPTV9VljSckPEplyQ2UGA_vJLqeDvPhijTu>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 014FC32A0099; Thu, 29 Oct 2026 08:41:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,51 +114,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <auM6mSXz-BVIjYBc@gmail.com>
+X-ThreadId: Auj5kB-x7wqJ
+Date: Thu, 29 Oct 2026 13:41:36 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Thomas Huth" <thuth@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nsc@kernel.org>, "Paul Walmsley" <pjw@kernel.org>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>
+Cc: soc@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ "Alexandre Ghiti" <alex@ghiti.fr>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev
+Message-Id: <f7533c95-8b42-4154-b76b-7d0dfb56148c@app.fastmail.com>
+In-Reply-To: <20261023064908.66707-1-thuth@redhat.com>
+References: <20261023064908.66707-1-thuth@redhat.com>
+Subject: Re: [PATCH v5 00/13] treewide: Replace __ASSEMBLY__ with __ASSEMBLER__ in
+ header files
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 29, 2026 at 05:30:25AM -0700, Breno Leitao wrote:
-> Hello Peter,
-> 
-> On Thu, Oct 29, 2026 at 11:49:38AM +0100, Peter Zijlstra wrote:
-> > On Thu, Oct 29, 2026 at 03:27:23AM -0700, Breno Leitao wrote:
-> > Bah, this reminds me I still have these patches:
-> > 
-> >  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=x86/syscall
-> > 
-> > which make your patch impossible. The reason for not dispatching through
-> > the syscall table is that syscall hijacking becomes a _LOT_ more
-> > difficult.
-> 
-> Cool, this would in fact solve my problem as well.
-> 
-> My goal is to make booting with mitigations=off equivalent to building
-> with CONFIG_CPU_MITIGATIONS=n, so we can ship a single kernel and pick
-> the mitigations at boot time. Your patches get there in a different way,
-> but that doesn't matter for my use case.
-> 
-> With "x86_64/entry: Unconditionally use -fno-jump-table", x64_sys_call()
-> becomes a compare tree on every x86_64 build, so system call dispatch is
-> the same whether the mitigations are disabled at boot or at build time,
-> which is basically my end goal.
-> 
-> Also, KBUILD_RISTFLAGS in that patch looks like a typo for
-> KBUILD_RUSTFLAGS.
+On Fri, Oct 23, 2026, at 08:48, Thomas Huth wrote:
+> The kernel Makefiles define the __ASSEMBLY__ macro to provide
+> a way to use headers in both, assembly and C source code.
+> However, all the supported versions of the GCC and Clang compilers (and
+> also other compilers like Tiny-C or PCC) define the macro __ASSEMBLER__
+> automatically already when compiling assembly code, too, so some kernel
+> headers are using __ASSEMBLER__ instead. With regards to userspace code,
+> this seems also to be constant source of confusion, see for example these
+> links here:
+>
+>  https://lore.kernel.org/kvm/20250222014526.2302653-1-seanjc@google.com/
+>  
+> https://stackoverflow.com/questions/28924355/gcc-assembler-preprocessor-not-compatible-with-standard-headers
+>  https://forums.raspberrypi.com/viewtopic.php?p=1652944#p1653834
+>  https://github.com/riscv-software-src/opensbi/issues/199
+>
+> To avoid confusion in the future, it makes sense to standardize
+> on the macro that gets defined by the compiler, so this patch series
+> changes all occurrences of __ASSEMBLY__ into __ASSEMBLER__ and
+> finally removes the -D__ASSEMBLY__ from the Makefiles.
+>
+> I split the patches per architecture / maintained subsystem to ease
+> the review, and I also split the uapi headers from the normal ones in
+> case we ever decide that uapi needs to be treated differently from the
+> normal headers here and the patches would need to get reverted.
 
-Haha, good one, let me fix.
+I have started an asm-generic branch[1] for 7.5 based on today's mainline
+snapshot and applied the series. I'll rebase once more after -rc1 is
+out to ensure this can be tested in linux-next.
 
-> That said, can I do anything to help those patches land? I see they are
-> from June, and I am wondering if anything is blocking them.
- 
-Mostly I just completely forgot about them :/
+Thanks a lot for getting this finished!
 
-I've since rebased them and went back to look for robot reports on the
-tree, and found one weird case where GCC-14 with an UNWIND_FP=y build
-insists on not doing tail-calls which then trips up objtool noinst
-validation.
+     Arnd
 
-I need to figure a way out of the noinstr validation puzzle. Also, lunch
-and a school run. I'll try and post them soon.
-
-Thanks!
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/log/?h=asm-generic
