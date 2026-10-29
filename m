@@ -1,45 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793281612;
-	b=FH9rHjfsO8ZtnVKPl9zPLks/NHrO4qz4OyE3uPuFSfI6HPTj6O2bx2yYrraqd8w6Rsnv
-	 ySq2u9fD0BxytoDB427GONZEUH9brDThzFBAVyVub1FOOlp2ySF+aMOiGT3q/JthbEuve
-	 rgQvYaqvfzEtCVUiZABFBNpuweeaeHeg/Ajv6t4pECdDFbg4Ts1WNdY0WncTsIXVJ0p4D
-	 Z+u3wLkjWi9SOnQ917wix2Z3dgGcQEfrbEuwDbjbuM3WKJD5den6sxfc1WzA2lDpaQwdA
-	 1I6Shuk6hsy0Fz5HknAlF35Nrd48iavXDL2Be66JTifETonmr1zxo1cSMr5OFqIRZ3w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793281612;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=gZNtzP6cs1GRwvoX88SXgu1Vv29qxW7oVI1eNbb/P/4=;
-	b=nAWgQssHbJSeQpRBloF0EKtxoU1qrR2DlSue73UFYdYZ2OMOlHPLw3PKhmuXdPxoqu0d
-	 R/cjT+ILCo1TYiDK9LJboqgu1rcrhN0A1/LkmQl2gX5z8ToUOIjgnf4ZEKWYHyp68tuGr
-	 O5Irdtyr0/EmcyZmdxk6/YjLEju99I9eNH2Uwk0C98hdjgOjWLs2/98Z0wvWxRKbYRlrO
-	 TkXIgvpC3VXQlw/Ma4UmXxFiTx9UqEBjMhoqNKwsVyNb11ELXQiKsN7HJ8bn5DF3LBEcn
-	 hHm+HxVW+YxyySjBDZh1WV0gIb/4XBTreOWre+e4dtvPwtq9WPpp3mFH5UFVWDuiLfQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DdooD9kw;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.177
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793281789;
+	b=pQtscRqDGQY5oDY3YZMakr7gku/jqeAo2x5THRchZZmgl+wpkuDRh4TKvKgcSvlWNbYM
+	 3YDHSQ1LGV7bQ8br2KzgirfWMGWuWqLztlDYj1izhp+Lo34pPy+UMQu4igEvfjhbZF+39
+	 S/O98gGxAJ44bG0T37R1jlW9ji9yZyAHRp5CTEli6kJ86jXDD2q206q+7XflCzif6d0Im
+	 V3P/CwMxd9X+MFHskk5DmxbVGbErvfBge8KLPtUZVo/rnI14/aWRSXOCL0fLlHfQdeg8L
+	 WcSo15lxLf+ju3Lqdgm1UTEQNAVuUF7oQed3zXvW9PTZ61kpXx6MVm+lW1MxOqyCHPQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793281789;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=jdEzrVvS7er6a3IlsJnCTgJPsgC3VSLy9Xk054XJvXM=;
+	b=dd+Ry+Yus6TFvAsU/HAlojFXdIPECufZMsE1u4xTlbdfkAXPeHCmbleIVs9rTLntfG39
+	 RX60kz1xddUlS9qwu/8J8UIFW5H6N7mDP/CGdgXHVVl+BB3iXSqjDqHmgyfgIXpEjagV2
+	 VLtpAh7VW3QsVhobzPQf7M0e0dtV7qL8n2LqOqTHptzf8iKqfwN5ingArp99UxSqodvyT
+	 O8yG2Z535ycsAQWUXZqqosC8H44TNFjM60djZMg0umRjCx0jZsrfV02uWRG+x36NTKnMm
+	 YMxaVUvAgO/BitcnTTKyGtWhbI1Sbr8ngnZ1bVWnj1Y8p7q5EPR0GKpkfBZ3U5IYm4Q==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iRUmJav4;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.177
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CC2606A31F;
-	Thu, 29 Oct 2026 13:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E28606A31A
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 13:49:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1E28606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DdooD9kw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A919F1F031E2;
-	Thu, 29 Oct 2026 13:46:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793281612;
-	bh=gZNtzP6cs1GRwvoX88SXgu1Vv29qxW7oVI1eNbb/P/4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DdooD9kwZKAUv2hnFqN4/UAT96adjHY5DQZxppOWhcafmfRbL2quhLzVByJ6nOdFT
-	 Gsq+vGiT/s/2AYbgWxdXKl8KgGznlsW0eFilX+M2IwG581DZtbI/7TSK5Ua52utcKT
-	 oP4g9pwLK/hikbek9t/Z45LXWY9WJRDZFyAKvFOi5iQLl4rZZbextSlPq5d2xSbVr1
-	 SW5N/+cPADmNrpQyRI+ZnxNpaILr3oIjOfqa8j9o/6J7VvzPQMzsTW84gKn0TTwhHX
-	 C0eoOCDeiu7hIkAJrdpEVgid4P2/yr5cARmnDPXqQ/mhssDWpFezoQ4kZmjzAvfab5
-	 m6mXKZNKuqkWg==
-Content-Type: multipart/mixed; boundary="===============3728746382167177240=="
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iRUmJav4
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-53644ab1f7bso21356721cf.3
+        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 06:49:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793281788; cv=none;
+        d=google.com; s=arc-20260327;
+        b=N+GYrcVT2EO/Wg4+4uUo9oPwWBeipT+z7ozBIZnjlMQgGEtqujN08EF3Nkqcj34ywv
+         uQKXs4RlFOAprLmc9kzW6OQ9lBHTJ3TtOHmA+VvjnoztARmdd0Ep0o8eDGKiF+aH6An6
+         +jenoC8GoSpe2GS1grz/shMvej8qdcdmKhXhbdsH7Ny/nYFvmQMepYalf0GGxzo0tbu+
+         YXDRvdS5f+RE2hQjeTT3daG+bardAE4Ue5982m+muZPoBja1A3nvm6AZ041dluxVj9wB
+         lKx6ldYKSf4uYasJMyq6HWIk/njwdSW679qvJk5cHS+9MokY/81uk41SMDW3LbA4fU2m
+         X8Ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=jdEzrVvS7er6a3IlsJnCTgJPsgC3VSLy9Xk054XJvXM=;
+        fh=4h9DgpvCdpsckona7i7KW9Zi4SEWSC9k0XA8A7/+/5c=;
+        b=r/nfyBH3gCVW+dhC8NjDtkHo/c6eTnwHeiObyy0DXUo5bdTx/NdusYEsEGdyNTz/LE
+         sBkPXpjuq7HxtdX1L6P8fldTMnFTNeBW7VcTuzbY+smLPgaTbUU4lElgl/8tVoij7peG
+         0yK5Q2A1laZefk8RRD9y5Je8Q+3d6dw77qfUp6dLBvHG8OdNFf4LXIsrbD6IPo1tMgOx
+         wdo/dMoqhnxwrDsnkCBSoARQ3lqp21XWtEbpS4gCT20G286a3KO4p3nL3JXYoNA8rMWE
+         34yTuVxk1em0N6ujzIKOPF4+946dS5E4W1OIn+ssttaAbiRi3bl59vtZliorI4Ni1q8w
+         UX7A==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793281788; x=1793886588; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jdEzrVvS7er6a3IlsJnCTgJPsgC3VSLy9Xk054XJvXM=;
+        b=iRUmJav4imPeaDLg4Ho5sPg7k94pb2pKA9pz18BECoTcWfiQORFkoe2gVTIIzvgDzk
+         mXKjNVU/nmqwhyfZu6rszxgcbWERAWgJ8uKrbnmWSL7qIzTafxM9+5wU6iXL94h6CFJy
+         k8d5TtUUl0TdZY/Wlovo1jtkVyHRWQSaadxjo5W9qdvvMLLBgVdUJ+FkZUXHsJk+NMmS
+         TFauL4t8E/F+tnF6nMsNH0qNh0zw3xylEv3zQ7ZZ0UDpjYKLbVrhlj85Lc4E696KDBzj
+         WeKvOaw7aE/1ma+dR01HoywsWv1NCG0WwrDAqk04gd76XDvwXxHtGXrMtpL37vPV4AW8
+         eD2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793281788; x=1793886588;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jdEzrVvS7er6a3IlsJnCTgJPsgC3VSLy9Xk054XJvXM=;
+        b=nTL/yCV+roLd4snYagOv2XSIdbpdGGeVtpimsrFsSrdW+RdHhYmTfih76itNOdjnZa
+         qVca1ApEVDAiXwn7l1kJGDFdYwwG8jm1y7GD0BAxmQopeQt0lL1yH3j38o+kf7UY0RjD
+         BG5iLEl4y9Bd3qv+5j+opv88mT6UXtAuE7Ies2ULWs3xDOCP+2cPCSKtjAcIJFA/tCtl
+         0s6+jCprxR7w7hozBSuMzUshAIJwjL7hqJKAVjvF9JdfVe1xHZdXP2Sk27BJeBNLChEO
+         lR+GWzA09Kgzjl73wc7+aXD2bA+/1xbMVWvCTEnOeYstCOAlFCRwpUarCGSCsG45TcZe
+         gopQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxuAIfn/SjCEU7+byMnNBPEHMVoGS3fx2QuoGaFIRWDFVE5M0ka4RaqH06uITy2Z/lflSjE@lists.linux.dev
+X-Gm-Message-State: AFq9FYILkvoVaE8f89mDWEeARty4FvlT1xwjvtR+Ni0tTXk7uIjEmIyb
+	RIqXiDKrPVkVydDiCksceWGGCk+0kJhFHE+lC7MC5lrlvADcncPfEwd3Dwz3J88+FR9P4xnVlnF
+	9V5ZG+58xhcqltL9TTxW80EznZ3tS+nxGyPYmL2y4
+X-Gm-Gg: AYBFou1qhigRLE85tjlbKodJYM7PnAx2xnfHUEAai8PSBLDOcj0XuCFtkhEWDFnlCNX
+	1VlVX/sEwxUsJXCJ2E71cBKrb8EkP9b0y9rH9nohpfO+JZk12/ug8Nu9cGkcR1PC+C162UrqCKE
+	39TV3EQpiF4H1asrVu/brW3uRr77l9XrDUzLSZNcJyfxCo7iRFhJHNeMcMKXyvQyv9L8qavaMWd
+	Vr07YxmVygOzIUzM2L0K847OZQ888AT5qOZBNCxsJsKXfUjlA8GndKMnumB1QjEp4Z72ZRA7KuB
+	Z8qhaoayLKRx5cYKvg+cx8gAkz1jqHcF1REqPjNsq25GybEVv2t8PJJduAKoDsv6Q0upXYg6b7e
+	Kd50eiLWqkZHvqcFFhP9cnRS/s0jb8Rv8Gz7m9D2I/AiFzPy19QNAHEabcbH49lrUiw==
+X-Received: by 2002:a05:622a:394:b0:536:702c:f8e4 with SMTP id
+ d75a77b69052e-53fcc9c38e1mr83446311cf.49.1793281786016; Thu, 29 Oct 2026
+ 06:49:46 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 29 Oct 2026 06:49:45 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20261023172347.88443-1-griffoul@gmail.com>
+References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
+ <20261022-gmem-alternative-providers-v2-31-5dd1dc6c660a@google.com> <20261023172347.88443-1-griffoul@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -49,114 +109,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <6b3ba80a4fbae6a9b693979e47170a15ec5917f5fd5c92520077aa99b8614a5b@mail.kernel.org>
-In-Reply-To: <20261029-bpftool-plugin-v3-2-87af799da40a@gmail.com>
-References: <20261029-bpftool-plugin-v3-2-87af799da40a@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] bpftool: Make the LLVM disassembler an optional runtime dependency
-From: bot+bpf-ci@kernel.org
-To: socketpair@gmail.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,nathan@kernel.org,morbo@google.com,justinstitt@google.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,ndesaulniers@google.com
-Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,llvm@lists.linux.dev,socketpair@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 29 Oct 2026 13:46:51 +0000 (UTC)
+Date: Thu, 29 Oct 2026 06:49:44 -0700
+X-Gm-Features: AclHuK98-PJmC38q62LJKPyoT2Xn1t02jBqXVrJ0iSGV7iV-HBBvt2AVL4ugH5Y
+Message-ID: <CAEvNRgEsGrhrRk2DcbrMNY3zWko_eXP3-FA1dGRSGYphQtBpXQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 31/50] KVM: guest_memfd: Support getting PFNs for
+ stage 2 from providers
+To: Fred Griffoul <griffoul@gmail.com>
+Cc: Alex Williamson <alex@shazbot.org>, Alexander Graf <graf@amazon.de>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Alexey Kardashevskiy <aik@amd.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+	Ashish Kalra <ashish.kalra@amd.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Baolu Lu <baolu.lu@linux.intel.com>, Bill Wendling <morbo@google.com>, 
+	Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Christian Brauner <brauner@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Connor Williamson <connordw@amazon.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, David Hildenbrand <david@kernel.org>, 
+	David Rientjes <rientjes@google.com>, David Woodhouse <dwmw2@infradead.org>, 
+	Erdem Aktas <erdemaktas@google.com>, Frank van der Linden <fvdl@google.com>, 
+	Gregory Price <gourry@gourry.net>, "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
+	James Houghton <jthoughton@google.com>, Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jianxiong Gao <jxgao@google.com>, Joerg Roedel <joro@8bytes.org>, Joey Gouly <joey.gouly@arm.com>, 
+	John Starks <John.Starks@microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Justin Stitt <justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Marc Zyngier <maz@kernel.org>, Michael Roth <michael.roth@amd.com>, 
+	Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolin Chen <nicolinc@nvidia.com>, 
+	Oliver Upton <oupton@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Steven Price <steven.price@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tarun Sahu <tarunsahu@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	Tycho Andersen <tycho@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Will Deacon <will@kernel.org>, Xu Yilun <yilun.xu@linux.intel.com>, 
+	Yan Zhao <yan.y.zhao@intel.com>, Zenghui Yu <yuzenghui@huawei.com>, x86@kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, Fuad Tabba <fuad.tabba@linux.dev>, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
---===============3728746382167177240==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Fred Griffoul <griffoul@gmail.com> writes:
 
-> bpftool: Make the LLVM disassembler an optional runtime dependency
-
-TL;DR: Nits only: the new generated llvm-plugin-dir stamp file may need a
-.gitignore entry, and the bpftool man page may need updating, since "llvm" in
-version output now depends on the plugin loading at runtime.
-
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index b0f7168e7943..dc8e4be86296 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-
-[ ... ]
-
-> @@ -290,6 +300,21 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
->  $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
->  	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
+>> +	int (*get_pfn)(void *provider, pgoff_t index, unsigned long *pfn,
+>> +		       int *max_order);
 >
-> +ifneq ($(LLVM_PLUGIN),)
-> +all: $(LLVM_PLUGIN)
-> +
-> +$(LLVM_PLUGIN): CFLAGS += -fPIC
-> +$(LLVM_PLUGIN): $(OUTPUT)llvm_disasm.o
-> +	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -shared $< $(LLVM_LIBS) -o $@
-> +
-> +# The plugin directory, $(libdir)/bpftool, is compiled into jit_disasm.o.
-> +# Recompile it if libdir changes, e.g. on "make" then "make install libdir=...".
-> +$(OUTPUT)llvm-plugin-dir: FORCE
-> +	$(Q)echo '$(libdir)/bpftool' | cmp -s - $@ || echo '$(libdir)/bpftool' > $@
-                                                          ^^^^
+> Should get_pfn() also return attributes of the frame? Only the provider
+> knows them, and every mapping of the frame has to follow them. Two
+> examples:
+>
 
-The new stamp file $(OUTPUT)llvm-plugin-dir is a generated build artifact,
-but it does not look like any ignore pattern matches it.
+I agree with you on this, we need to let the provider tell guest_memfd
+(and IOMMU) more about the PFN being returned.
 
-bpftool-llvm.so is covered by '*.so' and llvm_disasm.o by '*.o', but
-'git check-ignore' finds no pattern for tools/bpf/bpftool/llvm-plugin-dir.
+> - Read only. A provider may lend a page that the guest can read but not
+>   write. I know you dropped this from the sample to keep things simple,
+>   but without it guest_memfd maps every frame writable, and there is no
+>   other way to make a guest_memfd page read only.
+>
 
-On an in-tree build with a shared libLLVM (make -C tools/bpf/bpftool with
-no OUTPUT), the stamp is written to tools/bpf/bpftool/llvm-plugin-dir and
-shows up as an untracked file in 'git status'.
+I guess read-only would be the equivalent of !VM_WRITE in the VMA world,
+yes I think that should be supported.
 
-tools/bpf/bpftool/.gitignore already lists the similar generated file
-FEATURE-DUMP.bpftool.  Should this patch add '/llvm-plugin-dir' there as
-well?
+Other than read-only VFIO would need something like "cacheable" so KVM
+knows to map MMIO as uncacheable.
 
-> +
-> +$(OUTPUT)jit_disasm.o: $(OUTPUT)llvm-plugin-dir
-> +endif
-> +
+> - Aliased. The frame is also reachable somewhere else, e.g. a ring
+>   shared with a device. Such a frame must not become private; see my
+>   reply to 34/50.
+>
 
-[ ... ]
+Are we defining "aliased" as something that will never change once
+the provider considers the memory in-use by guest_memfd?
 
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index d15fec71b64e..321e928d651c 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-> @@ -124,7 +124,8 @@ static int do_version(int argc, char **argv)
->  	const bool has_libbfd = false;
->  #endif
->  #ifdef HAVE_LLVM_SUPPORT
-> -	const bool has_llvm = true;
-> +	/* The LLVM disassembler may be a plugin that is not installed */
-> +	const bool has_llvm = disasm_llvm_available();
-                              ^^^^
+Actually, I guess the question applies to read-only-ness as well.
 
-With a shared libLLVM, the "llvm" entry printed by "bpftool version" and
-"-V" now depends on whether bpftool-llvm.so can be dlopen()ed at runtime
-rather than on how bpftool was built.  The man page text was not updated
-to match.
+I hope we can say these attributes will never change once the memory is
+considered in-use by guest_memfd. Otherwise, I think we'd need
 
-tools/bpf/bpftool/Documentation/common_options.rst, which every bpftool man
-page includes, still says:
++ Some equivalent for folio_lock() to at least hold these attributes
+  constant until the mapping happens
++ Perhaps some other callback like .can_convert_private() for the
+  provider to dynamically query.
 
-    Print bpftool's version number (similar to **bpftool version**), the
-    number of the libbpf version in use, and optional features that were
-    included when bpftool was compiled. Optional features include linking
-    against LLVM or libbfd to provide the disassembler for JIT-ted programs
-    (**bpftool prog dump jited**) ...
-
-In this mode bpftool is no longer linked against LLVM at all, and
-do_version() -> disasm_llvm_available() -> llvm_load(false) can fail in
-llvm_plugin_find() or dlopen().  has_llvm then comes back false even though
-bpftool was compiled with HAVE_LLVM_SUPPORT.
-
-Should common_options.rst say that "llvm" is reported only when the
-disassembler plugin is installed and loadable?
-
->  #else
->  	const bool has_llvm = false;
->  #endif
+I'd rather aliased be something along the lines of
+"cannot_convert_private" (a concept closer to how guest_memfd should
+handle the information).
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Glad that we're converging, thank you for doing the rebase!
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40881490673
---===============3728746382167177240==--
+> A u32 of flags, with 0 for today's behaviour, would cover both and
+> leave room for more later.
+>
+> Fred
