@@ -1,105 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.182
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793278364;
-	b=UEFbLLocKIrCanxv/N0Y4t8xS16mxCOmFRrjv9p3cqrhl6pO4378Qbr/6EoF5ZsfJ5MY
-	 Vn6KMhi0qVSaZEGVF1c2mCeMBPZyGCMcNdZMpOfmNqNR1XYy6rqTbH28ia2l6G7+SmfzN
-	 XVDgB+Dey6hToqgkj4qiyxQbviHBUpdRLIabsZugfIAi37M/9U1I+4PkCmuHhXrMUZS4r
-	 Ab9FfRfY4DvFw4ONvmcKEav2Dj+iqSZoevr8YfUX7nN9x91SbA638a+pjOqgy4K/gapCO
-	 566f3EVuz8fRT5jGcnhCGCR2CEJlhAAl81qvrUkvabGS7QMvc9j0MuDfD1qHpP988lg==
+	t=1793279032;
+	b=SAG6Ig/3Xj8c+EWwpkmHU2BZhPd1ZXXL7d1iNvklNuHAr+rKfYGsqWl2ENwdJQrJB5ii
+	 RxMisedn/4dSIfu/6rrWMhm/DoAFWGCV0ZkccLYw+zXUY9EWJrS9cNv7DC7/audv+hmsK
+	 abD5XJAPhrx5X2zCWFGTsUMj/ygSzUyaG09ARhTqdyKYawW9fs+HnJOk1PsPAsU/le4MC
+	 3HGOUKi+EcOZAbGyaGypeqi/xAQvADTlLK5uhIHrqNiOLPLMi1yPGXkKG7lt0giuLFQMT
+	 elgtUsIicYZl15WtF4xlyEcKFUZDxX2toR9gqn3HNmh9S+bzhy14MdKaHiXMpOHOVUQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793278364;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793279032;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=zf2xViTkAeLxB49iEkeFNan7sx9Snfm1yj/XBegFK/Q=;
-	b=VXhVzT21v63IfJGKGdjfFYMFcW3ZEXNTOZXUHg96mY2lQaxHe2b7qNeUSJsMoXLf9XRJ
-	 MaXejozlIgM7ffgKPhA1kDLTU2JHnxQZlo4dKI66wMH0aNMiZjC1pyxhK9QeDcGpptxDU
-	 ZU2ij9pzj17l8O3lc9CHUfHUkLcW/3X/mYa2toCIXkUCpqw0xzj5Hfg6hlSjIcCcMHC0m
-	 RSnns4Ihmiy1gNm9UfAswN5UNENGl8AY6Z+nlmWzQwVKjevoQGiowuXNWSafhriDFDY3d
-	 b9Xrm1EMqeQ2YLVQhH/xVo1mpmxmnjM2zguElhY77GbfzROocVFgqruUdGmGx0sbljw==
+	bh=KF90/0GARuMWHyMTMB3Xwv0e5GgnH85LGW7qmrj44J0=;
+	b=UUVmhY+A/YaGY49qMkfpT8IJhkfy2sZu5jEOKlSpn4KnzlugEFKzs03ubgIEZA1aLrvG
+	 aHYuV4/raz9aypebLRQd1xUq01OLHcwQtdFGjBDqedGnQCe9kpnCUiL3VqColCEXls2fe
+	 jSY4NZk/zv7dPAREJQtjRXllaZaMX+PYsO19RXsTybXTMYZu8AkO5cgwvw4/cTGetsjH1
+	 RDsXBJAjaLOkR8lElJ3I5J5nnwhw1NHZR/ADGwm+0tIo1XMApLon4xjvKXuuepLGcgl0G
+	 gYSHTTsXVcgswoExkiLknYliDL9eeRZGg+VbTTWwZVhsg6W8yP8nFq+DIVo3T8zJzHA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AV1Hgm0i;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.47
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CJ7okvH2;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.182
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F78606A31E
-	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 12:52:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3F78606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D04606A320
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 13:03:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99D04606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AV1Hgm0i
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-91c7b00a75fso23335516d6.2
-        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 05:52:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793278362; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CJ7okvH2
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-5365f9a04c5so31637811cf.1
+        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 06:03:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793279031; cv=none;
         d=google.com; s=arc-20260327;
-        b=VSXHydPcc2FfgrkH8kcYd7LO+uV65qFutV8U17zLmLDpABtQRJBeOgzUjYlE/u/GPB
-         tXuKIslHWHxkWYQkvdUXhj7706XOWxFCfKhlE7NZ+RWWOzA7VKWe49dFRTWqsS9BOzQL
-         u0x8uFKmu/VWMsagstH9FJn9sDCG2+LiRKBqNLAcfVoSsR34suDzoNYJnq2qLvwCWKgF
-         5dirnFuTeDd46WZ8AQbActAJIm9VwA2dyv61glgBhD7M8myDYM/cVptiEB8D1tb0QwFU
-         nz0Kp9tVncrTHe7JgIPxhAGx41aJ91mgSiPaGFmB+rpjkDU55UdxVPuxrXDcqomNYiHF
-         97xQ==
+        b=euxehunTL7VKX22hXuRcDXPJ+FsvGLSFFaAMwVXelYNJxZzC/WRfkAu0RA/oRPxFs1
+         YQcVkb6Kwhtl444/I/c6C2BZf0hFN8ttAopwn2+WowoxRoj+QpO3vR7DuwcmaoKw8/SY
+         0bE8j4TNFKQO1aqd2Q2o1hsx4V5C/YvpCjaRW5NG3pKE3yrPcc6shXoSGEnDfIklsfV2
+         9QAAdHu20Qd9nIGsdQSO2wL51m+Ly3ehtf23lDzNWkCjGvFCB3AYe4QmATTVPAhoFKMe
+         CVO23f2jF6Wmy84GXqMR9J8R8dM9J7mF4OXX3Ilj6sktwxfwZ2sPFRFQ5LcM0juyY8iF
+         Ur/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
          :from:dkim-signature;
-        bh=zf2xViTkAeLxB49iEkeFNan7sx9Snfm1yj/XBegFK/Q=;
-        fh=ttFeWcNugsB7v2P2Xw9R+XGyRUfy0pDDJl1TLFAg22E=;
-        b=UG17pupQ1Pz/4glfi6hTkWSASP47R7pDzm/wRKGdt8M2qhJah9X6LkD8NrqfiSrp9b
-         J1VcwQMjLAXSRN0k6JcBNTh2uAgllJLlu1u/NxGVm7Ek4g+QYNPwZ3ZxGJZuih4pfEOy
-         /dKC0Pbext5mo3RBOeGU8bC1Nz65DFfnOACeZ3DaHGwKsmvvTh0uJ8MacvD+dz1QZpqN
-         Wj8GMWyQ4mczLzwdgwj/XxBmg3X+18ubY8w/9YIruIZXgBHXTWBne2xIzMZEiARgQKxL
-         IYTtNzpIWN7Co7npErBymuVEp/xMeXHQOd680oyxzn3iD1RmFs9SOSNZXqsVYOpTER4m
-         b0IA==;
+        bh=KF90/0GARuMWHyMTMB3Xwv0e5GgnH85LGW7qmrj44J0=;
+        fh=LKg3U5CF60AYDnpe13S9/goU38XNlhOtDkakSnhoykU=;
+        b=Z4ML3NbQJWTE45HdTRNf9VwIQJ773ohLsFKbGDxOM9+ZcK6XTMQD2O9J7cJQpU0ne1
+         BxYCBD633i5EozVHaAC+5YmKieqnsFyH3IROj3xrH/HSDfc+ZNqAv/nGsyqh1X+Zeccr
+         e1g8G9JvPSYDi2mWQbu7utPZb2uxhGMvpp3W2sYTTWc4qqxW0gf1WHwtVv0YuUhziFuc
+         TvTTvZZrcAer+eGZ/drSqf/5tKvlLjxFpgMqRNsL0ZqWKjyZNicXOgjxsaiflVMrG94K
+         nJluFLtmHh9agVsagTeva6s/27/uCp435FFoZPKOiN+pXLywB3HWsVAwaKA+xlPbhgcT
+         Pytw==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793278362; x=1793883162; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1793279030; x=1793883830; darn=lists.linux.dev;
         h=content-type:cc:to:subject:message-id:date:mime-version:references
          :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zf2xViTkAeLxB49iEkeFNan7sx9Snfm1yj/XBegFK/Q=;
-        b=AV1Hgm0iFHWzZGsDVHXCb2IYpeVv6EW98uFBcMPayNo5zowTitCRsaZEsM86QmXaj4
-         hchpPqMY9PX1QQ2cPWm7vibDab93DeznX5yk7hBYy2fD7m6S9H37ihFFsJVywMnUn75w
-         hojAZQ+/1QdS3oLsp7dKNIsW+idqKsMz69t3b7KPR4Qk9zpRsv1l4rI05Ii8mXd52ucw
-         CK+xEBLrvAhnttPArV1xrrGrmOmUEPHf9svnbV+VbJXuZWsb0/+niZ1X5HYCsaKiAoKu
-         r5d7BhOrxqSShvA728f9VawWElGawpqef14vxNHyh+lc2pkaviE7a8Qx3izPK2q/RAK7
-         ajnA==
+        bh=KF90/0GARuMWHyMTMB3Xwv0e5GgnH85LGW7qmrj44J0=;
+        b=CJ7okvH2KOmyou6LsTFV7UZ/bM35c/mXkHSaWH/tz/FN2UP4pxV2fMu3lbTmVJXgyj
+         DTt+QW8pQ+2HO17+aqj2jHnjOUteE9Sg5tnXk0OSi2328kTsRUvhJqvEElruiDP7yDtW
+         o2nrpH5FfJ8XVJhaLiqik52doHvEyjnc3Uigq1Fzty8oIZmFizdIBVOnSlDfx7eiybWN
+         M/Ceq/7EjrdpWh1VtIDZs9AVzrLtAiHTs5jNWEIO9pXbdapqKWwMBst8NKC19FVqoM9T
+         fWQTas/GOTh3m6EIx79hZhmO9KczA2sG498QeUaZxkhbYl97ipCaujNPDxzBlxH8jlST
+         DOgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793278362; x=1793883162;
+        d=1e100.net; s=20260707; t=1793279030; x=1793883830;
         h=content-type:cc:to:subject:message-id:date:mime-version:references
          :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zf2xViTkAeLxB49iEkeFNan7sx9Snfm1yj/XBegFK/Q=;
-        b=ZTuB90C96NkQtHCMUqJV2bRDwPrdd4tvdNr+7fCf3Di4RkNMOKLZV0BWffQp2xd9yK
-         LLS1yBYn5zfHQgqvtx9bdB6v/Bf6W8NYic7pCpyRwbZ/W2MFbtxQ58l3kMYcUU5Ngpba
-         9XiIx4eFDv19Xe502zfrILcUftMu/faHUj9jVT0F5m6Ml+9LpbnCAwZUP/PSqN/iJJBi
-         PXc3iphlYcbz16NDpCFx+RECu+ZD26zc4GQBviypyTHkVCpMdaBA3TZGNrETt5/erdgQ
-         /Uz2tkRAGzu07NDVjgEcNj8ahdjNwPy7o8fQ4YxGWkTXO2h43qF2mAFFYIx6JXTlXjB5
-         se3w==
-X-Forwarded-Encrypted: i=1; AKwUvBzi2ji5tb80JVWh7du5kW8lfbyhNl7crbXzLx2YvauQIe+Jn4G3qYmcDLg5a92CVtFwO5HW@lists.linux.dev
-X-Gm-Message-State: AFq9FYLizoLHJ3ISfxNsHZVMbtR+zNc2loWjhQ4xnYslCKFaUpemnpRo
-	XutL8OKnNzPejFt3B7LxEl9voAJBMsBqrFqzU4d1jRug6U0eRHPPhFLqW6E/EXC0zVEUPkevReD
-	q/dYvvlOohjhSKuRIfXE4p2GQABec8jxqK7gxA7AY
-X-Gm-Gg: AYBFou1u22B/u61cqPqgOlbD3wBiosbtLVYA1UI1ShoOUCXchxIC9O8v7nP8SFH6Zk3
-	59v/KNIfkKFKjETMZJWWCd+lAIL/axbHdWqDa2RbvcGI+820S7dlbutlPiI6Yy4gcUBH1gtNtNu
-	wzYd23QeyT24BWsoCpJTWlxWOnfMp7SeeeS4EGfrg/wklwic/wdJpC6871jWHVU4ReK9Rn5MbYN
-	VEIdXn8S5tc3nwSWHV1WCltgbluFHFtcuqBrCtOzAU1llD1To3/BYK5KElgZlDnnv2NucDjtgW9
-	yS8nqMRp194Hmu46ZYJ7+ZkvbxMfb2hPR57lycRaIjfC/Lh/xOtea89p9TkdcG9blZDYlwBOs6m
-	BFxHl8UB4Gh2Kpga+Bg+tOL7RyJ0FMyd9bfsx+zZXnTYbb7QlzPZr+Qplsrr/NfkGlA==
-X-Received: by 2002:ad4:5747:0:b0:91b:9496:6a18 with SMTP id
- 6a1803df08f44-91c7d1ae53bmr83041376d6.37.1793278361370; Thu, 29 Oct 2026
- 05:52:41 -0700 (PDT)
+        bh=KF90/0GARuMWHyMTMB3Xwv0e5GgnH85LGW7qmrj44J0=;
+        b=a/iuOiG01JoNVsbWH5o1BHY69nden6nNVyPh9S5A1vpM5cBRVLDuSbDqIzKf8OdAme
+         TLubF7akaum3M9sb2ty2+SUGqME7qyJAjlumRPto3kb3wdOfjX0OKLF5rRbKtDiNNVRc
+         obABieQCniKVORb4VkdYZBia7ArBN04AwTjlCtlA5uFO3H1KcgH32ZmDmfQb5bXvPtct
+         ZZHy/SyXsycMazbZR9KsnoWahv1t/sqy22ux0gSv/OipJkjll4V8P7356BKM2ruHCCZ2
+         TP6eWYo8xE0n1/UIawrSXYmiZpW9kHB6AvQ5tjzJ5Ww1MnjdFrzSDc2R7PjdJLuAGndS
+         PHfA==
+X-Forwarded-Encrypted: i=1; AKwUvByhzo8lpzLTa5rThgo+K1lNdeVWR14BfVEBBB97U1vM+cPyaBhsUQtWyHJp9xiCF/zTJvg8@lists.linux.dev
+X-Gm-Message-State: AFq9FYLRTY/gvtDPWgidF1tpC6ajZ/PmDKOWTuTPCGzCxzPUtjIelxD0
+	XpJxBdzSCvuUcm/GlO6STKzt9+CJJnpDREmSAw/PJ/4o6tDRFvEDPAxz/EDHLF2dILqQ0Lb/Blq
+	3UyvUOEwAtpYmUpzy0ozm7dV3IgI79FgcDKCSXo+X
+X-Gm-Gg: AYBFou3I6nK7R1qhS3cZ55yQsS/7WFYcI5hDVaPZTzrK9YIqx3v1M+6rgJH1eWitybC
+	5Dm5rRlpONilfbWXLL4y3T7+A5LLbwoMwHbyiqlErMkHpyX39/Qg14roOwaiBSGKmf2mCQmMfGA
+	xfCbtX74/pTr40jN/Ne1K1VKRoHyHqVadzpKRp4CSlijCiJMhuy5dDhkddcR7z0ggSNaa0whzgp
+	Awk8rBvTyDRkldcdXFSCFMxldQcVKWGhHJ4LyMlkzmmbfAuJaZhSx+98ZnX9Q4MKzmq+iFH1f2E
+	5tT3+9F2XawNL6jkt+1BtYQiXhXTtBD7L+6ATAnApkrbmCfg9HRDle4mUJXe1Z0apXh4BZUE08L
+	+4ndZOQQ+JJ46qH2yDKNCMcQ8MJVs0sNv+kQ1Nmm7ZC0xaphU7Sw=
+X-Received: by 2002:a05:622a:528f:b0:537:b9f5:e05 with SMTP id
+ d75a77b69052e-53fcc7cc0camr87903901cf.69.1793279029444; Thu, 29 Oct 2026
+ 06:03:49 -0700 (PDT)
 Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 29 Oct 2026 05:52:40 -0700
+ HTTPREST; Thu, 29 Oct 2026 06:03:47 -0700
 From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20261027154649.91571-12-griffoul@gmail.com>
+In-Reply-To: <20261027154649.91571-14-griffoul@gmail.com>
 References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
- <20261027154649.91571-1-griffoul@gmail.com> <20261027154649.91571-12-griffoul@gmail.com>
+ <20261027154649.91571-1-griffoul@gmail.com> <20261027154649.91571-14-griffoul@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -109,11 +109,11 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Date: Thu, 29 Oct 2026 05:52:40 -0700
-X-Gm-Features: AclHuK85LBuCmtDdaaOWg4OEyIMQUVa8mDtLyPY6JdCBNPTut6N07RXjZEiRQWQ
-Message-ID: <CAEvNRgGn09qrCZjUM5sdqQohPWE62GN4c52iK7ZV_gi5wro_Ww@mail.gmail.com>
-Subject: Re: [RFC PATCH 11/14] KVM: guest_memfd: Add kvm_gmem_restore() for
- PFN mode providers
+Date: Thu, 29 Oct 2026 06:03:47 -0700
+X-Gm-Features: AclHuK_J4_B8WHMj3lc3Bqk_zMBRzyMWVypxyBk9aFiFYwwISWnD_-KRrJmOcto
+Message-ID: <CAEvNRgFYecSKycFLkxwyK7gWZqKTXTPJVetSZm8YBbo0kg9tTA@mail.gmail.com>
+Subject: Re: [RFC PATCH 13/14] samples/kvm: Back absent pages on demand in the
+ sample provider
 To: Fred Griffoul <griffoul@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>, 
 	Sean Christopherson <seanjc@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>
 Cc: Alex Williamson <alex@shazbot.org>, Alexander Graf <graf@amazon.de>, 
@@ -155,72 +155,21 @@ Fred Griffoul <griffoul@gmail.com> writes:
 
 > From: Fred Griffoul <fgriffo@amazon.co.uk>
 >
-> A device cannot fault, so when a PFN mode provider gives frames to pages
-> that had none, or makes a read-only frame writable, a subsystem that
-> maps the file must be told.
-
-Totally makes sense that guest_memfd needs a way to actively map pages
-into the IOMMU page tables, rather than passively like for userspace
-page tables and stage 2 page tables.
-
-When the memory is owned by guest_memfd, on a to-shared conversion,
-guest_memfd would do the mapping for IOMMU, which can't handle faults
-like Stage 2 or userspace page tables.
-
-> kvm_gmem_revoke() does not fit: it would
-> zap the guest's and the VMM's mappings and reclaim frames that a guest
-> may already use.
+> The sample provider fails get_pfn() for an absent page and keeps its
+> frames on a punch hole, so tests cannot exercise a provider that backs
+> a hole when it is asked for a frame, one that backs more than the page
+> asked for, or one that frees the frames that a punch hole gives back.
+>
+> Add MPS_NEW_FILE_FILL: get_pfn() then backs an absent page with the
+> whole 2 MiB block around it, and put_pfn_range() makes the pages absent
+> again.
 >
 
-I'd drop this paragraph from the commit message, kvm_gmem_revoke() is
-the complete opposite and isn't a candidate at all for the goal, which
-is to notify importers that a page is now available (and they can map it
-in).
+Can what MPS_NEW_FILE_FILL is meant to illustrate be illustrated with
+the ioctl that sets memory present?
 
-> Add kvm_gmem_restore(), the counterpart to kvm_gmem_revoke() that the
-> sample provider leaves for users that cannot fault. It only updates the
-> exports, under the shared invalidate lock.
->
 > Assisted-by: Claude:claude-opus-5-5
 > Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
-> ---
->  arch/x86/kvm/Makefile       |  1 +
->  include/linux/guest_memfd.h | 37 ++++++++++++++++++++++---------------
->  virt/kvm/guest_memfd.c      | 35 +++++++++++++++++++++++++++++++++--
->  3 files changed, 56 insertions(+), 17 deletions(-)
->
-> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-> index 25fb3d6e2032..3255280884b5 100644
-> --- a/arch/x86/kvm/Makefile
-> +++ b/arch/x86/kvm/Makefile
-> @@ -63,6 +63,7 @@ exports_grep_trailer := --include='*.[ch]' -nrw $(srctree)/virt/kvm $(srctree)/a
->  				-e kvm_write_track_remove_gfn \
->  				-e kvm_file_to_kvm_fn \
->  				-e kvm_gmem_revoke \
-> +				-e kvm_gmem_restore \
-
-provider --1--> guest_memfd --2--> IOMMU
-
-2 is definitely required, but why is 1 required?
-
-Between the first .get_pfn() or .lookup_pfn_range() () and
-.put_pfn_range() or kvm_gmem_revoke(), the provider should consider the
-memory in-use by guest_memfd.
-
-When it's in-use by guest_memfd, then guest_memfd should use --2--> to
-map into IOMMU page tables as necessary.
-
-When it's not in-use by guest_memfd, why would the provider force it
-into guest_memfd?
-
-If the guest VM knows that the page is now usable (some other
-communication channel), it would touch the memory and do a .get_pfn(),
-that would be successful this time. Perhaps that's when --2--> needs to
-be performed?
-
->  				-e kvm_gmem_export
->
->  # Force grep to emit a goofy group separator that can in turn be replaced with
 >
 > [...snip...]
 >
