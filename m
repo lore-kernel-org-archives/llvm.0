@@ -1,78 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793299871;
-	b=y5X8TD08x/pRSp7UzddIw8KEQZ96IhAbff0oMkkCYEPOxgBA7xv2Y+kj9A6pAl+hvqoi
-	 bZHKe7zMNxxzgTxWWgexjVu4j7gvd/gfUwAirE0oEibKG9apv5HQkPLKeZLJ1be9brsGZ
-	 wjM1Fl/81wbhQ82ScPXseiBxOd6wg9+/1u/1EFTKsL9FiYdjBAG61QUuVbpnLe7L1sn+d
-	 kiGCj9jzJ9jnBu2SD1Zi/d3H+dFyaqhxvgDvmlP5y76h8Dqj8onCf5HSxggz3T7m9FVMz
-	 tfAPkNHy3GE6iiKb5vdd/mur4BftsX6G9C0SB5YgnqCCFSUb5bYti6m8Mb6Jee/GJuw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793299871;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=+nNBvGC3LE+4yf9NqrZuh6V+wkr3F4ReuVmyHCKbe8Y=;
-	b=ySgotkytHg8kjXovLA2ySjUsId78kbxAGwsj54zTL7IwAM19aMSdU/3L9R12MKm7jgC+
-	 X3VrxgrEIHXXj2Rid1zX7RgIcitc684jI6+sz2qQXaM+1C4yRaA+n9+aTwfuz8/lquaQ9
-	 EkWChAA95BG3ILkD4oL+jwcNmEUEgJKwAfegs9q5YEl+e8b0C2eKCfkFtq+Rz8h1T2HW/
-	 pLqpyS87mzB8VMheCuzhiLWm1kdVbik9iz3UIaZY04uK+oLXAsz3+okzBvyd/ju3I+fnk
-	 D4czLFCR1cFGv1heEAGVkXK/Sp5EQhrRVVU8jGaglvsRA59UCJQdhEB0nWpQZc5aPCg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="VaT/nUUJ";
-	arc=none smtp.remote-ip=198.175.65.14
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793300064;
+	b=r61JKiPK21Zuaa7PwyV9Y+wn7AR9ACdRyEojaeofxoaWc3IVsc/iCMniuBxvFb3oZeCA
+	 1Qj9QNNG/5rXnjxAt7HlHBS3Xu3SYYHH84eFId04mcwXg5gBWOK850JMlrzwSExeq/S0b
+	 lALc74YIW3FjTWap7m66+0Ie9ejCfaSSypjZU7kdlNF0YxM3o4MxwbbEJbT54kEa37VXp
+	 4IYMHZKsiaSRGkjELfg/5epkszp5oM4/ju7Ym7pwI9SvUiUQ/daQcMaM6s/aO7n1AbhFL
+	 BZvRolVSif9c3riAtLzprO9ldDzx9AGSZDZy18q8jqwD0I63gsTBUgLa070aCq6RbEQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793300064;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=mGLPcOV07vFxEsBt6sKpXx7XuO4u8sK9yJr1CxMA8Vw=;
+	b=Kj2j0hyVmOfncaPgm6I3I6MNEuVCrydolk913DYpXkncc0hzRMTuoLPNE6U0C3npPFr2
+	 VZQampRStfPKZxpfcA5r6otfGjb49eMLnrx8WDQ8pIHxPLQqcFhcfi1ZpWisq28O4qDfh
+	 8GAVrq6tx8xOpe9Q593B1yOrVYjmDYYswtreuaWFq237LpUvCOhufaxmhHxdqN0p9/0Vo
+	 wy8uciRykepU9TENvS8jEVoYBW35h/8Y35PXvhfYYuQLfaeKvFQuWoQ8CR/coNBWcr+C2
+	 7e//vucgVINvzWkAQ7vbpxi3AE8kvOwVLnGD9kvHzqiQ68ZgbBIfoYocM9y5DCYfSvg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SFtCAtf0;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B43606A320;
-	Thu, 29 Oct 2026 18:51:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16B43606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE94A606A31A
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 18:54:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE94A606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VaT/nUUJ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793299869; x=1824835869;
-  h=date:from:to:cc:subject:message-id;
-  bh=0hfTqC1AyX/Wji9VKTp4nM+fWucGw5F/TISOAoFUGiw=;
-  b=VaT/nUUJIjeRtaXHCeO0JjjUpBJYIRs9Qwkme36k4SyOjwZYgYp4qwTx
-   lsaniI8ByMOPirHQtFrZaDot2tbw0zmnNW54JXAFgIEfAaeMraWTRWdWP
-   HJrRnv/dJP4dHAkoI7150O2RdlLH/UOcIM4lRhmC+wk2a+j0534U/OXlO
-   1gl2d79kuEQla//jeMCo4C5QepZkZcpJHJu6FnLaDyWe41jtTgwAimgRK
-   nxuRGminilFoUfrvwAlM5ZUxRE3Eh01yTOKeWdqipl41+Rgapxl4CUN2H
-   yWEaDdEu5qusu52OyAuKVCyYrFtjoHEUgLdofIn3aNinPD5NF9QokkAk2
-   A==;
-X-CSE-ConnectionGUID: P4uhp7ejRCWGsZODBwp/8w==
-X-CSE-MsgGUID: hzwcJk/LTtKVP+Qlzoq0wA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11950"; a="1933196"
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="1933196"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 11:51:09 -0700
-X-CSE-ConnectionGUID: 2aeo37elTHOfGDyPOR9Xug==
-X-CSE-MsgGUID: rGl/k9TMR8+jTWuxFpBQnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="5310886"
-Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
-  by orviesa009.jf.intel.com with ESMTP; 29 Oct 2026 11:51:08 -0700
-Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xMVDN-000000005Jh-1hHo;
-	Thu, 29 Oct 2026 18:51:05 +0000
-Date: Thu, 29 Oct 2026 19:50:56 +0100
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:x86/syscall 3/5]
- arch/x86/entry/syscall_32.c:48:2: error: call to undeclared function
- 'instrumentation_weak'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202610291903.ejeEAxv0-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SFtCAtf0
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b4b7dee316so974468a12.0
+        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 11:54:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793300062; cv=none;
+        d=google.com; s=arc-20260327;
+        b=pIGcdfTYACWo53CnP2b0zqLDbheZE4thgcKQq1ZcTODhlfbz1T8A/9wJ7QJQSjcjJ1
+         FXfOP5/GP4GV1sam5k1RazvLnhklCGii13DaDqiDaj3Y9HkA9RjxIrpavmc6BPrrleHL
+         ROqCCIGIV4mjkKOjaQRrRSY4VPByFs/kdizqoFOSVQNtH4cL6FpwNN+HTP5gdg0R/7zn
+         gMBZcgliIqjMzQZ+H2pXti+9rzSjeaeDN0fIjXB7BGkpsrBAmd5fE05kzznopn5cFC1t
+         5qti/V6QIJrhapDvLq/v1i+pKcLbhd6b28345n1JJuS1FqfuALjRPCzxffqJ2PCA2Zkt
+         Hr/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=mGLPcOV07vFxEsBt6sKpXx7XuO4u8sK9yJr1CxMA8Vw=;
+        fh=jm702Na4l5zpN8CmeUgVBnws3m20w7VytFa9ArF//ug=;
+        b=MJJhJp8oZeQgIcPX8yt1bJP4A+1zGTU58wcZ5O9Bkk5AlE/JrQtqSIwZXy+Iq4ykhx
+         Lo4e/xWKgUFVZ6fAxIFFF9qYGiPzuNGXQFOvcAKlIYCmL6nNDJU4XPcPZMpeX/1GOJ0v
+         CSDZkEii9wDJgqnHKdY5FmZMgtYQ5hb6Mlod5NPqy/N8441TQq2V+4VTCmfcrUsL/baQ
+         M3Lbqpenls06HXkzQKwp+krQFfD1Qa5f2dIjMwrONe2J3JigRpXzp/6X0AO9Bc+0F0u7
+         bjtWVEsjh6qbPVHL4/CFqeWVStvWEWeymFC2A+E4i1lMd9egj21WmYGyBE5dPNMySKrP
+         27yw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793300062; x=1793904862; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mGLPcOV07vFxEsBt6sKpXx7XuO4u8sK9yJr1CxMA8Vw=;
+        b=SFtCAtf0NKVAfK48Z+X1+8Dmzu8QNM+IcTFU2pYyPr7ponI2yHxLo0J3/EM8RSPOz/
+         XmAL8k1miSlA+DHEawoiCQq8OTToiHGBCQMy55T9qeSOj4g4tL6jG5MxOd7lpNeuh6ZG
+         MQk2WtdodscJCLhZamvUSzs1ys8qtWRVbEPYSRly5eEalW29SAPuRpbnuPfi833JxNhO
+         Oz6LSfOrv1xdeCC+OSjl+IuCPMtN+SodmbJqPITYhG+SDpnz8R967uj/3SoUCsvoF/JI
+         G4892Xtby/Wgf6+roAG1FgO5dtzO91Lx9RttXdZXJlGIvVaVpTjh89HzMvNG+nHswsZQ
+         bXQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793300062; x=1793904862;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mGLPcOV07vFxEsBt6sKpXx7XuO4u8sK9yJr1CxMA8Vw=;
+        b=eSK9Bmr+aCQP7tBSCyp1UjmcaPCQj7B83cNvr3Mz/ZRcx4tgdW5tRmKZSyk3QhtakE
+         BKgOOyhFJ1/UDQ2ViGdlR3TAP0zDvAABGOta9tymsr9GZAOQ1flSSI1FavEc63CoAZEj
+         kFOfIyxb02VpFSZ5NSJ3W+9Zg1jTbfKzxponck49sTHklaOXNk9+6JbhUFyEw7FkocK0
+         Vbbf84yDSpxE1FcA5HN+q+O1NCmMLp5J9EvTiZY9orUTOOnSVOoJQegI+tFcNjoVMwgb
+         N3+R2/wCyXSD8NceXqsfh+ko46yClj39tFbZFAwcHhgZ257qi/CWziMRKmgeLr3oH8Q4
+         yvDw==
+X-Forwarded-Encrypted: i=1; AKwUvBy4KKv7a5fRtitN5Q/zWykSN8EOo3m/UjbWL7MXUd23Wtr4VbdpHYcC9GBjU2rt3xQHV/8s@lists.linux.dev
+X-Gm-Message-State: AFq9FYK/iqyxsExVpzkh0JElAHwNj5dJnxdaNCqCXTXp0/r9Xrw8o4Fq
+	mWWEXe+KAqvcRrHRph7Vssc8ZPG9IsX2khO5cUdKw1USnmYWdAfEWYWGLyACnbccci1V0jZsKMy
+	tAoPAdfmOKHL1HAHzolJ9AxDzmWR0k/dyUw==
+X-Gm-Gg: AYBFou2OXERYKwwOHj6op1IDUtkhx34hyFvTi1NZ9WeRtzmDPm8N5MiHFoHSCSzjieo
+	0guh8WTB08Qif6w8/biGiRffwEoGcSrMLk98EUb0JgteknGnFuWw8UzUvGK23n4Xl1fJDn38BO/
+	JbcO9VAOv/rHikNBpYnyn7wwgDXfREDdr71vWFEZzPLsxeqRF/kNKSgEVbJW+IqGGeQmhw+mCky
+	CMOU0fuHKnuAZnp+DS8cAXCYbF4hYv+kpW0ZwOcfvUdXARiLYB6/t0MUgyFo/TjiCVokTUCUPSa
+	mCB21nkRSXab2mXCbpdjTo0diLxg4nHtN/WPUdDgMWaZ4874sFOS1H4G3LuUMF1Ipku29yk/2s7
+	Pdk0UQb07spKOzutqqwmAwsARxsHGPCtWlGI=
+X-Received: by 2002:a05:6402:a6c1:10b0:6ac:a862:d8ce with SMTP id
+ 4fb4d7f45d1cf-6b49cbd6ba0mr3412953a12.7.1793300062077; Thu, 29 Oct 2026
+ 11:54:22 -0700 (PDT)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,41 +102,30 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+References: <202610290223.iOEGeDs2-lkp@intel.com> <20261028202400.GA835963@ax162>
+In-Reply-To: <20261028202400.GA835963@ax162>
+From: Luca Leonardo Scorcia <l.scorcia@gmail.com>
+Date: Thu, 29 Oct 2026 19:54:10 +0100
+X-Gm-Features: AclHuK-nQVrYwHXIPfeZqhaOMYDdttYG7QvDfwRoqznKlouAeTSr_3BHeahpDrs
+Message-ID: <CAORyz2KEJ5M86-+z2zWXVTJwbNO8SY4DWjn5Y6EO_-nPhdiytw@mail.gmail.com>
+Subject: Re: vmlinux.o: warning: objtool: mtk_timer_probe+0x23: no-cfi
+ indirect call!
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@kernel.org>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/syscall
-head:   57a2da426dba48424406ee52c0c931c6d024138a
-commit: 2414544a36dd483763751772609d05b965acee6e [3/5] x86_64/entry: Make syscall dispatch noinstr
-config: i386-randconfig-2000-20261029 (https://download.01.org/0day-ci/archive/20261029/202610291903.ejeEAxv0-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261029/202610291903.ejeEAxv0-lkp@intel.com/reproduce)
+Thank you Nathan for the analysis and suggested fix. I agree your
+patch would be useful even if the warning wasn't there, to make the
+device probe more robust.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610291903.ejeEAxv0-lkp@intel.com/
+Being a new contributor I'm not quite sure what the process is now -
+should I send out a patch with the correction, just as I did for the
+initial contribution? Or is it going to be fixed by the maintainers
+autonomously? (Obviously adding a Suggested-by tag with the rest of
+the bots' tags).
 
-All errors (new ones prefixed by >>):
-
->> arch/x86/entry/syscall_32.c:48:2: error: call to undeclared function 'instrumentation_weak'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      48 |         instrumentation_weak();
-         |         ^
-   1 error generated.
-
-
-vim +/instrumentation_weak +48 arch/x86/entry/syscall_32.c
-
-    44	
-    45	/* The unsigned int @nr argument is intentional as it creates denser code in a 64-bit build */
-    46	static noinstr long ia32_sys_call(const struct pt_regs *regs, unsigned int nr)
-    47	{
-  > 48		instrumentation_weak();
-    49		switch (nr) {
-    50		#include <asm/syscalls_32.h>
-    51		default: return __ia32_sys_ni_syscall(regs);
-    52		}
-    53	}
-    54	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thank you for your help
+-- 
+Luca
