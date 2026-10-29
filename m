@@ -1,99 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793284080;
-	b=o9B2ijN7mallKltbgZlG25m4+GAlCbC/RfYSmv0FrQsoywCxyhz7TqVUt56OtubXcIMC
-	 4U3knYv1PIH4KjPh6frCnkyvpCnOLZkXRyppC7YnrJYDZmncYrcs9GMLow6K4jM3peNzY
-	 l8nspfdqU8PszcNEsgzmH5Q48agh2UQ3R0qcnS0fn0iEkVaToTGfy4I0zpu5m+bNvFuuZ
-	 DU/3O9x5yrNjpJlOFXMGQsHwT4WGZV9f6xetHXd9PCJU4ayQDMziPm/CPzx38WehPxUN0
-	 /eJHH11aan4Xx8bD88DEfGQeruOrUhf0xdIx3zNomy29ZWv74OYx+wTIUemtVZWzFzA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793284080;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793287466;
+	b=JF/+lLBJ4p91/IHiFYuA410m5k3lvC50EODMGLa/gKZzAFN6Jw7Em6PPXIYf5RiO0arG
+	 Sh7VdwXDhKf/B+eknHioK0KjJh2O1nnkStBY3h2UKw+nfqVIisyxv+bKOTI/HBukp95RU
+	 enY9NicSI8BxBRs8VrhcslqH726uaP+Y6nUZehg25P9ibqMZEU8mV0CpKorkM4tA5JrB2
+	 S4xR5Z+VSNlepNeC4gczwhSF6jmANwI43o8IVzOy4MYsoIeSOI8LdMFXGXmjleIl7MKw/
+	 7QD63Jjfb/HwR6x3cO/C8KCFIExMDiQgVHFymxUuG+bOjGy52BRjclvF7615pfJ0EAQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793287466;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=gO96Ic3QVCctvLn6OTuZFYeIzqeAoDK7wy79tyihoyk=;
-	b=dqe9oDRIslI/mTbRZG1nDuG1mLUXXUw6AVWAbVYhHp7FaEN6nbCKOGoRdfgu1uZnAgnr
-	 kwAFLCtfMRQqsqKiO2a3fj4kebF3MpPCyNYVJLrEnjHriR/CsLwsHT/1+orlyt91a9MhM
-	 AspXI8HwNqD4TaRd+ePJm/mFHnNOD6SVTQ4Fu+gVx4Orb6n+vLJPYfgZc7zIquVbI+7Wb
-	 +5c5jJD/5U4MAC0Z/chqdhoc8+E+TBB/4zFezclVtK8X+Sthgk5bpCKD/4fVQM8kk+3KV
-	 eJ9dX+Zss+W/SxS7IaSGeKmdLUxmOH4pjnVSdBqaoJv8yW5f9EiH2tQlTx7Sgd7+1mA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=LqUQbtPft1j46GYypYCN7/YQGyvs+Nf1fNrdAmWoWxc=;
+	b=YjZAIMnpi6Scxy93HuSlIj812vn/+qdNLe4V8qjo4hp8FPJec19VXkBkIzv4blvYFuTA
+	 Wc496THZECfGyH6AC7FsVN7YuNor2flZ+Zh325bTY9V+A3xr1heu1OLArmk61APL90FhL
+	 nj9P2C789MB7vxE+BrMQAIkKPaR1IDQPVaJHzwBrQgzM19Gxd8lBCVDSUVPIoogU+TdCN
+	 /YkrSJIgB8IPJQMhDU4wD83Ylb4dVoWjaG9btwPCgHfsMM3gzneQZUatsWdl3miJlN2cJ
+	 Hqe/fKmpqbRvnkUXvqWKLpUFBKDipvpeE8VL0cLhO+cSd6ml3V9b5mS8p8A90BtMq/g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fcnXFa9V;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QYw3sZtJ;
+	arc=none smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771CA606A323
-	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 14:28:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 771CA606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C70606A31D
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 15:24:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59C70606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fcnXFa9V
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b4a13789b0so1091723a12.0
-        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 07:28:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793284079; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GkFJ6QfDZ2xWGU/nY1uzD5XgdtBr9Tk8xfhW5AUR8fmnhJ73ifbmeZmqRMhQvd09My
-         tybXG/XyXw+Ja/Eslta1MOJDKjjDzBV3KXTV6HWGQFOlElwd9vS2JUzVkpuoinb+Fnjj
-         mk6t8js5lRPmpAaw9t0pus63avznPEkgzCkHPL1P0QZhx5Q4wkecR4AWQvOy22z8gBjY
-         grWF5JaTLVHWCzcd4p9GyNxKj2/X1lFo62/pLdKryB0HKywlUDskuHdJoiR6hWhTp8uQ
-         hlpC4/9NZxOJGdkL5a1bZ4V9S3f04arHsb5Z61HVcoUf+w6uHZgFgWhR5IjmOXoyGcP1
-         x/JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=gO96Ic3QVCctvLn6OTuZFYeIzqeAoDK7wy79tyihoyk=;
-        fh=1rKC2rPSENQRTkhPW5mBIYKCbJgOgsAqq1EK3fgvHDs=;
-        b=Zg5Xg5UegKhoriO5ZlgsEsC4dLtxB8OqSCnNq2z1yvVyvfPXM7iRi2eAqzgiOL0QJB
-         MqsIN/ED3nuRQ2L4s46OMwR4eiNOaylG+Ri+TG58cBSXGtkr33NzZFcUKLN/dlDOA6o1
-         CLDVC/9b/1ioRCFXfkLglYVS0ImDbsyaatzzAM3Pa99V+l5OEbL461t1d5tkpcKGJfkf
-         cRDVUZfj7Sy67csI9GkH3svzqJMOdiFVamlqifm6hrsmJuT198DzfGzBxn5q2fZj+vbo
-         ggyKUS08GHD/lbP85vrN3IRMGzLOCAdPJF/j2R1OCohUawUTlIAABqmATj5Sep1SDvtF
-         qCwA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QYw3sZtJ
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc502d509c0so1039281a12.2
+        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 08:24:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793284079; x=1793888879; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gO96Ic3QVCctvLn6OTuZFYeIzqeAoDK7wy79tyihoyk=;
-        b=fcnXFa9Vjh9xwDqXCIn8UNLmlqUQITR4PtVSoAndC/wHr+lGNNfsLT0rGU65TyloCf
-         +QNLBr/zN2v2HeZubeHUrTUS+g/uZ9qeQCvxf+UBsIOXQ1F7sO3yWNpiIvmnOzIeR3DM
-         ZUnVdHjvFIWuZIDPdKfGsZua4wlzQ7gsjUjTb8GuF2XX6zeMU3ayvxJvjIDn45IA94kG
-         k2+Os/MMlfmtRZ/gD0i5ZyL7JkYvm2vHkdIXuxtrndjOhMmel1SDi5BYkHQCqhj+8NIP
-         v7aSsReo5LBtpxFFrWEE3mttTFjzHAUAG2HmVgk0i7N6+Rd6e7cPmgEoWNH3pWNEJimO
-         z7Kw==
+        d=gmail.com; s=20260707; t=1793287464; x=1793892264; darn=lists.linux.dev;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LqUQbtPft1j46GYypYCN7/YQGyvs+Nf1fNrdAmWoWxc=;
+        b=QYw3sZtJQmegqlf8K6D0RLCI3af8kJ/QRxn1LSBW0wowGjIWlEfBZ+hv9VjJZfKi/N
+         8025TTBNpByLW265YaHU/amn7pYspGE061aU/Kddz7VurtkVL/sXE3g+h+ktdjwKxYpD
+         dyiAQX9rTEMVe0ayhX49RrleVRJJ+9P41pUwwMJmT6Qh0BIvifcmZ0kRtT6k8yNtwcVY
+         j32WsJ5ByCmjaWE6SjpIlp9MzFbCnx9Ty39l+jbGeMm32DS5dgzcgpfl+KdH0YSoL9/N
+         /YS2buoNB7oPxUGXQxfNPT5dcpwNw92p8dKoI73OM7ulGTNA0xovRQDdnBn+mg2S5bgX
+         aqwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793284079; x=1793888879;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=gO96Ic3QVCctvLn6OTuZFYeIzqeAoDK7wy79tyihoyk=;
-        b=fWPv0YPUNc95hjyCtK/wBUBZdeFX4dXzy4wI6dImHAg/9332G6fsYizzDHCaMLaqzR
-         H5drijKLKfAErFaUJchANzHB2tyaNd3T/2LUR1yHMKaYAcOXgzMx4nzisk34qyVpg7xe
-         nPJ4+i3Zg1aB2ueOKLCyxrSdMdJbwy8p98Ws4/RjeZmIZhgNsnKfhKsu4S3YCPYeypKU
-         0oJYzExbmcPG8gPgXX0Y8DRyOrv/jLplPsg/WyTMJjcv+ykemQCmadsicjcOOnqkK+bx
-         HBnUyXXNNJ+fLdS1/gH38euM9Ay/ChCOhzIvsnohU78Lu2InO76fhlqysLyBZmm7/I9w
-         lbnA==
-X-Forwarded-Encrypted: i=1; AKwUvBzw8CqoRf8MqHwTJttOapC7cfWB9KvMLed+2pMKVfff7Nq5bCHVAHmC1YEiuvv3tYF3SSYX@lists.linux.dev
-X-Gm-Message-State: AFq9FYKq+rNYn1mY6/H9mD+T5jP5EcBQHEm6gGK3AhAremR7pYB369LS
-	LRoDhlPxINOcYAMIalYB0dGXyclRU9lpBUM1YDbzQkf+UOG81Q/nqHf9Xlwp44t6ZeHmVD4OwOm
-	+EfYCHvn+Qpw1RnhiCmop8u4zMEgaUxE=
-X-Gm-Gg: AYBFou0MLMPJ4/0hZFTg5aQl21wANzrWyUPoUPrhE+n0PD4Y3EBU80EqxYzaH6jVEJv
-	hHMmjiVf2P0zrCv4Xu6nz/vlhfoEJ00XERc5orMlgj57CVe+zmfpRbvN8I1iWRgUZ55nsiz94/b
-	KLnNrzHiQvGZr51hXHx1pHhoOe33N49R8C4iJs+VdazeG1qNsy5IJitOIuipOruPBaHqDZY9VQh
-	aslx2Zr587e5Vrzo+sCXO0xZ9oKlV3VX2x1jOzTiwfdFGI86uZs5jVdtbKgo+9GK8dNDj6MsyRs
-	/yy+SnWwjFsQ+SbCushT6myqUFkpm+daeaiJMoFLkRfqXFnRCxz8MWMbAO49J15ldMFTugnlS7b
-	UPPBqv+joispoMZehnVRozB46sFvdaPOIumZU5g7le0t1WWbcPUVIutNCZo7ZQFUvKOhnqQ==
-X-Received: by 2002:a05:6402:4508:b0:6b1:bb19:de98 with SMTP id
- 4fb4d7f45d1cf-6b4b0b09dcemr2163933a12.1.1793284076799; Thu, 29 Oct 2026
- 07:27:56 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1793287464; x=1793892264;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LqUQbtPft1j46GYypYCN7/YQGyvs+Nf1fNrdAmWoWxc=;
+        b=2W82GRL6H61Ap3n1AlaDBebXLOrpagJZc0y/KavJl7VNTCGwWAAC/8wu0WxbTC7l9/
+         gFIogcg6YtvV/ZeqhiYD1pbIa/x0RLkEs/+4IEY+uRnM2+mIdpb8U0UeRX1TUHqzD91n
+         4yFUKXNeJfKrmBvoGsYxQGv6B5u+SQfXNyNrw3IcJ/d7XD+ecOirb68PXZvEqL4HOYt4
+         7xdZYpAGVplNda7au/OTQC+1PyrHZmzw5dukQs88KCttGlPnBB/Nw7H+Q5X2HD4byPle
+         eHqPv12kLeXj/dND8NUVuhme8zbWgV0e34QJpJt/8anFlCttdLsyMUdMhNE/jBcWpCnH
+         BFOQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxZDUKqri40+xZSqxYHs3mDOD9vemv97qv0dJZRtTo4ON/o54wAD4smMmBqTEBC+b5GUSyo@lists.linux.dev
+X-Gm-Message-State: AFq9FYKx3qrox0AIZPOmsHD7GN7oPZ9ykMSodUeENf1GkOwsAMx8j8wd
+	kCKZDCAKQo8sl/K3Hjq32uPGOO0VBUtdIF7/nPZpGranq79S4Fs/IXU3
+X-Gm-Gg: AYBFou0vZVhvgmCm93ih03VQy3+lxnVqyierUvCcRnFcGn9nIYeSAyDS9nNFqtxYahr
+	DczPgabMh0OxJFcWBZUV702WkxVpxn3Ih++9HmX3GHCcXNAIagynrMDA+wbax0zkw4Yu8+14ryE
+	7INJuJJ45WoXvPv6pnZrj91KenKwbehBJcRazdZtr1vwbIekz+5KSPbRQvdpB0wI+zzLX91V+Ia
+	57ZqT80EBic9g2WRA4Plnf/xPUXlc+WD7XLRkzArrpgrVGwmHv7phMepPANRQMKcmjK4gLt4deM
+	cqJqxzcbrtBSKqKyCAVKhWUhLaNwQTD/ZS+ihPQFbSbglD8K8KGtWTppDemZB0EQeVwlxqlqBZf
+	hwg5nAC6uGMF/YaEouYYdk40z4w+gKXpfzY5KO7EsWDuTlZBsQ7r6AUfZs1hPjftvA3YsPKwUDL
+	+nL/67ymg3VFxugX9Y4O5LDkT6bEYoOlDsXqmE7fx1X7e3RxL+Pu4DlYvp+5PLmpJ377L8cANuh
+	9JyrjBs86LDf5iuBTE3a1pj+lFPrDWq6isPNqKbNOba8pCia3m7UjwaTr8TjZp6X2pmO1meO3Wo
+	4QvDxb+DQ3qt1YlwdSYT4dhB5YB0T4fG8s/Pyi0BjOAngzKcrsBcrsw8octPucNRq01t5iwDkNh
+	LJSzU0TnrzeCSLZ37G40Bl0HrxJejZeilEQ==
+X-Received: by 2002:a17:90b:48c7:b0:3ac:adce:60a9 with SMTP id 98e67ed59e1d1-3ae57e346ffmr4072955a91.9.1793287463471;
+        Thu, 29 Oct 2026 08:24:23 -0700 (PDT)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae579c59a6sm3481124a91.3.2026.10.29.08.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2026 08:24:22 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 29 Oct 2026 15:24:22 +0000
+Message-Id: <DMHFCN3J36VN.2JJEE30A07C0Z@gmail.com>
+Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <llvm@lists.linux.dev>
+Subject: Re: [PATCH bpf-next v3 2/2] bpftool: Make the LLVM disassembler an
+ optional runtime dependency
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <socketpair@gmail.com>, "Quentin Monnet" <qmo@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Bill
+ Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Nick Desaulniers" <ndesaulniers@google.com>
+In-Reply-To: <20261029-bpftool-plugin-v3-2-87af799da40a@gmail.com>
+References: <20261029-bpftool-plugin-v3-0-87af799da40a@gmail.com> <20261029-bpftool-plugin-v3-2-87af799da40a@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,107 +109,195 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261022-gmem-alternative-providers-v2-0-5dd1dc6c660a@google.com>
- <20261027154649.91571-1-griffoul@gmail.com> <20261027154649.91571-12-griffoul@gmail.com>
- <CAEvNRgGn09qrCZjUM5sdqQohPWE62GN4c52iK7ZV_gi5wro_Ww@mail.gmail.com>
-In-Reply-To: <CAEvNRgGn09qrCZjUM5sdqQohPWE62GN4c52iK7ZV_gi5wro_Ww@mail.gmail.com>
-From: Frederic Griffoul <griffoul@gmail.com>
-Date: Thu, 29 Oct 2026 14:27:45 +0000
-X-Gm-Features: AclHuK_kIg9XZ2cFnZL0tpsqSJGFt3xKJOd_xbKB2NrNWZ3oy-bCAgu9pf3hZSM
-Message-ID: <CAF2vKzOTd=0rmMXvtAE_SzbbZ3C9n9jTcjM+Rj=ovFoYBsXCKA@mail.gmail.com>
-Subject: Re: [RFC PATCH 11/14] KVM: guest_memfd: Add kvm_gmem_restore() for
- PFN mode providers
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, Alex Williamson <alex@shazbot.org>, 
-	Alexander Graf <graf@amazon.de>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Alexey Kardashevskiy <aik@amd.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>, Ashish Kalra <ashish.kalra@amd.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Baolu Lu <baolu.lu@linux.intel.com>, 
-	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Christian Brauner <brauner@kernel.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Connor Williamson <connordw@amazon.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, David Hildenbrand <david@kernel.org>, 
-	David Rientjes <rientjes@google.com>, David Woodhouse <dwmw2@infradead.org>, 
-	Erdem Aktas <erdemaktas@google.com>, Frank van der Linden <fvdl@google.com>, 
-	Gregory Price <gourry@gourry.net>, "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jacob Pan <jacob.pan@linux.microsoft.com>, 
-	James Houghton <jthoughton@google.com>, Jan Kara <jack@suse.cz>, Jianxiong Gao <jxgao@google.com>, 
-	Joerg Roedel <joro@8bytes.org>, Joey Gouly <joey.gouly@arm.com>, 
-	John Starks <John.Starks@microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Justin Stitt <justinstitt@google.com>, Lorenzo Stoakes <ljs@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Michael Roth <michael.roth@amd.com>, Mike Rapoport <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolin Chen <nicolinc@nvidia.com>, Oliver Upton <oupton@kernel.org>, 
-	Pratyush Yadav <pratyush@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Samiullah Khawaja <skhawaja@google.com>, 
-	Shuah Khan <shuah@kernel.org>, Steffen Eiden <seiden@linux.ibm.com>, 
-	Steven Price <steven.price@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Tarun Sahu <tarunsahu@google.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Tycho Andersen <tycho@kernel.org>, 
-	Vishal Annapurve <vannapurve@google.com>, Vlastimil Babka <vbabka@kernel.org>, Will Deacon <will@kernel.org>, 
-	Xu Yilun <yilun.xu@linux.intel.com>, Yan Zhao <yan.y.zhao@intel.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, x86@kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>, Fuad Tabba <fuad.tabba@linux.dev>, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 29, 2026 at 05:52:40AM -0700, Ackerley Tng wrote:
-> Fred Griffoul <griffoul@gmail.com> writes:
+On Thu, Oct 29, 2026 at 06:05 AM Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org> wrote:
+> Move the LLVM disassembler to a plugin, $(libdir)/bpftool/bpftool-llvm.so,
+> that bpftool loads with dlopen() only when disassembling JITed programs.
+> Distributions can then ship it as an optional package.
 >
-> > kvm_gmem_revoke() does not fit: it would
-> > zap the guest's and the VMM's mappings and reclaim frames that a guest
-> > may already use.
-> >
->
-> I'd drop this paragraph from the commit message, kvm_gmem_revoke() is
-> the complete opposite and isn't a candidate at all for the goal, which
-> is to notify importers that a page is now available (and they can map it
-> in).
+> The plugin exports a single structure of callbacks, with an ABI version
+> checked by bpftool. bpftool looks for the plugin next to its own binary,
+> then in its install directory, but not in the current directory since it
+> usually runs as root. "bpftool version" reports "llvm" only if the plugin
+> can be loaded.
 
-Sure, I'll drop it.
+This is overkill.
+The plugin wraps 7 llvm-c functions and the target init calls.
+bpftool can dlopen() libLLVM.so itself and dlsym() them.
+perf does that for libcapstone. See
+commit b5c9bcde61b8 ("perf capstone: Support for dlopen-ing libcapstone.so").
 
-> provider --1--> guest_memfd --2--> IOMMU
->
-> 2 is definitely required, but why is 1 required?
->
-> Between the first .get_pfn() or .lookup_pfn_range() () and
-> .put_pfn_range() or kvm_gmem_revoke(), the provider should consider the
-> memory in-use by guest_memfd.
->
-> When it's in-use by guest_memfd, then guest_memfd should use --2--> to
-> map into IOMMU page tables as necessary.
->
-> When it's not in-use by guest_memfd, why would the provider force it
-> into guest_memfd?
->
-> If the guest VM knows that the page is now usable (some other
-> communication channel), it would touch the memory and do a .get_pfn(),
-> that would be successful this time. Perhaps that's when --2--> needs to
-> be performed?
+                     this patch                  dlopen(libLLVM.so)
+  -----------------  --------------------------  ------------------
+  installed files    bpftool, bpftool-llvm.so    bpftool
+  who finds the lib  llvm_plugin_find()          ld.so
+  ABI to maintain    struct bpftool_llvm_ops     none
+  Makefile           libdir, llvm-plugin-dir,    one -D
+                     install, uninstall rules
 
-The IOMMU never asks, and the CPU may not touch the page before a
-device does. A few cases where only the provider knows:
+v1, v2 and v3 each look for the plugin in a different way.
+The bpftool that the selftests build still doesn't find it.
+selftests/bpf, selftests/hid, selftests/sched_ext and tools/sched_ext do:
 
-- The provider gives frames back with no guest involved: a page that
-  arrives during post-copy, a range moved back to the VM, memory given
-  to an overcommitted VM.
+  make -C tools/bpf/bpftool prefix= DESTDIR=<dir>/ install-bin
 
-- The guest already gave that IOVA to a device as a DMA buffer. The
-  device writes it without any CPU access, so there is no .get_pfn()
-  from a stage-2 fault, and most devices cannot fault.
+  bpftool           <dir>/sbin/bpftool
+  plugin            <dir>/lib/bpftool/bpftool-llvm.so
+  bpftool looks in  <dir>/sbin, then /lib/bpftool
 
-- A read-only frame becomes writable. KVM finds out on the next write
-  fault, but a device write to a read-only IOPTE just fails.
+"prog dump jited" fails there with this patch.
+"make install" in selftests/bpf copies only bpftool. The plugin stays behind.
 
-kvm_gmem_restore() doesn't push the memory into guest_memfd: guest_memfd
-only passes it on to its exports. Stage-2 and userspace mappings stay
-lazy, and iommufd looks the range up again and maps it.
+In the diff below llvm-config gives the name of the library at build time.
+ld.so finds it the same way as today.
+The distro package recommends the LLVM libs and doesn't require them.
+"bpftool version" keeps "llvm" as a compile time feature.
+That's what common_options.rst says.
+LLVM built with BUILD_SHARED_LIBS=ON is not handled.
 
-I'll make that clear in the kernel-doc and the commit message. Would
-that work for you?
+Something like this (not even compile tested):
 
-Fred
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index b0f7168..7a49182 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -186,10 +186,15 @@ ifeq ($(HAS_LLVM),1)
+   # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
+   # compilation error due to redefinition. Let's filter it out here.
+   CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+-  LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
++    LIBS += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+     LIBS += -lstdc++
++  else
++    # Don't link with libLLVM.so. "prog dump jited" loads it with dlopen().
++    LIBLLVM_SO := $(shell $(LLVM_CONFIG) --libfiles $(LLVM_CONFIG_LIB_COMPONENTS))
++    CFLAGS += -DLIBLLVM_SO='"$(notdir $(realpath $(LIBLLVM_SO)))"'
++    LIBS += -ldl
+   endif
+   LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+ else
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index 0454115..cca02cd 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -25,6 +25,7 @@
+ #include <bpf/libbpf.h>
+
+ #ifdef HAVE_LLVM_SUPPORT
++#include <dlfcn.h>
+ #include <llvm-c/Core.h>
+ #include <llvm-c/Disassembler.h>
+ #include <llvm-c/Target.h>
+@@ -47,6 +48,88 @@ static int oper_count;
+
+ typedef LLVMDisasmContextRef disasm_ctx_t;
+
++#ifdef LIBLLVM_SO
++/*
++ * libLLVM.so is big and only "prog dump jited" needs it. bpftool is not linked
++ * with it. disasm_init() loads it.
++ */
++#define LLVM_FUNCS(F)			\
++	F(LLVMCreateDisasm)		\
++	F(LLVMCreateDisasmCPUFeatures)	\
++	F(LLVMDisasmDispose)		\
++	F(LLVMDisasmInstruction)	\
++	F(LLVMDisposeMessage)		\
++	F(LLVMGetDefaultTargetTriple)	\
++	F(LLVMNormalizeTargetTriple)
++
++#define F(fn) static __typeof__(&fn) p_##fn;
++LLVM_FUNCS(F)
++#undef F
++
++static const struct {
++	const char *name;
++	void *ptr;
++} llvm_funcs[] = {
++#define F(fn) { #fn, &p_##fn },
++	LLVM_FUNCS(F)
++#undef F
++};
++
++/* The functions that LLVMInitializeAll*() in llvm-c/Target.h call */
++static const char * const llvm_init_funcs[] = {
++#define LLVM_TARGET(t) "LLVMInitialize" #t "TargetInfo", "LLVMInitialize" #t "TargetMC",
++#include <llvm/Config/Targets.def>
++#define LLVM_DISASSEMBLER(t) "LLVMInitialize" #t "Disassembler",
++#include <llvm/Config/Disassemblers.def>
++};
++
++#define LLVMCreateDisasm		p_LLVMCreateDisasm
++#define LLVMCreateDisasmCPUFeatures	p_LLVMCreateDisasmCPUFeatures
++#define LLVMDisasmDispose		p_LLVMDisasmDispose
++#define LLVMDisasmInstruction		p_LLVMDisasmInstruction
++#define LLVMDisposeMessage		p_LLVMDisposeMessage
++#define LLVMGetDefaultTargetTriple	p_LLVMGetDefaultTargetTriple
++#define LLVMNormalizeTargetTriple	p_LLVMNormalizeTargetTriple
++
++static void *llvm_sym(void *lib, const char *name)
++{
++	void *sym = dlsym(lib, name);
++
++	if (!sym)
++		p_err("%s is not in %s", name, LIBLLVM_SO);
++	return sym;
++}
++
++int disasm_init(void)
++{
++	void (*init)(void);
++	void *lib, *sym;
++	size_t i;
++
++	lib = dlopen(LIBLLVM_SO, RTLD_NOW);
++	if (!lib) {
++		p_err("failed to load %s: %s", LIBLLVM_SO,
++		      dlerror() ?: "unknown error");
++		return -1;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(llvm_funcs); i++) {
++		sym = llvm_sym(lib, llvm_funcs[i].name);
++		if (!sym)
++			return -1;
++		*(void **)llvm_funcs[i].ptr = sym;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(llvm_init_funcs); i++) {
++		init = llvm_sym(lib, llvm_init_funcs[i]);
++		if (!init)
++			return -1;
++		init();
++	}
++	return 0;
++}
++#endif /* LIBLLVM_SO */
++
+ static int printf_json(char *s)
+ {
+ 	s = strtok(s, " \t");
+@@ -135,6 +218,7 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc,
+ 	return count;
+ }
+
++#ifndef LIBLLVM_SO
+ int disasm_init(void)
+ {
+ 	LLVMInitializeAllTargetInfos();
+@@ -142,6 +226,7 @@ int disasm_init(void)
+ 	LLVMInitializeAllDisassemblers();
+ 	return 0;
+ }
++#endif
+ #endif /* HAVE_LLVM_SUPPORT */
+
+ #ifdef HAVE_LIBBFD_SUPPORT
+
+Keep patch 1.
+
+Also pls don't respin in 22 minutes only because a bot said something.
+
+pw-bot: cr
