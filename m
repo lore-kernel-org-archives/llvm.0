@@ -1,77 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.158
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793227031;
-	b=pJ4g54T8Lohfo91mqDtEVbPcuHDf/uTEv8FWP43taKu7qPNNOEOujffSs6+1cWkOYBzg
-	 QQl9rPU3/Lx+Bb1/cfuu3QVZrlbkBGoCD5ifj6z0MxAeveELq1JBnKlLLwWEI/pKXwrsx
-	 tcBZs0gwHSDPpg2SrvYDQmDKaRP0QEmoNJB80Vr8lYysIt07y7y00TKgQlV1ioeW6IJPo
-	 kfP+2uCAg7b+t1F+t1IiNgSBVARdFxR5Q4PMjKeDXFORxqP5Vwx0+9SGuFD87yIEvFPma
-	 8esbvGyAbCXcZtNPlydsfVvLdNB/nXOhGv3ZadLLNE3bEn12+s7AY/GNLlMeFZe74sQ==
+	t=1793252992;
+	b=blUwaICBELBDdnXzlKGx+OlPgz91v5lZXU8uXaeybaqp3k3uGk3F0WkeowwmPGBHPdXA
+	 BzNkkduNut31FWrqyLnpcMvd/ueswaq/WbjQ+x8uiymgGty4bDQRbuwUEvduq7iJK00we
+	 tlF7nIu5wtdutzcEGvkJTHuvoqCD1cTmDWvySVXVY7pBmgrH4C92lHh8sBuflqmmVeWvT
+	 W/RcproiSmTfTBCgTgvFo6auvYZY7JGzKtl/aIcv49dq2MR0R6FaR4Uym4glzVsqnc8li
+	 pef15/YxOPfa4xzKBbrs/15u/O/QSnJaL2TeuykdNJOS4QcwilO21M6nW7BkB+JfhYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793227031;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=jm0bOBlvJtf+c9cbCm5uoFNtSxOKCVNvIERBo9B/4SQ=;
-	b=ZSc4loSEM2koPNTc6J//cDo0hrYTTl77tJxhuKlAu02ay3s477YHH+gSUS+F++AAmK9w
-	 L0AHKlLTTwaOad8yeyQQGIN+mieXq/ycta4o4yhdJ/52te9L5kAUVy1aNejdsXXqaUS23
-	 00UT2Ct7m9ZwYgN99qdhdq/QwOwubM4VtlrXmzTmp+gl/ll6/XTbcnfWGvtEEMX6t2VHD
-	 H4erdMvAaPRuP/UYj4oomHZzkQQoCiWdCD4Vy/mf+/K308L06AZX50DJ2C2QORGYLwC7b
-	 9V/eepqWXBneWWEfDaznKBTqIjDE7IIkYvx/JYV0iK4vikx7VaudITPzPEyHBttoXmA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793252992;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=D1ac/wkjmqQ2BHhV67erTJFRXbNfNgVPH+OMTmkt05M=;
+	b=f5KgZw6vPEWGRdhnFFdHwHQxiaOea1ZOiQdZ6/8uLN9dfUrSqHxu7RoUO90XhNNw2d8h
+	 WkdVlE6P8VirnJkyN8lIq0PKm3IhDIKZlUUtIL4FYPBlN2FsdTrDjPLzIedFmU2n3SBUK
+	 fSh0l2t2kU2NrqAMeVjKu5zldzQY/O0Sk6t1HSzNGQD44vFjZIZgJD+sIH8l9FXSiUAkH
+	 m/bFreEAP64TFL8PDgw9hSgHFASVN0XKsvEXlHrMTGFwvflRnYyMkjqRVDRf2lg6YsiPu
+	 LrK3qowSTw4iNOlbPlHStXOnK2azZ3nhMSY7XAzyl25MaVAqRw38NWdLjnjd6E6HtRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=h3220zwt;
-	arc=none smtp.remote-ip=198.175.65.10
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=none header.from=wolber.net;
+	spf=pass smtp.mailfrom=wolber.net;
+	dkim=pass header.d=wolber.net header.i=@wolber.net header.a=rsa-sha256 header.s=fm1 header.b=GXaTKQn2;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Eq7lzYFQ;
+	arc=none smtp.remote-ip=103.168.172.158
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA94606A31A;
-	Wed, 28 Oct 2026 22:37:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0DA94606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB21606A31A
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 05:49:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AB21606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wolber.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolber.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=h3220zwt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793227029; x=1824763029;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xAFL3xR5HoY7fL7rQF+os/jWINYhG5Z304bdPN+0Buc=;
-  b=h3220zwtjOIQA0IN+JYPDQFK0CI5cdTwzSLRKXIH/287wxWj8JOvPxCu
-   258O/yAr9CojmZuw78hV92kD5c6UCwkd96JxVtyj5tU1+SxXgs7evkWIs
-   1Tubxk3d+tOAPgale+CPe2mA1uf+i+wrfJw1xmeaTsq7FmDbKzRnCH3Jg
-   113MG6f/3nw4/0sBLsrqvviV9sfDwhFkAAoP6bercklmO/yEr4lq2CJBH
-   r+12lp+e6xlRa4uKbPVWoUHRLtVzdaFGA4DbFBTMTapank+xzTmlXtpOR
-   IzVlGzY2OnKzWRkCt551sGpsvT7eLWFKWP84b3Ny7mnzOznQN287pXG4V
-   g==;
-X-CSE-ConnectionGUID: F3gbwWsoSXC4KNVDVK248A==
-X-CSE-MsgGUID: jwky0FRETpSWckJYVY87ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1861449"
-X-IronPort-AV: E=Sophos;i="6.27,183,1787036400"; 
-   d="scan'208";a="1861449"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 15:37:08 -0700
-X-CSE-ConnectionGUID: P+RacY5GQGOrqg1ZCWl6Bw==
-X-CSE-MsgGUID: xFdtIE9aQA2az64fdblalA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,183,1787036400"; 
-   d="scan'208";a="5360428"
-Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Oct 2026 15:37:07 -0700
-Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xMCGX-000000004zQ-0nLh;
-	Wed, 28 Oct 2026 22:37:05 +0000
-Date: Wed, 28 Oct 2026 23:36:41 +0100
-From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/auxclock-nanosleep 35/41]
- kernel/time/timer_list.c:117:57: error: no member named 'disabled_bases' in
- 'struct hrtimer_cpu_base'
-Message-ID: <202610282341.X4ssVNgi-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=wolber.net header.i=@wolber.net header.a=rsa-sha256 header.s=fm1 header.b=GXaTKQn2;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Eq7lzYFQ
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A6640140013C
+	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 01:49:45 -0400 (EDT)
+Received: from phl-imap-03 ([10.202.2.93])
+  by phl-compute-03.internal (MEProxy); Thu, 29 Oct 2026 01:49:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolber.net; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1793252985;
+	 x=1793339385; bh=D1ac/wkjmqQ2BHhV67erTJFRXbNfNgVPH+OMTmkt05M=; b=
+	GXaTKQn2JzEuUeJoPT/zSEzlcOtMhx+akHwrWHTeWrkSRpV7CPrgW2wbOZUiuKOb
+	L7VIBuHb1fwHLYEo1Eya6g3fG2Ply9k25eKX2kf5s7JhEisaKKUobazk/a1f4iFR
+	U0nUYgS/mzQHtZD5E0Jf4Gn1WI3xkxS53HWGhHkys/MUss0GHYjs8rsUSf/zYs1J
+	fqwlnKg4JCbzRSncY32fswg1ojL1J7kByWi6tcnEhTd/7bwV7NpAUmrMOZMrapsH
+	NDG5EVDdxLYDHauRulrTBqzaXwnfsSlNL1agN0JODevx/aveAGW3Ee59/QVZ5CPN
+	x46WcfSoPk0FANNv4DTUmw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793252985; x=
+	1793339385; bh=D1ac/wkjmqQ2BHhV67erTJFRXbNfNgVPH+OMTmkt05M=; b=E
+	q7lzYFQBgXaHVv0RKJUZCfhLvKhzRJmrp2gpMQbLjOwdtj8qO1f2OuWTeXUa17Bs
+	mnFL+y3unmwSjRbyHGZsLYM9+DLqvZJABI8cqSmZdtc0BFkZNBI5J/M7URO3n8eO
+	6AB8hQox9+ZgKPfTCVZbOxPg+HEkpUGgXs3Gd7bulJaILwQLo4YXoM8jQGwqlvK4
+	PJ33ZS5KMZHvHe/y3ojiUOICLXnvXmUse0KV/N7v+gA3tLDUWje9BU1eLzWnv5DW
+	UglI/Bd3x7WLlDbC1LuBdgvXunadtrfRKifR7iawe6HrT6L70BywN1BINqIndrzG
+	i+w1iFeAVWOIv15Co2z3A==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=wolber.net a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793252985; d=wolber.net;
+	mf=PGNodWNrQHdvbGJlci5uZXQ+;
+	rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm1:rsa-sha256:Mpgurgy6DahzrpNJdc7FVbOZfnvlpDPfHPiVCVN2Mev30PN
+	VZrzXIkrVOm5DDal4JVNX/2dx4a5QQ8ci3rxbTijm2kYg+LAMwKt7Ru9uESSSAyK
+	gtFxd/U6BuNmmRF2HGd/G9rtjDZAnY9RBpizIl6QHU++WY8iggpUqdHp+DExqJgj
+	OE+v/dSaQoPQmDoF4HIM2nv0RPS9MFhJDTkz89eiVl+7w5Q3bLFyNojpLt6SCzcz
+	gPqQ3jPDKtS1VVz9HAxFIkxRu0EXwJy2VSvbId6UCXEozy5QQXoyj/tUpqfqkPOD
+	q3Ov3L63NWpHAN74/6UpXIt3Sf8jBXMaF9kZh3w==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:PDCQrjEtRcrM4lcNqKDQDN9385PHH5uGr7FrVZcz+FU=:D1ac/wkjmqQ2BHhV67erTJFRXbNfNgVPH+OMTmkt05M=;
+X-ME-Sender: <xms:ed7iaj_lbutMFJJkR8aGD-2uDHsJBEseQqbZ0r3kbObgTtrJYuEYaA>
+    <xme:ed7iaqgJ0bNSwRXld3RRvgEIRoz4afpxsa7GQ35jnsp95SRB6OiEVPnSFeWGjL4VG
+    IavfBFOqLnOypa9YUgzTfFaXcBV_CpY6vrDTxXZXNq-fC3KsNfWg2Be>
+X-ME-Proxy-Cause: dmFkZTFi47UfBS3qtin2EOCAnLXWgDTgYqNWZh2+4k0MPu07+mRUMRnWVqjM07Gy9aqxen
+    sbcbfFAmwAoBnCxPB34CZcdieECYJIs/fOGcJEFx0bWy62+lF6VHtvLdyav0DePRL7QZG2
+    68t4tUbRn0qEtwBU1NUdMwWkQ07k/VJvfNuyH61UExn69DfFlh0jgzZh57oKFzwDUeNuN7
+    /BjlGMr63RTgfE4tUKe1cewV0prry6id2fPJsbWCky2R62Tcc9pZCfQlnH2OKvwN7Ti+2R
+    qNlRdLDYBki8Ms9zYvaNyf2FKgAad74wtx8OW7gHTayxwJku9z9uLuZyQYVfwkKTDKZ8AM
+    YdmiPF08dZwWgy+CXZCCLqbSDN8eNC2gSkNB4de9e7XCsmMUREzgzJqpyPfQdon+Fev0S5
+    JBZUUDl+FbO3aJDS65ekV1NOaksjonLr0wOU6UDz1zI1kRSIV0AjNG12loBO+0fj5t/Cvm
+    ppFwqUCOw49/nfA+tX6watX6qteQL+5lT/SKa/lGo4Ocx+aYMNNg64AB+30iAdqr2XjXhI
+    f98dUSrhDqaBUqHHQQZu2D2Rr04jIrr+g9OZt/IOHC9yXxrgMX7lUldryUgzUF9WPO2s1R
+    vShRQSjtHD0W5lb8/KDZVV6uzzQvJX9kVOmem0RNdTYUzgy3lRyBMTncnkoA
+X-ME-Proxy: <xmx:ed7iaviR-_6OYCH3WUTV6NvxqSwl5V88ab9dCo2ECWY3IpSOem7q3w>
+    <xmx:ed7iasdpjGp9fY3ySQxo5Lc3rAxhGNZOP0kMEaFHFKKxEwZ5Vk90kQ>
+    <xmx:ed7iau1DKfumNrRyv7Bf2mm_oqdMN-Phgip7zg9lcg0pOndsOytWFg>
+    <xmx:ed7iaoqppn5_63varWgnIvXWJY4J5KoWj7fMSrnQRN5ljj8MI_45yQ>
+    <xmx:ed7iavA_QMSps5FP5hyZgjr7rdzQdKLl6MK1yYAa5cycyXq656O6rm4b>
+Feedback-ID: i5cf64821:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 1358518E006C; Thu, 29 Oct 2026 01:49:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,59 +115,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+X-ThreadId: ADl5zPqKnVsk
+Date: Thu, 29 Oct 2026 05:49:24 +0000
+From: "Chuck Wolber" <chuck@wolber.net>
+To: "Sasha Levin" <sashal@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, llvm@lists.linux.dev,
+ "Marco Elver" <elver@google.com>, "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Thomas Gleixner" <tglx@kernel.org>, wentaoz5@illinois.edu,
+ chuck.wolber@boeing.com, "Josh Poimboeuf" <jpoimboe@redhat.com>
+Message-Id: <1f0ca403-551f-48c5-8e5b-1e07d3227f34@app.fastmail.com>
+In-Reply-To: <20261028164556.1610305-1-sashal@kernel.org>
+References: <20261028120034.871983-1-sashal@kernel.org>
+ <20261028120034.871983-5-sashal@kernel.org>
+ <20261028135140.GR2668564@noisy.programming.kicks-ass.net>
+ <20261028140118.GB2669272@noisy.programming.kicks-ass.net>
+ <20261028164556.1610305-1-sashal@kernel.org>
+Subject: Re: [RFC PATCH 04/20] compiler_types.h: Don't instrument __always_inline
+ functions for coverage
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
-head:   b07585bb535605fb7baff6811b5b778c83af0805
-commit: e135d1b5014d752a74322230ad9e2708ea093ebf [35/41] timer_list: Add auxiliary clock support
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261028/202610282341.X4ssVNgi-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261028/202610282341.X4ssVNgi-lkp@intel.com/reproduce)
+On Wed, Oct 28, 2026, at 4:45 PM, Sasha Levin wrote:
+> On Wed, Oct 28, 2026 at 02:51:40PM +0100, Peter Zijlstra wrote:
+>>This is pretty vile. But also, since people were trying to use MC/DC
+>>for validation efforts and the like, how does this impact them? If I
+>>understand correctly their previous emails on the topic, this means
+>>they have to go manually audit every single __always_inline function.
+>
+> Yes, the __always_inline helpers join noinstr code as something that
+> has to be justified separately rather than covered by tests. Steve's
+> answer to your noinstr question in 2024 [1] was that this is workable
+> as long as the number of distinct categories stays small, and this
+> adds one (556 functions and 445 MC/DC conditions for the config in the
+> changelog).
+>
+> Chuck, Steve, does that match what you'd expect on your side?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610282341.X4ssVNgi-lkp@intel.com/
+Yes, this is correct.
 
-All errors (new ones prefixed by >>):
-
->> kernel/time/timer_list.c:117:57: error: no member named 'disabled_bases' in 'struct hrtimer_cpu_base'
-     117 |                 bool enabled = ((1U << base->index) & base->cpu_base->disabled_bases);
-         |                                                       ~~~~~~~~~~~~~~  ^
-   1 error generated.
+And "small" is a relative term that should not be a factor that holds
+back this patchset. Perfect is the enemy of good and we can always
+improve on the level of coverage over time.
 
 
-vim +117 kernel/time/timer_list.c
+>>Still, I'm left wondering if these tools should be fixed. For
+>>instance, while the front-end emits this instrumentation, the backend
+>>could easily remove it again when it finds itself in the context of a
+>>noinstr function after inlining.
+>
+> Yup, we should do that. Both GCC and Clang add the counters before
+> inlining and let always_inline win over the attribute mismatch, so
+> neither can do it today. We can look at improving them, but it's
+> probably outside of what this series can do.
 
-   107	
-   108	static void
-   109	print_base(struct seq_file *m, struct hrtimer_clock_base *base, ktime_t now)
-   110	{
-   111		SEQ_printf(m, "  .base:       %p\n", base);
-   112		SEQ_printf(m, "  .index:      %d\n", base->index);
-   113	
-   114		SEQ_printf(m, "  .resolution: %u nsecs\n", hrtimer_resolution);
-   115	#ifdef CONFIG_HIGH_RES_TIMERS
-   116		if (clockid_is_aux_clock(base->clockid)) {
- > 117			bool enabled = ((1U << base->index) & base->cpu_base->disabled_bases);
-   118			const struct tk_aux_mono_conv *conv = base->aux_mono_conv;
-   119	
-   120			SEQ_printf(m, ".enabled:      %d\n", enabled);
-   121			if (enabled) {
-   122				SEQ_printf(m, "  .mono_base:  %lld nsecs\n", (long long)conv->mono_base);
-   123				SEQ_printf(m, "  .aux_base:   %lld nsecs\n", (long long)conv->aux_base);
-   124				SEQ_printf(m, "  .mono_mult:  %u\n", conv->mono_mult);
-   125				SEQ_printf(m, "  .aux_mult:   %u\n", conv->aux_mult);
-   126			}
-   127		} else {
-   128			SEQ_printf(m, "  .offset:     %lld nsecs\n", (long long)*base->offset);
-   129		}
-   130	#endif
-   131		SEQ_printf(m,   "active timers:\n");
-   132		print_active_timers(m, base, base_now(base, now));
-   133	}
-   134	
+Agreed. This is a good example of how the level of coverage can be
+improved.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+..Ch:W..
