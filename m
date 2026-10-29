@@ -1,111 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793268460;
-	b=bxOlFC1HLpdXXRogBOei6WC1JnFCTqmBl3aigR2QwxyukqCRVzIiGHLtKPFE+g66bkuP
-	 Bb4GmJxUNKYput8vhjfzh0vfy1N51sVg361u988m+BKTuoaEMDkFPfubMJ5z2d6sipPjH
-	 hVqtxdu/4ebIdIfwoA+nYpwq0hGysDdZYU48hvptudddu0G5sL1dJJXKqV9VvE3Rzv4Oq
-	 cHJxyxA+qpXTCkokRvJiUN0kyyXQzYpgaDiTinSOh78SfjQzT+UBd7nnNW36sR5x/EqaU
-	 Mec5IxFGeCeczMyZaGngnuSeI8X6QRJfwCn2jRI320U0FnXc04Vp0Inhdu/ddmGRDuw==
+	t=1793269845;
+	b=xHW3fwMUNzyiAPlCHmbL/B3LyIYdT4fGwH0zD+18aXdevcOfWhEvDLpESFxAZU0aD6il
+	 XJ01jFZRW6N1p9gKzemTcjPJ36oa6RAy81K19otxqB4u1EYyl1iZYPdroP0ve0wGa5fMu
+	 nv4JAyqEWP+oYCWtQqnFRetuFyWnqcjA3tNNueR9vK3g8sRWZFvTDIP0WAXnmo0JExGVi
+	 /wyIzj0R3mRQoqYiBuL4EcKxDdd2nmprB82f7H36uV5DxVUtX3loMWydRqx6e2qtZ4AiY
+	 DUG6PUAiV+aNGIHtOafdHiJnLm1Yc3tDa6itprPe2zPumBJ0JYqAv7XWi22bbGyjcbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793268460;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=2pI/j71t4VuCaLXQJYxfTinJklKy3KjSKz/+nzofH0A=;
-	b=rMNGHZrnSyQbkjdP2JrOvlLrFyjS/1P12EEVYn3r36dlEfT9oErTDbovfKHl26KZNYig
-	 zq8hECwDGexA0ymRDqfZq3Cv/InYUTqfvtUIVZuEDcXvbUHDualDW52qjPLAwb3ZQnaYO
-	 mXcRaSWwXXZw7fe5D15fTC1uri9H63WQ5p5Dw99p6ZuxSO2Ihim9diAB4778VKTDaX31w
-	 VgjmW4P9YwbVSP0ncjL/7IE86N3h/pTyAqafajqN2/aA8qGCGzEm6/gJPPHDwXLa47+Wf
-	 sjbETiDqn0Sf7NvUFqplFU9MiNznPAhwV7XE1eZ9S15OsujuoHzKQPmdLNTRXNx5xVw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793269845;
+	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Debian-User;
+	bh=37k4SuCznrRROwQPx+TAnrlUwps6gOeYzDwf1eYuuEE=;
+	b=mJuKrsXbvtLFSqmAUGkNT7MpoBhcUIyRHxu8BUX3KpSuqFoU7hHtcE+mZO6KhcMieYVn
+	 20O14oa+Ir0k0/YmizxbFcAu548zP/iq4vmhdDE49VMVVdPMCkIWPEoexcKyWd1K9d09o
+	 xs7n3s8udDo5M6wfP1YYrc88azptVyEhTlf1CBHjiOhO4Z/a+T0R9AIkm+sQ0PClzzPva
+	 uvu3DjXv9JKVgpKBtRDLWV6RMTnnCgGzGhwDYg5FnOxcHVvnanMK1V2X3Hp6q+I1ef42l
+	 yBnz1aqjn2HUzFns4bQitNifte6Na8rncygeRuKkZHHiVsE7JIYZ6HTMrXTxVtOuNUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=fireburn.co.uk;
-	spf=none smtp.mailfrom=fireburn.co.uk;
-	arc=none smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Y7xKS6kM;
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075DA606A31E
-	for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 10:07:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 075DA606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fireburn.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=fireburn.co.uk
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a207b02a2cso13318115e9.1
-        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 03:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fireburn-co-uk.20260707.gappssmtp.com; s=20260707; t=1793268452; x=1793873252; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2pI/j71t4VuCaLXQJYxfTinJklKy3KjSKz/+nzofH0A=;
-        b=i68KGOeGOELTh3rrM+EW9tB1koLKJSwRF5O73w36d9JUnbeAYl4JwUIgRffBj93l3U
-         qrSL02WO2OF/HR3qDegFHsE9M+HRGJPaF2lou6iiaTbyaRZDOO+daoNBVbSHxcTlZdwq
-         2sATt5c7JGMT513GWdpWas8cWJy/tCn4T2PJ5VPWmvnB7C3hCbG/Ay+98Kcqav8wwo7h
-         we2nDih1HsGAZ4z3OGzn1zfO+zmYmsIfcNHnjTkIMKgEfIWGCBTuPmqCwqVmXwO58i5O
-         2fxNov++DpXr5viGL4MskdSrudUxkcFEeGjpx2a7gPi7acB9e+DoV5+WEOv3+IE6+Odu
-         BG7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793268452; x=1793873252;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2pI/j71t4VuCaLXQJYxfTinJklKy3KjSKz/+nzofH0A=;
-        b=lA6mq/sGJhHy35EM7K6HvNslJWf3NcTWVnbdpvM7ctQf4KcEPKiGfIfmR+GdMOzA4V
-         dg5RhV8eHIrLnYJmvbwE+GALSNnZ0JSRqzZ5YvGgm3reiQfJtZAOkVuwwApL92Dv/Fjc
-         dxPmOfVX8QgzDaGnrBzDjY8nDXJQkuHi/Ad0HUpPJk9Pca9w0R1iGpN04uhyxMnxCbeI
-         Mbc2Kzc4a6rn/jnV7OWwtBYFklO1zgGk4kJZMGbpTC3vyBG8wsVvsL54aUlHdmk/SsiA
-         RE1NKqpUfSy7JsrWZViJQf2NqUnCO6Tgs7Cv3h2R5ebtfOsd7OQuQbU+sUYSirF/60cB
-         qu4w==
-X-Forwarded-Encrypted: i=1; AKwUvBw9cdseq56YDGG1qyPRVucRvbKMliS2ZuOB2mgI7jTL18ILZ0kqXEWE9xZsLlfgmDCyluZ3@lists.linux.dev
-X-Gm-Message-State: AFq9FYIVFPOl4AewtssEN7FeOBr8NuxQUs4HfGdvQJcVjgQmMSBsyj7m
-	H6PdXQV5Q+qyamvbcVqhO8Es1MUzLRtK9hONKctQbwsPP3q+wQ9JD3++xFoXNWaBCw==
-X-Gm-Gg: AYBFou0eeEQDo+FFJuLUEdGsqadERFJVd+eZ81qqhxST5JKik9KIPSXDdtbpnRZ3VlQ
-	Ed2lU5s4lrJDUd0XGZMQTeVyV1Siwd24bk8vVxSnRxao8I9M7agRas6ZEiQ0et9fYberfVQh+5e
-	UOm/CpX2iTKw7vR4rl7og/fldcNWvWmus4qWa83mJ6gLrFRz4l2ChutXEtGxKShbRRiPUUslG4I
-	dkSJXU7DAGP7XX/593MDqAvRVTwPX2SWLkafR2Kr9+FmM7diAbkVfPynMDQpyJk8Yd8cf2xPY+k
-	GA0rwEiAS7iPRN749BRteBJ2KAhBeFD5PX67Cw5Jjasr5UmHv2QLscws/DMQdjyaMeya5n387fL
-	TRtyJhyIohrsv4bAGWNkQJ2qqG+fqyHOZzmZW5f6ChfZ0r6rjB5OdEXEMp7rm2hYCwLP0X2FzAe
-	7cOMHirG1p44+qW1apXGCu0TXfXZqcG26DILrtM4zNmpobMFLkZzS6UxlQl8RZou57xs5RsU4Vh
-	zbMERqqvBo72Xs51KRe++kAvIus5Bj9ab4JcnkBPB7pedOPF/pkRdMCbUQE7udneEgag6wXKgsU
-	i2CynB8uO3gT4ccfC9DtV0oV2oGRvFuDMBaq/+syi9SPJ+2pCwvOamUYg87c0VPrxeWW/+HtDwB
-	qDAtB/htXmjv9VQHw/lO6xw==
-X-Received: by 2002:a05:600c:3146:b0:4a2:fe11:9a8a with SMTP id 5b1f17b1804b1-4a96552d0b9mr101086605e9.0.1793268452134;
-        Thu, 29 Oct 2026 03:07:32 -0700 (PDT)
-Received: from axion.fireburn.co.uk ([2a01:4b00:d309:1c00:caf1:6b20:8531:818c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ab61d8b9f4sm11425165e9.12.2026.10.29.03.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 03:07:30 -0700 (PDT)
-From: Mike Lothian <mike@fireburn.co.uk>
-To: Danilo Krummrich <dakr@kernel.org>,
-	linux-usb@vger.kernel.org
-Cc: ojeda@kernel.org,
-	boqun@kernel.org,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	daniel.almeida@collabora.com,
-	tamird@kernel.org,
-	acourbot@nvidia.com,
-	work@onurozkan.dev,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev,
-	gregkh@linuxfoundation.org,
-	oneukum@suse.com,
-	stern@rowland.harvard.edu
-Subject: Re: [PATCH v3 0/5] rust: usb: host-side abstractions for a bulk-endpoint driver
-Date: Thu, 29 Oct 2026 10:07:23 +0000
-Message-ID: <20261029100723.4160932-1-mike@fireburn.co.uk>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <DKZ34IA4DZAF.16BWFH4JPGROV@kernel.org>
-References: <DKZ34IA4DZAF.16BWFH4JPGROV@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E26F606A31C;
+	Thu, 29 Oct 2026 10:30:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E26F606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Y7xKS6kM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=37k4SuCznrRROwQPx+TAnrlUwps6gOeYzDwf1eYuuEE=; b=Y7xKS6kMrf8k2TFtPlWjzjJWEX
+	ovwq54zt09HR+k8ZactmRpcRNo7w7ATpt3b3kr0gb/0BVksuiBumA9pPNB30fPCG9z66PPWebYHWh
+	PJMLHc35a/2kzrbhWTvATa7KXaAW50T0fo1Q75kmwRliTC0gs6qgOaHapjwrQ93WPnl1OInEKxu4i
+	l6ax29oYznOkHaupCmTD+4JdztPuHy4Ox6gtv6LVN2L1FftCwUuCZqj3oCf8BmvdDb/77eQIKCYcw
+	AaF8kvPf2L2lyG1ov3ghpLs50eXJs5sUhROWkVEQvw1NWLrxfR49RwnO1gkDaEvojDqhzs/tG/crZ
+	1SRkIg6A==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xMNOy-002xSJ-0Q;
+	Thu, 29 Oct 2026 10:30:32 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Thu, 29 Oct 2026 03:27:23 -0700
+Subject: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when Spectre
+ v2 and BHI are off
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -115,31 +63,199 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261029-syscall-table-dispatch-v1-1-bca9dbb886de@debian.org>
+X-B4-Tracking: v=1; b=H4sIAI0f42oC/x3MQQrCMBAF0KsMf92BJEWp2QoewK24SJPRDoRaM
+ kWU0rsLvgO8DSZNxRBpQ5O3mr5mRPIdIU9pfgprQSQEF47ehYHtaznVymsaq3BRW9KaJ3Z96Z0
+ fTiUfRnSEpclDP//4huvljPu+/wDJr/2BbQAAAA==
+X-Change-ID: 20261028-syscall-table-dispatch-03d30189dc5b
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, 
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ torvalds@linux-foundation.org
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ kernel-team@meta.com, Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.17-dev-ce4c1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5936; i=leitao@debian.org;
+ h=from:subject:message-id; bh=pQ/CU1ObAwKL/q0NRJON0Pf3ttJvWE6vl503eCUpB+Q=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq4yBBKTNV4vhYFJzGFGOnbH3fL/JlxwjpzZswC
+ L4NRcBTw6KJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCauMgQQAKCRA1o5Of/Hh3
+ bRBnD/4lgUpXM6muhA51whX3+3X5Vlh9K/Flonkrg2W1ATBnwAISFUbF3ePfnc/wubvvdYSOoNE
+ Ew+kclR7ATYfKwTTDGk4pfl1cUlcP4cPLuVQYDex3kgBbtrUMqH6QMZIhhMRseiazE11+jsL8yc
+ bepcz+2fS2rTbdzxW7bgFqUW75dq+1IaDtGlBCqIt4yEowAbD8GJRVh5LUJTr/GSgzyLA7mDUNW
+ AAv1vTDX1Olbv6TlENCHa9m0ggHpDhu6eVaj8TLGYYBXqSB3DnH32f9mfgsxphVG+0fpte8J4+U
+ 9yHf+8q3WiTb0Y4A866Nq/gpg6utBzxcrym7rZnTPaCm75PiKjjGl8ZVJXBPa3Ky6DgrgcdaCPU
+ XQUGz+yaV8UxF/5WF0I3rnwy2ynPe4LRMokbhxfCidJnUIiWkHGVLk3NMZ9lQgj+cMo/wPqyOG5
+ Q4A+Sb8jrZipHlJCsYMcRIvSJ+y2BQ7A6jQq1TL0HqZlmYK0OQG/od5F+lNML5oX56ou+oSa1Kk
+ lZ30B2s/D+IOf8WGGvNxHkSIiye8hHap5Wzg9qZr8dEIO7abGzgB7Sqwr000ltMhn9CAumvc704
+ 7EviW9XBw0v5nFrjuJrIWB9BW842TgiZvkYxq3WO9WkTeefiZkBuhzOEAN0ISREi6Wvu10qBdBi
+ nZAYLjg0uJxSleQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Resending, the first copy went out as HTML and the lists will have dropped it
+Linus' commit 1e3ad78334a6 ("x86/syscall: Don't force use of indirect
+calls for system calls") dispatches system calls with a switch
+statement, so that syscall entry has no indirect branch for BHI to
+target.
 
-On Wed, 26 Aug 2026, Danilo Krummrich wrote:
-> Well, Alan also said this:
->
-> "At first I thought that we ought to have such a guarantee. But in fact
-> we don't, because the user can at any time write to a USB device's
-> bConfigurationValue sysfs attribute even if the device isn't bound to a
-> driver."
+As noted by Linus in the commit above, the compiler can either
+decide to generate an indirect jump, or just a series of conditional
+branches (which is more expensive).
 
-You're right, and the cover letter was wrong to lean on it. I took "an unconfigured device has no interfaces" as an invariant and it isn't one
+With CONFIG_MITIGATION_RETPOLINE, clang emits no indirect jump, and the
+switch becomes a tree of compares and conditional branches. That code is
+built in, so a kernel booted with mitigations=off still walks the tree
+on every system call.
 
-What the series relies on is narrower. Changing the configuration destroys the old interfaces, which unbinds their drivers first, so nobody can be holding an Interface<Bound> while the device is unconfigured. The unbind comes before the change, not as a result of the device staying configured. I'll say that in the v4 cover instead
+When neither the Spectre v2 nor the BHI mitigation is enabled, nothing in
+the kernel protects indirect branches, and the switch buys nothing. Use a
+static key to call through sys_call_table[] in that case.
 
-> On an abstract level a USB interface is a device that is operated by
-> some driver [...] there is no layering violation in shortening
-> intf.device().bulk_send() to intf.bulk_send()
+The compiler emits that call through a retpoline thunk, which boot-time
+patching turns into a plain indirect call when retpolines are off.
 
-Fair, and I overcorrected by dropping the patch outright. Io already borrows the interface and carries the transfer methods, so it's most of the way to your IoDevice<'a>. For v4 I'll make it that, so no I/O path hands out a usb::Device<Bound>, and keep usb::Device public for the calls that really are device level, like set_interface()
+On next-20261028 built with clang and booted with mitigations=off on a
+Xeon Gold 6138 at a fixed 2.0 GHz, perf bench syscall basic (getppid)
+and getpgid. Mean and standard deviation of 30 to 45 runs over 2 to 3
+boots, and kernel instructions and cycles per call from perf stat:
 
-On IoWindow, my question in the 1/5 thread is still open: can the lifetime and higher-ranked machinery express a window that closes and reopens within one bind? Suspend/resume and pre_reset/post_reset need that. I don't want to hold v4 for it, so unless you tell me it can, v4 will carry IoWindow with the Devres comparison dealt with in the commit message, and I'll rework it if you point me at the right primitive
+                         CPU_MITIGATIONS=n  =y              =y + patch
+  getppid()  ns          131.2 +- 0.2       134.1 +- 0.1    131.7 +- 0.4
+             insns/cyc   310 / 212.1        331 / 218.1     314 / 213.1
+  getpgid()  ns          129.8 +- 0.3       132.5 +- 0.2    130.0 +- 0.5
+             insns/cyc   302 / 209.4        323 / 214.1     306 / 209.8
 
-Gary is also right about release_driver(). It's gone from v4 and remove_all won't be coming back through this series
+Kernels that enable either mitigation keep the switch, behind one extra
+jump.
 
-Thanks,
-Mike
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+The reason behind this change is to make the mitigations a boot command
+line option rather than a compilation option.
+
+It is common to find different kernel configurations where the major
+difference is CONFIG_CPU_MITIGATIONS.
+
+With this patch, CONFIG_CPU_MITIGATIONS can be enabled at build time, and
+when the mitigations are disabled at boot, system call dispatch has no
+performance impact.
+---
+ arch/x86/entry/syscall_64.c    | 15 +++++++++++----
+ arch/x86/include/asm/syscall.h |  3 ++-
+ arch/x86/kernel/cpu/bugs.c     | 12 ++++++++++++
+ 3 files changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/entry/syscall_64.c b/arch/x86/entry/syscall_64.c
+index 966d3d1b75868..1da8b6c90171e 100644
+--- a/arch/x86/entry/syscall_64.c
++++ b/arch/x86/entry/syscall_64.c
+@@ -21,9 +21,8 @@
+ #define __SYSCALL_NORETURN __SYSCALL
+ 
+ /*
+- * The sys_call_table[] is no longer used for system calls, but
+- * kernel/trace/trace_syscalls.c still wants to know the system
+- * call address.
++ * Used for dispatch only when x64_syscall_use_table is enabled;
++ * kernel/trace/trace_syscalls.c also wants the system call addresses.
+  */
+ #define __SYSCALL(nr, sym) __x64_##sym,
+ const sys_call_ptr_t sys_call_table[] = {
+@@ -31,6 +30,11 @@ const sys_call_ptr_t sys_call_table[] = {
+ };
+ #undef  __SYSCALL
+ 
++/*
++ * Decide about syscall dispatch method: x64_sys_call() or sys_call_table
++ */
++DEFINE_STATIC_KEY_FALSE(x64_syscall_use_table);
++
+ #define __SYSCALL(nr, sym) case nr: return __x64_##sym(regs);
+ 
+ /* The unsigned int @nr argument is intentional as it creates denser code */
+@@ -58,7 +62,10 @@ static __always_inline bool do_syscall_x64(struct pt_regs *regs, unsigned long n
+ {
+ 	if (likely(nr < NR_syscalls)) {
+ 		nr = array_index_nospec(nr, NR_syscalls);
+-		regs->ax = x64_sys_call(regs, (unsigned int)nr);
++		if (static_branch_likely(&x64_syscall_use_table))
++			regs->ax = sys_call_table[nr](regs);
++		else
++			regs->ax = x64_sys_call(regs, (unsigned int)nr);
+ 		return true;
+ 	}
+ 	return false;
+diff --git a/arch/x86/include/asm/syscall.h b/arch/x86/include/asm/syscall.h
+index cfe4251fc1fe3..509449a70febc 100644
+--- a/arch/x86/include/asm/syscall.h
++++ b/arch/x86/include/asm/syscall.h
+@@ -13,12 +13,13 @@
+ #include <uapi/linux/audit.h>
+ #include <linux/sched.h>
+ #include <linux/err.h>
++#include <linux/jump_label.h>
+ #include <asm/thread_info.h>	/* for TS_COMPAT */
+ #include <asm/unistd.h>
+ 
+-/* This is used purely for kernel/trace/trace_syscalls.c */
+ typedef long (*sys_call_ptr_t)(const struct pt_regs *);
+ extern const sys_call_ptr_t sys_call_table[];
++DECLARE_STATIC_KEY_FALSE(x64_syscall_use_table);
+ 
+ /*
+  * Only the low 32 bits of orig_ax are meaningful, so we return int.
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 000ebee2d247b..1823b4d963de3 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -32,6 +32,7 @@
+ #include <asm/hypervisor.h>
+ #include <asm/tlbflush.h>
+ #include <asm/cpu.h>
++#include <asm/syscall.h>
+ 
+ #include "cpu.h"
+ 
+@@ -2134,6 +2135,16 @@ static void __init bhi_apply_mitigation(void)
+ 	setup_force_cpu_cap(X86_FEATURE_CLEAR_BHB_VMEXIT);
+ }
+ 
++static void __init syscall_dispatch_apply_mitigation(void)
++{
++	if (!IS_ENABLED(CONFIG_X86_64) || spectre_v2_enabled != SPECTRE_V2_NONE ||
++	    bhi_mitigation != BHI_MITIGATION_OFF)
++		return;
++
++	pr_info("BHI mitigation off, dispatching syscalls through sys_call_table\n");
++	static_branch_enable(&x64_syscall_use_table);
++}
++
+ static void __init spectre_v2_select_mitigation(void)
+ {
+ 	if ((spectre_v2_cmd == SPECTRE_V2_CMD_RETPOLINE ||
+@@ -3371,6 +3382,7 @@ void __init cpu_select_mitigations(void)
+ 	bhi_apply_mitigation();
+ 	tsa_apply_mitigation();
+ 	vmscape_apply_mitigation();
++	syscall_dispatch_apply_mitigation();
+ }
+ 
+ #ifdef CONFIG_SYSFS
+
+---
+base-commit: 6d0933ae9d46674a6ea63a87e9e9ab4e662670c9
+base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+change-id: 20261028-syscall-table-dispatch-03d30189dc5b
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
