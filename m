@@ -1,72 +1,118 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.42.244.94
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793362644;
-	b=aTkGxWfsSLCb5flTB5m2KLa66cEmTNsQ5q5vN6GfTTi047ZQQ4hdcLRdcKe6KkPEvrJT
-	 3gnxK5+Fj3y+S22oY7SIh4WHerwrjsZfk+x60O5ES5+ju3UoLExK+dmQGFmMjaW7jL71T
-	 a/orJZz10LkDncqiV7hzEk9r7Eifs6RBtVX3rJXPDZmM5xWhPKOcsFGl9xiTl8xVuiBnL
-	 sCux5m6YyzxINatrvQ34DUZRxkUaIBbbJbUI926aZSDRkVOzQ//xV4peEnCrEiVOYOLmt
-	 +M0pqbCo9ptTNSyWsh4zaiyTMaKiojrI8qBy+fsbTxYjS4JHe+3B2DktZoh0qGw1eOA==
+	t=1793366993;
+	b=Jk492itNeCtwuJH3FUwMabkREc7V++56XPHIE7iuoTBZGm6gG7kBd/cH2+a6pOVe86sz
+	 VMi3QdQtdgStQaaX+kGXFsFxk/CgPH6LLAnWwIFkNpoiXxhmgXIdgvYvJ+wbyYGxONk/S
+	 91baM/+4Tql5150EfAutYUBrrKtgvdoY6O7WR1XWjtugEelACOH89uPmlSe1rX5o09znX
+	 W6VcCqFn54EZKHwNButRk8N296hzeLSFol0GLGeBdMzeQxag6H94bqVSk/xu3UTpf89h/
+	 +urfyJp0C08xMGio5R5g2oUY0JiKm3G0iXdT8y9KebjUA1NU6ps6Vwf82v7/Do2HNSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793362644;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=HpxrkdHX+pHoxS8QiLrmBd8NFzaZIUXGXtbQN2oLq54=;
-	b=uyndSUgKmr37vuCL0DeYEbKoYlvcJLYHHIBky2PiTgQGYYe2pY02Dq0ab0myjmbU4pTg
-	 4+hkOBMXlavW4RU1kPGPYnqE1CFm99+I9nTaobBBDIUVssLDml8zYsTBSXRAZoRUYNUCC
-	 D0mVZ22k1yDqcJ51hL1OjU0TX+cfgQWVjcCn3S2qvMp1mJETtOtyg0pFOS61CLGTyYbVR
-	 9T5006dZss3M+GdD4IljP0LzLWRr7T85aa3CEcsQGg+U4S73w/YkqNfbzMNzqh7orAemd
-	 6HyNTz7L/dM9Hz1hUCY9vAoDzmiABGsJYoWBfiYkIsLcO/PnP0TAiswyZMy2UhjlQ1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793366993;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:Organization:x-ms-reactions:
+	 X-purgate-ID:X-purgate-type:X-purgate-size:X-Notice:X-purgate:
+	 X-purgate:X-pfmilter;
+	bh=QpUKaSoVRoEgdKmoyk8G7l81p1qWRtQXTZ0eVa1XsI0=;
+	b=L2Nj/dUMSB5Ik47SwZmhUxpPqNxWCNyRPCmIOLnVQpu9gJWcyxEQQj1UyhT2SMKad/re
+	 5NIddbCNz5QkeJn9JKuxBT8jNT5gYGWkXBBmHpjsIbGd3ARVEENnRz1Ff/aO32ofLdO45
+	 VNpWlpGCWeGVnh6b5V1nr1dDGM53k/WCNogRqTPydhQXNSxjGFLxvmggO1Ivx9ht35X7S
+	 1/3Wbd/0jmPH16UGVrOsFJVCxl0RZ4B/qmSJkl9okGb2KH91zDdyQ2zV0+znT7vk6dvsQ
+	 kw64R351f2Ei7JycrjRSnCURNhE47ipNh2Tz7uO1yOoVwa9w1VGG77Q/XHrRCDeaLWQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=H8h0Xx5I;
-	arc=none smtp.remote-ip=209.85.216.72
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=fritz.com;
+	spf=pass smtp.mailfrom=fritz.com;
+	dkim=pass header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=AmiP1sdZ;
+	arc=none smtp.remote-ip=212.42.244.94
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C38606A31C
-	for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 12:17:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28C38606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9926606A31A;
+	Fri, 30 Oct 2026 13:29:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9926606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=H8h0Xx5I
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3ab67ff8ec3so491755a91.0
-        for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 05:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793362643; x=1793967443; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HpxrkdHX+pHoxS8QiLrmBd8NFzaZIUXGXtbQN2oLq54=;
-        b=H8h0Xx5ItX6J19xT/Zvrjqr8aUKfw4LC9F4vZCCqsZC1Kr4j8kzvuSwvoWVSsoMdAi
-         Tv7Wz+GR2lcX63e49qKvKuUsnad4OnHeT5cn5CFG47IM5NujZQbdLECrrxpd7zzu7njq
-         itJ2+jUc7EqpwvAnDJebtrdt5fGpWx4RKef7EUJQbp2pDR7qv56cad1y06B4qZSHTtPL
-         Yn/C9qHsf97T3uxXpFTfaK9JBqVYdrjiS5bY5Yrx55YG+AfWkFaWGZR/P0KvoUpfSVm2
-         VZjlkNGxLECIA4hJsmu57VDUGiqNFuiYR8aSzGeDRN+opo9kPUoMZRUTbnRkAXQaXDZq
-         upWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793362643; x=1793967443;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HpxrkdHX+pHoxS8QiLrmBd8NFzaZIUXGXtbQN2oLq54=;
-        b=bLXInJpXsgaai/qoPTDOK95RGWCaA4oU2lpFrKOPe4MIXlNbRMiWsn2AkLtxH/ShO9
-         u/3BfVlVI7dc1YImM9K65J6LwYEYRqKU14c/WF+jBACQrJpT4YXwKaubTe1X+Nt7+Ybt
-         Gpu6EeI+PRjZVLqv0wQttbyZA7ASSqnLv8XKFpI+QKDwCuCg1EuFDYpLqWsEKgj+E5l1
-         xzDAZGJOaXy6Giv6IDm9yJT0zoFOaZIHfzBPXT1kXk4yZrhN+JdhzNItA1opO4LWTMTb
-         oKrGFfQtwjNdYtk1N/T3jtnwzV9EjD+ufl8ygki5oYwkCjzcQxrGJQM6nycbMqx0nZSk
-         mozw==
-X-Forwarded-Encrypted: i=1; AKwUvBxfaTgMSVN7wX763GCE6Bx1Iw4jA2ogm0rFgVW1/nzNj3R664fXzLGbQRk1kn7p427YtNlc@lists.linux.dev
-X-Gm-Message-State: AFq9FYI2nBi+ZBa4szzuR6npo1BApcMs5obdwBN3I5da1/NJeO480Ml9
-	ZjvoA08ySGbj5FSS0QiBDJXI0GigubLmcRLxlBHvpuBS51sQIC693K0kYg9YpXLVj44Pmklpbiy
-	b+JtlRSjoFVn4jnI6J4msbQ==
-X-Received: from pgby23-n1.prod.google.com ([2002:a05:6a02:6517:10b0:cc7:4919:5ed9])
- (user=jenhaochen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:5106:b0:3ab:e588:c295 with SMTP id 98e67ed59e1d1-3ae8983c798mr1659513a91.42.1793362643165;
- Fri, 30 Oct 2026 05:17:23 -0700 (PDT)
-Date: Fri, 30 Oct 2026 12:17:00 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=AmiP1sdZ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
+	t=1793366980; bh=a/fEt90n+2smzc8tULN5m3m/hMMA3WQXHcvWhcoynLc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AmiP1sdZKE4ipmV9XkFzIAg6sDdTc8piKssit8JG5M7jVm+wWoA9HNBcL6nnioxmf
+	 UtVWmWL8HC8cipXhGGKFKn344d7QBy4BigwXDhd9cibHOOYqfnPwcm+wl7S8LyH40H
+	 PIcRpdlbp12mkcZ/qVoxVXxHxdsVB4yBgm4K8e8Gb7j8o5MGT6HVOS52CCT1ImUgYM
+	 rC8fGm5esO5fYtQK82TXSmpyrCUdX6hUkhNuydSuiEjRPAEuIkSRJ3Vr5CzOMuVEiE
+	 +YmeA56zTDNX6G2v3XBcddEQclfpxGdALH3GP+htSNoKgdV3GvyPoPiSSRu1+yw2Ux
+	 Cmo8WDvejZ5Lw==
+Received: from [212.42.244.78] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
+	(envelope-from <n.schier@fritz.com>)
+	id 6ae49bc4-23c8-7f0000032729-7f0000019970-1
+	for <multiple-recipients>; Fri, 30 Oct 2026 14:29:40 +0100
+Received: from mail-auth.fritz.com (unknown [212.42.244.78])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Fri, 30 Oct 2026 14:29:40 +0100 (CET)
+Date: Fri, 30 Oct 2026 14:29:39 +0100
+From: Nicolas Schier <n.schier@fritz.com>
+To: Thomas Huth <thuth@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Luis Augenstein <luis.augenstein@tngtech.com>,
+	Maximilian Huber <maximilian.huber@tngtech.com>,
+	Anup Patel <anup@brainfault.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andy Lutomirski <luto@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, soc@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Mark Rutland <mark.rutland@arm.com>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Sean Christopherson <seanjc@google.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
+	netdev@vger.kernel.org, kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 13/13] treewide: Stop defining __ASSEMBLY__ for
+ assembler files
+Message-ID: <20261030-dexterous-manatee-of-honor-eac4eb@l-nschier-z2>
+References: <20261023064908.66707-1-thuth@redhat.com>
+ <20261023064908.66707-14-thuth@redhat.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -75,76 +121,78 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261030121700.260975-1-jenhaochen@google.com>
-Subject: [PATCH] mm/zsmalloc: inline obj_malloc() and obj_free()
-From: Jenhao Chen <jenhaochen@google.com>
-To: Minchan Kim <minchan@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	minchan@google.com, liumartin@google.com, benwei@google.com, 
-	Jenhao Chen <jenhaochen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="FhzCQO4A3K0b968D"
+Content-Disposition: inline
+In-Reply-To: <20261023064908.66707-14-thuth@redhat.com>
+Organization: FRITZ! Technology GmbH
+x-ms-reactions: disallow
+X-purgate-ID: 149429::1793366980-B27F8EE4-FD80AEC5/0/0
+X-purgate-type: clean
+X-purgate-size: 2843
+X-Notice: Whitelisted
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
+X-pfmilter: host: postfix-mx-03  mail-id: CA9E3A07A1  external: no
 
-In zs_malloc(), the fast path (if (likely(zspage))) allocates from an
-existing zspage via obj_malloc(), while the slow path allocates a new
-zspage via alloc_zspage().
+--FhzCQO4A3K0b968D
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Because obj_malloc() has three call sites across zs_malloc() and
-migrate_zspage(), Clang at -O2 leaves obj_malloc() out-of-line, adding a
-function call on every fast-path allocation. Conversely, because the
-362-instruction slow-path alloc_zspage() is static with a single caller,
-single-caller inlining under CONFIG_AUTOFDO_CLANG (e.g. with
-CONFIG_ZSMALLOC=m) inlines alloc_zspage() into zs_malloc(), growing it
-from 254 to 691 instructions.
+On Fri, Oct 23, 2026 at 08:48:50AM +0200, Thomas Huth wrote:
+> All spots have been changed to __ASSEMBLER__ (i.e. the macro that
+> gets defined by the compiler), so we don't have to manually define
+> __ASSEMBLY__ anymore.
+>=20
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  Makefile                                             | 2 +-
+>  arch/alpha/boot/compressed/Makefile                  | 2 +-
+>  arch/arm64/kernel/vdso32/Makefile                    | 1 -
+>  arch/loongarch/vdso/Makefile                         | 2 +-
+>  arch/mips/boot/compressed/Makefile                   | 2 +-
+>  arch/mips/vdso/Makefile                              | 2 +-
+>  arch/powerpc/boot/Makefile                           | 2 +-
+>  arch/powerpc/platforms/cell/spufs/Makefile           | 2 +-
+>  arch/s390/Makefile                                   | 2 +-
+>  arch/x86/boot/Makefile                               | 2 +-
+>  arch/x86/boot/compressed/Makefile                    | 2 +-
+>  arch/x86/realmode/rm/Makefile                        | 2 +-
+>  arch/xtensa/kernel/Makefile                          | 2 +-
+>  drivers/firmware/efi/libstub/Makefile                | 2 +-
+>  drivers/net/wan/Makefile                             | 2 +-
+>  scripts/Makefile.build                               | 2 +-
+>  scripts/gfp-translate                                | 2 +-
+>  scripts/headers_install.sh                           | 1 -
+>  scripts/sbom/tests/cmd_graph/test_savedcmd_parser.py | 2 +-
+>  tools/testing/selftests/kvm/lib/riscv/handlers.S     | 4 ----
+>  tools/testing/selftests/vDSO/vgetrandom-chacha.S     | 2 --
+>  21 files changed, 17 insertions(+), 25 deletions(-)
+>=20
 
-Mark obj_malloc() and obj_free() __always_inline and mark alloc_zspage()
-noinline to keep the fast path inline and the slow-path page allocation
-out-of-line.
+Reviewed-by: Nicolas Schier <n.schier@fritz.com>
 
-Signed-off-by: Jenhao Chen <jenhaochen@google.com>
----
- mm/zsmalloc.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 6258a4f5e9fce..5d3443f14a48f 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -960,9 +960,9 @@ static void create_page_chain(struct size_class *class, struct zspage *zspage,
- /*
-  * Allocate a zspage for the given size class
-  */
--static struct zspage *alloc_zspage(struct zs_pool *pool,
--				   struct size_class *class,
--				   gfp_t gfp, const int nid)
-+static noinline struct zspage *alloc_zspage(struct zs_pool *pool,
-+					    struct size_class *class,
-+					    gfp_t gfp, const int nid)
- {
- 	int i;
- 	struct zpdesc *zpdescs[ZS_MAX_PAGES_PER_ZSPAGE];
-@@ -1209,8 +1209,9 @@ size_t zs_huge_class_size(struct zs_pool *pool)
- }
- EXPORT_SYMBOL_GPL(zs_huge_class_size);
- 
--static unsigned long obj_malloc(struct zs_pool *pool,
--				struct zspage *zspage, unsigned long handle)
-+static __always_inline unsigned long obj_malloc(struct zs_pool *pool,
-+						struct zspage *zspage,
-+						unsigned long handle)
- {
- 	int i, nr_zpdesc, offset;
- 	unsigned long obj;
-@@ -1321,7 +1322,7 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp,
- }
- EXPORT_SYMBOL_GPL(zs_malloc);
- 
--static void obj_free(int class_size, unsigned long obj)
-+static __always_inline void obj_free(int class_size, unsigned long obj)
- {
- 	struct link_free *link;
- 	struct zspage *zspage;
--- 
-2.56.0.317.g454f8302e1-goog
+--FhzCQO4A3K0b968D
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEDv+Fiet06YHnC6RpiMa8nIiabbgFAmrkm8MACgkQiMa8nIia
+bbgYnhAAoBtAI6CuFq9HQy+0LMEBBrZiObTja20n/nhSog1KoLUqfiUozqhmkZ/q
+CT6UauaVVL+guGjUkQd4MU9Y4sF+qy0kKmfzavbo/MIofHFX6fypq5WinV83BS4k
+PfHvku6pkGUFMvVkCliG3iiJVbANl4MGycOY5VxIXI9veRse6+SRuWaP5fqRD0dv
+XZHNc+ZmLOMmkijTKgYUq7fUIdBhxmeq4Px5Q0aq0cESHCORoGOcUcdASB8KRxr/
+S2whk42NUvuQxJF/S68XDQ9N3LdkhPBY2Y0GHdcJ+esswGxGJVb7rfY38dRXkz8R
+a/X59L/D+n6k/1v/xfmmj36rd/INoushZOa+gNXEg5KPwORqTYICzhwVlfZz5mdv
+0XgTKePC+FBeKnCHfJjMK1P6SAnag5q59vu8MXmzNGH9HIhm2PzyPhRrPYA4lwBl
+N1Hh9kQBBwy4oEdLX69syKiLtIA3mDxbo80VqRIUm6MpUjxkTbkAgLQgfXDRz2M0
+Wa9/fDB/O1tJKj8IR8V+jbjPqz5/6/fNkpD9/6fpqvBgeD2vkjOk3q/IvTq5gvHK
+ApKpaLY5DYJBXdX80Rm5ofEmFac0/p9C+eX3ovHAHFIG7JPR5kTF3fwDtbSbP7z6
+ghTZsJCcqEgyM22oqOSpskYbUmxnPEnUkGMg6K1a7KZPgUJQ9zA=
+=Pwya
+-----END PGP SIGNATURE-----
+
+--FhzCQO4A3K0b968D--
