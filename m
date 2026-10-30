@@ -1,100 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793391724;
-	b=rvkpumrMyw45jylh/4pBi5p/BiY9wrmgOQqEHY/UCE5uQlJJPE1mLmYk7g5+NBa46NYK
-	 xpX3LgTdWMwzy2X957KlpJLYoC/ZXBl0puUfHda1LWB2BfHVD+nWqzBmPH8BCADDpUy4C
-	 vk9r6G+RH7+rrtNjBWJKIni2GXQCN9SqfSaA5RhESM6mUsVThl37+GjbvutXEnKOpOpgT
-	 y9a3UJqIFN+ktImSZSY9YJ8JTkmqX869IJVKYgrSboawQ/LbK2BonbMlQZbtsoz6mJiia
-	 rBzpFHUB47hBEjkbrgKRX51jqrDQ6cTaB2wvDbUkr6dLFY5iGkF/Yq4Xp27UFnCHqWA==
+	t=1793392049;
+	b=eYCa0w1pQo+e2wG3Ou0/YXeiwCsmn03A6TE7/yuBglhyY1RrhS5WaeTQBYopCfEmfpjq
+	 SkuTYUk3JgnDlQntp0UL3jQUiYZ6GsfYzcgLtBoUlxDZgxmoW61M9lo+o6TAXP8huSDMj
+	 7QIYe3SU42Zq+HYngfOVaBCe1K4TcXRKr9PNlQK2ZwJRxkLonah5KLKK0Pm6T0kpZJ+KW
+	 t0JSrz2LMlwDecvzOEzLXH5cOx6AC6rLSLfhB5Nn388ATz3grLMsqdOb+4iiFSAkZ7yps
+	 GgihSXnR5Oz9tBfm6ybErPoflzFD5IeJjMQJo72peRiMo3CBgFhVdFN1JftxD8v8hJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793391724;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=/ZKYNvV99olnOAN3/wz742NSCo6uP+fRvmVfRPXXfag=;
-	b=kkaMwiTKp3YBJQCfpoJLx9cAgnQtzhPcqTgx+7yjJJstBxgMtFHsoJ9+pmMMf61KOzXh
-	 Qgkwu0ATfNn8dGpXTJ2WQ8SliDWLFT1KisdDPMsXf9dRL59clVOoYYvxwziom5zB04owu
-	 B37ipmEv5mDWRSRJUDgGtJqXt2lGO3AOhowcFwtyTdHk/2jE0g+viMcmHjahFAcRoz8rg
-	 Q1hTa+xj8vo+r6zEKQah5wWNzvd6m6gaXIsagn7VspX8PLFA+XI0bATBwyeA6merRsoFZ
-	 C9PL9kWaBZaUdmUM/8BsrQr9x7gwXWNkB4lttCT7NBE5JQAB4bElndHuiztUtwHROeg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793392049;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=5lyHfD9gDVe46qmCqsjdgsoBvqJkPXERQXV0cBBlSa4=;
+	b=fOQGN6kXshrqtbxAEJfacY4m87td1Bh91oz6BU8OxEp/VPk8q2uwZGFg1qhcHXNpNzgW
+	 ezFczFiNRc7Exi5GixhVIeSSyvzvkhaj13E60V3D+C0f+1C8CUBOhjUiyFciFssp8ncvq
+	 Mo5crHiqJmXMjxFa1xkzrXxJvAOP0Co4x4O9z+embeZoPDuZojjFPJ7pkaawEY8HxS1kD
+	 sLabI+zJAHNvAtPUwuU60vNORA/YTHFBify3Egb1AXHCj1Kcp8lUVY3c4qLu+vq1QoiQD
+	 G86LDSJENpOPtTpkRIhWRo9qUpELnwPanMbr36+9meMT7GJpgvGaA6pVZCTlNQUFNRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Rm4/aJkl";
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="BtF/ZK1I";
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4EC606A31C;
-	Fri, 30 Oct 2026 20:22:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D4EC606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC04606A320
+	for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 20:27:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AC04606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Rm4/aJkl
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793391723; x=1824927723;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vPSnCcsxmoggsBL8AhqusSxvlXgXWzci4B57bAku3no=;
-  b=Rm4/aJklIqaRbvWzOW46M7Bu54lIxabPwXxZF6UiLwikvxhV4zH/46Bw
-   sXXmmuOMD3p+NyioeGcIPbMr3ya07ON6cxle9Wbh8EL2Juap3thd0Uocs
-   TRj61I++arOY8y5GONegdVB8Rb032tibs81vQi5+jenMxyEw30MqGByjP
-   gA5sT+/HbG5V8vqfox6YvtPhckjOiCdOnb1FbHBggUGJh7aULuvU6ILqM
-   xAjk/DT/j+q2eMb1BZxYIqIp7o1pQ6x5YDMqQUoer3cuQLMgsqYzUgUQP
-   rex16/YqcLXwtPstXsdZhnE8RIpN3nt+0PQ0pDHdttYXaLgrwRyjCe362
-   w==;
-X-CSE-ConnectionGUID: TOXlS+1/RFGww7C0N2covQ==
-X-CSE-MsgGUID: BGBEWVuSR9CacDlGVOJArw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2257863"
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="2257863"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 13:22:02 -0700
-X-CSE-ConnectionGUID: uq676+OpSbuSH9Qj21B94w==
-X-CSE-MsgGUID: mVKp5fG6TpmsPslS7cKOTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="6069808"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Oct 2026 13:21:54 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xMt6k-00000000cBs-3Ksb;
-	Fri, 30 Oct 2026 20:21:50 +0000
-Date: Sat, 31 Oct 2026 04:21:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: hang.suan.wang@altera.com, Dinh Nguyen <dinguyen@kernel.org>,
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Svyatoslav Ryhel <clamor95@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Gabriel Whigham <gabewhigham@gmail.com>,
-	Kiryl Shutsemau <kas@kernel.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, linux-doc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	muhammad.nazim.amirul.nazle.asmade@altera.com,
-	tze.yee.ng@altera.com, chee.nouk.phoon@altera.com,
-	genevieve.chan@altera.com, adrian.ho.yin.ng@altera.com
-Subject: Re: [PATCH v8 3/3] firmware: socfpga-fcs: add Altera SoCFPGA FCS
- driver with SDOS feature
-Message-ID: <202610310455.KTHdfiRf-lkp@intel.com>
-References: <d2a662d1b783146e48642dc85c920008a02b433c.1793197438.git.hang.suan.wang@altera.com>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=BtF/ZK1I
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-36a3451ea93so1731095eec.1
+        for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 13:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793392047; x=1793996847; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5lyHfD9gDVe46qmCqsjdgsoBvqJkPXERQXV0cBBlSa4=;
+        b=BtF/ZK1INo0m35fIb2SmTKX8TUXJyYAlS+BqgHJrCQiXGbUl5ZAZfBR7YBFwWrR7a+
+         LrPmGfRk9xGYg5oni+MC5BgOdP4vjdywRSQphdBlY32ZVtEbaIqmgoAxs0fW57TmvXIH
+         CImePksyICuzSD54VGcBVamCaXIQjZLVpv+S4eL68ouKEfaz2nYeACGepSd/MHKS7HZV
+         /VMt/Uos1LOpSOatSbIou2wQFMKtUZ0/PlBCm9aYxBcdhFv2BDHQlwcMiLFRZuzFVmuM
+         KTGrcCjhg9dCTGTM3jkr8cQcLGVt/lZnxS9STd5csYr9JWRWzaZnhXX5dWvH0XgrqG2j
+         lZsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793392047; x=1793996847;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5lyHfD9gDVe46qmCqsjdgsoBvqJkPXERQXV0cBBlSa4=;
+        b=wFCq4NA25oOnVoT/fOjzEjk8Ggahtd4vZPhGJw99xp3ob0fBSYbcONQ0jSOKFML88y
+         UXkwQ5p7s3Vb4u4vYXtkT4OTSlenaLfRDW5OGiewD3RWfFsi6Z5LSgqsX5ZoWe9qte20
+         tku6SSpzGYUFOCodbbPy/ZczL7eWMaqI7AwKZaGUeGCrk4sTewdjKY/NeM7ocQEdKBnb
+         rfXfUl58p5GEozHuMCGMTkonhc+p/+zJoJghxdZVFtBYQlP59evnEXA4h/pD1i2a/nqR
+         8uMcxrxLhpTF1vLXD45ljCQBiowilnS4bvTvL2PSTehdUy1PxVoVdQt5y9j2jrZt60vN
+         eNFw==
+X-Forwarded-Encrypted: i=1; AKwUvBywm0UCCIA8vvNU0iPVguGgNRpQHRl964OtFJwlEjOyxVTR0QcbpKDeMVsgEmuK38R9/0al@lists.linux.dev
+X-Gm-Message-State: AFq9FYLOsa/UpPb6WNQsc7HPP2eXXdTHEejqFL9kNM3L1Mbef/LoR476
+	U89b03wW7+DYOjoQ4vjJ4yCy3SPNZxid5RZxlG8kx4WygiXvxOMpwWa3AkVwcm8YZBbKZJ5k5fU
+	eLEc3Wj1T9g==
+X-Received: from dlbtp7.prod.google.com ([2002:a05:7022:3b87:b0:15f:5ef4:b896])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:1602:b0:1a8:4997:65f6
+ with SMTP id a92af1059eb24-1ac5d88c579mr6176377c88.20.1793392046539; Fri, 30
+ Oct 2026 13:27:26 -0700 (PDT)
+Date: Fri, 30 Oct 2026 13:27:07 -0700
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,65 +75,141 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2a662d1b783146e48642dc85c920008a02b433c.1793197438.git.hang.suan.wang@altera.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
+Message-ID: <20261030202710.3863806-1-irogers@google.com>
+Subject: [RFC PATCH v2 0/3] tools: Add Rust library build infrastructure and
+ prefer zlib-rs
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Quentin Monnet <qmo@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>
+Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+The zlib-rs project (https://github.com/trifectatechfoundation/zlib-rs)
+provides a memory-safe, high-performance Rust implementation of the zlib
+compression specification along with a C ABI layer (libz-rs-sys) that is a
+drop-in replacement for the standard C zlib library. Transitioning
+decompression of kernel configuration files (/proc/config.gz), compressed
+ELF/BTF sections, and perf data from C zlib to zlib-rs improves both memory
+safety and decompression performance.
 
-kernel test robot noticed the following build warnings:
+On many Linux distributions (such as Debian, Ubuntu, and Fedora), Rust
+crates like zlib-rs and libz-rs-sys are packaged as Cargo registry sources
+under /usr/share/cargo/registry/ (e.g. librust-libz-rs-sys-dev or
+rust-libz-rs-sys-devel) rather than as prebuilt C shared libraries, while
+other environments may install prebuilt libz_rs libraries via pkg-config or
+a custom prefix (LIBZ_RS_DIR).
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master next-20261029]
-[cannot apply to v7.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This RFC series lays the groundwork for building and linking Rust crate
+libraries in tools/ offline from the system Cargo registry and integrates
+zlib-rs support into perf and bpftool, preferring zlib-rs over C zlib when
+available:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hang-suan-wang-altera-com/firmware-stratix10-svc-increase-args-array/20261028-221419
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/d2a662d1b783146e48642dc85c920008a02b433c.1793197438.git.hang.suan.wang%40altera.com
-patch subject: [PATCH v8 3/3] firmware: socfpga-fcs: add Altera SoCFPGA FCS driver with SDOS feature
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20261031/202610310455.KTHdfiRf-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c2ea4440d4b64c148de4fdfca1fc2c437a0701e4)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610310455.KTHdfiRf-lkp@intel.com/reproduce)
+1. **tools build: Add Rust library build infrastructure and zlib-rs feature test**:
+   - Adds `tools/build/Makefile.rust` with helpers to resolve C compiler and
+     linker flags for Rust libraries via `%-cflags` and `%-libs` targets.
+   - Resolves `zlib-rs` compiler and linker flags via `LIBZ_RS_DIR`,
+     `pkg-config` (`libz-rs-sys-cdylib`, `zlib-rs`, `z_rs`), or building
+     `libz_rs.a` (with the `export-symbols`, `c-allocator`, `std`, and `gz`
+     features) into `$(OUTPUT)libz_rs/` from `/usr/share/cargo/registry`
+     using offline Cargo (`cargo metadata --offline` and
+     `cargo build --offline`).
+   - Adds `tools/build/feature/test-zlib-rs.c` checking
+     `ZLIB_VER_SUBREVISION == 15` (`0xf`, which distinguishes
+     `libz-rs-sys`'s `zlib.h` from standard C `zlib.h`) and linking against
+     `inflateInit()`.
+   - Extends `tools/scripts/Makefile.include` with cross-compilation target
+     triples (`RUST_TARGET_FLAGS_<arch>`) and the `feature_rust_lib` macro.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610310455.KTHdfiRf-lkp@intel.com/
+2. **perf build: Prefer zlib-rs over zlib when available**:
+   - Moves Rust detection ahead of zlib detection in
+     `tools/perf/Makefile.config` and prefers `zlib-rs` over C `zlib` unless
+     `NO_ZLIB_RS=1` (or `NO_ZLIB=1` / `NO_RUST=1`) is set.
+   - Defines both `HAVE_ZLIB_SUPPORT` and `HAVE_ZLIB_RS_SUPPORT` when
+     `zlib-rs` is used so existing zlib call sites in `perf` work unchanged
+     while `perf version --build-options` and `perf check feature zlib-rs`
+     report whether `zlib-rs` is active.
+   - Shares `$(OUTPUT)libz_rs/` with the host bootstrap `bpftool` build in
+     `tools/perf/bpf_skel.mak` and adds `NO_ZLIB` / `NO_ZLIB_RS` tests to
+     `tools/perf/tests/make`.
 
-All warnings (new ones prefixed by >>):
+3. **bpftool: Prefer zlib-rs over zlib when available**:
+   - Adds `zlib-rs` and `zlib` to `FEATURE_TESTS` and `FEATURE_DISPLAY` in
+     `tools/bpf/bpftool/Makefile` and configures `ZLIB_CFLAGS` and
+     `ZLIB_LIBS` via `feature_rust_lib` when `zlib-rs` is detected.
 
->> Warning: drivers/firmware/socfpga-fcs-core.c:74 function parameter 'priv' not described in 'fcs_svc_send_sync'
->> Warning: drivers/firmware/socfpga-fcs-core.c:112 function parameter 'priv' not described in 'fcs_svc_send_async'
->> Warning: drivers/firmware/socfpga-fcs-core.c:197 function parameter 'priv' not described in 'fcs_svc_send_request'
->> Warning: drivers/firmware/socfpga-fcs-core.c:282 function parameter 'priv' not described in 'fcs_open_session_locked'
->> Warning: drivers/firmware/socfpga-fcs-core.c:282 function parameter 'owner' not described in 'fcs_open_session_locked'
->> Warning: drivers/firmware/socfpga-fcs-core.c:318 function parameter 'priv' not described in 'fcs_close_session_locked'
->> Warning: drivers/firmware/socfpga-fcs-core.c:353 function parameter 'priv' not described in 'fcs_ctx_begin'
->> Warning: drivers/firmware/socfpga-fcs-core.c:384 function parameter 'priv' not described in 'fcs_ctx_end'
->> Warning: drivers/firmware/socfpga-fcs-core.c:417 function parameter 'priv' not described in 'fcs_get_atf_version'
->> Warning: drivers/firmware/socfpga-fcs-core.c:465 function parameter 'priv' not described in 'fcs_sdos_crypt'
->> Warning: drivers/firmware/socfpga-fcs-core.c:612 function parameter 'priv' not described in 'fcs_read_version_from_atf'
->> Warning: drivers/firmware/socfpga-fcs-core.c:669 bad line: 
-   Warning: drivers/firmware/socfpga-fcs-core.c:709 bad line: 
->> Warning: drivers/firmware/socfpga-fcs-core.c:74 function parameter 'priv' not described in 'fcs_svc_send_sync'
->> Warning: drivers/firmware/socfpga-fcs-core.c:112 function parameter 'priv' not described in 'fcs_svc_send_async'
->> Warning: drivers/firmware/socfpga-fcs-core.c:197 function parameter 'priv' not described in 'fcs_svc_send_request'
->> Warning: drivers/firmware/socfpga-fcs-core.c:282 function parameter 'priv' not described in 'fcs_open_session_locked'
->> Warning: drivers/firmware/socfpga-fcs-core.c:282 function parameter 'owner' not described in 'fcs_open_session_locked'
->> Warning: drivers/firmware/socfpga-fcs-core.c:318 function parameter 'priv' not described in 'fcs_close_session_locked'
->> Warning: drivers/firmware/socfpga-fcs-core.c:353 function parameter 'priv' not described in 'fcs_ctx_begin'
->> Warning: drivers/firmware/socfpga-fcs-core.c:384 function parameter 'priv' not described in 'fcs_ctx_end'
-   Warning: drivers/firmware/socfpga-fcs-core.c:417 function parameter 'priv' not described in 'fcs_get_atf_version'
-   Warning: drivers/firmware/socfpga-fcs-core.c:465 function parameter 'priv' not described in 'fcs_sdos_crypt'
-   Warning: drivers/firmware/socfpga-fcs-core.c:612 function parameter 'priv' not described in 'fcs_read_version_from_atf'
-   Warning: drivers/firmware/socfpga-fcs-core.c:669 bad line: 
-   Warning: drivers/firmware/socfpga-fcs-core.c:709 bad line: 
+Changes in v2:
+- Use offline Cargo (`cargo metadata --offline` and `cargo build --offline`
+  configured against `CARGO_REGISTRY_DIR` = `/usr/share/cargo/registry` and
+  isolated from `~/.cargo`) to resolve crate versions, dependency graphs,
+  features, and build scripts instead of manually globbing crate directory
+  names and invoking `rustc` on hardcoded `.rlib` edges (Miguel Ojeda).
+- Avoid including `../../scripts/Makefile.arch` in `tools/bpf/bpftool/Makefile`
+  (to keep the standalone bpftool mirror self-contained) by placing
+  `RUST_TARGET_FLAGS_<arch>` in `tools/scripts/Makefile.include`, and expand
+  the bpftool commit message on the security and performance motivation for
+  preferring `zlib-rs` (Quentin Monnet).
+- Drop unused `.rlib` pattern rules and helpers from `tools/build/Build.include`
+  and `tools/build/Makefile.build` (Sashiko).
+- Address Sashiko review feedback on `PKG_CONFIG` handling when unset or with
+  `-static`, `test-all.bin` re-checking `zlib-rs` and `rust`, preserving
+  `EXTRA_CFLAGS` optimization defaults when building `libbpf.a`, and
+  honoring `NO_ZLIB_RS=1` in `bpftool` when `FEATURES_DUMP` is used.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+AI Assistance Disclosure (per Documentation/process/coding-assistants.rst
+and Documentation/process/generated-content.rst):
+- Tools used: Antigravity coding assistant and Sashiko automated patch
+  review using Gemini 4 LLMs.
+- Summary of prompts and assistance: Interactive pair-programming session to
+  identify distro packaging for zlib-rs/libz-rs-sys, implement the zlib-rs
+  feature test and offline Cargo build rules in Makefile.rust, integrate
+  zlib-rs detection into perf and bpftool, separate Rust library outputs
+  into $(OUTPUT)libz_rs/, and address reviewer and automated Sashiko
+  feedback.
+- Testing performed: Built and tested perf and bpftool with zlib-rs
+  (default), NO_ZLIB_RS=1 (fallback to C zlib), NO_ZLIB=1, and MINIMAL=1;
+  verified `perf version --build-options`, `perf check feature`, and the
+  `make_no_zlib` / `make_no_zlib_rs` tests in `tools/perf/tests/make`; and
+  checked all commits with `scripts/checkpatch.pl`.
+
+Ian Rogers (3):
+  tools build: Add Rust library build infrastructure and zlib-rs feature
+    test
+  perf build: Prefer zlib-rs over zlib when available
+  bpftool: Prefer zlib-rs over zlib when available
+
+ tools/bpf/bpftool/.gitignore             |   1 +
+ tools/bpf/bpftool/Makefile               |  57 +++++++++-
+ tools/build/Makefile.feature             |  12 +-
+ tools/build/Makefile.rust                | 160 +++++++++++++++++++++++
+ tools/build/feature/.gitignore           |   1 +
+ tools/build/feature/Makefile             |  11 +-
+ tools/build/feature/test-zlib-rs.c       |  19 +++
+ tools/perf/.gitignore                    |   1 +
+ tools/perf/Documentation/perf-check.txt  |   1 +
+ tools/perf/Makefile.config               |  88 +++++++------
+ tools/perf/Makefile.perf                 |  32 ++++-
+ tools/perf/bpf_skel.mak                  |   8 +-
+ tools/perf/builtin-check.c               |   1 +
+ tools/perf/scripts/install-build-deps.sh |   6 +
+ tools/perf/tests/make                    |   9 ++
+ tools/scripts/Makefile.include           |  25 ++++
+ 16 files changed, 382 insertions(+), 50 deletions(-)
+ create mode 100644 tools/build/Makefile.rust
+ create mode 100644 tools/build/feature/test-zlib-rs.c
+
+-- 
+2.56.0.317.g454f8302e1-goog
+
