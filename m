@@ -1,118 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.42.244.94
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793366993;
-	b=Jk492itNeCtwuJH3FUwMabkREc7V++56XPHIE7iuoTBZGm6gG7kBd/cH2+a6pOVe86sz
-	 VMi3QdQtdgStQaaX+kGXFsFxk/CgPH6LLAnWwIFkNpoiXxhmgXIdgvYvJ+wbyYGxONk/S
-	 91baM/+4Tql5150EfAutYUBrrKtgvdoY6O7WR1XWjtugEelACOH89uPmlSe1rX5o09znX
-	 W6VcCqFn54EZKHwNButRk8N296hzeLSFol0GLGeBdMzeQxag6H94bqVSk/xu3UTpf89h/
-	 +urfyJp0C08xMGio5R5g2oUY0JiKm3G0iXdT8y9KebjUA1NU6ps6Vwf82v7/Do2HNSw==
+	t=1793373931;
+	b=q/Z9pcGBPebpZVfqhCQjw7k79lNykMn6MGlM2fr8Tpss3Sq234jjaOdMKuucooAQtrxU
+	 7UuuL2Sez9dJSbb3AC86KJS/aTkfR7hGAHeoXaDG9iYtP10QKDthLxdIBasuqbpYf7WTj
+	 tPlAKzeej+5MQkcJwg9bKjGULbCXl4FiDmI6Ew2vRHLVF7KSmWrGp3bsoypgyhWqR02GK
+	 iOi/1UBGN1ry8w7urbgeSnQvtKvqF1C/yMqjFoDDIV1tcxI/dreZQZB1oEUKZnO3S8d6t
+	 7UzFHmDnBDZJGLPzmG+bkizDarWqyY6Ue8uLdllVE4YRrDoOZYIOoqbngDCmydZZGfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793366993;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:Organization:x-ms-reactions:
-	 X-purgate-ID:X-purgate-type:X-purgate-size:X-Notice:X-purgate:
-	 X-purgate:X-pfmilter;
-	bh=QpUKaSoVRoEgdKmoyk8G7l81p1qWRtQXTZ0eVa1XsI0=;
-	b=L2Nj/dUMSB5Ik47SwZmhUxpPqNxWCNyRPCmIOLnVQpu9gJWcyxEQQj1UyhT2SMKad/re
-	 5NIddbCNz5QkeJn9JKuxBT8jNT5gYGWkXBBmHpjsIbGd3ARVEENnRz1Ff/aO32ofLdO45
-	 VNpWlpGCWeGVnh6b5V1nr1dDGM53k/WCNogRqTPydhQXNSxjGFLxvmggO1Ivx9ht35X7S
-	 1/3Wbd/0jmPH16UGVrOsFJVCxl0RZ4B/qmSJkl9okGb2KH91zDdyQ2zV0+znT7vk6dvsQ
-	 kw64R351f2Ei7JycrjRSnCURNhE47ipNh2Tz7uO1yOoVwa9w1VGG77Q/XHrRCDeaLWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793373931;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=g96ejP5k7aVZP0ZuEY0gLmKmg/HLJgGWzMsks9zcj4g=;
+	b=qIG+5ysObRqzN6t/FsLnJ7vmC+KvBka1DgwzL+/KOIWdFAG/eOJbtywsDA7IfMaOvtXT
+	 MAfD9/JAtgZ4CKTujDZU21UkbXqSbv8QKyKATetO+6KzpIqBQKn+p0yarJZRETRHjd2hH
+	 EQ80M7RbRd5qt+J63gb3uU2VBnjIikyTX39FnQosIofBuVua60IiojTBcDZ6uJgN5jxF4
+	 r4ycHWMIXfwYZppTKzFh/FBl1B2c/eBNozDEcZM5EUqlunKrtvt2ERu/CDAzdMZh+yUBG
+	 5qsotzYgAVTrjM+Cm6F5xreOMrkR6/Aos55jffYolAxp/m+EXRKZnLNG53zu3H6VjyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fritz.com;
-	spf=pass smtp.mailfrom=fritz.com;
-	dkim=pass header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=AmiP1sdZ;
-	arc=none smtp.remote-ip=212.42.244.94
-Received: from mail.avm.de (mail.avm.de [212.42.244.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nNKYTsqr;
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9926606A31A;
-	Fri, 30 Oct 2026 13:29:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9926606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01377606A31D;
+	Fri, 30 Oct 2026 15:25:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01377606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=AmiP1sdZ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
-	t=1793366980; bh=a/fEt90n+2smzc8tULN5m3m/hMMA3WQXHcvWhcoynLc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AmiP1sdZKE4ipmV9XkFzIAg6sDdTc8piKssit8JG5M7jVm+wWoA9HNBcL6nnioxmf
-	 UtVWmWL8HC8cipXhGGKFKn344d7QBy4BigwXDhd9cibHOOYqfnPwcm+wl7S8LyH40H
-	 PIcRpdlbp12mkcZ/qVoxVXxHxdsVB4yBgm4K8e8Gb7j8o5MGT6HVOS52CCT1ImUgYM
-	 rC8fGm5esO5fYtQK82TXSmpyrCUdX6hUkhNuydSuiEjRPAEuIkSRJ3Vr5CzOMuVEiE
-	 +YmeA56zTDNX6G2v3XBcddEQclfpxGdALH3GP+htSNoKgdV3GvyPoPiSSRu1+yw2Ux
-	 Cmo8WDvejZ5Lw==
-Received: from [212.42.244.78] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
-	(envelope-from <n.schier@fritz.com>)
-	id 6ae49bc4-23c8-7f0000032729-7f0000019970-1
-	for <multiple-recipients>; Fri, 30 Oct 2026 14:29:40 +0100
-Received: from mail-auth.fritz.com (unknown [212.42.244.78])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Fri, 30 Oct 2026 14:29:40 +0100 (CET)
-Date: Fri, 30 Oct 2026 14:29:39 +0100
-From: Nicolas Schier <n.schier@fritz.com>
-To: Thomas Huth <thuth@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Magnus Lindholm <linmag7@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Luis Augenstein <luis.augenstein@tngtech.com>,
-	Maximilian Huber <maximilian.huber@tngtech.com>,
-	Anup Patel <anup@brainfault.org>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, soc@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Mark Rutland <mark.rutland@arm.com>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Atish Patra <atish.patra@linux.dev>,
-	Sean Christopherson <seanjc@google.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
-	netdev@vger.kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 13/13] treewide: Stop defining __ASSEMBLY__ for
- assembler files
-Message-ID: <20261030-dexterous-manatee-of-honor-eac4eb@l-nschier-z2>
-References: <20261023064908.66707-1-thuth@redhat.com>
- <20261023064908.66707-14-thuth@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nNKYTsqr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793373930; x=1824909930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sPmRebhi39B1GLuucQ7j9mUgxJfeUGZv2Q2/PJX0BEc=;
+  b=nNKYTsqrIgyNn6SV2u4GOujKz+4zcBA/LtTEtCA50wJ0YCdG0UvCJc8f
+   m0bvM/nLS3vapcAbe8iaYMV5W2uS5uHq4bcQ4VgFZenTURnu6kA57mFVx
+   z1swjWCSJmQEGXg5JduIugezNtqWiRWSHLM35uSKTJ+H7IBc/0BtHbZZt
+   jIjkysvcYVgEKKLymVpFJyc4BFsMDhAFBedaDu0QU/jgm5sOzYbDpMQ01
+   qgfYOpl3D4lh6LBp0yIoMDmbp36+QGT80upTCXocz6JmYNw1KHQSTivf9
+   ttaRlbzhiALduGH2z8Xf4mEUR/Osh16RAEe5Oxjtl+7Agx0NRRFdb7/bJ
+   A==;
+X-CSE-ConnectionGUID: OIC7Acs0TI6xwPU6rJPIrg==
+X-CSE-MsgGUID: vDELS82qTo21il8kX/ED7g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2053001"
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="2053001"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 08:25:29 -0700
+X-CSE-ConnectionGUID: MDuDD1URQEWjvNZCZllP+g==
+X-CSE-MsgGUID: Q5pIwnPGS1you6hQSWVD1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="5475048"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 30 Oct 2026 08:25:26 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xMoTq-00000000bu0-2c8j;
+	Fri, 30 Oct 2026 15:25:22 +0000
+Date: Fri, 30 Oct 2026 23:24:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anna Maniscalco <anna.maniscalco2000@gmail.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Jessica Zhang <jesszhan0024@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Anna Maniscalco <anna.maniscalco2000@gmail.com>,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>
+Subject: Re: [PATCH v2] drm/msm: preemption aware hangcheck
+Message-ID: <202610302317.4PKDvDwV-lkp@intel.com>
+References: <20261029-preemption_aware_hangcheck-v2-1-be0056e1f02d@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -122,77 +92,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="FhzCQO4A3K0b968D"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261023064908.66707-14-thuth@redhat.com>
-Organization: FRITZ! Technology GmbH
-x-ms-reactions: disallow
-X-purgate-ID: 149429::1793366980-B27F8EE4-FD80AEC5/0/0
-X-purgate-type: clean
-X-purgate-size: 2843
-X-Notice: Whitelisted
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
-X-pfmilter: host: postfix-mx-03  mail-id: CA9E3A07A1  external: no
+In-Reply-To: <20261029-preemption_aware_hangcheck-v2-1-be0056e1f02d@gmail.com>
 
---FhzCQO4A3K0b968D
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Anna,
 
-On Fri, Oct 23, 2026 at 08:48:50AM +0200, Thomas Huth wrote:
-> All spots have been changed to __ASSEMBLER__ (i.e. the macro that
-> gets defined by the compiler), so we don't have to manually define
-> __ASSEMBLY__ anymore.
->=20
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  Makefile                                             | 2 +-
->  arch/alpha/boot/compressed/Makefile                  | 2 +-
->  arch/arm64/kernel/vdso32/Makefile                    | 1 -
->  arch/loongarch/vdso/Makefile                         | 2 +-
->  arch/mips/boot/compressed/Makefile                   | 2 +-
->  arch/mips/vdso/Makefile                              | 2 +-
->  arch/powerpc/boot/Makefile                           | 2 +-
->  arch/powerpc/platforms/cell/spufs/Makefile           | 2 +-
->  arch/s390/Makefile                                   | 2 +-
->  arch/x86/boot/Makefile                               | 2 +-
->  arch/x86/boot/compressed/Makefile                    | 2 +-
->  arch/x86/realmode/rm/Makefile                        | 2 +-
->  arch/xtensa/kernel/Makefile                          | 2 +-
->  drivers/firmware/efi/libstub/Makefile                | 2 +-
->  drivers/net/wan/Makefile                             | 2 +-
->  scripts/Makefile.build                               | 2 +-
->  scripts/gfp-translate                                | 2 +-
->  scripts/headers_install.sh                           | 1 -
->  scripts/sbom/tests/cmd_graph/test_savedcmd_parser.py | 2 +-
->  tools/testing/selftests/kvm/lib/riscv/handlers.S     | 4 ----
->  tools/testing/selftests/vDSO/vgetrandom-chacha.S     | 2 --
->  21 files changed, 17 insertions(+), 25 deletions(-)
->=20
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+[auto build test WARNING on d024361c631b3f020a26c07d683e5103404b0fbf]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anna-Maniscalco/drm-msm-preemption-aware-hangcheck/20261029-194101
+base:   d024361c631b3f020a26c07d683e5103404b0fbf
+patch link:    https://lore.kernel.org/r/20261029-preemption_aware_hangcheck-v2-1-be0056e1f02d%40gmail.com
+patch subject: [PATCH v2] drm/msm: preemption aware hangcheck
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20261030/202610302317.4PKDvDwV-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c2ea4440d4b64c148de4fdfca1fc2c437a0701e4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261030/202610302317.4PKDvDwV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610302317.4PKDvDwV-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/msm/msm_gpu.c:660:6: warning: unused variable 'ret' [-Wunused-variable]
+     660 |         int ret;
+         |             ^~~
+   1 warning generated.
+--
+>> drivers/gpu/drm/msm/adreno/a6xx_preempt.c:18:21: warning: unused variable 'dev' [-Wunused-variable]
+      18 |         struct drm_device *dev = gpu->dev;
+         |                            ^~~
+>> drivers/gpu/drm/msm/adreno/a6xx_preempt.c:32:6: warning: variable 'last_active_ctxcycles' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+      32 |         if (ring)
+         |             ^~~~
+   drivers/gpu/drm/msm/adreno/a6xx_preempt.c:55:37: note: uninitialized use occurs here
+      55 |         postamble[count++] = lower_32_bits(last_active_ctxcycles);
+         |                                            ^~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/adreno/a6xx_preempt.c:32:2: note: remove the 'if' if its condition is always true
+      32 |         if (ring)
+         |         ^~~~~~~~~
+      33 |                 last_active_ctxcycles = rbmemptr(ring, last_active_ctxcycles);
+   drivers/gpu/drm/msm/adreno/a6xx_preempt.c:29:32: note: initialize the variable 'last_active_ctxcycles' to silence this warning
+      29 |         uint64_t last_active_ctxcycles;
+         |                                       ^
+         |                                        = 0
+   2 warnings generated.
 
 
---FhzCQO4A3K0b968D
-Content-Type: application/pgp-signature; name=signature.asc
+vim +/ret +660 drivers/gpu/drm/msm/msm_gpu.c
 
------BEGIN PGP SIGNATURE-----
+   655	
+   656	static bool check_ring_timeout(struct msm_ringbuffer *ring, unsigned long timeout)
+   657	{
+   658		struct msm_gpu *gpu = ring->gpu;
+   659		u64 start, end;
+ > 660		int ret;
+   661	
+   662		if (!gpu->funcs->get_ctx_timestamp)
+   663			return !made_progress(gpu, ring);
+   664	
+   665		start = ring->memptrs->last_job_start_ctx;
+   666	
+   667		if (gpu->funcs->get_ctx_timestamp(ring, &end))
+   668			end = ring->memptrs->last_active_ctxcycles;
+   669	
+   670		if (end >= start)
+   671			return (end - start) > timeout;
+   672		else
+   673			return false;
+   674	}
+   675	
 
-iQIzBAABCAAdFiEEDv+Fiet06YHnC6RpiMa8nIiabbgFAmrkm8MACgkQiMa8nIia
-bbgYnhAAoBtAI6CuFq9HQy+0LMEBBrZiObTja20n/nhSog1KoLUqfiUozqhmkZ/q
-CT6UauaVVL+guGjUkQd4MU9Y4sF+qy0kKmfzavbo/MIofHFX6fypq5WinV83BS4k
-PfHvku6pkGUFMvVkCliG3iiJVbANl4MGycOY5VxIXI9veRse6+SRuWaP5fqRD0dv
-XZHNc+ZmLOMmkijTKgYUq7fUIdBhxmeq4Px5Q0aq0cESHCORoGOcUcdASB8KRxr/
-S2whk42NUvuQxJF/S68XDQ9N3LdkhPBY2Y0GHdcJ+esswGxGJVb7rfY38dRXkz8R
-a/X59L/D+n6k/1v/xfmmj36rd/INoushZOa+gNXEg5KPwORqTYICzhwVlfZz5mdv
-0XgTKePC+FBeKnCHfJjMK1P6SAnag5q59vu8MXmzNGH9HIhm2PzyPhRrPYA4lwBl
-N1Hh9kQBBwy4oEdLX69syKiLtIA3mDxbo80VqRIUm6MpUjxkTbkAgLQgfXDRz2M0
-Wa9/fDB/O1tJKj8IR8V+jbjPqz5/6/fNkpD9/6fpqvBgeD2vkjOk3q/IvTq5gvHK
-ApKpaLY5DYJBXdX80Rm5ofEmFac0/p9C+eX3ovHAHFIG7JPR5kTF3fwDtbSbP7z6
-ghTZsJCcqEgyM22oqOSpskYbUmxnPEnUkGMg6K1a7KZPgUJQ9zA=
-=Pwya
------END PGP SIGNATURE-----
-
---FhzCQO4A3K0b968D--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
