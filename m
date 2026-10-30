@@ -1,115 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793333155;
-	b=KLUofc3mpfRUxmMjh/riS7Hnv3B79pS4JZu1SuHAYaVt6q75p1UQAlyxnjFgvhBz0s84
-	 WzjkVcf77SYxg4ZHFGcKm0Sxc/F3GBwMqBTrFcT6A4I9dKW1F9tjMy9uoDCX0K4eMV3SW
-	 6Yvx+x/LNx5bvGKM4OmYe6fGyFzOK/tSl/UB4Vgr3f+OmOKbj+QwS14lWiEhNEzPUw2pH
-	 etHVJ4Jjj/5KMDeA/punFzIYCLhC7YnR9j1q2ZGLZ0k1OhblbEqa/3nwVSvKAPrCZSmZ2
-	 46T+jxMEaJKfJug6KduHJ9uRRi3+b2M9KqDy+DyEFrlJC64rlPq8nw2+flqyvHwKgYA==
+	t=1793335378;
+	b=kdEy2TytgBqLdi9zvkLX2QLNYMBGjJqe+Z1eHq7JMxqds6SQHT+JXiW/bzfDpFzq6ZV7
+	 SfQIzknZfsvYY0NOvPnoIzQBwFFLs0T1qIWb60GS3mrwIs8gETIqmaaMISJrV2FEBNd8D
+	 4l/b9t4Fy8vFa/zl78iY26IzgmCVV7hSlYDwLsu8sRr22++EggQYwd8HHpaRd4e4JSCpz
+	 4upD7M/sjh+qhP6sjD0R3R1+od8iAky/SKT0l4hZDOqpSaAYwpxlFdoS+s4o4zKq8wUzS
+	 Kbww76EqK9YrO8s9ZCc1MCydwpHiqOUjVnqpkKErWwtCFnc/anGf4sAEpKbO1S+cXEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793333155;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=9CvywPHpjrCT0zo2JhnH11M0JaZbySgNZTi9n8+NQFc=;
-	b=tk0GFOfibPV7NFoV+39j757TidXIMa8siUllWbTYmAqBX88E6SJrkDLHda7kLNRtxauP
-	 e7ceuzp6YAIO4PegklGK7ecwTlImUYtSkc89e7GC4qqRY+nUZVHeQUQcwOp05dEtUoshk
-	 oSZe+6VgYgKkK1EjKja5rffBDXI74uI/TxzhHSInvwSa8aOa1QPQ+bzIp+wHZ3Zc6IJQj
-	 rilqIBEpJMbpRooLUhk7RByYO914y1Y+L8l1HiwNRSH+aTlj/UrQxNzTK5WIBI0AriG+K
-	 3XuIHs4hBh2Lqsx8YXAW1T+MipFRVRs284JzlPLUx6NTa1H39tXu4ZdEivX6R715+bQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793335378;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=PiRijM27VfJZ6A9yzPvi6A5MclwQnlmk9KlfZ3cemEQ=;
+	b=MYXbPTIiga04sskGHa1TjoG6q046POixtn5NS6eI7Ok2oFy3N7MTocq+mVL2gknZQlIX
+	 z/AkVCZc8nCuNO2AykJVd45aaZSivwyCSP/Q++7F+AND6i1DLI/5Jv5VUQd/RgcHA5U1J
+	 VeGpBY1RqZUXs8ap2l3ISmaq6pVVaQNz7BQbAp7wFvKLEv2LxWeDMozlt5/qrXZFnE6Xj
+	 lXK02BKNIPqqTPnrPr2/RlDGvFC0tJbYOWu0wTE/Me29W+rjpu9/Bvufr1bnjkW0OQYj0
+	 6+RerXYjv3gXwFVie704TEUs4XzY8Z7pTACHYauR4tgvSkiEYhuLl9wa6HrKQWFuUcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linaro.org;
-	spf=pass smtp.mailfrom=linaro.org;
-	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=pNcRgMIZ;
-	arc=none smtp.remote-ip=74.125.82.180
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HN3is2pn;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92131606A322
-	for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 04:05:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92131606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03794606A31F;
+	Fri, 30 Oct 2026 04:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=pNcRgMIZ
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-3514b90bb89so632137eec.1
-        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 21:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1793333154; x=1793937954; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9CvywPHpjrCT0zo2JhnH11M0JaZbySgNZTi9n8+NQFc=;
-        b=pNcRgMIZIY2oZG+KBCWHOETi9ENJBfSv74eJI/QEk0Qv49pNOktbBQPM0cNGUV55/3
-         ePz7BhW8pNjZ8f4f1LSwcic33EABoFyd47SE7TUqqEmcPmDgzlYbefkW2jeKuHT9YCoX
-         EiEloNWcp73OAUo/HN1DbeN3mKUw6BNxygKbGN9KW1u8cfNeGOpnY0+APiLbZl6JIuHe
-         42Vpoc/I6bR38uspIwB297pgPGcOf+fOJrpxGnUHkpQsB9afSCO4oOjMTYQ5DOvt2Tk+
-         O73Kg0pG7Kj1iQoIowPPMoPHVY/KUvk8TmKThPcHK/hqxS3j+QlHVAereljRk0sZO8Q8
-         iIIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793333154; x=1793937954;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9CvywPHpjrCT0zo2JhnH11M0JaZbySgNZTi9n8+NQFc=;
-        b=uaAWY++knecO2psSUxiMdX98E3Q7OPFBQjOoYuSFSSYg0k169owxfRFNAM51OmTRSR
-         ymZIII2wg7FPvglz8kQim4B1OAAr82HKnU3myEB5m+c543N3HS5hNoNwRUvwFD4FkS4m
-         XENITUEtTOW4P+uChj97YR/meOVDqBaUa+NJe3OKsZKPMX1y0GM2E5+WrLPW3Xj2BM1u
-         0bvVPelpXtc29iu37ElV0nPiZ2CMrrPy00mE1V1Tyr07nA5ATfaO0tPSgtPmS+u4j2fq
-         KHvvEny4EaEeEdcl3f2eA/O+wQETRGLaSqXLXyjCkFICymm2XAyvTLSVlhLW9V9peHDx
-         elsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxqJIw2TykTVpI8YRNFR5u8slLELp9dmA0ciwxtiiNJLfVSqayguIVf5Jixoyc0gxGbkYfX@lists.linux.dev
-X-Gm-Message-State: AFq9FYKe1Qs3IIWGglf68Llqy9gTfRlHUWv94bdOCJ11dsnW4OgX4bIP
-	TYsGNjh8IMUXmTcq/YUzCpOdEY18QYW0sJ0bJAvd38fnviHYPLswnByAb+gVepeT37A=
-X-Gm-Gg: AYBFou0MwX5dQDnNcYQqnePfsJU6y/Kum93z2JU16B2X+mmUxJZY68WzFKrGAFuOv7o
-	yuTXDAX920UwCQ9qc/oZHUXf/UZdkFHclrjPjKjg40PuGGDUhEY1sdjURexPOg2BSXdc0XWU8B7
-	4qMMZ1J3IAMWynMUJfYLpMqGN3k6XeifGndHa5IxkeG88aMwv23V1J+v/liCp/0Wy5gsQIgpPRp
-	ATHNRFe5vrTc8XEPa+feYi52/ZaPivQsJ+w4SVbXHkJaGWnOn9iWQyctcHqqX8NHaUWhVoKLb0C
-	L/fqskc74z3VVDv5OyGArW8wwOUJI1DNuMkEMOB2sK19OZjoZSucoLGPUYXn9SK8PFyY1Ge/xsE
-	Jh3ZwEIqGZd5oGu/RD2G0NeYE7z3bu81hW+dOGcCbAEerEOK96LfMMb/F2cjbWIc0DmKBjnI9s1
-	WMri67NHL0EOgjy40GYkqaDzjLifJOLcMf41IVVdPiaKDmDbiyQcdncr/zCgNzvG5hMyzl/nz6y
-	NLT1kfOntg1GzgxKXIAdtB27jkkZQHVtdtIa4QFaSFlQcbZisLXx5lqvKXUOhwE11NJcq2ddSfz
-	nMvUEKmIPYXIPNuNbbEbD1sQZ4z3NNs=
-X-Received: by 2002:a05:7301:53cb:b0:35c:e696:2d4a with SMTP id 5a478bee46e88-36a423ea99dmr1772736eec.24.1793333153319;
-        Thu, 29 Oct 2026 21:05:53 -0700 (PDT)
-Received: from localhost ([122.172.82.240])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a4291e38fsm3512579eec.15.2026.10.29.21.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 21:05:52 -0700 (PDT)
-Date: Fri, 30 Oct 2026 09:35:49 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Kees Cook <kees@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Zhihao Cheng <chengzhihao1@huawei.com>,
-	Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>,
-	Sumanth Korikkar <sumanthk@linux.ibm.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-	linux-s390@vger.kernel.org, gfs2@lists.linux.dev,
-	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/9] cpufreq: governor: Initialize kobj_type release
- callback statically
-Message-ID: <auQXnep2xKpuNJOF@vireshk-B250M-D3H>
-References: <20261027223847.652884-1-irogers@google.com>
- <20261027223847.652884-5-irogers@google.com>
- <CAJZ5v0juvZ2ZVRBkY6FxBM=NhPt9vMA3+yRugXc5u=U1jO9AXg@mail.gmail.com>
- <CAP-5=fWVZ=7-qDRODiEQzRzhpQqribv9Morj=OoAXW_6uaW2dA@mail.gmail.com>
- <CAJZ5v0i0YoOW+ueh_aZJdYVS0etuCqfrf_S0NTKzCE9_6oKxPQ@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HN3is2pn
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A0E1F000C1;
+	Fri, 30 Oct 2026 04:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793335377;
+	bh=PiRijM27VfJZ6A9yzPvi6A5MclwQnlmk9KlfZ3cemEQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HN3is2pnAx/TSp7pLJ43rvMpVxiOGpUalEPutDA2v5hmXjtjUNGmd4P9cmBySYc2c
+	 io8BT7cPyd/JRFQ5xg7x7Vt9da+weU4jzeUXh7bZA7oyDE1aI4Znz09IuP/DocjXYt
+	 WTuOYf2Y/NgKAgYZec2m3QS2+Yn569/ZlTOgu8C/yGRijfQYhtPCnZGHvMEP9s3n/n
+	 cMuzj1rmNyguZPSAR2GCb9okTATpvEuZY6VyRGVEBLSsdr/coFfmz3lchKLVpBpHPi
+	 nUVhmVhfYsS9BaWfLEAcRMALKyufXaacMpXe/U8DYHi1bwhdl22tg+R9e3b/a2gpuY
+	 jE7/C5xqX3c3A==
+Date: Thu, 29 Oct 2026 21:42:53 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Luca Leonardo Scorcia <l.scorcia@gmail.com>
+Cc: Daniel Lezcano <daniel.lezcano@kernel.org>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: vmlinux.o: warning: objtool: mtk_timer_probe+0x23: no-cfi
+ indirect call!
+Message-ID: <20261030044253.GA2699480@ax162>
+References: <202610290223.iOEGeDs2-lkp@intel.com>
+ <20261028202400.GA835963@ax162>
+ <CAORyz2KEJ5M86-+z2zWXVTJwbNO8SY4DWjn5Y6EO_-nPhdiytw@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -121,15 +62,26 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0i0YoOW+ueh_aZJdYVS0etuCqfrf_S0NTKzCE9_6oKxPQ@mail.gmail.com>
+In-Reply-To: <CAORyz2KEJ5M86-+z2zWXVTJwbNO8SY4DWjn5Y6EO_-nPhdiytw@mail.gmail.com>
 
-On 28-10-26, 16:39, Rafael J. Wysocki (Intel) wrote:
-> I'd expect the driver core to pick up the series as a whole then, so
-> please feel free to add
-> 
-> Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org> # cpufreq
+On Thu, Oct 29, 2026 at 07:54:10PM +0100, Luca Leonardo Scorcia wrote:
+> Being a new contributor I'm not quite sure what the process is now -
+> should I send out a patch with the correction, just as I did for the
+> initial contribution? Or is it going to be fixed by the maintainers
+> autonomously? (Obviously adding a Suggested-by tag with the rest of
+> the bots' tags).
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Since the patch is already in Linus's tree, you'll need to send a follow
+up fix. Not only is it good practice for learning how to follow up on
+issues/feedback on your patches, it will help build trust with
+maintainers in case you submit other patches in the future because you
+have already shown you are willing to take ownership of them. It is
+generally better to send a patch if you are able than relying on a
+maintainer to handle it, not only because they don't typically have the
+bandwidth but because you will get full credit for the fix.
+
+Thanks for taking care of this!
 
 -- 
-viresh
+Cheers,
+Nathan
