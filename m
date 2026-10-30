@@ -1,79 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793316507;
-	b=tUguFhE1EcDBcD+mtw0T7vQZWx3aKH1cf/4+lG/WH2mBR/whvu1+/cHODe84M/8MG2lV
-	 G8I8EMi44Q01gyhMcK8VGUzwl3U5yLGC5QMvQvJHPFc/xIxTxDZJJpyOjlNizErnb6s0D
-	 /W83KG9WZyciJsCBUBhGuh/coIKn2km75A6BQGUAwYwIuyA469NleoO6MC1K0+hbpKKGh
-	 RwxppL4nSocNsjH1jvCRIPX5t7FsgNvp/ngcaILJfo2XhEhvQd47wrWRZo/SS3UoIWebm
-	 cqdgNwzlDpv1BEbkIalpb8NbpcXodb3Il2Sh/LxxhFHefEn9dLI6lIAIaP0wauKTX1g==
+	t=1793319302;
+	b=fdL8OLPi45bJ0Z38qWLvMXdPjy97HJa3WLNzYVSG4uyPbOhyWdXbeei8V6Q8NCMOUAId
+	 ncit7GZs9Sfkld8nATefl1z2Opzu62aK+kBhcVhPVIuiD1yFb5IovSRv8TIXUXNcnhHPn
+	 2wn2MjCBDpRD3ocqp1SLqzzOCBiFrhlniO3jdo66Q6nBohJqTJO9XwqyGpO3OKotVcTbf
+	 4+jhU7R9SHFBPZ8miOh1JxHYen5IVFQPHXHHqMbjg43sd2Vy08SJ+TYTP098FA/oSzvTe
+	 YzFA5S0b/ruLPcsKweZc2g0cM2k46np+l8p2ptFqwXHuM9IIp8UETnItRbBWwO7IV6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793316507;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=Gpn7SZjgFeXUYSeU/S/f3bTQwWe945+YKT9VTSfqIvw=;
-	b=PtMkazVgNRr9/xkO9MwciSuq9AT1opgbJbqRdo5gtTBaXEqIemsUgTUtW1NCzrRFI3ID
-	 5hmnLBOh72naZZczYgUhwE7L/vKiUF1vzLFLM9xyNO+oDc5ywBtthbxmbCAF5JGIteKk7
-	 i6T91N9RL8zJ2DIW2RGTQtwwNc8tiMh43tUS99ziCiw1cULQWwCJOyUuOaxcZDuoRWTE7
-	 Q7BjhbRmKAKfJgPUebfCRxMuVTHAAFqzwLVIIxy1X4p4TmHNSZYjWKRhMi8ygsRipzxdH
-	 bX5ViwIpEAOP6uKTby7t39YvC0ByXcifa1PZ4KN7JHeyLlh9eLkbnKsHEYjJAydGhgw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793319302;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=vqGnoJV4fIgbZtaKIk8jZS2Hfj3hWTfvQ+zjY/yWwmw=;
+	b=KBPKOqbn1qEDKo2S/xBvRAgdieTJJYBLYOh0xsLSMSzs2HH0a9ktSHvBA+Tg7bDFDrdE
+	 apNJkQivjWo33R/hFZuqvbM/rRuxEPNcE3Vtc3tmSoSPmmYQd9EH6PLDd34k5OxmX2MOV
+	 I/xHaTAl5SJfaTJ7DzgjfGzAIRLOEnktkRxdpg2btX8szfeOlntCjihqGGgMRIVrnmGAs
+	 zNjX68xIfmFOsnSZN2tSp3WDAO/17QAhDPriDRw1vGzItqrnWlupxVzeEWr0lJr8Nd9Re
+	 Gyhhf+Q19yuUHlbJ3DhoejjwnhFdNOwiQKOJvr4gy4dBGStC5lDG8aMiA/H0le0UZDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=EGdV7rtY;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="YxNO/Jua";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2B8606A326;
-	Thu, 29 Oct 2026 23:28:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B2B8606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBDA606A321;
+	Fri, 30 Oct 2026 00:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=EGdV7rtY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793316507; x=1824852507;
-  h=date:from:to:cc:subject:message-id;
-  bh=H/6GkqWngU0tBjeCwttQpQ0xwAw18cAjpMIs4G6mTNk=;
-  b=EGdV7rtYgVzHEZDb+jVT7fcDdgRaMKJmp1tXyLMqIHovDEow0DfcRQEy
-   JBR3HmMwGE0KL0Hlzst9aBpHfmCuRyZmzLzld+of//5tTDkhFO22EtZZA
-   pF0ZSQ7c/yYaj973WPgLDlzMKA9v0hkqYuEPl1OWBmbyhpBe2uiaZddPU
-   XpqfC/TPZ6rZ76SxHnu3/nvOaJZvIvtwuS2u89N8GgYC/ahyf8kb5RrhC
-   FZIv8+82QDkJ4nstBXF7fcGu503rBj31Hw1TSIepUDzGHow1k+dDEXpq7
-   E6Mbq6cUVisTY9hWkYCpjQYrjw2Ydd7abyDyLL2x975EbhocDt9GNuG84
-   g==;
-X-CSE-ConnectionGUID: L8Oc1uEMQZSN0d3KyXx61g==
-X-CSE-MsgGUID: PVyFciapTPeTmzlVe+tZbQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11950"; a="2079047"
-X-IronPort-AV: E=Sophos;i="6.27,185,1787036400"; 
-   d="scan'208";a="2079047"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 16:28:26 -0700
-X-CSE-ConnectionGUID: 29qHAZeqT+a9syeOZ3inDw==
-X-CSE-MsgGUID: ifLbYDmRSZuyc2IH6uSUvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,185,1787036400"; 
-   d="scan'208";a="5636487"
-Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
-  by fmviesa006.fm.intel.com with ESMTP; 29 Oct 2026 16:28:25 -0700
-Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xMZXi-000000005OZ-3cv7;
-	Thu, 29 Oct 2026 23:28:22 +0000
-Date: Fri, 30 Oct 2026 00:28:00 +0100
-From: kernel test robot <lkp@intel.com>
-To: Jacob Keller <jacob.e.keller@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Intel Wired LAN <intel-wired-lan@lists.osuosl.org>,
- Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [tnguy-net-queue:100GbE_E825_timecounter 14/15]
- drivers/net/ethernet/intel/ice/ice_ptp.c:2366:25: error: use of undeclared
- identifier 'cached_time'
-Message-ID: <202610300044.0bHmTu2J-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YxNO/Jua
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F253E1F000C1;
+	Fri, 30 Oct 2026 00:14:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793319301;
+	bh=vqGnoJV4fIgbZtaKIk8jZS2Hfj3hWTfvQ+zjY/yWwmw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=YxNO/Juac/DOmudo+trQ/spyJrXNnIR5b/xtycCcoDfZ/v194fmiqGaI2FuqMffnZ
+	 LNKtiXq2RyABZ+oLWseoAaQxNKNg/p071Wj3099jPOVR0Pl2lT0BoPMUl9qgDNkwvD
+	 0Vip+uYve+lcpb5qKTv+PWRocDaVz9A47G02tl9XrYwUmd5DpeokWiCT2V7rRkSnNl
+	 HoSi5dl9jB5dBnsYUbFWoPHGfqLChW5wL+LU86xRS+q3reladcWCkAHW9lZUmXwHQA
+	 w1SKnXYH9OGV7xuAHHghcReF3G9soUH84l1Kh5Dp3oqgoJoOBq9YqkH0isOdYtJMsr
+	 5tfbIpD+If6Rw==
+Message-ID: <d1267d81-0ed8-4b3f-a535-88ddba51af88@kernel.org>
+Date: Fri, 30 Oct 2026 01:14:56 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,68 +50,72 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 3/3] bpftool: Prefer zlib-rs over zlib when
+ available
+To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20261029162958.3224280-1-irogers@google.com>
+ <20261029162958.3224280-4-irogers@google.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261029162958.3224280-4-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue.git 100GbE_E825_timecounter
-head:   3f3ca43bb77f800814e88fc923238ad0a122d79f
-commit: a1bbd79fcdadf25fd90973f46fe35f9461d04a8c [14/15] ice: store cached PHC time in ice_adapter
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261030/202610300044.0bHmTu2J-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261030/202610300044.0bHmTu2J-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610300044.0bHmTu2J-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/ice/ice_ptp.c:2366:25: error: use of undeclared identifier 'cached_time'
-    2366 |         ice_trace(rx_hwtstamp, cached_time, ts_high, ts_ns);
-         |                                ^~~~~~~~~~~
-   1 error generated.
+2026-10-29 09:29 UTC-0700 ~ Ian Rogers <irogers@google.com>
+> Add zlib-rs and zlib to FEATURE_TESTS and FEATURE_DISPLAY in
+> tools/bpf/bpftool/Makefile and use feature_rust_lib to configure
+> ZLIB_CFLAGS and ZLIB_LIBS when zlib-rs is detected, falling back to -lz.
 
 
-vim +/cached_time +2366 drivers/net/ethernet/intel/ice/ice_ptp.c
+Hi Ian, bpftool doesn't make an intensive use of zlib (mostly, it's a
+requirement from other dependencies; we may also use it to unzip the
+kernel config on the host if necessary for probing BPF features on the
+system, but only on some distributions). So I'm struggling to understand
+the motivation for your proposal, what do we gain by switching to
+zlib-rs when available? I understand this implementation is in Rust, but
+I'm not sure the added complexity and feature probing in the build
+system is worth it.
 
-77a781155a6590 Jacob Keller     2021-06-09  2340  
-77a781155a6590 Jacob Keller     2021-06-09  2341  /**
-3310aad20defb9 Larysa Zaremba   2023-12-05  2342   * ice_ptp_get_rx_hwts - Get packet Rx timestamp in ns
-77a781155a6590 Jacob Keller     2021-06-09  2343   * @rx_desc: Receive descriptor
-9031d5f491b957 Larysa Zaremba   2023-12-05  2344   * @pkt_ctx: Packet context to get the cached time
-77a781155a6590 Jacob Keller     2021-06-09  2345   *
-77a781155a6590 Jacob Keller     2021-06-09  2346   * The driver receives a notification in the receive descriptor with timestamp.
-77a781155a6590 Jacob Keller     2021-06-09  2347   */
-3310aad20defb9 Larysa Zaremba   2023-12-05  2348  u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
-9031d5f491b957 Larysa Zaremba   2023-12-05  2349  			const struct ice_pkt_ctx *pkt_ctx)
-77a781155a6590 Jacob Keller     2021-06-09  2350  {
-77a781155a6590 Jacob Keller     2021-06-09  2351  	u32 ts_high;
-a1bbd79fcdadf2 Jacob Keller     2026-10-21  2352  	u64 ts_ns;
-77a781155a6590 Jacob Keller     2021-06-09  2353  
-b1a582e64bf222 Jacob Keller     2022-07-27  2354  	if (!(rx_desc->wb.time_stamp_low & ICE_PTP_TS_VALID))
-3310aad20defb9 Larysa Zaremba   2023-12-05  2355  		return 0;
-b1a582e64bf222 Jacob Keller     2022-07-27  2356  
-b1a582e64bf222 Jacob Keller     2022-07-27  2357  	/* Use ice_ptp_extend_32b_ts directly, using the ring-specific cached
-b1a582e64bf222 Jacob Keller     2022-07-27  2358  	 * PHC value, rather than accessing the PF. This also allows us to
-b1a582e64bf222 Jacob Keller     2022-07-27  2359  	 * simply pass the upper 32bits of nanoseconds directly. Calling
-b1a582e64bf222 Jacob Keller     2022-07-27  2360  	 * ice_ptp_extend_40b_ts is unnecessary as it would just discard these
-b1a582e64bf222 Jacob Keller     2022-07-27  2361  	 * bits itself.
-77a781155a6590 Jacob Keller     2021-06-09  2362  	 */
-77a781155a6590 Jacob Keller     2021-06-09  2363  	ts_high = le32_to_cpu(rx_desc->wb.flex_ts.ts_high);
-a1bbd79fcdadf2 Jacob Keller     2026-10-21  2364  	ts_ns = ice_ptp_extend_32b_ts(pkt_ctx->phc, ts_high);
-77a781155a6590 Jacob Keller     2021-06-09  2365  
-5443362bae71a7 Przemyslaw Korba 2026-05-11 @2366  	ice_trace(rx_hwtstamp, cached_time, ts_high, ts_ns);
-5443362bae71a7 Przemyslaw Korba 2026-05-11  2367  
-3310aad20defb9 Larysa Zaremba   2023-12-05  2368  	return ts_ns;
-77a781155a6590 Jacob Keller     2021-06-09  2369  }
-77a781155a6590 Jacob Keller     2021-06-09  2370  
 
-:::::: The code at line 2366 was first introduced by commit
-:::::: 5443362bae71a77a7bf37467cef3be608ce32783 ice: add rx timestamp tracepoint for debugging
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/bpf/bpftool/.gitignore |  1 +
+>  tools/bpf/bpftool/Makefile   | 56 ++++++++++++++++++++++++++++++++----
+>  2 files changed, 51 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignore
+> index a736f64dc5dc..ea2222373634 100644
+> --- a/tools/bpf/bpftool/.gitignore
+> +++ b/tools/bpf/bpftool/.gitignore
+> @@ -6,5 +6,6 @@ bpftool*.8
+>  FEATURE-DUMP.bpftool
+>  feature
+>  libbpf
+> +libz_rs
+>  /*.skel.h
+>  /vmlinux.h
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index b0f7168e7943..a193cf89a034 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  include ../../scripts/Makefile.include
+> +include ../../scripts/Makefile.arch
 
-:::::: TO: Przemyslaw Korba <przemyslaw.korba@intel.com>
-:::::: CC: Tony Nguyen <anthony.l.nguyen@intel.com>
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Looking at the GitHub mirror repository for bpftool, I'd avoid including
+this additional Makefile if I could.
+
+Thanks,
+Quentin
