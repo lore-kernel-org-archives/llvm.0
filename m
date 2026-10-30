@@ -1,100 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793329875;
-	b=uulQ2t3u06tLFWn/Y5SgaUaZ8my4rDfDRfeLM+Iv9528g4kR8apg3hbhbUYgWKhZHj5M
-	 5BxDapl4R+s5L9Ns+1hymvix/dQXpRHNIA7Hduc7ngqjyFtwoBAXINYgkElBRD3LMln5s
-	 lVdDMNgEvVoB5AoFwvGln0RxIlbDscXXzpKZ6lmQi04TIhW/v8uv/29JDoFDbRwmjJRHG
-	 Ud3ImYCZbd9uo3z5Wl682BszowzWxzz8BMTULHlrRqBzWlzPE8bzfpqVaq7eDr3CxPvSX
-	 ZyRPH2Jr37fxNgRi16dBh5CKTA8x3hV3GMnOdZe6PAAOVgOkObUY/SwiWYKx/+/XoIw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793329875;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793333155;
+	b=KLUofc3mpfRUxmMjh/riS7Hnv3B79pS4JZu1SuHAYaVt6q75p1UQAlyxnjFgvhBz0s84
+	 WzjkVcf77SYxg4ZHFGcKm0Sxc/F3GBwMqBTrFcT6A4I9dKW1F9tjMy9uoDCX0K4eMV3SW
+	 6Yvx+x/LNx5bvGKM4OmYe6fGyFzOK/tSl/UB4Vgr3f+OmOKbj+QwS14lWiEhNEzPUw2pH
+	 etHVJ4Jjj/5KMDeA/punFzIYCLhC7YnR9j1q2ZGLZ0k1OhblbEqa/3nwVSvKAPrCZSmZ2
+	 46T+jxMEaJKfJug6KduHJ9uRRi3+b2M9KqDy+DyEFrlJC64rlPq8nw2+flqyvHwKgYA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793333155;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-	b=DDKh5CQqkpT6BafyPVf2MsrUll8Z8IqVSynGoM7/luzsBtVaadbDvhVnAQKhhhls3pao
-	 2nKv+q3QU6L4GR3htRml0gzNv1eGvgJlwB5NICZmrfP5fQriKzqanVLQfhqd5m0NUx5ip
-	 jZdkAGNVBUm9kqkYqyUQ/kTo5fujgCWuTAjqgYixwxfWEeCFVTv3n/bcPiRAuIdBUGYAC
-	 sxoqEHEJu97d1fKsOugRriZboT2Zsnf0vJBNIL8Z/cn/OCb5QC0dC17ATFbUF9MJU7cxd
-	 /rRE5W5eOraokumUV7M5wrk2ZN6hfMKVQC+aJV7ZaXwJpZQkpVnukjqgyB/YebAwYCg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=i2bb2lWA;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=9CvywPHpjrCT0zo2JhnH11M0JaZbySgNZTi9n8+NQFc=;
+	b=tk0GFOfibPV7NFoV+39j757TidXIMa8siUllWbTYmAqBX88E6SJrkDLHda7kLNRtxauP
+	 e7ceuzp6YAIO4PegklGK7ecwTlImUYtSkc89e7GC4qqRY+nUZVHeQUQcwOp05dEtUoshk
+	 oSZe+6VgYgKkK1EjKja5rffBDXI74uI/TxzhHSInvwSa8aOa1QPQ+bzIp+wHZ3Zc6IJQj
+	 rilqIBEpJMbpRooLUhk7RByYO914y1Y+L8l1HiwNRSH+aTlj/UrQxNzTK5WIBI0AriG+K
+	 3XuIHs4hBh2Lqsx8YXAW1T+MipFRVRs284JzlPLUx6NTa1H39tXu4ZdEivX6R715+bQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=pNcRgMIZ;
+	arc=none smtp.remote-ip=74.125.82.180
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A1E606A31F
-	for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 03:11:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0A1E606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92131606A322
+	for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 04:05:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92131606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=i2bb2lWA
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-5337c7b9937so163951cf.0
-        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 20:11:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793329873; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MwZ1eQ8OsCUySo9AU0EaVd9fBMUI3AllOxCGYeEkmOv2k0IA4SpSbH6aZAX9Y5iFj9
-         7CV26DmRW6BgJ1UE9dJsa2xQmCMADzWsPHmrOMU8bGXrx3eDuxvVyMmfJHo8rReqx2G3
-         vMt0JSDdxv+Zo4gxfR6ILWQV3t4ZJcpCXrz+E6i5iR8PLwdhE9/AtLp4lQPtwQNS+lQe
-         rvEN2ZuQ5/sONycNDubeeoEwafLHjAyCwtD5RjhQOkfjlx2CluPWF12L7E8OtgUydum+
-         bAf3yPuOAd6jam1ybLskCEtwSC9Ly8qL+e5V0Q3qRl5f7ZQbqRqLS8jCV1/+R43Ac+9A
-         AK0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-        fh=3P/fvMlBYViz7H9VS2sIeU3/+wuRKuFP+MjQqbpE5Us=;
-        b=fAkld2//1UuvuNKVnTgRl4TJLEv3SgSy9kldhFReCoHHc25mRSAxx98EPS+k6/EwVI
-         UWFyHRLDsoMtBiE1a5zHFC6KiskyxjHoi0OMl5TImLXXRYMTxqzHl1L1PjB9Fb9JD2L9
-         lWgt2UwbGOHDaouXc+0cE7f3zvodl73MWqYypPQ4O/YzsnXrmaCyEEfZFJVfSIK7IrV2
-         c2/AmSdhkIzETfoLGBgMb/OAKS9YltnaUsZyrgA34IwHp3tP4B/9s0j2/aLeUfr9t518
-         WbTzpBR4/983xPI5q4SEXRg78KbLcAegpIlNqONvHONWK469LSB6FyTZX86qF4WaAqcy
-         QLHQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=pNcRgMIZ
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-3514b90bb89so632137eec.1
+        for <llvm@lists.linux.dev>; Thu, 29 Oct 2026 21:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793329873; x=1793934673; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=linaro.org; s=google; t=1793333154; x=1793937954; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-        b=i2bb2lWAYOk9Uo3Lv+yYEMBpeSBreidbCZZSGQ3o7/lc2nRQXU6pfsSA8NsjCGqvPH
-         B4EAy6CeozDBX0CIAQsVkCpEEVcHns5c3xKygFQ5+Lksp4hpo/dluXvE00op3+rzzuTw
-         u/02rDupfT2leUfejD1wfbCjjDy+uzMx9HVeO9KMOWxtbCrBHmTymJCmVL7UXWtBSkLC
-         DkWShDVrkn+yN13ZHoAgSLWniXmBmdI70BHwl8SbwOZyzXk67Z7nCdK6m4GfsKXavvO2
-         R0Y7EFnXUXDXcZD9dvEC3EIEpG/dwoXQVFcLUlhmc8eziQ5iBhytDt3zYKe+7cOjo0tC
-         q5Pw==
+        bh=9CvywPHpjrCT0zo2JhnH11M0JaZbySgNZTi9n8+NQFc=;
+        b=pNcRgMIZIY2oZG+KBCWHOETi9ENJBfSv74eJI/QEk0Qv49pNOktbBQPM0cNGUV55/3
+         ePz7BhW8pNjZ8f4f1LSwcic33EABoFyd47SE7TUqqEmcPmDgzlYbefkW2jeKuHT9YCoX
+         EiEloNWcp73OAUo/HN1DbeN3mKUw6BNxygKbGN9KW1u8cfNeGOpnY0+APiLbZl6JIuHe
+         42Vpoc/I6bR38uspIwB297pgPGcOf+fOJrpxGnUHkpQsB9afSCO4oOjMTYQ5DOvt2Tk+
+         O73Kg0pG7Kj1iQoIowPPMoPHVY/KUvk8TmKThPcHK/hqxS3j+QlHVAereljRk0sZO8Q8
+         iIIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793329873; x=1793934673;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793333154; x=1793937954;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-        b=SOsxYJIbyVJi2yYEsgfdoFfVky66mhHeLim/y1CnToFeVAntynZGJclZi2HsUZq51M
-         fTsomjavbye6Z3P+6DRxEx+Qp97i+16Uu15j1JqsltMkcMUTWPHGjFnkknTVhcEgKhUa
-         YBEikxL7MoAO3wHXZwX999w4UQB3eMr2wYfUifNWxQ+smByD8xiJ2FXxwxmrQVXKoEn9
-         ETZc0I1ngnYFp56Nw3M2keNfj/RbbgL0fDrqpH60AW0w6ceGXaWfAXZ5AjBjLYzb39mY
-         Z2YJtBH4T3vzwjyZj1adD+M3N7tnlv0A9pm6cpJOSGM7Q67YErE7ZxoBzw9pC/gaUCkC
-         P+Lw==
-X-Forwarded-Encrypted: i=1; AKwUvByH1mb7iZctK88Rn7oM/nzkk6ZqqZxsS5S8loNzlwxqYAY7zqV+p7hfLJPw5UZKaGzBBiJX@lists.linux.dev
-X-Gm-Message-State: AFq9FYILY3O9TuWGLBY+JdCJI5zCEHU1Y/XWYtlPXmbSRffRIWOyg0ns
-	0X8/8X8FFL1K+BDP44EtpLghoh/LYQYk1qdPoIubU559bo4htX2u4OaHf3KkSeFQ9lubzWfqH50
-	vXZk1vzcTi8wQFV2XvCHBZ44LjzZPtRRwG9un5lr5
-X-Gm-Gg: AYBFou0zoqhDtPFHqR3vpwdyNvaWN/OfNSkx4GujhElY7aEAgRnXsWw6LGJTlWBN3Mc
-	deipRrNG78nSoRWdB42S+a28HFhW8MSqjgIM8uTMCLhC9oLr3sLSmmmaU1eBUcWhPfJg1kr+IQT
-	B8btJ4p3JyY9S/eSH9tOMgsYX8rokLJ+p+qL0R1QlnbgQVyX9l4Fbk7eRIkaBiPjLsxMkEi9kb1
-	LsoRr5cVNHijByX06vaH84wyv2HZ/3D9qmYCfGvLhioxjlbEw0kx3HhcmAcaKOly4KZcGeuQMFJ
-	t+DL8mX0W22ky1ALq5qeKn/wrdGJqXrOnFCGosExnIRjpzO5qLHokQscqN8Io7xctmNNJh8oIus
-	MZw5usiz9Db2bwpLMYn3R92mPBkkxBIlqKdSJ4A==
-X-Received: by 2002:a05:622a:1b0e:b0:536:6d88:600a with SMTP id
- d75a77b69052e-5414de1cf2dmr34323151cf.9.1793329872551; Thu, 29 Oct 2026
- 20:11:12 -0700 (PDT)
+        bh=9CvywPHpjrCT0zo2JhnH11M0JaZbySgNZTi9n8+NQFc=;
+        b=uaAWY++knecO2psSUxiMdX98E3Q7OPFBQjOoYuSFSSYg0k169owxfRFNAM51OmTRSR
+         ymZIII2wg7FPvglz8kQim4B1OAAr82HKnU3myEB5m+c543N3HS5hNoNwRUvwFD4FkS4m
+         XENITUEtTOW4P+uChj97YR/meOVDqBaUa+NJe3OKsZKPMX1y0GM2E5+WrLPW3Xj2BM1u
+         0bvVPelpXtc29iu37ElV0nPiZ2CMrrPy00mE1V1Tyr07nA5ATfaO0tPSgtPmS+u4j2fq
+         KHvvEny4EaEeEdcl3f2eA/O+wQETRGLaSqXLXyjCkFICymm2XAyvTLSVlhLW9V9peHDx
+         elsQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxqJIw2TykTVpI8YRNFR5u8slLELp9dmA0ciwxtiiNJLfVSqayguIVf5Jixoyc0gxGbkYfX@lists.linux.dev
+X-Gm-Message-State: AFq9FYKe1Qs3IIWGglf68Llqy9gTfRlHUWv94bdOCJ11dsnW4OgX4bIP
+	TYsGNjh8IMUXmTcq/YUzCpOdEY18QYW0sJ0bJAvd38fnviHYPLswnByAb+gVepeT37A=
+X-Gm-Gg: AYBFou0MwX5dQDnNcYQqnePfsJU6y/Kum93z2JU16B2X+mmUxJZY68WzFKrGAFuOv7o
+	yuTXDAX920UwCQ9qc/oZHUXf/UZdkFHclrjPjKjg40PuGGDUhEY1sdjURexPOg2BSXdc0XWU8B7
+	4qMMZ1J3IAMWynMUJfYLpMqGN3k6XeifGndHa5IxkeG88aMwv23V1J+v/liCp/0Wy5gsQIgpPRp
+	ATHNRFe5vrTc8XEPa+feYi52/ZaPivQsJ+w4SVbXHkJaGWnOn9iWQyctcHqqX8NHaUWhVoKLb0C
+	L/fqskc74z3VVDv5OyGArW8wwOUJI1DNuMkEMOB2sK19OZjoZSucoLGPUYXn9SK8PFyY1Ge/xsE
+	Jh3ZwEIqGZd5oGu/RD2G0NeYE7z3bu81hW+dOGcCbAEerEOK96LfMMb/F2cjbWIc0DmKBjnI9s1
+	WMri67NHL0EOgjy40GYkqaDzjLifJOLcMf41IVVdPiaKDmDbiyQcdncr/zCgNzvG5hMyzl/nz6y
+	NLT1kfOntg1GzgxKXIAdtB27jkkZQHVtdtIa4QFaSFlQcbZisLXx5lqvKXUOhwE11NJcq2ddSfz
+	nMvUEKmIPYXIPNuNbbEbD1sQZ4z3NNs=
+X-Received: by 2002:a05:7301:53cb:b0:35c:e696:2d4a with SMTP id 5a478bee46e88-36a423ea99dmr1772736eec.24.1793333153319;
+        Thu, 29 Oct 2026 21:05:53 -0700 (PDT)
+Received: from localhost ([122.172.82.240])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a4291e38fsm3512579eec.15.2026.10.29.21.05.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2026 21:05:52 -0700 (PDT)
+Date: Fri, 30 Oct 2026 09:35:49 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Cc: Ian Rogers <irogers@google.com>, Kees Cook <kees@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Zhihao Cheng <chengzhihao1@huawei.com>,
+	Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>,
+	Sumanth Korikkar <sumanthk@linux.ibm.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+	linux-s390@vger.kernel.org, gfs2@lists.linux.dev,
+	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] cpufreq: governor: Initialize kobj_type release
+ callback statically
+Message-ID: <auQXnep2xKpuNJOF@vireshk-B250M-D3H>
+References: <20261027223847.652884-1-irogers@google.com>
+ <20261027223847.652884-5-irogers@google.com>
+ <CAJZ5v0juvZ2ZVRBkY6FxBM=NhPt9vMA3+yRugXc5u=U1jO9AXg@mail.gmail.com>
+ <CAP-5=fWVZ=7-qDRODiEQzRzhpQqribv9Morj=OoAXW_6uaW2dA@mail.gmail.com>
+ <CAJZ5v0i0YoOW+ueh_aZJdYVS0etuCqfrf_S0NTKzCE9_6oKxPQ@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,94 +119,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261029162958.3224280-1-irogers@google.com> <20261029162958.3224280-4-irogers@google.com>
- <d1267d81-0ed8-4b3f-a535-88ddba51af88@kernel.org>
-In-Reply-To: <d1267d81-0ed8-4b3f-a535-88ddba51af88@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 29 Oct 2026 20:11:01 -0700
-X-Gm-Features: AclHuK9rCNoYtTV6H1GziiI59-c1QFU3f9f-3J74Fr_QKbxS-WGNb4D7UrtMMqU
-Message-ID: <CAP-5=fWaLj-ToYvAowp-_dk5tL-_Ju+i=U90GRK_obFNqn5axg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 3/3] bpftool: Prefer zlib-rs over zlib when available
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i0YoOW+ueh_aZJdYVS0etuCqfrf_S0NTKzCE9_6oKxPQ@mail.gmail.com>
 
-On Thu, Oct 29, 2026 at 5:15=E2=80=AFPM Quentin Monnet <qmo@kernel.org> wro=
-te:
->
-> 2026-10-29 09:29 UTC-0700 ~ Ian Rogers <irogers@google.com>
-> > Add zlib-rs and zlib to FEATURE_TESTS and FEATURE_DISPLAY in
-> > tools/bpf/bpftool/Makefile and use feature_rust_lib to configure
-> > ZLIB_CFLAGS and ZLIB_LIBS when zlib-rs is detected, falling back to -lz=
-.
->
->
-> Hi Ian, bpftool doesn't make an intensive use of zlib (mostly, it's a
-> requirement from other dependencies; we may also use it to unzip the
-> kernel config on the host if necessary for probing BPF features on the
-> system, but only on some distributions). So I'm struggling to understand
-> the motivation for your proposal, what do we gain by switching to
-> zlib-rs when available? I understand this implementation is in Rust, but
-> I'm not sure the added complexity and feature probing in the build
-> system is worth it.
+On 28-10-26, 16:39, Rafael J. Wysocki (Intel) wrote:
+> I'd expect the driver core to pick up the series as a whole then, so
+> please feel free to add
+> 
+> Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org> # cpufreq
 
-Hi Quentin,
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-At my workplace, we are transitioning from zlib to zlib-rs for both
-security and performance reasons. I'd like to keep upstream tools
-aligned but they don't have to be, it just seems nice. I agree zlib is
-of a lower priority to users than, say, zstd. For attackers, like with
-brotli, it is probably an area of interest. Knowing the implementation
-is memory safe is at least something in favor of zlib-rs. I sent this
-series out as an RFC because I obviously have no way to mandate what
-upstream should or shouldn't be doing. There are things that can make
-life a little nicer and easier, and this patch series, for me, is one
-of them.
-
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/bpf/bpftool/.gitignore |  1 +
-> >  tools/bpf/bpftool/Makefile   | 56 ++++++++++++++++++++++++++++++++----
-> >  2 files changed, 51 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignor=
-e
-> > index a736f64dc5dc..ea2222373634 100644
-> > --- a/tools/bpf/bpftool/.gitignore
-> > +++ b/tools/bpf/bpftool/.gitignore
-> > @@ -6,5 +6,6 @@ bpftool*.8
-> >  FEATURE-DUMP.bpftool
-> >  feature
-> >  libbpf
-> > +libz_rs
-> >  /*.skel.h
-> >  /vmlinux.h
-> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > index b0f7168e7943..a193cf89a034 100644
-> > --- a/tools/bpf/bpftool/Makefile
-> > +++ b/tools/bpf/bpftool/Makefile
-> > @@ -1,5 +1,6 @@
-> >  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >  include ../../scripts/Makefile.include
-> > +include ../../scripts/Makefile.arch
->
->
-> Looking at the GitHub mirror repository for bpftool, I'd avoid including
-> this additional Makefile if I could.
-
-Ack. I also acknowledge that the CI failed because the patches were
-against perf-tools-next.
-
-Thanks,
-Ian
-
-> Thanks,
-> Quentin
+-- 
+viresh
