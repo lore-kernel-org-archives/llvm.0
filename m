@@ -1,85 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793359624;
-	b=EK3G48vEuOxXZog2T0hdKQf31a0yVt190grqT4twDGUb5qK67FJmldSg9NujLCkbss9Z
-	 LpYPOZ3quZFtAmENW3/L2E1aSlsClALAmqSm8QnYysLPfv95N2gG9GpJK/gZwMVSjE/qo
-	 td8J1hgdBpO0idSGYMuky6Megtl7ii+lFujF+E2SgLqDQKz6BSiDsvPDpEO/Y+s6itFcY
-	 86WvRsyfPw4KU67mb/npgLAqAkLCar302f/G1DiyhwDRGiyOfLr1ZjBeRSJCtV+e4W3pr
-	 Ft8cPxwuArW2iBjWMTHeOsF23fXxpuz9aZOodwNf+BCmSdR3GPSsnhY+wHJuGQwLYlg==
+	t=1793362327;
+	b=Gm1/df6/Qnl1o1qPRZshkm8TpmOc1dNyBLYxSXioMRFwVJZIfRnWwSFjEf03i/wsdNc6
+	 42QwlGYmnoVyCXowJhdG2rxup6m8VAgr8DnqSAY+fRitvphg/fZyDe7oY5ybXMPl73ppv
+	 esyb6pVrcv93C5Me+EXVWZpztcs0CCQnAmmBncmKoC7x0ys2Sq6JC0w8YWQSg+ON7gtPw
+	 CZZyRfizAG2CDsmWyL5GJS2Mkm3RS1OodTyRq0MugLui65nPSmQfJCAu3HeOMfkwx7PmK
+	 o/AC1XLN69mJnKl/of5PcSPjtcl6JfI7EilCs/yjPmkuJhtgdZtPwyU4Yn5dqpMINJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793359624;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=aqTUG3MhRPMe3T+iwrEz6qtbFX2SNbhZovF7I8ufp5w=;
-	b=WbBMkwGHoHm0g2LYaC6vF4AkVxAz04Lck/tOOBv2hINL1aKRmavnlqzmGRDjaviDPlbG
-	 iyd4boTZkfKJKtCRWTpLe4o8EEot+mbRRcky81gcZRzl2VbhbwF/FyxpZrC+gPTMQVJLD
-	 +jdQGAbgELOBFb4v1LMHTCxT7rDamkJwRViOXucEBSaayiNnQA5v09ruiNWaIyAWPckgh
-	 sLR1XrDIzAdS/BtoghsIG82X1g+vwrh7Su2kJ3jVmy8C/a5OvYdAx0DihvsjiqRRWWjkR
-	 7ZGIEKgeFiNfUAGfdM+47O79u6ey0E42ixFsXNmqkbzvoN89wJBHXmpfqLmrplk8Q/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793362327;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Debian-User;
+	bh=hna6sUJpKyxlDIEIw0dw2U7po5M91zQRyB5zbyinf68=;
+	b=5gZk2iyCSBnMr2XJXjs+YcSXIH+3otniJBYw+jgApAHDpPARbNvKi9f4Me4z9uHsZB7B
+	 R1T1TR3gSVcxG5hIPAUg7sOHzR9PzAA1iu365vgpKXYiDflPHpvRtcuSOxu+YXfIzqT2R
+	 Kunu74ze1edv3cYpIQpgxTtJdr/JRgSMxF2z/jEG/giopyTPhET205Kwn8dM8DCdw4Zrx
+	 Sbpn5WrGXVJ4J3ROEJ9ORYwYR3W6xeiUp2SJ0BqZOPTzWOhwYsT3Deg8DzDn03SJwlnq1
+	 pGHc08doVSHoWjng6xI9R+cmmnZRyy5C4+SSW5gDRPYjStfb2uPqFStIgkCYeEUPpoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=icHbeicO;
-	arc=none smtp.remote-ip=198.175.65.19
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=L8eKm6FO;
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBFF606A323;
-	Fri, 30 Oct 2026 11:27:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EBFF606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C48606A31C;
+	Fri, 30 Oct 2026 12:12:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44C48606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=icHbeicO
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793359623; x=1824895623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ncUJX/DtM5+A/RZso1ZcCWeMShn2h681nclm+TFp2D4=;
-  b=icHbeicO6worMvpJs8478JFSMcVXmiaoQWQHv7TYSfbP3NVfmSgT64ZN
-   zQKyvuDR/KFBMLa5u6gcC7SrSQPkelHB8lBWj8o5zpWG4P+LgPjPppnG+
-   BVcLwC6j8v/7VnGR7owikDIqxVzk4Aenf7Ry8vgU5QgPIJI8oxinfEIfq
-   PCdyy7GCTtnmcyKmGCgY6LOomPJOovHTv6sEtFf46JpZq7cR3vKWMQfi+
-   yr8/t9eiGe8QOUmP0WdxShO3aA0omk5xzfv14rHlVFtRHcQ+3dT5nFuyy
-   i0M/2GPTSr4k/eMVxCgb3cmDaJSoifFevYXcr2T7SYHnjM5aLXrhL/dva
-   g==;
-X-CSE-ConnectionGUID: 8fIZK8enSFmhWFaczXUYEw==
-X-CSE-MsgGUID: zKD7dwxyQUqbx0jUiXl8Pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11950"; a="2147039"
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="2147039"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 04:27:02 -0700
-X-CSE-ConnectionGUID: pMjUirJuRP2pYbMl8LVzGA==
-X-CSE-MsgGUID: bOa7RV4yQu22DE/uMwHFGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="5539917"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 30 Oct 2026 04:26:58 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xMkl6-00000000bea-25Xt;
-	Fri, 30 Oct 2026 11:26:56 +0000
-Date: Fri, 30 Oct 2026 19:26:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	konrad.dybcio@oss.qualcomm.com, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Subject: Re: [PATCH v7 3/3] PCI: qcom: Implement shutdown() callback
-Message-ID: <202610302144.Iwq8RoDq-lkp@intel.com>
-References: <20261029-shutdown-v7-3-3fd7a76a6991@oss.qualcomm.com>
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=L8eKm6FO
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=hna6sUJpKyxlDIEIw0dw2U7po5M91zQRyB5zbyinf68=; b=L8eKm6FOGqhX8si7wvCVyP3e5C
+	L44EYuq5F1f2qlNbSc57ggV2a+2EpUqo0BNt7QgsvPgkKDIUU8s0mV7T4vzmqpi/2UnwbWi+Ylsgb
+	IWBJ5IE0OFGRae5AF1bn3kDRvy9M6OwsZnGUTFMyWFnjossjH1wL9GlOihTsgg31cyXms2C0f2kyB
+	phmQd8mff3inYBmhGupdtcN+ilkEDgkrW/Ebacmpfx0N4/9uw0tDbjLrc6aCF9cfyglvLOoQ+dyW8
+	igLqsxvLUQ5K5peQ/Ql2i/l6ipqAL8VXrcjsVG7ydZp4epoTwhRsbyeIoA8As6Mb2vH59QBybq3rs
+	Ul8KsZtQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xMlSU-003o9l-2F;
+	Fri, 30 Oct 2026 12:11:46 +0000
+Date: Fri, 30 Oct 2026 05:11:40 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Borislav Petkov <bp@alien8.de>, david.kaplan@amd.com
+Cc: Peter Zijlstra <peterz@infradead.org>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, torvalds@linux-foundation.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, kernel-team@meta.com, David Kaplan <David.Kaplan@amd.com>
+Subject: Re: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when
+ Spectre v2 and BHI are off
+Message-ID: <auSIfywq5DhT-SBt@gmail.com>
+References: <20261029-syscall-table-dispatch-v1-1-bca9dbb886de@debian.org>
+ <20261029104938.GC1813469@noisy.programming.kicks-ass.net>
+ <auM6mSXz-BVIjYBc@gmail.com>
+ <20261030053825.GKauQtUX0pauVeLsGg@fat_crate.local>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -91,94 +78,22 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261029-shutdown-v7-3-3fd7a76a6991@oss.qualcomm.com>
+In-Reply-To: <20261030053825.GKauQtUX0pauVeLsGg@fat_crate.local>
+X-Debian-User: leitao
 
-Hi Krishna,
+On Thu, Oct 29, 2026 at 10:38:25PM -0700, Borislav Petkov wrote:
+> On Thu, Oct 29, 2026 at 05:30:25AM -0700, Breno Leitao wrote:
+> > My goal is to make booting with mitigations=off equivalent to building
+> > with CONFIG_CPU_MITIGATIONS=n, so we can ship a single kernel and pick
+> > the mitigations at boot time.
+> 
+> This might interest you then:
+> 
+> https://lore.kernel.org/all/20251013143444.3999-1-david.kaplan@amd.com
 
-kernel test robot noticed the following build warnings:
+Thanks for the pointer. I am very interested in this.
 
-[auto build test WARNING on 17bb0e2f6c8043f70a693a5f3797471cbed354c8]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Chaitanya-Chundru/PCI-host-common-Fix-early-bus-walk-exit-in-d3cold_possible/20261029-094927
-base:   17bb0e2f6c8043f70a693a5f3797471cbed354c8
-patch link:    https://lore.kernel.org/r/20261029-shutdown-v7-3-3fd7a76a6991%40oss.qualcomm.com
-patch subject: [PATCH v7 3/3] PCI: qcom: Implement shutdown() callback
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261030/202610302144.Iwq8RoDq-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c2ea4440d4b64c148de4fdfca1fc2c437a0701e4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261030/202610302144.Iwq8RoDq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610302144.Iwq8RoDq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pci/controller/dwc/pcie-qcom.c:2463:6: warning: variable 'pcie' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    2463 |         if (pcie_cfg && pcie_cfg->firmware_managed) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-qcom.c:2481:6: note: uninitialized use occurs here
-    2481 |         if (pcie)
-         |             ^~~~
-   drivers/pci/controller/dwc/pcie-qcom.c:2463:2: note: remove the 'if' if its condition is always false
-    2463 |         if (pcie_cfg && pcie_cfg->firmware_managed) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2464 |                 /*
-         |                 ~~
-    2465 |                  * Firmware owns the link teardown and clock/PHY shutdown in
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2466 |                  * this mode; Linux only owns the chained MSI IRQ(s), which
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2467 |                  * still need to be masked off before shutdown proceeds.
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2468 |                  */
-         |                  ~~
-    2469 |                 pci = platform_get_drvdata(pdev);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2470 |         } else {
-         |         ~~~~~~
-   drivers/pci/controller/dwc/pcie-qcom.c:2460:24: note: initialize the variable 'pcie' to silence this warning
-    2460 |         struct qcom_pcie *pcie;
-         |                               ^
-         |                                = NULL
-   1 warning generated.
-
-
-vim +2463 drivers/pci/controller/dwc/pcie-qcom.c
-
-  2456	
-  2457	static void qcom_pcie_shutdown(struct platform_device *pdev)
-  2458	{
-  2459		const struct qcom_pcie_cfg *pcie_cfg = of_device_get_match_data(&pdev->dev);
-  2460		struct qcom_pcie *pcie;
-  2461		struct dw_pcie *pci;
-  2462	
-> 2463		if (pcie_cfg && pcie_cfg->firmware_managed) {
-  2464			/*
-  2465			 * Firmware owns the link teardown and clock/PHY shutdown in
-  2466			 * this mode; Linux only owns the chained MSI IRQ(s), which
-  2467			 * still need to be masked off before shutdown proceeds.
-  2468			 */
-  2469			pci = platform_get_drvdata(pdev);
-  2470		} else {
-  2471			pcie = platform_get_drvdata(pdev);
-  2472			pci = pcie->pci;
-  2473	
-  2474			if (pcie->global_irq)
-  2475				disable_irq(pcie->global_irq);
-  2476		}
-  2477	
-  2478		if (pci->pp.use_imsi_rx)
-  2479			dw_pcie_free_msi(&pci->pp);
-  2480	
-  2481		if (pcie)
-  2482			dw_pcie_suspend_noirq(pcie->pci, true);
-  2483	
-  2484		pm_runtime_put_sync(&pdev->dev);
-  2485		pm_runtime_disable(&pdev->dev);
-  2486	}
-  2487	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I read most of the thread. As I understand it, there is a desire for
+something more dynamic, but that is non-trivial work that still needs
+to be done, and it is unclear if there will be follow-up (the patchset
+is 1year old)
