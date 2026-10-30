@@ -1,79 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793397667;
-	b=vx2D/tWTN+7ph/aQ6EdANqCbMUr6cumqrF6PfnGQHMw7TpgBSt8V9XAxsgjqP9fLmFUC
-	 irWic5bxTDQp6p6eGBpulLS+ji6ZWLZZdLS4TGzV5bYM+D0DmvzOAvMFR/JQ9t7ZWbSpS
-	 zYn9Sm2WCPhFJCT9S4KBemLwVuBENWawaP8+9kep4lQdZZJPVErisEYAa6muCrIWyz3Ob
-	 4nyaY5Y9wZV0C8I7/AOjxXItJgBdyoo0hBHQ30pPRwT+EWBfzmuDwXs1lyhYtkTNWBHAE
-	 H0V7GTxD1MquiqFNVdHWA4ZmViQteDmwowfV3RX7oi1GFFgGPDqqyh0LXxa3soCCIsQ==
+	t=1793399083;
+	b=CucD1v2n6NXgj0A8v9rL+JzLHmwdbZtJgOWK2pAqd44Yq6vzmuPwit9MyJMxeoS+hzkw
+	 mcsaHNJLCa1KFaTlyIQSDJDhekb+Rq9AYCZaY8G89mPMOD1utEA8dnjKAkOtXUertG+Lg
+	 ZrMyjnBdmkRqTVGZPQVZWpJjV4tspHGpXa2adUaE8GCIngYq7mYfpEz3CJ+ERXZk3M/uD
+	 AgrGaWlVN95T2ytCmaJBtqcXaemi0naI+5PZtjieDGAAcHhR4a3Ajr1OEJYud7imXDwMb
+	 vY77UJGodpdVSKrroaj+wfrZBuQ84RaQji+tbPWk8ojf5/C1SzLzPDlMbscUth8lmwg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793397667;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793399083;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=eC5A6pHAnZ0aE2KsQp0iN/0xlnhAOejQmwk5XYY9Wwg=;
-	b=PIoiNlYUKTH34zxJu5/aw1sSQ7REtqlYP2l25tIF5N6hl3LzZ8vxJ7CM7BptBp5wpRyo
-	 VlAlzosdjIIJ1d+NpxMsv/DVbCrhtK2+NK7XGP22vU3f0CVOK1MAGj6VikDzfclyXLCdl
-	 OTqxJJHTVNu5BdF5fqZksdpDIkZyfPQmSXvBjtEe7EzRY0ecUEQDxOc2zCW1Xl4TstfiJ
-	 TEkBHIhucaEGc6u9sEmJTA3VyHwL+aByOf+CwVqu9pYtGiRJa8vxv9LoIrE4eGQBx0NRj
-	 wETFr9VZA4haHIANW6PSuAEs1vnUvFEHe4S7NSGEgJSHMgeeg71NpvjM3DcECsGCg+w==
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=dSZdAKRabd6XVJjbDaWWnVcGzpWIKlPSDnWrxhwKu1c=;
+	b=BlJRPkMTH5my8wP7xzlJ5aHQTmwaTd6b56j+B7vKwuW14dBIGnejQI1rA85SZb3grC62
+	 erLKj6y26Zo9TvfpUPqy6/Y41a2kYx67aqSjPDQ5kh2qu1HXh8EbtEdra6dCusIophbUU
+	 kbhecCLgipxVOGYvoYAEaS2pEuXOVOa7fpiAUbN0giEQ5Od7hWte1llfTGxl1NgVr/BAE
+	 8ONlf6/3LuQ+OGH8vozghUHn0hwP5rYKbAS9VwhwvdhEF/sB3GyTjM2hHe9Kke6T0I6o3
+	 GSI/VFc79WkNhknXKhJuy6FqSvJo1E8//+Q2+zIUbWPHsVMuNf2OyZlI7sXfmBTGd1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=DV0d0HjL;
-	arc=none smtp.remote-ip=192.198.163.14
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MTwM8Bu1;
+	arc=none smtp.remote-ip=192.198.163.18
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C851B606A31F;
-	Fri, 30 Oct 2026 22:01:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C851B606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1934606A31C;
+	Fri, 30 Oct 2026 22:24:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1934606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=DV0d0HjL
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MTwM8Bu1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793397667; x=1824933667;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w31wXGRTOhUvzCl07DAy2h+Ynmh/ZR5jn1N9SMn3Isg=;
-  b=DV0d0HjLTtU4VGcEXHQgrC/kyHM4p77W0c+dqKjPwdg0DYery+6yaJyc
-   pxndYhSILCbjaGL04vNup9NUSfPMX9/0kMiJQ+ewYFNgCM3H7xvcyOq7u
-   m/OZz1nmYF0KfADOFP/1M/vrMmMIxbG/oP+eRJXKxIF6QL3hQZGKhUHLB
-   VumbuJNhKw6xdjJcnpD/2rYFKHL5iujC6turfsqzTcwZD6KtU6ptV1kNq
-   utLFYswusSSb4vdYYuycO91a+qsdf9OutgchfYJJz+Op5EPS1BKIHcGXw
-   osbRwoZ3Pc/UFU04WJd9ooUKfqGiw6xtQjuZaAnilYACQpG2SPxk0slti
-   Q==;
-X-CSE-ConnectionGUID: TahJkAmkTJm+QR1C7tW1Ig==
-X-CSE-MsgGUID: te1zm9cySKSHFyTwv63G6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2203063"
+  t=1793399081; x=1824935081;
+  h=date:from:to:cc:subject:message-id;
+  bh=TpIj0q7QxKBqyM5c8wYXeROoucyqaq4Kq3b4ZDn4l8A=;
+  b=MTwM8Bu1eAQbbbq4ixZgcpa5nyw1+ZQbpL6PaXHcv345H1YJgqIYjkiw
+   OFPVwZXtL92d37U9x2NqjLBP5nBYFBfUBT6yJYT0X4ht2dHU2gLs7Kgba
+   m3DUeqzz+YA7HrnT1bc3oJFfPPYBik51Z1A7S+LYeGesxgJlOGBFverE7
+   PAt5DlWuK8yt3l+9DwZX3qksSA5HFV5K07vbP0Klk1FdlpraFY9/aBk6S
+   ALPkkpRi+ApWSxbpJRY+C4qvlLsW7FDT9ywym0dW05FMF3rc6pDTmY0Md
+   ZYhlCIlloBFELx3oLOeARfhCgxOVcFnDY/+UYp3RJT8TBdjjzkjZs45Uc
+   A==;
+X-CSE-ConnectionGUID: pSNoahToRtGJ8JdLAhnr9A==
+X-CSE-MsgGUID: vfvqRxjpR3iCjtrDdj4L8Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2204384"
 X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="2203063"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 15:01:07 -0700
-X-CSE-ConnectionGUID: OXSaNlHyS1arWzlEY+TGQA==
-X-CSE-MsgGUID: kW0MS3YuSjaBb215Zgq1vQ==
+   d="scan'208";a="2204384"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 15:24:41 -0700
+X-CSE-ConnectionGUID: tuWsMn3qR/uJsHCI5mgsRg==
+X-CSE-MsgGUID: lORM5tshTPWd6hy3GHItrA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="5426391"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 30 Oct 2026 15:01:04 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+   d="scan'208";a="5519533"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by orviesa001.jf.intel.com with ESMTP; 30 Oct 2026 15:24:39 -0700
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xMuek-00000000cHM-1Mbk;
-	Fri, 30 Oct 2026 22:01:02 +0000
-Date: Sat, 31 Oct 2026 06:00:37 +0800
+	id 1xMv1Y-000000005jP-2AT4;
+	Fri, 30 Oct 2026 22:24:36 +0000
+Date: Fri, 30 Oct 2026 23:24:15 +0100
 From: kernel test robot <lkp@intel.com>
-To: Saranya Gopal <saranya.gopal@intel.com>, linux-acpi@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rafael.j.wysocki@intel.com
-Subject: Re: [PATCH] ACPI: s2idle: Handle shared _Ixx GPEs without an EC
-Message-ID: <202610310520.ZvkDiItr-lkp@intel.com>
-References: <20261030030515.3127310-1-saranya.gopal@intel.com>
+To: "Chen-Yu Tsai" <wens@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [wens:sunxi-wip 36/36]
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c:1930:1: warning: unused label 'pm_put'
+Message-ID: <202610302318.7gGiv7zc-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,53 +79,61 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261030030515.3127310-1-saranya.gopal@intel.com>
 
-Hi Saranya,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge amd-pstate/linux-next amd-pstate/bleeding-edge linus/master next-20261029]
-[cannot apply to v7.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Saranya-Gopal/ACPI-s2idle-Handle-shared-_Ixx-GPEs-without-an-EC/20261030-083515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20261030030515.3127310-1-saranya.gopal%40intel.com
-patch subject: [PATCH] ACPI: s2idle: Handle shared _Ixx GPEs without an EC
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20261031/202610310520.ZvkDiItr-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610310520.ZvkDiItr-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git sunxi-wip
+head:   e8e10ee67982c55fd3900953641c680a2fbef1c6
+commit: e8e10ee67982c55fd3900953641c680a2fbef1c6 [36/36] HACK: drm/etnaviv: check if GPU is actually there
+config: hexagon-randconfig-2001-20261030 (https://download.01.org/0day-ci/archive/20261030/202610302318.7gGiv7zc-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 8f6b51ca8bab1d49006ddaa042bc7e4e7306975d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261030/202610302318.7gGiv7zc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610310520.ZvkDiItr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610302318.7gGiv7zc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/acpi/tables.c:26:
->> drivers/acpi/internal.h:262:10: error: use of undeclared identifier 'ENOTSUP'
-     262 |         return -ENOTSUP;
-         |                 ^
-   1 error generated.
+>> drivers/gpu/drm/etnaviv/etnaviv_gpu.c:1930:1: warning: unused label 'pm_put' [-Wunused-label]
+    1930 | pm_put:
+         | ^~~~~~~
+   1 warning generated.
 
 
-vim +/ENOTSUP +262 drivers/acpi/internal.h
+vim +/pm_put +1930 drivers/gpu/drm/etnaviv/etnaviv_gpu.c
 
-   258	
-   259	static inline void acpi_ec_flush_work(void) {}
-   260	static inline int acpi_ec_dispatch_gpe(void)
-   261	{
- > 262		return -ENOTSUP;
-   263	}
-   264	
+  1904	
+  1905	static int etnaviv_gpu_detect(struct etnaviv_gpu *gpu)
+  1906	{
+  1907		int ret;
+  1908	
+  1909		ret = pm_runtime_resume_and_get(gpu->dev);
+  1910		if (ret < 0)
+  1911			return dev_err_probe(gpu->dev, ret,
+  1912					     "Failed to enable GPU power domain\n");
+  1913	
+  1914		ret = etnaviv_gpu_reset_deassert(gpu);
+  1915		if (ret) {
+  1916			dev_err_probe(gpu->dev, ret,
+  1917				      "GPU reset deassert failed\n");
+  1918			goto fail;
+  1919		}
+  1920	
+  1921		etnaviv_hw_identify(gpu);
+  1922	
+  1923		if (gpu->identity.model == 0) {
+  1924			ret = -ENODEV;
+  1925			dev_err_probe(gpu->dev, ret, "Unknown GPU model\n");
+  1926		}
+  1927	
+  1928	fail:
+  1929		pm_runtime_mark_last_busy(gpu->dev);
+> 1930	pm_put:
+  1931		pm_runtime_put_autosuspend(gpu->dev);
+  1932	
+  1933		return ret;
+  1934	}
+  1935	
 
 --
 0-DAY CI Kernel Test Service
