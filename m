@@ -1,114 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793355209;
-	b=GRZdnNGRpf+A3ub9tDlalyDe4LFUB1FN8xvfaQsU84pEjgJHYBod3UtiYxcUbir6pAKX
-	 qIizK2v6HRL78TLhDPagXpfk3ggibt2tRsz0d2w4+ZgcRJK8FQTJaHC7MXtCACMwTSvx7
-	 m8cgBHLIaXAlCLz3x1IlEklubupd1SkA0FrpWPTiTE0ZrIkgPVPqbi6+j4ZTRK/IXFIR9
-	 4wv7fUHUtvr7bifh8NtBs/VgCB/9x3zNMQ+4YoqDPSj+gLtCE7Q1pa5j43kLGz2gweOR8
-	 rynjuD9eit/Ffukru3mASzqrwPeIh4xLp87NsDkrOZK/t6weS+kBNj8JhF72Q/qLMWg==
+	t=1793359624;
+	b=EK3G48vEuOxXZog2T0hdKQf31a0yVt190grqT4twDGUb5qK67FJmldSg9NujLCkbss9Z
+	 LpYPOZ3quZFtAmENW3/L2E1aSlsClALAmqSm8QnYysLPfv95N2gG9GpJK/gZwMVSjE/qo
+	 td8J1hgdBpO0idSGYMuky6Megtl7ii+lFujF+E2SgLqDQKz6BSiDsvPDpEO/Y+s6itFcY
+	 86WvRsyfPw4KU67mb/npgLAqAkLCar302f/G1DiyhwDRGiyOfLr1ZjBeRSJCtV+e4W3pr
+	 Ft8cPxwuArW2iBjWMTHeOsF23fXxpuz9aZOodwNf+BCmSdR3GPSsnhY+wHJuGQwLYlg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793355209;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=O0rp/2ctYtAz5V4l4tmKFoGrP6ExbbPlGpEkX5p3g2U=;
-	b=Az9fR9OV8IRmJddkoQiMqbKaDhX9opwUZZjlOftiZXDplUibYyTnOEEpWTEeCOCa4Sef
-	 2FOQB7In8duJAYXaSPXcwYQSQ/l/LIAQHQPXToGLvWhKUi8QvdJs690DV9kgGB0nvjcn8
-	 zL5wT2cd3k1QSBXOipEBpfb18Mf8jDo5fTqTnm+oX+ObxPKR+MGEW12u0ffgFm1NgF77d
-	 KBy7Va8GEHnHu9gdRgp050E50Stu4KjOTuvQyWdvucqK8hrzH8zhR0n4AX7XL74OhFJo1
-	 gYy/4/JJLguSsBSshcGKG14pfqpAkkPSKLDXj7dbMg7taPkADs0CIw7qYNPX2+f53XA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793359624;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=aqTUG3MhRPMe3T+iwrEz6qtbFX2SNbhZovF7I8ufp5w=;
+	b=WbBMkwGHoHm0g2LYaC6vF4AkVxAz04Lck/tOOBv2hINL1aKRmavnlqzmGRDjaviDPlbG
+	 iyd4boTZkfKJKtCRWTpLe4o8EEot+mbRRcky81gcZRzl2VbhbwF/FyxpZrC+gPTMQVJLD
+	 +jdQGAbgELOBFb4v1LMHTCxT7rDamkJwRViOXucEBSaayiNnQA5v09ruiNWaIyAWPckgh
+	 sLR1XrDIzAdS/BtoghsIG82X1g+vwrh7Su2kJ3jVmy8C/a5OvYdAx0DihvsjiqRRWWjkR
+	 7ZGIEKgeFiNfUAGfdM+47O79u6ey0E42ixFsXNmqkbzvoN89wJBHXmpfqLmrplk8Q/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="uuh7B6/J";
-	arc=none smtp.remote-ip=209.85.221.53
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=icHbeicO;
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7CA606A320
-	for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 10:13:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D7CA606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBFF606A323;
+	Fri, 30 Oct 2026 11:27:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EBFF606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uuh7B6/J
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48afcd7ba9bso342928f8f.3
-        for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 03:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793355208; x=1793960008; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=O0rp/2ctYtAz5V4l4tmKFoGrP6ExbbPlGpEkX5p3g2U=;
-        b=uuh7B6/JpRE8aayEbDyT05eiJjIoqQoTKKLPYfSfQw0OkJvOq1anhAnmtblPgl7rJ+
-         IQYCKZzKXdDvhdU+Zz1SmxhX+qaJupExL2Rarh1/uFg+ysgxHatpCFXaqJ+zwLKd6apN
-         4sq4aQgdXYZmE2zQxnhwLzT3fihPXgBR3bm1Oo791x/4AkJ+fwZq/g91wQdFE1eyqkZj
-         eYXXqLhsRoy3t47eJo0Z+MLuMkERM7yf8F9Dk6G8HfuH7sf2y6/ET2XjBHODViUhuqdR
-         SiDwxqCTYFlPUtfKcAWkWS3z3U26u8zZZ737n47Kf6JZwvRFebcsQhGYqOVrbRPIiBqs
-         E9Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793355208; x=1793960008;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=O0rp/2ctYtAz5V4l4tmKFoGrP6ExbbPlGpEkX5p3g2U=;
-        b=cYL6CGn5MvYhGIhuWKds9Juecsi2ZXBbKjdLtVrfZ1/Tl7lJCSTeG318B43a2NHPjB
-         71pcoQemvAkUALpfBb+zzTwlBqfH0cZAadSkIsGSZI1xkKIRYp3yKK6gqXWUFFKmIQft
-         fDBBCcTmOf1VM7/UEjtw3CLGHSRRRI96/TkNSSbEOFv0UlXmg0PasQHM8+XiFcqpfzh+
-         VJQHuTzeKN6JKHfu6M5kGubVLkWZX3YwJ7bJNrnDTPSdQdCbOAIOJkp+XL5PB9Hz8lZ7
-         aS4ctJYBxmRFK4MIta5jk/7IY9Qp1D1cuCb1hZtbFRmbsrx0YPTAcgGlHa49mDjh7k2M
-         /rRQ==
-X-Forwarded-Encrypted: i=1; AKwUvByGTWdZk/HO09EAg5GKtkVvrlE4EiTczNFgq/6w4eirm+dtCGP4NtsZeJXYkXOR9mpymsN+@lists.linux.dev
-X-Gm-Message-State: AFq9FYKKkvMDUvuzrJQy3lD6jdIg3t7EuEeh62VKxF0wrp4scXrsULcV
-	fg7EMXMHXEBnYcPl+jPJFamZaUNqeAmvs9LO9qb+pccfO5jcXwkkdLoi
-X-Gm-Gg: AYBFou1wXmYT9yb5zWuvV2T+p1F9zfTtai4zoiy3s1KMBwFQATK+q+Wg2EvzDSsTuF9
-	pZEiHjzZiKKeu1TvCzFe+L43/a5kWJzRs+SiSIOC/q2BtuSzYaB7E0L2DdbouoqXF6xUw4wCNFC
-	Dqh1Hw68k3GQGppoMu9K32XamJhV/ALbeEPo9If/P+IW8epTb7USZTY3yJhFmR5I92kxChHmfhI
-	ymINtwXVbSeHfCJI1/8tiH0Q1qdERh0zzVvoED6+d+MUO/qjoYNMgq20QFIpQwhmBX4U4lA5Md4
-	S5vvlTEFIaaFsPUOx1uY2IFlMfMWzpLxkY3KHqZFtZDisvF3r0PUc6YfD5S24f1nDzLgoxMpxYk
-	0nGrQJNTg4beEKqzMFgJuVm9yXYVpZIhTZgr14yyg8OL452GR0URuKKgzmVsOpAtsGfOk+ApDhP
-	fdaZO7cpQOiGwHBH10JjAQGLcVhty/wkcsm400i13X66+4vyEHR76bOIxIChihZ9AxE219CmXrQ
-	QEyvMIHd2/3hX7mffUbN2RjpBgUkVNYNtyw0pmaeqIP1AaX/B6aniMGZSPe4aOB/T+NGsitgXrG
-	OkC5pjeebZpswAxQVw5gZ6H8UlO4HCTjED4Hbrs9pe1zFhyc8S0aVZykqmoZxBRegrrnrNxHoTH
-	09dN9+soo4ME=
-X-Received: by 2002:a05:600c:8b06:b0:4a2:d:5ccc with SMTP id 5b1f17b1804b1-4ac17b2bc63mr39008955e9.10.1793355207707;
-        Fri, 30 Oct 2026 03:13:27 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa81a896ecsm133317305e9.9.2026.10.30.03.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 03:13:27 -0700 (PDT)
-Date: Fri, 30 Oct 2026 10:13:25 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Ihor
- Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to
- /proc/kallsyms
-Message-ID: <20261030101325.6406e8ce@pumpkin>
-In-Reply-To: <CAG2KctrwzWGFRs6CZcSRaFOWx49WbH9LQVQJunWsPD3MOXn_iw@mail.gmail.com>
-References: <20261023001603.560210-8-wusamuel@google.com>
-	<20261023001603.560210-9-wusamuel@google.com>
-	<20261028134012.01d52e94@pumpkin>
-	<CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
-	<CAEf4BzYT4rvKwbOJ6UQ3zcp4wdsSBqRsMz-2=U1DA2RyUA3XSg@mail.gmail.com>
-	<CAG2KctrwzWGFRs6CZcSRaFOWx49WbH9LQVQJunWsPD3MOXn_iw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=icHbeicO
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793359623; x=1824895623;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ncUJX/DtM5+A/RZso1ZcCWeMShn2h681nclm+TFp2D4=;
+  b=icHbeicO6worMvpJs8478JFSMcVXmiaoQWQHv7TYSfbP3NVfmSgT64ZN
+   zQKyvuDR/KFBMLa5u6gcC7SrSQPkelHB8lBWj8o5zpWG4P+LgPjPppnG+
+   BVcLwC6j8v/7VnGR7owikDIqxVzk4Aenf7Ry8vgU5QgPIJI8oxinfEIfq
+   PCdyy7GCTtnmcyKmGCgY6LOomPJOovHTv6sEtFf46JpZq7cR3vKWMQfi+
+   yr8/t9eiGe8QOUmP0WdxShO3aA0omk5xzfv14rHlVFtRHcQ+3dT5nFuyy
+   i0M/2GPTSr4k/eMVxCgb3cmDaJSoifFevYXcr2T7SYHnjM5aLXrhL/dva
+   g==;
+X-CSE-ConnectionGUID: 8fIZK8enSFmhWFaczXUYEw==
+X-CSE-MsgGUID: zKD7dwxyQUqbx0jUiXl8Pg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11950"; a="2147039"
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="2147039"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 04:27:02 -0700
+X-CSE-ConnectionGUID: pMjUirJuRP2pYbMl8LVzGA==
+X-CSE-MsgGUID: bOa7RV4yQu22DE/uMwHFGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="5539917"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Oct 2026 04:26:58 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xMkl6-00000000bea-25Xt;
+	Fri, 30 Oct 2026 11:26:56 +0000
+Date: Fri, 30 Oct 2026 19:26:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	konrad.dybcio@oss.qualcomm.com, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Subject: Re: [PATCH v7 3/3] PCI: qcom: Implement shutdown() callback
+Message-ID: <202610302144.Iwq8RoDq-lkp@intel.com>
+References: <20261029-shutdown-v7-3-3fd7a76a6991@oss.qualcomm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -118,71 +89,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261029-shutdown-v7-3-3fd7a76a6991@oss.qualcomm.com>
 
-On Thu, 29 Oct 2026 17:28:01 -0700
-Samuel Wu <wusamuel@google.com> wrote:
+Hi Krishna,
 
-> On Thu, Oct 29, 2026 at 3:16=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Oct 29, 2026 at 3:06=E2=80=AFPM Samuel Wu <wusamuel@google.com>=
- wrote: =20
-> > >
-> > > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
-> > > would be different symbols at different addresses. Please correct me
-> > > if I'm missing something here!
-> > > =20
-> >
-> > foo and foo.constprop0 are different functions with different
-> > arguments, so I think we should distinguish them. The only special
-> > case is .llvm.<hash> because that suffix is added by compiler for LTO
-> > and I don't think the function itself is any different from the
-> > original =20
->=20
-> [...]
->=20
-> > I do think it would be good to spend a bit of thought on how to
-> > support at least one-by-one pagination from the get go. The same
-> > mechanism can then be used by batch version. I.e., think what can we
-> > use to provide data back to user which they can use to continue search
-> > after the symbol we just returned (at least for fixed set of symbols
-> > in vmlinux and modules; we also have dynamic symbols added for [bpf]
-> > "module", etc, we should support those as much as possible with the
-> > least possible deviation, IMO) =20
->=20
-> Let me sit on this a bit and figure out how to distill all of this
-> into a clean interface. I'll keep the .llvm.<hash>, pagination, and
-> batching in mind for the design.
->=20
-> [...]
->=20
-> > user code can be easily written by always setting buffer size, even if
-> > kallsyms_query is reused. This is the pattern with PROCMAP_QUERY,
-> > let's keep it consistent. =20
->=20
-> Ack, will have size in the struct for v3.
+kernel test robot noticed the following build warnings:
 
-It just adds code.
-If you use the size from the ioctl (which will match the structure
-the application passes) then you don't need to do the extra get_user()
-just to get the length.
-It isn't really hard to have:
-	case KALLSYMS_QUERY_v1:
-	case KALLSYMS_QUERY:
-		return do_kallsys_query(m->private, cmd, (void __user *)arg)
-It also saves all the problems of the two values mismatching.
+[auto build test WARNING on 17bb0e2f6c8043f70a693a5f3797471cbed354c8]
 
-That is why there is a length (and the r/w flags) embedded in the ioctl
-cmd value.
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Chaitanya-Chundru/PCI-host-common-Fix-early-bus-walk-exit-in-d3cold_possible/20261029-094927
+base:   17bb0e2f6c8043f70a693a5f3797471cbed354c8
+patch link:    https://lore.kernel.org/r/20261029-shutdown-v7-3-3fd7a76a6991%40oss.qualcomm.com
+patch subject: [PATCH v7 3/3] PCI: qcom: Implement shutdown() callback
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261030/202610302144.Iwq8RoDq-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c2ea4440d4b64c148de4fdfca1fc2c437a0701e4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261030/202610302144.Iwq8RoDq-lkp@intel.com/reproduce)
 
-David
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610302144.Iwq8RoDq-lkp@intel.com/
 
->=20
-> > also, returning actual size even if buffer is too short is a good way
-> > for user space to "probe" and increase buffer if necessary. unless it
-> > adds tons of complexity, this is a good and flexible UAPI =20
->=20
-> Ack.
+All warnings (new ones prefixed by >>):
 
+>> drivers/pci/controller/dwc/pcie-qcom.c:2463:6: warning: variable 'pcie' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    2463 |         if (pcie_cfg && pcie_cfg->firmware_managed) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-qcom.c:2481:6: note: uninitialized use occurs here
+    2481 |         if (pcie)
+         |             ^~~~
+   drivers/pci/controller/dwc/pcie-qcom.c:2463:2: note: remove the 'if' if its condition is always false
+    2463 |         if (pcie_cfg && pcie_cfg->firmware_managed) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2464 |                 /*
+         |                 ~~
+    2465 |                  * Firmware owns the link teardown and clock/PHY shutdown in
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2466 |                  * this mode; Linux only owns the chained MSI IRQ(s), which
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2467 |                  * still need to be masked off before shutdown proceeds.
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2468 |                  */
+         |                  ~~
+    2469 |                 pci = platform_get_drvdata(pdev);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2470 |         } else {
+         |         ~~~~~~
+   drivers/pci/controller/dwc/pcie-qcom.c:2460:24: note: initialize the variable 'pcie' to silence this warning
+    2460 |         struct qcom_pcie *pcie;
+         |                               ^
+         |                                = NULL
+   1 warning generated.
+
+
+vim +2463 drivers/pci/controller/dwc/pcie-qcom.c
+
+  2456	
+  2457	static void qcom_pcie_shutdown(struct platform_device *pdev)
+  2458	{
+  2459		const struct qcom_pcie_cfg *pcie_cfg = of_device_get_match_data(&pdev->dev);
+  2460		struct qcom_pcie *pcie;
+  2461		struct dw_pcie *pci;
+  2462	
+> 2463		if (pcie_cfg && pcie_cfg->firmware_managed) {
+  2464			/*
+  2465			 * Firmware owns the link teardown and clock/PHY shutdown in
+  2466			 * this mode; Linux only owns the chained MSI IRQ(s), which
+  2467			 * still need to be masked off before shutdown proceeds.
+  2468			 */
+  2469			pci = platform_get_drvdata(pdev);
+  2470		} else {
+  2471			pcie = platform_get_drvdata(pdev);
+  2472			pci = pcie->pci;
+  2473	
+  2474			if (pcie->global_irq)
+  2475				disable_irq(pcie->global_irq);
+  2476		}
+  2477	
+  2478		if (pci->pp.use_imsi_rx)
+  2479			dw_pcie_free_msi(&pci->pp);
+  2480	
+  2481		if (pcie)
+  2482			dw_pcie_suspend_noirq(pcie->pci, true);
+  2483	
+  2484		pm_runtime_put_sync(&pdev->dev);
+  2485		pm_runtime_disable(&pdev->dev);
+  2486	}
+  2487	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
