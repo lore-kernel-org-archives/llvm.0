@@ -1,78 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793416329;
-	b=nULejxufovRpq0XA2YbCHK+Cex8oaNDqFF7lwd2ILDcUtvb8FCoAryXM+qGBjqRfHyqy
-	 Jzz/wB7YhoM5b8MoqcW624UsmZ/rgSlMj2uY06CZU5nYLMHibt+Yd6PaZgOeXhMt7us0t
-	 dE18iSdOntWHa/6UFx4MILoGupuJq6r5x4ovU5+hds3zE1+3SuaA96lA/jpzHtwPHkMIa
-	 EXoWUm5+CY1SX+JNZMS2q7ATF1KXSqamHyGLv3mDfY9ShUyHl0aaB6MABfdTY2nzRFcer
-	 NHSDgpSm8BgFhlij6X1zM6ZCTNZuzmC1aV/r3/99Zskx0UOsFFNr+UfP8w2ZC8xESCw==
+	t=1793426955;
+	b=o0Rdeztiq1mrkinV9bhnr49m4+9b5C0XUvdz53ogykNjvcPm54KTBeP9LWdntEJmMA/N
+	 H9v+PZB6J8+5olnyBIQJUQCNMHDc5Ud18JW7zUq2Wgdp8RFkH9OSELJeGixRX3RF1/6TY
+	 YFC9ordswM0i6VHYdnLI97CHslvevroKScQ5bC4e2/8h8s6nJCk+BuVWbxicx/yk+oIDu
+	 fjcwTsKAitEjnQBRZGbvHRHTCbRVSEH2Pmte6Mgd6cYrrsrlG63Xbg0rohvBOJqBvtl3c
+	 LuLw/IOKvCuq5f8+R9i3caeMRCrtvcrMDvyqjUWb9zKSjkNz66X3ReS4bF/MJZ6ujnQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793416329;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=J0HrcKF1CdRwEzwcAUL1nNteds2mu3FA+nNKdV/v4Aw=;
-	b=c4P4sWemcQhQQVQ2ejDWfGQeu3uuoaVmPvlLP3z5kJYR47pzd5TMtHBcDx/H9FYZRkHf
-	 xnSpoLyzDq7YoJhfhZNQVjh0kEHDQPeHCzFOIj8qaKgthrtnkauMLfap05QB1grjDvroJ
-	 GOaPbX7qDh4pKxS1t+1seemXEQWYKkWNS1CeihgVV0VBdLgYPcFLqtxp/eto/RZWfvM4B
-	 4Dl7k/XQmu3E3cpzh37CmZNIJwrfXC/ACr+wlpS+KFvq+2X+k5m06d5G8k079zm37msmH
-	 LjaGBkzsWrDyrLNSfLDUoM6Whf4ksFpo+UjTLzlhyOFhcPf3jc5bhoX8i6jkEO6q/1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793426955;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=W9cmpLHdgetBFbDQCZYa5zQdrjStin80VjEDZl9jFyE=;
+	b=okyYUUw6sk2KkB1POBp0W5OCSCvp7Uc7Bpp9qvgmMCCnB0GsSHZDCLsOf/QIaPJ26Qoc
+	 MASs1XkUueKgGj2ryb2aFc4XC/6FTfw3HxfGOdKvt6pk8RE56ZymqZYutWRqS2REY6QPK
+	 yeAdhttCijAxQC1z2p7wniCWdBpd8gEnLua/ch6xI7jJ0NqW9qpmVY5MGy1OwPmnzS5fx
+	 MwkOJ5QfkK1PIwWt7b9yU6AAC1o9rljDDyY8goxKZu4b8lW2dfJ7CaHpQ/CnpFIclk1t0
+	 LkPBQvXzGsAabZUGXslKwMlRgq3xG+H8vsJ4IiQ1qxXz35pN1pSpOczZ/JbVEHGiZgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BFoPA0kF;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dzxIrEZm;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E1A606A31A;
-	Sat, 31 Oct 2026 03:12:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0E1A606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F61E606A31A;
+	Sat, 31 Oct 2026 06:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BFoPA0kF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793416328; x=1824952328;
-  h=date:from:to:cc:subject:message-id;
-  bh=q03yGqdzMvcjvgUO2ynhorXgjsw+J6MitN1rl9MDqcQ=;
-  b=BFoPA0kFWGQ8jK5gQrvAAYFzf4gKw+84FkGnjemFOGYsLsS9mFVvQ1Fz
-   GfmbVuhoOv/rDqkps9gq2//gICkDxaRUf2hOGYugdH/9D9RXcbs3o/qB1
-   37jIPvgYeml26o+kVddvxIbu454CmeMq7TNC4TqT1NtLZFsIeuRCxg7FX
-   EBKCLd3tt2jOJ/2dZiPrDwI3NahAxWZLwMbmi7ZukfbRY1v11rtKKhN7K
-   LZKm4kQUI7dKpc5dehzm0mHLpZQ496XGxkWfVr9NrOrgJd+tUz3Evg37N
-   1oONvQ4ZT22Q52+LAPCDnJyZbvMWnC3ECEf5BJYugUtEsfhbIehcHCiC7
-   Q==;
-X-CSE-ConnectionGUID: 8oNCMqySTdKiBTSS8q2C9g==
-X-CSE-MsgGUID: n1FuRCK9TkuSgdSS0ztc5A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2187888"
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="2187888"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 20:12:08 -0700
-X-CSE-ConnectionGUID: iuIkoq4LQ1WxKxO/j48WsQ==
-X-CSE-MsgGUID: GY9wuKzySSybMCROwILijQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="5975906"
-Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
-  by fmviesa006.fm.intel.com with ESMTP; 30 Oct 2026 20:12:06 -0700
-Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xMzVj-000000005qZ-3ykj;
-	Sat, 31 Oct 2026 03:12:03 +0000
-Date: Sat, 31 Oct 2026 04:11:45 +0100
-From: kernel test robot <lkp@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kuba:dma 2/11] drivers/xen/swiotlb-xen.c:435:11: error:
- incompatible function pointer types initializing 'void *(*)(struct device *,
- size_t, dma_addr_t *, gfp_t, unsigned long)' (aka 'void *(*)(struct device *,
- unsigned long, unsigned long long *, unsigned int, unsigned...
-Message-ID: <202610310459.Y3UJp0xu-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dzxIrEZm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B751F000C1;
+	Sat, 31 Oct 2026 06:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793426954;
+	bh=W9cmpLHdgetBFbDQCZYa5zQdrjStin80VjEDZl9jFyE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=dzxIrEZmdMq707FF96Tuazy28fN8HjOmgYpgCwE4ixWeMB37PT5XIxLt8GmuxXL78
+	 bomiHdktLE1ft3JVy1LpNTT3IT3HJsXvjhoDfCJZVbC1ROFzdUeFL1MfbZwyQ6Mg0G
+	 bv0IMnpDSfpE34LwV+hqzXpgMUrko/ozWMGUQQ2TYTeHASrvempSvDu9g2U7OazY0r
+	 cTeVgSKv+7CnePFL3bXVEcrGNvhlL3MN/cHtctmSEwqdx8hc0B7KBYnGsfGqUu1cLu
+	 ha8yzK07DsKLgJNVBfO6IMPuFXhnJvow5sbWrBJteXvw4SVwCCwSxGDST/ipa3rUCK
+	 x1Myr8ObJEEtg==
+Date: Fri, 30 Oct 2026 23:09:11 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, james.clark@linaro.org,
+	xueshuai@linux.alibaba.com, Peter Zijlstra <peterz@infradead.org>,
+	leo.yan@linux.dev, Li Huafei <lihuafei1@huawei.com>,
+	Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] perf annotate-data: Show event name in the data-type
+ title
+Message-ID: <auWGB-ONmDMktvRB@z2>
+References: <20261029071510.460873-1-wutengda@huaweicloud.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,47 +66,137 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261029071510.460873-1-wutengda@huaweicloud.com>
 
-Hi Jakub,
+On Thu, Oct 29, 2026 at 07:15:10AM +0000, Tengda Wu wrote:
+> The same data type can be annotated for multiple sampling events, in
+> which case the data-type header is printed once per event.  But the
+> header only shows the type name and the sample count, so several
+> identical-looking headers are emitted and the user cannot tell which
+> event each of them corresponds to. E.g.
+> 
+>   $ perf annotate --data-type=page --stdio --itrace=f
+>   Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
+>   ============================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>       9.95          0        0x8      long unsigned int   flags;
+> 
+>   Annotate type: 'struct page' in [kernel.kallsyms] (59480 samples):
+>   ============================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>      10.15          0        0x8      long unsigned int   flags;
+> 
+> Add the event name to the data-type title in both the TUI browser and
+> the stdio output, so each header can be attributed to its event.  For
+> group events, use evsel__group_desc() to print the group description
+> instead of the leader's name, so the whole group is identified.
+> 
+> While at it, size the underline in the stdio output dynamically based
+> on the length of the header line instead of using a fixed-width string,
+> so it keeps matching the header as the text grows.
+> 
+> Result:
+> 
+>   $ perf annotate --data-type=page --stdio --itrace=f
+>   Annotate type: 'struct page' in [kernel.kallsyms] for l1d-miss (59208 samples):
+>   ===============================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>       9.95          0        0x8      long unsigned int   flags;
+> 
+>   Annotate type: 'struct page' in [kernel.kallsyms] for l1d-access (59480 samples):
+>   =================================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>      10.15          0        0x8      long unsigned int   flags;
+> 
+> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git dma
-head:   cd9029ebe3033a797c066b493e4cfcf5337cf829
-commit: 40f9c52cdcf8713402ec7a31c47511d06bdcf5d2 [2/11] dma-direct: pass the NUMA node to dma_direct_alloc()
-config: arm64-randconfig-2000-20261031 (https://download.01.org/0day-ci/archive/20261031/202610310459.Y3UJp0xu-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 8f6b51ca8bab1d49006ddaa042bc7e4e7306975d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610310459.Y3UJp0xu-lkp@intel.com/reproduce)
+Thanks,
+Namhyung
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610310459.Y3UJp0xu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/xen/swiotlb-xen.c:435:11: error: incompatible function pointer types initializing 'void *(*)(struct device *, size_t, dma_addr_t *, gfp_t, unsigned long)' (aka 'void *(*)(struct device *, unsigned long, unsigned long long *, unsigned int, unsigned long)') with an expression of type 'void *(struct device *, size_t, dma_addr_t *, gfp_t, unsigned long, int)' (aka 'void *(struct device *, unsigned long, unsigned long long *, unsigned int, unsigned long, int)') [-Wincompatible-function-pointer-types]
-     435 |         .alloc = dma_direct_alloc,
-         |                  ^~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +435 drivers/xen/swiotlb-xen.c
-
-eb1ddc00b81cb8 Stefano Stabellini 2013-10-09  429  
-dceb1a6819ab2c Christoph Hellwig  2017-05-21  430  const struct dma_map_ops xen_swiotlb_dma_ops = {
-566fb90e050dfa Christoph Hellwig  2022-04-22  431  #ifdef CONFIG_X86
-dceb1a6819ab2c Christoph Hellwig  2017-05-21  432  	.alloc = xen_swiotlb_alloc_coherent,
-dceb1a6819ab2c Christoph Hellwig  2017-05-21  433  	.free = xen_swiotlb_free_coherent,
-566fb90e050dfa Christoph Hellwig  2022-04-22  434  #else
-566fb90e050dfa Christoph Hellwig  2022-04-22 @435  	.alloc = dma_direct_alloc,
-
-:::::: The code at line 435 was first introduced by commit
-:::::: 566fb90e050dfa2132340bbdab9533b727dda6f1 swiotlb-xen: fix DMA_ATTR_NO_KERNEL_MAPPING on arm
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Christoph Hellwig <hch@lst.de>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  tools/perf/ui/browsers/annotate-data.c | 14 +++++++++++---
+>  tools/perf/util/annotate-data.c        | 15 ++++++++++++---
+>  2 files changed, 23 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/perf/ui/browsers/annotate-data.c b/tools/perf/ui/browsers/annotate-data.c
+> index a15608f6ee53..0f778788df4a 100644
+> --- a/tools/perf/ui/browsers/annotate-data.c
+> +++ b/tools/perf/ui/browsers/annotate-data.c
+> @@ -340,11 +340,19 @@ static int browser__show(struct ui_browser *uib)
+>  	struct hist_entry *he = uib->priv;
+>  	struct annotated_data_type *adt = he->mem_type;
+>  	struct annotated_data_browser *browser = get_browser(uib);
+> +	struct evsel *evsel = hists_to_evsel(he->hists);
+>  	const char *help = "Press 'h' for help on key bindings";
+> -	char title[256];
+> +	const char *evsel_name = evsel__name(evsel);
+> +	char buf[512];
+> +	char title[sizeof(buf) + 256];
+> +
+> +	if (evsel__is_group_event(evsel)) {
+> +		evsel__group_desc(evsel, buf, sizeof(buf));
+> +		evsel_name = buf;
+> +	}
+>  
+> -	snprintf(title, sizeof(title), "Annotate type: '%s' (%d samples)",
+> -		 adt->self.type_name, he->stat.nr_events);
+> +	snprintf(title, sizeof(title), "Annotate type: '%s' for %s (%d samples)",
+> +		 adt->self.type_name, evsel_name, he->stat.nr_events);
+>  
+>  	if (ui_browser__show(uib, title, help) < 0)
+>  		return -1;
+> diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+> index b3de1ca688a2..25e3169ea8ad 100644
+> --- a/tools/perf/util/annotate-data.c
+> +++ b/tools/perf/util/annotate-data.c
+> @@ -2149,16 +2149,23 @@ static void print_annotated_data_header(struct hist_entry *he, struct evsel *evs
+>  	int nr_samples = he->stat.nr_events;
+>  	int width = 7;
+>  	const char *val_hdr = "Percent";
+> +	const char *evsel_name = evsel__name(evsel);
+> +	char buf[512];
+> +	int len;
+>  
+>  	if (evsel__is_group_event(evsel)) {
+>  		struct hist_entry *pair;
+>  
+>  		list_for_each_entry(pair, &he->pairs.head, pairs.node)
+>  			nr_samples += pair->stat.nr_events;
+> +
+> +		evsel__group_desc(evsel, buf, sizeof(buf));
+> +		evsel_name = buf;
+>  	}
+>  
+> -	printf("Annotate type: '%s' in %s (%d samples):\n",
+> -	       he->mem_type->self.type_name, dso__name(dso), nr_samples);
+> +	len = printf("Annotate type: '%s' in %s for %s (%d samples):\n",
+> +		     he->mem_type->self.type_name, dso__name(dso), evsel_name,
+> +		     nr_samples);
+>  
+>  	if (evsel__is_group_event(evsel)) {
+>  		struct evsel *pos;
+> @@ -2183,7 +2190,9 @@ static void print_annotated_data_header(struct hist_entry *he, struct evsel *evs
+>  		val_hdr = "Samples";
+>  	}
+>  
+> -	printf("============================================================================\n");
+> +	while (len-- > 1)
+> +		putchar('=');
+> +	putchar('\n');
+>  	printf("%*s %10s %10s  %s\n", (width + 1) * nr_members, val_hdr,
+>  	       "offset", "size", "field");
+>  }
+> 
+> base-commit: 151a134a4e6ec66f69db8750c66006f5207f7a9d
+> -- 
+> 2.34.1
+> 
