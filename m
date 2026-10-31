@@ -1,72 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793416090;
-	b=o/xOZPgQFy+YdU6ORcMlvx1j/vOAp1T3QuEk+DYLpVSCag8U/esJmz0SDLUR9bPXd39m
-	 yKbttaXWy9B5OvsJFcITmWBhOanMxNGi8tyPub7C/Pnc5vCsujIc+zxpz2182IZ64a4kv
-	 ZQICTBOz0yXCoRjO2r9qFRTyZG2JudRnVJbzfmjuGOwPigm5+urpGz2FsoatRmLNGQ/f3
-	 3gA091FNiSMcfJ2tLA7SbE7gZV2M9uMEB0245MMWMfVVZVX7AzJFmmuDokvrTtcFpLYc4
-	 p/AhwWZQIZZ4YQDJrBJyWOebGEATAMbUGNiU7xZndVWPwPXFo7KWGH9IDV1RCfWOisA==
+	t=1793416329;
+	b=nULejxufovRpq0XA2YbCHK+Cex8oaNDqFF7lwd2ILDcUtvb8FCoAryXM+qGBjqRfHyqy
+	 Jzz/wB7YhoM5b8MoqcW624UsmZ/rgSlMj2uY06CZU5nYLMHibt+Yd6PaZgOeXhMt7us0t
+	 dE18iSdOntWHa/6UFx4MILoGupuJq6r5x4ovU5+hds3zE1+3SuaA96lA/jpzHtwPHkMIa
+	 EXoWUm5+CY1SX+JNZMS2q7ATF1KXSqamHyGLv3mDfY9ShUyHl0aaB6MABfdTY2nzRFcer
+	 NHSDgpSm8BgFhlij6X1zM6ZCTNZuzmC1aV/r3/99Zskx0UOsFFNr+UfP8w2ZC8xESCw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793416090;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=f5aloOxgBcfJJK8SvXENQRlRRIiOwSu/Xe/rRaruUWM=;
-	b=ZziptxbcZCQqHM5E+6f8hzX1Y9A9bRCCYFkd3TaOpMeoKzZZklFvMqYnaYwUtkvKnCFA
-	 Zkne9fAayMb9WDiE1hm5/suJ2JJFW/mvbqtdqNVCmNiUBV1w8nPbn5f8TKySqGD8wLL0z
-	 nnv9PsVYr+dGfpPn3cXpcFfrcqFM/cvEi43mIRyKYRCJfa24OPZUJAFVOCluaqTOozg0i
-	 4ps4zXifdZOYlXnTh8hulLjy/jlxABvFLA+kVXGjBm06xa0AFiiUmOOCrUbjr9RJ3kTkC
-	 ug1cK1ZHVqen6tzRLMERlZyi1lTpZg+b6Ns2kfC9WNBj59hZNTdUZNvA2fxNsVsSljg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793416329;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=J0HrcKF1CdRwEzwcAUL1nNteds2mu3FA+nNKdV/v4Aw=;
+	b=c4P4sWemcQhQQVQ2ejDWfGQeu3uuoaVmPvlLP3z5kJYR47pzd5TMtHBcDx/H9FYZRkHf
+	 xnSpoLyzDq7YoJhfhZNQVjh0kEHDQPeHCzFOIj8qaKgthrtnkauMLfap05QB1grjDvroJ
+	 GOaPbX7qDh4pKxS1t+1seemXEQWYKkWNS1CeihgVV0VBdLgYPcFLqtxp/eto/RZWfvM4B
+	 4Dl7k/XQmu3E3cpzh37CmZNIJwrfXC/ACr+wlpS+KFvq+2X+k5m06d5G8k079zm37msmH
+	 LjaGBkzsWrDyrLNSfLDUoM6Whf4ksFpo+UjTLzlhyOFhcPf3jc5bhoX8i6jkEO6q/1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RXC02agP;
-	arc=none smtp.remote-ip=209.85.210.197
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BFoPA0kF;
+	arc=none smtp.remote-ip=192.198.163.15
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C60606A31F
-	for <llvm@lists.linux.dev>; Sat, 31 Oct 2026 03:08:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20C60606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E1A606A31A;
+	Sat, 31 Oct 2026 03:12:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0E1A606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RXC02agP
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-89e96c03cd0so1148582b3a.1
-        for <llvm@lists.linux.dev>; Fri, 30 Oct 2026 20:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793416089; x=1794020889; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=f5aloOxgBcfJJK8SvXENQRlRRIiOwSu/Xe/rRaruUWM=;
-        b=RXC02agPiTE8rNvf6JGqfZvMBGpnjZUPMw1yjJ3KEnncDYgrUnEigVwq1J16reF4IY
-         +xVMWJY1G1saq4nJ3ahrRUF++9CQV9rmNBSUW9bxUmcz+62X97w5VwEkZzpugqZwNKt1
-         A/keNuK4rcksswIxnC3IUkSDp4JwH1BYcpMLOoo29aE0dOd5fMxasNg8URJBqoz5tq/W
-         DLJ6DR4bkMjhdNrP5NHOL0mIiI6bDCTollW9aYbPcWhsu5yaGtc3VSfnPih2kVvPVkWu
-         MELRPzcFM3AXjd6QsALM5bkOEcB85VErtvmVaWrOpzJ31ZwNZVXGdIV+W6B0O0xpjB0r
-         B3xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793416089; x=1794020889;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=f5aloOxgBcfJJK8SvXENQRlRRIiOwSu/Xe/rRaruUWM=;
-        b=O0AyOpWhEYg+qbtgF18Nad+8zZ3pJYyM2jWYJwIU62w0hXAGbTV6KY/+U/+boR8tZS
-         7zPSmeYTniFBWc3lDdLnU1zIzZQVecZzDzHTri9MoBKxaKswwAeQRLSaric1TycsEuGs
-         Qo0qccm3CPbF4XmDC4HD+T/8kr4Xa94cHDJHJgJXEIyhXd5v3kTIEM8PhBDoGrOeJln/
-         Ul6ZtohXWYLjzsdT+L1xQ6CixqOcReUdhyZnbeOIEMqatIxQAEFndFEh4V6IDG0dBVCD
-         td5/vSsoDE0s1FRdOqKq1kGR590M4o7YViUgRUzU9MzO+HkrjlC+vxbj9CoPVoa5ue6I
-         yoNw==
-X-Forwarded-Encrypted: i=1; AKwUvBwcTyCR/oWKsnKHVz8zlfuH8HYzw05gD5ysuAfmspCiiDoMWCBRGaQgQ9MWTxS9nS8+hslr@lists.linux.dev
-X-Gm-Message-State: AFq9FYKjrjakYi/b9+B74aM3LgypFZ1zmx8DJHFTmS748mdbKzh4IYPW
-	oPB8N6fwveYZUmVGBjrwBa8fMPsP+hfwYf4o2HQRyW1fItSyvx5vbOMh9VXQSQ9fWVZT7Q4SN79
-	xOkLJj7YR63R6jIVZEr/KgA==
-X-Received: from pfbft2.prod.google.com ([2002:a05:6a00:81c2:b0:8a2:dc6e:fcd0])
- (user=jenhaochen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:10c9:b0:878:34d7:699e with SMTP id d2e1a72fcca58-8a9bfa0326bmr3697231b3a.46.1793416089082;
- Fri, 30 Oct 2026 20:08:09 -0700 (PDT)
-Date: Sat, 31 Oct 2026 03:08:07 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BFoPA0kF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793416328; x=1824952328;
+  h=date:from:to:cc:subject:message-id;
+  bh=q03yGqdzMvcjvgUO2ynhorXgjsw+J6MitN1rl9MDqcQ=;
+  b=BFoPA0kFWGQ8jK5gQrvAAYFzf4gKw+84FkGnjemFOGYsLsS9mFVvQ1Fz
+   GfmbVuhoOv/rDqkps9gq2//gICkDxaRUf2hOGYugdH/9D9RXcbs3o/qB1
+   37jIPvgYeml26o+kVddvxIbu454CmeMq7TNC4TqT1NtLZFsIeuRCxg7FX
+   EBKCLd3tt2jOJ/2dZiPrDwI3NahAxWZLwMbmi7ZukfbRY1v11rtKKhN7K
+   LZKm4kQUI7dKpc5dehzm0mHLpZQ496XGxkWfVr9NrOrgJd+tUz3Evg37N
+   1oONvQ4ZT22Q52+LAPCDnJyZbvMWnC3ECEf5BJYugUtEsfhbIehcHCiC7
+   Q==;
+X-CSE-ConnectionGUID: 8oNCMqySTdKiBTSS8q2C9g==
+X-CSE-MsgGUID: n1FuRCK9TkuSgdSS0ztc5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2187888"
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="2187888"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 20:12:08 -0700
+X-CSE-ConnectionGUID: iuIkoq4LQ1WxKxO/j48WsQ==
+X-CSE-MsgGUID: GY9wuKzySSybMCROwILijQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="5975906"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by fmviesa006.fm.intel.com with ESMTP; 30 Oct 2026 20:12:06 -0700
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xMzVj-000000005qZ-3ykj;
+	Sat, 31 Oct 2026 03:12:03 +0000
+Date: Sat, 31 Oct 2026 04:11:45 +0100
+From: kernel test robot <lkp@intel.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [kuba:dma 2/11] drivers/xen/swiotlb-xen.c:435:11: error:
+ incompatible function pointer types initializing 'void *(*)(struct device *,
+ size_t, dma_addr_t *, gfp_t, unsigned long)' (aka 'void *(*)(struct device *,
+ unsigned long, unsigned long long *, unsigned int, unsigned...
+Message-ID: <202610310459.Y3UJp0xu-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -75,115 +81,47 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261031030807.4101384-1-jenhaochen@google.com>
-Subject: [PATCH] kbuild: rust: pass AutoFDO flags to Clang with inline helpers
-From: Jenhao Chen <jenhaochen@google.com>
-To: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>
-Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Matthew Maurer <mmaurer@google.com>, Rong Xu <xur@google.com>, 
-	Han Shen <shenhan@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Qais Yousef <qyousef@google.com>, Ben Wei <benwei@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Jenhao Chen <jenhaochen@google.com>
-Content-Type: text/plain; charset="UTF-8"
 
-When CONFIG_RUST_INLINE_HELPERS=y, cmd_rustc_o_rs and cmd_rustc_library
-compile Rust sources to LLVM bitcode (.bc), link rust/helpers/helpers.bc
-via llvm-link, and then invoke $(CC) to compile the combined bitcode
-into the final ELF object (.o).
+Hi Jakub,
 
-When commit a960c2cdb19e ("kbuild: rust: add AutoFDO support") was
-tested with CONFIG_RUST_INLINE_HELPERS=y and CONFIG_LTO_CLANG_THIN=y,
-cmd_rustc_o_rs skipped the post-llvm-link $(CC) step under
-CONFIG_LTO_CLANG and handed the linked bitcode directly to ld.lld, where
-the ThinLTO backend applied --lto-sample-profile,
--plugin-opt=-split-machine-functions, and LLD's default function
-sections. Non-LTO builds (!CONFIG_LTO_CLANG), however, ran the
-post-llvm-link $(CC) step without $(CFLAGS_AUTOFDO_CLANG) ever since
-commit 3a2486cc1da5 ("kbuild: rust: provide an option to inline C
-helpers into Rust").
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Subsequently, commit 5febf432df1c ("kbuild: rust: keep Rust objects out
-of Clang LTO with inline helpers") updated cmd_rustc_o_rs and
-rust/Makefile to always invoke $(CC) on the linked bitcode even when
-CONFIG_LTO_CLANG=y. Because that $(CC) invocation only passes
-$(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS)) and does not include
-$(CFLAGS_AUTOFDO_CLANG) (which is normally appended to _c_flags in
-scripts/Makefile.lib), the final code generation step for Rust objects
-is compiled without -ffunction-sections, -fsplit-machine-functions,
--fprofile-sample-use, or flow-sensitive discriminator flags whenever
-CONFIG_RUST_INLINE_HELPERS=y.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux.git dma
+head:   cd9029ebe3033a797c066b493e4cfcf5337cf829
+commit: 40f9c52cdcf8713402ec7a31c47511d06bdcf5d2 [2/11] dma-direct: pass the NUMA node to dma_direct_alloc()
+config: arm64-randconfig-2000-20261031 (https://download.01.org/0day-ci/archive/20261031/202610310459.Y3UJp0xu-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 8f6b51ca8bab1d49006ddaa042bc7e4e7306975d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610310459.Y3UJp0xu-lkp@intel.com/reproduce)
 
-As a result, Rust crates built with both CONFIG_RUST_INLINE_HELPERS=y
-and CONFIG_AUTOFDO_CLANG=y emit all functions into a single monolithic
-.text section (0 .text.<func> sections instead of 417 in
-rust_binder_main.o and 424 in rust/kernel.o on arm64 with
-CLANG_AUTOFDO_PROFILE set), preventing the linker from performing
-AutoFDO hot/cold function clustering and discarding SamplePGO weights on
-the inlined C helpers during final code generation.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610310459.Y3UJp0xu-lkp@intel.com/
 
-Factor out _autofdo_c_flags in scripts/Makefile.lib (preserving per-file
-and per-directory AUTOFDO_PROFILE opt-outs) and pass it to the
-post-llvm-link $(CC) invocation in scripts/Makefile.build and
-rust/Makefile.
+All errors (new ones prefixed by >>):
 
-Fixes: 3a2486cc1da5 ("kbuild: rust: provide an option to inline C helpers into Rust")
-Fixes: 5febf432df1c ("kbuild: rust: keep Rust objects out of Clang LTO with inline helpers")
-Signed-off-by: Jenhao Chen <jenhaochen@google.com>
----
- rust/Makefile          | 2 +-
- scripts/Makefile.build | 2 +-
- scripts/Makefile.lib   | 3 ++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+>> drivers/xen/swiotlb-xen.c:435:11: error: incompatible function pointer types initializing 'void *(*)(struct device *, size_t, dma_addr_t *, gfp_t, unsigned long)' (aka 'void *(*)(struct device *, unsigned long, unsigned long long *, unsigned int, unsigned long)') with an expression of type 'void *(struct device *, size_t, dma_addr_t *, gfp_t, unsigned long, int)' (aka 'void *(struct device *, unsigned long, unsigned long long *, unsigned int, unsigned long, int)') [-Wincompatible-function-pointer-types]
+     435 |         .alloc = dma_direct_alloc,
+         |                  ^~~~~~~~~~~~~~~~
+   1 error generated.
 
-diff --git a/rust/Makefile b/rust/Makefile
-index 0ac9ab28cc2b..f2d9b4411720 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -658,7 +658,7 @@ quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L
- 	$(if $(link_helper),;$(LLVM_LINK) --internalize --suppress-warnings $(patsubst %.o,%.bc,$@) \
- 		$(obj)/helpers/helpers$(if $(part-of-module),_module).bc -o $(patsubst %.o,%.m.bc,$@); \
- 		$(CC) $(CLANG_FLAGS) $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS)) \
--		$(CC_FLAGS_RUST_INLINE_HELPERS) -Wno-override-module -c $(patsubst %.o,%.m.bc,$@) -o $@ \
-+		$(_autofdo_c_flags) $(CC_FLAGS_RUST_INLINE_HELPERS) -Wno-override-module -c $(patsubst %.o,%.m.bc,$@) -o $@ \
- 		$(cmd_ld_single)) \
- 	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@) \
- 	$(cmd_objtool)
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 6127feb970c6..bd7bd05e9fe9 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -369,7 +369,7 @@ quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
- 	$(if $(CONFIG_RUST_INLINE_HELPERS),;$(LLVM_LINK) --internalize --suppress-warnings $(patsubst %.o,%.bc,$@) \
- 		$(objtree)/rust/helpers/helpers$(if $(part-of-module),_module).bc -o $(patsubst %.o,%.m.bc,$@); \
- 		$(CC) $(CLANG_FLAGS) $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS)) \
--		$(CC_FLAGS_RUST_INLINE_HELPERS) -Wno-override-module -c $(patsubst %.o,%.m.bc,$@) -o $@ \
-+		$(_autofdo_c_flags) $(CC_FLAGS_RUST_INLINE_HELPERS) -Wno-override-module -c $(patsubst %.o,%.m.bc,$@) -o $@ \
- 		$(cmd_ld_single)) \
- 	$(cmd_objtool)
- 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 19e96b30a122..e72efa5c6c05 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -120,9 +120,10 @@ endif
- # enable (depends on variables AUTOFDO_PROFILE_obj.o and AUTOFDO_PROFILE).
- #
- ifeq ($(CONFIG_AUTOFDO_CLANG),y)
--_c_flags += $(if $(patsubst n%,, \
-+_autofdo_c_flags = $(if $(patsubst n%,, \
- 	$(AUTOFDO_PROFILE_$(target-stem).o)$(AUTOFDO_PROFILE)$(is-kernel-object)), \
- 	$(CFLAGS_AUTOFDO_CLANG))
-+_c_flags += $(_autofdo_c_flags)
- _rust_flags += $(if $(patsubst n%,, \
- 	$(AUTOFDO_PROFILE_$(target-stem).o)$(AUTOFDO_PROFILE)$(is-kernel-object)), \
- 	$(RUSTFLAGS_AUTOFDO_CLANG))
--- 
-2.56.0.317.g454f8302e1-goog
 
+vim +435 drivers/xen/swiotlb-xen.c
+
+eb1ddc00b81cb8 Stefano Stabellini 2013-10-09  429  
+dceb1a6819ab2c Christoph Hellwig  2017-05-21  430  const struct dma_map_ops xen_swiotlb_dma_ops = {
+566fb90e050dfa Christoph Hellwig  2022-04-22  431  #ifdef CONFIG_X86
+dceb1a6819ab2c Christoph Hellwig  2017-05-21  432  	.alloc = xen_swiotlb_alloc_coherent,
+dceb1a6819ab2c Christoph Hellwig  2017-05-21  433  	.free = xen_swiotlb_free_coherent,
+566fb90e050dfa Christoph Hellwig  2022-04-22  434  #else
+566fb90e050dfa Christoph Hellwig  2022-04-22 @435  	.alloc = dma_direct_alloc,
+
+:::::: The code at line 435 was first introduced by commit
+:::::: 566fb90e050dfa2132340bbdab9533b727dda6f1 swiotlb-xen: fix DMA_ATTR_NO_KERNEL_MAPPING on arm
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Christoph Hellwig <hch@lst.de>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
