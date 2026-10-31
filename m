@@ -1,63 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793401747;
-	b=lkUKCK4tdfXUjzCsAJK0Hk9xGZEvHacvBX2w1Cem5WGxl2t3W0egHtDg7E23kYAEuNZP
-	 I6RD9dp5GbMemu0kTp0bZ/9Y9cGTNARk9UjN+R3+TXk5UgnVvGLMvN8aj32KJsXxw+XnH
-	 SGHVKE7VgdUsQUOBdJFtKht61Fq12jTwIQyW/7mStHpKVhnU+CUk5qik7MQBFwnrC0Tub
-	 aOg4cj3/iGNIAOpTVSH0HIXphcF4GSP039xjCgvBR17trAidltUlostQKKhcgEjX8rUPK
-	 hd0Cwt2a1QxCTvl4cAYqPBKBdCzH/uHsEAxWggrjgRTbF4bE5XexlxDfNKftIhQGpog==
+	t=1793411348;
+	b=nXFaWPS/foLzuo9PxSddlIBuzOc3j/rhDE/zjCGU+twNJ4HF1XH6sqeWMUPbu8zd0IEy
+	 rgkiVLzJW5IaXI9Qyri/z6rDbTma/ENQrzIfZ4+lG/V+VQWbjsC/kw8pOBQ1+voDBMy1Y
+	 rKTE2AGfSSPfWfSjo2m1CuEN7BssUAVbe8gUkzbmutG7Sy0C9pIlQi4tEDNE3sy+wC/oM
+	 m9qpxfGF6xiHXtKlulbU37bNkwLjFEg0efCjp45/3CsRqrsAi0z9KlKMslNzsXQzij5VR
+	 KuRFKWPhF/E10MMq8d2lqVP2tW0TKsH+GfDxd2tgH/eRp/e/H6qUfMCqBu6+08IhkCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793401747;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=JHEnBv7mlQPYfgdTqHQxMbrkQoxYtWgsPA+USmqN1LQ=;
-	b=eTFOAEnIbYjKciAvI5zPF0cjDDjwkMKcRZQ/cr9/oys6f1SV4NgcYtaIvqdTTnyOny4u
-	 hI5lbpjta5nWdcfDd4Ls1l2V/bWhMz/dlg0Ccj0cB9xk28fDgAnL1J3g5gK8Pt3mDp630
-	 6BLFiXDmgkOyrLu/Y37BKGgpqjCh/BNkUcBinEJJFZvIGRz0g4HFxQk/OblqmlkyV3jri
-	 /AcynCTBbaieurqueErbIzgSDEgg6sZuRRCihrJWzD1WsJObBnG5+A+OgTjTs1Hj6TI+a
-	 7u+PpIUjarJTj76QUq1cxQexr574fK+QpHtDoOXOVuWqHnNcEf/PDwgnlTjQCliTkpg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793411348;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=mQ4fAjqKW3D5sPZo53NPq+l40c9RChAf/G3wa8WbYF0=;
+	b=NTJ334jQi+qV8Yed8wTKj+v2P7nSP/GEFTWOCHx1oyWouBKoY9Ps35qq1pmHKdoutJyc
+	 yiuHvOfq87ddGVXkJj8DmwrAJprVwRUMdzeomUq0hZtQWzl5OVdjHTavm86mwh/TlTjlh
+	 aEGcUEy6U+ouQZjKPDXpsux7Db4pp4YS+URvO6tY15o3J5ebt5PyS0DQE0kTAhf7IAQcO
+	 /r0E4Uyft7P6ZTdKC9zfxsUO0e4sl8l7ZAM3aCWJRbN87Gk3AE6DfMAoOYTI64cAp5smf
+	 Q5svwn5/7iVbXsF9qlD9CZ5nMaWh2rYB4sFCOoszFypUIK4rjgMrKrzDhIP6gp9pFtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZCxvke3S;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mcMSSFBl;
+	arc=none smtp.remote-ip=198.175.65.11
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A257606A31A;
-	Fri, 30 Oct 2026 23:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B33A606A31E;
+	Sat, 31 Oct 2026 01:49:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B33A606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZCxvke3S
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B9871F000C1;
-	Fri, 30 Oct 2026 23:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793401747;
-	bh=JHEnBv7mlQPYfgdTqHQxMbrkQoxYtWgsPA+USmqN1LQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ZCxvke3SPm6WIsQv+qlKfrp0H0XlURh7HvRBIjh13jwDjUno4DKJt3S4L/pyQkTYL
-	 FodjvZPqblr/CsrWvBflto88AtcDqHZLhGWZYTuBEUy72Eh66/uUf/pJyTkAMCaU7F
-	 ogoTH8EEIUvzSM6nGdZm6tsK6nexMT7ZCgPALPpn1ZZvgbi16g3eSFsnz1aFUmr+G5
-	 XHGBoheXw4EMGf3AoeKS0ZbAJXxoQfkZml7rhVPrCNxn+VstYqiJewXcByxi82LaAK
-	 aQdQcGWoyrzVhAHuXTjGj/LIvAsLoCGWRn/CwHP1sKonVOqDEKGTH6KY90tjGmkbxg
-	 m7+mxk3EpUmJg==
-Subject: Re: [PATCH net v3 3/3] can: j1939: enable context analysis
-From: netdev-bot+sashiko@kernel.org
-To: zihanx@nebusec.ai
-Cc: linux-can@vger.kernel.org, llvm@lists.linux.dev, robin@protonic.nl,
- o.rempel@pengutronix.de, kernel@pengutronix.de, socketcan@hartkopp.net,
- mkl@pengutronix.de, ecathinds@gmail.com, dev.kurt@vandijck-laurijssen.be,
- maxime.jayat@mobile-devices.fr, bst@pengutronix.de, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- vega@nebusec.ai, kuba@kernel.org
-Date: Fri, 30 Oct 2026 23:09:05 +0000
-Message-ID: <179340174578.3127.13159979354065824365@kernel.org>
-In-Reply-To:
- <0d7b3745c8d8f3d7bf4b91ca3690f5ff1ab52f59.1793259424.git.zihanx@nebusec.ai>
-References:
- <0d7b3745c8d8f3d7bf4b91ca3690f5ff1ab52f59.1793259424.git.zihanx@nebusec.ai>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mcMSSFBl
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793411345; x=1824947345;
+  h=date:from:to:cc:subject:message-id;
+  bh=0pkssyEXUtvypp489cZhQOzqhZsUkhdqdWZSkgOzXv8=;
+  b=mcMSSFBleSHGjFR/6ZWd+J4l/CZ4sMDVxIScB7sfslOif6lEXYN3ljKI
+   9OnQVNLNB1k8CJHM1tsxIi34h+wEVfX/WoyZ1/EH7z3Fc70ZnGJYKfreH
+   8SpArCsvTW+3YUEtgTDj9vmNODH2p+zPDLwxF/TiOpyFLl+r1D7MyskGB
+   lTWE8etgdaSRpmi+to1WGkJ7XDMncYxYjhGB3B8EJOt42f/7HavaYkvxD
+   dEmVMvX9CFFm+JyPluekczRX/JSCy3fIE0GXzUtqCrFUmmIfhGso/rGGx
+   7LLxnjCdbGepJXKDzfQhGmKMqgakep/PrxjmwX8rAhJ9aKeChQfdW3n7B
+   A==;
+X-CSE-ConnectionGUID: Pg8AKNQWQX6IOkr6IdqmGw==
+X-CSE-MsgGUID: vo1oh8VfRQym99Cf//wUIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2061724"
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="2061724"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 18:49:05 -0700
+X-CSE-ConnectionGUID: rrAmkHTfRNeeqaF+eyPqBA==
+X-CSE-MsgGUID: Uk5wfdH/RRenpdnrdTcRGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="5662991"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 30 Oct 2026 18:49:03 -0700
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xMyDK-000000005p2-2hqg;
+	Sat, 31 Oct 2026 01:48:58 +0000
+Date: Sat, 31 Oct 2026 02:48:01 +0100
+From: kernel test robot <lkp@intel.com>
+To: "Chen-Yu Tsai" <wens@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [wens:sunxi-wip 33/36] drivers/iommu/sun50i-iommu.c:262:9:
+ warning: shift count >= width of type
+Message-ID: <202610310227.axf3ZxDV-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,141 +79,45 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git sunxi-wip
+head:   e8e10ee67982c55fd3900953641c680a2fbef1c6
+commit: fb330cb5c647353254defd7befae00c11c3e49b9 [33/36] iommu/sun50i: Allow mapping 3GB~4GB physical address
+config: powerpc-randconfig-2001-20261030 (https://download.01.org/0day-ci/archive/20261031/202610310227.axf3ZxDV-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 8f6b51ca8bab1d49006ddaa042bc7e4e7306975d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610310227.axf3ZxDV-lkp@intel.com/reproduce)
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610310227.axf3ZxDV-lkp@intel.com/
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+All warnings (new ones prefixed by >>):
 
-- [Medium] The commit message says "Keep the analysis opt-in and its
-  annotations separate from the J1939 timer and send synchronization…
-- [Low] The patch marks the hrtimer object itself as guarded: `struct
-  hrtimer txtimer __guarded_by(&txtimer_lock)`…
+>> drivers/iommu/sun50i-iommu.c:262:9: warning: shift count >= width of type [-Wshift-count-overflow]
+     262 |                 pa |= BIT(32);
+         |                       ^~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^  ~~~~
+   1 warning generated.
+
+
+vim +262 drivers/iommu/sun50i-iommu.c
+
+   255	
+   256	static phys_addr_t sun50i_pte_get_page_address(u32 pte)
+   257	{
+   258		phys_addr_t pa = pte & SUN50I_PTE_PAGE_ADDRESS_MASK;
+   259	
+   260		/* un-truncate the physical address */
+   261		if (pa < memblock_start_of_DRAM())
+ > 262			pa |= BIT(32);
+   263	
+   264		return pa;
+   265	}
+   266	
 
 --
-
-can: j1939: enable context analysis
-
-This enables Clang context analysis for net/can/j1939/transport.o. It
-annotates the TX timer state and the TX-send shutdown flag with
-__guarded_by() and adds __acquires()/__releases() to the session-list lock
-wrappers. It also adds a few comments around the TX timer pinning logic.
-
-> Keep the analysis opt-in and its annotations separate from the J1939
-> timer and send synchronization fixes.
-
-[Severity: Medium]
-Is this description accurate for the series?
-
-The earlier fix in this series, "can: j1939: fix session reference leaks
-on timer rearm" (Fixes: 9d71dd0c7009, Cc: stable), already added this to
-j1939_session_new():
-
-	spin_lock_init(&session->tx_send_lock);
-	scoped_guard(spinlock_init, &session->txtimer_lock) {
-		hrtimer_setup(&session->txtimer, j1939_tp_txtimer,
-			      CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
-	}
-
-At runtime the spinlock_init guard does nothing beyond spin_lock_init().
-It only makes the analysis treat txtimer_lock as held while guarded
-members are initialized. Here that is only needed because of the
-__guarded_by(&txtimer_lock) on txtimer that this patch adds. By
-comparison, tx_send_lock uses plain spin_lock_init().
-
-The same fix also added the "Keep this alias across unlock" comment in
-j1939_session_txtimer_cancel(). That comment seems to belong with the
-context_unsafe_alias() added here.
-
-The spinlock_init guard class comes from the recent commit d084a73714f8
-("compiler-context-analysis: Introduce scoped init guards"). A stable
-tree older than that has no class_spinlock_init. Would a backport of the
-reference leak fix fail to build as written?
-
-Could the scoped_guard(spinlock_init) move into this patch, next to the
-__guarded_by() it supports? The stable fix would then use plain
-spin_lock_init() and hrtimer_setup(). Otherwise, could the separation
-claim be dropped from the commit message?
-
-> diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-> index 6bf55b7dfffcc..d664f32bbb8f2 100644
-> --- a/net/can/j1939/j1939-priv.h
-> +++ b/net/can/j1939/j1939-priv.h
-
-[ ... ]
-
-> @@ -293,22 +293,22 @@ struct j1939_session {
-
-[ ... ]
-
-> +	/* Protects TX timer rearming and cancellation. */
-> +	spinlock_t txtimer_lock;
-> +	struct hrtimer txtimer __guarded_by(&txtimer_lock);
-> +	bool txtimer_qref __guarded_by(&txtimer_lock);
-
-[ ... ]
-
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index 570e2b8d08263..7fcf66e93afd7 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-
-[ ... ]
-
-> @@ -331,6 +333,7 @@ static void j1939_session_txtimer_cancel(struct j1939_session *session)
->  	session->txtimer_shutdown = true;
->  	timer = &session->txtimer;
->  	/* Keep this alias across unlock; blocking cancel must run outside the lock. */
-> +	context_unsafe_alias(timer);
->  	ret = hrtimer_try_to_cancel(timer);
->  	if (ret == 1) {
->  		WARN_ON_ONCE(!session->txtimer_qref);
-
-[Severity: Low]
-Does the __guarded_by(&txtimer_lock) on txtimer match how this function
-uses it?
-
-The pointer is taken under txtimer_lock. Later in the same function, the
-blocking cancel runs after the lock has been dropped:
-
-	spin_unlock_bh(&session->txtimer_lock);
-
-	if (ret < 0) {
-		/* Keep the blocking cancel outside txtimer_lock. */
-		ret = hrtimer_cancel(timer);
-
-This has to run unlocked because j1939_tp_txtimer() takes txtimer_lock
-itself. So the code deliberately uses the object without the lock that
-the new annotation says guards it.
-
-include/linux/compiler-context-analysis.h documents context_unsafe_alias()
-as a context lock alias barrier:
-
- * @p: pointer aliasing a context lock or object containing context locks
-
-struct hrtimer is not a context lock and does not contain one. Here the
-helper seems to be used only so the analysis loses track of the alias.
-That also stops checking the locked hrtimer_try_to_cancel(timer) call
-right after it.
-
-Would context_unsafe() around the unlocked hrtimer_cancel(), with a
-stated reason, fit better? Another option is to leave the hrtimer
-unannotated and guard only the bookkeeping bools.
-
-The RX peer, j1939_session_rxtimer_cancel_sync(), uses the same pattern:
-the alias is taken under the lock and hrtimer_cancel() is then called
-unlocked. It has neither __guarded_by() nor an alias helper, so the two
-timers end up documented differently.
-
-Could the commit message also say that this unlocked access is exempted
-from the analysis?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/cover.1793259424.git.zihanx%40nebusec.ai
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
