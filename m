@@ -1,77 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793431620;
-	b=ZhXLGxxWg8zSu+HZF3ntfL5jezz+pk+7Xkc90nLDiJbuWPW5LdJhpRr7G19jvhQX6Qen
-	 ju0GjuGF4SPwDRBaB8P42h+J3+QacdQErvtiYc9rqOQVb1P6SHvs/uE+m91EQ5ne02L+S
-	 UuL4zvlPJnpfY3eZgELURMZBkRk6N5V9n022qLBH61/hbDNulIBbSl2NCDe3UQknCZ8e7
-	 fZaCdE32isiycldXdW1Zi9kYE5ojA8DV4Z4bUcB6w0n4zkOhmbR4slQkNmM6roY8KVcLW
-	 qa9gkXYV84OaJ2I8w8+1suKeG29qbYbQGtx5hRvr06tPgBimei/OmnN+79r1cIS0v8A==
+	t=1793445050;
+	b=MPGgvTbMv3lQHTWCof5vnyJdusssAfXWPwg0caf9sXCAnrNPRDO7wRaWkkff9tniTO/o
+	 /B2DIsrX7H9wXOSLciTX/euYzY2CU/d9DUbbLrTcoR04pXl5TUcXXi61u2frQrs1LvUHL
+	 EG44SQTZsJGq5/+PviJIFTjvYgmFHbDGE+IQXTSdqs5fZUJBr9ZqEdXyHcgUZ/EngiWfD
+	 EbNkI119Pw58ueGGTLB2j6v8ZqatVhad6O7zE7zrvpl7joY+DVROkqiWnr1K0b4jUmgrA
+	 KRP0yTjEMjm448fI099K8jbGsBky9u4fJZaP4cVE3YqDMqgXminMa8ncmHYmlZwazFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793431620;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=RiPlvIclKIHkb++bxVQkKuYeuOpiB3GRN0lNMPqxshc=;
-	b=CjdjxB0Ef3zeo7nv7VWysUY3ByQciPUEaJdCS6gvVH2iAPGTGjBoEUkHFbWS6HiJdGgD
-	 Ve6YSGdzOnQM1FVpmGJF6g508/+mHaDIUl2fclZzyWWBay+BYtASUJSs0sl2JVMSVc6C4
-	 QHBXrTmuhZ6h1JVYYfl3e0WdYx/6Exj267bmwqHB5eX2ZLIEtbT/gcrdg4lSPfVJhL1Tn
-	 KV5jRS8gsdpSdTH78kbGeDfio8YZqT75GyL73o3cp9e2DBBBLWGtdkCGagJfMb2qd06pV
-	 hrV5OsvlvXZGop60x+9w1t+5lTqbjQ5DxE7d2NZ+ll19QtNrXh2vHsU/Arja2t0+81A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793445050;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=8/DEyBWZeNjbIYVLMYEXjqZxeouD7j/CxCTXFjXVFWE=;
+	b=rVlLZPlZXJWI5fKPBhNRzIivbK+1BMAociTlontNnAqQwCe7xA42d62KSuIyu13El5Ft
+	 vY2UmxKbKJpJIusy12/JcrndHfqlYirFl21Fc9GxzIgLVjJxSKCxXsmTIVPsp+62yn55J
+	 Qsu+gFHvYdDW28DHREQQXmqrTTahvpviGwvjlBl8dakLRYLAGey6bRybY2R29pcDS9TWL
+	 LhpTFKGFgp/DwDjGduyovtnmTkICaLzF31RV7WNB/1g96BMZg5HWVi8d6gqbQRn8artMy
+	 aQnlaJnqbZnIyQYXZfXT+J8HhZ2jwgsTwUkF5QmgP6l36yqjkWMuEIutSmuAY2G8JRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Evmqkfkt;
-	arc=none smtp.remote-ip=198.175.65.19
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PYlqZo80;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20174606A31F;
-	Sat, 31 Oct 2026 07:26:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20174606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C7D606A31E
+	for <llvm@lists.linux.dev>; Sat, 31 Oct 2026 11:10:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78C7D606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Evmqkfkt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793431619; x=1824967619;
-  h=date:from:to:cc:subject:message-id;
-  bh=lXof648fFRP7CSIpdU/T6NkRhRo2R+XsR1Dv4fB84kM=;
-  b=EvmqkfktB/ppe70ONVOkIKQ/pnx7RLy7YeoCUlAOn8wjVsHP2YB1XAi5
-   3CNcbwqLP5naNueZq7J1hUGrycOKCKMbcBejMjQ7IXLdM8Ia4OGZHxeP3
-   3XnUA3V254VmQPKhhN74WoTqvdrvBWFKp9AjMvhif/vLfQxfNMw9ss1iG
-   qJEho2uDWxgEjYhXpIvrExGdCr8du32APIb9UFRJqFhZoo+0X7SAfUXb3
-   dPgQKtR8dNSkjetrM0LFHkhwtM0/u3PbbHCO1HsF+lgmMsgoGKMrA4J4T
-   vvHeH8QREmIUpfLaKPBdPubwxYR29LisLhZU+hN3B9a6qUKj+wPEBXGS+
-   Q==;
-X-CSE-ConnectionGUID: 8nmmR5AGTqqdORv04/sE/A==
-X-CSE-MsgGUID: 3KCJBpHiS6upkAlULu0u7w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2219473"
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="2219473"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2026 00:26:58 -0700
-X-CSE-ConnectionGUID: +p/aY0abTKOlkLyeh+6nyQ==
-X-CSE-MsgGUID: JWKTPYC1RJCGSxWi2goovQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
-   d="scan'208";a="5960961"
-Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
-  by fmviesa008.fm.intel.com with ESMTP; 31 Oct 2026 00:26:56 -0700
-Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xN3UL-000000005uh-38l1;
-	Sat, 31 Oct 2026 07:26:53 +0000
-Date: Sat, 31 Oct 2026 08:26:15 +0100
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-10-30 327/343]
- sound/soc/soc-card.c:1505:3: error: cannot jump from this goto statement to
- its label
-Message-ID: <202610310844.IFdxKyNR-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PYlqZo80
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a2084d62cdso13569985e9.1
+        for <llvm@lists.linux.dev>; Sat, 31 Oct 2026 04:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793445049; x=1794049849; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8/DEyBWZeNjbIYVLMYEXjqZxeouD7j/CxCTXFjXVFWE=;
+        b=PYlqZo80mLE55wXIKQFUeEuSRkmB9jinwsibz27378ySnKFLRXmDf8WqQByktYMPaY
+         yMJ1tL81R74512rMvKjK7X0tPRr7Y0c7Bi4L8M+Ih2ncLez2BztDL/5T9KVq7pvcjax6
+         65sRdA0svUQqOMmY0rOjLZREKMmTyjMeFQz1thSFEsV+BqRifN9101rD5XoWwon/wfTL
+         n2ys8NjvMmhK8+tO2bCFmc57xT9l96g+t+XnZC0R5VL/B4TPlVV62/Vss24kiizD4H3m
+         jyIkubCvoPLwNfLgNlG5TlXUE9FKmlcwmIBx85DD2PKEIQ3/YTfUQcDWypoyrA/EBFAb
+         1VRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793445049; x=1794049849;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8/DEyBWZeNjbIYVLMYEXjqZxeouD7j/CxCTXFjXVFWE=;
+        b=11puEc5sVw7t/XNxNG0daBR4cH2CAKrZkjRFsyXTrzpJoUJIjjtdaK1gizjWyP3MMA
+         S1wlB95tmioQYMThvJ9t66nFqtQKiUxQvBKO2xewELctpv06ec5GTQw5crmAH5BcM8MD
+         SuF4EGeZ8VW2gjBGvZjiHYDXRRmxigid2B7jgbW+motC1wmy1Kyp5U3a5krq+pn1cP8D
+         1aaKlOz7TuS06O60KlMjWmEhr7gmOPlzg7h8aiDWqrLqtFNJIQe4ZJcvDtiSbm6DWdN4
+         +YMjYxDJEElkBldjok3vqgRZJiscDPNVFaOHiS4hZzlmDsif6PpTYTSoqzuI1X+3UyrJ
+         CNMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBytwRTsJAK0iNAgQg4f38tiihznOwwlnMKXwNPrn3l/r2rMJgS5lZr1ABBHazUqDnC4lTd3@lists.linux.dev
+X-Gm-Message-State: AFq9FYJZv2nvXee8e1A1FsrOdd3ASRSrTkeYMPZm6sty2ORHZdllc9wx
+	3jQ3eYgEyTQd+72+UF89+aALkITviC+EKmrR9wP513m6cNcVTQ5oBnn/
+X-Gm-Gg: AYBFou20Z0SKM8NOcH1WpasHXZLRXG1BkirHWmdasSPGtEyv2voasC0ln7gwAZhYHrc
+	vouBusWZ4/dFdFe6ZHeOSqSYjZW5xsuStzxCQ7VOBhZLvn6giQwHy2e3BtfyBigm0H8i5JqXo8K
+	wdhKKvf7isymRwmuMZmcRj0u5mtfBZ81ECKRUqahbbMpVhaST1ZhXcZCKzTk/LT0DI9cFqsQFTe
+	p5tjnkTfkDGgIblNLGVQox+sBcpZIFuMh+YEHeApzOnd724fjIkrTEXkm1SXb88mgsK7yW61r88
+	XYJJhjIsVI/q58kvXSKElP/nyEqjmEk55d7lc3ub5JUYYiM0RnGzoC4hfEQ8oSj4ZwC3Jq2BUfV
+	oxbh/Ks+XW2B0+d2bB9T+NkkTnRCN6rQktE6vmzaEjnSr33dcdmi5feGtHeqKipg78qGgrkSiLC
+	fHrgPjSUnCY8q7RNZwr+qAUeYw+lZ6QJhPUaTxRSTPwosfbi0HcCn123CVUdLOr81QNZXnNpYY8
+	pzxc2r3drK3C+doXD8IOg4BqFRCHoFahUcs0WjoCclCebHoHcuDcN6toBDGYJpKzq5hNU5KrcFs
+	5nnoarB7AKSW5bPXCVtqjMCQ5jDmDMUiPHDT3OApootsNRdj+N9O2VCKQpaO0Cll+84r6NOSTLV
+	CztT6mhUgOiGDqBkeZzqhk/8zfuY4XFqdf/HUEvEWP6mFT3WIi8tx/GIm7vQasSP3jAyukWza2U
+	IQUlqTMVfDwLHhAJ3q8Ty303qrQ5ye
+X-Received: by 2002:a05:600c:198c:b0:4a2:5ca:767f with SMTP id 5b1f17b1804b1-4ac151a9a36mr117500995e9.4.1793445048512;
+        Sat, 31 Oct 2026 04:10:48 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-2a02-3100-a81d-e001-9c9b-db33-f166-0fda.310.pool.telefonica.de. [2a02:3100:a81d:e001:9c9b:db33:f166:fda])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf67aa704sm117315545e9.8.2026.10.31.04.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Oct 2026 04:10:47 -0700 (PDT)
+Date: Sat, 31 Oct 2026 12:10:45 +0100
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>, 
+	Andy Lutomirski <luto@kernel.org>, Frederic Weisbecker <frederic@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Hongyan Xia <hongyan.xia@transsion.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-trace-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, linux-doc@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 03/13] sched: Split preempt-count bookkeeping from
+ raw updates
+Message-ID: <auXLfz6mFh_uOvRr@gmail.com>
+References: <20261028033127.82193-1-kmehltretter@gmail.com>
+ <20261028033127.82193-4-kmehltretter@gmail.com>
+ <20261029093219.GH1779021@noisy.programming.kicks-ass.net>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,112 +114,31 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261029093219.GH1779021@noisy.programming.kicks-ass.net>
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-10-30
-head:   09f1a103b1f1ef745ade1826d62438261db56245
-commit: cf30bd670849d570767b65301fe6042a78f71e71 [327/343] ASoC: soc-card: use missing soc_card_ret()
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261031/202610310844.IFdxKyNR-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610310844.IFdxKyNR-lkp@intel.com/reproduce)
+On Thu, Oct 29, 2026 at 10:32:19AM +0100, Peter Zijlstra wrote:
+> Urgh, so much crazy.
+> 
+> So WARNs in noinstr code are 'fine'. That is, they should not happen, if
+> they do, bad things have happened and we need the warning out ASAP, if
+> it takes the machine down, too bad. See the
+> instrumentation_{begin,end}() markers in x86 asm/bug.h.
+> 
+> But yes, the tracing needs to go. But moving that around should not be
+> this ugly and also, that will give you the opportunity to fix
+> preempt_{en,dis}able_notrace(), since they currently also skip the bound
+> checks.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610310844.IFdxKyNR-lkp@intel.com/
+Yes, that's a good direction.
 
-All errors (new ones prefixed by >>):
+I checked the call chain and DEBUG_LOCKS_WARN_ON() is already fine in
+noinstr. arm64 just needs __always_inline on preempt_count() and
+should_resched() so Clang doesn't outline them.
 
->> sound/soc/soc-card.c:1505:3: error: cannot jump from this goto statement to its label
-    1505 |                 goto err;
-         |                 ^
-   sound/soc/soc-card.c:1523:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1523 |         guard(mutex)(&client_mutex);
-         |         ^
-   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
-     416 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
-     299 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:29:1: note: expanded from here
-      29 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:35:1: note: expanded from here
-      35 | __UNIQUE_ID_unlock_415
-         | ^
-   sound/soc/soc-card.c:1523:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
-     416 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
-     165 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:23:1: note: expanded from here
-      23 | __UNIQUE_ID_guard_414
-         | ^
-   1 error generated.
+I will work on that.
 
-
-vim +1505 sound/soc/soc-card.c
-
-  1488	
-  1489	int snd_soc_card_register(struct snd_soc_card *card, struct snd_soc_card_driver *driver)
-  1490	{
-  1491		int ret;
-  1492	
-  1493		if (!card->name)
-  1494			snd_soc_card_set_name(card, driver->default_name);
-  1495		if (!card->long_name)
-  1496			snd_soc_card_set_long_name(card, driver->default_long_name);
-  1497		if (!card->components)
-  1498			snd_soc_card_set_components(card, driver->default_components);
-  1499	
-  1500		card->driver		= driver;
-  1501		card->instantiated	= 0;
-  1502		card->dapm		= snd_soc_dapm_alloc(card->dev);
-  1503		if (!card->dapm) {
-  1504			ret = -ENOMEM;
-> 1505			goto err;
-  1506		}
-  1507	
-  1508		dev_set_drvdata(card->dev, card);
-  1509	
-  1510		INIT_LIST_HEAD(&card->widget_list_head);
-  1511		INIT_LIST_HEAD(&card->path_list_head);
-  1512		INIT_LIST_HEAD(&card->dapm_list_head);
-  1513		INIT_LIST_HEAD(&card->dapm_dirty_list_head);
-  1514		INIT_LIST_HEAD(&card->aux_list_head);
-  1515		INIT_LIST_HEAD(&card->component_list_head);
-  1516		INIT_LIST_HEAD(&card->unbind_list);
-  1517		INIT_LIST_HEAD(&card->rtd_list_head);
-  1518	
-  1519		mutex_init(&card->mutex);
-  1520		mutex_init(&card->dapm_mutex);
-  1521		mutex_init(&card->pcm_mutex);
-  1522	
-  1523		guard(mutex)(&client_mutex);
-  1524	
-  1525		ret = snd_soc_card_bind_call(card);
-  1526	err:
-  1527		return soc_card_ret(card, ret);
-  1528	}
-  1529	EXPORT_SYMBOL_GPL(snd_soc_card_register);
-  1530	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Karl
