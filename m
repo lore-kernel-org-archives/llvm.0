@@ -1,63 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793426955;
-	b=o0Rdeztiq1mrkinV9bhnr49m4+9b5C0XUvdz53ogykNjvcPm54KTBeP9LWdntEJmMA/N
-	 H9v+PZB6J8+5olnyBIQJUQCNMHDc5Ud18JW7zUq2Wgdp8RFkH9OSELJeGixRX3RF1/6TY
-	 YFC9ordswM0i6VHYdnLI97CHslvevroKScQ5bC4e2/8h8s6nJCk+BuVWbxicx/yk+oIDu
-	 fjcwTsKAitEjnQBRZGbvHRHTCbRVSEH2Pmte6Mgd6cYrrsrlG63Xbg0rohvBOJqBvtl3c
-	 LuLw/IOKvCuq5f8+R9i3caeMRCrtvcrMDvyqjUWb9zKSjkNz66X3ReS4bF/MJZ6ujnQ==
+	t=1793431620;
+	b=ZhXLGxxWg8zSu+HZF3ntfL5jezz+pk+7Xkc90nLDiJbuWPW5LdJhpRr7G19jvhQX6Qen
+	 ju0GjuGF4SPwDRBaB8P42h+J3+QacdQErvtiYc9rqOQVb1P6SHvs/uE+m91EQ5ne02L+S
+	 UuL4zvlPJnpfY3eZgELURMZBkRk6N5V9n022qLBH61/hbDNulIBbSl2NCDe3UQknCZ8e7
+	 fZaCdE32isiycldXdW1Zi9kYE5ojA8DV4Z4bUcB6w0n4zkOhmbR4slQkNmM6roY8KVcLW
+	 qa9gkXYV84OaJ2I8w8+1suKeG29qbYbQGtx5hRvr06tPgBimei/OmnN+79r1cIS0v8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793426955;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=W9cmpLHdgetBFbDQCZYa5zQdrjStin80VjEDZl9jFyE=;
-	b=okyYUUw6sk2KkB1POBp0W5OCSCvp7Uc7Bpp9qvgmMCCnB0GsSHZDCLsOf/QIaPJ26Qoc
-	 MASs1XkUueKgGj2ryb2aFc4XC/6FTfw3HxfGOdKvt6pk8RE56ZymqZYutWRqS2REY6QPK
-	 yeAdhttCijAxQC1z2p7wniCWdBpd8gEnLua/ch6xI7jJ0NqW9qpmVY5MGy1OwPmnzS5fx
-	 MwkOJ5QfkK1PIwWt7b9yU6AAC1o9rljDDyY8goxKZu4b8lW2dfJ7CaHpQ/CnpFIclk1t0
-	 LkPBQvXzGsAabZUGXslKwMlRgq3xG+H8vsJ4IiQ1qxXz35pN1pSpOczZ/JbVEHGiZgQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793431620;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=RiPlvIclKIHkb++bxVQkKuYeuOpiB3GRN0lNMPqxshc=;
+	b=CjdjxB0Ef3zeo7nv7VWysUY3ByQciPUEaJdCS6gvVH2iAPGTGjBoEUkHFbWS6HiJdGgD
+	 Ve6YSGdzOnQM1FVpmGJF6g508/+mHaDIUl2fclZzyWWBay+BYtASUJSs0sl2JVMSVc6C4
+	 QHBXrTmuhZ6h1JVYYfl3e0WdYx/6Exj267bmwqHB5eX2ZLIEtbT/gcrdg4lSPfVJhL1Tn
+	 KV5jRS8gsdpSdTH78kbGeDfio8YZqT75GyL73o3cp9e2DBBBLWGtdkCGagJfMb2qd06pV
+	 hrV5OsvlvXZGop60x+9w1t+5lTqbjQ5DxE7d2NZ+ll19QtNrXh2vHsU/Arja2t0+81A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dzxIrEZm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Evmqkfkt;
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F61E606A31A;
-	Sat, 31 Oct 2026 06:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20174606A31F;
+	Sat, 31 Oct 2026 07:26:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20174606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dzxIrEZm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B751F000C1;
-	Sat, 31 Oct 2026 06:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793426954;
-	bh=W9cmpLHdgetBFbDQCZYa5zQdrjStin80VjEDZl9jFyE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dzxIrEZmdMq707FF96Tuazy28fN8HjOmgYpgCwE4ixWeMB37PT5XIxLt8GmuxXL78
-	 bomiHdktLE1ft3JVy1LpNTT3IT3HJsXvjhoDfCJZVbC1ROFzdUeFL1MfbZwyQ6Mg0G
-	 bv0IMnpDSfpE34LwV+hqzXpgMUrko/ozWMGUQQ2TYTeHASrvempSvDu9g2U7OazY0r
-	 cTeVgSKv+7CnePFL3bXVEcrGNvhlL3MN/cHtctmSEwqdx8hc0B7KBYnGsfGqUu1cLu
-	 ha8yzK07DsKLgJNVBfO6IMPuFXhnJvow5sbWrBJteXvw4SVwCCwSxGDST/ipa3rUCK
-	 x1Myr8ObJEEtg==
-Date: Fri, 30 Oct 2026 23:09:11 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Tengda Wu <wutengda@huaweicloud.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, james.clark@linaro.org,
-	xueshuai@linux.alibaba.com, Peter Zijlstra <peterz@infradead.org>,
-	leo.yan@linux.dev, Li Huafei <lihuafei1@huawei.com>,
-	Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] perf annotate-data: Show event name in the data-type
- title
-Message-ID: <auWGB-ONmDMktvRB@z2>
-References: <20261029071510.460873-1-wutengda@huaweicloud.com>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Evmqkfkt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793431619; x=1824967619;
+  h=date:from:to:cc:subject:message-id;
+  bh=lXof648fFRP7CSIpdU/T6NkRhRo2R+XsR1Dv4fB84kM=;
+  b=EvmqkfktB/ppe70ONVOkIKQ/pnx7RLy7YeoCUlAOn8wjVsHP2YB1XAi5
+   3CNcbwqLP5naNueZq7J1hUGrycOKCKMbcBejMjQ7IXLdM8Ia4OGZHxeP3
+   3XnUA3V254VmQPKhhN74WoTqvdrvBWFKp9AjMvhif/vLfQxfNMw9ss1iG
+   qJEho2uDWxgEjYhXpIvrExGdCr8du32APIb9UFRJqFhZoo+0X7SAfUXb3
+   dPgQKtR8dNSkjetrM0LFHkhwtM0/u3PbbHCO1HsF+lgmMsgoGKMrA4J4T
+   vvHeH8QREmIUpfLaKPBdPubwxYR29LisLhZU+hN3B9a6qUKj+wPEBXGS+
+   Q==;
+X-CSE-ConnectionGUID: 8nmmR5AGTqqdORv04/sE/A==
+X-CSE-MsgGUID: 3KCJBpHiS6upkAlULu0u7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2219473"
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="2219473"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2026 00:26:58 -0700
+X-CSE-ConnectionGUID: +p/aY0abTKOlkLyeh+6nyQ==
+X-CSE-MsgGUID: JWKTPYC1RJCGSxWi2goovQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="5960961"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 31 Oct 2026 00:26:56 -0700
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xN3UL-000000005uh-38l1;
+	Sat, 31 Oct 2026 07:26:53 +0000
+Date: Sat, 31 Oct 2026 08:26:15 +0100
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-10-30 327/343]
+ sound/soc/soc-card.c:1505:3: error: cannot jump from this goto statement to
+ its label
+Message-ID: <202610310844.IFdxKyNR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,137 +80,112 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261029071510.460873-1-wutengda@huaweicloud.com>
 
-On Thu, Oct 29, 2026 at 07:15:10AM +0000, Tengda Wu wrote:
-> The same data type can be annotated for multiple sampling events, in
-> which case the data-type header is printed once per event.  But the
-> header only shows the type name and the sample count, so several
-> identical-looking headers are emitted and the user cannot tell which
-> event each of them corresponds to. E.g.
-> 
->   $ perf annotate --data-type=page --stdio --itrace=f
->   Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
->   ============================================================================
->    Percent     offset       size  field
->     100.00          0       0x40  struct page      {
->       9.95          0        0x8      long unsigned int   flags;
-> 
->   Annotate type: 'struct page' in [kernel.kallsyms] (59480 samples):
->   ============================================================================
->    Percent     offset       size  field
->     100.00          0       0x40  struct page      {
->      10.15          0        0x8      long unsigned int   flags;
-> 
-> Add the event name to the data-type title in both the TUI browser and
-> the stdio output, so each header can be attributed to its event.  For
-> group events, use evsel__group_desc() to print the group description
-> instead of the leader's name, so the whole group is identified.
-> 
-> While at it, size the underline in the stdio output dynamically based
-> on the length of the header line instead of using a fixed-width string,
-> so it keeps matching the header as the text grows.
-> 
-> Result:
-> 
->   $ perf annotate --data-type=page --stdio --itrace=f
->   Annotate type: 'struct page' in [kernel.kallsyms] for l1d-miss (59208 samples):
->   ===============================================================================
->    Percent     offset       size  field
->     100.00          0       0x40  struct page      {
->       9.95          0        0x8      long unsigned int   flags;
-> 
->   Annotate type: 'struct page' in [kernel.kallsyms] for l1d-access (59480 samples):
->   =================================================================================
->    Percent     offset       size  field
->     100.00          0       0x40  struct page      {
->      10.15          0        0x8      long unsigned int   flags;
-> 
-> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-10-30
+head:   09f1a103b1f1ef745ade1826d62438261db56245
+commit: cf30bd670849d570767b65301fe6042a78f71e71 [327/343] ASoC: soc-card: use missing soc_card_ret()
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261031/202610310844.IFdxKyNR-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610310844.IFdxKyNR-lkp@intel.com/reproduce)
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610310844.IFdxKyNR-lkp@intel.com/
 
-Thanks,
-Namhyung
+All errors (new ones prefixed by >>):
 
-> ---
->  tools/perf/ui/browsers/annotate-data.c | 14 +++++++++++---
->  tools/perf/util/annotate-data.c        | 15 ++++++++++++---
->  2 files changed, 23 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/perf/ui/browsers/annotate-data.c b/tools/perf/ui/browsers/annotate-data.c
-> index a15608f6ee53..0f778788df4a 100644
-> --- a/tools/perf/ui/browsers/annotate-data.c
-> +++ b/tools/perf/ui/browsers/annotate-data.c
-> @@ -340,11 +340,19 @@ static int browser__show(struct ui_browser *uib)
->  	struct hist_entry *he = uib->priv;
->  	struct annotated_data_type *adt = he->mem_type;
->  	struct annotated_data_browser *browser = get_browser(uib);
-> +	struct evsel *evsel = hists_to_evsel(he->hists);
->  	const char *help = "Press 'h' for help on key bindings";
-> -	char title[256];
-> +	const char *evsel_name = evsel__name(evsel);
-> +	char buf[512];
-> +	char title[sizeof(buf) + 256];
-> +
-> +	if (evsel__is_group_event(evsel)) {
-> +		evsel__group_desc(evsel, buf, sizeof(buf));
-> +		evsel_name = buf;
-> +	}
->  
-> -	snprintf(title, sizeof(title), "Annotate type: '%s' (%d samples)",
-> -		 adt->self.type_name, he->stat.nr_events);
-> +	snprintf(title, sizeof(title), "Annotate type: '%s' for %s (%d samples)",
-> +		 adt->self.type_name, evsel_name, he->stat.nr_events);
->  
->  	if (ui_browser__show(uib, title, help) < 0)
->  		return -1;
-> diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-> index b3de1ca688a2..25e3169ea8ad 100644
-> --- a/tools/perf/util/annotate-data.c
-> +++ b/tools/perf/util/annotate-data.c
-> @@ -2149,16 +2149,23 @@ static void print_annotated_data_header(struct hist_entry *he, struct evsel *evs
->  	int nr_samples = he->stat.nr_events;
->  	int width = 7;
->  	const char *val_hdr = "Percent";
-> +	const char *evsel_name = evsel__name(evsel);
-> +	char buf[512];
-> +	int len;
->  
->  	if (evsel__is_group_event(evsel)) {
->  		struct hist_entry *pair;
->  
->  		list_for_each_entry(pair, &he->pairs.head, pairs.node)
->  			nr_samples += pair->stat.nr_events;
-> +
-> +		evsel__group_desc(evsel, buf, sizeof(buf));
-> +		evsel_name = buf;
->  	}
->  
-> -	printf("Annotate type: '%s' in %s (%d samples):\n",
-> -	       he->mem_type->self.type_name, dso__name(dso), nr_samples);
-> +	len = printf("Annotate type: '%s' in %s for %s (%d samples):\n",
-> +		     he->mem_type->self.type_name, dso__name(dso), evsel_name,
-> +		     nr_samples);
->  
->  	if (evsel__is_group_event(evsel)) {
->  		struct evsel *pos;
-> @@ -2183,7 +2190,9 @@ static void print_annotated_data_header(struct hist_entry *he, struct evsel *evs
->  		val_hdr = "Samples";
->  	}
->  
-> -	printf("============================================================================\n");
-> +	while (len-- > 1)
-> +		putchar('=');
-> +	putchar('\n');
->  	printf("%*s %10s %10s  %s\n", (width + 1) * nr_members, val_hdr,
->  	       "offset", "size", "field");
->  }
-> 
-> base-commit: 151a134a4e6ec66f69db8750c66006f5207f7a9d
-> -- 
-> 2.34.1
-> 
+>> sound/soc/soc-card.c:1505:3: error: cannot jump from this goto statement to its label
+    1505 |                 goto err;
+         |                 ^
+   sound/soc/soc-card.c:1523:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1523 |         guard(mutex)(&client_mutex);
+         |         ^
+   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
+     299 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:29:1: note: expanded from here
+      29 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:35:1: note: expanded from here
+      35 | __UNIQUE_ID_unlock_415
+         | ^
+   sound/soc/soc-card.c:1523:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:23:1: note: expanded from here
+      23 | __UNIQUE_ID_guard_414
+         | ^
+   1 error generated.
+
+
+vim +1505 sound/soc/soc-card.c
+
+  1488	
+  1489	int snd_soc_card_register(struct snd_soc_card *card, struct snd_soc_card_driver *driver)
+  1490	{
+  1491		int ret;
+  1492	
+  1493		if (!card->name)
+  1494			snd_soc_card_set_name(card, driver->default_name);
+  1495		if (!card->long_name)
+  1496			snd_soc_card_set_long_name(card, driver->default_long_name);
+  1497		if (!card->components)
+  1498			snd_soc_card_set_components(card, driver->default_components);
+  1499	
+  1500		card->driver		= driver;
+  1501		card->instantiated	= 0;
+  1502		card->dapm		= snd_soc_dapm_alloc(card->dev);
+  1503		if (!card->dapm) {
+  1504			ret = -ENOMEM;
+> 1505			goto err;
+  1506		}
+  1507	
+  1508		dev_set_drvdata(card->dev, card);
+  1509	
+  1510		INIT_LIST_HEAD(&card->widget_list_head);
+  1511		INIT_LIST_HEAD(&card->path_list_head);
+  1512		INIT_LIST_HEAD(&card->dapm_list_head);
+  1513		INIT_LIST_HEAD(&card->dapm_dirty_list_head);
+  1514		INIT_LIST_HEAD(&card->aux_list_head);
+  1515		INIT_LIST_HEAD(&card->component_list_head);
+  1516		INIT_LIST_HEAD(&card->unbind_list);
+  1517		INIT_LIST_HEAD(&card->rtd_list_head);
+  1518	
+  1519		mutex_init(&card->mutex);
+  1520		mutex_init(&card->dapm_mutex);
+  1521		mutex_init(&card->pcm_mutex);
+  1522	
+  1523		guard(mutex)(&client_mutex);
+  1524	
+  1525		ret = snd_soc_card_bind_call(card);
+  1526	err:
+  1527		return soc_card_ret(card, ret);
+  1528	}
+  1529	EXPORT_SYMBOL_GPL(snd_soc_card_register);
+  1530	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
