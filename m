@@ -1,111 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793445050;
-	b=MPGgvTbMv3lQHTWCof5vnyJdusssAfXWPwg0caf9sXCAnrNPRDO7wRaWkkff9tniTO/o
-	 /B2DIsrX7H9wXOSLciTX/euYzY2CU/d9DUbbLrTcoR04pXl5TUcXXi61u2frQrs1LvUHL
-	 EG44SQTZsJGq5/+PviJIFTjvYgmFHbDGE+IQXTSdqs5fZUJBr9ZqEdXyHcgUZ/EngiWfD
-	 EbNkI119Pw58ueGGTLB2j6v8ZqatVhad6O7zE7zrvpl7joY+DVROkqiWnr1K0b4jUmgrA
-	 KRP0yTjEMjm448fI099K8jbGsBky9u4fJZaP4cVE3YqDMqgXminMa8ncmHYmlZwazFg==
+	t=1793448435;
+	b=WrMgm4885GRA1qtIdOIBJfQ+inkqeB24OPb5otxdsGsYBow34sRyxyLbM1ikCuwHYGh/
+	 yYXfLYI/b0xd+g/doJWF1YDUKRL6Zm9+BNfJp3z2YaMJfsBrbDC1+8sOH4IYnTsi1V8dM
+	 aWF/HBuLN7n/qDHhkezsOXOoedP7GY9dH3qD0arxWILbxRwQ9VUMkwnRlVckgE+Ljgzzk
+	 eSqWFOJ7XJkhSE5p4ygGFM+PBjGr9wmqQV6HjQT6akkCHhM3wIPoN7Sh2GXu5hVqKlByE
+	 nZSVNxZG9c3GWOISQVZWJwNQUWoPLGFO3SWA3WYefirIttyqTuitHT7hQmHKcPG5MuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793445050;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=8/DEyBWZeNjbIYVLMYEXjqZxeouD7j/CxCTXFjXVFWE=;
-	b=rVlLZPlZXJWI5fKPBhNRzIivbK+1BMAociTlontNnAqQwCe7xA42d62KSuIyu13El5Ft
-	 vY2UmxKbKJpJIusy12/JcrndHfqlYirFl21Fc9GxzIgLVjJxSKCxXsmTIVPsp+62yn55J
-	 Qsu+gFHvYdDW28DHREQQXmqrTTahvpviGwvjlBl8dakLRYLAGey6bRybY2R29pcDS9TWL
-	 LhpTFKGFgp/DwDjGduyovtnmTkICaLzF31RV7WNB/1g96BMZg5HWVi8d6gqbQRn8artMy
-	 aQnlaJnqbZnIyQYXZfXT+J8HhZ2jwgsTwUkF5QmgP6l36yqjkWMuEIutSmuAY2G8JRQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793448435;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=+l1RRgq+C9AayOmwqqNeY+nzGv5HKvLpPKk8tw/PkoQ=;
+	b=nLp34cnyTL0ulKRA0VT/YSkdv1o+7cqZsx42PUahUKUDR94b7id9LGxBX3POc06tlxpd
+	 77F8Q9DDjYYv3J5/eu41n/49CEMmDa6mOOmYlMWb9u4G9AC08MMMLJslL0TlHDQAmZoqS
+	 g5VLeWD1KMQ/FVGNEVmFX7sgDQyox7G2K3Hu7CtWsKu3NkYxhaF1x4mNTxczN5m9XW3iG
+	 YokTpOaNLo8sQt3r1vwOeImE1xWwUbwKQi4LBoxsG+EuaO770j5qosG1JTEclQfbMMUW2
+	 J9zXWBrL9O8b37ajkLeTvZ3A062DFB/cU5NkisFkKgH3HA5e7icRKM4sSKTrpNFB/Ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PYlqZo80;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=k5pQxOSG;
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C7D606A31E
-	for <llvm@lists.linux.dev>; Sat, 31 Oct 2026 11:10:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78C7D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D53606A31D;
+	Sat, 31 Oct 2026 12:07:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74D53606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PYlqZo80
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a2084d62cdso13569985e9.1
-        for <llvm@lists.linux.dev>; Sat, 31 Oct 2026 04:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793445049; x=1794049849; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8/DEyBWZeNjbIYVLMYEXjqZxeouD7j/CxCTXFjXVFWE=;
-        b=PYlqZo80mLE55wXIKQFUeEuSRkmB9jinwsibz27378ySnKFLRXmDf8WqQByktYMPaY
-         yMJ1tL81R74512rMvKjK7X0tPRr7Y0c7Bi4L8M+Ih2ncLez2BztDL/5T9KVq7pvcjax6
-         65sRdA0svUQqOMmY0rOjLZREKMmTyjMeFQz1thSFEsV+BqRifN9101rD5XoWwon/wfTL
-         n2ys8NjvMmhK8+tO2bCFmc57xT9l96g+t+XnZC0R5VL/B4TPlVV62/Vss24kiizD4H3m
-         jyIkubCvoPLwNfLgNlG5TlXUE9FKmlcwmIBx85DD2PKEIQ3/YTfUQcDWypoyrA/EBFAb
-         1VRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793445049; x=1794049849;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8/DEyBWZeNjbIYVLMYEXjqZxeouD7j/CxCTXFjXVFWE=;
-        b=11puEc5sVw7t/XNxNG0daBR4cH2CAKrZkjRFsyXTrzpJoUJIjjtdaK1gizjWyP3MMA
-         S1wlB95tmioQYMThvJ9t66nFqtQKiUxQvBKO2xewELctpv06ec5GTQw5crmAH5BcM8MD
-         SuF4EGeZ8VW2gjBGvZjiHYDXRRmxigid2B7jgbW+motC1wmy1Kyp5U3a5krq+pn1cP8D
-         1aaKlOz7TuS06O60KlMjWmEhr7gmOPlzg7h8aiDWqrLqtFNJIQe4ZJcvDtiSbm6DWdN4
-         +YMjYxDJEElkBldjok3vqgRZJiscDPNVFaOHiS4hZzlmDsif6PpTYTSoqzuI1X+3UyrJ
-         CNMQ==
-X-Forwarded-Encrypted: i=1; AKwUvBytwRTsJAK0iNAgQg4f38tiihznOwwlnMKXwNPrn3l/r2rMJgS5lZr1ABBHazUqDnC4lTd3@lists.linux.dev
-X-Gm-Message-State: AFq9FYJZv2nvXee8e1A1FsrOdd3ASRSrTkeYMPZm6sty2ORHZdllc9wx
-	3jQ3eYgEyTQd+72+UF89+aALkITviC+EKmrR9wP513m6cNcVTQ5oBnn/
-X-Gm-Gg: AYBFou20Z0SKM8NOcH1WpasHXZLRXG1BkirHWmdasSPGtEyv2voasC0ln7gwAZhYHrc
-	vouBusWZ4/dFdFe6ZHeOSqSYjZW5xsuStzxCQ7VOBhZLvn6giQwHy2e3BtfyBigm0H8i5JqXo8K
-	wdhKKvf7isymRwmuMZmcRj0u5mtfBZ81ECKRUqahbbMpVhaST1ZhXcZCKzTk/LT0DI9cFqsQFTe
-	p5tjnkTfkDGgIblNLGVQox+sBcpZIFuMh+YEHeApzOnd724fjIkrTEXkm1SXb88mgsK7yW61r88
-	XYJJhjIsVI/q58kvXSKElP/nyEqjmEk55d7lc3ub5JUYYiM0RnGzoC4hfEQ8oSj4ZwC3Jq2BUfV
-	oxbh/Ks+XW2B0+d2bB9T+NkkTnRCN6rQktE6vmzaEjnSr33dcdmi5feGtHeqKipg78qGgrkSiLC
-	fHrgPjSUnCY8q7RNZwr+qAUeYw+lZ6QJhPUaTxRSTPwosfbi0HcCn123CVUdLOr81QNZXnNpYY8
-	pzxc2r3drK3C+doXD8IOg4BqFRCHoFahUcs0WjoCclCebHoHcuDcN6toBDGYJpKzq5hNU5KrcFs
-	5nnoarB7AKSW5bPXCVtqjMCQ5jDmDMUiPHDT3OApootsNRdj+N9O2VCKQpaO0Cll+84r6NOSTLV
-	CztT6mhUgOiGDqBkeZzqhk/8zfuY4XFqdf/HUEvEWP6mFT3WIi8tx/GIm7vQasSP3jAyukWza2U
-	IQUlqTMVfDwLHhAJ3q8Ty303qrQ5ye
-X-Received: by 2002:a05:600c:198c:b0:4a2:5ca:767f with SMTP id 5b1f17b1804b1-4ac151a9a36mr117500995e9.4.1793445048512;
-        Sat, 31 Oct 2026 04:10:48 -0700 (PDT)
-Received: from unknown748F3CBA5068 (dynamic-2a02-3100-a81d-e001-9c9b-db33-f166-0fda.310.pool.telefonica.de. [2a02:3100:a81d:e001:9c9b:db33:f166:fda])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf67aa704sm117315545e9.8.2026.10.31.04.10.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 04:10:47 -0700 (PDT)
-Date: Sat, 31 Oct 2026 12:10:45 +0100
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>, 
-	Andy Lutomirski <luto@kernel.org>, Frederic Weisbecker <frederic@kernel.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Hongyan Xia <hongyan.xia@transsion.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-trace-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, linux-doc@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 03/13] sched: Split preempt-count bookkeeping from
- raw updates
-Message-ID: <auXLfz6mFh_uOvRr@gmail.com>
-References: <20261028033127.82193-1-kmehltretter@gmail.com>
- <20261028033127.82193-4-kmehltretter@gmail.com>
- <20261029093219.GH1779021@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=k5pQxOSG
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793448434; x=1824984434;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2NOLA5XLr0F+d2rcxhw0zW65IDgq0qHt9PrC2igHtR4=;
+  b=k5pQxOSG7azQND/AcZuzs3XsntWJI61kUbDswhhMOGyutMUU6dciBlII
+   MkCVebYpkno1KGjFYuJVi2mFUgHC9UdkRbTMIiFsvXVxCsCLffkCD2rjW
+   ljkYQE2SXqNxbncc0HEWXT/DgKEbBAK1ERzMdBweU3HStxTd3KrXEDLeJ
+   fXZMb5vwRji6EMsjS1LgwuNaxxmI4UvPxIV9wlU32SOILkn+rQTa2mMRy
+   fCRcXGXmbj0o4MB+rtlcStzheZAqHw4Pe8ehaoiA3c1YlPRTEsL58qkly
+   GXqX8lKlp2rGQQCtkr2EAiF/i6coMoPJqpIAoWn6lKhNPWY7Urx0NPgzu
+   w==;
+X-CSE-ConnectionGUID: 4b5p85oKR/6E16lXjWkluA==
+X-CSE-MsgGUID: innpXHaySayPPcCMsOVeyg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2111056"
+X-IronPort-AV: E=Sophos;i="6.27,188,1787036400"; 
+   d="scan'208";a="2111056"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2026 05:07:13 -0700
+X-CSE-ConnectionGUID: aRmGSsk1R1ugqt8b3FW5xQ==
+X-CSE-MsgGUID: IYxRFdnZT1CpmNC+dmjNEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,188,1787036400"; 
+   d="scan'208";a="7493584"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa011.fm.intel.com with ESMTP; 31 Oct 2026 05:07:09 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xN7rV-00000000coK-1izy;
+	Sat, 31 Oct 2026 12:07:05 +0000
+Date: Sat, 31 Oct 2026 20:07:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>, jgg@ziepe.ca,
+	alex@shazbot.org, pbonzini@redhat.com, seanjc@google.com,
+	bhelgaas@google.com, jjohnson@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	johannes@sipsolutions.net, mani@kernel.org, lpieralisi@kernel.org,
+	kwilczynski@kernel.org, robh@kernel.org, vkuznets@redhat.com,
+	kevin.tian@intel.com, linux-pci@vger.kernel.org,
+	kvm@vger.kernel.org, linux-wireless@vger.kernel.org,
+	ath11k@lists.infradead.org, ath12k@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Subject: Re: [PATCH v3 2/8] KVM: add PCI MSI hypercall for VFIO passthrough
+Message-ID: <202610311919.NWIUCtPb-lkp@intel.com>
+References: <20261029163713.1366077-3-jtornosm@redhat.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -117,28 +92,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261029093219.GH1779021@noisy.programming.kicks-ass.net>
+In-Reply-To: <20261029163713.1366077-3-jtornosm@redhat.com>
 
-On Thu, Oct 29, 2026 at 10:32:19AM +0100, Peter Zijlstra wrote:
-> Urgh, so much crazy.
-> 
-> So WARNs in noinstr code are 'fine'. That is, they should not happen, if
-> they do, bad things have happened and we need the warning out ASAP, if
-> it takes the machine down, too bad. See the
-> instrumentation_{begin,end}() markers in x86 asm/bug.h.
-> 
-> But yes, the tracing needs to go. But moving that around should not be
-> this ugly and also, that will give you the opportunity to fix
-> preempt_{en,dis}able_notrace(), since they currently also skip the bound
-> checks.
+Hi Jose,
 
-Yes, that's a good direction.
+kernel test robot noticed the following build errors:
 
-I checked the call chain and DEBUG_LOCKS_WARN_ON() is already fine in
-noinstr. arm64 just needs __always_inline on preempt_count() and
-should_resched() so Clang doesn't outline them.
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master next-20261030]
+[cannot apply to kvm/queue kvm/next ath/ath-next kvm/linux-next v7.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I will work on that.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jose-Ignacio-Tornos-Martinez/vfio-add-helper-to-find-PCI-device-by-vendor-device-ID/20261029-173706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20261029163713.1366077-3-jtornosm%40redhat.com
+patch subject: [PATCH v3 2/8] KVM: add PCI MSI hypercall for VFIO passthrough
+config: x86_64-randconfig-1011-20261031 (https://download.01.org/0day-ci/archive/20261031/202610311919.NWIUCtPb-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261031/202610311919.NWIUCtPb-lkp@intel.com/reproduce)
 
-Thanks,
-Karl
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610311919.NWIUCtPb-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: vfio_file_find_pci_device
+   >>> referenced by vfio.c:405 (arch/x86/kvm/../../../virt/kvm/vfio.c:405)
+   >>>               vmlinux.o:(kvm_vfio_pci_msi_alloc)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
