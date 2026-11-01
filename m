@@ -1,101 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793526975;
-	b=aAjYU1DfwIUYC7VnZRauxp7K2TopON1M4L01GqFWpwUaxnSqaQMz/PqsGowlPuOEM6IE
-	 dByQRGW5hujdlI9hK6rMVUDBAA2RGXirFoshgBiRjnpxv0/a/g+J81D+W8SQoBZ+2Vcx7
-	 54knw83mAamEdLmh2In4NJxYNxLGW2M3N2yDAAIZ/rqNWd2nYPjZDaCYWR1xHJ5bXcntc
-	 Xd+gSju5DZlSQgmjU8LqvQOQ2RuJYgwDusKhaV8T3SEalsfHLZl136ULJ4x3ywVB6JdQK
-	 kL9exGpToiEP1Jsb9TzIcgbCWARs1dzNyQJMd2AXZiEGgWGWwsI4DUEQbmSV2REWdjg==
+	t=1793539033;
+	b=PXSV6i18Ch8NHcRFy2nZsYKcWlluHDtJsgp0eEjTkJpNrpCzbZLn8MKQqDW0yAMijEic
+	 HgLE1vSwUL9jU82/MAKxV0LJ+joaepSkrNXzeaLzjSOsYMZsCqUVrSmNT1sIwIPRoIPz8
+	 G7Pqy+JIdlJ9t3nIN8F5VIZkAkNQ42AMBwawwVYILfsQGESsB9Nd8P7m/AKt1yrN0QTnx
+	 ygOvtpbS2clO+Q+PCGgpN6b/7391td/RDo2OJvCcJMsXtJ7+I0MShnnheEzmiL6LYcIes
+	 zWjURV4GCuqSGSRcZtk88kNhnsLOPQMNXBWT50jt5pSnstin9fWo/ChN5tps8hesmYw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793526975;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=NH5p8XFReWk5OnsBbt0kkc9aNsHf1J+jU8MERKjpPV8=;
-	b=fC+2bvPWpooPihXbkQM5MXWEns20ShAjUSZUunK9AUfzJMjmTpfUNzP+7dPt2ukvXr1l
-	 +R4jLulIhJpao/QmYVdSQFZrO2NpcdkLJSW/BZtCjlGbSStQAJUSFcjCYUVYTizxVYQ8e
-	 1LMGpAqaWDOH81HPnB8/ivpwFy39LA13nQrbaXTOop1+7qOSafcELmvq3ycxlFh+9e+kT
-	 8zZv530fEhEfo4tqHqh50CZssv1KlCS+MVjDD6VO3hbdeWrJQQ+p+wUH0foUPumJ1b6B8
-	 t5+HbUN0/bgLl9+zNELzIPYqcoNl604dMrv21/bjCaLaBBZzMzksRQYkCSedgEvJkFA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793539033;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=w4bq/0g8RhsZpG5ZMgi9uMz4OgpyNoh3lwfQvLSG4kA=;
+	b=HaqqLZbtqZZKQcggclsIbUcQ+1iEowEavYMj03McpKbbNGG7N+zPK8hifN7nt1NEcQxB
+	 fKgh8axXtnvtKbfOWYEeF1U7q+SloTqMH3koE5Mkshk+ro6bT3xN83MDpWEXH/aOjwCee
+	 sLCgKrvHJe7t7WCz+S9ZfgWQr/Tp3aqNJbXBkR48SwPJP9cnBX6SJbzXF6z/nCAesrCAF
+	 Dq2GZR4RE87mbtna69MzzWxY95yy46UQeWyZyuNSEY0p9AF98gLWSJmGzGxBtp6bx4k+P
+	 U3iiMQDpW35ouIRgS7vRkmxRS9NcLS8GO9HKlxgSxt37Oljt/dyYHcWd/7MHcz78nYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JyXuLk8w;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=FXnku0FF;
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5622C606A325
-	for <llvm@lists.linux.dev>; Sun,  1 Nov 2026 09:56:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5622C606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA97606A325;
+	Sun,  1 Nov 2026 13:17:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EA97606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JyXuLk8w
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a2084d62cdso17967925e9.1
-        for <llvm@lists.linux.dev>; Sun, 01 Nov 2026 01:56:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793526974; x=1794131774; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NH5p8XFReWk5OnsBbt0kkc9aNsHf1J+jU8MERKjpPV8=;
-        b=JyXuLk8wHXjgNagUe+HMe1nT9PYmJiAk2HTD7mlYcI5xL+PBfDekK0jAwL7u49R9KO
-         WRkq1LsAR5Xq4nDHYYqtXjBiCf0TPNALMJC3l1AV+8y0MJBO7QisPlFKmEZveLB1wxxu
-         rhp8+s+QUGlUIUKOhXDuSSXdKvTs4b7rTHOww15wi6uKIyCqjsMnokKqGrzZAkgZlcbX
-         OzLIkaXUlHIsgLzrn0QdfhxZElcifN4FhhPO0eRDbGvu61MpAuM634ZSwEpr9/XzYGdK
-         MnSjwMStuzTWX6XuI2Y1nqMNGITJ6OMMIfkItetdoPUtih4tdVocsuBXiQzc4WVC4eM+
-         3ZSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793526974; x=1794131774;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NH5p8XFReWk5OnsBbt0kkc9aNsHf1J+jU8MERKjpPV8=;
-        b=sdBtDcJq6mdWrRFsDxkeCRo+pMlQDM+V8B+Jv8bgHYqDwSouWtGrl6y3wEBkdhUkyk
-         NxDEKt98gGb91XJiNaCgXmRn+fyK5sVizxOW/KqDuNGdPNYjCoUhj3N3rzhis6yeXGpV
-         05SPpFAyOXdeodprEu2hdwnl0+Sjyx92eRtjHcHZLhNkfhfsH8LCVaOet/Ozcb6QQxPQ
-         sXJlu9RpkZnPoyJyuUnbflbNOwcrcugzru1mTdhZaZlijb+CoIpZWsL4KpFz6ZqIoY8d
-         5a1jWwM4+DfUlC/3APsEleNCVVNkQwHEMuqSN1NO9WES/h8zkTWjr50PSySnxD9p/zQX
-         EX+A==
-X-Forwarded-Encrypted: i=1; AKwUvBx3CAtizCgl+S7yN5y0nEBw28tXnpjj3RbiGK2aP58QNvRjQMR8Qc0fEtXHfq39L9afkhs4@lists.linux.dev
-X-Gm-Message-State: AFq9FYJDVzRSN8K7jFhr1RBBW8h6GnRTXhNOaPtJ8v0AxkZ2egCou0Xw
-	y0X0LCy+3JpBhLTNLqtvz/FihPVxmPqwmMZUJxWB/FRM2XGp6tSojFFG
-X-Gm-Gg: AYBFou1PbPTFDF3/+z9DjC364oDryAQqu5QRw9QUB92CBCdp6XO6OHyqn26uG9IvErY
-	9qxND8B59RwFmHPHDWGdLJ7kXFCQmiAP+SRLb9S6ydtsa4lcXBtwLFk35P4ZMuPVYzu8ofDXrJx
-	pqtaVcYjaliYozTb2RRej1yOE74KYEtl7xHa7TZS+2pmsP5X07GVjUr5L9JlmXh3XBZs3xXUZU4
-	9f+R8DTcNlud5IMhi0EKaGI/lAP2CMWEd8ZvwvjeU1qrNW9Y8Xl5hw3/v8koAZ4deYzOqLR/MTZ
-	QHXI9U6txsYoWiHjUk/jU1YCuOooRPWMYVrDIAvH4/xgwHRsP6CSS3J4zKQfcQ0BUUt0B9//HTx
-	Dg8yCfU5tEl1I0Aki52NeaYX40lFeSfzYHwGsBC47uWjtBHQ6JLwsM9CK45PwsSpBoJdADklpP+
-	BOYKUrAo5DFoz03Eu/ThUNxBmFXiTbs1/3Q+pxL/2QBmj7FNB1BfQP2QEmEJIzcOTj9ldq0LTp1
-	ZwPuf+sMhn/hQfQAl9CaU00uFPW1FyKS7MWEzBeZkVkevJRcuNZ5nfoLFlg3tmTqBhZOApOUlgY
-	/ATxhFi6heEZ+mGCDNFDOIfq
-X-Received: by 2002:a05:600c:8706:b0:4a1:e0d5:293e with SMTP id 5b1f17b1804b1-4ac1765d3ddmr174291005e9.21.1793526973501;
-        Sun, 01 Nov 2026 01:56:13 -0800 (PST)
-Received: from luca-vm.lan ([154.61.61.58])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf67aa704sm179893505e9.8.2026.11.01.01.56.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 01:56:13 -0800 (PST)
-From: Luca Leonardo Scorcia <l.scorcia@gmail.com>
-To: linux-mediatek@lists.infradead.org
-Cc: Luca Leonardo Scorcia <l.scorcia@gmail.com>,
-	kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] clocksource/drivers/timer-mediatek: Fix "no-cfi indirect call" warning
-Date: Sun,  1 Nov 2026 10:55:31 +0100
-Message-ID: <20261101095538.1046918-1-l.scorcia@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=FXnku0FF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793539032; x=1825075032;
+  h=date:from:to:cc:subject:message-id;
+  bh=JAbPOH2A8VFIzFQrMfM3PNOHGoeHF4IVMnIPcL5oetg=;
+  b=FXnku0FFjBqV0zlVz8cexOkmChr6DXW9l9bV6BKgLy5fMjo76HGTgCLq
+   XjrLqXvqMPZarXNlT3P8CahAsRUdQsKCk3PyccTJHNipobDcFPCNApC6c
+   Qztp/yfwoMu/VgyRcQFNjBwcnZj+ShFxp1cVpqslSNCJJjJlvH4kz2PSp
+   0zglI+OmWNbvBhjg57gdWWmjPOyuwjfX4uqqVYP+OCzTRGOFL7ikwk4Kh
+   MEBuiRpByVVXMymky0GI7x5CIclNeP9totY8W/XwGnYJPpSgS/0T2zZzV
+   455G4WmBxs2SaPI0OOkcLmA7BsIjUISKmlPm/ZIJitCsit7c3N+7WkLra
+   g==;
+X-CSE-ConnectionGUID: vrK7XTi1RZWt+bVKYceRzw==
+X-CSE-MsgGUID: PR6YXv6mQouXLRiiAyRRlg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11952"; a="2152764"
+X-IronPort-AV: E=Sophos;i="6.27,190,1787036400"; 
+   d="scan'208";a="2152764"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2026 05:17:11 -0800
+X-CSE-ConnectionGUID: aLojhxKPShK+3iypFH1W9g==
+X-CSE-MsgGUID: SJQhPmI3QuuiQN50erUsIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,190,1787036400"; 
+   d="scan'208";a="6268820"
+Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
+  by fmviesa007.fm.intel.com with ESMTP; 01 Nov 2026 05:17:10 -0800
+Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xNVQq-000000006i3-0PDb;
+	Sun, 01 Nov 2026 13:17:08 +0000
+Date: Sun, 01 Nov 2026 14:17:03 +0100
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:work.procfs.cleanup 22/115]
+ net/l2tp/l2tp_ppp.c:1602:28: warning: unused variable 'pd'
+Message-ID: <202611011406.rTUd4cX8-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,44 +80,41 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-After converting the driver to OF probing, kernel-test-robot reported the
-following new warning:
+tree:   https://github.com/brauner/linux.git work.procfs.cleanup
+head:   149defb030fc6398856817bad7186556426e0845
+commit: 16905bac11a0bd08362a07a222b1650db0bff1ec [22/115] l2tp: let procfs own the seq_file of /proc/net/pppol2tp
+config: s390-randconfig-2001-20261101 (https://download.01.org/0day-ci/archive/20261101/202611011406.rTUd4cX8-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261101/202611011406.rTUd4cX8-lkp@intel.com/reproduce)
 
-vmlinux.o: warning: objtool: mtk_timer_probe+0x23: no-cfi indirect call!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611011406.rTUd4cX8-lkp@intel.com/
 
-This occurs because of_device_get_match_data() returns NULL when
-CONFIG_OF is disabled, which results in LLVM dropping the kCFI setup
-since it knows that there is no valid target for this call. Adding a
-check for a NULL timer_init avoids the warning and it makes the probe
-more robust since of_device_get_match_data() could return NULL even
-when CONFIG_OF=y.
+All warnings (new ones prefixed by >>):
 
-Fixes: 7a097aba7255 ("clocksource/drivers/timer-mediatek: Convert to OF probing")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202610290223.iOEGeDs2-lkp@intel.com/
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Luca Leonardo Scorcia <l.scorcia@gmail.com>
----
- drivers/clocksource/timer-mediatek.c | 3 +++
- 1 file changed, 3 insertions(+)
+>> net/l2tp/l2tp_ppp.c:1602:28: warning: unused variable 'pd' [-Wunused-variable]
+    1602 |         struct pppol2tp_seq_data *pd = ((struct seq_file *)file->private_data)->private;
+         |                                   ^~
+   1 warning generated.
 
-diff --git a/drivers/clocksource/timer-mediatek.c b/drivers/clocksource/timer-mediatek.c
-index 842d6ee4259e..e772f5fe8742 100644
---- a/drivers/clocksource/timer-mediatek.c
-+++ b/drivers/clocksource/timer-mediatek.c
-@@ -353,6 +353,9 @@ static int mtk_timer_probe(struct platform_device *pdev)
- 	int (*timer_init)(struct platform_device *pdev);
- 
- 	timer_init = of_device_get_match_data(&pdev->dev);
-+	if (!timer_init)
-+		return -ENODEV;
-+
- 	return timer_init(pdev);
- }
- 
--- 
-2.43.0
 
+vim +/pd +1602 net/l2tp/l2tp_ppp.c
+
+  1598	
+  1599	/* procfs opened the seq_file and allocated @pd */
+  1600	static int pppol2tp_proc_open(struct inode *inode, struct file *file)
+  1601	{
+> 1602		struct pppol2tp_seq_data *pd = ((struct seq_file *)file->private_data)->private;
+  1603		struct net *net;
+  1604	
+  1605		net = maybe_get_net(pde_data(inode));
+  1606		if (!net)
+  1607			return -ENXIO;
+  1608	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
