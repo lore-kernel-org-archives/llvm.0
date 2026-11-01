@@ -1,60 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793572814;
-	b=1CTaElcUMW2Nt+QfVthcwrKCIgG2j2UsWNTMZtb3MYG7QQShPXlQuB+YWlEp+kJ25h4m
-	 /D0SqelbMjh3GVAUSlx8fOCt2lLF4cO6+P0DNIhM15YyvksmXnEq5q4dMqTjPTL9nj7EJ
-	 ZYEOjgJiT7MroGKrKxN7Tp9B6dhEFiMS8bnU6lcIwMJyNsL9ZLabWUXLEvfjLBU+YsDiu
-	 kgkBfNe2/vDzfd/i+t2+ogOb7cv93Dr15jbJaN1ojufgGhcqQBUSCuv1u07bjvYebJKiA
-	 EhSDS3ZAcXRlgAhlLUFwNktIlyboCdAC0cgg1bKetJl/V2O80cCl6FOZe6t+uIJva8w==
+	t=1793573058;
+	b=dUvJscVDYdPLp+qjjv+kQ7Y5xQJJdznQUJcQ4HYOYEHM0x2ArX2eRsURC2M8JRfXXQDZ
+	 pa/vMES6id4bZEVKv4nXMX6D7mWRW6SwKK+iXX/3fQG1rZpJM8OLmsurywgvp+eorwXGP
+	 k9u0ZMRI7DBoAR9OMiCpGoNpJ29oaRtkNkoCkLKp1Eb/zW1LpO5r15h8FEfCDenB8ZvR4
+	 LhZubuquownlBU44WmQIQdNWNqggJMbnghRERk40LhzVK+wkOIzTscOSpqt90Rjg1b8uz
+	 YmpfQLAABWy+kwgIa5GAT+1E6g2vnRL6LflEgP4GuRsz/Vb5hEpU2pSZCrFX8mC2Xvw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793572814;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793573058;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=zz0SgYmzMlFmYbvywWRdsNJhbZCdEWF94qrr5u2SZBg=;
-	b=ACQUwOqsV761a94dVloihopGM3hvLP3X78ox9zceDWCFFiYYsKlERvETX/9FbDJxBG8m
-	 IyIkPJ+EMZWThrWLQ49ikQ2yrdrbzkutpRNzffl3GEvlW054Sj/v/zLYguELfNQT5nxR2
-	 lt6Kufc1i5BF18sNOIN5HEaueCn4bzeMjjw1+VA2I84RVGI9zV7tMMwxr064Nn9dzuE5M
-	 XU8RLel86Rf24m6P5nzGZOXdKyLAHGc7izrYG9TJVXwiKuk2IDn5J0ebqs21TBxraY97y
-	 3voLK2JaZ1PQC3Vdma8IcihRlwrZRtPQrNRzmegYaHfOYhNbMaFGu60wwoUoLT04cNw==
+	bh=MD/ud5bn1lltcSGfJDPA5Z7qCcJ2gM0givQb8/vfVIA=;
+	b=1MfxvmE5OfAFuofIclP6f9bl/gwwq2D1WiBDOwVWvB+0eLuGMiHdupPkF2JEWbhNFmfA
+	 vtOuHxpn/Ht8qot2Gmbu7VHeQvyY2FuY/SUekRzeEHJSSqTC6PplmwqgUeiDyvTB20bmX
+	 Hw4cmCa2t9grloPhghGHC/kZb5GCHqbB+/zAQ1GvTOnLftO6LZ6BroB5Rxzb1gDqnT494
+	 jCucH7lD2KaeIUdRt2NF06qEzI9FpDvGHCSw6GM9i4cqn3Lt5xKXcejdbLjPOkeET/lEd
+	 3z8Fdylk7WdMPiXDSFN6OmvHf6N9+KSen+wGntHYp4oTNlGZ0MFtC3Q6fza2pyvtYzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="GEB8z/uT";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Gr5Evwy/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAD2606A326;
-	Sun,  1 Nov 2026 22:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE5E606A324;
+	Sun,  1 Nov 2026 22:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GEB8z/uT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB1F1F000C1;
-	Sun,  1 Nov 2026 22:40:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gr5Evwy/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1AFD1F000C1;
+	Sun,  1 Nov 2026 22:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793572814;
-	bh=zz0SgYmzMlFmYbvywWRdsNJhbZCdEWF94qrr5u2SZBg=;
+	s=k20260515; t=1793573058;
+	bh=MD/ud5bn1lltcSGfJDPA5Z7qCcJ2gM0givQb8/vfVIA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=GEB8z/uTQp1CRy8jvIiM4D3Tva+bUAi1CqUQ0LJdgHgywDg9ZzPO89IQ2YwunLrrF
-	 nBWDsAqeAwEYkB46xe1aKwLJX3/z+lQNcuikoGXr/s7iAD/tMEsGz8yow3dfHuxrSA
-	 jnGt1Trhrslmy3Pc6x/bog8KFbtwtcoqyubFtmRqiGv80+Gwjww9G6Gh7JWHk/XVul
-	 U510JibNyuI59Yw4IYoDvfGa1iqvUs4M4UtTRoV9PXYmpYrevq+Me1QZEwWFijEypH
-	 yHCbYQo8ScidZSHAePpYaXp8w68yVMG8ulLtKqFEFBBP626Y0Gup3lDRAV8OO0hQt/
-	 86TTR7aRak/TA==
-Date: Sun, 1 Nov 2026 15:40:08 -0700
+	b=Gr5Evwy/mzkVY6iMhTqthJIBmxhEOY8fNWU70xm4NNhLEyRs0rbrQzYfn5Rv7lcP3
+	 tyHeIrtvP2VZD3JWwedOEHOxHljajeeQC4KEfZf0NRXAzmfWzSOH8pCHtzzCqXZ8V9
+	 4csKCjl+7fsZ3R7BMbruYW7YepqhcW538tjenuo1aJv3EUvI1St8qUROn2JOZ99sMJ
+	 jlgj2LUGct+A+8P0ZHIOfmBJgYhg7pf6txxwh8d24dM5vOkU8GiGFm0bHYra3k9xPi
+	 lUTtwNcEr5oiq6MTGTHbvvj5i7kkHLWmhjwRsUaVmbEZpQ1DD/2b4L7IGwhzFNxXhz
+	 tyldoud8rPfQA==
+Date: Sun, 1 Nov 2026 15:44:12 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Luca Leonardo Scorcia <l.scorcia@gmail.com>
-Cc: linux-mediatek@lists.infradead.org, kernel test robot <lkp@intel.com>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] clocksource/drivers/timer-mediatek: Fix "no-cfi indirect
- call" warning
-Message-ID: <20261101224008.GA910831@ax162>
-References: <20261101095538.1046918-1-l.scorcia@gmail.com>
+To: Demian Shulhan <demyansh@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marco Elver <elver@google.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	David Gow <davidgow@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kunit-dev@googlegroups.com, netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] arm64: csum: Add fused copy and Internet checksum
+Message-ID: <20261101224412.GA1185206@ax162>
+References: <20260927131838.6774-1-demyansh@gmail.com>
+ <20260927131838.6774-2-demyansh@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,50 +68,24 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261101095538.1046918-1-l.scorcia@gmail.com>
+In-Reply-To: <20260927131838.6774-2-demyansh@gmail.com>
 
-On Sun, Nov 01, 2026 at 10:55:31AM +0100, Luca Leonardo Scorcia wrote:
-> After converting the driver to OF probing, kernel-test-robot reported the
-> following new warning:
-> 
-> vmlinux.o: warning: objtool: mtk_timer_probe+0x23: no-cfi indirect call!
-> 
-> This occurs because of_device_get_match_data() returns NULL when
-> CONFIG_OF is disabled, which results in LLVM dropping the kCFI setup
-> since it knows that there is no valid target for this call. Adding a
-> check for a NULL timer_init avoids the warning and it makes the probe
-> more robust since of_device_get_match_data() could return NULL even
-> when CONFIG_OF=y.
-> 
-> Fixes: 7a097aba7255 ("clocksource/drivers/timer-mediatek: Convert to OF probing")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202610290223.iOEGeDs2-lkp@intel.com/
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Luca Leonardo Scorcia <l.scorcia@gmail.com>
+Hi Demian,
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+On Sun, Sep 27, 2026 at 03:17:57PM +0200, Demian Shulhan wrote:
+> diff --git a/arch/arm64/lib/csum-copy-neon.c b/arch/arm64/lib/csum-copy-neon.c
+> new file mode 100644
+> index 000000000000..bfeaf2beba39
+> --- /dev/null
+> +++ b/arch/arm64/lib/csum-copy-neon.c
+> @@ -0,0 +1,168 @@
+...
+> +#include <linux/types.h>
+> +#include <asm/neon-intrinsics.h>
 
-> ---
->  drivers/clocksource/timer-mediatek.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/clocksource/timer-mediatek.c b/drivers/clocksource/timer-mediatek.c
-> index 842d6ee4259e..e772f5fe8742 100644
-> --- a/drivers/clocksource/timer-mediatek.c
-> +++ b/drivers/clocksource/timer-mediatek.c
-> @@ -353,6 +353,9 @@ static int mtk_timer_probe(struct platform_device *pdev)
->  	int (*timer_init)(struct platform_device *pdev);
->  
->  	timer_init = of_device_get_match_data(&pdev->dev);
-> +	if (!timer_init)
-> +		return -ENODEV;
-> +
->  	return timer_init(pdev);
->  }
->  
-> -- 
-> 2.43.0
-> 
+Please avoid combining these files, it will be forbidden soon:
+
+  https://lore.kernel.org/20261029135020.272082-9-ardb+git@google.com/
 
 -- 
 Cheers,
