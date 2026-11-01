@@ -1,77 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793539033;
-	b=PXSV6i18Ch8NHcRFy2nZsYKcWlluHDtJsgp0eEjTkJpNrpCzbZLn8MKQqDW0yAMijEic
-	 HgLE1vSwUL9jU82/MAKxV0LJ+joaepSkrNXzeaLzjSOsYMZsCqUVrSmNT1sIwIPRoIPz8
-	 G7Pqy+JIdlJ9t3nIN8F5VIZkAkNQ42AMBwawwVYILfsQGESsB9Nd8P7m/AKt1yrN0QTnx
-	 ygOvtpbS2clO+Q+PCGgpN6b/7391td/RDo2OJvCcJMsXtJ7+I0MShnnheEzmiL6LYcIes
-	 zWjURV4GCuqSGSRcZtk88kNhnsLOPQMNXBWT50jt5pSnstin9fWo/ChN5tps8hesmYw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793539033;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=w4bq/0g8RhsZpG5ZMgi9uMz4OgpyNoh3lwfQvLSG4kA=;
-	b=HaqqLZbtqZZKQcggclsIbUcQ+1iEowEavYMj03McpKbbNGG7N+zPK8hifN7nt1NEcQxB
-	 fKgh8axXtnvtKbfOWYEeF1U7q+SloTqMH3koE5Mkshk+ro6bT3xN83MDpWEXH/aOjwCee
-	 sLCgKrvHJe7t7WCz+S9ZfgWQr/Tp3aqNJbXBkR48SwPJP9cnBX6SJbzXF6z/nCAesrCAF
-	 Dq2GZR4RE87mbtna69MzzWxY95yy46UQeWyZyuNSEY0p9AF98gLWSJmGzGxBtp6bx4k+P
-	 U3iiMQDpW35ouIRgS7vRkmxRS9NcLS8GO9HKlxgSxt37Oljt/dyYHcWd/7MHcz78nYQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=FXnku0FF;
-	arc=none smtp.remote-ip=192.198.163.11
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.46
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793540041;
+	b=cidjMuWWJev2rBMHJAKav/eAjZIsyNbBc1mcmCyPz91AK6D22IfgB7BFmz5Fwihdc+Wq
+	 Fd72G4jg0gnJkFd8ppM769bzNmiv2e+jsSv7AynWhjltF8yqIDohuRT8Zkqfru4fW4rBR
+	 GUBNbyKV0jjNfBSLc9YPct066WsvqBs0s5vfrf9Y+lDVbZIpHSLkq0QP4lCPKKSJb8gQm
+	 UcMDiWi2ZxjTbcJ8Dj+yaRAcPPr2Pnf4IznOF+qcCBBarC9mvlPpj5aTAS7p/4XGpOFpa
+	 +MK8pQMxkavi2P/oKb/60f1ORo7XVjzSXxfUtXzqPyPRtFUBHcEgofo8kerYBWVPfow==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793540041;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=4FoSNuo4120zGj2L29GeDCwMhfV0RCk5eABERU3r5fE=;
+	b=qzRqE6RfBwO04Q2etvUJ2Yk+hX/pledi6jfyxVeSI3LMDLajalwuR2vrsDjxRqErXgOr
+	 Nc5G4Eo6NFYnviBbf6PPeQR1khl6RHN8btAFZUx17RH3xoHbSWZC+TNr1JnKqn2+ahOGB
+	 tNIvCqbdGSChPaHgJs5Ic7dHr0RTIrAcRRBJ5kDyNtd4a1bRCX1/e/5e/NulYikqDN4W6
+	 VKiclmR+hgo3dOsqxPnhjaSdCBEJaBAXlhkPFxDTAmnG66uHTE1/iz+NQbEh+ak/xeuBk
+	 9EBx01lb6Cr9T5VOgwXjx3RNaEF8UFirzKPbtRItetXyZe5dGXp1vf5G7IRkwMKndsQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DSuacvDG;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.46
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA97606A325;
-	Sun,  1 Nov 2026 13:17:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EA97606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87686606A326
+	for <llvm@lists.linux.dev>; Sun,  1 Nov 2026 13:34:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87686606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=FXnku0FF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793539032; x=1825075032;
-  h=date:from:to:cc:subject:message-id;
-  bh=JAbPOH2A8VFIzFQrMfM3PNOHGoeHF4IVMnIPcL5oetg=;
-  b=FXnku0FFjBqV0zlVz8cexOkmChr6DXW9l9bV6BKgLy5fMjo76HGTgCLq
-   XjrLqXvqMPZarXNlT3P8CahAsRUdQsKCk3PyccTJHNipobDcFPCNApC6c
-   Qztp/yfwoMu/VgyRcQFNjBwcnZj+ShFxp1cVpqslSNCJJjJlvH4kz2PSp
-   0zglI+OmWNbvBhjg57gdWWmjPOyuwjfX4uqqVYP+OCzTRGOFL7ikwk4Kh
-   MEBuiRpByVVXMymky0GI7x5CIclNeP9totY8W/XwGnYJPpSgS/0T2zZzV
-   455G4WmBxs2SaPI0OOkcLmA7BsIjUISKmlPm/ZIJitCsit7c3N+7WkLra
-   g==;
-X-CSE-ConnectionGUID: vrK7XTi1RZWt+bVKYceRzw==
-X-CSE-MsgGUID: PR6YXv6mQouXLRiiAyRRlg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11952"; a="2152764"
-X-IronPort-AV: E=Sophos;i="6.27,190,1787036400"; 
-   d="scan'208";a="2152764"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2026 05:17:11 -0800
-X-CSE-ConnectionGUID: aLojhxKPShK+3iypFH1W9g==
-X-CSE-MsgGUID: SJQhPmI3QuuiQN50erUsIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,190,1787036400"; 
-   d="scan'208";a="6268820"
-Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 01 Nov 2026 05:17:10 -0800
-Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xNVQq-000000006i3-0PDb;
-	Sun, 01 Nov 2026 13:17:08 +0000
-Date: Sun, 01 Nov 2026 14:17:03 +0100
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-github:work.procfs.cleanup 22/115]
- net/l2tp/l2tp_ppp.c:1602:28: warning: unused variable 'pd'
-Message-ID: <202611011406.rTUd4cX8-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DSuacvDG
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-15943c9c005so434788c88.1
+        for <llvm@lists.linux.dev>; Sun, 01 Nov 2026 05:34:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793540040; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CfUJFbWqwXU8Pi1RKF1OvD6vETn9pl66W7XHQT6ek81ZdLNy1E12uO1tqEo3p1g41i
+         qfLi1+1Fy04n1aK6rQh0EmhfYIqECWi40EkmrkLFogbA/+qvkNbYXMQSmnSSVHvSggDT
+         btYysNvxveCK+X5DakaeGhBVEbJaoHePk/O1JSd7VO1s/oJ2/2lUz5tMHrXJj/GllMht
+         ViqQ15lQMQbxa0sEvgWeU0GZdProGLvUbaP2whSqSnHsqQA52WZWLTRljD3g7GCNU1xd
+         MiPWKvTTMFzn5I+cKHr0mHQaZOOLUzJQO9c3rDiVaBBwKgXg0Qv33Sna/W7vMroQiWtS
+         TxzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4FoSNuo4120zGj2L29GeDCwMhfV0RCk5eABERU3r5fE=;
+        fh=N/LN1jek1l9CDNmErP0wzR5wAaarnoZu4ZPVGlkQkG8=;
+        b=nUN6cIddT0XKxUmkqINsOAo31zaPyHs2IZ/sBg2WtEZpfbIX1Cml2Y8iLJqjQPG8g8
+         l9bGOEONxdJ/OB71Jn1SiAZlp/XiIIAtLHjcY0Mhmi/y2cG0hvlbHgleB6DL8nwkUj2W
+         5LghFWqfSA54ikZykgj4pz7LOeruA6O/d5lI4IX2N9qO+ePGtuSWNhsU5ZPiO6nD3bxg
+         HMhQK2R+Hu6xcr0ka6Elbtk4QMhJ5RL4tNoO+rTRuyLV4QsR6dWPClWUk/RcGO78o/uX
+         TOexCTjlCsoqDmC0RmdDliQD7phu4T9524VUlZie6ZI4Q9oAsQ43QnDuvg3qSe3MRJ62
+         rkNA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793540040; x=1794144840; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4FoSNuo4120zGj2L29GeDCwMhfV0RCk5eABERU3r5fE=;
+        b=DSuacvDG2w1gNYJLnhB5FLmF0hwghu/S8Rr9FGLr9XvNkD0L+AD8rEjlyl4Z4/EjU1
+         b7N1XNKcLDdZD8JCM+d7h37XTUaa5H2G6y/ujfr3xG66HdEbypN+TluOWDoSbEmtof+f
+         BfZkaA7k9mNLF/GdtTGE5h+Rh1FUinPtybAOs+nekq7lO65tf0BiI6UjmiDSb7BU7J1F
+         P1Kq7XHW+QxNcLZhJtEaTLznDLBcv7Qhb3Wo3hqto+2tNeH0g8mD8kSfzZXYex6P0ns/
+         fTEF1gK+Vbgq4jxBPSqaGNTApSFggh+KFRM/Gb893zRDFFldcmSCRDWWM8GZQNNuK7+V
+         gD+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793540040; x=1794144840;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4FoSNuo4120zGj2L29GeDCwMhfV0RCk5eABERU3r5fE=;
+        b=EPEXqaQY7ByCU1NeBqywV8FM+2uU61KZdSYO6Rp5VVyG0Qr5SNoCzpafKHpANaqkpl
+         yJzeeVQd8hLCf9XjrpYZk4dr5Fi0N374Hhhzvf7PHtergqHaQTzvAiEXVZ5voqgqfsgi
+         QZ3E5Zw7BMv95jQEkMW92R8R2x5Azq7ESGZXgqhTYO1D7Q43+X4okMAkDkaMjzqBCIWU
+         sMRSejS1Ryn97zmo301qKP/F19VUvUhHzVEIC3BWHXYvy51kZF+XrOrepxucz1+hdh4r
+         Uzoac9yWvztcr8jrXzQY1+C+nJJLJCJ7FJJaNJMrnByFQ15ETn8apSGLnDPK7atN2LoU
+         8fEQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz4+xjurNrs88e8j9jP4XPgCngn1gUhLdRuQEduYfnmJYZbK6vGxnzFFs7qdclm3bU+PVwD@lists.linux.dev
+X-Gm-Message-State: AFq9FYJEtK+n8sVw9enIR2HWq8295GgeiLM6b1EVoSZJ34GAosd/8J+g
+	dFzCm/sXEEcmEnW9WZ21UibJXftY4rtLQCAL8LnVtJhrtf4l5upM1sJM7YRpu8/Nbd/TDREnibC
+	CGlg5uq+T5xT3y7l0vkvP3TB8f4dNAwc=
+X-Gm-Gg: AYBFou1cWlDqf9I0nSdNq8m5MdHcOgDMR6PGLHQ06YZBK3e4/2PmZUXmXCHaFRco5rH
+	mAzw9I/zls/R/+Snt5CM9DI0BbMhuYupteJIHZSo1ZpVo6OO4mUzIHX7evG2IbLFbW/TPb7KB0X
+	Y7QjIATkGEWGgJ/X9TQ/ABW0hcPjeh7hLg2axifO0GKcRv9HM5Sivie/6QyuPVj5xslXCB5wpEg
+	pVMiyAwGlWtNUDnaRX33VePpN8ACmfsdt2OG0yX+TPOnqeOVh/8nQPcl2b0de2Cf3wITaZ/73JI
+	bRiGPTPeSTX7S3BRWjnYp78tgQKwWW7mbXccRmim0BgdceHPHrCJDFKXpi0rzL+MGALC8G7iBLD
+	vrcyt6gaFnVMEWQ8KVW2iRUctHOx5fYpKfMr60x0TuNwVmL8tW4SB66o2EOOUYtf/Rx3AdQ3D
+X-Received: by 2002:a05:7022:b047:20b0:1a3:bfb6:44ad with SMTP id
+ a92af1059eb24-1ac5da797d4mr12358096c88.32.1793540040375; Sun, 01 Nov 2026
+ 05:34:00 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,41 +103,130 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+References: <20260927131838.6774-1-demyansh@gmail.com> <20260927184414.6c0c8867@pumpkin>
+In-Reply-To: <20260927184414.6c0c8867@pumpkin>
+From: Demian Shulhan <demyansh@gmail.com>
+Date: Sun, 1 Nov 2026 14:33:49 +0100
+X-Gm-Features: AclHuK-VTVK2Zx9itCVd1q2fYcmda4QQ21q-m0eczAKCyG7Q3SKFRADCEFBZaD8
+Message-ID: <CAOLeWCt+yFs29yWg6DrRH42HD9ConLgTEbW=wMKtEoTW5ROHvw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] arm64: csum: Add fused copy and Internet checksum
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Marco Elver <elver@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Robin Murphy <robin.murphy@arm.com>, David Gow <davidgow@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/brauner/linux.git work.procfs.cleanup
-head:   149defb030fc6398856817bad7186556426e0845
-commit: 16905bac11a0bd08362a07a222b1650db0bff1ec [22/115] l2tp: let procfs own the seq_file of /proc/net/pppol2tp
-config: s390-randconfig-2001-20261101 (https://download.01.org/0day-ci/archive/20261101/202611011406.rTUd4cX8-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261101/202611011406.rTUd4cX8-lkp@intel.com/reproduce)
+Hi David,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611011406.rTUd4cX8-lkp@intel.com/
+Sorry for the delay, I was in the middle of a company change.
 
-All warnings (new ones prefixed by >>):
+You are right about SG and TX csum, but only when the traffic goes
+straight to a NIC that offloads them. There is another side: software
+GSO (skb_segment() with !sg && !csum) hits this path on 100% of TCP
+payload over WireGuard (wg_xmit() -> skb_gso_segment(skb, 0)), and on
+drivers without SG/TX csum (u_ether/f_ncm, cdc_ncm, mt76, rtw88/89,
+ath9k).
 
->> net/l2tp/l2tp_ppp.c:1602:28: warning: unused variable 'pd' [-Wunused-variable]
-    1602 |         struct pppol2tp_seq_data *pd = ((struct seq_file *)file->private_data)->private;
-         |                                   ^~
-   1 warning generated.
+So in general the software copy+csum path is still alive.
 
+On the other hand, NEON is useless here. skb_segment() splits GSO
+packets into 1-MSS segments before copying, so on these paths calls
+never exceed 1448 bytes (1368 on WireGuard). At that size
+kernel_neon_begin()/end() costs more than NEON saves, on real hardware
+v1 was ~3% slower in cycles/byte than the scalar loop on the slower
+cores. So that part can go.
 
-vim +/pd +1602 net/l2tp/l2tp_ppp.c
+I would prefer to keep only the scalar version of the fused copy+csum.
+It reads the data once instead of twice, and on real Armv9 hardware it
+cuts end-to-end cycles/byte for bulk TCP over WireGuard by 3-12%
+depending on the core (+6-8% throughput). It uses only general-purpose
+registers, so there is no FPSIMD state to save and it is safe in any
+context.
 
-  1598	
-  1599	/* procfs opened the seq_file and allocated @pd */
-  1600	static int pppol2tp_proc_open(struct inode *inode, struct file *file)
-  1601	{
-> 1602		struct pppol2tp_seq_data *pd = ((struct seq_file *)file->private_data)->private;
-  1603		struct net *net;
-  1604	
-  1605		net = maybe_get_net(pde_data(inode));
-  1606		if (!net)
-  1607			return -ENXIO;
-  1608	
+If you are OK with the scalar path, I can send v2 with NEON dropped,
+the scalar path only, and the KUnit fix for the x86 zero-length case
+Jakub reported.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Demian
+
+=D0=BD=D0=B4, 27 =D0=B2=D0=B5=D1=80. 2026=E2=80=AF=D1=80. =D0=BE 19:44 Davi=
+d Laight <david.laight.linux@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Sun, 27 Sep 2026 15:17:56 +0200
+> Demian Shulhan <demyansh@gmail.com> wrote:
+>
+> > arm64 currently uses the generic csum_partial_copy_nocheck(), which
+> > performs memcpy() followed by a second pass for csum_partial(). This
+> > double pass exerts unnecessary pressure on the L1 cache.
+>
+> Which workload actually needs this?
+> Most modern ethernet MAC support checksum setting on transmit and
+> checking on receive.
+> So the software checksum shouldn't be needed very often.
+>
+> IIRC there is also code to defer UDP checksum validation until the
+> copy_to_user().
+> I'd bet (a few pints of beer) that the complication this adds isn't
+> actually worth while.
+> Even Linus can't remember why it was done, my guess is it improved the
+> performance of the userspace NFS (over UDP) daemon that would be
+> doing 8k UDP send/receive (fragmented by IP).
+>
+> There is certainly still code to checksum data during copy_from_user()
+> in send().
+> Last time I looked I couldn't see why send on TCP sockets didn't go throu=
+gh it.
+> On x86 (in particular) copies can be done far faster than ones that
+> include a checksum.
+>
+> David
+>
+> >
+> > Replace it with a single-pass implementation. The new implementation
+> > provides a general-purpose register path for short buffers and atomic
+> > contexts, and a kernel-mode NEON path for lengths >=3D 1024 bytes.
+> >
+> > Measured in-kernel on an Ampere Altra (Neoverse-N1):
+> > - Scalar path: 1.2x-1.6x faster for lengths < 1024 bytes.
+> > - NEON path: 1.2x faster at 1024 bytes, scaling up to 1.6x-1.8x at
+> >   4096 bytes.
+> > On Apple M-series cores, gains are 1.3-1.7x below 1024 bytes and
+> > 1.6-2.4x above. No length or alignment regresses on either
+> > microarchitecture.
+> >
+> > Patch 1 implements the fused routines and the dispatcher.
+> > Patch 2 adds KUnit test coverage for the new API and internal paths.
+> >
+> > Tested: in-kernel benchmark module on Neoverse-N1 with both
+> > implementations cross-checked (0 mismatches); KUnit suite under QEMU
+> > (with/without KASAN, with PREEMPT_RT), exhaustive and random userspace
+> > testing of both routines against a naive reference with PROT_NONE guard
+> > pages, gcc 13 and clang 18 W=3D1 builds, checkpatch --strict.
+> >
+> > Demian Shulhan (2):
+> >   arm64: csum: Add fused copy and Internet checksum
+> >   lib/tests: checksum: Add KUnit tests for csum_partial_copy_nocheck()
+> >
+> >  arch/arm64/include/asm/checksum.h |   3 +
+> >  arch/arm64/lib/Makefile           |   7 +-
+> >  arch/arm64/lib/csum-copy-neon.c   | 168 +++++++++++
+> >  arch/arm64/lib/csum-copy.c        | 108 +++++++
+> >  arch/arm64/lib/csum-copy.h        |  84 ++++++
+> >  arch/arm64/lib/csum.c             |  54 ++++
+> >  lib/Kconfig.debug                 |  10 +
+> >  lib/tests/checksum_kunit.c        | 463 ++++++++++++++++++++++++++++++
+> >  8 files changed, 896 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/arm64/lib/csum-copy-neon.c
+> >  create mode 100644 arch/arm64/lib/csum-copy.c
+> >  create mode 100644 arch/arm64/lib/csum-copy.h
+> >
+> >
+> > base-commit: 93f51579e7df248780214094418f205253383cc5
+>
