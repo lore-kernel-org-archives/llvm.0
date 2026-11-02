@@ -1,86 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793652799;
-	b=dvNfArrHmhvtrE345I0Q/J5H1TPxqORizv9TCpS5Iih1MaOKVDtr32TsnS400GO46ZMV
-	 D3YnUcekJ9Gv/GVy0vbACawVA5duxzHM7buweoY9yPXRl8rKSPbqk5UIr8/Y2p3yZhvl7
-	 K3U9E9wZoAB4MJiZFWsf1JkRtQcg3gsFWNXwodX6gtUeibdDlCODAOxUNoxIJuJIt8Gj1
-	 t69TZA028fYeP9ThGyc7qLHbM9ZlMMlxa36iVFP7x45vvEyqixh8cuy7nF3jKGCSBq+4G
-	 jBFFVzP6wb4YWwV5+2WvLmmbQF8HdyAejn6Sy1XVch3Qrf8j+QzHUjUzjwhFi5zWEmw==
+	t=1793656081;
+	b=c8xxmendMei1RPChXLem699TSFCxYaYppv17X38QZV1DJyl8jr5AifctKFUfmNtFFrIG
+	 6/b+zDfMHS/gK1lQwlGmSR17ZJHhRECGdz3On3lGKrwi4tdtyAKZyO8zn2T4vvRjYdwBh
+	 5RGRnTTjm3tQFjhggfaLhsiOMdxwpBAHXSCSq9DpJT1kXRW7tyQujFhGPS27owetyDhTk
+	 2P0/1oMFkJgj7nxgp5zHdo+r35632cFIRflv0XdVE59hey934rmJMXCCnOELBGl+twEW1
+	 Y+itKRcZ5eLPBEue8RijndkWN4o2GwEec9OwEtuCQ2GaxI3AW4+/UiZmecjXmnFYH2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793652799;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:X-Mimecast-Spam-Score:
-	 X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=117yBiLwKENKL+3PiWG/U5OMCVmGd5cgD5S+cpkVimE=;
-	b=2+O8TNSQYbNF+r1yZJCwbO3djiLkG+FSfMPKky0z1yunHtsKrGr6z/F25JCMxJ8TDXTc
-	 Ej8AgfkDPYvRHcXD1G/W3zF2MyXZ4rnJ/jI3Vkp/E5etyYa6MBK5KGSEZRZFJ74O8zt2+
-	 JkpvxaG/8n8CiRuPxCvAMMGdyjbkTZGhWtPV4rni3WkdG2fR3tarptiSiYtUEypd2frhE
-	 ZmaW2HAvd3vd5hKY6manBzOCPyLxjB2lduQQNwplI97k69nN4KetFUSciiLzadSOWJU0p
-	 6/0soGYHcIC0vknWJ0tVnyQF53ch+96KiGUVjVxquasnMyTQXoQ//hmu7QfnIAxKfyA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793656081;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=Ecjrezbkx2gTMoUuT1bcQl4GYo4kQcGWUul21B9Xg94=;
+	b=mvrLdmRYt4ld1VbhXaqKB1gFpCtP9lg+Nw87cl3QZE0oALEu065k644bNdZpn+po7lW0
+	 +vFPC3+DfJR2t1GOPW6VMCKNAiq29CetLt+Ld9Abnl7ntLHsNGDPHr0X3pAfSdcjkBEUa
+	 s9hzJk5WvYObPsRvyoq5RnYHO5jbD0eeYL/x0sgl3dzEgJEDV7dnrbTjgXizA1R9FoTEQ
+	 o8d0SCwutEjHoUg7T5wrPIxZ3hjsSZItWfJJA411U/qTydhnZaGsC88UIm4K3S1E9uba3
+	 jWk4DcS6DsiTof1qurFFkCELjLkf/+zp7ddvYIMyGntb1tL1vC0LjNEQj+XXfjOIp4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JrjqNRqP;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cybIE21L;
+	arc=none smtp.remote-ip=198.175.65.15
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C56C606A33A
-	for <llvm@lists.linux.dev>; Mon,  2 Nov 2026 20:53:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C56C606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D78E606A334;
+	Mon,  2 Nov 2026 21:47:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D78E606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JrjqNRqP
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793652792;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=117yBiLwKENKL+3PiWG/U5OMCVmGd5cgD5S+cpkVimE=;
-	b=JrjqNRqP10lz+xwTaT1N5hOMraQMewbNcL6ZPtYs/6qBeMDZq5lyggz1hz5TUE2wvCqKwM
-	IXQbQRbVn/7mLpXXty1C0A86MwLFP717upzSrzHF5Nt1PiF43MqFrw00/Vf94oFs2+EMGE
-	o+EsfhfOm9/h5ijPwHR98WSryq3gxtk=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-606-rbjR_SZNNO2ujaQnAh5eOA-1; Mon, 02 Nov 2026 15:53:09 -0500
-X-MC-Unique: rbjR_SZNNO2ujaQnAh5eOA-1
-X-Mimecast-MFC-AGG-ID: rbjR_SZNNO2ujaQnAh5eOA_1793652788
-Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-3ab3061668eso242251fa.1
-        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 12:53:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793652788; x=1794257588;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=117yBiLwKENKL+3PiWG/U5OMCVmGd5cgD5S+cpkVimE=;
-        b=pEip6xjx3Bryhdq5Dz+MLyPi+De+yW0TmV1iOVTIUkOiUkPaiUieT7vpUlS+JCefQz
-         qewKMr/9KPzh6mNa9wvt8JlE2AzA5iZ+eYTwJNK74/eb+j0Wi2fCqBT4qv83CrtPyQLy
-         LKashbiOxRkZXIwtDPfdfoNa7N/c2tf+oUtBhXgX9U+KXkCmBrBoLOocQEsgO9pSjNax
-         KTySRD6lxk6w/SbRQBwlbU+MYp1KO7+r5ek/kX7W7QwLtFhvnbDJLvVyssk3Wdo4XPm0
-         Q5FxHr0T6GKILvZ9jypAdujjQZipwAkFQsW5RxUddxcPJ3LrhfKPWwsuZqmZ6LLlVMCo
-         moUQ==
-X-Forwarded-Encrypted: i=1; AKwUvByTVSCGBqdeDyH6oU5ejeEqKF485TVkv9r8jjJpxKADxvmGEWyXE5JeA7O8scoXlsJt12r7@lists.linux.dev
-X-Gm-Message-State: APuU4Z/ptJYc762rOiwFhvSq6z2Los3eHr26Fb7RLQ1OHxsN53Mr2fNy
-	45lEeRwSxFsViicioYVDH5xfgh1LcYuICN7wbXSqEnI8M0+r2xMiIxbP8Rh09hDqRne/N3rTpjk
-	Gn+78IHOy2rNXgdWJvw5UjyCeZ/1Ptgpuzw4vqdGIAZB1pq81vEJ8qUQuajn6X87fZVc1jdsRk9
-	BnU537/LgmrhMUctePynFBSzWa3viqgg==
-X-Gm-Gg: AYBFou0wBQS5D2EuoMWgNu0yUyWEVNqBipg9Xv2eFa56XWfwPGCF2ME7/3yyLjqErq+
-	5/pXHSPd7sVocwyEs69u2IFwiapVP4z0AJ+ZswPFgs+IcEaM2oATkg6x0Vpk1FDvnyvcXP2DiIQ
-	Rdg+6JBB9IIAowiF7E71t3Z6mdtviGAb3V17hMVlTnM7zZsKwCs67Uoces
-X-Received: by 2002:a05:651c:a14e:b0:3ac:4b79:573b with SMTP id 38308e7fff4ca-3acb7aa83b1mr20499191fa.13.1793652788263;
-        Mon, 02 Nov 2026 12:53:08 -0800 (PST)
-X-Received: by 2002:a05:651c:a14e:b0:3ac:4b79:573b with SMTP id
- 38308e7fff4ca-3acb7aa83b1mr20499011fa.13.1793652787872; Mon, 02 Nov 2026
- 12:53:07 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cybIE21L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793656079; x=1825192079;
+  h=date:from:to:cc:subject:message-id;
+  bh=o8NtNmpEkzUgx72kGOTosC4boGIc4J4wMruvggU2jHY=;
+  b=cybIE21LdQBoaZVmPx1wwhzgVRT546sOo+7FcGaB0H1Gf7D8UEz67Ps1
+   u57tS5APOyLBnDSwemZD1fhRE55V31tBQtEHNLB0eC2bi3rp9xjbXe+Hi
+   XXjLyce1MQMidgk4uKdlVPErr9O2nUPYKOrW7PdgaIYHHB9lUAh/hr06N
+   2cEBD4H4WoEQEEHccPhZGcBmPMCWwOJVcq/dqk1k8MaBaqd4XhKO73qYe
+   +4kO5TzrulzfvahxV3FWol2qYucLswcupcfuSmH1hoN2CVl2oiShqq1Kb
+   /09bThlPV9dWgS7eGTjPw6+gY4i/qpyhLJ6zMtcYHGXGD7Z3MwJbL3gIy
+   g==;
+X-CSE-ConnectionGUID: Nf9s5mJjR5udFcaZEF6eTQ==
+X-CSE-MsgGUID: xpqQ09gESkWlC3h3VB90+A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2373260"
+X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
+   d="scan'208";a="2373260"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 13:47:59 -0800
+X-CSE-ConnectionGUID: 7NTgG3MxQHaDQ6dQRrpCXw==
+X-CSE-MsgGUID: 8lenz+oOTfG6SnlMdGGZIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
+   d="scan'208";a="8069523"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa013.fm.intel.com with ESMTP; 02 Nov 2026 13:47:57 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xNzsg-00000000htR-15Pe;
+	Mon, 02 Nov 2026 21:47:54 +0000
+Date: Tue, 03 Nov 2026 05:47:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacob Keller <jacob.e.keller@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Intel Wired LAN <intel-wired-lan@lists.osuosl.org>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [tnguy-net-queue:100GbE_E825_timecounter 14/15]
+ drivers/net/ethernet/intel/ice/ice_ptp.c:2366:25: error: use of undeclared
+ identifier 'cached_time'
+Message-ID: <202611030534.V72bnxj4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -89,67 +82,67 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-References: <20261027223847.652884-1-irogers@google.com> <20261027223847.652884-6-irogers@google.com>
-In-Reply-To: <20261027223847.652884-6-irogers@google.com>
-From: Alexander Aring <aahringo@redhat.com>
-Date: Mon, 2 Nov 2026 15:52:55 -0500
-X-Gm-Features: AclHuK8pGzNf4aGPekLa6NQcs521xOugw8djA3E8ZMCjZ7yn89XzG5j_wIaQNFk
-Message-ID: <CAK-6q+j-MS_5St04YFU11LG_Cjf1jOuS3q33qk_iK=7TE-iuBg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/9] dlm: Free dlm_ls in kobject release callback
-To: Ian Rogers <irogers@google.com>
-Cc: Kees Cook <kees@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>, 
-	Sumanth Korikkar <sumanthk@linux.ibm.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-sh@vger.kernel.org, linux-s390@vger.kernel.org, gfs2@lists.linux.dev, 
-	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org, 
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, David Teigland <teigland@redhat.com>, 
-	Greg Kroah-Hartman <gregkh@suse.de>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: r7ysYGOHpSWm1i8SvephQdPPJidQ8pSWTwINx_-oVg0_1793652788
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue.git 100GbE_E825_timecounter
+head:   3f3ca43bb77f800814e88fc923238ad0a122d79f
+commit: a1bbd79fcdadf25fd90973f46fe35f9461d04a8c [14/15] ice: store cached PHC time in ice_adapter
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20261103/202611030534.V72bnxj4-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611030534.V72bnxj4-lkp@intel.com/reproduce)
 
-On Tue, Oct 27, 2026 at 6:39=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> struct dlm_ls embeds a struct kobject (ls_kobj), but dlm_ktype lacked a
-> .release callback and dlm freed the lockspace structure directly via
-> kfree(ls). With CONFIG_DEBUG_KOBJECT_RELEASE=3Dy, freeing ls before the
-> delayed kobject release runs causes a use-after-free, and unloading the
-> module while the delayed release is pending results in an instruction
-> page fault.
->
-> Add a completion ls_kobj_done and dlm_ls_release() to complete it when
-> the last kobject reference is dropped, waiting for it in free_lockspace()
-> before kfree(ls) and in the new_lockspace() error path before module_put(=
-).
-> Also delete the kobject via kobject_del() before stopping dlm_recoverd
-> to close the window where concurrent sysfs writes could wake the stopped
-> recovery task.
->
-> Fixes: 3514faca19a6 ("kobject: remove struct kobj_type from struct kset")
-> Signed-off-by: Ian Rogers <irogers@google.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611030534.V72bnxj4-lkp@intel.com/
 
-A somewhat "big change" for just a debug functionality. Althrough I
-agree we shout call "kobject_del()" early to avoid additional sysfs
-changes during removal.
+All errors (new ones prefixed by >>):
 
-Acked-by: Alexander Aring <aahringo@redhat.com>
+>> drivers/net/ethernet/intel/ice/ice_ptp.c:2366:25: error: use of undeclared identifier 'cached_time'
+    2366 |         ice_trace(rx_hwtstamp, cached_time, ts_high, ts_ns);
+         |                                ^~~~~~~~~~~
+   1 error generated.
 
-Thanks.
 
-- Alex
+vim +/cached_time +2366 drivers/net/ethernet/intel/ice/ice_ptp.c
 
+77a781155a6590 Jacob Keller     2021-06-09  2340  
+77a781155a6590 Jacob Keller     2021-06-09  2341  /**
+3310aad20defb9 Larysa Zaremba   2023-12-05  2342   * ice_ptp_get_rx_hwts - Get packet Rx timestamp in ns
+77a781155a6590 Jacob Keller     2021-06-09  2343   * @rx_desc: Receive descriptor
+9031d5f491b957 Larysa Zaremba   2023-12-05  2344   * @pkt_ctx: Packet context to get the cached time
+77a781155a6590 Jacob Keller     2021-06-09  2345   *
+77a781155a6590 Jacob Keller     2021-06-09  2346   * The driver receives a notification in the receive descriptor with timestamp.
+77a781155a6590 Jacob Keller     2021-06-09  2347   */
+3310aad20defb9 Larysa Zaremba   2023-12-05  2348  u64 ice_ptp_get_rx_hwts(const union ice_32b_rx_flex_desc *rx_desc,
+9031d5f491b957 Larysa Zaremba   2023-12-05  2349  			const struct ice_pkt_ctx *pkt_ctx)
+77a781155a6590 Jacob Keller     2021-06-09  2350  {
+77a781155a6590 Jacob Keller     2021-06-09  2351  	u32 ts_high;
+a1bbd79fcdadf2 Jacob Keller     2026-10-21  2352  	u64 ts_ns;
+77a781155a6590 Jacob Keller     2021-06-09  2353  
+b1a582e64bf222 Jacob Keller     2022-07-27  2354  	if (!(rx_desc->wb.time_stamp_low & ICE_PTP_TS_VALID))
+3310aad20defb9 Larysa Zaremba   2023-12-05  2355  		return 0;
+b1a582e64bf222 Jacob Keller     2022-07-27  2356  
+b1a582e64bf222 Jacob Keller     2022-07-27  2357  	/* Use ice_ptp_extend_32b_ts directly, using the ring-specific cached
+b1a582e64bf222 Jacob Keller     2022-07-27  2358  	 * PHC value, rather than accessing the PF. This also allows us to
+b1a582e64bf222 Jacob Keller     2022-07-27  2359  	 * simply pass the upper 32bits of nanoseconds directly. Calling
+b1a582e64bf222 Jacob Keller     2022-07-27  2360  	 * ice_ptp_extend_40b_ts is unnecessary as it would just discard these
+b1a582e64bf222 Jacob Keller     2022-07-27  2361  	 * bits itself.
+77a781155a6590 Jacob Keller     2021-06-09  2362  	 */
+77a781155a6590 Jacob Keller     2021-06-09  2363  	ts_high = le32_to_cpu(rx_desc->wb.flex_ts.ts_high);
+a1bbd79fcdadf2 Jacob Keller     2026-10-21  2364  	ts_ns = ice_ptp_extend_32b_ts(pkt_ctx->phc, ts_high);
+77a781155a6590 Jacob Keller     2021-06-09  2365  
+5443362bae71a7 Przemyslaw Korba 2026-05-11 @2366  	ice_trace(rx_hwtstamp, cached_time, ts_high, ts_ns);
+5443362bae71a7 Przemyslaw Korba 2026-05-11  2367  
+3310aad20defb9 Larysa Zaremba   2023-12-05  2368  	return ts_ns;
+77a781155a6590 Jacob Keller     2021-06-09  2369  }
+77a781155a6590 Jacob Keller     2021-06-09  2370  
+
+:::::: The code at line 2366 was first introduced by commit
+:::::: 5443362bae71a77a7bf37467cef3be608ce32783 ice: add rx timestamp tracepoint for debugging
+
+:::::: TO: Przemyslaw Korba <przemyslaw.korba@intel.com>
+:::::: CC: Tony Nguyen <anthony.l.nguyen@intel.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
