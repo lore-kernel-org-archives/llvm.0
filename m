@@ -1,71 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793641804;
-	b=SiPm9NxYSFMb+bRMdMk9OpYkiOHx4vypiQ0Hl1xsztCJZOdFGdx9aCSRWF9WtNvNJWS/
-	 ddzyIRVlMFZpPeDs94WcilbbSAx3lSToEF/6rbtGiZeZ3va1JoQqEb57Hihza9CMuvFnd
-	 qlvpi+zNz7GyzaOxLkf+Lg+YHvbNHrpmIYLm5CBayXmlERuuHOBLbfAy8LPaKKtV0wVMc
-	 IYbqvu/CKjrYLmAzhxagskR0SBbfo6AQy3fLIlQ5Qy90z7bCMoPECgMQqq7+Wlds8VLAO
-	 P5RE/jv98YXmHiXA5DHXuroci3zO4kjDR3BC0/JrmrN47v+xiKCGN1xgZku2T0VfvFQ==
+	t=1793643064;
+	b=BKL2uNXxzN8NcBZtjLjn1qU7DnVga48ZiB5mBuhWzWrthKcRZlkGvdcOmxOifYN1BIZo
+	 cQVQfM9Pdt+yjWWlmEQlnQPVKNz2sItsfzgAIGg0UMUHnam5C1Uhyi0z9bJrcVO38PFLS
+	 fHMg1lOIhqqFzotTYlS2uXcCtgRnOD0cpEqWCiySCWHZJUPiEtIDFpoUth7iGQBs0g5Jg
+	 PFq9yIU31bNbP+/nGKY/IJjSiba0QoONc0Ae35RM1rKCQ8xw8kyKU7C6AgPkhfLuPh1NH
+	 UWBUOIrKNgOS9/ahvK5LoyIArLkXoQRsLZX6cvz3UqPx0Ii9P0msA7Ye2A3gSyodWXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793641804;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793643064;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=T1ticfJydrYA1SjDeUoJpfnM83pkS1wa5V7oY625kH4=;
-	b=rxtfDbxXw5bk8Vz0FV9rpDAWEx4YWWXr61BbabsdqrXhGn7sRKUsfZKrRE1SASR0rfCU
-	 iq1gbTY3pJkBTJnLy7I9yihZqes3Jkm25Rf0HnWx2pSHdgjiYZJl9O6J5bSSxMrrDTq8Z
-	 76LDOh/ht2/WvKxApNMlx2qe784Kzgd0XXOKQK37gU5hxEca6UxftVMQm8nZZG7R/JJQb
-	 K9CbSQA0xjfLKG5T0D80HuGI0dYzXAi0WZeMgRfVJkIq6qlDjTVEJGYZwgHL/qlg8fiBH
-	 3NJZ8Utn7pOhdBuzW/x5k/1zaaXcI++AO2tP1C7z42uZlqtJg9r4YCzXEVvQFwPhNrw==
+	bh=bjvJoJc/GTpSMbKiG3k1l8fW3FUFv6sMHWG+G/+EbEY=;
+	b=KSwwNOnftsT55BzTWYnA0EIVJkK12dh2RqESrColi0QGy/MMa6jWTbsK97PxaDA/He3/
+	 GydusmM5ncAOfiZv5yuZix2wKw3cLVKar9Iner2J9OTgrlwNe/h/dmKTlmIvAFLTR+b4O
+	 DLvl4GQLttbHwTCeY4H+AxhKqBsomCJ06i3EnxnZwOAov2c+YuQzEjDUrNVByztteOr9V
+	 iVAyXtMyEy3zBNL8hSBNfF94tbsFT+1jVTzCAsgU3frXl7BfJpM85ozOarl+Veab1B4fP
+	 56lJW/m3jX73/Oi9jFQnikPnDdGsbNaYKz5EPSmCcBYtd95faZq7MeE7LhfwpLsgz9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Se0Vj9l7;
-	arc=none smtp.remote-ip=192.198.163.14
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kBfzWQNH;
+	arc=none smtp.remote-ip=198.175.65.17
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EABE606AB9B;
-	Mon,  2 Nov 2026 17:50:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EABE606AB9B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F600606A326;
+	Mon,  2 Nov 2026 18:11:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F600606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Se0Vj9l7
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kBfzWQNH
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793641804; x=1825177804;
+  t=1793643064; x=1825179064;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TSCF7zBSudjiGOzT24V0nGQydsXVadvfVgF/yDTTR6Q=;
-  b=Se0Vj9l7F6NZ5RRMbW9cSVpJTIk32iuaOoiO12kclXmKNDSx6UB2XYnN
-   mDthGNKO+usEvtFS4h2RaET6HNWgGnKlHvsQUdllokW8V+z/lOSZGmO5N
-   vlNcfdyvt+Q7sjAgzw7w80L7IzM1llkm/ZbGQvD9Ue9g7zxjXUi3M6ywi
-   mqHWjxXFDymKxMgmL0pbeyL6DHvGZTaYqYR4BP9veojWeI7yTfTzoiUfX
-   eYa16YQJiUF8ofb0AuYxeTHj7s0Cq44NUbWDiYSYpiEFsHIgPhuO/RxKz
-   3wOUs8RT1yehybgVB1SqpULepb3Z2Juz7Zonz0NVqruqr7+HPXmqLAgBJ
+  bh=ARYRBjuRpiAfnJqS9ZxGEd/Hf5DQbR9n3T1V6+4Bh2I=;
+  b=kBfzWQNHFHNp/x+QXK58joP8xlzwETbGvgzYMn/AlFmYP86GGZeepOFa
+   d/LWvwTo+okdjwkouI36pCzKr7YmoLTLgjpSlKi7W1IoICPbhdMkJJaxE
+   t4gEU0W7nVMgl54NftFSCFXpCedalSIUcmsu2EGZc+2TiY9hLGiL8p3F9
+   qtPy9ywsdQulxCK0n6Nh572LoIM7DFlfLuyUtHGSTeF/7qL33gI6YQ0u8
+   iQD3BwFqra1hpA432mcSvl9FS0Nw6jA5rtbESudPLFlnfIn0E6TKjaycT
+   gqVDqqKbAH2hQWywEetL2GYlIMt4//oIT6w5JxGmhvFyjpLR7AYpX1Y3G
    w==;
-X-CSE-ConnectionGUID: RbfY3OXXS2KdZr2/nZaZjQ==
-X-CSE-MsgGUID: lNav8km2TECVMDmaR+Xm6g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2375152"
+X-CSE-ConnectionGUID: kbeieVZzT86dXHYKyZ8gRA==
+X-CSE-MsgGUID: VGDTrRftSCysNM+8IZTZZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2364939"
 X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="2375152"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 09:50:03 -0800
-X-CSE-ConnectionGUID: vAvJJhCZStKaIHnfZCdEXw==
-X-CSE-MsgGUID: GN9Lo8r8RTaqWIvzavueyA==
+   d="scan'208";a="2364939"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 10:11:04 -0800
+X-CSE-ConnectionGUID: NwbxsqZBTwWoiRPuuqyvpg==
+X-CSE-MsgGUID: pqzIkRSeSW6iLT9RKtxPaA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="6094170"
+   d="scan'208";a="6184129"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 02 Nov 2026 09:49:59 -0800
+  by orviesa002.jf.intel.com with ESMTP; 02 Nov 2026 10:11:01 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xNwAO-00000000hbQ-46TU;
-	Mon, 02 Nov 2026 17:49:56 +0000
-Date: Tue, 3 Nov 2026 01:49:32 +0800
+	id 1xNwUk-00000000hcC-0SV1;
+	Mon, 02 Nov 2026 18:10:58 +0000
+Date: Tue, 3 Nov 2026 02:10:03 +0800
 From: kernel test robot <lkp@intel.com>
 To: Binbin Deng <18983559317@163.com>, dsahern@kernel.org,
 	idosch@nvidia.com, davem@davemloft.net, edumazet@google.com,
@@ -75,7 +75,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Binbin Deng <18983559317@163.com>
 Subject: Re: [PATCH net v1] igmp: use copy-on-write RCU updates in
  ip_mc_source()
-Message-ID: <202611030103.U23Q9Kyn-lkp@intel.com>
+Message-ID: <202611030211.aklzSdgm-lkp@intel.com>
 References: <20261102095312.47767-1-18983559317@163.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -100,21 +100,18 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Deng/igmp-use-copy
 base:   net/main
 patch link:    https://lore.kernel.org/r/20261102095312.47767-1-18983559317%40163.com
 patch subject: [PATCH net v1] igmp: use copy-on-write RCU updates in ip_mc_source()
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20261103/202611030103.U23Q9Kyn-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611030103.U23Q9Kyn-lkp@intel.com/reproduce)
+config: sparc64-randconfig-1001-20261102 (https://download.01.org/0day-ci/archive/20261103/202611030211.aklzSdgm-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611030211.aklzSdgm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611030103.U23Q9Kyn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611030211.aklzSdgm-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   net/ipv4/igmp.c:2084:6: warning: variable 'changerec' set but not used [-Wunused-but-set-variable]
-    2084 |         int     changerec = 0;
-         |                 ^
->> net/ipv4/igmp.c:2646:1: error: function definition is not allowed here
+   net/ipv4/igmp.c:2646:1: error: function definition is not allowed here
     2646 | {
          | ^
    net/ipv4/igmp.c:2737:1: error: function definition is not allowed here
@@ -132,159 +129,58 @@ All errors (new ones prefixed by >>):
    net/ipv4/igmp.c:2924:1: error: function definition is not allowed here
     2924 | {
          | ^
-   net/ipv4/igmp.c:2977:1: error: function definition is not allowed here
-    2977 | {
+   net/ipv4/igmp.c:3277:1: error: function definition is not allowed here
+    3277 | {
          | ^
-   net/ipv4/igmp.c:2999:1: error: function definition is not allowed here
-    2999 | {
+>> net/ipv4/igmp.c:3294:19: error: use of undeclared identifier 'igmp_netdev_event'; did you mean 'igmp_ifc_event'?
+    3294 |         .notifier_call = igmp_netdev_event,
+         |                          ^~~~~~~~~~~~~~~~~
+         |                          igmp_ifc_event
+   net/ipv4/igmp.c:884:13: note: 'igmp_ifc_event' declared here
+     884 | static void igmp_ifc_event(struct in_device *in_dev)
+         |             ^
+>> net/ipv4/igmp.c:3294:19: error: incompatible function pointer types initializing 'notifier_fn_t' (aka 'int (*)(struct notifier_block *, unsigned long, void *)') with an expression of type 'void (struct in_device *)' [-Wincompatible-function-pointer-types]
+    3294 |         .notifier_call = igmp_netdev_event,
+         |                          ^~~~~~~~~~~~~~~~~
+   net/ipv4/igmp.c:3298:1: error: function definition is not allowed here
+    3298 | {
          | ^
-   net/ipv4/igmp.c:3018:1: error: function definition is not allowed here
-    3018 | {
+>> net/ipv4/igmp.c:3316:2: error: expected '}'
+    3316 | }
+         |  ^
+   net/ipv4/igmp.c:2485:1: note: to match this '{'
+    2485 | {
          | ^
-   net/ipv4/igmp.c:3028:1: error: function definition is not allowed here
-    3028 | {
-         | ^
-   net/ipv4/igmp.c:3034:1: error: function definition is not allowed here
-    3034 | {
-         | ^
-   net/ipv4/igmp.c:3046:1: error: function definition is not allowed here
-    3046 | {
-         | ^
-   net/ipv4/igmp.c:3055:1: error: function definition is not allowed here
-    3055 | {
-         | ^
->> net/ipv4/igmp.c:3094:11: error: use of undeclared identifier 'igmp_mc_seq_start'; did you mean 'igmp_mc_seq_ops'?
-    3094 |         .start  =       igmp_mc_seq_start,
-         |                         ^~~~~~~~~~~~~~~~~
-         |                         igmp_mc_seq_ops
-   net/ipv4/igmp.c:3093:36: note: 'igmp_mc_seq_ops' declared here
-    3093 | static const struct seq_operations igmp_mc_seq_ops = {
-         |                                    ^
->> net/ipv4/igmp.c:3095:10: error: use of undeclared identifier 'igmp_mc_seq_next'; did you mean 'igmp_mc_seq_ops'?
-    3095 |         .next   =       igmp_mc_seq_next,
-         |                         ^~~~~~~~~~~~~~~~
-         |                         igmp_mc_seq_ops
-   net/ipv4/igmp.c:3093:36: note: 'igmp_mc_seq_ops' declared here
-    3093 | static const struct seq_operations igmp_mc_seq_ops = {
-         |                                    ^
->> net/ipv4/igmp.c:3096:10: error: use of undeclared identifier 'igmp_mc_seq_stop'; did you mean 'igmp_mc_seq_ops'?
-    3096 |         .stop   =       igmp_mc_seq_stop,
-         |                         ^~~~~~~~~~~~~~~~
-         |                         igmp_mc_seq_ops
-   net/ipv4/igmp.c:3093:36: note: 'igmp_mc_seq_ops' declared here
-    3093 | static const struct seq_operations igmp_mc_seq_ops = {
-         |                                    ^
->> net/ipv4/igmp.c:3097:10: error: use of undeclared identifier 'igmp_mc_seq_show'; did you mean 'igmp_mc_seq_ops'?
-    3097 |         .show   =       igmp_mc_seq_show,
-         |                         ^~~~~~~~~~~~~~~~
-         |                         igmp_mc_seq_ops
-   net/ipv4/igmp.c:3093:36: note: 'igmp_mc_seq_ops' declared here
-    3093 | static const struct seq_operations igmp_mc_seq_ops = {
-         |                                    ^
->> net/ipv4/igmp.c:3094:11: error: initializing 'void *(*)(struct seq_file *, loff_t *)' (aka 'void *(*)(struct seq_file *, long long *)') with an expression of incompatible type 'const struct seq_operations'
-    3094 |         .start  =       igmp_mc_seq_start,
-         |                         ^~~~~~~~~~~~~~~~~
->> net/ipv4/igmp.c:3095:10: error: initializing 'void *(*)(struct seq_file *, void *, loff_t *)' (aka 'void *(*)(struct seq_file *, void *, long long *)') with an expression of incompatible type 'const struct seq_operations'
-    3095 |         .next   =       igmp_mc_seq_next,
-         |                         ^~~~~~~~~~~~~~~~
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   1 warning and 20 errors generated.
+   11 errors generated.
 
 
-vim +2646 net/ipv4/igmp.c
+vim +3294 net/ipv4/igmp.c
 
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2644  
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2645  int ip_mc_msfilter(struct sock *sk, struct ip_msfilter *msf, int ifindex)
-^1da177e4c3f41 Linus Torvalds          2005-04-16 @2646  {
-9951f036fe8a4e David L Stevens         2005-07-08  2647  	int err = 0;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2648  	struct ip_mreqn	imr;
-63007727e0bb09 Al Viro                 2006-09-27  2649  	__be32 addr = msf->imsf_multiaddr;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2650  	struct ip_mc_socklist *pmc;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2651  	struct in_device *in_dev;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2652  	struct inet_sock *inet = inet_sk(sk);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2653  	struct ip_sf_socklist *newpsl, *psl;
-877acedc0d3ea0 Daniel Lezcano          2008-08-13  2654  	struct net *net = sock_net(sk);
-9951f036fe8a4e David L Stevens         2005-07-08  2655  	int leavegroup = 0;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2656  
-f97c1e0c6ebdb6 Joe Perches             2007-12-16  2657  	if (!ipv4_is_multicast(addr))
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2658  		return -EINVAL;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2659  	if (msf->imsf_fmode != MCAST_INCLUDE &&
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2660  	    msf->imsf_fmode != MCAST_EXCLUDE)
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2661  		return -EINVAL;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2662  
-54ff9ef36bdf84 Marcelo Ricardo Leitner 2015-03-18  2663  	ASSERT_RTNL();
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2664  
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2665  	imr.imr_multiaddr.s_addr = msf->imsf_multiaddr;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2666  	imr.imr_address.s_addr = msf->imsf_interface;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2667  	imr.imr_ifindex = ifindex;
-877acedc0d3ea0 Daniel Lezcano          2008-08-13  2668  	in_dev = ip_mc_find_dev(net, &imr);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2669  
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2670  	if (!in_dev) {
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2671  		err = -ENODEV;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2672  		goto done;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2673  	}
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2674  
-9951f036fe8a4e David L Stevens         2005-07-08  2675  	/* special case - (INCLUDE, empty) == LEAVE_GROUP */
-9951f036fe8a4e David L Stevens         2005-07-08  2676  	if (msf->imsf_fmode == MCAST_INCLUDE && msf->imsf_numsrc == 0) {
-9951f036fe8a4e David L Stevens         2005-07-08  2677  		leavegroup = 1;
-9951f036fe8a4e David L Stevens         2005-07-08  2678  		goto done;
-9951f036fe8a4e David L Stevens         2005-07-08  2679  	}
-9951f036fe8a4e David L Stevens         2005-07-08  2680  
-1d7138de878d1d Eric Dumazet            2010-11-12  2681  	for_each_pmc_rtnl(inet, pmc) {
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2682  		if (pmc->multi.imr_multiaddr.s_addr == msf->imsf_multiaddr &&
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2683  		    pmc->multi.imr_ifindex == imr.imr_ifindex)
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2684  			break;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2685  	}
-917f2f105ea4bb David L Stevens         2005-07-08  2686  	if (!pmc) {		/* must have a prior join */
-917f2f105ea4bb David L Stevens         2005-07-08  2687  		err = -EINVAL;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2688  		goto done;
-917f2f105ea4bb David L Stevens         2005-07-08  2689  	}
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2690  	if (msf->imsf_numsrc) {
-e6a1f7e0b0fe59 Gustavo A. R. Silva     2021-08-04  2691  		newpsl = sock_kmalloc(sk, struct_size(newpsl, sl_addr,
-e6a1f7e0b0fe59 Gustavo A. R. Silva     2021-08-04  2692  						      msf->imsf_numsrc),
-8b3a70058bfe71 Kris Katterjohn         2006-01-11  2693  				      GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2694  		if (!newpsl) {
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2695  			err = -ENOBUFS;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2696  			goto done;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2697  		}
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2698  		newpsl->sl_max = newpsl->sl_count = msf->imsf_numsrc;
-2d3e5caf96b944 Gustavo A. R. Silva     2021-07-31  2699  		memcpy(newpsl->sl_addr, msf->imsf_slist_flex,
-2d3e5caf96b944 Gustavo A. R. Silva     2021-07-31  2700  		       flex_array_size(msf, imsf_slist_flex, msf->imsf_numsrc));
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2701  		err = ip_mc_add_src(in_dev, &msf->imsf_multiaddr,
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2702  			msf->imsf_fmode, newpsl->sl_count, newpsl->sl_addr, 0);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2703  		if (err) {
-e6a1f7e0b0fe59 Gustavo A. R. Silva     2021-08-04  2704  			sock_kfree_s(sk, newpsl,
-e6a1f7e0b0fe59 Gustavo A. R. Silva     2021-08-04  2705  				     struct_size(newpsl, sl_addr,
-e6a1f7e0b0fe59 Gustavo A. R. Silva     2021-08-04  2706  						 newpsl->sl_max));
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2707  			goto done;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2708  		}
-8713dbf05754aa Yan Zheng               2005-10-28  2709  	} else {
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2710  		newpsl = NULL;
-8713dbf05754aa Yan Zheng               2005-10-28  2711  		(void) ip_mc_add_src(in_dev, &msf->imsf_multiaddr,
-8713dbf05754aa Yan Zheng               2005-10-28  2712  				     msf->imsf_fmode, 0, NULL, 0);
-8713dbf05754aa Yan Zheng               2005-10-28  2713  	}
-1d7138de878d1d Eric Dumazet            2010-11-12  2714  	psl = rtnl_dereference(pmc->sflist);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2715  	if (psl) {
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2716  		(void) ip_mc_del_src(in_dev, &msf->imsf_multiaddr, pmc->sfmode,
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2717  			psl->sl_count, psl->sl_addr, 0);
-c85bb41e93184b Flavio Leitner          2010-02-02  2718  		/* decrease mem now to avoid the memleak warning */
-e6a1f7e0b0fe59 Gustavo A. R. Silva     2021-08-04  2719  		atomic_sub(struct_size(psl, sl_addr, psl->sl_max),
-e6a1f7e0b0fe59 Gustavo A. R. Silva     2021-08-04  2720  			   &sk->sk_omem_alloc);
-dba5bdd57bea58 Eric Dumazet            2022-04-29  2721  	} else {
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2722  		(void) ip_mc_del_src(in_dev, &msf->imsf_multiaddr, pmc->sfmode,
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2723  			0, NULL, 0);
-dba5bdd57bea58 Eric Dumazet            2022-04-29  2724  	}
-cf778b00e96df6 Eric Dumazet            2012-01-12  2725  	rcu_assign_pointer(pmc->sflist, newpsl);
-dba5bdd57bea58 Eric Dumazet            2022-04-29  2726  	if (psl)
-dba5bdd57bea58 Eric Dumazet            2022-04-29  2727  		kfree_rcu(psl, rcu);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2728  	pmc->sfmode = msf->imsf_fmode;
-917f2f105ea4bb David L Stevens         2005-07-08  2729  	err = 0;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2730  done:
-9951f036fe8a4e David L Stevens         2005-07-08  2731  	if (leavegroup)
-9951f036fe8a4e David L Stevens         2005-07-08  2732  		err = ip_mc_leave_group(sk, &imr);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2733  	return err;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2734  }
-e12e04f5ab54cd Breno Leitao            2026-09-14  2735  
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3292  
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3293  static struct notifier_block igmp_notifier = {
+4aa5dee4d99978 Jiri Pirko      2013-07-20 @3294  	.notifier_call = igmp_netdev_event,
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3295  };
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3296  
+72c1d3bdd5bf10 WANG Cong       2014-01-10  3297  int __init igmp_mc_init(void)
+7091e728c57015 Alexey Dobriyan 2008-12-25  3298  {
+72c1d3bdd5bf10 WANG Cong       2014-01-10  3299  #if defined(CONFIG_PROC_FS)
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3300  	int err;
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3301  
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3302  	err = register_pernet_subsys(&igmp_net_ops);
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3303  	if (err)
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3304  		return err;
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3305  	err = register_netdevice_notifier(&igmp_notifier);
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3306  	if (err)
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3307  		goto reg_notif_fail;
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3308  	return 0;
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3309  
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3310  reg_notif_fail:
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3311  	unregister_pernet_subsys(&igmp_net_ops);
+4aa5dee4d99978 Jiri Pirko      2013-07-20  3312  	return err;
+72c1d3bdd5bf10 WANG Cong       2014-01-10  3313  #else
+72c1d3bdd5bf10 WANG Cong       2014-01-10  3314  	return register_netdevice_notifier(&igmp_notifier);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  3315  #endif
+72c1d3bdd5bf10 WANG Cong       2014-01-10 @3316  }
 
 --
 0-DAY CI Kernel Test Service
