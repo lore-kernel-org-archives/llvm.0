@@ -1,103 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793601964;
-	b=ZqTeurg4YVZaHchKfpLnMuZJY++4v2d5X1ZHDgz2KBSM2y7qE5IA3iu42tmLt6AZMhV5
-	 m59czVhuZiyJ95U0l1cqe2/AEIx5tU8n3HrldyIWsRrIhvSzNOp/07iLtsojaqQZ32LoO
-	 MQcJIooPXVcRPlYTcJ92+xJsogvWGZ5hdE56Ud6uN1Em9T5YdGu7Ww7e/q7hGIvReadhi
-	 UxFFnXbV6oR+xlTCWbe04HAG0gmWSdvS+TTJFAYC09kOUQOotVw8dHhO7pIgopQKj5bKA
-	 PDNfFeunlsFFpXDqxOijXfcGOVmdXEj36jKO5LFSDhf7nkYtQCbG5+kj/tNxBd2LjhQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793601964;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=jQyVKf+xKGyYu2gTWeUfHIN4PWX5+OTKCqL+rPAXxBM=;
-	b=ctG+8nLeDLyqa6f4NfuUfD/FO2Y7Js61duUmlLRlyuwX8KvOyw/uW6msB7MOmOZNlXcr
-	 6idwEH6hUuCnr/J4U3eLRba0GttEpqGRy7PVaVM8sISXH0D+H+zZA6KK7XnXBQpYUgGfO
-	 mwQ3Ut70mZFAcRyovzlBw/F2uQ0OArP0fIvi5KDZeFpPvWqroWjXYhlqq/E5ilalbOYVj
-	 IonfTNAXv73tky5WUw//zkF8rMx04yuMnE041cZh9aR2lqEp2xVbsS7HOnCkCgM7x63oY
-	 roArOPTeXWhVS1djF88VdOclaAh0Q9z9IBXWQ7BoSaQXC3zYGaxT0CQWYxLUoKJzlvg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IzHl1KxN;
-	arc=none smtp.remote-ip=192.198.163.18
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.208.48
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793619891;
+	b=au3ePKPWpodtuUV4p7tdF/JBTr30/R54ma/U2oK1pRIZ41QKyce4i4ZZtCn7lzNtAkCL
+	 Sicg5efvWRbMGhIQdo5ADlrZwvZgrvYQku1EWgvbXakunM4D8QNiyh6v6uatnO38EHcgW
+	 UR+B/KPP6tZNIIRM4PSsnuML4Joxdt6wjddPhuwsGmu0EF5FFiFAYajTI30vivmVgzDR3
+	 IIUgW1Svct8abqAQzof7UTILDuYs+xr872+c8bfPcvUOIrw/cSjgTBhFD/8TgU60H+2pj
+	 uCrauuaL9szGRs4EabnbSOON0qq9/Vla/xYOD7U0m/IrJVLdSQoJB0YDNSahCkfOGtg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793619891;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=4lCaHcGUCMu2QTUG/7Oh7CJPypRTIX/8Km/fNlYAggk=;
+	b=AAEEbVv4z0IhgS/E+XRL6yxEqXKAC9/pK6YPy3xEfAZlDYrL77tl+jvb3C3hoD3MenWx
+	 FDcE7vrPrrLhrAFpDm8+DCe1PwY+ySP1xtfYCLi+sivKKT6NC83j35q39eDXI/9kmvLAl
+	 F7ViSR2nzWzTIghJwWnQRXWhpHaSRCXku06GCtpXwcdkpyANqrGGAUCYcwQhhlrLMs8ao
+	 4ieFzvtkcSswgjhlktMobf84g5uweKYDgoyHhvXTb2FRARhR0FkSMJsQgSv9LSDg7sF50
+	 7CTMr/r7JFIM0V3MGOIQH09s9Qo8gKl/JEJxczjU0eHvMuEetiHYsAkJw4jTPTPRjKA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nyatdTR9;
+	arc=fail smtp.remote-ip=209.85.208.48
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E9C606A335;
-	Mon,  2 Nov 2026 06:46:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74E9C606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EF6606A326
+	for <llvm@lists.linux.dev>; Mon,  2 Nov 2026 11:44:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7EF6606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IzHl1KxN
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793601963; x=1825137963;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ve5h5MZP7tPfgfDQBI9dQre1wJZbL1TJsT4gIu4qPF0=;
-  b=IzHl1KxNTdi55wEGJIZS8PM3DQ2XGohl9k8S1bykR4r2IAYM1LhQyU4Y
-   dc6vG7GpnVbyeXMbSGm7FMjw+coHNUH5nwOaweFVV6OaYhMGJ3yL0om2q
-   Ul0AYpmMe0cWkXiaoyDxliqMnwQhJWZE7cldJhIpzY+bFWzVIIxy03E/Z
-   8ICCsdaeZ3yP5FHeKC2zfxVhoHawlybWyxiAqyug5HA1zYZHbRMevAJrC
-   9bev+9sMQNAL4JRELo5J7o/nshi8/qk6BJ4snh9U/VUtkncuxWM2OD8zL
-   hhIFG+IqHi9ZlPVhxRLuKOjZI/vM2Fz8WNHek6AZe67Khqz/8Yo/YiUtP
-   g==;
-X-CSE-ConnectionGUID: 9+rvzEaSQtWwvPW7arbEOg==
-X-CSE-MsgGUID: PYfcppDORGSAs2PrYJchDQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11953"; a="2314504"
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="2314504"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2026 22:46:02 -0800
-X-CSE-ConnectionGUID: 8l3CM987Tjm3P9BwrFglaw==
-X-CSE-MsgGUID: ThJWP+isTvCeYX2carf4Zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="5867273"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 01 Nov 2026 22:45:55 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xNlnj-00000000gWe-2XRs;
-	Mon, 02 Nov 2026 06:45:51 +0000
-Date: Mon, 2 Nov 2026 14:45:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Brian Starkey <Brian.Starkey@arm.com>,
-	John Stultz <jstultz@google.com>,
-	"T.J. Mercier" <tjmercier@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ondrej =?utf-8?B?TW9zbsOhxI1law==?= <omosnacek@gmail.com>,
-	Jens Wiklander <jenswi@kernel.org>,
-	Sumit Garg <sumit.garg@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 2/8] dma-heap: charge dma-buf memory via explicit memcg
-Message-ID: <202611021401.ZN5EGF6G-lkp@intel.com>
-References: <20261027-v2_20230123_tjmercier_google_com-v3-2-78d2c4cb8647@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nyatdTR9
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6b1aa4d71e7so2981342a12.0
+        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 03:44:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793619889; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NCFYKoAcATn9BQ1HEKy/QgAYYo946oaDmnjTO51ED1298BsDFUHKJAfFrwzG2WcT1x
+         zZp/PpGsTjbzQAamvoFS20RdEI0/RWF3E7o3/Ndmi38uMrPADKjU/cxPZ4z4CXaxHwkA
+         HFy6iUL9aavgafJWLVsuE6ruIFFoRBsdAxcBU5X01NthtdOCPPqYfYh5s4+6vQ2pXZlA
+         loaSxANcS8NgoyJamlbRjcKtVlDx8QJCCOu27K991T1/zBT3I+K8zF7hWzLsdw5sKdTE
+         gDQlEW2mAd3dECCWcUVceO5PskqS+8kKX22vVhiGLzEAWEXRsdCWpOnQzijEAJvBU1GI
+         wYBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4lCaHcGUCMu2QTUG/7Oh7CJPypRTIX/8Km/fNlYAggk=;
+        fh=7K646eoraxxNjw9FR9x0pB1jWiR5XjE5bJEWrtjKuvI=;
+        b=J6opF46KwhCU4/91X16ys+DTTA+DOrUWe8SUR4aR9RcDYUB8mjy75+BuQqhcpRJWt0
+         bfv2qeeIq40IhK9vwx9dv8FtWRRYm8R+Xr68Q18CHCXa5tnCjnFXr963o7wbh9xAW7Aw
+         kM8iUaa/J5Ha9wuGFNWgyRyKpYn1PRO4sZHcrXLtmDwvUgegpYPd7BLcSBNq6LsrNWKF
+         THHW+LfXYFjRS+oJMR1mu28x4xQegdXrgXS7dF1m8TJNCYXcBuc+oR2vPT+ZxT4rkt6G
+         9Ss8lvHkICTt7vzvLqBh6iYCXSfnS4dT9tFdh0GGg5bSm1QZCDSZVPwToHFZtX/0IvZX
+         1nyw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793619889; x=1794224689; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4lCaHcGUCMu2QTUG/7Oh7CJPypRTIX/8Km/fNlYAggk=;
+        b=nyatdTR9wmZZFNgIff/5tICrm14mBH/KOirCi6IJEGRqyVLe7ekGj6SFMbXbXewts+
+         Enuvif5xNcdVGMJL5eejyQNwNBWE0jgqm0YIXYjEnEu8T79OREi3qGjnsYgGx/rzJeha
+         oitablHvcIvr+5Pc0WuqxkFr7RhcRggmgMdTh6NlGYzrCevMTT8HhEFGayv3wBNoZahE
+         s/JfQDIiNhAJ7qr/NnJBUgxN7o04/2OG+/o/DfB8QWvu2kUSoRZ8eml8U0G0MlL9HDYr
+         cu75JF/Ye1Y5Zp8tLiHxEBuVPmQthsKJrFNQUk34rUwhyJundhmHU55Wd9qhyyy4CAQC
+         ObUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793619889; x=1794224689;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4lCaHcGUCMu2QTUG/7Oh7CJPypRTIX/8Km/fNlYAggk=;
+        b=WABpQF02LjkdmUeSYOuR9rNozLGwwEK2TcR7aQ45VnzmlmHPfroyetwAJmE7l7BvSZ
+         O6Upf0AHp/eDk6sHiYqrjSRyJ3nvNPDYOuX5hH6vZJm/LP1IA2jWl8ru7Ei6zbui+yPs
+         27y1DG6UoBgvjLMJOWHrc68HdLiuTejbuOezLIYmsphSBpK5gIhGoInv4IMdlfBKj3HE
+         2OUhIY4wvba0tfzo75ssIhBpkCROK/IiVflWkcDj27MVLGrrvWminTVg43j7QTVhEZFp
+         VtFgRnmcgWeAonrKwZhc81oYkmVO8V6x3DlVGKKIN0Xf/FqiSogsv9XaPw5pj3HdCo74
+         d17g==
+X-Forwarded-Encrypted: i=1; AKwUvBwbFHlPvNmpOP4TWzKZBbO3P41Jj2lXA3qN6CTBtqv8SKmyjbfZ5dnBfzU2mfMZC+7FESNO@lists.linux.dev
+X-Gm-Message-State: APuU4Z/OOK+ay0bqr5bJNOdkOCq5o0NLEIClIrxGZIPw+lxwHPmK3u+d
+	CU+8dQ9ddGQe0C7WHbN6/69Lq2Cqxj5BKvvSNhPs01P+kFNasshOXcoxjE3gQw1sUbZuwNLsSAQ
+	DgHOTJQm4Mkq5hpyRDHiCtl4SGy6V6Pk9YTmh
+X-Gm-Gg: AYBFou0iUbwU5wWwmUnQG/hhq8egJPlY43hBVN2CYCWio5nsAg6LFLtRrXH4AYNu1Oh
+	Q7ZMhhF2Ur2MaSOSQtTpk68bLJfahEfhpW4pd4esAsOKbjRfVuKPDjJSm1JqcOah6LgfGOUUm+I
+	gkJ3sLJEBUAuejC02fRKwn/l/M7L6+gDyjje3eMkzzRx0Alql/e4qFRwEp/68HN2wEFwf/N4BiT
+	GOaTKjzrPwGqcsXTgnEiW6JLsT2BtgvMESg61L9OJ5SZNMMzJCiEzHk/Un4ekGEmgQFlk8a2Kra
+	B9PPCwDGNhCNt8cKm6gYNI/r4TeLoNtpkCFtckyBWhDTsLgmEqlkZljWQu91YTEDlO0uCBecuN7
+	0VKAKD2Rc2e9AxGCt2f7A9aLvUccv+ug6xX5YgUaI26I1TbaMjtTAOdKFPx2w4hCdcR0B5Sk=
+X-Received: by 2002:aa7:c1cc:0:b0:6b3:f840:59b5 with SMTP id
+ 4fb4d7f45d1cf-6b4d4c71d29mr4850911a12.27.1793619889068; Mon, 02 Nov 2026
+ 03:44:49 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -107,35 +104,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261027-v2_20230123_tjmercier_google_com-v3-2-78d2c4cb8647@redhat.com>
+References: <20260927131838.6774-1-demyansh@gmail.com> <20260927184414.6c0c8867@pumpkin>
+ <CAOLeWCt+yFs29yWg6DrRH42HD9ConLgTEbW=wMKtEoTW5ROHvw@mail.gmail.com>
+In-Reply-To: <CAOLeWCt+yFs29yWg6DrRH42HD9ConLgTEbW=wMKtEoTW5ROHvw@mail.gmail.com>
+From: saeed bishara <saeed.bishara.os@gmail.com>
+Date: Mon, 2 Nov 2026 13:44:37 +0200
+X-Gm-Features: AclHuK9z8jjLcwsnJfsDSIZ0apXZZySDKKpQ7s2Xoes3fbuqIuVEpNRNi2DB1ZE
+Message-ID: <CAHfVqdX4AmqXs_oD5OCjU8R5ts=98=RmgCmJ3D5gLyk=Xtrfkw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] arm64: csum: Add fused copy and Internet checksum
+To: Demian Shulhan <demyansh@gmail.com>
+Cc: David Laight <david.laight.linux@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Eric Biggers <ebiggers@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Marco Elver <elver@google.com>, Ard Biesheuvel <ardb@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	David Gow <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Albert,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Albert-Esteve/memcg-Add-MEMCG_DMABUF-accounting-infrastructure/20261027-160244
-base:   24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
-patch link:    https://lore.kernel.org/r/20261027-v2_20230123_tjmercier_google_com-v3-2-78d2c4cb8647%40redhat.com
-patch subject: [PATCH v3 2/8] dma-heap: charge dma-buf memory via explicit memcg
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261102/202611021401.ZN5EGF6G-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261102/202611021401.ZN5EGF6G-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611021401.ZN5EGF6G-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: drivers/dma-buf/heaps/system_heap.ko: symbol 'mem_cgroup_reserve_dmabuf' undefined!
->> ERROR: modpost: drivers/dma-buf/heaps/system_heap.ko: symbol 'mem_cgroup_commit_dmabuf' undefined!
->> ERROR: modpost: drivers/dma-buf/heaps/system_heap.ko: symbol 'mem_cgroup_cancel_dmabuf' undefined!
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Sun, Nov 1, 2026 at 3:34=E2=80=AFPM Demian Shulhan <demyansh@gmail.com> =
+wrote:
+>
+> I would prefer to keep only the scalar version of the fused copy+csum.
+> It reads the data once instead of twice, and on real Armv9 hardware it
+> cuts end-to-end cycles/byte for bulk TCP over WireGuard by 3-12%
+> depending on the core (+6-8% throughput). It uses only general-purpose
+> registers, so there is no FPSIMD state to save and it is safe in any
+> context.
+>
+> If you are OK with the scalar path, I can send v2 with NEON dropped,
+> the scalar path only, and the KUnit fix for the x86 zero-length case
+> Jakub reported.
+>
+The scalar path seems like generic C code and not restricted to arm64,
+curious how that performs against existing (e.g. x86) assembly
+optimized implementation.
+saeed
