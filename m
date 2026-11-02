@@ -1,82 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793643064;
-	b=BKL2uNXxzN8NcBZtjLjn1qU7DnVga48ZiB5mBuhWzWrthKcRZlkGvdcOmxOifYN1BIZo
-	 cQVQfM9Pdt+yjWWlmEQlnQPVKNz2sItsfzgAIGg0UMUHnam5C1Uhyi0z9bJrcVO38PFLS
-	 fHMg1lOIhqqFzotTYlS2uXcCtgRnOD0cpEqWCiySCWHZJUPiEtIDFpoUth7iGQBs0g5Jg
-	 PFq9yIU31bNbP+/nGKY/IJjSiba0QoONc0Ae35RM1rKCQ8xw8kyKU7C6AgPkhfLuPh1NH
-	 UWBUOIrKNgOS9/ahvK5LoyIArLkXoQRsLZX6cvz3UqPx0Ii9P0msA7Ye2A3gSyodWXQ==
+	t=1793645408;
+	b=WuOWrKeN8h1VWKWeTww8CAbrBgQ0b2za6aqYL3O9jPVwJgMSNXJsCKrY1POjWVjle10e
+	 6tDw+q/+efxOdfmziq/f289pxUwGhCi6hYR4yRMkeuRXyvM+b5a0l81QKzEK6OzfagGxS
+	 ExoSTbKn0GcMLB1isS5iuP2YBQd2WveH2cTAtGyr9Siw3BsGwNIkshqCXOxVk79tRVPjF
+	 xqToGgY+ZfKbbwxqO4tJiValC05A47e7ZOw17Rd7F28n/3TP1pcR8NjtUdtH//prBWt0q
+	 RWI8EsX78INDWTYS5L7JGLBf3CQgNAI0Bi5N8dlC3UqtRTOSQNnnGlemqQeWdVE1Q2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793643064;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=bjvJoJc/GTpSMbKiG3k1l8fW3FUFv6sMHWG+G/+EbEY=;
-	b=KSwwNOnftsT55BzTWYnA0EIVJkK12dh2RqESrColi0QGy/MMa6jWTbsK97PxaDA/He3/
-	 GydusmM5ncAOfiZv5yuZix2wKw3cLVKar9Iner2J9OTgrlwNe/h/dmKTlmIvAFLTR+b4O
-	 DLvl4GQLttbHwTCeY4H+AxhKqBsomCJ06i3EnxnZwOAov2c+YuQzEjDUrNVByztteOr9V
-	 iVAyXtMyEy3zBNL8hSBNfF94tbsFT+1jVTzCAsgU3frXl7BfJpM85ozOarl+Veab1B4fP
-	 56lJW/m3jX73/Oi9jFQnikPnDdGsbNaYKz5EPSmCcBYtd95faZq7MeE7LhfwpLsgz9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793645408;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Debian-User;
+	bh=J3zIJ3gk1eY7N/ZBU/IvNwURLViQlts0fQeLtN252cg=;
+	b=MHDLFsdu75pcdBTsGWqID4ejcmhuFAFjBufMX9AFRO2Cw2NdYs/3KMY5TyTaLxBy+mrT
+	 2BhVXzeeTBI4DcRBvX9Vx+hzzLV2OJ3nT1/YFnC/MPsLkAs49nzRBWCJKr0OQT2bPMIdG
+	 aAbk+MKVQdaZganQ3LP7XZBpzFB+lFWtYiGRzLLKa+8rXWp+xIyg5a3ntkGT/M912zz9g
+	 bIGs63fqbmvtMBgWiUN7ZNdDHO8ahS1RceQ8l91yYnan48TjVAuvDa/989kn7ApxYvJrB
+	 zVF9Q2pDEf2CvjOio45M2lCnXE1MUlfYX/zsK6hXBVCFfGi101UqrF4y5SyFuUpRRtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kBfzWQNH;
-	arc=none smtp.remote-ip=198.175.65.17
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=OaiydFFW;
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F600606A326;
-	Mon,  2 Nov 2026 18:11:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F600606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDECE606A327;
+	Mon,  2 Nov 2026 18:50:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDECE606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kBfzWQNH
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793643064; x=1825179064;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ARYRBjuRpiAfnJqS9ZxGEd/Hf5DQbR9n3T1V6+4Bh2I=;
-  b=kBfzWQNHFHNp/x+QXK58joP8xlzwETbGvgzYMn/AlFmYP86GGZeepOFa
-   d/LWvwTo+okdjwkouI36pCzKr7YmoLTLgjpSlKi7W1IoICPbhdMkJJaxE
-   t4gEU0W7nVMgl54NftFSCFXpCedalSIUcmsu2EGZc+2TiY9hLGiL8p3F9
-   qtPy9ywsdQulxCK0n6Nh572LoIM7DFlfLuyUtHGSTeF/7qL33gI6YQ0u8
-   iQD3BwFqra1hpA432mcSvl9FS0Nw6jA5rtbESudPLFlnfIn0E6TKjaycT
-   gqVDqqKbAH2hQWywEetL2GYlIMt4//oIT6w5JxGmhvFyjpLR7AYpX1Y3G
-   w==;
-X-CSE-ConnectionGUID: kbeieVZzT86dXHYKyZ8gRA==
-X-CSE-MsgGUID: VGDTrRftSCysNM+8IZTZZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2364939"
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="2364939"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 10:11:04 -0800
-X-CSE-ConnectionGUID: NwbxsqZBTwWoiRPuuqyvpg==
-X-CSE-MsgGUID: pqzIkRSeSW6iLT9RKtxPaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="6184129"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 02 Nov 2026 10:11:01 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xNwUk-00000000hcC-0SV1;
-	Mon, 02 Nov 2026 18:10:58 +0000
-Date: Tue, 3 Nov 2026 02:10:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Binbin Deng <18983559317@163.com>, dsahern@kernel.org,
-	idosch@nvidia.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Binbin Deng <18983559317@163.com>
-Subject: Re: [PATCH net v1] igmp: use copy-on-write RCU updates in
- ip_mc_source()
-Message-ID: <202611030211.aklzSdgm-lkp@intel.com>
-References: <20261102095312.47767-1-18983559317@163.com>
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=OaiydFFW
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=J3zIJ3gk1eY7N/ZBU/IvNwURLViQlts0fQeLtN252cg=; b=OaiydFFWMoqJ/gYJedDx9l+hYP
+	sqff92kj//BahEG9qzrJtWdxcpNGGapueKNV5VelIBEpOIx93G8txJtplLXpI94QsQhEr2cQbhX94
+	U8VOOWioUllagEiBFIJ9bOUDEO92RUk9eScpZClGd9rqafT8VsJBVgsY99Zdr7n7xvAsioRSZWtsT
+	wzDYUpBYYeKMISmP0nWI3kE2e6DMfcVNEje7RtLKotWpGmwaPSgy+nlONlCWdosXHVdpQE53vB3s5
+	/vjVvW7hnHmRooMHwmKFMqYCBvT3FGRoNClSeIV42rFktcl48dlBk2wGyUcJaHP5y2y/wtrDDmjVW
+	piytbiQw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xNx6J-006MGt-0S;
+	Mon, 02 Nov 2026 18:49:47 +0000
+Date: Mon, 2 Nov 2026 10:49:41 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>, peterz@infradead.org
+Cc: Peter Zijlstra <peterz@infradead.org>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, kernel-team@meta.com
+Subject: Re: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when
+ Spectre v2 and BHI are off
+Message-ID: <aujZL2d08hMp7FK7@gmail.com>
+References: <20261029-syscall-table-dispatch-v1-1-bca9dbb886de@debian.org>
+ <20261029104938.GC1813469@noisy.programming.kicks-ass.net>
+ <auM6mSXz-BVIjYBc@gmail.com>
+ <CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -88,100 +78,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261102095312.47767-1-18983559317@163.com>
+In-Reply-To: <CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
+X-Debian-User: leitao
 
-Hi Binbin,
+Hello Linus,
 
-kernel test robot noticed the following build errors:
+On Fri, Oct 30, 2026 at 08:56:12AM -1000, Linus Torvalds wrote:
+> On Thu, 29 Oct 2026 at 02:30, Breno Leitao <leitao@debian.org> wrote:
+>
+> We could have a single static jump that picks between this one and the
+> "conditional branch tree" version, as in your patch at the beginning
+> of the thread.
 
-[auto build test ERROR on net/main]
+I am looking at this on top of Peter's "x86: Harden syscall dispatch"
+series [1], and before spending more time on it, I would like to
+clarify how you see this suggestion fitting with Peter's series.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Deng/igmp-use-copy-on-write-RCU-updates-in-ip_mc_source/20261102-175312
-base:   net/main
-patch link:    https://lore.kernel.org/r/20261102095312.47767-1-18983559317%40163.com
-patch subject: [PATCH net v1] igmp: use copy-on-write RCU updates in ip_mc_source()
-config: sparc64-randconfig-1001-20261102 (https://download.01.org/0day-ci/archive/20261103/202611030211.aklzSdgm-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611030211.aklzSdgm-lkp@intel.com/reproduce)
+Peter's patch 1 makes -fno-jump-tables unconditional on x86_64 and
+drops array_index_nospec() from the dispatch. Patch 4 then marks every
+syscall __noendbr, since dispatch is only direct calls.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611030211.aklzSdgm-lkp@intel.com/
+The computed jump you suggested is somehow a jump table, just without
+the load: the syscall number picks the target of an indirect JMP. So I
+suspect we don't need array_index_nospec() back on that path, given 
+the user explictly set mitigations=off (?).
 
-All errors (new ones prefixed by >>):
+Is that what you had in mind:
 
-   net/ipv4/igmp.c:2646:1: error: function definition is not allowed here
-    2646 | {
-         | ^
-   net/ipv4/igmp.c:2737:1: error: function definition is not allowed here
-    2737 | {
-         | ^
-   net/ipv4/igmp.c:2802:1: error: function definition is not allowed here
-    2802 | {
-         | ^
-   net/ipv4/igmp.c:2851:1: error: function definition is not allowed here
-    2851 | {
-         | ^
-   net/ipv4/igmp.c:2898:1: error: function definition is not allowed here
-    2898 | {
-         | ^
-   net/ipv4/igmp.c:2924:1: error: function definition is not allowed here
-    2924 | {
-         | ^
-   net/ipv4/igmp.c:3277:1: error: function definition is not allowed here
-    3277 | {
-         | ^
->> net/ipv4/igmp.c:3294:19: error: use of undeclared identifier 'igmp_netdev_event'; did you mean 'igmp_ifc_event'?
-    3294 |         .notifier_call = igmp_netdev_event,
-         |                          ^~~~~~~~~~~~~~~~~
-         |                          igmp_ifc_event
-   net/ipv4/igmp.c:884:13: note: 'igmp_ifc_event' declared here
-     884 | static void igmp_ifc_event(struct in_device *in_dev)
-         |             ^
->> net/ipv4/igmp.c:3294:19: error: incompatible function pointer types initializing 'notifier_fn_t' (aka 'int (*)(struct notifier_block *, unsigned long, void *)') with an expression of type 'void (struct in_device *)' [-Wincompatible-function-pointer-types]
-    3294 |         .notifier_call = igmp_netdev_event,
-         |                          ^~~~~~~~~~~~~~~~~
-   net/ipv4/igmp.c:3298:1: error: function definition is not allowed here
-    3298 | {
-         | ^
->> net/ipv4/igmp.c:3316:2: error: expected '}'
-    3316 | }
-         |  ^
-   net/ipv4/igmp.c:2485:1: note: to match this '{'
-    2485 | {
-         | ^
-   11 errors generated.
+  a) the switch tree by default
+  b) table as a fast path only for kernels booted with mitigations
+     disabled
 
+Thanks,
+--breno
 
-vim +3294 net/ipv4/igmp.c
-
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3292  
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3293  static struct notifier_block igmp_notifier = {
-4aa5dee4d99978 Jiri Pirko      2013-07-20 @3294  	.notifier_call = igmp_netdev_event,
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3295  };
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3296  
-72c1d3bdd5bf10 WANG Cong       2014-01-10  3297  int __init igmp_mc_init(void)
-7091e728c57015 Alexey Dobriyan 2008-12-25  3298  {
-72c1d3bdd5bf10 WANG Cong       2014-01-10  3299  #if defined(CONFIG_PROC_FS)
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3300  	int err;
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3301  
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3302  	err = register_pernet_subsys(&igmp_net_ops);
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3303  	if (err)
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3304  		return err;
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3305  	err = register_netdevice_notifier(&igmp_notifier);
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3306  	if (err)
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3307  		goto reg_notif_fail;
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3308  	return 0;
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3309  
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3310  reg_notif_fail:
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3311  	unregister_pernet_subsys(&igmp_net_ops);
-4aa5dee4d99978 Jiri Pirko      2013-07-20  3312  	return err;
-72c1d3bdd5bf10 WANG Cong       2014-01-10  3313  #else
-72c1d3bdd5bf10 WANG Cong       2014-01-10  3314  	return register_netdevice_notifier(&igmp_notifier);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  3315  #endif
-72c1d3bdd5bf10 WANG Cong       2014-01-10 @3316  }
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1] https://lore.kernel.org/all/20261102112549.714541309@infradead.org/
