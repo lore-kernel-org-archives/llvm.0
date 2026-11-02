@@ -1,101 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793632459;
-	b=Limmv3/2VgtTuTIaB5m9cpdqFfLkxNjW/TLuMaryjSgtt5bSYzIpIOJTVJlpJ1MkTfDa
-	 gUWatJzvGstM1G0nDt/5sidRMOZfevBMpav4QWkrwmzEoJVRoMc8Q9vFKy8jz2k27PD62
-	 T8Hsiaek9wQvOXWfeqmDpjfjgecKtpPNDriWA0yaD20pLEe4sPi4SH71DHSlm0x7mbrqG
-	 WmU7dkiChuRbWpghvMCCIr0XbBa08NJPNQR0hZ1GUsiCKmYN2a1vU1wg23IQWdvcK5wD7
-	 8N0HTwpAnLUmjf3tKqkM7oQxeuY7y6uBjdHsMPDamvkIJEqK68lx9sUsppnrnZ0xAzA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793632459;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=8yUDlmlI3+iGrY/dSFtrVmA03ksQdMmCOwxVGGqFig8=;
-	b=YCmdKpxUFl/t7w6ewPYSbyI3dLhZAPuxa9OHIgd/rmVW6GmIWQrwrSzPgwkLvtyuV39B
-	 zTpC/KlrLHqIHirA3h4qMSZJ766AkRVyl/Sn2IWegbBwVQpB+OUH8osbtYeoRAkgfnA+q
-	 ETLkxmi0LulAvO88L96H3Am40pBtIl6N5v5kHPo+q1XYEX1MFkXczao+DRTjhwbPjYELU
-	 6gVwBgsf28mdIaii7fc6C4F1qI0NImml19Gp1yPcIE59rtWV/QqznIZ0yGUsVVD2KhJ02
-	 ee949RLhX2A2rCZojoP9Br5kHDXv3MgddKGgedx881mYWSj38tA0ZitUly+NS4x+mAw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oecKHz71;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.53
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793633605;
+	b=s5A5VZTKye+QjxcsjkuX9lI4kW3aQkllEdsWyMIDW6R3SlIyxUXaBvyAb0W2HNiIewJc
+	 +EI66tiLkZpCXmzC5eRt+p7NvKCYrS5axYki6FoThaxvDoBMtLtksAqNLBnedoEmYohKX
+	 brAbJU1s7WxrnweXOUHigeStXeajernrJg/iNueh0qvzaGmHAHZTd94T/ZCgccmEd495t
+	 Fijt5DT0/FsTTOYU8AyM+jRrImcB4ckMgM52nRv3gHwl5h+Y4878rdpQqbwXqxiMlJeao
+	 MGDgTFziZVSCk7wXOQVOK094mmlVGyXQw4vQwGNQVYzEyOxIAOhiAPMYTSwApCOHRrA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793633605;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=lJHoj9lM3k/CRUYNMR+EIgjIhAXFSpH7YrbBAELRZig=;
+	b=qVFHGG+c73NZabKJODB01eD9kS5U/jkp94lc8z5wfWhUSQWR8eX9tX56QNNpssq4wOaM
+	 b4OhXlYTcXEaEV1v7OMgDqKUwlary5dWSJKosOsP9MUIw3kkNi5+mdYYO1XeH3qvRL45e
+	 rC0SkzxNb6rzvVcQYZP3b+etL90G2ESqxOdg7wpul7CBVBsyWOWgV923VUwINLUc3LhcR
+	 YKEYs7dBQVcpQdYYFjXO22DVNUa2UKWbHsRyDaJfynZJ5pgRtQZGp57XmFnsM6uicQLOR
+	 At4PYim2VZkSm61BZHb5sdnZYe2kQLDHGCgJ46tmbRj+YsFY2Y6X4KFa/u2sAQj79hQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ZDQKZEOO;
+	arc=none smtp.remote-ip=192.198.163.14
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A95607992B
-	for <llvm@lists.linux.dev>; Mon,  2 Nov 2026 15:14:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8A95607992B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866B4608A372;
+	Mon,  2 Nov 2026 15:33:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 866B4608A372
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oecKHz71
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-14394530ec6so3873432c88.1
-        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 07:14:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793632458; cv=none;
-        d=google.com; s=arc-20260327;
-        b=CZl0Kf7/DzENvi6cbWK2kJf84F15QT1OXEhW7qcJ/NwZ1ebx3ASYhWd/5NEbKEKiEz
-         OUxQv+AKsw9pxQ8N03ngatIKdksqvaCRZDG9srQGrhoMi2AvBTbFgbC1ly4tqqA64I3W
-         9wllZ/4mDaeroTZc4vleuOeTK/Vj+lNd+h+pFdZ5AApwmTQEVvlhdV8qRsHyP9y+5k5s
-         Fvx+XDT4NAbCVsJXjTg302vfmkRyffKBL1T6cwLd3Sf7xRk1bLHLdih13g7o7myg3k94
-         UqssxIF3WsP/jcq5l4J+DmNfQHnd7m8yDdFi4d1260hX0DWBfLcSJRJZLUGvMOE7DXkF
-         Df/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8yUDlmlI3+iGrY/dSFtrVmA03ksQdMmCOwxVGGqFig8=;
-        fh=065/qlDhIgHS75Nn6fZ80GWyzuvDw54XH3XHBPO7OEA=;
-        b=HJkn9FHp2wujB9Z97PpGAtA2L9qx51XrxLWHRWzmHHqIFNffZAp7u7f2Z4/wEKgEMy
-         5NZJeXKN7YZAg5LhqgeTRPVrbdFXLdHnrBDkXX5KfJiEYnxN00OK593pUXwlFZyiA0jb
-         eNMtOyFXwxpEz6Kbj2qx73boXg5gfCTYdAK6ITFQ4mTiLYNr/Y258S6aAzsQSYVfEwwZ
-         s4/gtthqC4MhcS7+7kGhTopHtuvX2AV0Kr4moaZrF7n26VvzvuR4NVx4BMs5vXDOQk7j
-         FcIZTt44fkXy92w5eqOCvra8hNxqXWAXE+4XF8+WQJtbYZgJsLvBc0CH59w0B7tmYjZz
-         TL/Q==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793632458; x=1794237258; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8yUDlmlI3+iGrY/dSFtrVmA03ksQdMmCOwxVGGqFig8=;
-        b=oecKHz71tNH1OWFWOAWROeHTkORDUVP8FFHBXVi54b0VK531OdrGSh+KdXhFTxZNs8
-         /dB/dbCXxPrZReWhbZACMK6B8upV9Uqjrlal4BRtNWl4gmiN0tDO9PgxqOzynPhZQIUw
-         E+tbF4qT9qYzoXShaCmhjRsin2tClZ+CuYEnYnhzyMn+ceiQpcqwnl6So1FNKBvtk/Q6
-         RVuogPGEQr4Sq+LKCfyvLyFp91bw1pbCHwm+ww60HKLky8aw54pjHCijCWBVV+LCbnMf
-         qWxQrGAuj+G/Zj/Q+aHe7fhVxhFe/RcZTtRQjQB6EmnkT4KmdD7lcVSRdHNqvuz6o32z
-         /nBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793632458; x=1794237258;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8yUDlmlI3+iGrY/dSFtrVmA03ksQdMmCOwxVGGqFig8=;
-        b=iIYh2XW2I/mxTgOaGeCuXXfYH9I3pa32WgWu0Ar9QyBuRErfSLYK8dgjMslLkcNRtp
-         z/sj5ypXGBZHoZ62iJujtaUVFLPWDUgDzzO1N4Guw2NbGeOLJFV25Kn7GxfVeDt9JqT2
-         5BohuHe1Rc8uojkTXmsMpW1xe2GrvSi8n+nlSKx3Ws8ziyGeSv8VKtx0IPiABdX74XU7
-         RZvg+flGyJb6PWYSM8b5ZH7lrbRyC9IKIFrUpDLtnlWYZl7DoXfVgk38uJkFYIV3CCBZ
-         3dy2ZpGNkzmvR5HwpNi8E/Q9nG62w0X6S9PvWtWnWc5xhQgT6cdPirisKNHfaoSGi05m
-         d41w==
-X-Forwarded-Encrypted: i=1; AKwUvBydrcQp78upyMeSJdOxdV6sfbNBpEcLgqaK8zhD//DOasThvvqYsA8I4U6hv9ALJGsw+aiZ@lists.linux.dev
-X-Gm-Message-State: AFq9FYL2mhnhDe2ZhO3bszFY5xZVmuABCZvGXIKgYxaU3AMMSPBCEIgL
-	xaMVNWAxgd0UMYlJHYCERXyr0orUrWQelQuklxd8exDisSNsKE03l2eZY2Rbg/D7WzBiR8oRBkq
-	cW/BBL+CmmaF4nJvLZ+//348AvN7HjTU=
-X-Gm-Gg: AYBFou1EbLOdTmORagQL5HSmqleTLQhSTEklg2c1QMil58Ajwkt3h4dozfZhNExm7Uk
-	tT29Uvp2c4gsEGeXMhyghaurFGRMablBRimoakkjzHVnouZGsR+JlSXNdyRgOMm8rNhae58Clej
-	p2IZaemSNk8si5wxIcTQMgi0xj0Z+//Fbjo0gGlnGDfWP3zSby/KZHSCFRUoERuwSUhdgG7Z8Q/
-	3XHbALpezx6ZPz7yi2ZF1xnQIkgmz1dvsnrzJpZNlEGUdR++64f/VVn3da0cMnqEhrIRKHC0O42
-	OiIWPqfQIi2FWfl0EuZY2/kcjc7ePiVsS7optzfbGg2nRCAbBWpb62hy/auGmz9O3b8H8rG3Tcr
-	3HtrtL4SAorZR4qXQw8UsBgxcgzuEy2Teu8m96GoNZsfd+01JCGhvwDcZpkFmNGbj3CawGTaJlS
-	wtY3+fTFelI67Z
-X-Received: by 2002:a05:7022:88:b0:144:fb31:a597 with SMTP id
- a92af1059eb24-1ac6069cebdmr14582009c88.47.1793632457694; Mon, 02 Nov 2026
- 07:14:17 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ZDQKZEOO
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793633604; x=1825169604;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/VrAM8d+OBUPZ1t1z41VtwaZT+cQHgFWWxsqB2NaHcw=;
+  b=ZDQKZEOOA7ujE8GmsW+Xrgqy6Cg6kApqoXjcs2FcT1ViQ5Zdge+/3Wf/
+   Z5RjHrGcutWw/QzNhSdWwDL2z73qupDql53BfhUpH/RtnBGYwXMW5wCrk
+   zfu5TFNlGflbKMfMcNx0NbTmzwkyqrw+9qubsWL2TKGbh9b4T3oZdn6or
+   +4QQ2FuCJLTblDbT77FzVfbIPjsABoWOTHNZ/+KbwyKBTwodJvfhA5v0N
+   nunsfKPEAe2RWLSJ1sM8ukkfz/dk2Hm0G/ED+ZoiUO911A2DjQ0CzHU8h
+   psbNaCF0EXMN66WT73ZupWx1YqbXiBicsoQushBJ66BgBvYL9OBetE6ZT
+   Q==;
+X-CSE-ConnectionGUID: oL3YTsLWQom/YtBV+Al9Bw==
+X-CSE-MsgGUID: cgRMFLQGSPGeAYeWrUCgHw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2359995"
+X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
+   d="scan'208";a="2359995"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 07:33:23 -0800
+X-CSE-ConnectionGUID: 3QG/0HqgRrSehrutwxc9VA==
+X-CSE-MsgGUID: W8dxiBUPSMGsfV3iKeM07w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
+   d="scan'208";a="7920912"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa012.fm.intel.com with ESMTP; 02 Nov 2026 07:33:20 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xNu29-00000000hDI-1eW4;
+	Mon, 02 Nov 2026 15:33:17 +0000
+Date: Mon, 2 Nov 2026 23:32:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tung Nguyen <tung.quang.nguyen@est.tech>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, kuba@kernel.org, edumazet@kernel.org,
+	pabeni@redhat.com, jmaloy@redhat.com, horms@kernel.org,
+	tipc-discussion@lists.sourceforge.net,
+	Tung Nguyen <tung.quang.nguyen@est.tech>,
+	syzbot+64197f7577a09686ffdb@syzkaller.appspotmail.com
+Subject: Re: [PATCH net v2 6/6] tipc: fix NULL pointer dereference in
+ named_distribute()
+Message-ID: <202611022356.UddfVq4D-lkp@intel.com>
+References: <20261102034207.10639-7-tung.quang.nguyen@est.tech>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -105,52 +87,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20260927131838.6774-1-demyansh@gmail.com> <20260927184414.6c0c8867@pumpkin>
- <CAOLeWCt+yFs29yWg6DrRH42HD9ConLgTEbW=wMKtEoTW5ROHvw@mail.gmail.com> <CAHfVqdX4AmqXs_oD5OCjU8R5ts=98=RmgCmJ3D5gLyk=Xtrfkw@mail.gmail.com>
-In-Reply-To: <CAHfVqdX4AmqXs_oD5OCjU8R5ts=98=RmgCmJ3D5gLyk=Xtrfkw@mail.gmail.com>
-From: Demian Shulhan <demyansh@gmail.com>
-Date: Mon, 2 Nov 2026 16:14:06 +0100
-X-Gm-Features: AclHuK9s_qVGMHFu-dL36Q48-lWDPnNvO_Yb6GHSTKkiWePXFsWruUJSaC8neac
-Message-ID: <CAOLeWCu4NiedyXmoLwwnTvJitRwgg6PQq9LApO=k36ktN3-XWA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] arm64: csum: Add fused copy and Internet checksum
-To: saeed bishara <saeed.bishara.os@gmail.com>
-Cc: David Laight <david.laight.linux@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Eric Biggers <ebiggers@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Marco Elver <elver@google.com>, Ard Biesheuvel <ardb@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	David Gow <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, 
-	netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102034207.10639-7-tung.quang.nguyen@est.tech>
 
-> The scalar path seems like generic C code and not restricted to arm64,
-> curious how that performs against existing (e.g. x86) assembly
-> optimized implementation.
-Depends. I think __builtin_addcll() is needed to get roughly the same
-performance as the asm version. In my tests GCC on arm64 turns it
-into adds + cset instead of adcs like on x86.
-But I will look at it, thanks!
+Hi Tung,
 
-=D0=BF=D0=BD, 2 =D0=BB=D0=B8=D1=81=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 12:44=
- saeed bishara <saeed.bishara.os@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On Sun, Nov 1, 2026 at 3:34=E2=80=AFPM Demian Shulhan <demyansh@gmail.com=
-> wrote:
-> >
-> > I would prefer to keep only the scalar version of the fused copy+csum.
-> > It reads the data once instead of twice, and on real Armv9 hardware it
-> > cuts end-to-end cycles/byte for bulk TCP over WireGuard by 3-12%
-> > depending on the core (+6-8% throughput). It uses only general-purpose
-> > registers, so there is no FPSIMD state to save and it is safe in any
-> > context.
-> >
-> > If you are OK with the scalar path, I can send v2 with NEON dropped,
-> > the scalar path only, and the KUnit fix for the x86 zero-length case
-> > Jakub reported.
-> >
-> The scalar path seems like generic C code and not restricted to arm64,
-> curious how that performs against existing (e.g. x86) assembly
-> optimized implementation.
-> saeed
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tung-Nguyen/tipc-fix-memory-leak-in-tipc_node_xmit/20261102-104027
+base:   net/main
+patch link:    https://lore.kernel.org/r/20261102034207.10639-7-tung.quang.nguyen%40est.tech
+patch subject: [PATCH net v2 6/6] tipc: fix NULL pointer dereference in named_distribute()
+config: sparc64-randconfig-1001-20261102 (https://download.01.org/0day-ci/archive/20261102/202611022356.UddfVq4D-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261102/202611022356.UddfVq4D-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611022356.UddfVq4D-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/tipc/net.c:147:6: warning: variable 'p' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     147 |         if (!tn->nt_self_node_exist)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   net/tipc/net.c:150:6: note: uninitialized use occurs here
+     150 |         if (p || err == -EEXIST)
+         |             ^
+   net/tipc/net.c:147:2: note: remove the 'if' if its condition is always true
+     147 |         if (!tn->nt_self_node_exist)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     148 |                 p = tipc_nametbl_insert(net, &ua, &sk, addr, &skb, &err);
+   net/tipc/net.c:132:23: note: initialize the variable 'p' to silence this warning
+     132 |         struct publication *p;
+         |                              ^
+         |                               = NULL
+   1 warning generated.
+
+
+vim +147 net/tipc/net.c
+
+   125	
+   126	static void tipc_net_finalize(struct net *net, u32 addr)
+   127	{
+   128		struct name_table *nt = tipc_name_table(net);
+   129		struct tipc_socket_addr sk = {0, addr};
+   130		struct tipc_net *tn = tipc_net(net);
+   131		struct sk_buff *skb = NULL;
+   132		struct publication *p;
+   133		struct tipc_uaddr ua;
+   134		u32 rc_dests;
+   135		int err = 0;
+   136	
+   137		tipc_uaddr(&ua, TIPC_SERVICE_RANGE, TIPC_CLUSTER_SCOPE,
+   138			   TIPC_NODE_STATE, addr, addr);
+   139	
+   140		if (cmpxchg(&tn->node_addr, 0, addr))
+   141			return;
+   142		tipc_set_node_addr(net, addr);
+   143		tipc_named_reinit(net);
+   144		tipc_sk_reinit(net);
+   145		tipc_mon_reinit_self(net);
+   146		spin_lock_bh(&tn->nametbl_lock);
+ > 147		if (!tn->nt_self_node_exist)
+   148			p = tipc_nametbl_insert(net, &ua, &sk, addr, &skb, &err);
+   149	
+   150		if (p || err == -EEXIST)
+   151			tn->nt_self_node_exist = true;
+   152		rc_dests = nt->rc_dests;
+   153		spin_unlock_bh(&tn->nametbl_lock);
+   154	
+   155		if (skb)
+   156			tipc_node_broadcast(net, skb, rc_dests);
+   157	}
+   158	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
