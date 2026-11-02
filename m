@@ -1,77 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793650058;
-	b=kTPNpU2bTWND8Tois+e1Ghynymk9HIX+HmADbxF7zWA35yhqsxEUiB8H/WlMY7fFgpJy
-	 HZMr85kqKdUzjp/4bG/vj3Mr1j3mQbake9gHZPx5/N37WCeGPnpIKYrJxDJcL96yBcF3T
-	 z41RFF4vREFtFVMQSAUdxNinJFbfTkRaejmW09y2zn7Im5f0bWWujO9F+ikLsIxjyGu9e
-	 WrEx0+LfRm0QcEI8C7zNoqBdnfu9kWYNLQsoYbDpsmnGpm9OYYijIg4zRe/J2wk0gWDfT
-	 STRoNK7UdwI2OjlrEUZWvTj6z6JD7QGG5Crcc38Xw6bu9+cQKH97HEz8I00pHzJkHdQ==
+	t=1793650321;
+	b=w0BQcn4Sa0Z1QCeBAn6zbZlK0SMCGkwLJlHP/TQCfs3zKkd8KLuVOTnblJM4dWLbEIVP
+	 uBaAX2myDeN/O2YI3AQT0tCVw5h2wEUF+4f16W4b/MgkiH12nCJuF3Ov0A750tbd863hP
+	 214sDdH9t3opLhX+BTAXaW7u519lO4i+UjOOP2POWkHW46Ph5EX04bo/nlb57aRW+pcmG
+	 fu9Ms46CtQfJthFgaamMI+X/BZ+qCFy9UW6y2Ih8wnqBVforRToQmDuxna4xuPCKkeETg
+	 ZSdE3PbhRet7R/HvbCBtJqGHfrkjS536Qv6Ntc8XPOGKAkgsNkzoDnqkpNiBQRTi+Rw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793650058;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=Bx7tsTHOjeYtqkeO8upPwBontZvzYlAzqswaLQaTdjw=;
-	b=KFTVD0jH4kd4nNwrzoixiKihaZvn5VcLddS5iw6VhiPxmwRmSo/nP4nCAENyoGwzXqXK
-	 gFpDY6TnDHhsGjZkF3ujMFTTth0M1a6A2Zydq1UyIHVuksGiQr/SfQV/fi05VfRiANeJi
-	 dga8c0cCZt1Tq0ymECz67zqrJ5VbNTX/8DrZQ+hxxt+TExL5ugKYmviwglznPWxVfE3zS
-	 fBBsqzMP5B0o5KYiGViDh0ZPRro9XLCl+Geg00cMFjegH9ILIDx/GIs3QuCSxX6pCLFfz
-	 HdPYJVJYuvgx78HkvY3Sp1JJBpXzgVs1oMsbOzEZqYQApsAHO4xdD9a84RlLkoML4hA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793650321;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Received:X-Forwarded-Encrypted:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=0RcgJVqgbNsSUdU++7Y0dOlItgAQ3e32UH6pOxcRyus=;
+	b=cM72E1b+9JmY6ZK2W9eEIKZ1hs55cNRFVpISTqWRhes3NdstKLc512ocLvocCTg7X6hN
+	 M/50kg/q4fezTwXZ6WtgTSIJ1aSMjbK3KtfpSDjq/LjwJJcU7642ioMinM9w2nTXs/gDX
+	 XpGQl+sm6Z5V3/jFQRFpILzGKSYsjayoVHlqWH3atT7ZvPdAxBREgBsl1CRVYlCb6tgZU
+	 PRuTUUX1xcEP5t3YANa9H2ZoFtIgrp4y4OJQT1FHwmIaMlchJdzwEmbSPCi3+6DCu8I23
+	 3W7rGHs0vXa29zhzaBS6Qqf9SDROfBoAhTAUAFQ5wauq1DfOtKjwYlIKmViOHwOiZqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GrVbzjjp;
-	arc=none smtp.remote-ip=192.198.163.14
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=none header.from=linux-foundation.org;
+	spf=pass smtp.mailfrom=linuxfoundation.org;
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=PH3rlZGA;
+	arc=none smtp.remote-ip=209.85.218.48
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F023606A326;
-	Mon,  2 Nov 2026 20:07:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F023606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD75606A324
+	for <llvm@lists.linux.dev>; Mon,  2 Nov 2026 20:11:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FD75606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GrVbzjjp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793650058; x=1825186058;
-  h=date:from:to:cc:subject:message-id;
-  bh=YNTuNst4Y3YfpmT+sbu5F9FRBiE5J6SL76U5MPL2I94=;
-  b=GrVbzjjpXfGOo9IrDAGnMZ6MYVkvElJW6DcEC6Rks8CgxADRnq50RiFJ
-   8CdNMmyiVyXW0xYYs4ldy46dPthtjGRjDZOZ3Ru0w+wrt3yqhfCCT6NOe
-   xSbgVLufjbCIb6yxzwpazlpnrm+HztPTHcU5dS7VP7oUypbZwr87DKf1x
-   Es3vThiRpIV7IpJFgoUIp4wBF4tsFqppDMyC7F1EEdS4rJAiy+YN1jvCJ
-   JzKKV41A+kGJDS7TEvXJlUY7Dyvz+qTMDjzdZEvNlB4uGdVaVBmY//jP5
-   tHsqGPwg/66OJk9uEQb9DH+Rgxybkmun+S1mVAKpDXX7hhT39FQdtWR+d
-   Q==;
-X-CSE-ConnectionGUID: AdNp5tpCTIShUJnaDdLxPw==
-X-CSE-MsgGUID: emYZaDbTSca3CPwORMQxvQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2388176"
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="2388176"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 12:07:37 -0800
-X-CSE-ConnectionGUID: LDBZrR+IQQO9+FF1emu1Qg==
-X-CSE-MsgGUID: 3He5U1Y+S7u2e6uJ/V16nQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="6370949"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Nov 2026 12:07:36 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xNyJZ-00000000hls-0o5p;
-	Mon, 02 Nov 2026 20:07:33 +0000
-Date: Tue, 03 Nov 2026 04:07:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [chao:feature/large_folio_v7+ 16/22] fs/f2fs/f2fs.h:2303:3:
- error: call to undeclared function 'set_sbi_flag'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202611030337.dami3tsw-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=PH3rlZGA
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c4cac7a7d3cso416566866b.3
+        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 12:11:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1793650318; x=1794255118; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0RcgJVqgbNsSUdU++7Y0dOlItgAQ3e32UH6pOxcRyus=;
+        b=PH3rlZGA0MItqEukq9AFA4NbFCf9JD+EvFZhqcsM4wDfQO4keo/u2q5SoyanBADWW6
+         3mR+3nDZXSonbR9KVkwDXah7/HmHGf5ez+C/o6N7J6bc7+WsL2UeXe9q72x/JzLjCv0+
+         fPNkQ91FzP9bgsHK18UoesOLvfgCZKb4L+H8g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793650318; x=1794255118;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=0RcgJVqgbNsSUdU++7Y0dOlItgAQ3e32UH6pOxcRyus=;
+        b=0BTduuilBQ3ptoL6mOZ4DD8NpTayzz567Hkaf208TR/1Xchva94SpeN2zsSqMfjVrc
+         nmdrWT2EnZRQGEVheGweRS1eGt+S4cfu0a9bLwsCCQv4HyVnPRUDdJL2wvSlb5vG8/Ct
+         nqlyveTeU/JQFFzK2V3XbCyF/48wZnvbu3b2KOTtltbk0p8TtXJkWsN0exprfSJ4N7ay
+         zIgr7foZcOxcS1VtTDhypAh/bAlCQe9OIT10lKwA8hKHV6tWZlU77nCsMKmzBH0mWoul
+         xfHMB4HJCAmCaWAxuZ9e7IhYf57Nf4veX5+SihZSa0HV3NxaQYPrrWptYTxb5zsG4sOY
+         imSA==
+X-Forwarded-Encrypted: i=1; AKwUvBw6YSd1Au+Fwpt3MJwWhtaeicZsd7eTIYFotrnUjn601oBa9bOjZFfRotzSiOIHYIc0Wz20@lists.linux.dev
+X-Gm-Message-State: APuU4Z83P9/RrxlxM5GRzhcFY6y+od8c/JqfqGfrAfSKWz1htaY1Cq8U
+	S0iTcl+0OB2oNT2+5R+9y7f7DsH+0rsqEC1kc8Xb9+AWMAPIbib6TL2IuMbtUFkRe+kz0Ru+qlS
+	9T2fB55uuHQ==
+X-Gm-Gg: AYBFou0JgMVxQPshEL3G2fVyNDEAOjWbbQ9vtaB1HhXp5l3uzt+fYyIMFI4RD5tWMkV
+	jKXlq3SNOuJT6EEmHU86YiZTi+N6QkLKOVvzZ7Tpxv+yEEjnHtvPc/rXhxbUuS1OgHb9ZqAXyud
+	Aai9ONy0ZmRCfRrjr1YGu/4iZvgR91uBTwUX4/u6sm/jqWh3WYVl3hJ4E/1AVivH/6t3jwtp54a
+	E97YwYqWWZdL56ejMimFeZPoNJTIdKXgVtM0SUQX+RJu3N693hwGnxkKcKDiDpYvGpKd0yVCLr5
+	INae1+kBTYfG2J5Lvl1qp7/6XZrdT1m8JT49H0SDn54nAGV6xnq8WXkdop8TkeyvZKN89Nn0xhz
+	hOLsKooyUW7G3gg5cphsCarTbmUJYOpFAi9Ynw9oiIZVx2O8nHPqJfJz1iwtOGPIy2SYQt+rRAo
+	enuW7pQJOui5ZdMhQxoCFIadf5xCuIDxqO6KHP47Y3AM2A1wwXxrZgPk0jNUmIqOaNFX4uaCvzk
+	fWMTE2lpIUA7ucETsqP6nxGQ2pi9IzlnfXbYcE5kEG339mbj8TjFY6ZlFbOzYlInZvfyEZoZoAd
+	iwxu3JXz8Ve6IA5Ec18DHB+Xlgd+qtOdAKR1Zx3NR3yZV/O+8FywHJ2nyrlVoGU02sRfYyG/2Mz
+	7YQ==
+X-Received: by 2002:a17:906:f84:b0:c4c:ddd1:d006 with SMTP id a640c23a62f3a-c4cddd1d259mr214397066b.38.1793650317971;
+        Mon, 02 Nov 2026 12:11:57 -0800 (PST)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4cec15c806sm19589566b.74.2026.11.02.12.11.56
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 12:11:57 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c2e8c710847so480458066b.0
+        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 12:11:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBxNCW++tmGRahkvOw5PAM0+P3tKen7v7dceLQ5KoQm2yZc3BVxkWyQLANksFx4HiFAH/PXS@lists.linux.dev
+X-Received: by 2002:a17:907:6092:b0:c46:7fa4:9224 with SMTP id
+ a640c23a62f3a-c4ca7a42014mr847532666b.8.1793650316483; Mon, 02 Nov 2026
+ 12:11:56 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,53 +93,32 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+References: <CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
+ <86f2f603-c1a7-4715-ad43-ac9c90f6a837@citrix.com>
+In-Reply-To: <86f2f603-c1a7-4715-ad43-ac9c90f6a837@citrix.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 2 Nov 2026 12:11:38 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wibsAfLX4H0pcxDrh3JZoKgFfdkZfLfQbKYUqMyLtKKvw@mail.gmail.com>
+X-Gm-Features: AclHuK-O_PpDvelbVnnFVPJ5B2qswxBRCgv27xvFqM-TqSK8PWwNWy-2a0ehb7U
+Message-ID: <CAHk-=wibsAfLX4H0pcxDrh3JZoKgFfdkZfLfQbKYUqMyLtKKvw@mail.gmail.com>
+Subject: Re: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when Spectre
+ v2 and BHI are off
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com, 
+	jpoimboe@kernel.org, justinstitt@google.com, kernel-team@meta.com, 
+	leitao@debian.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	luto@kernel.org, mingo@redhat.com, morbo@google.com, nathan@kernel.org, 
+	ndesaulniers@google.com, pawan.kumar.gupta@linux.intel.com, 
+	peterz@infradead.org, tglx@kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/large_folio_v7+
-head:   5b72086892ee05798082621df69a27afeff2b233
-commit: 70ebe88955b4db7e829c8a27938bcce16c5a2686 [16/22] diff: fix patch 1
-config: arm64-randconfig-1003-20261102 (https://download.01.org/0day-ci/archive/20261103/202611030337.dami3tsw-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611030337.dami3tsw-lkp@intel.com/reproduce)
+On Mon, 2 Nov 2026 at 12:06, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
+>
+> This doesn't buy you anything, except a larger code footprint and more
+> branch predictor pressure.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611030337.dami3tsw-lkp@intel.com/
+Very possible. At some point in history, computed branches were
+cheaper than table lookups, but that may simply not be true any more.
 
-All errors (new ones prefixed by >>):
-
-   In file included from fs/f2fs/file.c:29:
->> fs/f2fs/f2fs.h:2303:3: error: call to undeclared function 'set_sbi_flag'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2303 |                 f2fs_bug_on(F2FS_F_SB(folio), 1);
-         |                 ^
-   fs/f2fs/f2fs.h:38:4: note: expanded from macro 'f2fs_bug_on'
-      38 |                         set_sbi_flag(sbi, SBI_NEED_FSCK);               \
-         |                         ^
-   1 error generated.
-
-
-vim +/set_sbi_flag +2303 fs/f2fs/f2fs.h
-
-  2290	
-  2291	static inline bool f2fs_folio_has_ffs(const struct folio *folio)
-  2292	{
-  2293		unsigned long private = (unsigned long)folio->private;
-  2294	
-  2295		if (!folio_test_large(folio) || !private)
-  2296			return false;
-  2297	
-  2298		/*
-  2299		 * A large folio should always carry f2fs_folio_state rather than
-  2300		 * non-pointer private flags at its folio->private.
-  2301		 */
-  2302		if (unlikely(test_bit(PAGE_PRIVATE_NOT_POINTER, &private))) {
-> 2303			f2fs_bug_on(F2FS_F_SB(folio), 1);
-  2304			return false;
-  2305		}
-  2306		return true;
-  2307	}
-  2308	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+               Linus
