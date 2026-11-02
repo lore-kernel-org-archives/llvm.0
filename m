@@ -1,90 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793650321;
-	b=w0BQcn4Sa0Z1QCeBAn6zbZlK0SMCGkwLJlHP/TQCfs3zKkd8KLuVOTnblJM4dWLbEIVP
-	 uBaAX2myDeN/O2YI3AQT0tCVw5h2wEUF+4f16W4b/MgkiH12nCJuF3Ov0A750tbd863hP
-	 214sDdH9t3opLhX+BTAXaW7u519lO4i+UjOOP2POWkHW46Ph5EX04bo/nlb57aRW+pcmG
-	 fu9Ms46CtQfJthFgaamMI+X/BZ+qCFy9UW6y2Ih8wnqBVforRToQmDuxna4xuPCKkeETg
-	 ZSdE3PbhRet7R/HvbCBtJqGHfrkjS536Qv6Ntc8XPOGKAkgsNkzoDnqkpNiBQRTi+Rw==
+	t=1793652799;
+	b=dvNfArrHmhvtrE345I0Q/J5H1TPxqORizv9TCpS5Iih1MaOKVDtr32TsnS400GO46ZMV
+	 D3YnUcekJ9Gv/GVy0vbACawVA5duxzHM7buweoY9yPXRl8rKSPbqk5UIr8/Y2p3yZhvl7
+	 K3U9E9wZoAB4MJiZFWsf1JkRtQcg3gsFWNXwodX6gtUeibdDlCODAOxUNoxIJuJIt8Gj1
+	 t69TZA028fYeP9ThGyc7qLHbM9ZlMMlxa36iVFP7x45vvEyqixh8cuy7nF3jKGCSBq+4G
+	 jBFFVzP6wb4YWwV5+2WvLmmbQF8HdyAejn6Sy1XVch3Qrf8j+QzHUjUzjwhFi5zWEmw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793650321;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:X-Forwarded-Encrypted:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=0RcgJVqgbNsSUdU++7Y0dOlItgAQ3e32UH6pOxcRyus=;
-	b=cM72E1b+9JmY6ZK2W9eEIKZ1hs55cNRFVpISTqWRhes3NdstKLc512ocLvocCTg7X6hN
-	 M/50kg/q4fezTwXZ6WtgTSIJ1aSMjbK3KtfpSDjq/LjwJJcU7642ioMinM9w2nTXs/gDX
-	 XpGQl+sm6Z5V3/jFQRFpILzGKSYsjayoVHlqWH3atT7ZvPdAxBREgBsl1CRVYlCb6tgZU
-	 PRuTUUX1xcEP5t3YANa9H2ZoFtIgrp4y4OJQT1FHwmIaMlchJdzwEmbSPCi3+6DCu8I23
-	 3W7rGHs0vXa29zhzaBS6Qqf9SDROfBoAhTAUAFQ5wauq1DfOtKjwYlIKmViOHwOiZqQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793652799;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:X-Mimecast-Spam-Score:
+	 X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=117yBiLwKENKL+3PiWG/U5OMCVmGd5cgD5S+cpkVimE=;
+	b=2+O8TNSQYbNF+r1yZJCwbO3djiLkG+FSfMPKky0z1yunHtsKrGr6z/F25JCMxJ8TDXTc
+	 Ej8AgfkDPYvRHcXD1G/W3zF2MyXZ4rnJ/jI3Vkp/E5etyYa6MBK5KGSEZRZFJ74O8zt2+
+	 JkpvxaG/8n8CiRuPxCvAMMGdyjbkTZGhWtPV4rni3WkdG2fR3tarptiSiYtUEypd2frhE
+	 ZmaW2HAvd3vd5hKY6manBzOCPyLxjB2lduQQNwplI97k69nN4KetFUSciiLzadSOWJU0p
+	 6/0soGYHcIC0vknWJ0tVnyQF53ch+96KiGUVjVxquasnMyTQXoQ//hmu7QfnIAxKfyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=linux-foundation.org;
-	spf=pass smtp.mailfrom=linuxfoundation.org;
-	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=PH3rlZGA;
-	arc=none smtp.remote-ip=209.85.218.48
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JrjqNRqP;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD75606A324
-	for <llvm@lists.linux.dev>; Mon,  2 Nov 2026 20:11:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FD75606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C56C606A33A
+	for <llvm@lists.linux.dev>; Mon,  2 Nov 2026 20:53:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C56C606A33A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=PH3rlZGA
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c4cac7a7d3cso416566866b.3
-        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 12:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1793650318; x=1794255118; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0RcgJVqgbNsSUdU++7Y0dOlItgAQ3e32UH6pOxcRyus=;
-        b=PH3rlZGA0MItqEukq9AFA4NbFCf9JD+EvFZhqcsM4wDfQO4keo/u2q5SoyanBADWW6
-         3mR+3nDZXSonbR9KVkwDXah7/HmHGf5ez+C/o6N7J6bc7+WsL2UeXe9q72x/JzLjCv0+
-         fPNkQ91FzP9bgsHK18UoesOLvfgCZKb4L+H8g=
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JrjqNRqP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793652792;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=117yBiLwKENKL+3PiWG/U5OMCVmGd5cgD5S+cpkVimE=;
+	b=JrjqNRqP10lz+xwTaT1N5hOMraQMewbNcL6ZPtYs/6qBeMDZq5lyggz1hz5TUE2wvCqKwM
+	IXQbQRbVn/7mLpXXty1C0A86MwLFP717upzSrzHF5Nt1PiF43MqFrw00/Vf94oFs2+EMGE
+	o+EsfhfOm9/h5ijPwHR98WSryq3gxtk=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-606-rbjR_SZNNO2ujaQnAh5eOA-1; Mon, 02 Nov 2026 15:53:09 -0500
+X-MC-Unique: rbjR_SZNNO2ujaQnAh5eOA-1
+X-Mimecast-MFC-AGG-ID: rbjR_SZNNO2ujaQnAh5eOA_1793652788
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-3ab3061668eso242251fa.1
+        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 12:53:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793650318; x=1794255118;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=0RcgJVqgbNsSUdU++7Y0dOlItgAQ3e32UH6pOxcRyus=;
-        b=0BTduuilBQ3ptoL6mOZ4DD8NpTayzz567Hkaf208TR/1Xchva94SpeN2zsSqMfjVrc
-         nmdrWT2EnZRQGEVheGweRS1eGt+S4cfu0a9bLwsCCQv4HyVnPRUDdJL2wvSlb5vG8/Ct
-         nqlyveTeU/JQFFzK2V3XbCyF/48wZnvbu3b2KOTtltbk0p8TtXJkWsN0exprfSJ4N7ay
-         zIgr7foZcOxcS1VtTDhypAh/bAlCQe9OIT10lKwA8hKHV6tWZlU77nCsMKmzBH0mWoul
-         xfHMB4HJCAmCaWAxuZ9e7IhYf57Nf4veX5+SihZSa0HV3NxaQYPrrWptYTxb5zsG4sOY
-         imSA==
-X-Forwarded-Encrypted: i=1; AKwUvBw6YSd1Au+Fwpt3MJwWhtaeicZsd7eTIYFotrnUjn601oBa9bOjZFfRotzSiOIHYIc0Wz20@lists.linux.dev
-X-Gm-Message-State: APuU4Z83P9/RrxlxM5GRzhcFY6y+od8c/JqfqGfrAfSKWz1htaY1Cq8U
-	S0iTcl+0OB2oNT2+5R+9y7f7DsH+0rsqEC1kc8Xb9+AWMAPIbib6TL2IuMbtUFkRe+kz0Ru+qlS
-	9T2fB55uuHQ==
-X-Gm-Gg: AYBFou0JgMVxQPshEL3G2fVyNDEAOjWbbQ9vtaB1HhXp5l3uzt+fYyIMFI4RD5tWMkV
-	jKXlq3SNOuJT6EEmHU86YiZTi+N6QkLKOVvzZ7Tpxv+yEEjnHtvPc/rXhxbUuS1OgHb9ZqAXyud
-	Aai9ONy0ZmRCfRrjr1YGu/4iZvgR91uBTwUX4/u6sm/jqWh3WYVl3hJ4E/1AVivH/6t3jwtp54a
-	E97YwYqWWZdL56ejMimFeZPoNJTIdKXgVtM0SUQX+RJu3N693hwGnxkKcKDiDpYvGpKd0yVCLr5
-	INae1+kBTYfG2J5Lvl1qp7/6XZrdT1m8JT49H0SDn54nAGV6xnq8WXkdop8TkeyvZKN89Nn0xhz
-	hOLsKooyUW7G3gg5cphsCarTbmUJYOpFAi9Ynw9oiIZVx2O8nHPqJfJz1iwtOGPIy2SYQt+rRAo
-	enuW7pQJOui5ZdMhQxoCFIadf5xCuIDxqO6KHP47Y3AM2A1wwXxrZgPk0jNUmIqOaNFX4uaCvzk
-	fWMTE2lpIUA7ucETsqP6nxGQ2pi9IzlnfXbYcE5kEG339mbj8TjFY6ZlFbOzYlInZvfyEZoZoAd
-	iwxu3JXz8Ve6IA5Ec18DHB+Xlgd+qtOdAKR1Zx3NR3yZV/O+8FywHJ2nyrlVoGU02sRfYyG/2Mz
-	7YQ==
-X-Received: by 2002:a17:906:f84:b0:c4c:ddd1:d006 with SMTP id a640c23a62f3a-c4cddd1d259mr214397066b.38.1793650317971;
-        Mon, 02 Nov 2026 12:11:57 -0800 (PST)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4cec15c806sm19589566b.74.2026.11.02.12.11.56
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 12:11:57 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c2e8c710847so480458066b.0
-        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 12:11:56 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBxNCW++tmGRahkvOw5PAM0+P3tKen7v7dceLQ5KoQm2yZc3BVxkWyQLANksFx4HiFAH/PXS@lists.linux.dev
-X-Received: by 2002:a17:907:6092:b0:c46:7fa4:9224 with SMTP id
- a640c23a62f3a-c4ca7a42014mr847532666b.8.1793650316483; Mon, 02 Nov 2026
- 12:11:56 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793652788; x=1794257588;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=117yBiLwKENKL+3PiWG/U5OMCVmGd5cgD5S+cpkVimE=;
+        b=pEip6xjx3Bryhdq5Dz+MLyPi+De+yW0TmV1iOVTIUkOiUkPaiUieT7vpUlS+JCefQz
+         qewKMr/9KPzh6mNa9wvt8JlE2AzA5iZ+eYTwJNK74/eb+j0Wi2fCqBT4qv83CrtPyQLy
+         LKashbiOxRkZXIwtDPfdfoNa7N/c2tf+oUtBhXgX9U+KXkCmBrBoLOocQEsgO9pSjNax
+         KTySRD6lxk6w/SbRQBwlbU+MYp1KO7+r5ek/kX7W7QwLtFhvnbDJLvVyssk3Wdo4XPm0
+         Q5FxHr0T6GKILvZ9jypAdujjQZipwAkFQsW5RxUddxcPJ3LrhfKPWwsuZqmZ6LLlVMCo
+         moUQ==
+X-Forwarded-Encrypted: i=1; AKwUvByTVSCGBqdeDyH6oU5ejeEqKF485TVkv9r8jjJpxKADxvmGEWyXE5JeA7O8scoXlsJt12r7@lists.linux.dev
+X-Gm-Message-State: APuU4Z/ptJYc762rOiwFhvSq6z2Los3eHr26Fb7RLQ1OHxsN53Mr2fNy
+	45lEeRwSxFsViicioYVDH5xfgh1LcYuICN7wbXSqEnI8M0+r2xMiIxbP8Rh09hDqRne/N3rTpjk
+	Gn+78IHOy2rNXgdWJvw5UjyCeZ/1Ptgpuzw4vqdGIAZB1pq81vEJ8qUQuajn6X87fZVc1jdsRk9
+	BnU537/LgmrhMUctePynFBSzWa3viqgg==
+X-Gm-Gg: AYBFou0wBQS5D2EuoMWgNu0yUyWEVNqBipg9Xv2eFa56XWfwPGCF2ME7/3yyLjqErq+
+	5/pXHSPd7sVocwyEs69u2IFwiapVP4z0AJ+ZswPFgs+IcEaM2oATkg6x0Vpk1FDvnyvcXP2DiIQ
+	Rdg+6JBB9IIAowiF7E71t3Z6mdtviGAb3V17hMVlTnM7zZsKwCs67Uoces
+X-Received: by 2002:a05:651c:a14e:b0:3ac:4b79:573b with SMTP id 38308e7fff4ca-3acb7aa83b1mr20499191fa.13.1793652788263;
+        Mon, 02 Nov 2026 12:53:08 -0800 (PST)
+X-Received: by 2002:a05:651c:a14e:b0:3ac:4b79:573b with SMTP id
+ 38308e7fff4ca-3acb7aa83b1mr20499011fa.13.1793652787872; Mon, 02 Nov 2026
+ 12:53:07 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -94,31 +90,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
- <86f2f603-c1a7-4715-ad43-ac9c90f6a837@citrix.com>
-In-Reply-To: <86f2f603-c1a7-4715-ad43-ac9c90f6a837@citrix.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 2 Nov 2026 12:11:38 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wibsAfLX4H0pcxDrh3JZoKgFfdkZfLfQbKYUqMyLtKKvw@mail.gmail.com>
-X-Gm-Features: AclHuK-O_PpDvelbVnnFVPJ5B2qswxBRCgv27xvFqM-TqSK8PWwNWy-2a0ehb7U
-Message-ID: <CAHk-=wibsAfLX4H0pcxDrh3JZoKgFfdkZfLfQbKYUqMyLtKKvw@mail.gmail.com>
-Subject: Re: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when Spectre
- v2 and BHI are off
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com, 
-	jpoimboe@kernel.org, justinstitt@google.com, kernel-team@meta.com, 
-	leitao@debian.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	luto@kernel.org, mingo@redhat.com, morbo@google.com, nathan@kernel.org, 
-	ndesaulniers@google.com, pawan.kumar.gupta@linux.intel.com, 
-	peterz@infradead.org, tglx@kernel.org, x86@kernel.org
+References: <20261027223847.652884-1-irogers@google.com> <20261027223847.652884-6-irogers@google.com>
+In-Reply-To: <20261027223847.652884-6-irogers@google.com>
+From: Alexander Aring <aahringo@redhat.com>
+Date: Mon, 2 Nov 2026 15:52:55 -0500
+X-Gm-Features: AclHuK8pGzNf4aGPekLa6NQcs521xOugw8djA3E8ZMCjZ7yn89XzG5j_wIaQNFk
+Message-ID: <CAK-6q+j-MS_5St04YFU11LG_Cjf1jOuS3q33qk_iK=7TE-iuBg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] dlm: Free dlm_ls in kobject release callback
+To: Ian Rogers <irogers@google.com>
+Cc: Kees Cook <kees@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Zhihao Cheng <chengzhihao1@huawei.com>, Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>, 
+	Sumanth Korikkar <sumanthk@linux.ibm.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-sh@vger.kernel.org, linux-s390@vger.kernel.org, gfs2@lists.linux.dev, 
+	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, David Teigland <teigland@redhat.com>, 
+	Greg Kroah-Hartman <gregkh@suse.de>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: r7ysYGOHpSWm1i8SvephQdPPJidQ8pSWTwINx_-oVg0_1793652788
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2 Nov 2026 at 12:06, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
+Hi,
+
+On Tue, Oct 27, 2026 at 6:39=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
 >
-> This doesn't buy you anything, except a larger code footprint and more
-> branch predictor pressure.
+> struct dlm_ls embeds a struct kobject (ls_kobj), but dlm_ktype lacked a
+> .release callback and dlm freed the lockspace structure directly via
+> kfree(ls). With CONFIG_DEBUG_KOBJECT_RELEASE=3Dy, freeing ls before the
+> delayed kobject release runs causes a use-after-free, and unloading the
+> module while the delayed release is pending results in an instruction
+> page fault.
+>
+> Add a completion ls_kobj_done and dlm_ls_release() to complete it when
+> the last kobject reference is dropped, waiting for it in free_lockspace()
+> before kfree(ls) and in the new_lockspace() error path before module_put(=
+).
+> Also delete the kobject via kobject_del() before stopping dlm_recoverd
+> to close the window where concurrent sysfs writes could wake the stopped
+> recovery task.
+>
+> Fixes: 3514faca19a6 ("kobject: remove struct kobj_type from struct kset")
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Very possible. At some point in history, computed branches were
-cheaper than table lookups, but that may simply not be true any more.
+A somewhat "big change" for just a debug functionality. Althrough I
+agree we shout call "kobject_del()" early to avoid additional sysfs
+changes during removal.
 
-               Linus
+Acked-by: Alexander Aring <aahringo@redhat.com>
+
+Thanks.
+
+- Alex
+
