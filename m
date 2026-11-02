@@ -1,80 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793635171;
-	b=wI/7IedVaL2zy7FAXyUNmcicCqNq1/06GY4rmgq5GBhVqp1lJfUT0UPUuZWFvA489vud
-	 mgz1zSkaekCdH78ZxbYNSEMWeyDO/7Y8X3N2Nonq/ICPIRfzzHmlLRf3dhXjSnIPSyG/S
-	 9N69kzndl1VFVQ2MsDCkjNbVUl7EqjSJG6vsWxA13aSvmFF86SndUxcD57LuS7RTC06Wl
-	 51+XocumFlYs769xk4BChctI4By7H7AZftQH3NXUmCyg8jg1OQXZws8JlrpaqjE5/lLBT
-	 KDgUo6hjLMHRKJz4BqiNoRQmPenoBHXv88RJI/Qy7pWijRf7L9R76zK0b1CsFMQC4/w==
+	t=1793636071;
+	b=vwkkF6Sg90sccXfH9QtrRhndm2etKYdEsfveI59b5MvtAO81WgEMIhCAn4bEV+2nocf7
+	 jkEp0aZ/aWB9/lxVgVSo1RtGRbRRHkhDrpNkbUTlPnQZiGdkrSISpeSExXMj23qiAW11O
+	 zEkzdKQcihf08n30SA0vEr6JwTNEWajFJpU40BqhgrYheRJKqcaFduu8FPl+IgLO6ijNr
+	 G1AvOENT14ippkfhOjrwtYF0Mj02AB62u+xBNBf8RvLVfpoVHJNKigllCF1nLVR8zntE+
+	 nzvOB7aWVBXgKQmpHZE/8/AOMmCxuRHW0iRBKjxUvDtousgomqjIEqT70BXTs4g1yTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793635171;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=D0i2eJhct4lVnv3jYqFiTKy7E3ET5Ck8DgYNv8uqdd0=;
-	b=dM/tAZELfp1KOmiJP65GA8C5UOaOFCGGj2jtqXmZ4NObPFn4zngWbzYMG4AnkDPpDKcw
-	 DhDkwJ5vFWAPXeju6xxJeDnIdRqIey4jqoyBxyICfpSSA77gm9ue8id7GcYnis8lJDT31
-	 gZG0Y/atZRsCusz42308RY2or3pVgvvh475kjWCutLmaWH30dMQ54IhK5WnTpEEpD0NEY
-	 z2dGR742SXcZ+n2ijsmiLDo8pPybMd1Eo3l5atNISqigfZMSwVee57FGpuxy5YgoMcLEF
-	 61WCvm6nLyjfv0lAeQZlnNlTxTBIFok4GL7PAy68197bZmRlZe8Wv1NwNB5lXb0BO0Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793636071;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=Xq5JtlRc0bd7QYpBrNP/yR1XPt2PV3UUDwsNUvNWTIw=;
+	b=JttEfYf14mS78RYB0RFhUSKqXhZbO9Sjb6Oc1Xt7M6NRyl7nS+bdU8LCUw6WvGpAKdhT
+	 QgHGuCezWFauLYGRQveS3DMPfCyocHgzVR49LZ1uASkbTdMlXBKko4dqPhZKV/b58YTYH
+	 QCaW9MJPtfSa5jImBVQ4TAtku3VxKs0ozif5u4gazKbUnOPh4NyfsCndvXIyS600Rca9L
+	 lLYETSXfNFf1dQGqPmnB91FOAMsddCOkiy2iEcrBj6QhESsWo93GL42fOPzNnnhInMFcL
+	 u7WINRum93Vfdji+/8Zn3Qb7ySME3XcmcyYogCDWDBLTBWM3Oqn1Oj/NsrNLg8Peo9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=KgIlSrf3;
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OGW93SQ8;
+	arc=none smtp.remote-ip=209.85.128.52
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F69606E011;
-	Mon,  2 Nov 2026 15:59:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31F69606E011
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377F060824C1
+	for <llvm@lists.linux.dev>; Mon,  2 Nov 2026 16:14:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 377F060824C1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=KgIlSrf3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793635171; x=1825171171;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jr72uMiZ8lu5SNyAIaR1hpnAnxC9sKbALEfjKIcjjAQ=;
-  b=KgIlSrf3iFv8kVJgVNlnTeRoGYrrQGtyw5aYmfyUuDV+u0OIPJU+ih3a
-   AiwOzOcTjFiejWc4DEAdJCchcZq4QXIpmIw+x3m6MFfgodl390oAsWSWa
-   q98k6oVKyZw6HON5UUvlufn6gEcMqTBX5sy6hb91I80/JLVIH1TLF1UdS
-   htrr7cZszZUOoPTGWAIObTUfa0C6jHBNxLbzrCqXqIr0Ja8+dMpfdozim
-   q/qxCM2nfWnA+PVnabNh4IC+X8RTGEyYarqVuluQOpL/cCPIVuK7bKZ8S
-   aJY4uSqE6WXIbv+hBv3vuu8CZxp0kiDkXcuE8G0F+xgcxlo1wuySnm7HN
-   Q==;
-X-CSE-ConnectionGUID: 3tdQ+mHCQhKPXsxTCTLuSw==
-X-CSE-MsgGUID: XqZQNl/JQXmczAYeCd4azA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2345742"
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="2345742"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 07:59:29 -0800
-X-CSE-ConnectionGUID: /5C42JiUTUujHcmaqrrNPg==
-X-CSE-MsgGUID: wPutJd7vRz6N5JHbqLgYMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
-   d="scan'208";a="7947234"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa011.fm.intel.com with ESMTP; 02 Nov 2026 07:59:28 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xNuRQ-00000000hFQ-3mJR;
-	Mon, 02 Nov 2026 15:59:24 +0000
-Date: Mon, 2 Nov 2026 23:59:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Edward Adam Davis <eadavis@sina.com>,
-	syzbot+a31cda410a4ccd419712@syzkaller.appspotmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, axboe@kernel.dk,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] loop: prohibit the use of sysfs as a backing file
-Message-ID: <202611022315.fQUGv982-lkp@intel.com>
-References: <20261102103354.427722-1-eadavis@sina.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OGW93SQ8
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so26928265e9.3
+        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 08:14:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793636069; x=1794240869; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Xq5JtlRc0bd7QYpBrNP/yR1XPt2PV3UUDwsNUvNWTIw=;
+        b=OGW93SQ8Fw3OAO1F4kb0DtYa82VSABg+61h37T7+gCLmOwwxGosWzDhmJma7Tlut40
+         FeL3w12we4OSvC7Lim2l+5D4gNguDKMoe/jP81jrtmWD2NHvnnZP2nl4uaxTh1xjvZ1o
+         ODMEfpJCs+gDdUJBmZR1UKB0nLZYkKDO07eL+Q7DpYec68ftTcC4A4ML59yzOqNC0qdL
+         cXgQLZjeGGWlWCGH8LvSFYVXLBn7j8ymuyzYZUxNtGjT66HDuaV2DDX9BxOTfmwIYaxa
+         gGwziJKEyxbbHdw9IQ3Cwcs9K4Ml/I6OQYQCOjDIxxje+O0wfmyT7zyRTDm3GqaRXhxT
+         lqaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793636069; x=1794240869;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Xq5JtlRc0bd7QYpBrNP/yR1XPt2PV3UUDwsNUvNWTIw=;
+        b=JxQBM8W01yK4jfkEnqG7mhtf637l0G0UY6KjCl2tELvk2cDM5ExrSNHANKExaG8i68
+         bShmfyZXX1HiFnLV8QQgBT22w3WiyIfy6Y39JY2V9jmk6oHmLO0SxBZErlYGBQE0kOA5
+         PbLqiGRJhoeHTe1gV0sMQnv01LilNt8OgxDVFDcqIEHY7c6QaLBUVlWrkWZbES1G6lek
+         XSu0MUPNIA6izYSQUmj5HE+ey/ysf6R88Kf76F6kY4KvXvPb8uaC8BBKoZiswqwFN/z7
+         YNocck+fk0JKrAeiiXONkIx7y46SIv77CvSnICG+zB9EY0AoFXJKgooS3CnCHFGypuDW
+         Vj8Q==
+X-Forwarded-Encrypted: i=1; AKwUvBz8AY5neQBY6KyzhlSR9GprWWcui8RjlG3ZAWqjpwuGqaf2/aCnc7DK4gxq3i1eWXl8gUkN@lists.linux.dev
+X-Gm-Message-State: APuU4Z9qr3zJ6M4UaPli+qOJvGP38VbEr5D5kOtwrPdyjHVcYmptyXr/
+	Ap37nVw8idYT+xDghMfuNNAnR76S78Jnl+TaCeAyg4lHDZFHt8+ZlCu/
+X-Gm-Gg: AYBFou1AwqfLp/0miosWCl3nJyn0Zdofo1GnYALnHmc58gNktu5K+K/RQSqK+9My4Hj
+	uK9zgHjiHhp7whR/4CKxY/iHxE1wYL5oQ7cRuq8m2R0iZX4qLwqYBbx0ERjinSSk5+yH9GSPbL8
+	SiPChO5wtqsWDbqMcDYVxolYejG02dVfjE1TjGekonz4dKSCA1DOsJ4w4uc+og39X2D4XBOtZhm
+	e+Jy8znYmfIYP7RV61XK3nEnVh1C0jc2tqt8UOgXf8LPID4Cx6loPNQyS7ytLYqA3CyAsvZBYVe
+	qhuuZGa2jfuBsd+2dDgMOQi9JfY9egh721Z14ZY9q82HGaMk7MFpyyNz767VdJnEVVI0xu45YHa
+	iJWc9YCM6yHml3/hNCAJV+53xSN2Bp5mLDjUGrl1uKe192IN3OWehsBvi2F9u5L6FnAanPYhah8
+	wmBRBE8JclIgkkg3IJ/nzJuoLqZg/TC5WWvMFbZbzN/sOJLbV+tLnCMxIHBMyY3sTJpvxmF5Oxj
+	CkNYry6iH0lZqj/3gYjJwzhxo7ueFADmqmvmqoO5oDhRxoLy+/D8qmkxLZBoUJLPk+CG2sV/dsc
+	S8svwaQLijdbG0m3IAPw2OcGi0a6UBvPkbGC1BxAtcTF4x4HbvoIjxItfUa6zx9E
+X-Received: by 2002:a05:600c:c118:b0:4af:79ee:f660 with SMTP id 5b1f17b1804b1-4af79eef775mr111736695e9.31.1793636069327;
+        Mon, 02 Nov 2026 08:14:29 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf0b36853sm267629925e9.0.2026.11.02.08.14.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 08:14:28 -0800 (PST)
+Date: Mon, 2 Nov 2026 16:14:26 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Demian Shulhan <demyansh@gmail.com>
+Cc: saeed bishara <saeed.bishara.os@gmail.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Eric Biggers <ebiggers@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Marco Elver <elver@google.com>, Ard Biesheuvel
+ <ardb@kernel.org>, Robin Murphy <robin.murphy@arm.com>, David Gow
+ <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, Nathan
+ Chancellor <nathan@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] arm64: csum: Add fused copy and Internet checksum
+Message-ID: <20261102161426.2403d308@pumpkin>
+In-Reply-To: <CAOLeWCu4NiedyXmoLwwnTvJitRwgg6PQq9LApO=k36ktN3-XWA@mail.gmail.com>
+References: <20260927131838.6774-1-demyansh@gmail.com>
+	<20260927184414.6c0c8867@pumpkin>
+	<CAOLeWCt+yFs29yWg6DrRH42HD9ConLgTEbW=wMKtEoTW5ROHvw@mail.gmail.com>
+	<CAHfVqdX4AmqXs_oD5OCjU8R5ts=98=RmgCmJ3D5gLyk=Xtrfkw@mail.gmail.com>
+	<CAOLeWCu4NiedyXmoLwwnTvJitRwgg6PQq9LApO=k36ktN3-XWA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,59 +109,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102103354.427722-1-eadavis@sina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Edward,
+On Mon, 2 Nov 2026 16:14:06 +0100
+Demian Shulhan <demyansh@gmail.com> wrote:
 
-kernel test robot noticed the following build errors:
+> > The scalar path seems like generic C code and not restricted to arm64,
+> > curious how that performs against existing (e.g. x86) assembly
+> > optimized implementation. =20
+> Depends. I think __builtin_addcll() is needed to get roughly the same
+> performance as the asm version. In my tests GCC on arm64 turns it
+> into adds + cset instead of adcs like on x86.
+> But I will look at it, thanks!
 
-[auto build test ERROR on axboe/for-next]
-[also build test ERROR on linus/master v7.3 next-20261030]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The C version I posted earlier has the loop:
+    buf +=3D count;
+    count =3D -count;
+    sum =3D carry =3D 0;
+    do {
+        val =3D *(u64 *)(buf + count);
+        sum +=3D val;
+        carry +=3D sum < val;
+    } while ((count +=3D 8));
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/loop-prohibit-the-use-of-sysfs-as-a-backing-file/20261102-183354
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
-patch link:    https://lore.kernel.org/r/20261102103354.427722-1-eadavis%40sina.com
-patch subject: [PATCH] loop: prohibit the use of sysfs as a backing file
-config: hexagon-defconfig (https://download.01.org/0day-ci/archive/20261102/202611022315.fQUGv982-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261102/202611022315.fQUGv982-lkp@intel.com/reproduce)
+for aarch64 you get:
+.L4:
+        ldr     x1, [x0, x4]
+        adds    x2, x2, x1
+        cinc    x3, x3, cs	# adc $0,%rxx on x86
+        adds    x4, x4, 8
+        bne     .L4
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611022315.fQUGv982-lkp@intel.com/
+I suspect that is close to optimal - especially for fast cpu with
+out of order execution.
 
-All errors (new ones prefixed by >>):
+https://godbolt.org/z/eso79K7Wq
 
->> drivers/block/loop.c:537:41: error: use of undeclared identifier 'SYSFS_MAGIC'
-     537 |         if (file_inode(file)->i_sb->s_magic == SYSFS_MAGIC)
-         |                                                ^~~~~~~~~~~
-   1 error generated.
+David
 
+>=20
+> =D0=BF=D0=BD, 2 =D0=BB=D0=B8=D1=81=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 12:=
+44 saeed bishara <saeed.bishara.os@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+> >
+> > On Sun, Nov 1, 2026 at 3:34=E2=80=AFPM Demian Shulhan <demyansh@gmail.c=
+om> wrote: =20
+> > >
+> > > I would prefer to keep only the scalar version of the fused copy+csum.
+> > > It reads the data once instead of twice, and on real Armv9 hardware it
+> > > cuts end-to-end cycles/byte for bulk TCP over WireGuard by 3-12%
+> > > depending on the core (+6-8% throughput). It uses only general-purpose
+> > > registers, so there is no FPSIMD state to save and it is safe in any
+> > > context.
+> > >
+> > > If you are OK with the scalar path, I can send v2 with NEON dropped,
+> > > the scalar path only, and the KUnit fix for the x86 zero-length case
+> > > Jakub reported.
+> > > =20
+> > The scalar path seems like generic C code and not restricted to arm64,
+> > curious how that performs against existing (e.g. x86) assembly
+> > optimized implementation.
+> > saeed =20
 
-vim +/SYSFS_MAGIC +537 drivers/block/loop.c
-
-   528	
-   529	static int loop_check_backing_file(struct file *file)
-   530	{
-   531		if (!file->f_op->read_iter)
-   532			return -EINVAL;
-   533	
-   534		if ((file->f_mode & FMODE_WRITE) && !file->f_op->write_iter)
-   535			return -EINVAL;
-   536	
- > 537		if (file_inode(file)->i_sb->s_magic == SYSFS_MAGIC)
-   538			return -EINVAL;
-   539	
-   540		return 0;
-   541	}
-   542	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
