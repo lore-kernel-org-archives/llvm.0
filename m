@@ -1,57 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793699070;
-	b=2lYK+mHM9hlxtfb0aXaKZqA8hJ1WjYC3kpPbO2hY4crYNazgePH7AnQCZEgEvWZOUE8o
-	 eEedkGM8o9n5MLSvTcFedjGLdGUi+QPK1WQhiQlE4IKkkJqOuwlpuErsbFYKfVnX5vPZo
-	 uQBCBoRsMmLldHrVjLjF5a1K5TnOu4+iuwRa6YgUFkBYwn3a7+Q86POp/+oKto6WXohgi
-	 a6/TilXamFptLRI8Sgw3jhlcHvX+ISdIIdxfveJjFeoPbqZ1zrxKETgg1INYHJeu2JLOm
-	 1gU+/iH8CQUuaqorsiEYiXVFWdhdXzjWkHBxxDZkmqWDma+CAQSKdA0m7ITiv+cnhNA==
+	t=1793700900;
+	b=OcTWRyKzwi7hxDQvL3p2HppACE4rH8NSrXjZ0X/sh5wZNwokOum+f3THrFTxd5re3Wd8
+	 mJqrYloFQ58ZLH6aDqV14OmCCFJrVrWKDj487c5MHuKz/IG2nFLX6q4VQLQvxi2apXDo2
+	 MlDhUpOMMvnsHg+Deu4NVyEl6psUNaTTlEOLwe4RPqDfuthnVpEE+TzS8yfkXlT/YMrZB
+	 gdCYSBxb4na34QlKus0e+LY1JCSBSsp32YvGVDCPziL03S8mu/bZkR7v6SQdfS1TwuO+P
+	 RL8bY3ba5FRyJLV0YKmTxN5Rk8MiNNMTRPlLI3uUUlmE890gQ4ATe3SZwtTQ3a6ZPWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793699070;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 Content-Language:From:In-Reply-To:Content-Transfer-Encoding:
-	 X-CMS-MailID:X-Msg-Generator:Content-Type:X-RootMTR:X-EPHeader:
-	 X-CMS-RootMailID:References;
-	bh=EqD6XXEFKVf4WUIZtUdGo2rdQDUJQpo7+qGZ1y//k9Y=;
-	b=P07xiVKnPetU7E4r0hBB5yU6fSHbt59BaO0ogZECh4l6tNh/Qn9zt/DEOCtjgRw0lr/B
-	 WN4vK9oOXIuQ8euF/JpmwAzPu2RrmQmTVwJP+5f+j5iQLg8c8TGJ+RgAJfytsXP21QB+1
-	 tLj7FxNYIRWB7vzCzdY8TsWVloAHuLKZNOSKPbz2romFx4iBmzqJokDGKrKW4AquoIdY5
-	 x/TKhyzcCj8uT28nSfMbCq7/YvfeVzNTMatuBq8jhZLWBsn1zCU4TKZ8I8sAoxyz/G/zu
-	 IxUokBxl5i+0l616+FvHe43MDiXzxsZw6J/cyYxlMMMxiIsmhdJvja/uV7YXdaJCp4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793700900;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=U90YHHqYabJCzGCISBw16c6Orv5qCzpj8HcVqDO2HtM=;
+	b=sNx2TTyI5EPw6SZ0eU7k6tIvhmhR+20Cz8hYDPzGTwocFr1+5jen6PfIsUl6CEXcvcyr
+	 NVoUMXKRFbTRkRCTlI0ADEa7MRxO0dYd+DNK+lUcXHbV5d2SiWl+bhhbLw4yYsT07kSvy
+	 fusKp2dWQBm70Kd8ZP5kP/mjqQ9f/LtPCqrGExKaurlTprertQD5aJXfjCnPOxpt9gQIw
+	 16SsCg5Xus06pipQhtvZZqokK9jz4+maCHHVcAXVADlj53FJgwAFktKo6SBhrgRhJY3lx
+	 WvYbopbHTK/EXNywsnfxy7qdZC8oQC7+dl2yFB5wdDOqvtvtsWmnAQ7G4DymiDWuY7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=samsung.com;
-	spf=pass smtp.mailfrom=samsung.com;
-	arc=none smtp.remote-ip=210.118.77.11
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UU0i2ECF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA0F606A330
-	for <llvm@lists.linux.dev>; Tue,  3 Nov 2026 09:44:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CA0F606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20261103094425euoutp01c02a9d27dde9928d4a3f5a5d871a0428~kf8wF2p-U2983929839euoutp01p
-	for <llvm@lists.linux.dev>; Tue,  3 Nov 2026 09:44:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20261103094425euoutp01c02a9d27dde9928d4a3f5a5d871a0428~kf8wF2p-U2983929839euoutp01p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1793699065;
-	bh=EqD6XXEFKVf4WUIZtUdGo2rdQDUJQpo7+qGZ1y//k9Y=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=NFegZMCmsOz9eMS3itkiBpvSwHFNBoGwf/1MbFWg2hwoq6nDtOviGgPzwKEQMieAq
-	 BOAhrAlUiRqpCclrpKU8YGbKCRT9ZGzbeNMHXA3CGtVpCqUnhSE1GnX/aNkjJmUmby
-	 4dt4J1ImQVGPlOkD5w0ASZ47AFZhwhHBTo7b8leY=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20261103094425eucas1p14f8698866db3a44dc2559fef5569686e~kf8vsv8-G1950419504eucas1p1X;
-	Tue,  3 Nov 2026 09:44:25 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20261103094424eusmtip1a4f4097b78810e28de113df65a194052~kf8ug9zZc1524615246eusmtip1d;
-	Tue,  3 Nov 2026 09:44:24 +0000 (GMT)
-Message-ID: <8b1e8238-e5ba-4875-869f-478177591738@samsung.com>
-Date: Tue, 3 Nov 2026 10:44:23 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A837F606BFB6;
+	Tue,  3 Nov 2026 10:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UU0i2ECF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32DB1F00919;
+	Tue,  3 Nov 2026 10:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793700899;
+	bh=U90YHHqYabJCzGCISBw16c6Orv5qCzpj8HcVqDO2HtM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UU0i2ECFurVjJyBCS6ZF6AH2Xktl7pInMJd7bazTQddWePDIEA5puQTogv9IC4gmj
+	 vDXtNCxrzh7MDJ3y8rdI/oSSkl60s21Po9fm5r9bLuW6alBau2Jag4PshJqMPPNyXv
+	 vbVWT40/nrXKwReI3HHsqnziuE7kypXnARDHkipEtL71XPpOzXK8B0PI/SHFk7Zuxi
+	 8UnJMwBR0AXholRlH1Ulo9W1W0gkzlSzG/FngOBMmh3bYiTP4poFqmEban/zXNJXR/
+	 ZqovUxW/zY9QWyRYIKWlJC3ZxoqmwoyCPoDjpLmBdOngc8Mj0IiybdzgtAYP84YlhL
+	 u/1XA/JjrQJtg==
+Date: Tue, 3 Nov 2026 12:14:50 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: gaohan@iscas.ac.cn
+Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <baoquan.he@linux.dev>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>, Yao Zi <me@ziyao.cc>,
+	Han Gao <rabenda.cn@gmail.com>, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kexec@lists.infradead.org
+Subject: Re: [PATCH 3/5] kexec_file: Honor the segment alignment for CMA
+ allocations
+Message-ID: <aum0GlBKTfZ6rvgL@kernel.org>
+References: <20261023-riscv-kexec-cma-fixes-v1-0-825b90ea23c4@iscas.ac.cn>
+ <20261023-riscv-kexec-cma-fixes-v1-3-825b90ea23c4@iscas.ac.cn>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -61,81 +69,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH] of: reserved_mem: mark the early_memremap() array
- helpers __init
-To: Sasha Levin <sashal@kernel.org>, Rob Herring <robh@kernel.org>
-Cc: Saravana Kannan <saravanak@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20261102224528.2495168-1-sashal@kernel.org>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20261103094425eucas1p14f8698866db3a44dc2559fef5569686e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20261102224535eucas1p2a4b762399cd706fadb9dbaeb08188846
-X-EPHeader: CA
-X-CMS-RootMailID: 20261102224535eucas1p2a4b762399cd706fadb9dbaeb08188846
-References: <CGME20261102224535eucas1p2a4b762399cd706fadb9dbaeb08188846@eucas1p2.samsung.com>
-	<20261102224528.2495168-1-sashal@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261023-riscv-kexec-cma-fixes-v1-3-825b90ea23c4@iscas.ac.cn>
 
-On 02.11.2026 23:45, Sasha Levin wrote:
-> early_array_map() and early_array_unmap() wrap early_memremap() and
-> early_memunmap(), which are __init, but the helpers themselves are only
-> static inline. If the compiler decides not to inline them, the out of
-> line copy ends up in .text and modpost complains. clang 21 does this for
-> a riscv allnoconfig build:
->
->   WARNING: modpost: vmlinux: section mismatch in reference: early_array_map+0x30 (section: .text) -> early_memremap (section: .init.text)
->   ERROR: modpost: Section mismatches detected.
->
-> Both helpers are only called from fdt_scan_reserved_mem(), which is
-> __init, so mark them __init too.
->
-> Fixes: aa05faf81583 ("of: reserved_mem: allocate and map the reserved_mem array early")
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Fri, Oct 23, 2026 at 03:33:16PM +0800, Han Gao via B4 Relay wrote:
+> From: Han Gao <gaohan@iscas.ac.cn>
+> 
+> dma_alloc_from_contiguous() limits the requested alignment to
+> CONFIG_CMA_ALIGNMENT without reporting it. kexec_alloc_contig() can
+> therefore place a segment at a less aligned address than buf_align. On
+> RISC-V with 4 KiB pages, the default 1 MiB limit is below the 2 MiB
+> kernel alignment, and the new kernel stops at the setup_vm() BUG_ON for
+> a misaligned physical address.
+> 
+> Release such a block and fall back to the regular memory hole search,
+> which honors the alignment.
+> 
+> Fixes: 07d24902977e ("kexec: enable CMA based contiguous allocation")
+> Signed-off-by: Han Gao <gaohan@iscas.ac.cn>
 
-
-I wasn't aware that 'static inline' functions might need __init
-annotations.
-
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
 > ---
-> KernelCI's clang-21 riscv builds fail on this once dt/for-next is
-> merged, so it will probably show up in tomorrow's linux-next as well.
->
-> Tested with a riscv LLVM=1 allnoconfig build (fails at modpost before,
-> links after), plus W=1 builds of of_reserved_mem.o for riscv and arm64
-> defconfig with clang, and arm64 defconfig with gcc.
->
->  drivers/of/of_reserved_mem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
-> index 0fd1683cba011..630ad65466385 100644
-> --- a/drivers/of/of_reserved_mem.c
-> +++ b/drivers/of/of_reserved_mem.c
-> @@ -66,11 +66,11 @@ static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
->   */
->  #if defined(CONFIG_GENERIC_EARLY_IOREMAP) && !defined(CONFIG_PPC64)
->  #include <asm/early_ioremap.h>
-> -static inline void *early_array_map(void *array, size_t size)
-> +static inline void * __init early_array_map(void *array, size_t size)
->  {
->  	return early_memremap(__pa(array), size);
->  }
-> -static inline void early_array_unmap(void *map, size_t size)
-> +static inline void __init early_array_unmap(void *map, size_t size)
->  {
->  	early_memunmap(map, size);
->  }
+>  kernel/kexec_file.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 59fb9d71e9d8..6ce10e01414e 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -690,6 +690,13 @@ static int kexec_alloc_contig(struct kexec_buf *kbuf)
+>  
+>  	mem = page_to_boot_pfn(p) << PAGE_SHIFT;
+>  
+> +	/* dma_alloc_from_contiguous() caps the alignment at CONFIG_CMA_ALIGNMENT. */
+> +	if (!IS_ALIGNED(mem, kbuf->buf_align)) {
+> +		pr_debug("CMA block 0x%lx is not aligned to 0x%lx\n", mem, kbuf->buf_align);
+> +		dma_release_from_contiguous(NULL, p, nr_pages);
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (kimage_is_destination_range(kbuf->image, mem, mem + kbuf->memsz)) {
+>  		/* Our region is already in use by a statically defined one. Bail out. */
+>  		pr_debug("CMA overlaps existing mem: 0x%lx+0x%lx\n", mem, kbuf->memsz);
+> 
+> -- 
+> 2.55.0
+> 
+> 
 
-Best regards
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Sincerely yours,
+Mike.
