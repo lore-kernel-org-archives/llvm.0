@@ -1,83 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793673784;
-	b=uN3m1coRjTnrC5PJ2c37/kH4Gf67xn4xMnqd7Z6J8gxf9I/BWLMBx+pigMqJhkNWi5Hw
-	 4v9677Xs+pOA88GzbpdANpO/O9rL2yJbrnQnnqvbKg8Fx3yWftzEGMn4RecD4VBd/4vEl
-	 88FRe128CWTRmn85KqbR5ovDyFeMLmu+OBnUyPoQXCg23j7Il9yeF7or9ulvA02QPMHak
-	 VoskZnrfvP4e6P4vjEEXT5jN6Ynwl/IS06OWLZAcar177R326c7BhSPo0xtZ7V93U1Bff
-	 4DMeV5OkV9xEKkhutaDD3EJhVwY2ZQ6QcFsZDylFePC7G1VdnIoeqfYQNm9+cWFpFBg==
+	t=1793680540;
+	b=ayctvhdEd/G5YKdTI+h71rIn/TWAr0ff6xClLBD4SgDEHycfAFxD02Po3paaMoQQUTT9
+	 FIJ1ocMdbeAV1igcQL+ZpqafNkxc1AoLPsDZ8GDxp35/OCCoBmjla5sfDRSjRMvqdVbuB
+	 FH6xJ5u2ZKKkUJwnY8YwY34q5bkH+TBcu0caCZQhVedwjAf2wtpnvoJl/C5+25P+ToAVf
+	 1wqODWBSonslpIh/5/2pkwiZxIc+QfxnVzkKnAWI2jZzE99uaBSnyezeP/CQ8A5xmNNse
+	 R+D6giXVkXay7Xa4aytKwy/Q+wL/JDxMD9vB6RTEVGZLstp7WKCWQEYGpDdaczGpLKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793673784;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=GHRb85n1Foh7KgznphB1XwN4hpwluA6wCCK9oDJFt+0=;
-	b=R7zo4z6oMjqk8Z6xYN65a1SK/KUv/6fX45329kM56YZPTR2QnnA5lhGOoa8ZixfKcpUT
-	 LoLwYNX5R6xy/pSbpZlYHW6N89JSyaPx+iY4j/OfTUbRTv9s4SkMJN83dnXKtz1wybUTy
-	 JmPNsK5glfbcKLcr0OS4G54aekFRXZ474Z7lZFc0cp6eBephK7ZaeJxTls2JSuYUwpfBG
-	 0AIf3tZtGl1MqJ7QBwu6LR8uA4BaZurwQ+cjyE5WzeAkLNXcr8vBYSFKIMXstExjjO2kC
-	 K6Lj7orN7OXM+7y8aKGCBzwLpo+a92UYOGgdbGh05ae7MLY3RGMl/N2FlI5QWsFmtZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793680540;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=+haBGwyiWfU5fK0i8XKvoQcOJxAPZRgUZLulxjt6MCY=;
+	b=CMJOc7utYSTTKo/1uegyLpCTZ835gopvnrj0lHkKePtYoAqTysL6HUSrSWmKyPydr4bm
+	 AyyitMOzZK9piOUuTkzcChvyMEymi17sz2+LzuK6WpbHrkBAPe6VdFAT/cSX4ZiItUKos
+	 rnSDIOYPzTyegKrb3anN/WnoKMdktpw6GymlX4Ybw0e5fTx/+a7VTRrGzgtG8uBZ1Zcpp
+	 /i1QwSSDOD8WGg+sy4Hx8IhlocDJ+eJ10T/+zy+r7IYWrmRR+RrKE3MVzZ1Kr2srTCBP3
+	 5fR6Tp3ZADWT/cfpNWuXNW+DuLUj14AhvE0jEL0Tvk6125eykQe0eYe7vkKf0aSModw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Hhn1ZKeT;
-	arc=none smtp.remote-ip=198.175.65.11
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yUZNsxka;
+	arc=none smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9213B606A324;
-	Tue,  3 Nov 2026 02:43:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9213B606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45AF8606A324
+	for <llvm@lists.linux.dev>; Tue,  3 Nov 2026 04:35:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45AF8606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Hhn1ZKeT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793673783; x=1825209783;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iESoaevwqTMSuhIUPaAMKfLpXgQKRSiqlSV8Jn8HSos=;
-  b=Hhn1ZKeTm189WkThts+MO5iKAtLd7YssKxrMA9soBKkGYg4A5XbtENoE
-   nuyhy/UHSlonKGT/X5CXK+aY30Y3HjFY+WHjlxWAFC3W5gNTY8YiAz4rJ
-   1P20Q2z/DpSG+LpYIJNuA0kTRz3MgvtWv9dcZh+GLkEvmVO7GJdO0IurM
-   NmIE5Vbtp9+LX3MFA6VbthFUSyus+VFKS7+m5YHe30kCLUauzvD+0lve/
-   jNt2bfMRmW2LEdDWcpz4eExj+JowrT2Rm6j7M4x14PkBPMbwhNWF9mmdX
-   CyNmw3txlHrU5y2c7k4/2PUN+LleKiMj1fHfkAKdxKTAf7TDmtb5qiHI6
-   Q==;
-X-CSE-ConnectionGUID: ag+rJl7fRBm2aRoF1QKlow==
-X-CSE-MsgGUID: A/8suxzeQH6QsPqmn/I2mw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2264643"
-X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
-   d="scan'208";a="2264643"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 18:43:03 -0800
-X-CSE-ConnectionGUID: GY5dtudzRe+l1yJICGtbMg==
-X-CSE-MsgGUID: M0Qwd2mOQqi1UUrelqyqBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
-   d="scan'208";a="6619852"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Nov 2026 18:43:00 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xO4UD-00000000iCu-19Sb;
-	Tue, 03 Nov 2026 02:42:57 +0000
-Date: Tue, 3 Nov 2026 10:42:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oxana Kharitonova <webprosto@gmail.com>, mic@digikod.net,
-	brauner@kernel.org, viro@zeniv.linux.org.uk, gnoack@google.com,
-	utilityemal77@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-security-module@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, webprosto@gmail.com,
-	landlock@lists.linux.dev
-Subject: Re: [PATCH v2 2/4] Landlock: Enforce MAKE_REG for POSIX message
- queue creation
-Message-ID: <202611031036.3r5EL9TN-lkp@intel.com>
-References: <20261102144708.920232-3-webprosto@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yUZNsxka
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ae7626d14aso1992877a91.2
+        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 20:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793680533; x=1794285333; darn=lists.linux.dev;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+haBGwyiWfU5fK0i8XKvoQcOJxAPZRgUZLulxjt6MCY=;
+        b=yUZNsxkaiieEFocX/U4mFkhM+Cxw4xT11F60BOZdP84wAAR5wVCgFtYLpx+gLPA48s
+         zo9E8faODMREN+UAl25FNDRIlgP10hSpz//XsBwmFIWMTUm2fcp3MiQ5iQvbwbbf4ucA
+         K5cZf2IzqNhP/SlVYCt9OR4VCOTKz4cgMyTxy34/ukPCXpCz08/qb8A0gJ9WKqRvBASp
+         YLrmovPZbca9AyyOdRKsg7fONSkqaaF8RlpH54LDpHrxZEhdOcrs28XWKt4/ACDs7BQh
+         pCe+prAEl/nxH2f1xL65X7zkMXwHuaHGeJQR9qGDxpyMQ394iP6vmKc40ZStczjXFVkt
+         c+JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793680533; x=1794285333;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+haBGwyiWfU5fK0i8XKvoQcOJxAPZRgUZLulxjt6MCY=;
+        b=vMs0A2qWeF+IrDSxK9ktUBTyv+f4Rqdjcyu00Q2wfbn7ICX68w87nx68GFmV4ywzNm
+         8h8syvWYYb6nJqs0Vasy2qGXRJZhBv+j4xHIOU749TkqpbapyHrEQyMs0SOoRGTa3Uem
+         vkN6vQ/DNKUwnV2eHWFbAPsis3Qu54KRxGHMCYvu+n4Avlwa5GM57s/yGt7QaCVcqbMb
+         xwf2M7YRPsBmK9bV7rRwZfh6hfui8heu9puWNWZsl91gHjasqv/nWoBA+g/wt+pRrUHd
+         Cl3/MxDbbTO0eDjcWJ9UcAXUeyXs1DDRLB8FB4qVB6trnPvl7i1zIAaBBJJiHIe9bT8L
+         IBgA==
+X-Forwarded-Encrypted: i=1; AKwUvBwjmSGmgFkYvbGzFXdfJS3VmYs1Z+XYfNtOYAKwIUx19XtCpzrNIIoBVZRSS+1LJLeY9N5N@lists.linux.dev
+X-Gm-Message-State: APuU4Z+ykdEXZEneYQquYyYGCa4BseFxfCkLaGsGCqiiV9TysC8o0d05
+	H9QoFaDpy02ELXMaCCkum11vJ0Acsl6gSlPGwlN2WqTPd/E4PADgoRx3
+X-Gm-Gg: AYBFou1EkMKrqkGd/ISXZm6HdRxFGG3G/1uNAhorjPYJRgewpBd83g58JLV49ueKrwz
+	vScf/hBh0EZs6ZZakUGQQ3YAlH+V566SxK0aNMzeS8AMcR6RteLmHfrFOA6ZYYcAp8HCrDz19hO
+	Y9kT08xtX970cqBteAp87COPW7/BdUONNlf+Xpk56GcwpfzQUTnn9aHV3j9dZ4K4idFsGyIwV5V
+	McO3HQhKWx0OpCUhyp2OIocGgkFVx14pqnvGcoeHt21kByRaxDxVrYQ+YzR63jMn9cXUKD0YTTI
+	A7gd8xVsIeaIEgk+v9+kNbzjZKus8jUoMF1ICs0mRP7Q8DTHn0NXpUrt6vKDg9mY4rwQprB2BxA
+	bJyj5AQisMWA9pXBL5AGvKZCEfTX4yi3zmIwEhMfASxxzilu7LU5WWChdHSykWzPQegrYBBl/ny
+	5899bI1F9nvRAPcDDeR8N0i2TKhid9Dx5MIHVKmCrW7Jaydr76NxlXwaYB7VC5z2nSOkDjPu/Ce
+	hbI2pPVS89osXKoCKIVjNWdifWeUgPnLqLkCJdFllpBXcNjbzqWn6si24dLsWePIVYTN1S72AeG
+	T7ZNqHBCt6hfx1t53frwzl93VfqgWIYMpwvQG6eYa+qLucKbGxHYrgqEIhQJWc9agTsTIPFxokz
+	S/mOzi73esfGzqbb5iBlHdikTDaSo/tUnhL0=
+X-Received: by 2002:a17:90b:4f87:b0:3ac:af8d:c839 with SMTP id 98e67ed59e1d1-3ae897f6e6dmr9433576a91.35.1793680533365;
+        Mon, 02 Nov 2026 20:35:33 -0800 (PST)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85cb91e5sm9616698a91.0.2026.11.02.20.35.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 20:35:32 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 03 Nov 2026 04:35:32 +0000
+Message-Id: <DMLAOL0238CH.43SXF0SFHONW@gmail.com>
+Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <llvm@lists.linux.dev>
+Subject: Re: [PATCH bpf-next v4 2/2] bpftool: Make the LLVM disassembler an
+ optional runtime dependency
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <socketpair@gmail.com>, "Quentin Monnet" <qmo@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Bill
+ Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Nick Desaulniers" <ndesaulniers@google.com>
+In-Reply-To: <20261102-bpftool-plugin-v4-2-5a853e973db9@gmail.com>
+References: <20261102-bpftool-plugin-v4-0-5a853e973db9@gmail.com> <20261102-bpftool-plugin-v4-2-5a853e973db9@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,81 +109,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102144708.920232-3-webprosto@gmail.com>
 
-Hi Oxana,
+On Mon, Nov 02, 2026 at 04:44 AM Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org> wrote:
+> +  else ifeq ($(words $(LIBLLVM_SO)),1)
+> +    # Don't link with libLLVM.so. "prog dump jited" loads it with dlopen().
+> +    CFLAGS += -DLIBLLVM_SO='"$(notdir $(realpath $(LIBLLVM_SO)))"'
 
-kernel test robot noticed the following build warnings:
+sashiko is right. realpath was my suggestion, sorry.
+Today DT_NEEDED of bpftool has the soname of libLLVM.so.
+Every distro makes that name visible to ld.so.
+The name of the file behind it is up to the distro.
+The two are the same on Fedora 44, where you tested.
+Where they differ dlopen() fails and "prog dump jited" doesn't work at all.
+Pls use the soname. Something like this (not tested):
 
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on linus/master next-20261030]
-[cannot apply to shuah-kselftest/fixes trace/for-next brauner-vfs/vfs.all v7.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    LIBLLVM_SONAME := $(shell $(READELF) -d $(LIBLLVM_SO) | \
+                        sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p')
+    CFLAGS += -DLIBLLVM_SO='"$(LIBLLVM_SONAME)"'
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oxana-Kharitonova/ipc-Move-MQUEUE_MAGIC-to-a-shared-header/20261102-144557
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20261102144708.920232-3-webprosto%40gmail.com
-patch subject: [PATCH v2 2/4] Landlock: Enforce MAKE_REG for POSIX message queue creation
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20261103/202611031036.3r5EL9TN-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611031036.3r5EL9TN-lkp@intel.com/reproduce)
+[...]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611031036.3r5EL9TN-lkp@intel.com/
+> +	lib = dlopen(LIBLLVM_SO, RTLD_NOW);
+> +	if (!lib) {
+> +		p_err("failed to load %s: %s", LIBLLVM_SO,
+> +		      dlerror() ?: "unknown error");
+> +		return -1;
+> +	}
 
-All warnings (new ones prefixed by >>):
+"bpftool prog dump jited id N file F" fails here too when libLLVM.so is
+not installed. It doesn't need a disassembler.
+prog_dump() only writes the image to F.
+But do_dump() calls disasm_init() before it parses "file".
+Call disasm_init() after the arguments are parsed, and only without "file" ?
+It can be a separate patch.
 
->> security/landlock/fs.c:1686:51: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-    1686 |                              struct dentry *const dentry, const umode_t)
-         |                                                                        ^
-   security/landlock/fs.c:2117:30: error: incompatible function pointer types initializing 'int (*)(const struct mnt_idmap *, struct inode *, struct dentry *, umode_t)' (aka 'int (*)(const struct mnt_idmap *, struct inode *, struct dentry *, unsigned short)') with an expression of type 'int (struct inode *const, struct dentry *const, const umode_t)' (aka 'int (struct inode *const, struct dentry *const, const unsigned short)') [-Wincompatible-function-pointer-types]
-    2117 |         LSM_HOOK_INIT(inode_create, hook_inode_create),
-         |                                     ^~~~~~~~~~~~~~~~~
-   include/linux/lsm_hooks.h:141:21: note: expanded from macro 'LSM_HOOK_INIT'
-     141 |                 .hook = { .NAME = HOOK }                \
-         |                                   ^~~~
-   1 warning and 1 error generated.
+Also common_options.rst still says "linking against LLVM".
 
-
-vim +1686 security/landlock/fs.c
-
-  1679	
-  1680	/*
-  1681	 * Unlike regular file creation, mq_open(2) calls vfs_mkobj() directly and
-  1682	 * therefore does not trigger the path_mknod hook.  Use the mqueuefs mount
-  1683	 * associated with the current IPC namespace to recover the parent path.
-  1684	 */
-  1685	static int hook_inode_create(struct inode *const dir,
-> 1686				     struct dentry *const dentry, const umode_t)
-  1687	{
-  1688		struct ipc_namespace *ipc_ns;
-  1689		struct vfsmount *mnt;
-  1690		struct path parent;
-  1691	
-  1692		if (!landlock_is_posix_mqueue_fs(dir))
-  1693			return 0;
-  1694	
-  1695		if (!current->nsproxy)
-  1696			return 0;
-  1697		ipc_ns = current->nsproxy->ipc_ns;
-  1698		if (!ipc_ns)
-  1699			return 0;
-  1700		mnt = ipc_ns->mq_mnt;
-  1701		if (WARN_ON_ONCE(!mnt || mnt->mnt_sb != dir->i_sb))
-  1702			return 0;
-  1703	
-  1704		parent.mnt = mnt;
-  1705		parent.dentry = dentry->d_parent;
-  1706		return current_check_access_path(&parent, LANDLOCK_ACCESS_FS_MAKE_REG);
-  1707	}
-  1708	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+pw-bot: cr
