@@ -1,57 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793659530;
-	b=OzE3C+Y9FxfSFB7zOrYL8ubZ3rgdFzyS+kwuoD5Q/E7BxQZ5i8Ogau7YY+Oh2N/BGkVJ
-	 ufRDTpQjNk+Go3jevp0JvRCpyZEEr2bdTNqO0Zu8AN8q7V0Fm6gd2q2N/PwQA8H/I59aQ
-	 +zWrP81Vk98TeULX63RgHqaJ5pACslWfnyjdENR8MRppiKbb3s9c120foAKZelNbcwVGc
-	 Ik96+mEiYCARHgfN4FkSOaN+MMwgL0npFhV2MT5k/yRenKBKkzghXSVasJzXXVii/85cG
-	 yBnr1Ez2TCevDcTq+ryFlz5QIju+rF6MnE+by+YRS/ICLBWgSxVWvj8sHJ5I6sjzCsw==
+	t=1793665350;
+	b=2rZ8dFl+2k8Ezbhdu+OZKeXofUgK0TFhb2VgCa0wzRrQOgSNp9gY5FtEhNSqDX4L232P
+	 vL46QEs9iTiysLwwScU01iWUYCwrlk2yFbN9Jk1UfzMCdENBigSC2/kvCR5PR0HTO7YXR
+	 JV7StKj+KmI8GpXgdzFlzLPNe18Ywv3iPTKoaKIB/bDAke/P5vFBZ3asLdiWtVt/nv76k
+	 wrL0s2YTGNBz4i3g5rg/GfGoNpVdHhL6xgmzmio5NQ3LmZ25e1dlUkWCGjCGyUxIEMcZN
+	 odKXsTwFSael1+fyYaB1vf+TVJWEQ6mzwOZO726U8jiNtpQWY2kgFsNLay7SKWHspmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793659530;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=8hWw5b26mqKqJp1xqnFOgseTDKqkWU7op0vhqlcFJNE=;
-	b=c/StjUD8IJav0le3IVc2AmJeErH7fRqT4GqODlrXRGJauTiKukYaBdQQ0Gk5jFxeftih
-	 jMgFe/ZlZj7VM7oxccgvJjJ9vTTyNgZg8pyeBHak/iqw6DjG2aUdhAxu9Gl9h+vu68w4X
-	 /U5oJJbPF/W1jZ5LgJN/v7om2+5o5t4vfkXq0YZ/0QBrTxnt2ha090yYM2OB+gnl/jlJb
-	 HUCn7cTyjyYmdy3LEkG5n6mXMUq4ot974WHc/4Km8mzm0/PxYodoPuxvT6eqt2alAmo6S
-	 +VV4S3bZxntNbpX2u4Po4HmuZEbXqF19Nfw/0cXs6k5kWQjzj3k7lbdo4ImVOK2dEsg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793665350;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=Xo23pX0LkqDaqeUDm7pphUOpOZD0A0t29LsZLUd6y+w=;
+	b=StIIVO+6zCQRxRUmC56FnmItyB/iQzl2U830aoVABPqR9TFF8RGMupGUhOGEI0K7VW/y
+	 GltAV7AQnz/M2NcgppLQ0ndxPtkzVP8o+MxfS2D4epTyQnt8gi3vBTTQJXIMQc+syg2+2
+	 aFCIgqFBBHZ0sPBAWVOh0+9gP7EnRt8h0QCt7VOYYO5FXItHO8ebc6CPnzclZ17oU1ejr
+	 77Gn3JQoVAexMCIKx8mRV3HxZS5QnOPoCxQG4WtXUHdOfh7pY2heaG5ElsfYUtcgATh2V
+	 UBYqWhel5tBNM79OvdXe6dcaYlWKXsis3BWQb8VPRC4i8t4eQebNNymkdNft5bybnDQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEfH1e9P;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Qq+FAJfy;
+	arc=none smtp.remote-ip=192.198.163.9
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EDF606A324;
-	Mon,  2 Nov 2026 22:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DDB606A33A;
+	Tue,  3 Nov 2026 00:22:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07DDB606A33A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NEfH1e9P
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B165B1F00A1A;
-	Mon,  2 Nov 2026 22:45:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793659530;
-	bh=8hWw5b26mqKqJp1xqnFOgseTDKqkWU7op0vhqlcFJNE=;
-	h=From:To:Cc:Subject:Date;
-	b=NEfH1e9PbDq5+zC87ofPcexu0dLJZQorOEw31oyjUcMboCV2Zgen/+FizIa2AtUeT
-	 3zdxBlMb74pQT9EazX/51l9ldRpGPyuRyDomqj2MJVp1BYzGui097VKYErpOHsUvTV
-	 /xdaIZDmePT6DcuFV8A2zW0nZAjRBZa/OyFwLLXewS5jKWJFot6Tl2YRFb/Cp0NH7n
-	 Kd4Cz6qmbgDLFGPbvTOmiN6ePS3RbnjcMGSFaaWeU/O4PYxRHEGbCil1tsw+WihleN
-	 NNxTj+zsZQLAIoDeeuV6mJ+/K+vmiZp3kdfqItz/mF42EC9uSdREAZYicqqItskj9l
-	 ZyOLY+iXmMrLA==
-From: Sasha Levin <sashal@kernel.org>
-To: Rob Herring <robh@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Saravana Kannan <saravanak@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	devicetree@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] of: reserved_mem: mark the early_memremap() array helpers __init
-Date: Mon,  2 Nov 2026 17:45:28 -0500
-Message-ID: <20261102224528.2495168-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Qq+FAJfy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793665349; x=1825201349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xBQkxZD2qmYmXTlHQrUaab8BxBJ6qbBDJIm+K6hAggk=;
+  b=Qq+FAJfy/Bk26zwisD69o+//daW27vznDV/Xuwap3LjOFUM/DuDsXl5p
+   qqikcI4Z2MQ5MvUho+qbPveOVBZyom5/ABi+Hs6N9OH4xBTG01WH7pGuo
+   idViaTJGixGa8rFI/AKK4rUJtgBkvK7CpeTlGmh3R0Q61tRqJydWQtSPV
+   EOzLycHhkjxXFW3vpkRdw69DpqmxWWfcm7RitDvOgnlTYZdhUD1z52I8Y
+   xjPJc6ZXi5Tfv6C3uWuimWGM3fJoPreamp9BqKyn0b+7PhfRFhvtz0tyb
+   m+WrTMgWm/3NufKZs2q9UM6LSllnSF5EATA+9MYpwP/vmVlUL4A78umLv
+   w==;
+X-CSE-ConnectionGUID: o5K1G+1VRtGdaQGwB0J38w==
+X-CSE-MsgGUID: VFOWpEnySW6UeWyEq1dyCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2255651"
+X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
+   d="scan'208";a="2255651"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 16:22:28 -0800
+X-CSE-ConnectionGUID: TepHzMvJQ8SEPar/wdwHVA==
+X-CSE-MsgGUID: Yb20lfD8Rt6X3iiUOVSHRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
+   d="scan'208";a="6607032"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 02 Nov 2026 16:22:27 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xO2IC-00000000i5I-0ILN;
+	Tue, 03 Nov 2026 00:22:24 +0000
+Date: Tue, 3 Nov 2026 08:21:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viktor Korsnes <viktor.korsnes@remarkable.no>,
+	Jeff Chen <jeff.chen_1@nxp.com>,
+	Johannes Berg <johannes@sipsolutions.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Viktor Korsnes <viktor.korsnes@remarkable.no>,
+	Francesco Dolcini <francesco@dolcini.it>,
+	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH wireless 1/2] wifi: nxpwifi: fix hex parsing in
+ nxpwifi_parse_cal_cfg()
+Message-ID: <202611030826.7OV08JJo-lkp@intel.com>
+References: <20261102121856.1011263-1-viktor.korsnes@remarkable.no>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -61,51 +87,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102121856.1011263-1-viktor.korsnes@remarkable.no>
 
-early_array_map() and early_array_unmap() wrap early_memremap() and
-early_memunmap(), which are __init, but the helpers themselves are only
-static inline. If the compiler decides not to inline them, the out of
-line copy ends up in .text and modpost complains. clang 21 does this for
-a riscv allnoconfig build:
+Hi Viktor,
 
-  WARNING: modpost: vmlinux: section mismatch in reference: early_array_map+0x30 (section: .text) -> early_memremap (section: .init.text)
-  ERROR: modpost: Section mismatches detected.
+kernel test robot noticed the following build errors:
 
-Both helpers are only called from fdt_scan_reserved_mem(), which is
-__init, so mark them __init too.
+[auto build test ERROR on wireless/main]
 
-Fixes: aa05faf81583 ("of: reserved_mem: allocate and map the reserved_mem array early")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-KernelCI's clang-21 riscv builds fail on this once dt/for-next is
-merged, so it will probably show up in tomorrow's linux-next as well.
+url:    https://github.com/intel-lab-lkp/linux/commits/Viktor-Korsnes/wifi-nxpwifi-add-missing-header-to-HOST_CMD_CFG_DATA/20261102-131800
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git main
+patch link:    https://lore.kernel.org/r/20261102121856.1011263-1-viktor.korsnes%40remarkable.no
+patch subject: [PATCH wireless 1/2] wifi: nxpwifi: fix hex parsing in nxpwifi_parse_cal_cfg()
+config: i386-buildonly-randconfig-1002-20261103 (https://download.01.org/0day-ci/archive/20261103/202611030826.7OV08JJo-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611030826.7OV08JJo-lkp@intel.com/reproduce)
 
-Tested with a riscv LLVM=1 allnoconfig build (fails at modpost before,
-links after), plus W=1 builds of of_reserved_mem.o for riscv and arm64
-defconfig with clang, and arm64 defconfig with gcc.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611030826.7OV08JJo-lkp@intel.com/
 
- drivers/of/of_reserved_mem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
-index 0fd1683cba011..630ad65466385 100644
---- a/drivers/of/of_reserved_mem.c
-+++ b/drivers/of/of_reserved_mem.c
-@@ -66,11 +66,11 @@ static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
-  */
- #if defined(CONFIG_GENERIC_EARLY_IOREMAP) && !defined(CONFIG_PPC64)
- #include <asm/early_ioremap.h>
--static inline void *early_array_map(void *array, size_t size)
-+static inline void * __init early_array_map(void *array, size_t size)
- {
- 	return early_memremap(__pa(array), size);
- }
--static inline void early_array_unmap(void *map, size_t size)
-+static inline void __init early_array_unmap(void *map, size_t size)
- {
- 	early_memunmap(map, size);
- }
--- 
-2.53.0
+>> drivers/net/wireless/nxp/nxpwifi/sta_cmd.c:1405:8: error: call to undeclared function 'hex2bin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1405 |                             hex2bin(d, s, 1))
+         |                             ^
+   1 error generated.
 
+
+vim +/hex2bin +1405 drivers/net/wireless/nxp/nxpwifi/sta_cmd.c
+
+  1393	
+  1394	static u32 nxpwifi_parse_cal_cfg(u8 *src, size_t len, u8 *dst, size_t dst_size)
+  1395	{
+  1396		u8 *s = src, *d = dst;
+  1397	
+  1398		while (s - src < len) {
+  1399			if (*s && (isspace(*s) || *s == '\t')) {
+  1400				s++;
+  1401				continue;
+  1402			}
+  1403			if (isxdigit(*s)) {
+  1404				if (d - dst >= dst_size || src + len - s < 2 ||
+> 1405				    hex2bin(d, s, 1))
+  1406					return 0;
+  1407				d++;
+  1408				s += 2;
+  1409			} else {
+  1410				s++;
+  1411			}
+  1412		}
+  1413	
+  1414		return d - dst;
+  1415	}
+  1416	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
