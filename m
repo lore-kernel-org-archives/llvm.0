@@ -1,92 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793747985;
-	b=UsrwLPb95XcMVl+rd3UkPxxZQZfU2oLIBcmX6EthCfQrcgmDvzVQ2YbpwkDiE6sgQE1B
-	 +V9jWpXvtI3x54LuiJ8dJOqxXnmvitnMEBl42UQJmUvUVw9vCM5mBV+PAwjLO6coWrrMY
-	 4QJdwMxNI8xeD7OHhZZumUP4CWolQbj65dmbmgmxHL0x2PzqkScZF08IKfhptKrMI1yp0
-	 dig9Sz4GQxLFXsVKDiOvSwfaWDwt0rnaoeVR9hvhUmzFhXE/DfdVN4Ngy+dxMODmqyifL
-	 FSXXG3RKLzQVLwO4vzEor7YAE9etl3oVEvTr4YfiNGGg6wMUzhk5rEz6xBh/cLHmS4w==
+	t=1793748194;
+	b=g1dPQntyLxu2DsQlwQLAtKVAfEwnJab/TnqNtMWY+dN8eUzOuJzajtwfCGZX2hGl+eZi
+	 wRKn/P/p2+cD3YrgRHXv0xzfGXlivPxt38CchKP+0x02xQl0W+kNMaHOEDdz0eyIwUxE6
+	 GkX4nGJFbrTo/v7grD13cYd5ZnWD6cMXFI0V/uE2z1gDnCmyes9bENTlZnz1QsX2DYO0P
+	 rWBbidQ+kuCLnU+bPcEBAyPnZ7tzJzYM1Phrwqu4A15Rk6kX3QWRnssHvWANbCUoTl6KT
+	 SIWII0J408GQl/bGF/CrrQfmjAA0+asjDcCKMuv9J7RT6nh9cRcCGhYpEaB0MEl6sog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793747985;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ge8nPcGUxBsvSUK/jINOGmSzjSvUlXilvyC+0rJ7oiE=;
-	b=U6/pJUjrt+a2V77QY+iniljeS9ZCbYjgLqeam/1q+ldgJDUxfT3E4ovtvgLxQJ4uX37l
-	 h474sS+Nu4PChOpSA1AKl/1h6La5YvWo9dilOhzXHZWSwpDEBV8/yYX3T1t1BIs3TTdyb
-	 DhDjk+4l0vRSo8SaFlQou2DqSYNsHTmIUkpkvLNUdE6YfI1NsCkCh3fsSUZ4od14IRDbj
-	 7ietpLx8TBwmVEGlGdIxNx8vCCPhcjnp/SlKSTQ4bLcfyakeAeSNw1UCs9Jdvpof0EoIs
-	 CmXiMgy781+qz8rr+p91cxhocZDgdo8nTWGbaZYBr/WWhSR0NClJP10c3Zm5pI8WcoA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793748194;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=e7rXf/7upxx278z7chkqQz8HWBYmfJDS1RiHHtrdlaQ=;
+	b=Gr1pJVKS1uzTBKVAeuADi+mENUm+cbLfJDxAuOuSGWxbN72FbixuBclz64L/1vql6z+9
+	 EJGwGZgdcleltKRHKZHY3YrD65AzloDuXXwUJtbF+phbAOko2TbVsx9J3mkKi3ZnNKs1R
+	 SI6LQytOFQQtrv9MYFtDXxiJuVVW6ikHBZ5TeRUEnuQnBEG6wLmZlbUDwDAbsZneu1jC4
+	 3aP/RnZeTgMkTSzHqqAsLb7O/Bcne6Fzhf2h+Q/jxjvB4ypG5XlV9/glH39MBvtzW44ar
+	 3of22Ns8KTBIHE3woOddPsvXAApq4KYdXjxr2rC0OVGnjyH19URxgV/nKpMNgHsNURw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IucYV2rN;
-	arc=none smtp.remote-ip=192.198.163.13
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NOfgK94k;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C832B606A32D;
-	Tue,  3 Nov 2026 23:19:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C832B606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBA3606A31B;
+	Tue,  3 Nov 2026 23:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IucYV2rN
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793747984; x=1825283984;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yGcM0U/fiCfGKTJxpm31vDx9xIx3ErmFbd839Kd62eI=;
-  b=IucYV2rN8HHiqiatsLYF+Zknmb13T4lT7Xf2b8kuOpHEAg8H7yRLvpE7
-   qwqfmFjhNYdF7eHsjXuN5cVNpmNBsjJAvG6WUjcQSxTblQwcGNfhYBUqG
-   +VgHJoENUad3CV4XJGOsV04Ht4ookexT0O/88j2TnW/ClpcZoPUeYVcAr
-   aq6WMznB48KIyDhZqDn2IeY8R+Kz48PDJrDiunAdNS9T8nwdyWoCN9y4T
-   nAU8swsDjYQSKd6JPJhMi+7BQkgTr2uwBheP1g6qhSQ5mjFOktaYf3F4e
-   kj/BJ8GBIW/hLkNPgiKs5LrAWQOdeZSoxpVaojkRLIQExE4TRQSEHFcrY
-   w==;
-X-CSE-ConnectionGUID: OG6F3CHRTbyymTsr0UzgQw==
-X-CSE-MsgGUID: PftyOAA4T8m8iLwnrjmXeg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2489834"
-X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="2489834"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 15:19:43 -0800
-X-CSE-ConnectionGUID: ztogfQyQSRyK1fZcohZdLg==
-X-CSE-MsgGUID: 0eJy8HeXQcywk+AUu8ktRQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="6570453"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 03 Nov 2026 15:19:39 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xONmx-00000000jRz-3F88;
-	Tue, 03 Nov 2026 23:19:35 +0000
-Date: Wed, 4 Nov 2026 07:19:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Clark <robin.clark@oss.qualcomm.com>,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	Alexander Koskovich <akoskovich@pm.me>,
-	Jie Zhang <jie.zhang@oss.qualcomm.com>,
-	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
-	Bhaskar Reddy Valluru <bvalluru@qti.qualcomm.com>,
-	Nico Angelo Dela Cruz <nicoangelodelacruz@gmail.com>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Konrad Dybcio <konradybcio@kernel.org>,
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NOfgK94k
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7081F000C1;
+	Tue,  3 Nov 2026 23:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793748189;
+	bh=e7rXf/7upxx278z7chkqQz8HWBYmfJDS1RiHHtrdlaQ=;
+	h=From:To:Cc:Subject:Date;
+	b=NOfgK94kPQuJt2tWbKaCubyhU9FV3ihz9gQSTdbmCF3YMtOS4Sd/+I94hUfntHllX
+	 9NVzIZR+CFdaFq++/BBqhLMVViCNJNGHoi/6YJLLLwAARAW5ffLoxfHoub3rXAqLXr
+	 Gu1nIATHojy4Kc9ncAbQL4eSjDeZZX7IwwmAPWHxKNYZqIKwEm8aXvWF2AE8YFHvDt
+	 mYnntGgjz6LSIOtkTv5tHux5CubRchT9REAhSz+mjp1R2fc0Y+HXNi0Ab8jmf1q0M3
+	 Qm3AGGKZPD7MdsaAVK8TgDluu1CC5Q/tr1peOtoxNT/+L87gp9T/nJB2PJ1U+qIEK6
+	 bzAdlY5eL4odg==
+From: Sasha Levin <sashal@kernel.org>
+To: Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 11/15] drm/msm/a8xx: devcoredump state capture support
-Message-ID: <202611040652.1Wy2glVj-lkp@intel.com>
-References: <20261102220405.30730-12-robin.clark@oss.qualcomm.com>
+Subject: [PATCH] selftests: harness: don't compare function pointers in is_signed_var()
+Date: Tue,  3 Nov 2026 18:23:05 -0500
+Message-ID: <20261103232307.1924618-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -96,66 +62,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102220405.30730-12-robin.clark@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Rob,
+is_signed_var() checks whether -1 converted to the type of its argument
+is below 1. When an ASSERT or EXPECT compares function pointers, such as
+the result of signal() against SIG_ERR, that is an ordered comparison of
+function pointers, and clang warns about it:
 
-kernel test robot noticed the following build errors:
+  legacy_check.c:41:2: warning: ordered comparison of function pointers ('typeof (__exp)' (aka 'void (*)(int)') and 'typeof (__exp)' (aka 'void (*)(int)')) [-Wordered-compare-function-pointers]
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on drm-tip/drm-tip linus/master next-20261030]
-[cannot apply to drm-misc/drm-misc-next daeinki-drm-exynos/exynos-drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes v7.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Do the check on uintptr_t for pointers, which __builtin_classify_type()
+reports as class 5. Pointers already come out as unsigned, so the
+output doesn't change.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Import-adreno_snapshot-h/20261102-140245
-base:   https://gitlab.freedesktop.org/drm/kernel.git drm-next
-patch link:    https://lore.kernel.org/r/20261102220405.30730-12-robin.clark%40oss.qualcomm.com
-patch subject: [PATCH v5 11/15] drm/msm/a8xx: devcoredump state capture support
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261104/202611040652.1Wy2glVj-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611040652.1Wy2glVj-lkp@intel.com/reproduce)
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+Found with clang 19, 21 and 22 in the rseq and namespaces tests; gcc
+doesn't warn. On failure the harness prints the same values as before
+for integers, char, bool, enums, and object and function pointers. This
+is next to the lines that the pending 32-bit __EXPECT() fixes change, so
+whichever goes in second needs a trivial rebase.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611040652.1Wy2glVj-lkp@intel.com/
+ tools/testing/selftests/kselftest_harness.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 29a19bc870846..54ee275fac8f0 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -760,7 +760,11 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
+ 	for (; _metadata->trigger; _metadata->trigger = \
+ 			__bail(_assert, _metadata))
+ 
+-#define is_signed_var(var)	(!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
++#define __signedness_type(var) \
++	__typeof__(__builtin_choose_expr(__builtin_classify_type(var) == 5, \
++					 (uintptr_t)0, (var)))
++#define is_signed_var(var) \
++	(!!(((__signedness_type(var))(-1)) < (__signedness_type(var))1))
+ 
+ #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+ 	/* Avoid multiple evaluation of the cases */ \
+-- 
+2.53.0
 
-   In file included from drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:9:
->> drivers/gpu/drm/msm/adreno/adreno_snapshot.h:506:15: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     506 |         *(p->in++) = FIELD_PREP(GENMASK_U64(63, 44), reg) | BIT(21) | BIT(0);
-         |                      ^
-   drivers/gpu/drm/msm/adreno/adreno_snapshot.h:513:15: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     513 |         *(p->in++) = FIELD_PREP(GENMASK_U64(63, 44), reg) | dwords;
-         |                      ^
->> drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:920:14: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     920 |         side_data = FIELD_GET(GENMASK(27, 24), reg);
-         |                     ^
-   drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:1135:14: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1135 |         side_data = FIELD_GET(GENMASK(27, 24), reg);
-         |                     ^
->> drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:1271:4: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1271 |                         FIELD_PREP(GENMASK(7, 4), a6xx_gpu->slice_mask));
-         |                         ^
-   5 errors generated.
-
-
-vim +/FIELD_PREP +506 drivers/gpu/drm/msm/adreno/adreno_snapshot.h
-
-   502	
-   503	static inline void CD_WRITE(struct cd_script *p, u32 reg, u32 val)
-   504	{
-   505		*(p->in++) = val;
- > 506		*(p->in++) = FIELD_PREP(GENMASK_U64(63, 44), reg) | BIT(21) | BIT(0);
-   507		__cd_check_overflow(p);
-   508	}
-   509	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
