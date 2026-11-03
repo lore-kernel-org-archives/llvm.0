@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1793714396;
-	b=Y4R0WK0v7UWFW+JTOk5Y5rqEzSkT2lng1eNvc38J0dQlfyhA6iXZ1veM1YuCQYc7XYhF
-	 wWS8t+opJN24ixrvZCmkgh2sJwPuMIeHCZQrxqDUkgjkFu6MUFuZnTBdxTGBrxf5e3Dbw
-	 bFBeGN7hjRVPi9SAd06juYye/hNXbJnt2g+PicU8IkEQozbDRIVGjaCg2IafKvJeywVPo
-	 P/hdyVQU+SzlxWffJNDbgrKKiOGkCvNpu7m0cehOvkb0KKpqlOJEO8jwnHbpw8aoh+L1K
-	 ZfeuGp//glTVaYhy8X9tpmOQWV0RPgpcNLpJnMRPjz7Sl5uV9YzoGs1Ly3vB+162d4Q==
+	b=NnJ6fI+7td1CHFZPF/tyB0zczAk9yyY4AEctEbv/UIcYwY+KkMzSyhRa7Ouvhzycu2TC
+	 sDcMDsI6wLBm7lVRU0sb8fuAkC1r2Ls+Nk/Lsmc0MIssM7wN8DSjuDMO3q2S0Du+yEI7K
+	 MHsOAKdT1qDYDqzLCONfjWDJHQyrOg3/LyBH7Ov9nXIgfbganB4B1UveHe1qJDTXycMNx
+	 brW/8ORkP2RKC6AQ7YD7UKq+Nj5yeP+5XdCRPXZJuc6InJz3FlclKv/aEeDaTmNWjwWso
+	 o/Rf9TOjYH8eZYm7A4/dQcwktUmPg8KYLVXwLCtsKcAuViBbWLpVTcr9aw9zf7dt2Ew==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793714396;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KIipZjig14H8lJmsSF4jjlP+SZ/ZdCYhKJ4RJl3Qdjg=;
-	b=n0XKKZy768k4X50435c/+Bgr4lNxukd/c5hgXtTJDFJ1AFOA6q2THkxzO7sN8VHbgQZQ
-	 vXpIBq7NCBc+3hX1qcoUSwez3jZt9yrF9SQNIIxsFIRb2GrQr23aLABhuek0FBYCn2U+G
-	 7AEB+Id9wpPuFiVQ+M1SaCfOJWKrq+vcLEOkh663itYB4P0yb9FB0A+tGD7g9lfr5yU7y
-	 WZP8+1BwtXpS8G87jNEHRwyiBtPZq9RgsUOlw3+mQaJOFnOH2B/mXx4m/mpEkWa+87acq
-	 mtQjRX8zKpNz2TlNhyFdQW2xioJ81/E3wSZEbzjm9SFMzW75IjsTtgXXg6DE+2P5w1g==
+	bh=fdwV+XH9NvK1Im6ennF2xULO8qxPmM8IB/d5hh95yUY=;
+	b=pKxRTm4Njg7semn7huEsAS4//tuw5QsSJ7RQshlIokHwcOTm7tvEVMzE2LEJ18+8U11q
+	 6IbAauj0FqsSSkk3QaNiZgbKqR2gemvUvVWzK5ZdR4xRy6Rpeknk4k3MKeOGJzYLorUNB
+	 rTLhHGLkm7d1S0dYViUZgwtGeR0SXvPlT7/rEU72spQrSOd3NftzZ/xM9tNqTdE6XEerm
+	 z0FxkNtm/ql+pU8ekZNX3eROTVTC9PRH5cf/VYgGyxOex9rZRpszb2niQMS9i7MJ97uiX
+	 0Qr1WzdAcxiIxog4QiAAiKrmzKgVwZmd3X7k6wheCe6K/vkJGXQYXOWkH0HQP29kwRQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k8xu2yN9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B8SFfs3m;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7D3606D809;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C239608361F;
 	Tue,  3 Nov 2026 13:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k8xu2yN9
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B8SFfs3m
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1793714396;
-	b=BAffGAZvPEjZjNrd5LJevP4DSAf3+qKTGkbxzft2eeUbtAD44J//bXeduYJZFVx7l6le
-	 JoEJHUVcSiMVnjn9q8EWSO/Euld1WVZ6PS6j7Yf0SFnUgDeCVz7bk0Pjl4IHyBzqZovO+
-	 a5GDfknNSR4IHRUyUGFhnRbTwUWZj8sX8aLbK4VrscCp+LMT8aM53PFY8t28P7ilVDQxd
-	 o2nQTrCeRdiLrPPQzCEpQzo4FDcUZF9kQGiSOBeT77FhX11OB4OiehMhFnUH0o/JeZO5C
-	 UyWcS3h2WM+3JqV4jfaMyOMEaOXan1LT9q/NKFreXUvPmdVlAcgA6wk9CZBP/GLHncw==
+	b=TEr25OPPKq2iDUeb4SuglmShiP5kGqE/lbiqVTQM2yF5QSDqUIKRiPbRfxUJG18yYtPG
+	 MKL4K7mGXs/fhItK9fVwPbyyVQL7EI1dDngx7Cl+Gdnj0qcb4pTqoZI0SCLn+69UFWkNc
+	 h4ZdPbq7TAN7dsz3mopgfO5kMCnmybqJXtatNKTB/TWed8EofAwfaNSs9QXWXP6Vt4r9k
+	 KG73iPhaxmmQYLv6voqmrRyx8REY7cvgP+smEBDBrPIcTUr+duHv74Ni7rZgvSLFMXzcB
+	 bGdO+vEvSnP6oNgao6KGn13hLfYxLevuu0fklym8nad/kjgKSDFVqQd+xWBa8a6ohyg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1793714396;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KIipZjig14H8lJmsSF4jjlP+SZ/ZdCYhKJ4RJl3Qdjg=;
-	b=q+7hZxxrxxTOtj+rj4Y1ViBk7LNwRv3nfJURY1tjcuUUDQ5Gv8UnhKOh3Ct/zrE5JDaN
-	 K6XRMIT7oRdJkqf+o4LLw/w7Fq7n7nPA83BZLtpUOVdboTsDVlJUYUUVprDzqohYzIe51
-	 Q5WwnyxrPf0TNm99cGuEWfxiZv6oZmWKsooiZ2eGatdyVGgyS1O8S2J8gnCW0iUK8KDgI
-	 wQkLItzw8UTt2gll928fY/xi7JVzaiIb3EpvtPIvesbd91fB4FQJS4l3ktBU6qQYeCLiI
-	 3NTOgMToMAL5pIMQaS3MA38XwxgujIOiPFe7AvqU3euEAwHYKpCNyy5kq+IZ+CAqRww==
+	bh=fdwV+XH9NvK1Im6ennF2xULO8qxPmM8IB/d5hh95yUY=;
+	b=XlcBEAmKRNB00eumKbY/WGzWXaOt2qj9VxCJKFBvrMiEE0zoAqthu36HFDaFdhSPQUL8
+	 YY4vwagqYkb3Bv8rFns0hnW3P3XTRnDrYE0oG1JfHC7dlJlI/uIzU8A/KozdVUvrw6E7Z
+	 v8va4ybDpaNhFeW+gETPmcnt1RFO2VYv/xTGyMROOb1y05HHmTs+TGeKY1Rb4PIKzPUXY
+	 2VhHf7TMEXmsnG+QxuCZ3r07NDbVODh3A8NAlD14mgCEKj3ETiHdOjrNxjl3Eae77JYFB
+	 W/4W+SeqY0Ybk9qsJUV1ma6pAH/2H7WYy7g6l/+cNXDqyLvTIM9e3ArAvo0EGpxcR0g==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BA9691F0093A;
+	by smtp.kernel.org (Postfix) with ESMTPS id BB2C51F00A15;
 	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793714396;
-	bh=KIipZjig14H8lJmsSF4jjlP+SZ/ZdCYhKJ4RJl3Qdjg=;
+	bh=fdwV+XH9NvK1Im6ennF2xULO8qxPmM8IB/d5hh95yUY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=k8xu2yN9s6uE1enF1L2kE5k82wkVWDTk3iCAfe5IvosD5sjmVltnp3Wx+7YkhHzeU
-	 3raBsLRu3y/3ap4kjvb1ylnofThdwXXJYRnCnVRxTcBpmceWxcFTU4awwmq2Pwpzxq
-	 w43l4ggRxFxhCFEZBcD8KFmstxSuuuDccmFEzt0gHwl2d0BXnB+Oo0oGpqM98s6lTM
-	 zJIsSucRMqaMIfkyHuOv2Kd/JCT3hJ6LWSeitlBa1yvHkNccNXX7ff9hVp0F4ESng3
-	 fmH1xwingIwp3sWp8FOs/3k38ob0MvAIuQt3IF9TmmgBpTfsjQi3Xg/NHAocmkTRdX
-	 Jwzgrf8xfVqrQ==
+	b=B8SFfs3mXyzGQYuIw8pJl698NuP1cvwqVxbhzbVpyOQvl1lgaSZ8S2Dxd6Lf7GdGw
+	 VDW1raWBoN3rJIjKzSR9WCEBCs3KMm+UwyQAv3gl0PLkSprjG6CwqwYMyTFhoTb2k0
+	 CTF38Krq3dYx9s0knfksITj7nVYVazLWcnngkA/VgjcdWzZFWtAXfY05i00wE7l87K
+	 Rt/tjdPtMaDvuCtehRkZKLz0RuAKq1Re0hv4aH4lgxOkTR/vYN/Nz3P2vLP2tXRXXJ
+	 hqQm6XRmpDKwXUOsDrYqh05HZbfLL7qIqSBQqXdZef+06rVM5WuPgzEE818ZDzapeP
+	 CVYOtpPWiHq+A==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 3A43146985;
+	by lkml.kernel.org (Postfix) with ESMTP id 2CE6A46966;
 	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
 From: Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
-Date: Tue, 03 Nov 2026 18:59:54 +0500
-Subject: [PATCH bpf-next v5 2/3] bpftool: Don't require a disassembler to
- dump a JITed program to a file
+Date: Tue, 03 Nov 2026 18:59:53 +0500
+Subject: [PATCH bpf-next v5 1/3] bpftool: Fix disposal of the LLVM
+ disassembler context
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,7 +84,7 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261103-bpftool-plugin-v5-2-683e08a25df0@gmail.com>
+Message-Id: <20261103-bpftool-plugin-v5-1-683e08a25df0@gmail.com>
 References: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
 In-Reply-To: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
 To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
@@ -102,11 +102,11 @@ To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
  Mark Korenberg <socketpair@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793714393; l=1265;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793714393; l=926;
  i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
- bh=YA3fRuAfEUIVwaShslcQVsu+SC7z7OAIjbkZp9Lhxg0=;
- b=Z1J5xoIL49fKB2/6kCpqsAROwLn77sNLXyfAPF2ORHGm7kAnGSTxyan1auk6kRSUjMkiR2WI5
- KCduzWdu52ZDu0nmPhTrlj+6w6t3kpQTrqmmq4euw27vHcl+W9dqkxB
+ bh=WFtOq3wdcmZOoH/EhJgh2UIYAu0AaQ6cH9OmA9+kaSo=;
+ b=hTCTXZ6eoCML/m1GjNTUVVsHdppz6wlw86fD8uroJrgV44vs3OkUJ9FzaEK2Wmxgp0gqzW6wt
+ QJ2H5pwW5ohAsMV1chrBl2iL2VDJeATAWWtAV4uNP1rJgS0JHr911Ng
 X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
  pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
 X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
@@ -117,41 +117,30 @@ Content-Transfer-Encoding: 7bit
 
 From: Mark Korenberg <socketpair@gmail.com>
 
-"bpftool prog dump jited PROG file FILE" only writes the JITed image to
-FILE, but do_dump() calls disasm_init() before it parses the arguments,
-so the command fails when bpftool has no disassembler.
+destroy_context() frees the disassembler context with LLVMDisposeMessage(),
+which is a plain free() meant for strings returned by LLVM. The context is
+therefore never destroyed, leaking about 28 KiB per disassembled function.
+Use LLVMDisasmDispose() instead.
 
-Call disasm_init() only when the image is disassembled.
-
-Fixes: 29a9c10e4110 ("bpftool: make libbfd optional")
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: eb9d1acf634b ("bpftool: Add LLVM as default library for disassembling JIT-ed programs")
 Signed-off-by: Mark Korenberg <socketpair@gmail.com>
 ---
- tools/bpf/bpftool/prog.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/jit_disasm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 43599c79c93ac..15efc6eebffb1 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -894,8 +894,6 @@ static int do_dump(int argc, char **argv)
- 	int err = -1;
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index 04541155e9ccc..5ff144ce84a1c 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -115,7 +115,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
  
- 	if (is_prefix(*argv, "jited")) {
--		if (disasm_init())
--			return -1;
- 		mode = DUMP_JITED;
- 	} else if (is_prefix(*argv, "xlated")) {
- 		mode = DUMP_XLATED;
-@@ -959,6 +957,8 @@ static int do_dump(int argc, char **argv)
- 		p_err("'visual' is not compatible with JSON output");
- 		goto exit_close;
- 	}
-+	if (mode == DUMP_JITED && !filepath && disasm_init())
-+		goto exit_close;
+ static void destroy_context(disasm_ctx_t *ctx)
+ {
+-	LLVMDisposeMessage(*ctx);
++	LLVMDisasmDispose(*ctx);
+ }
  
- 	if (json_output && nb_fds > 1)
- 		jsonw_start_array(json_wtr);	/* root array */
+ static int
 
 -- 
 2.56.0
