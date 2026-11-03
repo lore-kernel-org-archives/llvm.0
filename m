@@ -1,80 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793729247;
-	b=A5DmKsPgVZUXOw6pQwUdAebt4NC+IVBQ3SnD0tWr0hMH5f6XfPGV3nnc88PFfMb1GqIR
-	 UShIfWHgrJ40DL2WT7Z1ut5E7McBLiiFzP3Duq+9vEK+jSD9DC93qRmYDd88LsH0tZBBA
-	 ZnRTorvWM+ux4/xGAynnsr+QQucdM+/S1wTXy5qHIu2DZzyWsQSiyLN3UAjiAqQUmZWfI
-	 f0OPES6tu8QOy99z7IY91n01T9C8wWeG/Nt7+cWq8+WpVFKcjOJn9w/4X6faz97fK4IFn
-	 YYpATZSHCzg9+UVRUEoSrh6tDrfLByvJy0CeA65e02MvWOoa/X5PnY8Q0OW543LrckQ==
+	t=1793732458;
+	b=EAVqMvtGSwm8U63Xd+DrNeYjKOanazQWNGIK61Ab2PvcC0uelN+2XX1F8ysO2BsSa4wu
+	 v5qve9UoPEsv3DmNZbdcm/nJgDU4fkr8Pa/NQyYiNPqrHJy+/xKzXMAkRwiDS2i+vkUA9
+	 fOjVz+LBP5UDoRDzw7bRN4f8WiVsAPtj615mSgHoHoA2oda0c/Vc/saBmk5GIkRu4hB5z
+	 HI7/CTXBqrlGwhlaVgWJ3ldy1iDg+gqrjBo+ZSukGZliZAsjmtVGduscEdrrIbb/dwlND
+	 bafBFXBJFte1sUJgwSllo3sZqTSXy6sdncyhZ9ta9m0aRlfUa7uHiDAkFSGm14epuhg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793729247;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=zK/MHfvWSgBGdmyh4OG7p06HHkO8iMce8c9q7NLU0+E=;
-	b=NcINXevNpvvabz7iXH/Dc0pk8CcjZM1ZR/JQEAeLUfq1HwH0DdyhAIA1MKiLUWO/YP2u
-	 5UjwUCA2WkA7w41LUlDqx9UbONbG5c7YwnuBdUtHDRErlyKJUOI2+fRGay42cA04k8PD1
-	 BdNUViebEH2EByugO9/7Xg1dcQB0Y64xaGpyIDNXjbgFsCEznmKQAmK+AGkGdvz1NLRsb
-	 rnVqB/uQDyt6OwOm4Dc2U9LgmTwlr4CUpolBdSelzP32pPL4wEr0TEBP0w2yr02MiEwBr
-	 CRDqw615stjY6+EbNkvDFrHwN38soczLtkuUe5eusmxq9yRKj4X0ZlE/zOTrFNpzV3w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793732458;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=nPbC9p/kXZfK/pAtwP8FvtmaMonTRXTCIHkYzc09zfM=;
+	b=h0qbbBPtbMtaQ/o12xATN8sJ28f2alMqqzjkoMgEK2S88f3WJMtUu1ufWMK2cST6viJp
+	 EpzMqxn3yb20yL/G71Z3eTqwsoHtn+yoQBH91TOV2XReEZrWiWwzmGI2psateAm2NgnTY
+	 MfM3WNK/icQ8y/xT1svOfUE7mYV9hZUEZ/iAPvUZgOgu8CIbsK1FAU9+OppsnD1y11jjN
+	 KGBkAGKcY5lPPYuhZdLtyZS7cymQzZK6vrUC0EFPyF1AOF5PloPwiJDfZMY9RZyVsbevt
+	 uFYrYyBMptueYJxlNDpSgbtrmFHPAj2K6jsfR0Ev8cmwG2S14gY7hBwUoKdVnPeMHMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F5o7VD9W;
-	arc=none smtp.remote-ip=192.198.163.16
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mA3KNvu9;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D6D606A32E;
-	Tue,  3 Nov 2026 18:07:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1D6D606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B3E606A330;
+	Tue,  3 Nov 2026 19:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F5o7VD9W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793729246; x=1825265246;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b64n/ALy9ONkgf58cbPGHTwkxpkalkyb2b0ByEQyLoY=;
-  b=F5o7VD9Wuq7AuNCiHZbvb9znmI3oqNgxzilz9qLCfjF4sVFXyhNwHdFJ
-   T0DsoRVVr5vpMq4367xcrJUaFUWHRLvHJG9jL9E1tpNzQ2a1s34f0kYVa
-   Q0RvTCSazRZrc3gBBFg+tjZzGWtwkj23CWF1GslSc+2CO48wrPn6jklNE
-   x0pKd5P5g8GzKL3DETaAQHIrIWnkgK0Z1ub2805o5h0GjyenObpAMELFP
-   1Mr6PsGd4tMIvraYAM2UlOZpcPh4jO01CO9+QpRzFqlX6SvkhsGpfnxO+
-   fKO54miWyFzRyaAU1pUr5V1T8ASSyPSI2RLp6TT1ynG0T6vCNVLiKtJpM
-   g==;
-X-CSE-ConnectionGUID: cm+ZSZvgRk+cegXXGGRniQ==
-X-CSE-MsgGUID: P6IhHmmNS3+YGyO4XT4wNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2478669"
-X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
-   d="scan'208";a="2478669"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 10:07:26 -0800
-X-CSE-ConnectionGUID: smG6AWmqT/KMhf5xtzl5sQ==
-X-CSE-MsgGUID: FFMi16GtTlixeZXBGVCi4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
-   d="scan'208";a="6643639"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Nov 2026 10:07:24 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xOIun-00000000j71-0RuF;
-	Tue, 03 Nov 2026 18:07:21 +0000
-Date: Wed, 4 Nov 2026 02:07:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nicolas Saenz Julienne <nsaenz@amazon.com>
-Subject: Re: [PATCH 23/45] KVM: Introduce
- kvm_check_gen()/kvm_memslots_check_gen()
-Message-ID: <202611040108.LHPSqkKE-lkp@intel.com>
-References: <20261102174512.8903-7-pbonzini@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mA3KNvu9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E1951F00919;
+	Tue,  3 Nov 2026 19:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793732457;
+	bh=nPbC9p/kXZfK/pAtwP8FvtmaMonTRXTCIHkYzc09zfM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mA3KNvu9dg7XUyhJO0i0shuS6M7OCVvpPJ12H2WiorQDQRwexlDCrSlqzfrLNf6YT
+	 UVpjkw08WSqPHQzkqqf8i4mFVXpr3Wg7kM0/yBXGVrT7wVT2l0vZdxtfod18lCAPy2
+	 XJ2sCPSkDumY332hjBeQ346+g5Jqk+WpWRGxZx2P88xUjesfQkge49DYFQTc1QZCy9
+	 nFdw8SsvHpeeBP2IipbPgbbaGYfdvXGxdyQp3+D3sipL6je0FiYu2qmByUTcEz+7qf
+	 OzKxc7zzcEU5C7ndPp/zWJx6b2C2xtpQnC/dCD95fuehMxkayaYVecqWuZ4SwaxZN7
+	 s+LCjijx97KgQ==
+Date: Tue, 3 Nov 2026 12:00:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rosalie Fang <rosaliefang@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
+	David Laight <david.laight.linux@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Greg Thelen <gthelen@google.com>, Yi Zhu <chuyee@google.com>,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] lib/base64: fix -Wconstant-conversion warning in INIT_1()
+Message-ID: <20261103190052.GA267580@ax162>
+References: <20261103163404.159582-1-rosaliefang@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -86,101 +64,66 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261102174512.8903-7-pbonzini@redhat.com>
+In-Reply-To: <20261103163404.159582-1-rosaliefang@google.com>
 
-Hi Paolo,
+Hi Rosalie,
 
-kernel test robot noticed the following build errors:
+On Tue, Nov 03, 2026 at 04:34:04PM +0000, Rosalie Fang wrote:
+> When expanding BASE64_REV_INIT() for v in 0x7c..0x7f (124..127), the
+> unselected ternary branch (v) - '0' + 52 evaluates to 128..131, which
+> exceeds SCHAR_MAX (127). Recent Clang versions diagnose implicit integer
+> constant conversions in unevaluated ternary arms when initializing the
+> s8 lookup tables:
+> 
+>   lib/base64.c:58:18: error: implicit conversion from 'int' to 's8'
+>   (aka 'signed char') changes value from 131 to -125
+>   [-Werror,-Wconstant-conversion]
+>      58 |         [BASE64_IMAP] = BASE64_REV_INIT('+', ',')
+>         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>   lib/base64.c:34:42: note: expanded from macro 'INIT_1'
+>      34 |                 : (v) >= '0' && (v) <= '9' ? (v) - '0' + 52 \
+>         |                                              ~~~~~~~~~~^~~~
+> 
+> Explicitly cast the digit-branch expression to s8 to silence the
+> warning.
+> 
+> Fixes: c4eb7ad32eab ("lib/base64: optimize base64_decode() with reverse lookup tables")
+> Assisted-by: LLM
+> Signed-off-by: Rosalie Fang <rosaliefang@google.com>
+> ---
+>  lib/base64.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/lib/base64.c b/lib/base64.c
+> index 325c7332b049..1489c048b1fd 100644
+> --- a/lib/base64.c
+> +++ b/lib/base64.c
+> @@ -31,7 +31,7 @@ static const char base64_tables[][65] = {
+>  #define INIT_1(v, ch_62, ch_63) \
+>  	[v] = (v) >= 'A' && (v) <= 'Z' ? (v) - 'A' \
+>  		: (v) >= 'a' && (v) <= 'z' ? (v) - 'a' + 26 \
+> -		: (v) >= '0' && (v) <= '9' ? (v) - '0' + 52 \
+> +		: (v) >= '0' && (v) <= '9' ? (s8)((v) - '0' + 52) \
+>  		: (v) == (ch_62) ? 62 : (v) == (ch_63) ? 63 : -1
+>  
+>  /*
+> -- 
+> 2.56.0.385.gac671c819a-goog
+> 
 
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on kvm/next linus/master next-20261030]
-[cannot apply to mst-vhost/linux-next kvm/linux-next v7.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the change. I avoided this in a different way, which has
+recently been merged into a tree that should be merged into mainline
+relatively soon:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Bonzini/KVM-nVMX-nSVM-check-unconditionally-whether-CR3-is-valid/20261102-124045
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20261102174512.8903-7-pbonzini%40redhat.com
-patch subject: [PATCH 23/45] KVM: Introduce kvm_check_gen()/kvm_memslots_check_gen()
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20261104/202611040108.LHPSqkKE-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611040108.LHPSqkKE-lkp@intel.com/reproduce)
+  https://git.kernel.org/akpm/mm/c/3af83c11cf5990fda0bfe3959aa6391ff903ffdd
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611040108.LHPSqkKE-lkp@intel.com/
+For the record, I do hope that
 
-All errors (new ones prefixed by >>):
+  https://github.com/llvm/llvm-project/pull/226775
 
->> arch/loongarch/kvm/vcpu.c:167:53: error: expected ')'
-     167 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
-         |                                                                   ^
-   arch/loongarch/kvm/vcpu.c:166:5: note: to match this '('
-     166 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
-         |            ^
-   arch/loongarch/kvm/vcpu.c:1821:53: error: expected ')'
-    1821 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
-         |                                                                   ^
-   arch/loongarch/kvm/vcpu.c:1820:5: note: to match this '('
-    1820 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
-         |            ^
-   2 errors generated.
+eventually gets merged so that these workarounds will be unnecessary but
+I am not sure how that will play out yet.
 
-
-vim +167 arch/loongarch/kvm/vcpu.c
-
-   151	
-   152	static void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
-   153	{
-   154		u32 version;
-   155		u64 steal;
-   156		gpa_t gpa;
-   157		struct kvm_steal_time __user *st;
-   158		struct gfn_to_hva_cache *ghc;
-   159	
-   160		ghc = &vcpu->arch.st.cache;
-   161		gpa = vcpu->arch.st.guest_addr;
-   162		if (!(gpa & KVM_STEAL_PHYS_VALID))
-   163			return;
-   164	
-   165		gpa &= KVM_STEAL_PHYS_MASK;
-   166		if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
- > 167			     kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
-   168			if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st))) {
-   169				ghc->gpa = INVALID_GPA;
-   170				return;
-   171			}
-   172		}
-   173	
-   174		st = (struct kvm_steal_time __user *)ghc->hva;
-   175		if (kvm_guest_has_pv_feature(vcpu, KVM_FEATURE_PREEMPT)) {
-   176			unsafe_put_user(0, &st->preempted, out);
-   177			vcpu->arch.st.preempted = 0;
-   178		}
-   179	
-   180		unsafe_get_user(version, &st->version, out);
-   181		if (version & 1)
-   182			version += 1; /* first time write, random junk */
-   183	
-   184		version += 1;
-   185		unsafe_put_user(version, &st->version, out);
-   186		smp_wmb();
-   187	
-   188		unsafe_get_user(steal, &st->steal, out);
-   189		steal += current->sched_info.run_delay - vcpu->arch.st.last_steal;
-   190		vcpu->arch.st.last_steal = current->sched_info.run_delay;
-   191		unsafe_put_user(steal, &st->steal, out);
-   192	
-   193		smp_wmb();
-   194		version += 1;
-   195		unsafe_put_user(version, &st->version, out);
-   196	out:
-   197		mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
-   198	}
-   199	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
