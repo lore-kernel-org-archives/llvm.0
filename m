@@ -1,102 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793726644;
-	b=39AYWnhAQIDJyBCR8vLJ5MKfi7V3ckRxQstq0UEhMa4KBeJYJ7eH+uLX4GIvr/aNy6AT
-	 e8G3CCAm+gTENYI6sqD1odRwMb/6rBQheWmj79Be/vji9klL6riV38J8eq8TuBJ8JIow7
-	 S8jPjr4JuPf0GfWu2V4VsLC1Tj5aaxaItEMZr5p4W9uOXKWKTzxZNjQsG+F/3W5bOM5Z1
-	 GMWzgKBOGQBDI9oxW+/2Y1n4eH3hfZYPErvOhdeMI0D/zG+sEEn1Xthv61eEsWxPK77hG
-	 UMaluuaR51SH//P6tm/KnNqEtPlzX8MVBadVbRcSCDtfYhrGZMaR0gpwkCVMx3UoeUw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793726644;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=KH5rnR50iDzpBeli+MkfX7fiAl3GikgWrgJ0zxm2Avw=;
-	b=MaBUXwNVmlQhyP3f7z39YZEhdf9XB2jlZdU6gCgfLONO44/eX6fVwsPvu3tGEOV67R4n
-	 V4ZamghKecLVxKL26voBgyxochCL2ad78bGZg24cLv/LgU3YVav5jFRSqMKwKFGoUrxW9
-	 IToOwGTodlhmTAf7ajcQ66WWgWyOs836EpJ4HN1WaigC47HRJgJfSnFdkFdoLOObc7+T+
-	 k948Fi2RCzGkLiGAm98SoNdb8/Ku8X5eFA7jZpwXCEiLiS8yj8TXZsRUQasuL8n5ZkqT5
-	 /wZIWmXelL5OlDc/eWOg+/lEq08nkrsem57HRJNzMKrNxyHVofBZjQI1wDbuwyloNpw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=p2J1Quwx;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.45
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.16
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793729247;
+	b=A5DmKsPgVZUXOw6pQwUdAebt4NC+IVBQ3SnD0tWr0hMH5f6XfPGV3nnc88PFfMb1GqIR
+	 UShIfWHgrJ40DL2WT7Z1ut5E7McBLiiFzP3Duq+9vEK+jSD9DC93qRmYDd88LsH0tZBBA
+	 ZnRTorvWM+ux4/xGAynnsr+QQucdM+/S1wTXy5qHIu2DZzyWsQSiyLN3UAjiAqQUmZWfI
+	 f0OPES6tu8QOy99z7IY91n01T9C8wWeG/Nt7+cWq8+WpVFKcjOJn9w/4X6faz97fK4IFn
+	 YYpATZSHCzg9+UVRUEoSrh6tDrfLByvJy0CeA65e02MvWOoa/X5PnY8Q0OW543LrckQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793729247;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=zK/MHfvWSgBGdmyh4OG7p06HHkO8iMce8c9q7NLU0+E=;
+	b=NcINXevNpvvabz7iXH/Dc0pk8CcjZM1ZR/JQEAeLUfq1HwH0DdyhAIA1MKiLUWO/YP2u
+	 5UjwUCA2WkA7w41LUlDqx9UbONbG5c7YwnuBdUtHDRErlyKJUOI2+fRGay42cA04k8PD1
+	 BdNUViebEH2EByugO9/7Xg1dcQB0Y64xaGpyIDNXjbgFsCEznmKQAmK+AGkGdvz1NLRsb
+	 rnVqB/uQDyt6OwOm4Dc2U9LgmTwlr4CUpolBdSelzP32pPL4wEr0TEBP0w2yr02MiEwBr
+	 CRDqw615stjY6+EbNkvDFrHwN38soczLtkuUe5eusmxq9yRKj4X0ZlE/zOTrFNpzV3w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F5o7VD9W;
+	arc=none smtp.remote-ip=192.198.163.16
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3FC606A328
-	for <llvm@lists.linux.dev>; Tue,  3 Nov 2026 17:24:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B3FC606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D6D606A32E;
+	Tue,  3 Nov 2026 18:07:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1D6D606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=p2J1Quwx
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48b042c0759so2430374f8f.2
-        for <llvm@lists.linux.dev>; Tue, 03 Nov 2026 09:24:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793726642; cv=none;
-        d=google.com; s=arc-20260327;
-        b=U9MsFgkiDMOiNIlv/3bVgOcnJBHRX9GVRaC93RQMNNTvGSUIMwVKU6MqmcI8fQ3IzZ
-         /jtyxCYOeOziVbri8NigJqec+/zJfMwFnQXW6fupq2VtLN1XOH7G3BdzJEO/rjSHMB3z
-         tZLGiTrEtQcCS3R2mkRUcVLLJnJgHYQKVtDihQ/XwIuCK/PQJlsJs+qJuFPIksdU5p7x
-         1vHxwEQUHQz/YfDJtWMaOaCjvDkP8WQqNAPZyWTEANHyVn4ioRaT2HbKRCh9/gNH6gQ0
-         U4JKJ5onXIuY+UzGeNEYr7v2C8b+UyURC9l2N+IR2MHbbGCUMWbe4D62nlnp9LAL0ekZ
-         Pu9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KH5rnR50iDzpBeli+MkfX7fiAl3GikgWrgJ0zxm2Avw=;
-        fh=q9Bjh5QM9KXHzQxn91Nds4DDKv0angs/NPqfvVg390U=;
-        b=VvDgFh1DwwS8AGXmrrI6ujCLbg4Yt1DFvJcALoQUAISi1C8fcmFDUV+a+nl+KUv5tm
-         ZYep8qRyCvT5CYiybNllOIRsfV/ZLQVT85QT3RD6mdPLDiSupfMZMdFD7XZ1QUTydowc
-         /kIqt34fvHdWrcl8MNYegyy6m4jFW+rhsgCrIhvZ4vRtJMhzSd10qiImE1cSXGaBejze
-         5nz38frMY99Vy3rZDHdbcYKcaTBxynkw5zfeFBoIjCSiwD5c+wYYKwmTRwOgTxDk0rma
-         l5X3ynBY1PpKKc7gAyxxOoEZFALQyyC6Rd5+WHfur16ZXhYLnQscg8Y1fzOvx/8WhYuz
-         KsGQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793726642; x=1794331442; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=KH5rnR50iDzpBeli+MkfX7fiAl3GikgWrgJ0zxm2Avw=;
-        b=p2J1Quwx+/euenNlbYYKL9LVDos938SIBlQINEPScLN8RleW3kbL1w2iAfL4YwRDBA
-         U/a/occf9EpNQKqKYiUFAjepBfH5ejPrq3qspYEAgpA7eyXQSmakDEMt6g8GinGi8jWv
-         xxq+KWYzGGH2fi+ujG0+9HzwqeIsAvIbML7xWGHhGrwd9JwbI/NVv6xvU3Hjq0NL0ED3
-         4DlckPXnk6otYOAhAOguZFMgSacYt8NEPfhuVVNeMeC+dxTCjbrIWVtwj2yuLaSW3xsi
-         xZVhNMQzVlRC7cgvhR6e73REZuJMNP6/FDMMzkg98yr25bW3efW2Yvt5L9l2ySmpnYdq
-         OXEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793726642; x=1794331442;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KH5rnR50iDzpBeli+MkfX7fiAl3GikgWrgJ0zxm2Avw=;
-        b=ybIp4yMzFRCzt4On7FlC/5UXkCLlEpEbBYKxAlQZ9cimf7uAEu21EHLdbB4EEoQe5W
-         MZ60p691fAWkGbs/bz6RSw4ilBfTYj3ISpduYOgHix7TkPIRxuCrquaPcuRALCYqBJZg
-         6YmiIr05vou66WYsg/eNefyiiuHFlGu7mz1Azspe9oBedoh1sJ9nzJCoUWia3IvRk5U0
-         KsWuWPlAzfbvw4TxdauVz/TkfZefWsTpgYWglaOrrCX+Oe60aHR6W75W3nKMQUB9O1Vc
-         kNzxrG2rHijFii7aGEdO2ZjkUU+CChgx+7rrmHj6ap+2k+WmgdJ8TGaicz7gZcrXLue4
-         Vsbw==
-X-Forwarded-Encrypted: i=1; AKwUvBxBDkt9dHjU0oB4vcNdj/JjzS7ChfAA875A06L8MIgaI6HpH5SMC0xunBi3otHC1UfcYgDg@lists.linux.dev
-X-Gm-Message-State: APuU4Z+kPlf8ZVA4VV3vYEyhjm93Bi1iZAbEXwBh/0qpxVlFpJfr2pK0
-	qreF2y31pmwFLqnZL8Uwod4rQtq1WihLqBPaqpj+Zy9vJd5DLNk8OFmnIJzUf95HcXGNBcYzNRI
-	ooXALw6o11bDB/6zWCLPaSAcjsk/930+qQWnEzIu3
-X-Gm-Gg: AYBFou3avB6YOyWY+z2/FhX7u6pLk1Mg/16NrdVR5jcLzKR/gFKv97ToLKv/OXaKiAU
-	kiFcxDGCJSrSJBkNRBvYsEffAjFt7Y1Utj07+f350iDuUqVVT6+oleut/6ubwfUAcp5l0J1nCoj
-	h3v/Fy9cIABop7+NLjmK+/qv1E7JL+iGGYm6v6GahfcyB7PIyHQPsDxNsK2DH4Q37wOGBkQ05Wb
-	g95yCbRiJHic0yNVxwxIAQYCXajNdM6AsorrG3CbXQlj9mSoFa0WfDsft+VEyeX4vBd1YxUla3A
-	WgBP+eQRxStRwmOkuRxloZY9KU6gy6hdt6K72WLntQto3xPEOUZlEN8rUg1rCBkNEsNdnzX4yMm
-	U96XtfpY+0GnNhRXjL/PJB1YeQhncWeWB4v+IjYGqsLJcLumpPLtGw9s2ih44FkEgT7H/OnoA/m
-	4qFvK3ae1oE5jXMfOjieUyMyG5/NJs54oricfiHo4ZeUsmvt4tD98XCuEBU8l1NtRmla1d6Y69N
-	upkHgpTUT0WDGuITH5OKUmzAtqaqn2uZGUdkcKK
-X-Received: by 2002:a5d:64c4:0:b0:48c:6fa4:fc89 with SMTP id
- ffacd0b85a97d-48e6e3072d7mr33054677f8f.12.1793726641939; Tue, 03 Nov 2026
- 09:24:01 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F5o7VD9W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793729246; x=1825265246;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b64n/ALy9ONkgf58cbPGHTwkxpkalkyb2b0ByEQyLoY=;
+  b=F5o7VD9Wuq7AuNCiHZbvb9znmI3oqNgxzilz9qLCfjF4sVFXyhNwHdFJ
+   T0DsoRVVr5vpMq4367xcrJUaFUWHRLvHJG9jL9E1tpNzQ2a1s34f0kYVa
+   Q0RvTCSazRZrc3gBBFg+tjZzGWtwkj23CWF1GslSc+2CO48wrPn6jklNE
+   x0pKd5P5g8GzKL3DETaAQHIrIWnkgK0Z1ub2805o5h0GjyenObpAMELFP
+   1Mr6PsGd4tMIvraYAM2UlOZpcPh4jO01CO9+QpRzFqlX6SvkhsGpfnxO+
+   fKO54miWyFzRyaAU1pUr5V1T8ASSyPSI2RLp6TT1ynG0T6vCNVLiKtJpM
+   g==;
+X-CSE-ConnectionGUID: cm+ZSZvgRk+cegXXGGRniQ==
+X-CSE-MsgGUID: P6IhHmmNS3+YGyO4XT4wNA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2478669"
+X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
+   d="scan'208";a="2478669"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 10:07:26 -0800
+X-CSE-ConnectionGUID: smG6AWmqT/KMhf5xtzl5sQ==
+X-CSE-MsgGUID: FFMi16GtTlixeZXBGVCi4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
+   d="scan'208";a="6643639"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Nov 2026 10:07:24 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xOIun-00000000j71-0RuF;
+	Tue, 03 Nov 2026 18:07:21 +0000
+Date: Wed, 4 Nov 2026 02:07:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nicolas Saenz Julienne <nsaenz@amazon.com>
+Subject: Re: [PATCH 23/45] KVM: Introduce
+ kvm_check_gen()/kvm_memslots_check_gen()
+Message-ID: <202611040108.LHPSqkKE-lkp@intel.com>
+References: <20261102174512.8903-7-pbonzini@redhat.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,142 +84,103 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261103060658.696994-1-martin.ankerl@gmail.com>
-In-Reply-To: <20261103060658.696994-1-martin.ankerl@gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 3 Nov 2026 09:23:49 -0800
-X-Gm-Features: AclHuK-McbrGplTAZCIwqXxNNWb4QkQhAciv2_yCizkKvvgWNxpSELNrt8SaikY
-Message-ID: <CAKwvOdmXSH2W0evc6XF+2yjr1qg3oUExiy-pF+LAx4_iHycu7g@mail.gmail.com>
-Subject: Re: [PATCH] x86/cpu: Use prefetcht0 for prefetch() on 64-bit
-To: Martin Leitner-Ankerl <martin.ankerl@gmail.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Andi Kleen <ak@linux.intel.com>, 
-	Youling Tang <youling.tang@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Youling Tang <tangyouling@kylinos.cn>, 
-	Nikolay Borisov <nik.borisov@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102174512.8903-7-pbonzini@redhat.com>
 
-On Mon, Nov 2, 2026 at 10:08=E2=80=AFPM Martin Leitner-Ankerl
-<martin.ankerl@gmail.com> wrote:
->
-> x86-64 does not define ARCH_HAS_PREFETCH, so prefetch() from
-> <linux/prefetch.h> is just __builtin_prefetch(). The kernel builds with
-> -mno-sse, and clang then drops __builtin_prefetch() without a warning,
-> while gcc emits prefetcht0. An x86-64 defconfig vmlinux has 8
-> prefetcht0 with clang 22.1.8, all from inline assembly, and 62 with gcc
-> 16.2.1. Also prefetch_range() is empty on x86-64 with any compiler, it
-> needs ARCH_HAS_PREFETCH.
->
-> Give x86-64 its own prefetch(), a prefetcht0 in inline assembly, which
-> every x86-64 CPU has, and define ARCH_HAS_PREFETCH for 64-bit too. Not
-> the 32-bit alternative: it becomes prefetchnta on CPUs with SSE, a
-> non-temporal prefetch, which would change what gcc builds emit today.
->
-> Afterwards clang's vmlinux has 57 prefetcht0, the new ones in 34
-> functions, e.g. __blk_mq_alloc_requests(), prepend_path(),
-> __alloc_skb(), tcp_ack() and the receive paths of e1000, tg3, sky2,
-> r8169 and forcedeth. gcc's stay at 62. With gcc 16.2.1, prefetch_range()
-> adds 16 to hfi1's receive functions and 8 to scsi_debug, which a
-> defconfig does not build. Youling Tang proposed to define
-> ARCH_HAS_PREFETCH in <linux/prefetch.h> instead [1].
->
-> KVM guest with one CPU on a Ryzen 9 7950X at a fixed 4.5 GHz, clang
-> 22.1.8, 6 boots per kernel in turns, ns per call, median (range):
->
->                     before                 after
->   io_uring IOPOLL   680.1 (679.6..684.6)   664.9 (663.1..668.4)   -2.3%
->   getcwd()          912.9 (912.0..1019.4)  901.4 (900.1..907.3)   -1.3%
->
-> IOPOLL reads 4 KiB from null_blk, 32 per submit; getcwd() is 40
-> directories deep. Built with gcc, where both kernels have the same
-> prefetches, the two differ by +0.4% and 0.0%. pread() with O_DIRECT, UDP
-> and TCP over loopback, times() and clock_gettime() change no more than
-> that. Unfortunately the NIC receive paths need real hardware, so they
-> are not measured.
->
-> Fixes: ab483570a13b ("x86 & generic: change to __builtin_prefetch()")
-> Link: https://lore.kernel.org/20240529032059.899347-2-youling.tang@linux.=
-dev/ # [1]
-> Cc: Youling Tang <tangyouling@kylinos.cn>
-> Cc: Nikolay Borisov <nik.borisov@suse.com>
-> Signed-off-by: Martin Leitner-Ankerl <martin.ankerl@gmail.com>
-> ---
->
-> Notes:
->     Code generation, testing, compiling, analysis, measurements, etc. wer=
-e
->     all driven by an AI agent (Claude Code). I have reviewed the results =
-and
->     supervised the process.
->
->     A few minutes ago this went to the x86 maintainers only, without the
->     lists, by mistake. Sorry for the duplicate.
->
->  arch/x86/include/asm/processor.h | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/proc=
-essor.h
-> index 77488ff5eb8c..64748b8705e3 100644
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -624,15 +624,25 @@ extern int                        bootloader_versio=
-n;
->  extern char                    ignore_fpu_irq;
->
->  #define HAVE_ARCH_PICK_MMAP_LAYOUT 1
-> +#define ARCH_HAS_PREFETCH
->  #define ARCH_HAS_PREFETCHW
->
->  #ifdef CONFIG_X86_32
->  # define BASE_PREFETCH         ""
-> -# define ARCH_HAS_PREFETCH
->  #else
->  # define BASE_PREFETCH         "prefetcht0 %1"
->  #endif
->
-> +#ifdef CONFIG_X86_64
-> +/*
-> + * Every x86-64 CPU has prefetcht0. Not __builtin_prefetch(): the kernel
-> + * builds with -mno-sse, and clang then drops the builtin without a warn=
-ing.
-> + */
-> +static inline void prefetch(const void *x)
-> +{
-> +       asm("prefetcht0 %0" : : "m" (*(const char *)x));
+Hi Paolo,
 
-Thanks for the patch!
-Is there a reason to have the cast vs simply use "r" constraint and
-deref in the inline asm?
-asm("prefetcht0 (%0)" : : "r" (x));
-https://godbolt.org/z/xezh15oMe
+kernel test robot noticed the following build errors:
 
-Either way:
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on kvm/next linus/master next-20261030]
+[cannot apply to mst-vhost/linux-next kvm/linux-next v7.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +}
-> +#else
->  /*
->   * Prefetch instructions for Pentium III (+) and AMD Athlon (+)
->   *
-> @@ -645,6 +655,7 @@ static inline void prefetch(const void *x)
->                           X86_FEATURE_XMM,
->                           "m" (*(const char *)x));
->  }
-> +#endif /* CONFIG_X86_64 */
->
->  /*
->   * 3dnow prefetch to get an exclusive cache line.
->
-> base-commit: 2305edc99ef7bbc11a8dcebf78853bc1b6a761bc
-> --
-> 2.56.0
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Bonzini/KVM-nVMX-nSVM-check-unconditionally-whether-CR3-is-valid/20261102-124045
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20261102174512.8903-7-pbonzini%40redhat.com
+patch subject: [PATCH 23/45] KVM: Introduce kvm_check_gen()/kvm_memslots_check_gen()
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20261104/202611040108.LHPSqkKE-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611040108.LHPSqkKE-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611040108.LHPSqkKE-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/loongarch/kvm/vcpu.c:167:53: error: expected ')'
+     167 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+         |                                                                   ^
+   arch/loongarch/kvm/vcpu.c:166:5: note: to match this '('
+     166 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+         |            ^
+   arch/loongarch/kvm/vcpu.c:1821:53: error: expected ')'
+    1821 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+         |                                                                   ^
+   arch/loongarch/kvm/vcpu.c:1820:5: note: to match this '('
+    1820 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+         |            ^
+   2 errors generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +167 arch/loongarch/kvm/vcpu.c
+
+   151	
+   152	static void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
+   153	{
+   154		u32 version;
+   155		u64 steal;
+   156		gpa_t gpa;
+   157		struct kvm_steal_time __user *st;
+   158		struct gfn_to_hva_cache *ghc;
+   159	
+   160		ghc = &vcpu->arch.st.cache;
+   161		gpa = vcpu->arch.st.guest_addr;
+   162		if (!(gpa & KVM_STEAL_PHYS_VALID))
+   163			return;
+   164	
+   165		gpa &= KVM_STEAL_PHYS_MASK;
+   166		if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+ > 167			     kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+   168			if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st))) {
+   169				ghc->gpa = INVALID_GPA;
+   170				return;
+   171			}
+   172		}
+   173	
+   174		st = (struct kvm_steal_time __user *)ghc->hva;
+   175		if (kvm_guest_has_pv_feature(vcpu, KVM_FEATURE_PREEMPT)) {
+   176			unsafe_put_user(0, &st->preempted, out);
+   177			vcpu->arch.st.preempted = 0;
+   178		}
+   179	
+   180		unsafe_get_user(version, &st->version, out);
+   181		if (version & 1)
+   182			version += 1; /* first time write, random junk */
+   183	
+   184		version += 1;
+   185		unsafe_put_user(version, &st->version, out);
+   186		smp_wmb();
+   187	
+   188		unsafe_get_user(steal, &st->steal, out);
+   189		steal += current->sched_info.run_delay - vcpu->arch.st.last_steal;
+   190		vcpu->arch.st.last_steal = current->sched_info.run_delay;
+   191		unsafe_put_user(steal, &st->steal, out);
+   192	
+   193		smp_wmb();
+   194		version += 1;
+   195		unsafe_put_user(version, &st->version, out);
+   196	out:
+   197		mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
+   198	}
+   199	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
