@@ -1,105 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793680540;
-	b=ayctvhdEd/G5YKdTI+h71rIn/TWAr0ff6xClLBD4SgDEHycfAFxD02Po3paaMoQQUTT9
-	 FIJ1ocMdbeAV1igcQL+ZpqafNkxc1AoLPsDZ8GDxp35/OCCoBmjla5sfDRSjRMvqdVbuB
-	 FH6xJ5u2ZKKkUJwnY8YwY34q5bkH+TBcu0caCZQhVedwjAf2wtpnvoJl/C5+25P+ToAVf
-	 1wqODWBSonslpIh/5/2pkwiZxIc+QfxnVzkKnAWI2jZzE99uaBSnyezeP/CQ8A5xmNNse
-	 R+D6giXVkXay7Xa4aytKwy/Q+wL/JDxMD9vB6RTEVGZLstp7WKCWQEYGpDdaczGpLKQ==
+	t=1793681556;
+	b=lA46GnIpSEBwspvjnWTUjjX+VS0vQ0duw1tC4t0UQnCCWya3DbKynCJpqC9lim3c8fdy
+	 N4SbaOVNQsod39ObAxL5SS9U8wSQbRV0alPNx9gnodVg7tq3PBEbSU74pt7i0CZorl+25
+	 6a2rkD3rvH1BvXnqi5Ue5EY+tVy1Zu6xr4gbmoXpXigqsvza8QF2oCj6y2nCrIvOF1ZzY
+	 7aCzmg/+Lrnjkx0IHQM5I6KIEBkDuWTPzaPTTzewNNjVo95jHjhgtMKWx3+D6dbgGOsqE
+	 0NdaSjYUE5W9VvKMVf3afUdp1bOK/xQz9rgQ7jvUeyDkubtgYdOGd3VO7aXusvnslrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793680540;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=+haBGwyiWfU5fK0i8XKvoQcOJxAPZRgUZLulxjt6MCY=;
-	b=CMJOc7utYSTTKo/1uegyLpCTZ835gopvnrj0lHkKePtYoAqTysL6HUSrSWmKyPydr4bm
-	 AyyitMOzZK9piOUuTkzcChvyMEymi17sz2+LzuK6WpbHrkBAPe6VdFAT/cSX4ZiItUKos
-	 rnSDIOYPzTyegKrb3anN/WnoKMdktpw6GymlX4Ybw0e5fTx/+a7VTRrGzgtG8uBZ1Zcpp
-	 /i1QwSSDOD8WGg+sy4Hx8IhlocDJ+eJ10T/+zy+r7IYWrmRR+RrKE3MVzZ1Kr2srTCBP3
-	 5fR6Tp3ZADWT/cfpNWuXNW+DuLUj14AhvE0jEL0Tvk6125eykQe0eYe7vkKf0aSModw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793681556;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=34p6/q4mUiohDUq3YP/o+RtLUNRMezD/7unT8fjXWqs=;
+	b=M8lw5zwsbEPtsdkmN3hSjqygZckOlgMlD/aQU4v8xs4xyFWzGjqXJwz36gOhBm/gnie1
+	 t3QCM1+qbnPhpvzJh4oaq/HcXkvz3lXU6bshA0Z5wfow0YuHtx5DIbUMgYujeYE1J20Dw
+	 uoZUFIyXRollMAHfdQaiWujn9vPtZr9EjD1tfjIkZShWZ/hrgul2lxgmSo72f+2823NHB
+	 XViqfY9KU5RoE58SLZcagwVU9ioX+Dfv2yQZyp/VUunsRXtt2fPucjfZM5a2u/BSiprbo
+	 huldnmh/Y81LPSTzNcM04KYEZyJbavaUEqnF3EWQh2erlhIJ+XkR9dBNOtqZeO2rsKg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yUZNsxka;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Mh0L3Skv;
+	arc=none smtp.remote-ip=192.198.163.7
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45AF8606A324
-	for <llvm@lists.linux.dev>; Tue,  3 Nov 2026 04:35:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45AF8606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B413D606A327;
+	Tue,  3 Nov 2026 04:52:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B413D606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yUZNsxka
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ae7626d14aso1992877a91.2
-        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 20:35:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793680533; x=1794285333; darn=lists.linux.dev;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=+haBGwyiWfU5fK0i8XKvoQcOJxAPZRgUZLulxjt6MCY=;
-        b=yUZNsxkaiieEFocX/U4mFkhM+Cxw4xT11F60BOZdP84wAAR5wVCgFtYLpx+gLPA48s
-         zo9E8faODMREN+UAl25FNDRIlgP10hSpz//XsBwmFIWMTUm2fcp3MiQ5iQvbwbbf4ucA
-         K5cZf2IzqNhP/SlVYCt9OR4VCOTKz4cgMyTxy34/ukPCXpCz08/qb8A0gJ9WKqRvBASp
-         YLrmovPZbca9AyyOdRKsg7fONSkqaaF8RlpH54LDpHrxZEhdOcrs28XWKt4/ACDs7BQh
-         pCe+prAEl/nxH2f1xL65X7zkMXwHuaHGeJQR9qGDxpyMQ394iP6vmKc40ZStczjXFVkt
-         c+JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793680533; x=1794285333;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+haBGwyiWfU5fK0i8XKvoQcOJxAPZRgUZLulxjt6MCY=;
-        b=vMs0A2qWeF+IrDSxK9ktUBTyv+f4Rqdjcyu00Q2wfbn7ICX68w87nx68GFmV4ywzNm
-         8h8syvWYYb6nJqs0Vasy2qGXRJZhBv+j4xHIOU749TkqpbapyHrEQyMs0SOoRGTa3Uem
-         vkN6vQ/DNKUwnV2eHWFbAPsis3Qu54KRxGHMCYvu+n4Avlwa5GM57s/yGt7QaCVcqbMb
-         xwf2M7YRPsBmK9bV7rRwZfh6hfui8heu9puWNWZsl91gHjasqv/nWoBA+g/wt+pRrUHd
-         Cl3/MxDbbTO0eDjcWJ9UcAXUeyXs1DDRLB8FB4qVB6trnPvl7i1zIAaBBJJiHIe9bT8L
-         IBgA==
-X-Forwarded-Encrypted: i=1; AKwUvBwjmSGmgFkYvbGzFXdfJS3VmYs1Z+XYfNtOYAKwIUx19XtCpzrNIIoBVZRSS+1LJLeY9N5N@lists.linux.dev
-X-Gm-Message-State: APuU4Z+ykdEXZEneYQquYyYGCa4BseFxfCkLaGsGCqiiV9TysC8o0d05
-	H9QoFaDpy02ELXMaCCkum11vJ0Acsl6gSlPGwlN2WqTPd/E4PADgoRx3
-X-Gm-Gg: AYBFou1EkMKrqkGd/ISXZm6HdRxFGG3G/1uNAhorjPYJRgewpBd83g58JLV49ueKrwz
-	vScf/hBh0EZs6ZZakUGQQ3YAlH+V566SxK0aNMzeS8AMcR6RteLmHfrFOA6ZYYcAp8HCrDz19hO
-	Y9kT08xtX970cqBteAp87COPW7/BdUONNlf+Xpk56GcwpfzQUTnn9aHV3j9dZ4K4idFsGyIwV5V
-	McO3HQhKWx0OpCUhyp2OIocGgkFVx14pqnvGcoeHt21kByRaxDxVrYQ+YzR63jMn9cXUKD0YTTI
-	A7gd8xVsIeaIEgk+v9+kNbzjZKus8jUoMF1ICs0mRP7Q8DTHn0NXpUrt6vKDg9mY4rwQprB2BxA
-	bJyj5AQisMWA9pXBL5AGvKZCEfTX4yi3zmIwEhMfASxxzilu7LU5WWChdHSykWzPQegrYBBl/ny
-	5899bI1F9nvRAPcDDeR8N0i2TKhid9Dx5MIHVKmCrW7Jaydr76NxlXwaYB7VC5z2nSOkDjPu/Ce
-	hbI2pPVS89osXKoCKIVjNWdifWeUgPnLqLkCJdFllpBXcNjbzqWn6si24dLsWePIVYTN1S72AeG
-	T7ZNqHBCt6hfx1t53frwzl93VfqgWIYMpwvQG6eYa+qLucKbGxHYrgqEIhQJWc9agTsTIPFxokz
-	S/mOzi73esfGzqbb5iBlHdikTDaSo/tUnhL0=
-X-Received: by 2002:a17:90b:4f87:b0:3ac:af8d:c839 with SMTP id 98e67ed59e1d1-3ae897f6e6dmr9433576a91.35.1793680533365;
-        Mon, 02 Nov 2026 20:35:33 -0800 (PST)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85cb91e5sm9616698a91.0.2026.11.02.20.35.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 20:35:32 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Nov 2026 04:35:32 +0000
-Message-Id: <DMLAOL0238CH.43SXF0SFHONW@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <llvm@lists.linux.dev>
-Subject: Re: [PATCH bpf-next v4 2/2] bpftool: Make the LLVM disassembler an
- optional runtime dependency
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <socketpair@gmail.com>, "Quentin Monnet" <qmo@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Bill
- Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Nick Desaulniers" <ndesaulniers@google.com>
-In-Reply-To: <20261102-bpftool-plugin-v4-2-5a853e973db9@gmail.com>
-References: <20261102-bpftool-plugin-v4-0-5a853e973db9@gmail.com> <20261102-bpftool-plugin-v4-2-5a853e973db9@gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Mh0L3Skv
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793681554; x=1825217554;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=r+WZUoyk2WCPAmB29GrTF3vpV/Ii9qAichtjByshkXk=;
+  b=Mh0L3SkvF+rk4XrXm7l0FahMCKcxURLLbRk5RlkoQX81txrRo0Q7sPKv
+   loIJR9LRyOf7wDxTnIVq+nBDpnKFIA8WrjkSOdnTShHQpH81iZY6vHkcv
+   09fKza2gyEyb/hlkXj1V6LyQFww+tWDu3c04zrwajQ0ZEjdAUhkaQIpei
+   iqFtUPq+kGNGJaTEZcueXKqv/jm2h8mf2mFV3LSvsyUtv/DWAIYJQzfTT
+   qQgA+S0CYY5A8K4OqDd0CfMMzQRfUnre4dzrJCYuXYg3QOv/snRv0Blsd
+   MZqyYWWCWzLw2yL/FheDxauVuK51+wSCbGxqaF7Ri4hTeOFCPD6JliImm
+   g==;
+X-CSE-ConnectionGUID: A6IXQa55Tb+tr+QmqbBSeA==
+X-CSE-MsgGUID: F+q6kCN5RTmGrGIbfl92nA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2269713"
+X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
+   d="scan'208";a="2269713"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 20:52:33 -0800
+X-CSE-ConnectionGUID: b/1gL201RsWw53qtt2NzoA==
+X-CSE-MsgGUID: ua1yMAqYQf6kZ1IShzMipg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
+   d="scan'208";a="6852594"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 02 Nov 2026 20:52:25 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xO6VS-00000000iJU-0Zcp;
+	Tue, 03 Nov 2026 04:52:22 +0000
+Date: Tue, 3 Nov 2026 12:51:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?J=F6rg_R=F6del?= <joro@8bytes.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Michael Roth <michael.roth@amd.com>,
+	Liam Merwick <liam.merwick@oracle.com>,
+	Vishal Annapurve <vannapurve@google.com>,
+	Ninad Naik <ninadnaik07@gmail.com>,
+	Joerg Roedel <joerg.roedel@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	coconut-svsm@lists.linux.dev, joro@8bytes.org
+Subject: Re: [PATCH v3 4/8] KVM: SEV: Add direct VMSA capability
+Message-ID: <202611031239.b4rFO1dx-lkp@intel.com>
+References: <20261102114137.1198982-5-joro@8bytes.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -109,40 +93,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261102114137.1198982-5-joro@8bytes.org>
 
-On Mon, Nov 02, 2026 at 04:44 AM Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org> wrote:
-> +  else ifeq ($(words $(LIBLLVM_SO)),1)
-> +    # Don't link with libLLVM.so. "prog dump jited" loads it with dlopen().
-> +    CFLAGS += -DLIBLLVM_SO='"$(notdir $(realpath $(LIBLLVM_SO)))"'
+Hi Jörg,
 
-sashiko is right. realpath was my suggestion, sorry.
-Today DT_NEEDED of bpftool has the soname of libLLVM.so.
-Every distro makes that name visible to ld.so.
-The name of the file behind it is up to the distro.
-The two are the same on Fedora 44, where you tested.
-Where they differ dlopen() fails and "prog dump jited" doesn't work at all.
-Pls use the soname. Something like this (not tested):
+kernel test robot noticed the following build errors:
 
-    LIBLLVM_SONAME := $(shell $(READELF) -d $(LIBLLVM_SO) | \
-                        sed -n 's/.*(SONAME).*\[\(.*\)\].*/\1/p')
-    CFLAGS += -DLIBLLVM_SO='"$(LIBLLVM_SONAME)"'
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on kvm/next linus/master next-20261030]
+[cannot apply to tip/x86/core mst-vhost/linux-next kvm/linux-next v7.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[...]
+url:    https://github.com/intel-lab-lkp/linux/commits/J-rg-R-del/KVM-SEV-Document-SNP-direct-VMSA-userspace-ABI/20261102-124130
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20261102114137.1198982-5-joro%408bytes.org
+patch subject: [PATCH v3 4/8] KVM: SEV: Add direct VMSA capability
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261103/202611031239.b4rFO1dx-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611031239.b4rFO1dx-lkp@intel.com/reproduce)
 
-> +	lib = dlopen(LIBLLVM_SO, RTLD_NOW);
-> +	if (!lib) {
-> +		p_err("failed to load %s: %s", LIBLLVM_SO,
-> +		      dlerror() ?: "unknown error");
-> +		return -1;
-> +	}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611031239.b4rFO1dx-lkp@intel.com/
 
-"bpftool prog dump jited id N file F" fails here too when libLLVM.so is
-not installed. It doesn't need a disassembler.
-prog_dump() only writes the image to F.
-But do_dump() calls disasm_init() before it parses "file".
-Call disasm_init() after the arguments are parsed, and only without "file" ?
-It can be a separate patch.
+All errors (new ones prefixed by >>):
 
-Also common_options.rst still says "linking against LLVM".
+>> arch/x86/kvm/svm/svm.c:5473:2: error: cannot jump from switch statement to this case label
+    5473 |         default:
+         |         ^
+   arch/x86/kvm/svm/svm.c:5466:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    5466 |                 guard(mutex)(&kvm->lock);
+         |                 ^
+   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
+     423 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
+     303 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:80:1: note: expanded from here
+      80 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:86:1: note: expanded from here
+      86 | __UNIQUE_ID_unlock_1239
+         | ^
+   arch/x86/kvm/svm/svm.c:5466:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:423:15: note: expanded from macro 'guard'
+     423 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:74:1: note: expanded from here
+      74 | __UNIQUE_ID_guard_1238
+         | ^
+   1 error generated.
 
-pw-bot: cr
+
+vim +5473 arch/x86/kvm/svm/svm.c
+
+  5456	
+  5457	static int svm_enable_vm_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
+  5458	{
+  5459		switch (cap->cap) {
+  5460	#ifdef CONFIG_KVM_AMD_SEV
+  5461		case KVM_CAP_SNP_DIRECT_VMSA:
+  5462			if (memchr_inv(cap->args, 0, sizeof(cap->args)) ||
+  5463			    kvm->arch.vm_type != KVM_X86_SNP_VM)
+  5464				return -EINVAL;
+  5465	
+  5466			guard(mutex)(&kvm->lock);
+  5467			if (kvm->created_vcpus)
+  5468				return -EINVAL;
+  5469	
+  5470			to_kvm_sev_info(kvm)->snp_direct_vmsa = true;
+  5471			return 0;
+  5472	#endif
+> 5473		default:
+  5474			return -EINVAL;
+  5475		}
+  5476	}
+  5477	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
