@@ -1,100 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793747008;
-	b=D4MCAov0QiEcnsCoRt3k5ccg8PoctEoGlQ+GQ+Z1WNWGnmWjF0GvUKVoyVPN864GRmf9
-	 b1hLGpVMu5YjhJp4Ij6s1OHekjHZHGsEyHRWybcwx4qk+3xwdGVO7gGdnlMGRHkPIxC1C
-	 J8B+xKCrRcqC3fDr8X4Z/Zs9FNkaoxvACjD//FYQQ/bonHRMyPidybYw+JVZIxN2tLP6s
-	 LhfSBRCjIGBX0tfdogT34xDlIc0x0//CN0QniexUPd4sTNh2c+b1UG0r9mhezQXD2clGZ
-	 4ioplUz0J/nHttr0KmnQSoCSOhyfaequP/p0kORARRuJgX3rJgy2CY2BaQtD7Xyuiww==
+	t=1793747985;
+	b=UsrwLPb95XcMVl+rd3UkPxxZQZfU2oLIBcmX6EthCfQrcgmDvzVQ2YbpwkDiE6sgQE1B
+	 +V9jWpXvtI3x54LuiJ8dJOqxXnmvitnMEBl42UQJmUvUVw9vCM5mBV+PAwjLO6coWrrMY
+	 4QJdwMxNI8xeD7OHhZZumUP4CWolQbj65dmbmgmxHL0x2PzqkScZF08IKfhptKrMI1yp0
+	 dig9Sz4GQxLFXsVKDiOvSwfaWDwt0rnaoeVR9hvhUmzFhXE/DfdVN4Ngy+dxMODmqyifL
+	 FSXXG3RKLzQVLwO4vzEor7YAE9etl3oVEvTr4YfiNGGg6wMUzhk5rEz6xBh/cLHmS4w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793747008;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=l22MxaExXx2RO2+ezWq0CB4Ta82xkRaqq8ZcfjriRS8=;
-	b=37PsV1WhCUTBo8Jui+JKbmMRfsG52HzC1jFp2LG8qCjwQErWapk9f/GldE/MxuIA6oQl
-	 4wkuZQxFPNwuptuRSflkQLGY83huNbHCnTh8UBl2F85klZ+kEkF5ButXim9PF9JxBKYVu
-	 xpkFQjqrZUphMMNY1ZciHmQt1921blM31FyU7q8iNX5a23PkpMe8Qs7KkWFWY4x9NztDL
-	 9y3ApUJuFmxTUyiMtBEldJJEODDM1z6QONvVaNRa+OHP+Xtm7pl3PFbHhwUm6zIsr3KFS
-	 dWw1G+nNZw3z3hOa9cQWxYhsVNZbySyvOouioFBVjxRyBdQEpyaYLRsvf3Ob+25ZUPg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793747985;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=ge8nPcGUxBsvSUK/jINOGmSzjSvUlXilvyC+0rJ7oiE=;
+	b=U6/pJUjrt+a2V77QY+iniljeS9ZCbYjgLqeam/1q+ldgJDUxfT3E4ovtvgLxQJ4uX37l
+	 h474sS+Nu4PChOpSA1AKl/1h6La5YvWo9dilOhzXHZWSwpDEBV8/yYX3T1t1BIs3TTdyb
+	 DhDjk+4l0vRSo8SaFlQou2DqSYNsHTmIUkpkvLNUdE6YfI1NsCkCh3fsSUZ4od14IRDbj
+	 7ietpLx8TBwmVEGlGdIxNx8vCCPhcjnp/SlKSTQ4bLcfyakeAeSNw1UCs9Jdvpof0EoIs
+	 CmXiMgy781+qz8rr+p91cxhocZDgdo8nTWGbaZYBr/WWhSR0NClJP10c3Zm5pI8WcoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FqdSWJkW;
-	arc=none smtp.remote-ip=209.85.128.46
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IucYV2rN;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476B7606A324
-	for <llvm@lists.linux.dev>; Tue,  3 Nov 2026 23:03:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 476B7606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C832B606A32D;
+	Tue,  3 Nov 2026 23:19:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C832B606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FqdSWJkW
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a215e64962so620075e9.1
-        for <llvm@lists.linux.dev>; Tue, 03 Nov 2026 15:03:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793747007; x=1794351807; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=l22MxaExXx2RO2+ezWq0CB4Ta82xkRaqq8ZcfjriRS8=;
-        b=FqdSWJkWBbFmMxChKnsXxKiHG1PeT+QX2nae8a9sTMebZrjM16Dr6/xCynpD6t+pe4
-         kohwnAiHDuuNfijojv++k3tj76yI0GHXU0zS0Uh51JjX+QRrWqtWyVdYdzie4kDze/0c
-         OjerjDN+ffgZCKdXFYaMWS8ISvf+KZt4RhcOn/Ud2s8zRmGqeN9TQClMUZ+ejSIpATG5
-         gHp5mrHbwwQGLIhVgecPGLDjsOVs567ny4wg0ywYV4/BEKyh/LyEUlpeNhocmV47Es4z
-         o1Iw0SIIsnB+yfeHM1EmGszRaeZ6omRuefYbjqs8msNtzpxbGRdrY7u1AcVNt4fniP1S
-         HYdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793747007; x=1794351807;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=l22MxaExXx2RO2+ezWq0CB4Ta82xkRaqq8ZcfjriRS8=;
-        b=xYdCDSA484ixMd81UFAG1wg2gmbBsOwM9Q01XuIdO7yeA69DxeVquSEg5lO8gks+sh
-         uh4OctQhuN5b2djH3h7fZXfY1V4ISJchdhHX5ffHOt0jieZx5yq3Tc06eLrrvNWb8eMf
-         +vOaxXdlv2hkgbmpYb6i4zwnSTKZLdBEnu0RkaTpdBd5+8+jghw/iGvjQcoEzQiRzA5G
-         62ySEE+EycFeNdOR7y1p8Ht0q4vunBYKyfzoPPTj6ijipkElS3GDC7fp9BR6mitQXcNC
-         I4OzT+5mxrznrPUjeEJaHP7ViMjY/0aAeUXYp66RextbjKi/YMaXa7zstLieeKg612he
-         aoJg==
-X-Forwarded-Encrypted: i=1; AKwUvBzgX15uA5qDsCTHyX1cHoEht0AQJr7qBHDald4tXPNwMSsKasrzIgl79lRMLPiUOv5ln9oh@lists.linux.dev
-X-Gm-Message-State: APuU4Z9rJvR+7HgMIVxuI+BslvmNrNUbNeo2SKiRZJ43Ic4N0eUwdN/U
-	Sjqu7Amgfsrg397g/kEEE48LLRVNsu8H234Ttwly6NZ7kFOrwwVGXzFi
-X-Gm-Gg: AYBFou2Hu3iW/hxa9iUK8V/UkQTHv/3UAmQsIShcYs2WVzONgajtrGNWAVcwcijWpqX
-	CwYNto063PaEMvG9TxObEqCcRKxOa7qfY2GGaN6gOOuBQQaUsI5oyJI0locaiFDnyOIyou/21Ld
-	+UTb33iSn3J5VodJWgDKsTsMWl1CM1UHPKyV/IwulXZI8A/NRnSx8T17IdqtItDGzvL2YiagBCe
-	JWpe2zKXO7DGt3FEmxwng+TJqzNg+Q2SJSUXNZcetjoJgkkVBkkk+t/YS6QBTsn8zS0mkRQR4NN
-	x/TxAwN6Dx9wm6ihXOYRvoQ9E1bswdMuwx2WBvwUzPV/mOiE4uaHUb3uYBnVekDgRvPGC7Yvgx8
-	QOrCw/mbbc4R92bCxKDQYlAUJDR3Uu1xuKgIKw98o1PkQ7bfmCVBN7jzI5ioIdsJm+vFPEh59kB
-	SuTTtmMT2DVFf7jt4tnIv5jTUh+UphyY5mi89HMjYmdP8oP76VJs6ZNdpn1sKlAd5OFRpMnDTIR
-	uxnLoBzgTPH56LmWJS6GEsW40yUe6uSOtw4b3lDSa7iG6qzxX/RPPL7p8u+b+Me5blAP2R2WIOC
-	3Acox+q9rZC+GbLoyHGEp7YcweUkOZYmBjdH4cLy0BZ5nm9M7ddSL5TTK9X/zvU0DvC5e0QlZcv
-	LjKNxpIy0Rw==
-X-Received: by 2002:a05:600c:3556:b0:4a1:c6fd:4db0 with SMTP id 5b1f17b1804b1-4ac187a80b4mr362053555e9.19.1793747006566;
-        Tue, 03 Nov 2026 15:03:26 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b452eb99b1sm1703755e9.3.2026.11.03.15.03.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:03:26 -0800 (PST)
-Date: Tue, 3 Nov 2026 23:03:25 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Rosalie Fang <rosaliefang@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, Kuan-Wei Chiu <visitorckw@gmail.com>,
- Guan-Chun Wu <409411716@gms.tku.edu.tw>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Greg Thelen <gthelen@google.com>, Yi
- Zhu <chuyee@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] lib/base64: fix -Wconstant-conversion warning in
- INIT_1()
-Message-ID: <20261103230325.12fff6b0@pumpkin>
-In-Reply-To: <20261103190052.GA267580@ax162>
-References: <20261103163404.159582-1-rosaliefang@google.com>
-	<20261103190052.GA267580@ax162>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IucYV2rN
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793747984; x=1825283984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yGcM0U/fiCfGKTJxpm31vDx9xIx3ErmFbd839Kd62eI=;
+  b=IucYV2rN8HHiqiatsLYF+Zknmb13T4lT7Xf2b8kuOpHEAg8H7yRLvpE7
+   qwqfmFjhNYdF7eHsjXuN5cVNpmNBsjJAvG6WUjcQSxTblQwcGNfhYBUqG
+   +VgHJoENUad3CV4XJGOsV04Ht4ookexT0O/88j2TnW/ClpcZoPUeYVcAr
+   aq6WMznB48KIyDhZqDn2IeY8R+Kz48PDJrDiunAdNS9T8nwdyWoCN9y4T
+   nAU8swsDjYQSKd6JPJhMi+7BQkgTr2uwBheP1g6qhSQ5mjFOktaYf3F4e
+   kj/BJ8GBIW/hLkNPgiKs5LrAWQOdeZSoxpVaojkRLIQExE4TRQSEHFcrY
+   w==;
+X-CSE-ConnectionGUID: OG6F3CHRTbyymTsr0UzgQw==
+X-CSE-MsgGUID: PftyOAA4T8m8iLwnrjmXeg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2489834"
+X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
+   d="scan'208";a="2489834"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 15:19:43 -0800
+X-CSE-ConnectionGUID: ztogfQyQSRyK1fZcohZdLg==
+X-CSE-MsgGUID: 0eJy8HeXQcywk+AUu8ktRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
+   d="scan'208";a="6570453"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 03 Nov 2026 15:19:39 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xONmx-00000000jRz-3F88;
+	Tue, 03 Nov 2026 23:19:35 +0000
+Date: Wed, 4 Nov 2026 07:19:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Clark <robin.clark@oss.qualcomm.com>,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	Alexander Koskovich <akoskovich@pm.me>,
+	Jie Zhang <jie.zhang@oss.qualcomm.com>,
+	Akhil P Oommen <akhilpo@oss.qualcomm.com>,
+	Bhaskar Reddy Valluru <bvalluru@qti.qualcomm.com>,
+	Nico Angelo Dela Cruz <nicoangelodelacruz@gmail.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 11/15] drm/msm/a8xx: devcoredump state capture support
+Message-ID: <202611040652.1Wy2glVj-lkp@intel.com>
+References: <20261102220405.30730-12-robin.clark@oss.qualcomm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,85 +96,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102220405.30730-12-robin.clark@oss.qualcomm.com>
 
-On Tue, 3 Nov 2026 12:00:52 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+Hi Rob,
 
-> Hi Rosalie,
-> 
-> On Tue, Nov 03, 2026 at 04:34:04PM +0000, Rosalie Fang wrote:
-> > When expanding BASE64_REV_INIT() for v in 0x7c..0x7f (124..127), the
-> > unselected ternary branch (v) - '0' + 52 evaluates to 128..131, which
-> > exceeds SCHAR_MAX (127). Recent Clang versions diagnose implicit integer
-> > constant conversions in unevaluated ternary arms when initializing the
-> > s8 lookup tables:
-> > 
-> >   lib/base64.c:58:18: error: implicit conversion from 'int' to 's8'
-> >   (aka 'signed char') changes value from 131 to -125
-> >   [-Werror,-Wconstant-conversion]
-> >      58 |         [BASE64_IMAP] = BASE64_REV_INIT('+', ',')
-> >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >   lib/base64.c:34:42: note: expanded from macro 'INIT_1'
-> >      34 |                 : (v) >= '0' && (v) <= '9' ? (v) - '0' + 52 \
-> >         |                                              ~~~~~~~~~~^~~~
-> > 
-> > Explicitly cast the digit-branch expression to s8 to silence the
-> > warning.
-> > 
-> > Fixes: c4eb7ad32eab ("lib/base64: optimize base64_decode() with reverse lookup tables")
-> > Assisted-by: LLM
-> > Signed-off-by: Rosalie Fang <rosaliefang@google.com>
-> > ---
-> >  lib/base64.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/lib/base64.c b/lib/base64.c
-> > index 325c7332b049..1489c048b1fd 100644
-> > --- a/lib/base64.c
-> > +++ b/lib/base64.c
-> > @@ -31,7 +31,7 @@ static const char base64_tables[][65] = {
-> >  #define INIT_1(v, ch_62, ch_63) \
-> >  	[v] = (v) >= 'A' && (v) <= 'Z' ? (v) - 'A' \
-> >  		: (v) >= 'a' && (v) <= 'z' ? (v) - 'a' + 26 \
-> > -		: (v) >= '0' && (v) <= '9' ? (v) - '0' + 52 \
-> > +		: (v) >= '0' && (v) <= '9' ? (s8)((v) - '0' + 52) \
-> >  		: (v) == (ch_62) ? 62 : (v) == (ch_63) ? 63 : -1
-> >  
-> >  /*
-> > -- 
-> > 2.56.0.385.gac671c819a-goog
-> >   
-> 
-> Thanks for the change. I avoided this in a different way, which has
-> recently been merged into a tree that should be merged into mainline
-> relatively soon:
-> 
->   https://git.kernel.org/akpm/mm/c/3af83c11cf5990fda0bfe3959aa6391ff903ffdd
+kernel test robot noticed the following build errors:
 
-#define INIT_1(v, ch_62, ch_63) \
-	[v] = (s8)((v) >= 'A' && (v) <= 'Z' ? (v) - 'A' \
-		 : (v) >= 'a' && (v) <= 'z' ? (v) - 'a' + 26 \
-		 : (v) >= '0' && (v) <= '9' ? (v) - '0' + 52 \
-		 : (v) == (ch_62) ? 62 : (v) == (ch_63) ? 63 : -1)
-probably looks best?
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on drm-tip/drm-tip linus/master next-20261030]
+[cannot apply to drm-misc/drm-misc-next daeinki-drm-exynos/exynos-drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes v7.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> For the record, I do hope that
-> 
->   https://github.com/llvm/llvm-project/pull/226775
-> 
-> eventually gets merged so that these workarounds will be unnecessary but
-> I am not sure how that will play out yet.
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Import-adreno_snapshot-h/20261102-140245
+base:   https://gitlab.freedesktop.org/drm/kernel.git drm-next
+patch link:    https://lore.kernel.org/r/20261102220405.30730-12-robin.clark%40oss.qualcomm.com
+patch subject: [PATCH v5 11/15] drm/msm/a8xx: devcoredump state capture support
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261104/202611040652.1Wy2glVj-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611040652.1Wy2glVj-lkp@intel.com/reproduce)
 
-Someone really doesn't like kernel code!
-There are other warnings like 'cast of pointer to/from integer of a different
-size' that it would be nice not to have reported in code that will be optimised
-away.
-At least the kernel gave up on some of the 'type limits' warnings, they
-had similar problems (even inside __builtin_choose_expr()).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611040652.1Wy2glVj-lkp@intel.com/
 
-David
+All errors (new ones prefixed by >>):
 
-(I'm reading these unthreaded...)
+   In file included from drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:9:
+>> drivers/gpu/drm/msm/adreno/adreno_snapshot.h:506:15: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     506 |         *(p->in++) = FIELD_PREP(GENMASK_U64(63, 44), reg) | BIT(21) | BIT(0);
+         |                      ^
+   drivers/gpu/drm/msm/adreno/adreno_snapshot.h:513:15: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     513 |         *(p->in++) = FIELD_PREP(GENMASK_U64(63, 44), reg) | dwords;
+         |                      ^
+>> drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:920:14: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     920 |         side_data = FIELD_GET(GENMASK(27, 24), reg);
+         |                     ^
+   drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:1135:14: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1135 |         side_data = FIELD_GET(GENMASK(27, 24), reg);
+         |                     ^
+>> drivers/gpu/drm/msm/adreno/a8xx_gpu_state.c:1271:4: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1271 |                         FIELD_PREP(GENMASK(7, 4), a6xx_gpu->slice_mask));
+         |                         ^
+   5 errors generated.
 
+
+vim +/FIELD_PREP +506 drivers/gpu/drm/msm/adreno/adreno_snapshot.h
+
+   502	
+   503	static inline void CD_WRITE(struct cd_script *p, u32 reg, u32 val)
+   504	{
+   505		*(p->in++) = val;
+ > 506		*(p->in++) = FIELD_PREP(GENMASK_U64(63, 44), reg) | BIT(21) | BIT(0);
+   507		__cd_check_overflow(p);
+   508	}
+   509	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
