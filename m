@@ -1,62 +1,53 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.97.179.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793710904;
-	b=ICyWNAuALe5sz413lhLIVUfMqBW62m4KjPaAIHF76ifz5noGQ+px0AffHFKQR4YcCJkw
-	 id2udw6jGL7DZiSzZW3wZ6yN0V5TcmcHBNSrhpvUsUs5ZVKUQbGl93Nb3edi+bsflX3MX
-	 QqCR7kFla0IbClTtHLHxvf34QAaOdz/DMppKnvjVYHHzxhna/cW4Q0MdkT85R1puM+GTE
-	 gPduISngSDsuF7N1Llx5utHP2hXNmpuvSu0bbZd2Lg9H4Iy52Bn3gFt59YxCERe+rDiWe
-	 ITcyRey/Zo+h24duNz66KUf+Wwx4XUh31YA1mtq3nEN9L7Dg8mA3SvynDzfyXVxFGwA==
+	t=1793711016;
+	b=OQArUklV9X3CEls1pCRi6Pof/9kmPvzMydtkj+XU4Rf4eDc/4OMfzs7RLkk/WtEcceji
+	 LgXCM/qPr5EZIckZlhTAq5DqjcGYQOoW70b2/8Qn8ejIHxY4A9JR6dfpJg7OwHV8Mkneb
+	 bdbuuEoUNldClIObKZTm+JfKJSz3kwlhdK4iw5b8DZlDQEof67fLZOvR4L0BkOGXwInnE
+	 uNW/0doQwwhnkBoqqdUeb1Vwqdvhff76Mw01DIBS42myFi6hvfam0xURaCuJjw3Xc7EO1
+	 lSQe4xTv05vrsFTlCReoaE2y9T16int67T44xe5F1zmksF4QDG3g/f978WaFhC6yegQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793710904;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=CM1sHdFY9XeKp8SyPiofbXJvq/Pp2zuA6NY4f40oVL0=;
-	b=KYk565KiLsCFCqs48OsiuiuF9SoMteQicrS9oRTyO6QBjwPXKMAKoxv4Y3ldHMwX7Tc4
-	 W0DfVfmBM7JGCfEZHn4BuM7pAxur7UTRT9PjHIrEKka05JhsCOReB2/EcT8bvLC4eSA0F
-	 DjfZfaBpLwIqALhh6u+4g8maVncLQRz0Jxi6iINRw3y2HuIawGR69nUPVmJDGWl5GrOdr
-	 MFp9eYH4ST0wWxDGGnAyEfip1b+yqJkVsy6seZ1ATGhCgOeHzpuOLtWdUvlizl0/CECFn
-	 X7D4Z00CHLp76jkNpzHVjoU/XmwK2vsJSazuygOiiJ6J0CIqcygI4EsdGjtHqSSAXvg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793711016;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=0P+ytSK0bOW8b158bPuMgr0LCfs97gULxxvFrsgq9Wc=;
+	b=wf6LyI4S1yvCTu8RHQoBjtC+14l4K3I3Jir10y6krr8bLgCrul0rsXgI121NX+p3CWnc
+	 typLoiqY+vxdK/FgVrfywcHvCMF4mh+B07xg/YhmD+2EjEi1iWmHOo0v9gD3kbb4NKuW8
+	 5Bc8J69goJ/XrvNhw2WfVHaSAeJZuJ4iXA4CJsTvAwlHVsVFl9CHoL/CCtz7TicL5RqBc
+	 DangsWa2cdGGglG+H/LV+hTwiKM4wrvqTrbkOjZXEbh/1ETpOKtdJyKMTOpwHSFRJSw1c
+	 MDJBnHrQ7dUqQTpLvQIoIXcPGGNfXaDGGpebcAlsiBKS5rCI0YMMXepQLYM9PU5oCJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gu7j3C9n;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=igalia.com;
+	spf=pass smtp.mailfrom=igalia.com;
+	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=dmcrOp8T;
+	arc=none smtp.remote-ip=213.97.179.56
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8489E606D828;
-	Tue,  3 Nov 2026 13:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3250606A324;
+	Tue,  3 Nov 2026 13:03:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3250606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gu7j3C9n
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166A81F00919;
-	Tue,  3 Nov 2026 13:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793710904;
-	bh=CM1sHdFY9XeKp8SyPiofbXJvq/Pp2zuA6NY4f40oVL0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Gu7j3C9nge11nrKHIyt2s335jtyd60bB98+u93DZ1xaM76HFgJ5osT30x+erpcVcS
-	 bS9xaYm1kEu4a+g+YxPAwADB+ugBA9U0EClIqnLn3KnIOBH2oCrJTyONQ1sym+CjV8
-	 oG1U+4gfnwrPhzFsqr7YzKnbiwUHL8QczROJAA7lo0V0z2/hMUp3/OI4O76FeLR2Vt
-	 Af45joD858QkFP7+sNrOAw+nx1WxuXQZn8YIum6AgJMCjsNHaFTm8h8C4nrWsFyZvQ
-	 hv+u88ZBBVZgQamNg4QWR/LWAPp2uZ06WVVyemx8mRnG5gFrYxeYoRvT2YsM7I+wP6
-	 nEWltcVNiHaEg==
-From: Sasha Levin <sashal@kernel.org>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	llvm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/futex: load atomic values before harness comparisons
-Date: Tue,  3 Nov 2026 08:01:29 -0500
-Message-ID: <20261103130131.4069212-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261014200147.1364987-1-sashal@kernel.org>
-References: <20261014200147.1364987-1-sashal@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=dmcrOp8T
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
+	MIME-Version:Date:Message-ID:From:Reply-To;
+	bh=0P+ytSK0bOW8b158bPuMgr0LCfs97gULxxvFrsgq9Wc=; t=1793711013; x=2109071013; 
+	b=dmcrOp8TA3J/XsF6LBhqxZp6Zmp5phaf5KUuNbbbCTnHWSejPqerAhUSqmhehK8r5bJUFqEfC1T
+	Z+FllVAwBABaZw/5YS073xy4ga2l07uRGA48eZP8HMhfPDdA3zQxDEbhrScJ1IR9S2dT+LY/s/78p
+	xunRy03tI0JpxjxQWGK/FJTQmvjx7omUvjGRYVkwhlQgi/ClYUVAOe3nayVcKrceCUST7XUpxdqxz
+	066ySTHV5E530equUjV+4pPeW7BaSaAZHyxwARbGFt8rvZH5NQQyuXzZepKKAfumnSN+DlMiP8GVL
+	OQ9WKjOoddQIO8lolju4xVyhdN1b0tMXy1SA==;
+Received: from [177.172.122.137] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1xOEAb-001Ea8-LM; Tue, 03 Nov 2026 14:03:21 +0100
+Message-ID: <8b8f7eee-96bb-432e-aab0-a76ec727a60f@igalia.com>
+Date: Tue, 3 Nov 2026 10:03:27 -0300
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,12 +57,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/futex: load atomic values before harness
+ comparisons
+To: Sasha Levin <sashal@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Darren Hart
+ <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Nathan Chancellor <nathan@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ llvm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261014200147.1364987-1-sashal@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20261014200147.1364987-1-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Ping, this still applies on 7.4-rc1. The clang jobs in KernelCI still
-fail to build futex/functional/robust_list.c with the three
-invalid-operands errors.
+Em 14/10/2026 17:01, Sasha Levin escreveu:
+> Clang 21 rejects the harness comparison because typeof(*futex) preserves
+> the atomic qualification. Load the value explicitly in the three affected
+> assertions so the harness compares unsigned integers. Atomic access and
+> its existing sequentially consistent ordering are preserved.
+> 
+> The baseline produces three invalid-operands errors. The complete futex
+> suite builds with Clang 21 and GCC 14 after the change.
+> 
+> Fixes: 608323bf7bb8 ("selftests: futex: Add tests for robust release operations")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
--- 
-Thanks,
-Sasha
+Reviewed-by: André Almeida <andrealmeid@igalia.com>
+
