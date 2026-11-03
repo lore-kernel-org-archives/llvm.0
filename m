@@ -1,80 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793714397;
-	b=C/o28rWs77Y0CRK/oZ50A9p16nj+hNcfywSgmWYulQum8NbwzBd+4AtnquNJ2pNzuXeK
-	 95g75AYD7cjUQWOjPD1WlT7b8dKt5bK29mCOooOgL8h4FbiTOpXN2gsNozfIk3VNvhLoK
-	 MLelNJLySunxLIoEm5YnZqhAoziTCnIrI6w6QYya3iateXZE5Id23HPa5yhkdcIYd0kYw
-	 9mploYLBEyElC077+ItJW9MJ6T1wUZoxrIVHzqitP4sWukma06PnLhZU48BY0HL7S8y+v
-	 bCJGyMIFYLcJT2Stfo9FRkXeLHL0wwk0HSCpvdC6rYo27a/8mv3Ynq11jkIFsBHN7Yg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793714397;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=eAJAOTI6E0N7XqB8gY0HnnSavIbY3EivEPEaxZWww7Y=;
-	b=0aC4vwJG16zjLE141cJClpL8yxZGwWOFIDpXGuQoB3i6JaPyO7DehDcvXyWzqN4NT14P
-	 gbidikSWBDTzxjUpVcYZAQYbZW1Zupo6WmO4XwNA+7lFLZDSPj5a7jZUrGRoRoQ99C6g1
-	 2ILsES/o93lKMk2NAF4EDrV4NbmVnVQXl4ASJ53OK04b679kRI7kEAd7jjlDmxzzftjZ+
-	 kV2NN/nt4KJ72e/1lGX6TMDTFJxKOuaz3d1LCqf460SxSQ3FUBupu1yBRp6uERrvZSgdn
-	 OQaOLxvs1c85sEGLJG0wiw2hFVxLS9YGAFPH74X4ejHGA+ynMWH5sp3bXCRmEwg38cQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiFk7esk;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793715148;
+	b=f4Ow5G3A550I0yz5TuoldU2WwB1rJ/odKvmYOHWCkNZwC6UmZjQzPqGNeFd47fXR6AGS
+	 bcKN7wzu3GdymiSTcByty+wg87Qot7SFUxWG1o/LVs2iPUSQ0Nt6DQx1gyhHjqe02F3Ep
+	 QXmkHHyOY0g0rY/DeBY9+EP5QNpamzz5joyIar4d4kzXxDCe3PdXT+r2hMXADS1ui+DVZ
+	 yWSpUUlEOUDLv0DqGIL2g6j2+PdyO1lV9JtMwZUtudFti2uBy3QXkL1iHW7YeILwoVChu
+	 G8eJB5Z1Z8inqLnhWDFCAacndAkiaEByqN2W6xUztfDn0ULuCRuazC96Rgpj0Hnc3bQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793715148;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=jQiHQJYaf/EXsGdTe2p5klR92l65Zw/CdzHHYP7vMSc=;
+	b=2K6tkgZjzku22oEBDz7dCjy6JCqiPSXRwSc+Skq2MwECA/Rj6ZJUbV4a2qO/lPWjhFiH
+	 qvDWryxErbMlOxT89hbE5A0JsJUA742r4mHxezASKFgauVLJQx79h/GquhhcCBUlJU8g3
+	 smAqUzum1QC0w5xKbKaRKHtuCwrtXWOBvSE7gAdn6GeWtrl9HlpEC3M5qstQsUJ86xD6b
+	 Ditc680rzxcks70J8MXdTdTwjnO2lf28Nk60sIgz30cOEiH9cGZqMQe7lcp5KwYI6I6Ux
+	 VqNqz/tiK1QuHVlhh7ibCUTL5g5WlNgyylAqku8ONq8IcMTnaPoMCl1eAufPh1BKKbA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f3ia8tux;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D569608362B;
-	Tue,  3 Nov 2026 13:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiFk7esk
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793714397;
-	b=d4a5He7huzrrTt2LYz1/nxN0Bbk7ZCLUh+tukP5wWAG8XXl4txEx2NLeQDpqLZG4TyI4
-	 DfTXvHUmgquvk9A19yL98hWlD2+jcTJAsk9aei4rPcRVE389Pgezk9NCClpMdy3vagYwq
-	 m8qZvtwWMnrgMh1Dj9dPHQLoRokv69NT9aNfNl954TS2LY+jcszKPksaSsrvPf/cc7OsQ
-	 kLnxuJxBfyicZ2MvUXRGz52WvoGj1teFxFaBxX/OqUKlOBPxUGmMhWEEROhq3lhnhUWKK
-	 GL4Yof73ZgFZ/bkcJE5Sfnq5rdjqy7T+DCK08IixClf4hdxSh3iOuVniCa1LV5CdMOg==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793714397;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=eAJAOTI6E0N7XqB8gY0HnnSavIbY3EivEPEaxZWww7Y=;
-	b=a5O01Q7LBeL6+QWbR43Sl0H267WJyEeKkYvQdVFqQkPDgH42eQD2RIZ2PnlyC8TejJ9i
-	 vTZ6ja8q0K2A0R8JmAzZh8y9Fenk1I8gWdPjWlV2SPVjzRocWEe5m0d9lSX4371ChXXHE
-	 hTkhi4AYl9B2j1ZpJ1X0odC9VlSMULHncmQxgc9elfZx11n9zi0NOi3abaEVKrIKDizEp
-	 VslVnrw7UvY0eR4XLCDBN6IK2nSrFeLZpUV9kTMuY79g9VmxdB53orB2SorPMAZYq7ZcZ
-	 3GKehp6n9QyJzEH6ahyEWwgAgn/xq096lVWRKneKwywXT1VKypYfo3a0zOwjCdUCFYA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BA6EC1F00919;
-	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87139606A331;
+	Tue,  3 Nov 2026 14:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f3ia8tux
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6087B1F00919;
+	Tue,  3 Nov 2026 14:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793714396;
-	bh=eAJAOTI6E0N7XqB8gY0HnnSavIbY3EivEPEaxZWww7Y=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=eiFk7eskI8sSCHI2aL6WZIhE1gHJFpEsDRQljYX6y1MmbMjXN+OvO3VGtZI1FfpJ8
-	 DCWxHAq6vXMud1oWYvLjWAR8G/qlV1zPXqRj6u4f5EXeY2bcw27+hjjGgfq3PHDkHU
-	 UWmfBcruJa6Gqjg8GRorJS3L3HHdu87AkD/lipNI8nJSFqd4uavaRhG426zEcqNAqa
-	 WrV3Q7F+m9Gr+mdqfiYcnc1kD1ghlRLEpiexOm4AJ20eQb2d7+LWPwIJZWEZkwPZbT
-	 NW2kpUgHe1M7ydwA4ARLiTCTCo+ANRuidHeVpWQ/EFCi4UYeBIVR8eLE99JivrUXh4
-	 Aw17CgXqi57EQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 1D09646981;
-	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
-From: Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
-Subject: [PATCH bpf-next v5 0/3] bpftool: Make the LLVM disassembler an
- optional runtime dependency
-Date: Tue, 03 Nov 2026 18:59:52 +0500
-Message-Id: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
+	s=k20260515; t=1793715148;
+	bh=jQiHQJYaf/EXsGdTe2p5klR92l65Zw/CdzHHYP7vMSc=;
+	h=From:To:Cc:Subject:Date;
+	b=f3ia8tuxNUn8HykJy+JcC1cAYNMS3x7aHQNJSahYmElxB9R7MSqPfI0Nu0A5epnk+
+	 mGDfgZH2ibEc/1zITs3pQhfg3/wHNUhkxIkNBiTBfWQIrBU5wXM+ACPXiR+pl72ZCd
+	 bXCv+r+kl95sz63pI145IJnP8kmwabDv60jmiOoU1l7yT6xwcaXXyk/1dl6A7cesXz
+	 BQMLqz6lqXp5duiYsiB21hFeKB9XcByJLVaXGQFephXVBN4q83Bwi/LI3kEHlRuRJA
+	 WlGJitWyV3BVE3P/3qwR/FIW2V62Izs3tq9PPv9VlGEo+ESVvbMqKtSqGqVnTMMTjp
+	 gDbc3a2QL7+Lg==
+From: Sasha Levin <sashal@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Andrei Vagin <avagin@google.com>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/timens: print and parse time_t as long long
+Date: Tue,  3 Nov 2026 09:12:26 -0500
+Message-ID: <20261103141226.28507-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,121 +60,221 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NTWrDMBAF4KsErTtlpJF/Jqvco3QxkmVH4FjGd
- k1K8N0rvGhDQrp8vPne3NQcphhmdTzc1BTWOMc05FC8HZQ/y9AFiE3OyqApsUQCN7ZLSj2M/Vc
- XB/DM1nkKWFpSGY1TaON1H/xQ+RaGcF3UZ27OcV7S9L1/WvXevxpdNWgoa4/iWbeF0Km7SOzff
- brsU6v55RoNP3EDCFps5QyxdugeOf3PKfO6krZibsSiPHL7x7N/4jbzQuqCAlfUOL7n27b9AHO
- liWBzAQAA
-X-Change-ID: 20260603-bpftool-plugin-c994bc3e0643
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
- Justin Stitt <justinstitt@google.com>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
- Mark Korenberg <socketpair@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793714393; l=4062;
- i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
- bh=FTpGNAMeoY1x3nm3HnFThoT7APvBIz/tLsd5anzdXyg=;
- b=GOhRtZTKRCK2jOK3H5P/nT+F8yC+FXobdGQdayYJTcqsAXPp9Llk74PL5166ccg3PCn8XiwyK
- OuZ+XsG4mMRCy1KF8Q6kdUwdrrnwlNKMuO+ew8No82kyrTLOKQKWz1Z
-X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
- pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
-X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
- auth_id=806
-X-Original-From: Mark Korenberg <socketpair@gmail.com>
-Reply-To: socketpair@gmail.com
+Content-Transfer-Encoding: 8bit
 
-libLLVM (~140 MiB on Fedora) is a hard dependency of bpftool, although it
-is only used by "bpftool prog dump jited". With this series, bpftool is
-no longer linked with libLLVM.so but loads it with dlopen() when it needs
-to disassemble JITed programs, so that distributions can make it optional.
-Patch 1 fixes a leak found on the way. Patch 2 makes "prog dump jited
-... file FILE" work without a disassembler.
+Several timens tests pass time_t values to printf-style functions with
+%ld or %lu, exec.c reads one with sscanf("%ld"), and exec.c and
+vfork_exec.c take the absolute value of a time_t difference with
+labs(). On 32-bit architectures where the C library uses a 64-bit
+time_t, such as armhf in Debian 13, time_t is a long long and every
+timens test fails to build with -Werror:
 
-Changes in v5:
-- Use the soname of libLLVM for dlopen(), not the name of the file it
-  points to, which is not in the ld.so path on Ubuntu 24.04 (Sashiko,
-  Alexei)
-- New patch 2: call disasm_init() only when the image is disassembled,
-  so that "prog dump jited ... file FILE" works without libLLVM (Alexei)
-- Update common_options.rst, which still said that bpftool links with
-  LLVM (Alexei)
-- Rebase on bpf-next
-- Link to v4: https://lore.kernel.org/r/20261102-bpftool-plugin-v4-0-5a853e973db9@gmail.com
+  timens.h:72:48: error: format '%ld' expects argument of type 'long int', but argument 5 has type 'time_t' {aka 'long long int'} [-Werror=format=]
 
-Changes in v4:
-- Drop the plugin, load libLLVM.so with dlopen() instead, as suggested by
-  Alexei. This also makes "prog dump jited" work with the bpftool built by
-  selftests.
-- Keep "llvm" in "bpftool version" a build time feature (Alexei)
-- Unlike the suggested diff, still link with LLVM built with
-  BUILD_SHARED_LIBS=ON, rather than failing to build
-- Link to v3: https://lore.kernel.org/r/20261029-bpftool-plugin-v3-0-87af799da40a@gmail.com
+Clang also rejects the labs() calls with -Wabsolute-value.
 
-Changes in v3:
-- Look for the plugin next to the bpftool binary before its install
-  directory, so that bpftool run from its build directory does not pick
-  an older installed plugin (Sashiko)
-- Link to v2: https://lore.kernel.org/r/20261029-bpftool-plugin-v2-0-1a47b2391b0b@gmail.com
+Cast the values to long long and print them with %lld, parse the exec
+argument into a long long, and use llabs() as timer.c and timerfd.c
+already do.
 
-Changes in v2:
-- Move the LLVMDisasmDispose() fix to a separate patch (Quentin)
-- Look for the plugin next to the bpftool binary when it is not installed,
-  so that bpftool works from its build directory (Quentin, Sashiko). Not in
-  the current directory: bpftool usually runs as root.
-- Export a single versioned structure of callbacks from the plugin (Quentin)
-- Only report "llvm" in "bpftool version" if the plugin loads (Quentin)
-- Handle dlerror() returning NULL (Quentin)
-- Rebuild jit_disasm.o if libdir changes between "make" and
-  "make install" (Quentin)
-- uninstall: use QUIET_UNINST, remove $(libdir)/bpftool (Quentin)
-- With a static libLLVM, which a static bpftool requires, link the
-  disassembler into bpftool as before (Sashiko). This drops
-  LLVM_LINK_STATIC: static LLVM archives are never linked into a shared
-  object.
-- Commit log and comment fixes (Quentin, Sashiko)
-- Rebase on bpf-next
-- Link to v1: https://lore.kernel.org/r/20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com
-
-Tested on Fedora 44 x86_64, LLVM 22: builds with shared, static and
-per-component LLVM, and with SKIP_LLVM; "prog dump jited" (plain, JSON
-and to a file) on live programs; bpftool, also when installed as
-selftests do, loads libLLVM.so only for "prog dump jited" and reports an
-error if it is missing; "prog dump jited ... file" works without a
-disassembler. Also tested with Ubuntu 24.04 (LLVM 18) userspace, where
-bpftool now loads libLLVM.so.18.1 (v4 tried libLLVM.so.1).
-
-The changes since v1 were written with the help of an AI assistant
-(Claude), from the review comments; I reviewed and tested them.
-
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Mark Korenberg (3):
-      bpftool: Fix disposal of the LLVM disassembler context
-      bpftool: Don't require a disassembler to dump a JITed program to a file
-      bpftool: Make the LLVM disassembler an optional runtime dependency
+KernelCI hits this on every 32-bit arm kselftest build: all nine timens
+programs fail. Built the timens sources with gcc 16 and clang 21 for
+x86_64, for i386 and for i386 with _TIME_BITS=64 (the last one fails
+without this patch). exec, vfork_exec, clock_nanosleep and futex pass
+on x86_64 in a user namespace.
 
- tools/bpf/bpftool/Documentation/common_options.rst | 10 ++-
- tools/bpf/bpftool/Makefile                         | 16 +++-
- tools/bpf/bpftool/jit_disasm.c                     | 88 +++++++++++++++++++++-
- tools/bpf/bpftool/prog.c                           |  4 +-
- 4 files changed, 110 insertions(+), 8 deletions(-)
----
-base-commit: cd5bc55288d4fd999595c8f2af6a5408cbe92a52
-change-id: 20260603-bpftool-plugin-c994bc3e0643
+ .../selftests/timens/clock_nanosleep.c        |  4 +--
+ tools/testing/selftests/timens/exec.c         | 27 ++++++++++++-------
+ tools/testing/selftests/timens/procfs.c       |  7 ++---
+ tools/testing/selftests/timens/timens.c       | 16 ++++++-----
+ tools/testing/selftests/timens/timens.h       |  3 ++-
+ tools/testing/selftests/timens/vfork_exec.c   | 17 +++++++-----
+ 6 files changed, 45 insertions(+), 29 deletions(-)
 
-Best regards,
+diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
+index 5cc0010e85ff0..aeb1883e90f7c 100644
+--- a/tools/testing/selftests/timens/clock_nanosleep.c
++++ b/tools/testing/selftests/timens/clock_nanosleep.c
+@@ -102,8 +102,8 @@ static int run_test(int clockid, int abs)
+ 	}
+ 
+ 	if (rem.tv_sec < 3300 || rem.tv_sec > 3900) {
+-		pr_fail("clockid: %d abs: %d remain: %ld\n",
+-			clockid, abs, rem.tv_sec);
++		pr_fail("clockid: %d abs: %d remain: %lld\n",
++			clockid, abs, (long long)rem.tv_sec);
+ 		return 1;
+ 	}
+ 	ksft_test_result_pass("clockid: %d abs:%d\n", clockid, abs);
+diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
+index a644162d56fdc..7dcac5765e259 100644
+--- a/tools/testing/selftests/timens/exec.c
++++ b/tools/testing/selftests/timens/exec.c
+@@ -25,13 +25,17 @@ int main(int argc, char *argv[])
+ 	pid_t pid;
+ 
+ 	if (argc > 1) {
+-		if (sscanf(argv[1], "%ld", &now.tv_sec) != 1)
++		long long sec;
++
++		if (sscanf(argv[1], "%lld", &sec) != 1)
+ 			return pr_perror("sscanf");
++		now.tv_sec = sec;
+ 
+ 		for (i = 0; i < 2; i++) {
+ 			_gettime(CLOCK_MONOTONIC, &tst, i);
+-			if (labs(tst.tv_sec - now.tv_sec) > 5)
+-				return pr_fail("%ld %ld\n", now.tv_sec, tst.tv_sec);
++			if (llabs(tst.tv_sec - now.tv_sec) > 5)
++				return pr_fail("%lld %lld\n", (long long)now.tv_sec,
++					       (long long)tst.tv_sec);
+ 		}
+ 		return 0;
+ 	}
+@@ -52,9 +56,10 @@ int main(int argc, char *argv[])
+ 
+ 	for (i = 0; i < 2; i++) {
+ 		_gettime(CLOCK_MONOTONIC, &tst, i);
+-		if (labs(tst.tv_sec - now.tv_sec) > 5)
+-			return pr_fail("%ld %ld\n",
+-					now.tv_sec, tst.tv_sec);
++		if (llabs(tst.tv_sec - now.tv_sec) > 5)
++			return pr_fail("%lld %lld\n",
++					(long long)now.tv_sec,
++					(long long)tst.tv_sec);
+ 	}
+ 
+ 	if (argc > 1)
+@@ -72,13 +77,15 @@ int main(int argc, char *argv[])
+ 		/* Check that a child process is in the new timens. */
+ 		for (i = 0; i < 2; i++) {
+ 			_gettime(CLOCK_MONOTONIC, &tst, i);
+-			if (labs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
+-				return pr_fail("%ld %ld\n",
+-						now.tv_sec + OFFSET, tst.tv_sec);
++			if (llabs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
++				return pr_fail("%lld %lld\n",
++						(long long)now.tv_sec + OFFSET,
++						(long long)tst.tv_sec);
+ 		}
+ 
+ 		/* Check for proper vvar offsets after execve. */
+-		snprintf(now_str, sizeof(now_str), "%ld", now.tv_sec + OFFSET);
++		snprintf(now_str, sizeof(now_str), "%lld",
++			 (long long)now.tv_sec + OFFSET);
+ 		execve("/proc/self/exe", cargv, cenv);
+ 		return pr_perror("execve");
+ 	}
+diff --git a/tools/testing/selftests/timens/procfs.c b/tools/testing/selftests/timens/procfs.c
+index 0a9ff90ee69a9..ded9e0f51b394 100644
+--- a/tools/testing/selftests/timens/procfs.c
++++ b/tools/testing/selftests/timens/procfs.c
+@@ -138,9 +138,10 @@ static int check_uptime(void)
+ 
+ 	uptime_expected = uptime_old.tv_sec + TEN_DAYS_IN_SEC;
+ 	if (fabs(difftime(uptime_new.tv_sec, uptime_expected)) > prec) {
+-		pr_fail("uptime in /proc/uptime: old %ld, new %ld [%ld]",
+-			uptime_old.tv_sec, uptime_new.tv_sec,
+-			uptime_old.tv_sec + TEN_DAYS_IN_SEC);
++		pr_fail("uptime in /proc/uptime: old %lld, new %lld [%lld]",
++			(long long)uptime_old.tv_sec,
++			(long long)uptime_new.tv_sec,
++			(long long)uptime_old.tv_sec + TEN_DAYS_IN_SEC);
+ 		return 1;
+ 	}
+ 
+diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
+index a9c0534ef8f67..f3cefacecd572 100644
+--- a/tools/testing/selftests/timens/timens.c
++++ b/tools/testing/selftests/timens/timens.c
+@@ -118,9 +118,11 @@ static int test_gettime(clockid_t clock_index, bool raw_syscall, time_t offset)
+ 
+ 	if (difftime(cur_ts.tv_sec, child_ts_new.tv_sec) < precision) {
+ 		ksft_test_result_fail(
+-			"Child's %s (%s) time has not changed: %lu -> %lu [%lu]\n",
+-			clocks[clock_index].name, entry, parent_ts_old.tv_sec,
+-			child_ts_new.tv_sec, cur_ts.tv_sec);
++			"Child's %s (%s) time has not changed: %lld -> %lld [%lld]\n",
++			clocks[clock_index].name, entry,
++			(long long)parent_ts_old.tv_sec,
++			(long long)child_ts_new.tv_sec,
++			(long long)cur_ts.tv_sec);
+ 		return -1;
+ 	}
+ 
+@@ -132,9 +134,11 @@ static int test_gettime(clockid_t clock_index, bool raw_syscall, time_t offset)
+ 
+ 	if (difftime(cur_ts.tv_sec, parent_ts_old.tv_sec) > DAY_IN_SEC) {
+ 		ksft_test_result_fail(
+-			"Parent's %s (%s) time has changed: %lu -> %lu [%lu]\n",
+-			clocks[clock_index].name, entry, parent_ts_old.tv_sec,
+-			child_ts_new.tv_sec, cur_ts.tv_sec);
++			"Parent's %s (%s) time has changed: %lld -> %lld [%lld]\n",
++			clocks[clock_index].name, entry,
++			(long long)parent_ts_old.tv_sec,
++			(long long)child_ts_new.tv_sec,
++			(long long)cur_ts.tv_sec);
+ 		/* Let's play nice and put it closer to original */
+ 		clock_settime(clocks[clock_index].id, &cur_ts);
+ 		return -1;
+diff --git a/tools/testing/selftests/timens/timens.h b/tools/testing/selftests/timens/timens.h
+index 7ca4b46ca61d0..fa9a60f75e39a 100644
+--- a/tools/testing/selftests/timens/timens.h
++++ b/tools/testing/selftests/timens/timens.h
+@@ -69,7 +69,8 @@ static inline int _settime(clockid_t clk_id, time_t offset)
+ 	if (clk_id == CLOCK_MONOTONIC_COARSE || clk_id == CLOCK_MONOTONIC_RAW)
+ 		clk_id = CLOCK_MONOTONIC;
+ 
+-	len = snprintf(buf, sizeof(buf), "%d %ld 0", clk_id, offset);
++	len = snprintf(buf, sizeof(buf), "%d %lld 0", clk_id,
++		       (long long)offset);
+ 
+ 	fd = open("/proc/self/timens_offsets", O_WRONLY);
+ 	if (fd < 0)
+diff --git a/tools/testing/selftests/timens/vfork_exec.c b/tools/testing/selftests/timens/vfork_exec.c
+index b957e1a651243..42fa0dcdfdec4 100644
+--- a/tools/testing/selftests/timens/vfork_exec.c
++++ b/tools/testing/selftests/timens/vfork_exec.c
+@@ -32,9 +32,10 @@ static void *tcheck(void *_args)
+ 
+ 	for (i = 0; i < 2; i++) {
+ 		_gettime(CLOCK_MONOTONIC, &tst, i);
+-		if (labs(tst.tv_sec - now->tv_sec) > 5) {
+-			pr_fail("%s: in-thread: unexpected value: %ld (%ld)\n",
+-				args->tst_name, tst.tv_sec, now->tv_sec);
++		if (llabs(tst.tv_sec - now->tv_sec) > 5) {
++			pr_fail("%s: in-thread: unexpected value: %lld (%lld)\n",
++				args->tst_name, (long long)tst.tv_sec,
++				(long long)now->tv_sec);
+ 			return (void *)1UL;
+ 		}
+ 	}
+@@ -64,9 +65,10 @@ static int check(char *tst_name, struct timespec *now)
+ 
+ 	for (i = 0; i < 2; i++) {
+ 		_gettime(CLOCK_MONOTONIC, &tst, i);
+-		if (labs(tst.tv_sec - now->tv_sec) > 5)
+-			return pr_fail("%s: unexpected value: %ld (%ld)\n",
+-					tst_name, tst.tv_sec, now->tv_sec);
++		if (llabs(tst.tv_sec - now->tv_sec) > 5)
++			return pr_fail("%s: unexpected value: %lld (%lld)\n",
++					tst_name, (long long)tst.tv_sec,
++					(long long)now->tv_sec);
+ 	}
+ 	if (check_in_thread(tst_name, now))
+ 		return 1;
+@@ -118,7 +120,8 @@ int main(int argc, char *argv[])
+ 		char *cenv[] = {NULL};
+ 
+ 		/* Check for proper vvar offsets after execve. */
+-		snprintf(now_str, sizeof(now_str), "%ld", now.tv_sec + OFFSET);
++		snprintf(now_str, sizeof(now_str), "%lld",
++			 (long long)now.tv_sec + OFFSET);
+ 		execve("/proc/self/exe", cargv, cenv);
+ 		pr_perror("execve");
+ 		_exit(1);
 -- 
-Mark Korenberg <socketpair@gmail.com>
-
+2.53.0
 
