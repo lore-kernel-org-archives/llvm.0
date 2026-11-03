@@ -1,80 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793685573;
-	b=4Y5qOrlGCEiByt7UC8/Rq6+cT0P6JtpO7keKhM3Zaq05Ti5qGVDWk6ERJ8Yy0tqnSuFK
-	 Zjd2bQFLgiu9qZpkFqsroipKYJKmFrathchrrHY8Vot7OgRg4BxzT+VPIm7sIqsbKikcg
-	 Y4dHbWXh5jvR18y3Uv7KDh8O5GCocVnz82cjAb25/RDFLSvhOHXuHmHSmyYDlyV1XFT8f
-	 q/asfrmtvTy/wFjfze4TmvDEXzyx0/lezWMWEwYgH7D382XnEbEVYYqunfVK6s5kvcROK
-	 /vdE6j5LlxU25uGjPwymzInzPjpqzbamP5A0w+5PreOd9X5jWr5tQtZh/H5tBv14DvQ==
+	t=1793686082;
+	b=tvp3fp6iuhX6L1ZIaZqQGx3lT3+6PvUvHxLMLvApGZGUiD09WFgof8cUgBQKxrGWL2Yc
+	 cwyZTSoNpwIU8JCZUNZ00nJgEGVwvQ5ILnQhR8SrM/4PIiy3mUwPI2mJUHngLIrXDuIjZ
+	 BeVzjG8r6EBX+E2DSIIAGVceZGKMadWKJBwOHHR4wrpfgk+oE+WMk+5qXwCzkWisRb9Cd
+	 iDC84TxpliQg7r4Ry2bLiVO0NeVRYfxMNDyvq91sVAMObYIAzGU9Hmy7AaDni1mCNLJM9
+	 g16Mr6JuWrdQV2mWCVbZ2v1KfBGh1WBpolnk9aGtd4mS8tGjs7N/+eWM5uWvbGGS3EA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793685573;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=A8bddEBIbBnrhCkJvUD76tfHihR90VydcaXvriNMGT4=;
-	b=DSl9MUdHGjRWmHRSOvucmOmkzfjLko2VqYzSOA3tUqMousgYUJ1JwHeOkTvnUEAlxOxB
-	 5uscGfclxoaanl3MkqM5LR26Wc+qP70yv4E/TWP477Y4j4Kg90XalfHqJgw4L1E+R+Eh0
-	 uREbh//mFIec7oRZUZFxIgedF+iglDOxvBjxpGUo29vTt7O4lq+Kq9++jOhiGcIb38Vua
-	 ceRu560dKUahIP9XxvoBTLcunGhhLNPehR+wQCcciOCQacTjLnDNrYBzB/gYb+EtZX9NB
-	 wWl3V91DQTWnt9t3Y3LYQ59uQqrr/CQN71rtj9zX7OV4ax88dNZUOGE2lAShomhfnsg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793686082;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=EqZFBFEZO5TSxtcO1rE9N6/Lrb9ZGXQ+yZtDiTgYOIA=;
+	b=RLbSGS1OTlvW0bGbAk6E6819MuwH85wXt1sOFt1hLVZIIQJmAK1QXGLBxftMCJ8jaonO
+	 1AvjskSESvG8Ycl38ZcDhPoIYin3KCpSEoFvlp5EljrZU+5loCnCFFzlvRjz3fXNhc5p8
+	 jbf0+UXwbBAIYo/E5khbqJxsvTzc3NSwSNfH144PCK8cEb798UAwXyAMXLdsNDJ17ZBfC
+	 SR8iORXO254Qhftr+ejKce9Au8Qyml17pkXk3QXsx2NxweN95y1JcRPQ4fDZbrLzEnQ9i
+	 tsdlp32YGIzpyOOUlITpRb3AzY56QUNXlr9hZWND0T1WbSkziPV+tBdWv4Mcik/rKEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=drR3Heoy;
-	arc=none smtp.remote-ip=198.175.65.9
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RGAwIsX6;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82903606A329;
-	Tue,  3 Nov 2026 05:59:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82903606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7EE4606A329
+	for <llvm@lists.linux.dev>; Tue,  3 Nov 2026 06:08:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7EE4606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=drR3Heoy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793685572; x=1825221572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gS7oDy6q6yF2JzSAfNg+xd9jPSrR+iIht6F312MyITc=;
-  b=drR3HeoyUYGO/bfbS9Ul0HcxrlHgPVLN+O6TDg6AnO/ObAhzsL1G1k+y
-   3QfKMnNWBApCgOx5D2Fjpox6YOfUi1LS9NHEnus6DlxaNuvu67N6YMDaG
-   GekZfI65QQZ/zysFfj+wd/x5o5Lkrw8G29SJSLyjpd2oxxjU7Ifq72KfC
-   M+CxEehIcQyldxn4C62Oa/9AhE0YO1ZldsjEH8pIGWvPXdELwHZM7yDEM
-   CevLC1Tjp1zVzLu20d3XOse6QCy5ZU4yhOZBIdLimGtWWX6jffqniK5vy
-   ixBLdRxhGY2aI3nkTOxvkCsg0td3nSjhO2chEbUb55PSs/KKTdbfs0w1N
-   w==;
-X-CSE-ConnectionGUID: fGpQUpg5S3aTno+Csl64HQ==
-X-CSE-MsgGUID: wk1RUJd7RrmEyLDSKF2zUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2285600"
-X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
-   d="scan'208";a="2285600"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 21:59:31 -0800
-X-CSE-ConnectionGUID: KE+OZC1YS/aEKNdDrVVCRQ==
-X-CSE-MsgGUID: y85TrGMQRvKoEDO5x6CJUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,192,1787036400"; 
-   d="scan'208";a="6490027"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Nov 2026 21:59:29 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xO7YM-00000000iLU-0vQR;
-	Tue, 03 Nov 2026 05:59:26 +0000
-Date: Tue, 3 Nov 2026 13:59:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes@sipsolutions.net>,
-	linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes.berg@intel.com>,
-	Miriam Rachel Korenblit <miriam.rachel.korenblit@intel.com>
-Subject: Re: [PATCH wireless-next] wifi: cfg80211: add APIs for SMD transition
-Message-ID: <202611031315.T7kEmqOi-lkp@intel.com>
-References: <20261102231220.5b52ad631258.Id451626c78a925e85aaf2598ab471120940a91c7@changeid>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RGAwIsX6
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48c4be28b82so3966617f8f.2
+        for <llvm@lists.linux.dev>; Mon, 02 Nov 2026 22:08:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793686080; x=1794290880; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EqZFBFEZO5TSxtcO1rE9N6/Lrb9ZGXQ+yZtDiTgYOIA=;
+        b=RGAwIsX6MthysLGiIG/WdO0IB2SEl7VWU7gQd3/cru76QA+CQit3WuSnB8lkJN4KGZ
+         efvVljb0khh8st12XnHRcMOX3ECvBvTqj415D0cO2jdnQrI1UhwEuOD+B3NYDqfzL7pY
+         93v5xL7GbjbFnh3BFTF0awOJNkyQz2crzvbzyLYwzPTqKcCmO7IauGJB+XQZjIPnRUXw
+         YgOKF723MVmf1BE6wfFD8/uijGWzrnDWdc/Jyndn0FlnNMkPXlOzV4INVmdR865e4Q/t
+         sFDuft22a1Tsi5Tt8ff8JrLzyi/19aA/cQeveEFb++ROYF5TYA2SRPQAjCWy6SF+afvg
+         feoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793686080; x=1794290880;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EqZFBFEZO5TSxtcO1rE9N6/Lrb9ZGXQ+yZtDiTgYOIA=;
+        b=W4/5i1UgZXbaGSMm+FJJ0YCz+By5c1bUlmiGfdn+rmgmuyfHYN1Uws1+f9GIET2+yp
+         m8rW7FyDrPJN8I+jMrQeo8RfNN/aShJ5qel7OsczVvyX9KQmeeGfb9Mo0raE6TCxbk5j
+         EZnziYCyoWHj6TfYdSyuQzc/NRN/TRG0cXck9hCVMlxiJmGjYVsbaO1sdg6vR1KRcGRo
+         uWllBWZIfvmEx1fOsxG8aBB6XiVpXSjizRVR7WWYGxP3KkYya9y2aB552nyg7fhBWW6s
+         /asfwc5jOexM9z+ZWstafLVDp/hMCcXgen2lJiRCSmTkh/BiQXolcMiWcxNI7n01W5pJ
+         j52A==
+X-Forwarded-Encrypted: i=1; AKwUvBwiTXMBtK+f3AzZIVdbXvHjpwZQVKpPvV9PW34v46uPb6IFeh4OuLWFt0271uMwIiZRmXzQ@lists.linux.dev
+X-Gm-Message-State: APuU4Z/+uNmb3yESpt9Be3Fp2tOcGvEXFNXNtlm1X1BxUy6yKJ2LPvGu
+	dS8AcfZXR2pbH5sxORbJfy4IReu6vR8G7SeQzXRkrt5FJEmVLw1TbSE7
+X-Gm-Gg: AYBFou3/4/ktIxDjeWR2ogmfnfG7QqrdHhv6lS2GYt0EEEV6EH9hZBvtcWNNddRF1kR
+	+dfQq3VerKexqZE0H4GMvWxfBD7t3W/PrssP9FdHN5qv3wySp9qvjHtyqVcHgfF5OCjdqaVSKmq
+	RwJHnPek1C6h9DR5b0VA9m5s6xKKnsCKSEONwhnwiAiFMO5Xn6zy2yx5vHNPUHt+T6eXFCNi+LW
+	QYfHmHJQPBqA9t07HdMH4jlI24Ne1QBYspnzT/oMXHgraCY6osCamJ7mT2zFDB5glAmuql54o7U
+	MzBko7i2E87k9qUkDewZwT+6GiTwozuIXrkHOb1hckCQ29+yWkRRKJY52hJKGGJatuUstD7cENA
+	nSzJrDSsGUhVcpUOQAIFfrNHWngpaZZNGttI9qfnXwRLO8tfjGoUULWyN/IvOsAWaNjnmU24KeA
+	oXJuYYmdV7gSC7qtw9oCuICf56ccAK+EP8JfDyr0SsTtU5pJIuqMIS09tqfRjG/1i6rjmxskOCg
+	9tOsYFAAPJ9Qc3xsH8le2E3akiT5blyOEYfqDdQEQud9wGYFlC/euVJ7x1Fsx8RBV2uXRUElEB0
+	Gw6nK55IWe5fX6bE/qZ5RFtGnYzFZDzJKzF4mRF0bQg10bIVkNP5V1c3HR/oJ1XXhayi3oj2bP0
+	1tKgKv23Efhk=
+X-Received: by 2002:a05:6000:4026:b0:48b:4a2:8175 with SMTP id ffacd0b85a97d-48e6e501911mr27129221f8f.43.1793686080145;
+        Mon, 02 Nov 2026 22:08:00 -0800 (PST)
+Received: from box (046124040162.public.t-mobile.at. [46.124.40.162])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71a4d3e9sm26072722f8f.6.2026.11.02.22.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 22:07:59 -0800 (PST)
+From: Martin Leitner-Ankerl <martin.ankerl@gmail.com>
+To: Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org
+Cc: Martin Leitner-Ankerl <martin.ankerl@gmail.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andi Kleen <ak@linux.intel.com>,
+	Youling Tang <youling.tang@linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Youling Tang <tangyouling@kylinos.cn>,
+	Nikolay Borisov <nik.borisov@suse.com>
+Subject: [PATCH] x86/cpu: Use prefetcht0 for prefetch() on 64-bit
+Date: Tue,  3 Nov 2026 07:06:20 +0100
+Message-ID: <20261103060658.696994-1-martin.ankerl@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,251 +110,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102231220.5b52ad631258.Id451626c78a925e85aaf2598ab471120940a91c7@changeid>
+Content-Transfer-Encoding: 8bit
 
-Hi Johannes,
+x86-64 does not define ARCH_HAS_PREFETCH, so prefetch() from
+<linux/prefetch.h> is just __builtin_prefetch(). The kernel builds with
+-mno-sse, and clang then drops __builtin_prefetch() without a warning,
+while gcc emits prefetcht0. An x86-64 defconfig vmlinux has 8
+prefetcht0 with clang 22.1.8, all from inline assembly, and 62 with gcc
+16.2.1. Also prefetch_range() is empty on x86-64 with any compiler, it
+needs ARCH_HAS_PREFETCH.
 
-kernel test robot noticed the following build warnings:
+Give x86-64 its own prefetch(), a prefetcht0 in inline assembly, which
+every x86-64 CPU has, and define ARCH_HAS_PREFETCH for 64-bit too. Not
+the 32-bit alternative: it becomes prefetchnta on CPUs with SSE, a
+non-temporal prefetch, which would change what gcc builds emit today.
 
-[auto build test WARNING on wireless-next/main]
+Afterwards clang's vmlinux has 57 prefetcht0, the new ones in 34
+functions, e.g. __blk_mq_alloc_requests(), prepend_path(),
+__alloc_skb(), tcp_ack() and the receive paths of e1000, tg3, sky2,
+r8169 and forcedeth. gcc's stay at 62. With gcc 16.2.1, prefetch_range()
+adds 16 to hfi1's receive functions and 8 to scsi_debug, which a
+defconfig does not build. Youling Tang proposed to define
+ARCH_HAS_PREFETCH in <linux/prefetch.h> instead [1].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/wifi-cfg80211-add-APIs-for-SMD-transition/20261102-231218
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20261102231220.5b52ad631258.Id451626c78a925e85aaf2598ab471120940a91c7%40changeid
-patch subject: [PATCH wireless-next] wifi: cfg80211: add APIs for SMD transition
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261103/202611031315.T7kEmqOi-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611031315.T7kEmqOi-lkp@intel.com/reproduce)
+KVM guest with one CPU on a Ryzen 9 7950X at a fixed 4.5 GHz, clang
+22.1.8, 6 boots per kernel in turns, ns per call, median (range):
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611031315.T7kEmqOi-lkp@intel.com/
+                    before                 after
+  io_uring IOPOLL   680.1 (679.6..684.6)   664.9 (663.1..668.4)   -2.3%
+  getcwd()          912.9 (912.0..1019.4)  901.4 (900.1..907.3)   -1.3%
 
-All warnings (new ones prefixed by >>):
+IOPOLL reads 4 KiB from null_blk, 32 per submit; getcwd() is 40
+directories deep. Built with gcc, where both kernels have the same
+prefetches, the two differ by +0.4% and 0.0%. pread() with O_DIRECT, UDP
+and TCP over loopback, times() and clock_gettime() change no more than
+that. Unfortunately the NIC receive paths need real hardware, so they
+are not measured.
 
-   In file included from net/wireless/trace.c:6:
-   In file included from net/wireless/trace.h:4711:
-   In file included from include/trace/define_trace.h:134:
-   In file included from include/trace/bpf_probe.h:129:
->> net/wireless/trace.h:4556:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
-    4556 | TRACE_EVENT(cfg80211_rx_st_preparation_response,
-         | ^
-   include/trace/trace_events.h:41:2: note: expanded from macro 'TRACE_EVENT'
-      41 |         DECLARE_EVENT_CLASS(name,                              \
-         |         ^
-   include/trace/bpf_probe.h:54:2: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      54 |         __BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/trace/bpf_probe.h:49:55: note: expanded from macro '__BPF_DECLARE_TRACE'
-      49 |         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-         |                                                              ^
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/bpf_probe.h:31:42: note: expanded from macro '__CAST2'
-      31 | #define __CAST2(a,...) __CAST_TO_U64(a), __CAST1(__VA_ARGS__)
-         |                                          ^
-   include/trace/bpf_probe.h:30:24: note: expanded from macro '__CAST1'
-      30 | #define __CAST1(a,...) __CAST_TO_U64(a)
-         |                        ^
-   include/trace/bpf_probe.h:26:17: note: expanded from macro '__CAST_TO_U64'
-      26 |         UINTTYPE(sizeof(x)) __dst; \
-         |                        ^
-   net/wireless/trace.h:4559:25: note: declared here
-    4559 |                  struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-         |                                       ^
->> net/wireless/trace.h:4556:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
-    4556 | TRACE_EVENT(cfg80211_rx_st_preparation_response,
-         | ^
-   include/trace/trace_events.h:41:2: note: expanded from macro 'TRACE_EVENT'
-      41 |         DECLARE_EVENT_CLASS(name,                              \
-         |         ^
-   include/trace/bpf_probe.h:54:2: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      54 |         __BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/trace/bpf_probe.h:49:55: note: expanded from macro '__BPF_DECLARE_TRACE'
-      49 |         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-         |                                                              ^
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/bpf_probe.h:31:42: note: expanded from macro '__CAST2'
-      31 | #define __CAST2(a,...) __CAST_TO_U64(a), __CAST1(__VA_ARGS__)
-         |                                          ^
-   include/trace/bpf_probe.h:30:24: note: expanded from macro '__CAST1'
-      30 | #define __CAST1(a,...) __CAST_TO_U64(a)
-         |                        ^
-   include/trace/bpf_probe.h:26:17: note: expanded from macro '__CAST_TO_U64'
-      26 |         UINTTYPE(sizeof(x)) __dst; \
-         |                        ^
-   net/wireless/trace.h:4559:25: note: declared here
-    4559 |                  struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-         |                                       ^
->> net/wireless/trace.h:4556:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
-    4556 | TRACE_EVENT(cfg80211_rx_st_preparation_response,
-         | ^
-   include/trace/trace_events.h:41:2: note: expanded from macro 'TRACE_EVENT'
-      41 |         DECLARE_EVENT_CLASS(name,                              \
-         |         ^
-   include/trace/bpf_probe.h:54:2: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      54 |         __BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/trace/bpf_probe.h:49:55: note: expanded from macro '__BPF_DECLARE_TRACE'
-      49 |         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-         |                                                              ^
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/bpf_probe.h:31:42: note: expanded from macro '__CAST2'
-      31 | #define __CAST2(a,...) __CAST_TO_U64(a), __CAST1(__VA_ARGS__)
-         |                                          ^
-   include/trace/bpf_probe.h:30:24: note: expanded from macro '__CAST1'
-      30 | #define __CAST1(a,...) __CAST_TO_U64(a)
-         |                        ^
-   include/trace/bpf_probe.h:26:17: note: expanded from macro '__CAST_TO_U64'
-      26 |         UINTTYPE(sizeof(x)) __dst; \
-         |                        ^
-   net/wireless/trace.h:4559:25: note: declared here
-    4559 |                  struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-         |                                       ^
->> net/wireless/trace.h:4556:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
-    4556 | TRACE_EVENT(cfg80211_rx_st_preparation_response,
-         | ^
-   include/trace/trace_events.h:41:2: note: expanded from macro 'TRACE_EVENT'
-      41 |         DECLARE_EVENT_CLASS(name,                              \
-         |         ^
-   include/trace/bpf_probe.h:54:2: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      54 |         __BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/trace/bpf_probe.h:49:55: note: expanded from macro '__BPF_DECLARE_TRACE'
-      49 |         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-         |                                                              ^
-   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/bpf_probe.h:31:42: note: expanded from macro '__CAST2'
-      31 | #define __CAST2(a,...) __CAST_TO_U64(a), __CAST1(__VA_ARGS__)
-         |                                          ^
-   include/trace/bpf_probe.h:30:24: note: expanded from macro '__CAST1'
-      30 | #define __CAST1(a,...) __CAST_TO_U64(a)
-         |                        ^
-   include/trace/bpf_probe.h:26:17: note: expanded from macro '__CAST_TO_U64'
-      26 |         UINTTYPE(sizeof(x)) __dst; \
-         |                        ^
-   net/wireless/trace.h:4559:25: note: declared here
-    4559 |                  struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-         |                                       ^
-   net/wireless/trace.h:4627:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
-    4627 | DECLARE_EVENT_CLASS(cfg80211_st_evt,
-         | ^
-   include/trace/bpf_probe.h:54:2: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      54 |         __BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/trace/bpf_probe.h:49:55: note: expanded from macro '__BPF_DECLARE_TRACE'
-      49 |         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-         |                                                              ^
-   include/trace/bpf_probe.h:43:26: note: expanded from macro 'CAST_TO_U64'
-      43 | #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
-         |                          ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/bpf_probe.h:31:42: note: expanded from macro '__CAST2'
-      31 | #define __CAST2(a,...) __CAST_TO_U64(a), __CAST1(__VA_ARGS__)
-         |                                          ^
-   include/trace/bpf_probe.h:30:24: note: expanded from macro '__CAST1'
-      30 | #define __CAST1(a,...) __CAST_TO_U64(a)
-         |                        ^
-   include/trace/bpf_probe.h:26:17: note: expanded from macro '__CAST_TO_U64'
-      26 |         UINTTYPE(sizeof(x)) __dst; \
-         |                        ^
-   net/wireless/trace.h:4629:25: note: declared here
-    4629 |                  struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-         |                                       ^
-   net/wireless/trace.h:4627:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
-    4627 | DECLARE_EVENT_CLASS(cfg80211_st_evt,
-         | ^
-   include/trace/bpf_probe.h:54:2: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      54 |         __BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/trace/bpf_probe.h:49:55: note: expanded from macro '__BPF_DECLARE_TRACE'
-      49 |         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-         |                                                              ^
-   include/trace/bpf_probe.h:43:26: note: expanded from macro 'CAST_TO_U64'
-      43 | #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
-         |                          ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/bpf_probe.h:31:42: note: expanded from macro '__CAST2'
-      31 | #define __CAST2(a,...) __CAST_TO_U64(a), __CAST1(__VA_ARGS__)
-         |                                          ^
-   include/trace/bpf_probe.h:30:24: note: expanded from macro '__CAST1'
-      30 | #define __CAST1(a,...) __CAST_TO_U64(a)
-         |                        ^
-   include/trace/bpf_probe.h:26:17: note: expanded from macro '__CAST_TO_U64'
-      26 |         UINTTYPE(sizeof(x)) __dst; \
-         |                        ^
-   net/wireless/trace.h:4629:25: note: declared here
-    4629 |                  struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-         |                                       ^
-   net/wireless/trace.h:4627:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
-    4627 | DECLARE_EVENT_CLASS(cfg80211_st_evt,
-         | ^
-   include/trace/bpf_probe.h:54:2: note: expanded from macro 'DECLARE_EVENT_CLASS'
-      54 |         __BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-         |         ^
-   include/trace/bpf_probe.h:49:55: note: expanded from macro '__BPF_DECLARE_TRACE'
-      49 |         CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-         |                                                              ^
-   include/trace/bpf_probe.h:43:26: note: expanded from macro 'CAST_TO_U64'
-      43 | #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
-         |                          ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/trace/bpf_probe.h:31:42: note: expanded from macro '__CAST2'
-      31 | #define __CAST2(a,...) __CAST_TO_U64(a), __CAST1(__VA_ARGS__)
-         |                                          ^
-   include/trace/bpf_probe.h:30:24: note: expanded from macro '__CAST1'
-      30 | #define __CAST1(a,...) __CAST_TO_U64(a)
-         |                        ^
-   include/trace/bpf_probe.h:26:17: note: expanded from macro '__CAST_TO_U64'
-      26 |         UINTTYPE(sizeof(x)) __dst; \
-         |                        ^
-   net/wireless/trace.h:4629:25: note: declared here
-    4629 |                  struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-         |                                       ^
-   net/wireless/trace.h:4627:1: warning: sizeof on array function parameter will return size of 'struct cfg80211_bss **' instead of 'struct cfg80211_bss *[15]' [-Wsizeof-array-argument]
+Fixes: ab483570a13b ("x86 & generic: change to __builtin_prefetch()")
+Link: https://lore.kernel.org/20240529032059.899347-2-youling.tang@linux.dev/ # [1]
+Cc: Youling Tang <tangyouling@kylinos.cn>
+Cc: Nikolay Borisov <nik.borisov@suse.com>
+Signed-off-by: Martin Leitner-Ankerl <martin.ankerl@gmail.com>
+---
 
+Notes:
+    Code generation, testing, compiling, analysis, measurements, etc. were
+    all driven by an AI agent (Claude Code). I have reviewed the results and
+    supervised the process.
 
-vim +4556 net/wireless/trace.h
+    A few minutes ago this went to the x86 maintainers only, without the
+    lists, by mistake. Sorry for the duplicate.
 
-  4555	
-> 4556	TRACE_EVENT(cfg80211_rx_st_preparation_response,
-  4557		TP_PROTO(struct net_device *netdev, const u8 *ap_mld_addr,
-  4558			 const u8 *buf, size_t len,
-  4559			 struct cfg80211_bss *links[IEEE80211_MLD_MAX_NUM_LINKS]),
-  4560		TP_ARGS(netdev, ap_mld_addr, buf, len, links),
-  4561		TP_STRUCT__entry(
-  4562			NETDEV_ENTRY
-  4563			MAC_ENTRY(ap_mld_addr)
-  4564			__dynamic_array(u8, frame, len)
-  4565			__field(u16, rejected_links)
-  4566			__array(u8, bssids, IEEE80211_MLD_MAX_NUM_LINKS * ETH_ALEN)
-  4567		),
-  4568		TP_fast_assign(
-  4569			NETDEV_ASSIGN;
-  4570			MAC_ASSIGN(ap_mld_addr, ap_mld_addr);
-  4571			if (buf)
-  4572				memcpy(__get_dynamic_array(frame), buf, len);
-  4573	
-  4574			__entry->rejected_links = 0;
-  4575	
-  4576			memset(__entry->bssids, 0, sizeof(__entry->bssids));
-  4577			for (int i = 0; i < IEEE80211_MLD_MAX_NUM_LINKS; i++) {
-  4578				if (!links[i])
-  4579					continue;
-  4580				__entry->rejected_links |= BIT(i);
-  4581				memcpy(__entry->bssids + i * ETH_ALEN,
-  4582				       links[i]->bssid, ETH_ALEN);
-  4583			}
-  4584		),
-  4585		TP_printk(NETDEV_PR_FMT ", ap_mld_addr: %pM, frame_len: %u, rejected_links: 0x%x",
-  4586			  NETDEV_PR_ARG, __entry->ap_mld_addr,
-  4587			  __get_dynamic_array_len(frame), __entry->rejected_links)
-  4588	);
-  4589	
+ arch/x86/include/asm/processor.h | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 77488ff5eb8c..64748b8705e3 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -624,15 +624,25 @@ extern int			bootloader_version;
+ extern char			ignore_fpu_irq;
+ 
+ #define HAVE_ARCH_PICK_MMAP_LAYOUT 1
++#define ARCH_HAS_PREFETCH
+ #define ARCH_HAS_PREFETCHW
+ 
+ #ifdef CONFIG_X86_32
+ # define BASE_PREFETCH		""
+-# define ARCH_HAS_PREFETCH
+ #else
+ # define BASE_PREFETCH		"prefetcht0 %1"
+ #endif
+ 
++#ifdef CONFIG_X86_64
++/*
++ * Every x86-64 CPU has prefetcht0. Not __builtin_prefetch(): the kernel
++ * builds with -mno-sse, and clang then drops the builtin without a warning.
++ */
++static inline void prefetch(const void *x)
++{
++	asm("prefetcht0 %0" : : "m" (*(const char *)x));
++}
++#else
+ /*
+  * Prefetch instructions for Pentium III (+) and AMD Athlon (+)
+  *
+@@ -645,6 +655,7 @@ static inline void prefetch(const void *x)
+ 			  X86_FEATURE_XMM,
+ 			  "m" (*(const char *)x));
+ }
++#endif /* CONFIG_X86_64 */
+ 
+ /*
+  * 3dnow prefetch to get an exclusive cache line.
+
+base-commit: 2305edc99ef7bbc11a8dcebf78853bc1b6a761bc
+-- 
+2.56.0
+
