@@ -1,64 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793700926;
-	b=a9496kK5K6+lqlS4fMxDldL1q9nn7nQL5K16a1dd7qo269UWagejn+ei/Tm0i9WOlO2x
-	 d8JeJXcqiLOOhQKSKR8GQyLYOEwSY7l/reh8Rn7phQpdMDy34C8uX28aWaccirRqMefPu
-	 tTOeO5ku/M5bn+Qxbce9wNW2Bne6IAH46N/4MmC3akORaYS03q04O8pod2+gKOve16XSd
-	 EIQInGPWs4RVSbAtmLul3kpmHstputnJr9J8F9T1+NvIvhG6x30OKHLPjazeffuJYQi/N
-	 HxgnMwAAjVPLraNFi94kzjbOlOgQ8/RrKNjePWqJ7wmdHoQNUDnKHI+qYqtur0D15sQ==
+	t=1793710456;
+	b=OO/OYIOpy7cycdVXZ6C7QWJwmFfauBkPLlZPAHbl8lxTY61fKNfeIeng4mXtjEPsESzL
+	 CEhcjtv6YG53FAYOst+fyhwGaslspEzIbat7jS1BTzWHfSFCF0e63rvsIavyHcNc1ADGc
+	 BEbjxUICG2JmlcIpuAvPdMf7T7Zrqfv5n+Ldv+8v6uLjof8/SSdpA7amVnnTuG5mV3qG1
+	 OnXNLdXmRy5OZtWhPn6I+WgUJgMKHkate2uertiJP5EzX7IG29XHefSsaod13YKEjd67Z
+	 rDp3Vil41u0ey4yL2OATmuWRBCJNEq9P/Evn/idS85AvKoDRWeVJ6btEQbjo11jzXng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793700926;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=5o98qwlKEQyOrCRjq2RUqHe7Txdo2HfIj4qXGPwficc=;
-	b=YiYSOEz8TUNwgmQMVxVTo7JmWAMnXGvkc3QSfsjUqFWYnVDtSnhTnYBeC78D89ElBkiX
-	 SYVl57lZLCUsDMPHQ8fGrDlaevPS23ZB5kRwcwTr0xtHm404wKoGVbhaeyk/c4S0XeoPS
-	 sp4+Au9Toxv1Gr60AbtO1zcnnkGN4JtEwBFFA/lOd3XLW2BD8orAgrKswUwO/gn6XR6SX
-	 RxBnMErbK4WPCysGp2xwLW3udOngr/jRy0NzytMeZDYlGf7N2j3D3ZCXGnxVZuCQo76cF
-	 vZ5LD2BRYQ7rzSVPGYhFUxwkDOVgXhYTQWIMpC0TCTBLa2HaLSTEzgBnRWgaG8XDYjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793710456;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=T84aiAJqcr9eIc+RMHEdRg8f3K7zIQJ4MBqlwh+rBPc=;
+	b=apDihe8ean6hAC4x7G6+ECnzb3oE00aw4h4NAYQFTaZJkwpNuNf1pm93qRw9J98Uj4Ra
+	 acpUzT+WdqS10EaDuR5zm/WfPiHliPbNWrGuu5vSerUjIoIijvRBZ5DxmcGNIavbs7rUG
+	 lhSFY0ag8l7ei1yhhtbQC3sQhJ0l9bOPMCqYsd8jI9fqtexhFPesrXomskTVVaJ/cUe1B
+	 xN0aFFAQXuQZTdtKGj1Gfp1GX1FpxEB3f1+BzKgWjpuW8b2gqpTpOrcU1U8aZGp1Cfhnb
+	 qK/OipkUC9TrdEZ0i2V4fOZej24yWqdfrIK4Gr1f1a67J7Ju8hTbPJheF7g2unJsu8A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l4M9873z;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mMsegJ5d;
+	arc=none smtp.remote-ip=198.175.65.9
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBAC606C575;
-	Tue,  3 Nov 2026 10:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE916606A332;
+	Tue,  3 Nov 2026 12:54:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE916606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l4M9873z
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C53311F000C1;
-	Tue,  3 Nov 2026 10:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793700925;
-	bh=5o98qwlKEQyOrCRjq2RUqHe7Txdo2HfIj4qXGPwficc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=l4M9873zeOp+nuSn9vGGPWM/5zR54YN8iGYC/B8Y18HQJOpFdwDfuPsn2vNUNk+NP
-	 Uhf2M+Btkoiph3PQBpwJsFhic896iAqepE0h9dLCpKlAT/9gUjbY5mhQLzGQ3/fL1f
-	 ZsQ1uSDCfX8u5/3T+tY4zOt7H2ihasdNaaoxKbI2NBQYIYbtZO9nG9bwX8dcZbYdyO
-	 0BQUezOpFtIVi/H+vhLMA7bUtpqmWfcSpK93Xv8oCzQ+t22pDSLZjSIfg3hXfKDps3
-	 DdRnHbHugGUkSbZpCF5hrPiL7KiLQeeff3o/ayxbyjmYJq+PIMS+HKqulLooeXACS4
-	 r4f891vSExf1A==
-Date: Tue, 3 Nov 2026 12:15:16 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: gaohan@iscas.ac.cn
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mMsegJ5d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793710454; x=1825246454;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IhRkmlNFW8wvqh1/ycRf3KZ3oTStQ6uioF6qvXYIdxs=;
+  b=mMsegJ5dKg6nPnD0khk1DwMuw8ekVkHkKZAm3a9AvqaqWnMn8udLFEdq
+   CW51kiwgk0aMyd9r1rpBJqHaOdQKD5ddqDJhAjOLIA+3+1UrBzjqI+5K0
+   iKfPbmsoaUALpZQaV6EPs2+1mhRDbY6C5Cj+kokYkXsqrWEms5RSBeNvk
+   2f0PGyYWQnzq1Oh4obBpGkrp4IYogNTD75pSyTSVLrOjO0t7wVXpNRxoA
+   iJgt7zubVj0zJd9asR7v4EQ8jeopApDqDw3ngtsxoHVOlBsJ268ATqvNM
+   WIwrUZc0zIobaw+jLsfKAWtEmS1dQ1bvHJsov7ENVnwM73hwoih9E7BUf
+   w==;
+X-CSE-ConnectionGUID: N3+nM2vkRk+giiZI6qPypg==
+X-CSE-MsgGUID: ZSLf+i1tTBWC+Mf4IzVXsA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2323240"
+X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
+   d="scan'208";a="2323240"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 04:54:13 -0800
+X-CSE-ConnectionGUID: bIrfVphKRsiEpMbkrvetPA==
+X-CSE-MsgGUID: 3fvg2CqPSWirao/zO/h4zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
+   d="scan'208";a="8203943"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa011.fm.intel.com with ESMTP; 03 Nov 2026 04:54:07 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xOE1a-00000000ik4-3PiJ;
+	Tue, 03 Nov 2026 12:54:02 +0000
+Date: Tue, 3 Nov 2026 20:53:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew Ruffell <matthew.ruffell@canonical.com>,
+	Waiman Long <longman@redhat.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <baoquan.he@linux.dev>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Pratyush Yadav <pratyush@kernel.org>, Yao Zi <me@ziyao.cc>,
-	Han Gao <rabenda.cn@gmail.com>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kexec@lists.infradead.org
-Subject: Re: [PATCH 4/5] kexec_core: Clear the unused part of CMA segments
-Message-ID: <aum0NFfSezGOiR0K@kernel.org>
-References: <20261023-riscv-kexec-cma-fixes-v1-0-825b90ea23c4@iscas.ac.cn>
- <20261023-riscv-kexec-cma-fixes-v1-4-825b90ea23c4@iscas.ac.cn>
+	David Hildenbrand <david@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Caron Wills <caron.wills@pulsar.com>,
+	Ridong Chen <ridong.chen@linux.dev>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH 3/6] mm/folio, mm/mlock: Don't batch folios in per-CPU
+ LRU caches on isolated CPUs
+Message-ID: <202611032053.I3Ud8d11-lkp@intel.com>
+References: <20261103075940.110308-4-matthew.ruffell@canonical.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -70,60 +110,63 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261023-riscv-kexec-cma-fixes-v1-4-825b90ea23c4@iscas.ac.cn>
+In-Reply-To: <20261103075940.110308-4-matthew.ruffell@canonical.com>
 
-On Fri, Oct 23, 2026 at 03:33:17PM +0800, Han Gao via B4 Relay wrote:
-> From: Han Gao <gaohan@iscas.ac.cn>
-> 
-> kimage_load_cma_segment() copies the source data into pages that are not
-> cleared, but zeroes nothing after it: the final memset() runs once the
-> loop has consumed all of memsz. The tail of the last source page and
-> every page beyond bufsz keep stale data, while the purgatory digest
-> covers them as zeroes.
-> 
-> A kexec_file reboot then stops in purgatory on a digest mismatch, for
-> instance when the DTB lands in a reused CMA page.
-> 
-> Zero the remainder of each page instead.
-> 
-> Fixes: 07d24902977e ("kexec: enable CMA based contiguous allocation")
-> Signed-off-by: Han Gao <gaohan@iscas.ac.cn>
+Hi Matthew,
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+kernel test robot noticed the following build errors:
 
-> ---
->  kernel/kexec_core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index dc770b9a6d05..0d6e10bea4e4 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -780,15 +780,15 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
->  			goto out;
->  		}
->  
-> +		/* CMA pages are not cleared: zero the part without source data */
-> +		memset(ptr + uchunk, 0, mchunk - uchunk);
-> +
->  		ptr    += mchunk;
->  		mbytes -= mchunk;
->  
->  		cond_resched();
->  	}
->  
-> -	/* Clear any remainder */
-> -	memset(ptr, 0, mbytes);
-> -
->  out:
->  	return result;
->  }
-> 
-> -- 
-> 2.55.0
-> 
-> 
+[auto build test ERROR on akpm-mm/mm-everything]
 
--- 
-Sincerely yours,
-Mike.
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Ruffell/sched-isolation-Consider-nohz_full-CPUs-isolated-in-cpu_is_isolated-again/20261103-205935
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20261103075940.110308-4-matthew.ruffell%40canonical.com
+patch subject: [PATCH 3/6] mm/folio, mm/mlock: Don't batch folios in per-CPU LRU caches on isolated CPUs
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20261103/202611032053.I3Ud8d11-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261103/202611032053.I3Ud8d11-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611032053.I3Ud8d11-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/folio.c:293:6: error: call to undeclared function 'lru_batching_bypassed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     293 |         if (lru_batching_bypassed())
+         |             ^
+   1 error generated.
+
+
+vim +/lru_batching_bypassed +293 mm/folio.c
+
+   280	
+   281	static void __folio_batch_add_and_move(struct folio_batch __percpu *fbatch,
+   282			struct folio *folio, move_fn_t move_fn, bool disable_irq)
+   283	{
+   284		unsigned long flags;
+   285	
+   286		folio_get(folio);
+   287	
+   288		if (disable_irq)
+   289			local_lock_irqsave(&cpu_fbatches.lock_irq, flags);
+   290		else
+   291			local_lock(&cpu_fbatches.lock);
+   292	
+ > 293		if (lru_batching_bypassed())
+   294			folio_move_lru_now(folio, move_fn);
+   295		else if (!folio_batch_add(this_cpu_ptr(fbatch), folio) ||
+   296				!folio_may_be_lru_cached(folio) || lru_cache_disabled())
+   297			folio_batch_move_lru(this_cpu_ptr(fbatch), move_fn);
+   298	
+   299		if (disable_irq)
+   300			local_unlock_irqrestore(&cpu_fbatches.lock_irq, flags);
+   301		else
+   302			local_unlock(&cpu_fbatches.lock);
+   303	}
+   304	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
