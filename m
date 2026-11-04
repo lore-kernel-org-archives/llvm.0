@@ -1,58 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793748194;
-	b=g1dPQntyLxu2DsQlwQLAtKVAfEwnJab/TnqNtMWY+dN8eUzOuJzajtwfCGZX2hGl+eZi
-	 wRKn/P/p2+cD3YrgRHXv0xzfGXlivPxt38CchKP+0x02xQl0W+kNMaHOEDdz0eyIwUxE6
-	 GkX4nGJFbrTo/v7grD13cYd5ZnWD6cMXFI0V/uE2z1gDnCmyes9bENTlZnz1QsX2DYO0P
-	 rWBbidQ+kuCLnU+bPcEBAyPnZ7tzJzYM1Phrwqu4A15Rk6kX3QWRnssHvWANbCUoTl6KT
-	 SIWII0J408GQl/bGF/CrrQfmjAA0+asjDcCKMuv9J7RT6nh9cRcCGhYpEaB0MEl6sog==
+	t=1793752808;
+	b=R6TdGIOALknZjAaUcKLWuK7D7tQ5uah4HnJ37J1G/cfyLbb1JgCFqfUXMYLgh5bfoHaJ
+	 JniD6Z4lervJmKz/XU1CgEM365Az77wEP7BJv9VS/+yQU/HpxxwK4s3fMsT4WwL0uXdGM
+	 ag8+DZr9rRr/v1ADBe738qUnEDS/PSUgiBHcILt79mLlP7dNbA6G7cShAk+9WiWoCLGJt
+	 KdJFxNu2idg4CU/TQZciYjlSlELQV1Hkr8swdcLn9hTdlsH/Zao7Xx2ewpZruglZM2aFe
+	 SaXlKyJf0loOddHzejkslngptAo/fAzJ/73nZ8E9txJzimXCxc1VCAEHcyggYzV1TUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793748194;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=e7rXf/7upxx278z7chkqQz8HWBYmfJDS1RiHHtrdlaQ=;
-	b=Gr1pJVKS1uzTBKVAeuADi+mENUm+cbLfJDxAuOuSGWxbN72FbixuBclz64L/1vql6z+9
-	 EJGwGZgdcleltKRHKZHY3YrD65AzloDuXXwUJtbF+phbAOko2TbVsx9J3mkKi3ZnNKs1R
-	 SI6LQytOFQQtrv9MYFtDXxiJuVVW6ikHBZ5TeRUEnuQnBEG6wLmZlbUDwDAbsZneu1jC4
-	 3aP/RnZeTgMkTSzHqqAsLb7O/Bcne6Fzhf2h+Q/jxjvB4ypG5XlV9/glH39MBvtzW44ar
-	 3of22Ns8KTBIHE3woOddPsvXAApq4KYdXjxr2rC0OVGnjyH19URxgV/nKpMNgHsNURw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793752808;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=j2JaS/R7X/xCfgXzHtVUd9SRGUmcF3AJ821t7IZ28HE=;
+	b=trE+aLznjv9CUhlvtTiFPHJV8mkfjFKyVwMsvmv9D4907EYfsTYYgisKJa3JAjDaR2n+
+	 c3s20WKKQfU32oEsIrMgvC2a+OSTDXjUg8LsWRK1rguT28xPTLKcBN391cjEvnNLKyuMZ
+	 BQW9MBCb2+57s4HcyNUA1Iwa8UO13Z0xHzykYZxSLjCfrreQTHdqVP+MVQ7j2AfHWQzFl
+	 JRhSh9IAhlwFmu56bsjrEUpr4usGHDtv7QsO4n6jVoHr4bBYfgVLTk1bkH3BLIncJc2hS
+	 N2Ry1YR+EO08lsRWehENwN48GUSCBl5P2sZAv3SPz1V/6aHDSM8yRxa2ZSWnwRprQOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NOfgK94k;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bRkxRMJ2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBA3606A31B;
-	Tue,  3 Nov 2026 23:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1DF606A31B;
+	Wed,  4 Nov 2026 00:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NOfgK94k
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7081F000C1;
-	Tue,  3 Nov 2026 23:23:08 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bRkxRMJ2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B1E1F000C1;
+	Wed,  4 Nov 2026 00:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793748189;
-	bh=e7rXf/7upxx278z7chkqQz8HWBYmfJDS1RiHHtrdlaQ=;
-	h=From:To:Cc:Subject:Date;
-	b=NOfgK94kPQuJt2tWbKaCubyhU9FV3ihz9gQSTdbmCF3YMtOS4Sd/+I94hUfntHllX
-	 9NVzIZR+CFdaFq++/BBqhLMVViCNJNGHoi/6YJLLLwAARAW5ffLoxfHoub3rXAqLXr
-	 Gu1nIATHojy4Kc9ncAbQL4eSjDeZZX7IwwmAPWHxKNYZqIKwEm8aXvWF2AE8YFHvDt
-	 mYnntGgjz6LSIOtkTv5tHux5CubRchT9REAhSz+mjp1R2fc0Y+HXNi0Ab8jmf1q0M3
-	 Qm3AGGKZPD7MdsaAVK8TgDluu1CC5Q/tr1peOtoxNT/+L87gp9T/nJB2PJ1U+qIEK6
-	 bzAdlY5eL4odg==
-From: Sasha Levin <sashal@kernel.org>
-To: Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: harness: don't compare function pointers in is_signed_var()
-Date: Tue,  3 Nov 2026 18:23:05 -0500
-Message-ID: <20261103232307.1924618-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20260515; t=1793752807;
+	bh=j2JaS/R7X/xCfgXzHtVUd9SRGUmcF3AJ821t7IZ28HE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=bRkxRMJ2mht5hrVJIYWewOQuogYHCqN2a+ZYYRsID8Rfpu5wE4hexqAdPrpWKt3ee
+	 2M53OMB78sKmVw+FPuIc7tV6ZA2+ZmpE4TVjnHwHpp0SKZ2zVEEUECabf5ryGIa7hC
+	 SQUoI+KXyyj5n7OfAvpEJSB3rcExZpqhjrLDEtj+U07/cqipdPhwlz3bft8QOPy75U
+	 5oyk5Qc+5/b0PK9cDLfjSq+ROYH2mFHPZv1Wioy6ESAVjSLPbBFaEZQPSnM+kwSkfu
+	 VFbAeegPWrkYcaIxXbMkR13XjQPgDxtDEZHHlWDERhtYXofaFc18oRV84Zh3VSl8aL
+	 bfOaVZG9dRioQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D519391B168;
+	Wed,  4 Nov 2026 00:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -63,46 +54,49 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v5 0/3] bpftool: Make the LLVM disassembler an
+ optional runtime dependency
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179375280630.1976018.3900503813483067924.git-patchwork-notify@kernel.org>
+Date: Wed, 04 Nov 2026 00:40:06 +0000
+References: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
+In-Reply-To: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
+To: Mark Korenberg <socketpair@gmail.com>
+Cc: qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, nathan@kernel.org,
+ morbo@google.com, justinstitt@google.com, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, ndesaulniers@google.com, kuba@kernel.org,
+ sdf@fomichev.me, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ llvm@lists.linux.dev
 
-is_signed_var() checks whether -1 converted to the type of its argument
-is below 1. When an ASSERT or EXPECT compares function pointers, such as
-the result of signal() against SIG_ERR, that is an ordered comparison of
-function pointers, and clang warns about it:
+Hello:
 
-  legacy_check.c:41:2: warning: ordered comparison of function pointers ('typeof (__exp)' (aka 'void (*)(int)') and 'typeof (__exp)' (aka 'void (*)(int)')) [-Wordered-compare-function-pointers]
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Do the check on uintptr_t for pointers, which __builtin_classify_type()
-reports as class 5. Pointers already come out as unsigned, so the
-output doesn't change.
+On Tue, 03 Nov 2026 18:59:52 +0500 you wrote:
+> libLLVM (~140 MiB on Fedora) is a hard dependency of bpftool, although it
+> is only used by "bpftool prog dump jited". With this series, bpftool is
+> no longer linked with libLLVM.so but loads it with dlopen() when it needs
+> to disassemble JITed programs, so that distributions can make it optional.
+> Patch 1 fixes a leak found on the way. Patch 2 makes "prog dump jited
+> ... file FILE" work without a disassembler.
+> 
+> [...]
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-Found with clang 19, 21 and 22 in the rseq and namespaces tests; gcc
-doesn't warn. On failure the harness prints the same values as before
-for integers, char, bool, enums, and object and function pointers. This
-is next to the lines that the pending 32-bit __EXPECT() fixes change, so
-whichever goes in second needs a trivial rebase.
+Here is the summary with links:
+  - [bpf-next,v5,1/3] bpftool: Fix disposal of the LLVM disassembler context
+    https://git.kernel.org/bpf/bpf-next/c/abf197dfc622
+  - [bpf-next,v5,2/3] bpftool: Don't require a disassembler to dump a JITed program to a file
+    https://git.kernel.org/bpf/bpf-next/c/40dbd552e2b1
+  - [bpf-next,v5,3/3] bpftool: Make the LLVM disassembler an optional runtime dependency
+    https://git.kernel.org/bpf/bpf-next/c/1c9ca39c56ce
 
- tools/testing/selftests/kselftest_harness.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 29a19bc870846..54ee275fac8f0 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -760,7 +760,11 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
- 	for (; _metadata->trigger; _metadata->trigger = \
- 			__bail(_assert, _metadata))
- 
--#define is_signed_var(var)	(!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
-+#define __signedness_type(var) \
-+	__typeof__(__builtin_choose_expr(__builtin_classify_type(var) == 5, \
-+					 (uintptr_t)0, (var)))
-+#define is_signed_var(var) \
-+	(!!(((__signedness_type(var))(-1)) < (__signedness_type(var))1))
- 
- #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
- 	/* Avoid multiple evaluation of the cases */ \
+You are awesome, thank you!
 -- 
-2.53.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
