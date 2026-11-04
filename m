@@ -1,102 +1,53 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=78.133.224.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793781530;
-	b=u+HSzEWdvmzw6GoaNnC/MuSwI4z9QSBomOb8ZmhmQ8yDqj7YAy6YAE/iIdOSVOnmpJq3
-	 USe+AOwRB0NzEeLuiGpX8RdlBNpHMt1+KG+A+dLmXNyAjwAyNb//it58RgRMPHxWnDc6h
-	 zH4tIfvwv25ZZ2K2FRV5NZyF6ylcAfZcM9jMyYivsMOxtBpjflB/wc713zNpO6T6U51Y/
-	 12pyPDjV7h7FDOV5/FddJDgoP/gXEnsePoopDfPfWDzDlrdO4b35sF0nsmxktHhYD4z+J
-	 iTs5QxM6TE1h035hVTVwEL9ceQRp5ySTVioj0eQdkI9tPIuloeHa35QBhGcrXv6kQSg==
+	t=1793781893;
+	b=NDsHZM3Amet66qrOWZtnBg8G8HDaNs0vUcDAZ7iHm85ynKpNdMwsqlBe24jInHQ4H+Py
+	 XK2ESx3Uh5ofKt11MlsPjfb2DQwV3ZdU0n04+fpwksI37t/IygU/vrayeO+UuhtQ2XUbY
+	 jS/FUS35S+bwUoiOdT1ZyFfPL4nColvb5OPZZizUFDU2qNyZDRZ8q5KfH1Y+cKY1ExGcd
+	 lxk9H4bXiGjDWtQ5K99WIpmRb3SUl6FnD7O607p1g4Q/19QCap9iZcFryJ3BGkuKUjyDy
+	 UvAbovAWf0xPrTMNsZH3qNVntT2DCSHNQEOHOsEGzGGoHkVhVTEcesNQQE22uQZ1uIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793781530;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Spam-Flag:X-Spam-Level:
-	 X-Spamd-Result:X-Spam-Score;
-	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
-	b=KR8IbyYUnz+/p97m93YPuoGRdfEms/dNbgwjJST8nyzrgbxVtSybdyszSRyP05Q7JbJ4
-	 5vlLy1j+XM4ziplz9N9mpHtWFIhlbD6hHWWf+zqTi56ItHKmn3ZCLggWAyHPoWEShfyz9
-	 5DvOPN0uV+fgkBiXcMugv6A0j/G/rk24i0VcAu7sZZN7+SD3rFYzPTJ8UMdMnZhhGXnlA
-	 XUPXqJxaxeNEykMEPfDZN3vserBsFM3T5V3VWUiNTjXgt6mY5y3i1az90r3glU3HuQHfM
-	 2NKe9FpxsEvzVr3JVjWike5VEN7bcYUOOVAhbbPdYTW1QwvimrcCn4x3FzP8xI+Np0Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793781893;
+	h=DMARC-Filter:Received:Received:Date:From:To:cc:Subject:In-Reply-To:
+	 Message-ID:References:User-Agent:MIME-Version:Content-Type;
+	bh=ctB5Vq7rzRA1tmvwFfYQJUZK4yutrxijqadyX44J5Ow=;
+	b=tCvMxf5sp2JOu5LQavzpUCwpq9ftPGKF3JgTHOr6ihvU2scDGi2hIF7hPkseCCS+yd6J
+	 nTNrbJn4OdokbPhH1oaV4rw5g2lI3VuOBfIfuLHeuoeybmdZ9wlZJfDPmo6BSIJc4z7BH
+	 Sb89EuHhpUCaUXRHb1CLhWDmyLLRK+xG4M/rolrhLgV2acRdHKhWzzXW/n9MQ2vd9sV9Q
+	 7AivazBM+LpTB07qaUZ0cfGF+QGlRt4rzK8CE4ffc0Xbo+MsvQCmIHpCpJzXW/yKqtg/k
+	 niaK9aicC5wUnBJwGi+iRe0xQ/dcm0FONmO1JACvauwHicDXZW+yGX9v+oNc749fOeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.de;
-	spf=pass smtp.mailfrom=suse.de;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx;
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B86B606A32C
-	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 08:38:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B86B606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 476E02009B;
-	Wed,  4 Nov 2026 08:38:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793781527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
-	b=fA3O9gy4OyDPyMVktW0BsXoQkkG8Ai0tQSL7cP1inKZRftggtBP7MlNcC4ja2mvjL8v9QK
-	aqG0ZpzF3Y5K2Nn3gqqtiAE7AtaQt89X2AzicwKipGYF02r++U8PuzybIptC4JdsCvUHz+
-	ROw6LIfzWHmC2noeLap+toYBI3Gl+gY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793781527;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
-	b=gFBk0IZxHinMUg91qFZV9JlDpfMF8eZdv2uNLvZXZs1e9BatBaO+XwNhIKFUz79BDkJcPM
-	0gypWuzwiVk6mOCg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793781527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
-	b=fA3O9gy4OyDPyMVktW0BsXoQkkG8Ai0tQSL7cP1inKZRftggtBP7MlNcC4ja2mvjL8v9QK
-	aqG0ZpzF3Y5K2Nn3gqqtiAE7AtaQt89X2AzicwKipGYF02r++U8PuzybIptC4JdsCvUHz+
-	ROw6LIfzWHmC2noeLap+toYBI3Gl+gY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793781527;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
-	b=gFBk0IZxHinMUg91qFZV9JlDpfMF8eZdv2uNLvZXZs1e9BatBaO+XwNhIKFUz79BDkJcPM
-	0gypWuzwiVk6mOCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4B41B134F0;
-	Wed,  4 Nov 2026 08:38:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id A64HBRbv6mq1AgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Wed, 04 Nov 2026 08:38:46 +0000
-Message-ID: <6abf56cc-d3df-4ca8-9f6d-fe9fa3462837@suse.de>
-Date: Wed, 4 Nov 2026 09:37:22 +0100
+	dmarc=none header.from=orcam.me.uk;
+	spf=none smtp.mailfrom=orcam.me.uk;
+	arc=none smtp.remote-ip=78.133.224.34
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF9A606A326
+	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 08:44:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AF9A606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 9144B92009E; Wed,  4 Nov 2026 09:44:50 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 8A1FB92009C;
+	Wed,  4 Nov 2026 08:44:50 +0000 (GMT)
+Date: Wed, 4 Nov 2026 08:44:50 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Tzu-Ching Yang <shingekinocore@gmail.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Marco Crivellari <marco.crivellari@suse.com>, 
+    Frederic Weisbecker <frederic@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    linux-mips@vger.kernel.org, llvm@lists.linux.dev, 
+    linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
+    stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix genex.S build with LLVM before 21
+In-Reply-To: <20261104030147.3117325-1-shingekinocore@gmail.com>
+Message-ID: <alpine.DEB.2.21.2611040746160.6502@angie.orcam.me.uk>
+References: <20261104030147.3117325-1-shingekinocore@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,78 +57,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH nf-next] selftests: netfilter: nf_queue: drop the no-op
- loop initializer
-To: Sasha Levin <sashal@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>,
- Florian Westphal <fw@strlen.de>
-Cc: Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20261103165419.687806-1-sashal@kernel.org>
- <20261103165419.687806-5-sashal@kernel.org>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20261103165419.687806-5-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spamd-Result: default: False [-13.29 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-0.999];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -13.29
+Content-Type: text/plain; charset=US-ASCII
 
-On 11/3/26 5:54 PM, Sasha Levin wrote:
-> The out-of-order verdict loop starts with "for (ooo_count; ...", and
-> clang warns about the unused expression:
-> 
->    nf_queue.c:354:10: warning: expression result unused [-Wunused-value]
-> 
-> Leave the initializer empty.
-> 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> KernelCI's clang builds show this warning.
-> 
->   tools/testing/selftests/net/netfilter/nf_queue.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/netfilter/nf_queue.c b/tools/testing/selftests/net/netfilter/nf_queue.c
-> index cca6c3cfa9e46..bc0b2f601a0a4 100644
-> --- a/tools/testing/selftests/net/netfilter/nf_queue.c
-> +++ b/tools/testing/selftests/net/netfilter/nf_queue.c
-> @@ -351,7 +351,7 @@ static int mainloop(void)
->   		if (opts.out_of_order) {
->   			ooo_ids[ooo_count] = id;
->   			if (ooo_count >= 15) {
-> -				for (ooo_count; ooo_count >= 0; ooo_count--) {
-> +				for (; ooo_count >= 0; ooo_count--) {
->   					nlh = nfq_build_verdict(buf, ooo_ids[ooo_count],
->   								opts.queue_num, opts.verdict);
->   					if (mnl_socket_sendto(nl, nlh, nlh->nlmsg_len) < 0) {
+On Wed, 4 Nov 2026, Tzu-Ching Yang wrote:
 
-Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
+> Wrap both expressions in %lo(). For that operator, LLVM 17 to 20
+> emit a LO16 fixup instead of rejecting the operand, and resolve it when
+> writing the object, since both expressions are constants by then; no
+> relocation is left. Both values are between 2 and 30, so %lo() does
+> not change them. 
 
-Thanks!
+ Seems fair.
+
+>   - The objects are byte-identical before and after with GCC, with
+>     LLVM_IAS=0 and with LLVM 21 to 23. The only exception is the
+>     microMIPS ADDIU above. The 4-byte move with LLVM_IAS=0 is harmless:
+>     set_vi_handler() computes the offsets and the length of the vectored
+>     handler from symbols before copying it, and ejtag_debug_handler and
+>     nmi_handler are only referenced through their symbols.
+
+ I would be tempted to accept the GAS microMIPS code size regression as a 
+missed optimisation.  This is a general issue with forward references and 
+%lo() calculation is only one example: we're missing microMIPS relaxation 
+for 16-bit vs 32-bit instruction encodings, except for branches.  We only 
+do it for MIPS16 code.
+
+> - The malta kernels built with GCC 8.1 and 16.2, LLVM 17, 20 and 23, and
+>   LLVM 17 with LLVM_IAS=0 boot under QEMU 6.2 -cpu 24Kf. That CPU uses
+>   r4k_wait(), so interrupts go through skipover_handle_int. Each kernel
+>   boots to an init that keeps the CPU going in and out of idle and then
+>   reboots; a QEMU trace shows every interrupt that lands in the idle
+>   region resuming at r4k_wait_exit. A microMIPS kernel does not boot
+>   under QEMU -cpu M14Kc with or without this patch, so the microMIPS
+>   change was not run.
+
+ I wouldn't be surprised with a microMIPS kernel not booting.  Support was 
+messy right from the beginning and despite my opposition it was merged as 
+it stood.  Maybe one of the fragile assumptions broke here or there.  Or 
+it could be a QEMU emulation bug too; it doesn't seem too stable compared 
+to actual hardware, microMIPS or not.  I could try bisecting it sometime 
+as I do have an otherwise working microMIPS QEMU setup; sadly no actual 
+microMIPS hardware.
+
+> On 6.18.y, which also allows LLVM 15 and 16, the patch applies after
+> 2b6d718c8dbe, and LLVM 15 and 16 fail and are fixed the same way.
+> 
+> The 56651128e2fb backport was dropped from the 6.14, 6.12 and 6.6
+> stable queues because of this build failure [1], so 6.12.y and 6.6.y
+> still lack that fix.
+
+ Shouldn't this use:
+
+Cc: <stable@vger.kernel.org> # 6.6.x: 56651128e2fb: MIPS: Fix idle VS timer enqueue
+Cc: <stable@vger.kernel.org> # 6.6.x: 2b6d718c8dbe: MIPS: Fix whitespace damage in r4k_wait from VS timer fix
+Cc: <stable@vger.kernel.org> # 6.6.x
+
+then to get this all picked up?  Or is it unsupported annotation syntax 
+where a prerequisite matches a Fixes: tag?
+
+  Maciej
