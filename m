@@ -1,49 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793816533;
-	b=Vd5Cv3zXXzfCNSdEwKSqbrfjj+yr9kbG/FEsCgoPe178RuN2Vj5M2qglG9Yhw/sqPNCb
-	 elSFmKMMY1IjSscW08EtfmFN7TXldv9cMx/sK1Bm3soc3Zcl11ku37BoEWdShlkIcHwHe
-	 TIT02TFfVzEzCWr1HqP4KYVuzB6Fx2gft02tV5jnEU2cskDFMfE19ryNc0xi+CrPZf/K2
-	 +BWI63ugtRnIjmhyJMmZv1HPQCkxJNVx7CIJSPwYCR7+xuB+JnKbtUNxHLusubMISuXPh
-	 Yo3/KDuvT9MzJX4hIM6/HoRaAwexLazlCOvmVMTbHoUVhVC4Cc1xKK+XxYAnisPitnQ==
+	t=1793825390;
+	b=zORP5Fflll4ybwgBE8ntr/odeR/4N33SLUW294SN5l4D2l5HLc4ABY/WXqeAcWtHkoOy
+	 AK/9AH3d22cL3KJGz89fjOABgCWCYzel1c/xHCk1rAlH0EZdyikslU2yKYmQUE9KGAl5/
+	 64EIkeTKbptHvAfGIfxc7ZfrGYKW7IL+UX00oEnAZcvaFSIs0Xwj51uQpb/PXCm6XFr8d
+	 p87IFSdl7ApGDhQn2TJ2/gxT9rsSbrl98alVKOnQ17HAt3eak2EFuO99zZU6Lo97rPKqZ
+	 X/zmg4LR8wgpVfd75lRLhAPAUI19LBlFhkIW3dcAedoM7sKLlEV9uphb4O8nj9ZL4aQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793816533;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=Ae44f96zItRoMnEuDxqCncdEeGbSJAWzgR3XJgNUP70=;
-	b=46m2GwE2YtzGbwajKu8FMdTZ6tODjMhI8qhwYdSSPdBWfzbFZ8L9gGoAxjrNl/H805pD
-	 JAhDTfse08X/559MJsqZTdl4RMa085XuSfwbsiDzpciXxGDatwQybhF8B24XsaFKfxvVW
-	 U2KWyVwHajlAUOeCkpdU5CBa22VgMZZzhLuP3gg+GO/xtTqJtzG3XCkRMaq91ttHAy73a
-	 YTnhbL9WoQEMpOsZX8JaW8MGs6/zsGjIk8rVLiiok/6yrDjI8EaHidaDulU7mT2ZWZ8Q3
-	 KGt3SuCJhrDatxLA16uVT6x8G4tb+df0e05llILngj5e+UgSgXfOBji0ILq0wznJKng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793825390;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=7UHNfr4Il3LK173WRBdrE3VsuDX4KYvFSp/3qgLgdhM=;
+	b=iKCplzFs4LnB0xDS7MJkxieVttTFWuQ+UIWtXfAsRegBAOOGvzrPHATOJYVbpA1uK7Hn
+	 LGdwh0MTYrdO5anuXfeccYcSL8WwmjCHK8Tjv197+5Jig3FOpGvB1ld8dY3mpLcGAX3HE
+	 qEcbS7j6djC6Ny79mEaeWks7Z0KxOygzfW658jSfh3uw3NMNcihbotcmvzNFIl3pInDXD
+	 xwa8S6goatjt6PJ3FymbX5DGFxMmDWRXGM+qNd5zVBc1zj1Ln5OWSfwIiZtQnuruIQ9Oh
+	 gLlbKlqEQCZ6Ye6mUm2i6vbrIYcaUvVyTu7VdkMV5dke2xsc9H1XweLsy8hV10ACZNQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hs59Teb0;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=l2Ozy7eb;
+	arc=none smtp.remote-ip=198.175.65.18
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFFB606D2E3;
-	Wed,  4 Nov 2026 18:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80365606CA23;
+	Wed,  4 Nov 2026 20:49:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80365606CA23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hs59Teb0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60F31F00919;
-	Wed,  4 Nov 2026 18:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793816532;
-	bh=Ae44f96zItRoMnEuDxqCncdEeGbSJAWzgR3XJgNUP70=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=hs59Teb0yhtPbZ/h74PFv9MW9QEiSmAVJZFS1FTYTU7wnnWhQ+xAbwgVbAYow8NOK
-	 kNm7m5LEEPXZwIL3/mFGDobzskJxK93M/N0b/q2Ca8BpaZt//spk3eeIvY9G++OZcw
-	 4rpVhepNM/4W5zzyt6cV96z1fU2SOzl5M4QgB3PJpff+AVM3eg5Xw1WjNf33AkG6Wv
-	 nv0dT4p3APoOknaWM0NYIgd5mwZPN4gfBuBv83NtoAIOe+pzo09qaH2QvYZh6he+yY
-	 CUfaQFr7NBy1yH99osmwcdRkn/gfT+i+2lUCsssJUpEWPGgVLdD010bnqXQANuhAI5
-	 agXgV8P4XmsUQ==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Wed, 04 Nov 2026 18:20:29 +0000
-Subject: [PATCH v5 11/11] kbuild: build rust crates in parallel with the
- rest of the build
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=l2Ozy7eb
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793825388; x=1825361388;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5xeOURYxUIPvO0bpPT2q/RibhsINvajMvDh/SUbxlto=;
+  b=l2Ozy7eblfRcWbZJ5kcTCoqM/2FJhQxM1T+zc0pCazMlfhIcjFGxbKB/
+   ffz+VUlUnyZ419RUIZ3LV6nAwFrn2hQFxfSRtsDTf7t4MMd6guAascDKp
+   tWtNQui+wI7Zes+yhKlKnwyFBS1Dhqu5k2eFyNJyIxbTfOUnT1iavnme/
+   FYCjCpUKD2zOnxggNehCIAiT1T+KSS7v61ZKyZdPyQPyWSD/swxCz03sR
+   9JKXr+oQz4tR1P2kTGNEN8sv1wZc/zcZxMku/8nQhLiNGLJq0iMcxItID
+   MnkBlZN3OXgPny6hvdM9DiZNGrbj1H3ubEG33PQ2f+b8Dzfz/06I0YU7Y
+   w==;
+X-CSE-ConnectionGUID: duuHviZwSMKTkluY4urVPw==
+X-CSE-MsgGUID: cxZTvrqWQfeRNOLhguPlew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2610888"
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="2610888"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 12:49:48 -0800
+X-CSE-ConnectionGUID: vWF71u6tQXerag+cpWI2Ow==
+X-CSE-MsgGUID: lZZeExA0Stu6OVEk1wFsaQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="6942779"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Nov 2026 12:49:47 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xOhvU-00000000kzv-1oLk;
+	Wed, 04 Nov 2026 20:49:44 +0000
+Date: Thu, 5 Nov 2026 04:48:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Atharva Tiwari <atharvatiwarilinuxdev@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 10/14] power/supply: add support for x86 macs in
+ macsmc-power
+Message-ID: <202611050433.ijrZVulP-lkp@intel.com>
+References: <20261029085504.3547-11-atharvatiwarilinuxdev@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,175 +82,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261104-build-speedup-v5-11-0f6018be8dae@kernel.org>
-References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
-In-Reply-To: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Geert Uytterhoeven <geert@linux-m68k.org>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: ljs@kernel.org, linux-kbuild@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
- rust-for-linux@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4608; i=ljs@kernel.org;
- h=from:subject:message-id; bh=FgSgFDAAcTPCFUAL+8odpu2fPm2OKUlCsBm/ENgnc8s=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJel+dt0LuyaXfbNOY9pR3zHT59b3wuq7N+5vIGXd416
- /y27p2zsqOUhUGMi0FWTJHl+Rfx/UEiYfM6L/i7wcxhZQIZwsDFKQAT0bnPyPDKR156gdy8xyn+
- XOs3/2qaNFnmS1Okr+/+sssq67LnHuxj+Kfd4V8/8eaSHOESDtVr3Llfb9WalTZuZey8J2rfyPJ
- Thg0A
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261029085504.3547-11-atharvatiwarilinuxdev@gmail.com>
 
-When CONFIG_RUST is specified make prepare builds all of the rust
-components before descending into the tree.
+Hi Atharva,
 
-This means nothing can be done until all of these are compiled, resulting
-in a stall at the start of every clean CONFIG_RUST build.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-This also implicitly slows down every rust-capable LLVM allmodconfig build
-as this enables the CONFIG_RUST option.
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on groeck-staging/hwmon groeck-staging/hwmon-next groeck-staging/watchdog groeck-staging/watchdog-next jic23-iio/togreg linus/master v7.3 next-20261030]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fix this by allowing rust crates to be built alongside the C code.
+url:    https://github.com/intel-lab-lkp/linux/commits/Atharva-Tiwari/treewide-Add-backend-for-macsmc/20261029-045158
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20261029085504.3547-11-atharvatiwarilinuxdev%40gmail.com
+patch subject: [RFC PATCH 10/14] power/supply: add support for x86 macs in macsmc-power
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261105/202611050433.ijrZVulP-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611050433.ijrZVulP-lkp@intel.com/reproduce)
 
-Remove the rust build from the make prepare step, then establish a
-dependency between rust code located elsewhere in the tree upon rust
-components contained in rust/.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611050433.ijrZVulP-lkp@intel.com/
 
-Do this by establishing a top-level list of directories containing rust
-code, KBUILD_RUST_DIRS, upon which the dependency is expressed.
+All errors (new ones prefixed by >>):
 
-Finally, ensure that no rust code is located elsewhere and fail the build
-if any is found to ensure that nothing is missed in future.
+>> drivers/power/supply/macsmc-power.c:1011:24: error: call to undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1011 |                 acpi_status status = acpi_evaluate_integer(power->adapter->handle, "_PSR", NULL,
+         |                                      ^
+   drivers/power/supply/macsmc-power.c:1011:24: note: did you mean 'acpi_evaluate_object'?
+   include/acpi/acpixf.h:556:8: note: 'acpi_evaluate_object' declared here
+     556 |                             acpi_evaluate_object(acpi_handle object,
+         |                             ^
+   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
+      93 |         static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
+         |                            ^
+>> drivers/power/supply/macsmc-power.c:1011:60: error: incomplete definition of type 'struct acpi_device'
+    1011 |                 acpi_status status = acpi_evaluate_integer(power->adapter->handle, "_PSR", NULL,
+         |                                                            ~~~~~~~~~~~~~~^
+   include/linux/device/bus.h:224:8: note: forward declaration of 'struct acpi_device'
+     224 | struct acpi_device;
+         |        ^
+>> drivers/power/supply/macsmc-power.c:1308:9: error: call to undeclared function 'acpi_dev_install_notify_handler'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1308 |                 ret = acpi_dev_install_notify_handler(power->adapter, ACPI_DEVICE_NOTIFY,
+         |                       ^
+   drivers/power/supply/macsmc-power.c:1308:9: note: did you mean 'acpi_install_notify_handler'?
+   include/acpi/acpixf.h:641:8: note: 'acpi_install_notify_handler' declared here
+     641 |                             acpi_install_notify_handler(acpi_handle device,
+         |                             ^
+   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
+      93 |         static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
+         |                            ^
+   drivers/power/supply/macsmc-power.c:1313:24: error: call to undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1313 |                 acpi_status status = acpi_evaluate_integer(power->adapter->handle, "_PSR", NULL,
+         |                                      ^
+   drivers/power/supply/macsmc-power.c:1313:60: error: incomplete definition of type 'struct acpi_device'
+    1313 |                 acpi_status status = acpi_evaluate_integer(power->adapter->handle, "_PSR", NULL,
+         |                                                            ~~~~~~~~~~~~~~^
+   include/linux/device/bus.h:224:8: note: forward declaration of 'struct acpi_device'
+     224 | struct acpi_device;
+         |        ^
+>> drivers/power/supply/macsmc-power.c:1330:3: error: call to undeclared function 'acpi_dev_remove_notify_handler'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1330 |                 acpi_dev_remove_notify_handler(power->adapter, ACPI_DEVICE_NOTIFY,
+         |                 ^
+   drivers/power/supply/macsmc-power.c:1330:3: note: did you mean 'acpi_remove_notify_handler'?
+   include/acpi/acpixf.h:647:8: note: 'acpi_remove_notify_handler' declared here
+     647 |                             acpi_remove_notify_handler(acpi_handle device,
+         |                             ^
+   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
+      93 |         static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
+         |                            ^
+   6 errors generated.
 
-Care is taken to ensure the rust/ dependency is also established for any
-module being built to account for external rust modules which rely upon it,
-and that only one rust/ build will be performed at any one time.
 
-External rust modules builds are unaffected - make modules_prepare ...
-(where ... are other goals) will build rust/ first.
+vim +/acpi_evaluate_integer +1011 drivers/power/supply/macsmc-power.c
 
-The rustdoc and rusttest goals invoke rust/ directly rather than via
-Kbuild, so build rust/ first there too.
+  1005	
+  1006	static void macsmc_power_acpi_notify(acpi_handle handle, u32 event, void *context)
+  1007	{
+  1008		struct macsmc_power *power = context;
+  1009	
+  1010		if (event == 0x80) {
+> 1011			acpi_status status = acpi_evaluate_integer(power->adapter->handle, "_PSR", NULL,
+  1012									&power->adapter_status);
+  1013			if (ACPI_FAILURE(status))
+  1014				return;
+  1015	
+  1016			power->adapter_status = !!power->adapter_status;
+  1017			power_supply_changed(power->batt);
+  1018			power_supply_changed(power->ac);
+  1019		}
+  1020	}
+  1021	
 
-Every Rust and C object was confirmed to be byte-for-byte identical after
-this change.
-
-Whole build, 128-thread Threadripper 9980X, best of N runs:
-
-                                         before   after     delta
-                                         -------------------------------
-  x86 defconfig+RUST, clean                36.5s    32.6s     -3.9s (-11%)
-  x86 allmodconfig, clean                 297.0s   278.3s    -18.7s (-6%)
-
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- Kbuild                 |  5 +++++
- Makefile               | 17 ++++++++++++++++-
- scripts/Makefile.build |  5 ++++-
- 3 files changed, 25 insertions(+), 2 deletions(-)
-
-diff --git a/Kbuild b/Kbuild
-index a6a0192dea08..9670556059dd 100644
---- a/Kbuild
-+++ b/Kbuild
-@@ -115,3 +115,8 @@ obj-$(CONFIG_NET)	+= net/
- obj-y			+= virt/
- obj-y			+= $(ARCH_DRIVERS)
- obj-$(CONFIG_DRM_HEADER_TEST)	+= include/
-+
-+# Rust code elsewhere in the tree depends upon rust/.
-+ifdef CONFIG_RUST
-+$(KBUILD_RUST_DIRS): | rust
-+endif
-diff --git a/Makefile b/Makefile
-index 7c254b8657a3..de4cc052af03 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1416,11 +1416,14 @@ prepare0: archprepare
- 	$(Q)$(MAKE) $(build)=. prepare
- 	$(Q)$(MAKE) $(build)=scripts/mod
- 
-+ifdef CONFIG_RUST
-+export KBUILD_RUST_DIRS := drivers lib mm samples
-+endif
-+
- # All the preparing..
- prepare: prepare0
- ifdef CONFIG_RUST
- 	+$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh
--	$(Q)$(MAKE) $(build)=rust
- endif
- 
- PHONY += remove-stale-files
-@@ -1767,6 +1770,14 @@ modules: modules_prepare
- # Target to prepare building external modules
- modules_prepare: prepare
- 	$(Q)$(MAKE) $(build)=scripts scripts/module.lds
-+ifdef CONFIG_RUST
-+# Avoid two instances of rust/ being built at any one time.
-+ifneq ($(filter modules_prepare,$(MAKECMDGOALS)),)
-+ifeq ($(filter all vmlinux modules %Image% dtbs rustdoc rusttest,$(MAKECMDGOALS)),)
-+	$(Q)$(MAKE) $(build)=rust
-+endif
-+endif
-+endif
- 
- endif # CONFIG_MODULES
- 
-@@ -2035,13 +2046,17 @@ rustavailable:
- # Documentation target
- #
- # Using the singular to avoid running afoul of `no-dot-config-targets`.
-+#
-+# rust/ is built alongside the rest of the tree, so must be built first here.
- PHONY += rustdoc
- rustdoc: prepare
-+	$(Q)$(MAKE) $(build)=rust
- 	$(Q)$(MAKE) $(build)=rust $@
- 
- # Testing target
- PHONY += rusttest
- rusttest: prepare
-+	$(Q)$(MAKE) $(build)=rust
- 	$(Q)$(MAKE) $(build)=rust $@
- 
- # Formatting targets
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 7b652f169a8f..ec4e220d6831 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -381,8 +381,11 @@ quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
- 		$(cmd_ld_single)) \
- 	$(cmd_objtool)
- 
-+rust-dir-ok = $(or $(KBUILD_EXTMOD),$(filter rust $(KBUILD_RUST_DIRS),$(firstword $(subst /, ,$@))))
-+
-+# Ensure that any rust code located elsewhere from rust/ is listed in KBUILD_RUST_DIRS.
- define rule_rustc_o_rs
--	$(call cmd_and_fixdep,rustc_o_rs)
-+	$(if $(rust-dir-ok),,$(error $@: Rust code in a directory not listed in KBUILD_RUST_DIRS, see the top Makefile))$(call cmd_and_fixdep,rustc_o_rs)
- 	$(call cmd,gen_objtooldep)
- endef
- 
-
--- 
-2.56.0
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
