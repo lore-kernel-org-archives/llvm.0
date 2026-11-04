@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.192
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.121
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793808463;
-	b=WX6kamU1UTM4szJ6u7RDcM7gJj3xh608VwZmIiHP3IiCI/onyzBIgCLylTr6DGFGL15B
-	 42zWcir1hEYv/rt1HElLwv/ITqk1sR9HR/lm87IHFdCt++KdIF+mh4JCuvLTAFlitGTTb
-	 pRdyeHT2rRc3Vk3r939kJxXfFHSMXi7xk1vKqFA9MA1RJj02gLKTKOrScwM0r4jJJ1iH5
-	 JT1YmVGVP3THedAdFkRut0MtKcIa3se0Wwj7WW5E5GYMY0E+53w464ePiv/vIWCnoVRJF
-	 2x/aWj9SaG5Kctf9zUQUOx8f5weFg+iPkQFgXd7glvLmNLM0dAS6BJh8B8/kGH9WJIA==
+	t=1793808491;
+	b=UEH9W093pfDQWjriiF7VmjMeVBITClq1QXKCFZQrnHkOnkC425W1G1UFtBeKot14BIOM
+	 Vn9Ir3U3ozYlRGb8ZVHCVxg6wRS0fPh8uWD3Kev/dp3lNvs8NyazWVBtaH23Y974T17hC
+	 EfnRhNLNZAcPxP7y1PxylmZZ/yc0Eu0aCV4jug0GQeirKaM6HLjNhcr80E0C9NyaXJdI7
+	 QwZY6YOgbmyzF4xUo81hqG/IqXOaWEYccs4vXLCeol+AWYyw0jy87xDa8h/rwNIcZTP0D
+	 iHeXlGrrUGtV5Lo3QL9n5hzHn30bKdoOUD9Gn7DZSaenjmwNg+tPBo5B2OuFwDHw9fw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793808463;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793808491;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=tUI0nKZKutgcYVVqywY0bgNqE6wcGLtzzloSBXTvSY0=;
-	b=EN0T3fi3y/C2nxd5Urv0BmNUs/9D0QMR9graImuZKKGiFfXMkyxxhUPN3rD4Ptij47Rn
-	 VQkITuGekQvoNdWzMJwGAGLmWnntnqdBodmPqi/no+u3LBjK2b9NxY1MZl0ychln7/zjy
-	 hmvY9X+TOY5cKrJnrtWR9htsY9a3knd0slK9p61CtKUf3tP5zkYw+vGBT0RwvT0aHNMuY
-	 f+by81xF4pmRSfEelWniOXrL3ApgqVgvdvOgxSsKU52rVl7S2E1+hYlGo1Ci/pyCquZII
-	 mwu4oW6M8Ceu+y1OkExdmk+6+fahB+kWwVgEotFPOtUsF78lgGCTZjkoC//3Lh1ldrQ==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=12512aLllXftI9moEQx7MlwEUWUL+y5ReetVj26fF0E=;
+	b=YV5Os6IPoin547Ve4lyFTPgrSkAOM678jskcigGCdhgeJUHzyhhAYCkLGs2fyozAJVjv
+	 VDpb8/U8709ZhxUYH4ZV69Uwo+FuFIFV5uRZtxSVi6wPrWF+Z1tdF2Dg5LDaYYQfvyVt7
+	 YFVhCMFg5b3qf9Fx6uVt67OnSJUvV4L990dH7r3Ryg2jk1C9fgYRjatZZCrgyyHntNNym
+	 RWqTcKWPFesxitEexp8XZWoydBeZjMRYBYxKeH3ra9GxCEm3s5urT7JrfYFlPcxi+UvnH
+	 Fd+SdS7aijBPkfN2Z51cbajEFS4z2nx/0bF2avwZCXVFt5E/18+A5TSwf0WAMxkTEmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="XQNU/is/";
-	arc=none smtp.remote-ip=91.218.175.192
-Received: from mta0.migadu.com (out-192.mta0.migadu.com [91.218.175.192])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="rb+/XLQD";
+	arc=none smtp.remote-ip=95.215.58.121
+Received: from mta1.migadu.com (out-121.mta1.migadu.com [95.215.58.121])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D63606A328
-	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 16:07:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46D63606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51F9606A333
+	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 16:08:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D51F9606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=XQNU/is/
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rb+/XLQD
 X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=8h6G/EKHbetMFLZ3FoTwPAwj6jQwPZCmaugSiKT4/5M=;
+DKIM-Signature: a=rsa-sha256; bh=TEEBqA5mys4k9gU+dMidncfMYOQA4DDB7pbBCcoYQ8w=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793808459; v=1; x=1794413259;
- b=XQNU/is/dft3ETxtjnalCy4ZDdy1INN6nP91Ud3MGemBsNgDbMYrTU65cc0u6EwccevYOCUf
- PjysVVkSQsy3EbBBbFIKb818S2ixg3BPIQD4p7qP5yRYuPtSkoRRb3cLjmGe69aebS2/tD96/XW
- k9wvx0LQjVKBMNDKulLWg/qk=
+ t=1793808487; v=1; x=1794413287;
+ b=rb+/XLQDmsVYYxbxM3pGl972/st2pEV7ZbvHwKTQUgpV6MNzyw2KF70URj+Bt2J+vOuRHzCL
+ riO0CRGCictBJBAk5Tk2a4cqMqj5SLr7tvHXx3d4Aj8VftTHV86KeYzyqriAc3piAsMLTC2pkyL
+ CQudFOs1JOex96IapnoJGxFk=
 X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 64b2df2fbae2508c;
-	Wed, 04 Nov 2026 16:07:38 +0000
-X-Mizu-Trace-ID: 64b2df2fbae2508c
+Received: by smtp.migadu.com with ESMTPS id ae6b6b9431f873b0;
+	Wed, 04 Nov 2026 16:08:04 +0000
+X-Mizu-Trace-ID: ae6b6b9431f873b0
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: Thomas Gleixner <tglx@kernel.org>,
@@ -66,31 +67,21 @@ To: Thomas Gleixner <tglx@kernel.org>,
 	Matthew Brost <matthew.brost@intel.com>,
 	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>
 Cc: Vineet Gupta <vineet.gupta@linux.dev>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Xin Li (Intel)" <xin@zytor.com>,
-	Brian Gerst <brgerst@gmail.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	linux-kernel@vger.kernel.org,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	iommu@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	intel-gfx@lists.freedesktop.org,
 	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
 	intel-xe@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 0/4] Fix the x86 defconfig build with GCC 17
-Date: Wed,  4 Nov 2026 08:07:17 -0800
-Message-ID: <20261104160722.1637541-1-vineet.gupta@linux.dev>
+Subject: [PATCH 4/4] drm/i915: Avoid -Wconstant-logical-operand with GCC 17
+Date: Wed,  4 Nov 2026 08:07:21 -0800
+Message-ID: <20261104160722.1637541-5-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261104160722.1637541-1-vineet.gupta@linux.dev>
+References: <20261104160722.1637541-1-vineet.gupta@linux.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -102,53 +93,71 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix build warnings and failures (CONFIG_WERROR=y) with a GCC 17 build.
-GCC 17 adds -Wconstant-logical-operand which is strict about operands
-of && or || that fold to a constant other than 0 or 1.
+GCC 17 adds -Wconstant-logical-operand to -Wall. It warns when an operand
+of && or || folds to a constant other than 0 or 1. Three places break the
+build with CONFIG_WERROR=y:
 
-In the past similar fixes have been done for clang, e.g.
+  include/drm/intel/reg_bits.h:27:48: error: use of logical '&&' with constant operand '256' [-Werror=constant-logical-operand]
+  drivers/gpu/drm/i915/i915_config.c:13:43: error: use of logical '&&' with constant operand '10000' [-Werror=constant-logical-operand]
+  drivers/gpu/drm/i915/gem/i915_gem_context.c:999:45: error: use of logical '&&' with constant operand '20000' [-Werror=constant-logical-operand]
 
-  93f56de25937 2017-04-06 mac80211: Fix clang warning about constant operand in logical operation  [v4.12-rc1]
-  ...
-  dd7fe5d9fd6a 2024-01-17 rtc: max31335: Fix comparison in max31335_volatile_reg()                 [v6.8-rc1]
+clang has the same warning, but it checks only a constant right operand
+outside a macro. Here each constant is a left operand, and
+IS_POWER_OF_2() is also a macro.
 
-The reason this trips only with gcc is that clang's toggle is more
-permissive:
- - it checks RHS only, not constant LHS.
- - Macros are not checked.
+Commit 1a839e016e49 ("drm/i915: remove IS_ACTIVE") moved
+CONFIG_DRM_I915_FENCE_TIMEOUT to the left of && to avoid the clang
+warning. That does not help with GCC 17.
 
-Fix is to effectively make a macro or condition return 0 or 1.
+Compare each constant against 0, as commit aeedd3a82678 ("drm/i915: Avoid
+-Wconstant-logical-operand in nsecs_to_jiffies_timeout()") did.
 
-The patches are split up per subsystem and can go independently via
-respective trees:
-
-  1/4 x86/cpufeatures: the awk-generated *_MASK_BIT_SET() returns 0 or 1.
-  2/4 wait: ___wait_is_interruptible() with a constant state.
-  3/4 iommupt: PT_SUPPORTED_FEATURE() in the fvalog2_*() helpers.
-  4/4 drm/i915: IS_POWER_OF_2() in reg_bits.h, and two Kconfig timeouts.
-
-Tested on x86 defconfig with CONFIG_WERROR=y, at each patch:
-
- - GCC 17 trunk (20261103): each patch removes only its own errors. The
-   build has no warnings after 4/4.
- - GCC 16.1: the build has no warnings. The .text of each object file
-   does not change. The only differences come from the build timestamp
-   and the release string.
-
-Vineet Gupta (4):
-  x86/cpufeatures: Make {REQUIRED,DISABLED}_MASK_BIT_SET() return 0 or 1
-  wait: Make ___wait_is_interruptible() return 0 or 1
-  iommupt: Make PT_SUPPORTED_FEATURE() return 0 or 1
-  drm/i915: Avoid -Wconstant-logical-operand with GCC 17
-
- arch/x86/tools/cpufeaturemasks.awk          | 4 ++--
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
  drivers/gpu/drm/i915/gem/i915_gem_context.c | 2 +-
  drivers/gpu/drm/i915/i915_config.c          | 2 +-
- drivers/iommu/generic_pt/pt_defs.h          | 2 +-
  include/drm/intel/reg_bits.h                | 2 +-
- include/linux/wait.h                        | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+index c58ffa5a8fa6..1639639dd290 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
+@@ -996,7 +996,7 @@ static int intel_context_set_gem(struct intel_context *ce,
+ 	    intel_engine_has_semaphores(ce->engine))
+ 		__set_bit(CONTEXT_USE_SEMAPHORES, &ce->flags);
+ 
+-	if (CONFIG_DRM_I915_REQUEST_TIMEOUT &&
++	if (CONFIG_DRM_I915_REQUEST_TIMEOUT != 0 &&
+ 	    ctx->i915->params.request_timeout_ms) {
+ 		unsigned int timeout_ms = ctx->i915->params.request_timeout_ms;
+ 
+diff --git a/drivers/gpu/drm/i915/i915_config.c b/drivers/gpu/drm/i915/i915_config.c
+index 9e13b1be407c..9bbebe0a6a70 100644
+--- a/drivers/gpu/drm/i915/i915_config.c
++++ b/drivers/gpu/drm/i915/i915_config.c
+@@ -10,7 +10,7 @@
+ 
+ unsigned long i915_fence_context_timeout(u64 context)
+ {
+-	if (CONFIG_DRM_I915_FENCE_TIMEOUT && context)
++	if (CONFIG_DRM_I915_FENCE_TIMEOUT != 0 && context)
+ 		return msecs_to_jiffies_timeout(CONFIG_DRM_I915_FENCE_TIMEOUT);
+ 
+ 	return 0;
+diff --git a/include/drm/intel/reg_bits.h b/include/drm/intel/reg_bits.h
+index 2a9066e1d808..f913c3e61f39 100644
+--- a/include/drm/intel/reg_bits.h
++++ b/include/drm/intel/reg_bits.h
+@@ -24,7 +24,7 @@
+ /*
+  * Local integer constant expression version of is_power_of_2().
+  */
+-#define IS_POWER_OF_2(__x)		((__x) && (((__x) & ((__x) - 1)) == 0))
++#define IS_POWER_OF_2(__x)		((__x) != 0 && (((__x) & ((__x) - 1)) == 0))
+ 
+ /**
+  * REG_FIELD_PREP8() - Prepare a u8 bitfield value
 -- 
 2.53.0-Meta
 
