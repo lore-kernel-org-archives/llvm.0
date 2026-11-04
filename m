@@ -1,100 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.48
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793754880;
-	b=TazlLOVRqtU0BcN989aqj3KDr/T/rURlc7MNqR5CMeLhq7NT4EjUTrhJY6tlb3nCzthL
-	 hodCApaoLV9clGpIB6BoVhQM6jNiWvIFu/3SoqI9bG8EQRNfogJsB/ve1JykdY6HXLecT
-	 UvLYWktV/SrbRi2Bn3z5md9OODm2+FfFeLHAf1VA5InpQuIjgPxsV4mVUrZuwH61JQhzH
-	 01iXnZKUUttVKx8MiDaZjgZDDT6bz8u2sOao+a4+6Al1zr+cdlFswqgMe7u/wT8T/kLIL
-	 /4HJJh3EeG/He8aBPlZnMxt90bYeg2oJBnXrorNVERfhJ00h4jO54EzaA2L6SrAgFVQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793754880;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-	b=R06HP6Dl9DNxFu6R5Jf/niRwbhT1+ZT6hexnhJT7dSHW3O4ctjY42qazzQ3uuYGImv9b
-	 2Bra69zQ3FdSRkQ/yINgX0cwBvbWebCD4/kBg3krQIyfZhdjqY/blJe/ZWvtaQGJMx650
-	 B9FfTXLa9Ye1XF4YOYYuUa6+nNVw/xJRMspPvLY1sTJ7WmdG11oOZ9DTMG744giqhT/vg
-	 Og0MqwMgdRWrUEjGpyuMueiUql+wR+TUFr8y9aDRawe+3NQ7YN6HQ76pSMSXDRp4qSYzn
-	 iRtBOh5e10gpG+MKcs2FFlZWaMgT3mA9y7mUg/uaVfeDczPj0erFjVftoTEQSfHpKqQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=O8Oe2179;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.48
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793756498;
+	b=qF8Z2VjJyQZ6XO8aBlAJxFRrxsPQX0ZVwqse6ZSHx0JNqVhb1izyoizTZGgL5hEme+pA
+	 GbY6VWmIOPso0uxrab1qIzAACvQ4C5I3Xoy6tVdmaYiZXvBGzUuJcFV00MgcYGgtRijGU
+	 egVrE3p3TC5khfXwUiCPXYfo0u6PUt4gg2vH2EfYuxS7ByNd5qg71o4x04ToNFNitHVjH
+	 Do6pFgLPsfiYoE1Rlo/5ac7uqoxKHGKKUw/sXX5ge0e4fpKiVjUdecMSxvNzdSE+VdycB
+	 9lv5VQf+lpKxewm5UGJW7qoaBUJMAGslC+ofxglmtCurG0pOa/Tl3VXjaLmlNCs1fpA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793756498;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=nrEpzo2FbyYGf4WoydGR8O8NAthTAxRR3fiKImw2LBY=;
+	b=FpFtptiJY3xHFKY3kD4yGsGKVOh2ThdjM4McXISEg+rXqEYuq8VZX/CeS+ssb+yJcZ3M
+	 Jz0KC1rWP+EYWhQ/SdIUV+EzB6qnZeGRmIEcEu3zqbspEFn0opNMaHOdvNwF6DSxzcuL/
+	 QxVOcTEm96895mwiLwRqHzxSrrBPUSy5UBiNSYy5uzGL/w1yl2//XrhbBReYKtfudhs9J
+	 M9sI1sIG+7lyctW1B9msVuBUO2SEMtocI6g/FRXkgNESJ2BdDN0TWleI0BHlF68meBirO
+	 Xn3Xoh+SQKwKIyKBAfaWSgzYVCop8N5hhVL1FTLxmvndPeB0cKJDCFGIQiCXvAKeeBw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c2KAliKC;
+	arc=none smtp.remote-ip=192.198.163.17
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65439606A32D
-	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 01:14:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65439606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F076606D80E
+	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 01:41:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F076606D80E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=O8Oe2179
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6b1f31c63ebso1867896a12.0
-        for <llvm@lists.linux.dev>; Tue, 03 Nov 2026 17:14:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793754879; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AJp7nJ2UwVkbbvV5NGpKt2SGMmuh41UmpJTwnmNEdtE3qUSuwurDknJ2Qe9q+DauQV
-         u6bpgr1JMhKR5OGd9a740foicwFfLMBi/GD5HxAYXUVUAhL7DcYeZcfBxNKGf4R19vvH
-         DjINN+a/5SFPB7FlP0Wmprk+jRKiKxuMjN4G5LH21mfG5Y3tKlGjj9TzKo5TC5bE6lY5
-         kZGSwxaAYN/8w6bGG5j36jG9zjtv9oTa3yQshMYeRkt38flPnZCSdMN4FpW9VNnCjMVI
-         aRuaUXZ6hUIIXvsF7tRBpDSFjP4RRaLJFPdYz1ikDUinwiALrFa6RWckji8bkMiYN6a0
-         HqSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-        fh=nRpmXk48fyYSfsscQNCgPl6SoGq3zSWPaMZhJ5rujKY=;
-        b=M56ZxWSFzfuMe3Jhdgx6Ofb8+u/dSTsJhiG8nsdwps3t1PtnAv1BsmO1TdoNH9YaG7
-         7JZ0qwGL85oq051vKb2L/q9u+G0/GgWft0DTMbNHPft6G6aGO9VKvwmtLyQRplGZjL12
-         Y5KUHIdyBW6lfXgWt7F0FkMj3FQ+x4mYdMJ6W8lGW5fDY7Mmmv1ceUexTo423B02+FLW
-         1zD4XwWHrqv+u2TG5mqtyUvixfuD9GCawkm+H639nZz119Qyu/+inVBzKdz5Z6efnQO2
-         4W5s1odH4bmN2nlIcc2Chfr+JWmZQsfoP6/3Ed4Lw/beOZiPLYIBwSMSCEMevAADBqhu
-         PcSw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793754879; x=1794359679; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-        b=O8Oe2179MYAlEyoZ5pmdXBBrq4UBdl9Jut4QhJn6G11v9qfBAR9d8Z/c04YPwVJqdY
-         Lu2Q8FMCzOmv4g66/AcZUWSJqE3svM60vxBvDivQdDbgVsi8eJG0G/BwD5HzOFehRA4l
-         ckl2kBsdmBZquVA3kjNUoWqJMiUwiGzAPrpehCL3XrWAANwZE6N0EgGr7OHDj/0ORN7C
-         qsjvSl+J3K2U72VmwJOVdNpArwak5R7iAk80KTPUjvSafzVaDoKhVmbr4H3xvstjf0lE
-         giRRG7FBPdf8dSW6f50Jl4cUeyX+/UFZEivGhE3VlKve1p6Rk7MdaIgq8dmxKFytCeTd
-         YCIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793754879; x=1794359679;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-        b=h824z4HLvTa2rgRI/4Vufq2VPpCTcI9Z6AZa7XDPOpQRuSbtFHrmcO6W0GS9u2FGs1
-         wTCLTnDc2JTZ4NVAxmyydBqiR1fZm/Dli3U5ZPK3tp4ftVZXqp8BDZPYgSYzR2KYP8AM
-         NX/UHOas3Kd/bdPa73jRH6rnr0/ZjgaLM8TVwz7LiG2DEzLKfochtXnlDdop+ZOhvyKt
-         EQybpnv7ilhs8YmfYM7EHfH48xAZMBKC+hO23/LS4Fqi5FMyLutgZ9l8Cktf5Tt9Dj1/
-         tXFj29uTNdSg8k/G6cFTOxb5WfnUu4Avw2VNZW6cGyeAjQjQN9DYEJJA2tNLAsAFSoQ5
-         Va7A==
-X-Forwarded-Encrypted: i=1; AKwUvBw+Oz8iVoY6fkBZBe9kCYT8mgJh64670yFPILGIbAcN+oT2mpeXOOgrIZ6f/aIrSjBwnb1+@lists.linux.dev
-X-Gm-Message-State: APuU4Z9glZXnRX0688tY6mglBHiNejfV49PSdIYjM/3XO+/MPb7/KMQS
-	ElU5hyXm1RQSORlfle+YButdXtscL5iG5ZJnDDkbIolnNxUvUwvlh+39jFMtxA+vp2KxCKQsxWg
-	PEj8gANqE942/zU1oqzFDZ8wmFxDOS2fTmnZ1xOQM
-X-Gm-Gg: AYBFou2ks41qXy7+5pGIFy7bG9FIJkjQuyItEDIcXVN14SL1944emjBValDzi/DIofL
-	/rv3pDi7xiLnjmblNT4nH2zZq1KaQEmFixy3+Nca2mYZFAX7KJwjTfV9RtyWXxUbdTHKjpT5OWx
-	w7lp/F5vll28kV1Lleh0RuRlhWZCkNmW6K8X0Doz8LJIZfVVfADO9mRInBHd7SZS2UnA7o2Oko9
-	P0h4Rsh8ffwlrciVFll5UnKV0DbAG4qGOrME5GxvAqY056Sb6lZMRBbUFseauYW1ZGZGais+wji
-	GusltyI8dSWvt8r/RgB95UY8tq0jsfJxI+iNrJPjCH6rp4IMIf7xHF7vGqX2TnQNrFVsgg761e0
-	vZyl7lGA05FrusQm5AKtuPvWxEu4TbSnWRfFllvWmUCcecAtQET88OHDbi0fHQfhp2Xj83QY=
-X-Received: by 2002:a17:906:9946:b0:c4d:939:526b with SMTP id
- a640c23a62f3a-c4d0939530bmr80653766b.0.1793754878307; Tue, 03 Nov 2026
- 17:14:38 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c2KAliKC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793756498; x=1825292498;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vDr2JILrP7CXpfLgY8bKxkAuyrvod5DOQU34EM2moew=;
+  b=c2KAliKC7pExndXfYaCKkJIJPiMYnKFyeJN/Y5wtwPxWO/stcOJiix58
+   PbzD4IUAvZCM/DgFjE8PqbYNvuBD1YTJ7Rg2bwhwVY5Vq4sN3fi8QdOzV
+   4AoHvYSxWwyASzX2IkQaWISfug3KK85T+9/MXwA+eus9VjkXDespwGsU+
+   ozpLYYsUSnsO/Jf0TzRVBeWdR7u1XeRCExGA+mnY3ttQJBCKv5him0+0Y
+   KB2DRm0OEejZfaj1ZdeE+tm7aXdwd9Us0bb6Vy8GeXwDKya0xDl20C0At
+   wjeUNrojb97FR/9HGwBU8GSKx/H8tRVbrMAuiqJsZ7s1Ej8d1g/K+9UHW
+   Q==;
+X-CSE-ConnectionGUID: /TKcFNuMT+6Ws4sIANNWow==
+X-CSE-MsgGUID: 5Z/jlHzYTnaBVpuvCvZatw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2509026"
+X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
+   d="scan'208";a="2509026"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 17:41:37 -0800
+X-CSE-ConnectionGUID: nOdDaauHReGtVTXCAtE9IA==
+X-CSE-MsgGUID: z881yAwyRF2NYDW1Ta5Bng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
+   d="scan'208";a="6912924"
+Received: from tassilo.jf.intel.com (HELO tassilo) ([10.54.38.190])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 17:41:37 -0800
+Date: Tue, 3 Nov 2026 17:41:35 -0800
+From: Andi Kleen <ak@linux.intel.com>
+To: Martin Leitner-Ankerl <martin.ankerl@gmail.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Youling Tang <youling.tang@linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Youling Tang <tangyouling@kylinos.cn>,
+	Nikolay Borisov <nik.borisov@suse.com>
+Subject: Re: [PATCH] x86/cpu: Use prefetcht0 for prefetch() on 64-bit
+Message-ID: <auqNT3yNeA1ujmW3@tassilo>
+References: <20261103060658.696994-1-martin.ankerl@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,88 +88,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
- <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
- <20261030100215.6f8e0d4f@pumpkin>
-In-Reply-To: <20261030100215.6f8e0d4f@pumpkin>
-From: Samuel Wu <wusamuel@google.com>
-Date: Tue, 3 Nov 2026 17:14:26 -0800
-X-Gm-Features: AclHuK-cSPxC_sFXLW9VVvDKj-9cMyP8tHQ9MAfu7xEMrtFl6vQvJ8w_LlboHFk
-Message-ID: <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261103060658.696994-1-martin.ankerl@gmail.com>
 
-On Fri, Oct 30, 2026 at 3:02=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
->
-> On Thu, 29 Oct 2026 15:05:45 -0700
-> Samuel Wu <wusamuel@google.com> wrote:
-[...]
-> > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
-> > would be different symbols at different addresses. Please correct me
-> > if I'm missing something here!
->
-> Only that the user might really want one of the copies.
-> Sometimes there is only the copy.
+> +#ifdef CONFIG_X86_64
+> +/*
+> + * Every x86-64 CPU has prefetcht0. Not __builtin_prefetch(): the kernel
+> + * builds with -mno-sse, and clang then drops the builtin without a warning.
+> + */
+> +static inline void prefetch(const void *x)
+> +{
+> +	asm("prefetcht0 %0" : : "m" (*(const char *)x));
+> +}
+> +#else
 
-Good point. I'll have v3 add KALLSYMS_F_PREFIX + pos/next_pos
-pagination to cover these. A prefix query for "foo." also finds the
-copies when plain foo does not exist (expanded on this in my reply to
-Andrii's Oct 30 mail in this thread).
+One thing you should check if the inline assembly pessimizes the code on
+gcc. Normally builtins can be better optimized. Or keep using the builtin
+on gcc to be safe.
 
-[...]
-> > > Have you tried measuring it with my patches that speed up the kernel
-> > > 'search by name' code?
-> > > That speeds the lookup by a factor of ~18 (testing the code in usersp=
-ace).
-> >
-> > Not yet. Can you point me to the latest version? Happy to try it out.
->
-> I've just forwarded you all the patches.
-> (They include patches to the tests and scripts/kallsyms)
-> I'll copy you (and the other people getting this email) for v3.
-
-Thanks for forwarding the patches! I'll be looking out for your v3. I
-tested them across baseline, baseline + my series, and baseline + my
-series + your series, using the same two benchmarks and setups as v2
-patchseries:
-
-Loading a BPF program with 11 typeless ksyms via libbpf (8-CPU x86-64
-Cuttlefish VM, 273k /proc/kallsyms lines; BY_NAME, unfiltered, so each
-query also scans ~35.8k module symbols for ambiguity):
-- Base: 156.1 ms
-- Base + my v3 series: 2.05 ms
-- Base + my v3 series + your v2 series: 1.95 ms
-
-Perfetto symbolizer (8-CPU x86-64 VM, 175k /proc/kallsyms lines;
-BY_ADDR; init / 50k cached symbolizations):
-- Base: 129.1 ms / 28.0 ms
-- Base + my v3 series: 0.04 ms / 3.4 ms
-- Base + my v3 series + your v2 series: 0.04 ms / 3.1 ms
-
-I'm seeing your series help most when the vmlinux name search
-dominates: on the Cuttlefish VM, a vmlinux-filtered BY_NAME call is
-5-7x faster (hit: 8.3 us -> 1.7 us, miss: 9.5 us -> 1.4 us).
-
-[...]
-> > > > +     __u64 query_flags;      /* in - query mode (enum kallsyms_que=
-ry_flags) */
->
-> There is no need for a command here - use the ioctl cmd.
-
-Agreed, done in v3
+-Andi
