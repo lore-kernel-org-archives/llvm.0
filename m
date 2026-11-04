@@ -1,82 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793771197;
-	b=16zV04gLLJhe4LArLU5WAt4J/++/2UZfER4CyDCdoHBjlKWcLztkuGd8Wln3iuFoEIp+
-	 Rx+i8Q3yHwIQW6W+o0raDph8QmgbFHWuLGSpj3pssas6SIP8spLOfvoPlgMqIqGDjvF44
-	 kMinbSDahlzDTuW7taM2Za9RtFrNHHCyL1rwchxhV6r4e0IBApNpGfvLPy1NFH8ClxLJj
-	 UPfcXpDl3buH+uSktBGDuHbmFN6445nEkTkyhXQFnt/Ifbaa7m5DGWMW/aducyqzyCoID
-	 Dgb9o+mY2rMKfkqEFk0EyaknaaAYpIzsv+Y/N6MCmlblu4u/ROKfs0jndiealH+Cj+g==
+	t=1793771199;
+	b=QK+mcG24/p7HReQI9zq0rrjU/V81vAcj3GCCi/YujgcAX4MYdIjLxwlkVNHgoWZMuRop
+	 8Eaq53ReDtA/FTJTN9azl+yKfvwVxLQhottfGctk03M4Zyyd5XOVjNdlG8l5abSgLFxqk
+	 FOwWz7Dy82dMXiy6OaXcUeAZGJXqZo/dbesKgnZIYbV8ZvrDGeVDizty6HQQC5ZsJa4EA
+	 fYqz39fgbQCtvifbVao1JKJVzwbuNB8GDdzzlYR2xsZL7XTka4GCKtrFUNcBZx3nfIJCe
+	 JSelECiURBqiMwaqjgZFuaCV+TDlkP8AxXQrQh1gJTpqZJi3WjGtYsk/IvBM69aN5Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793771197;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793771199;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=J/dWx4XyY9Qu61P8ybBzax3t6bA7XT2OkEgtv4viqsc=;
-	b=baj6uOdk+37v1czH2Jgxe6EWt002/zplA3mnHHgc2FQ9eP9Dbt6dCpMylzwmOXSqqiNa
-	 IueStSRZl1qdVRwKnMslYjQa+2wH9NA8DBiHVX2ncdzQBDXHaxwdj4A5KYfpRyNdyqqds
-	 h796Wjz1Z9ElEk343BCt3BocMdQvHqSvPZKZa4V3B2EpxsciwsQvY+bZsV2gyiJq9IjDn
-	 J0vJAWMfdUEEFhNkE+pCjn/Vac6Udv4RE82N60XdYNTV7uT2SqQ5muGkAm1f32Y0ZFCsz
-	 yqsopfw34jG6aK5VdeGORx3lZAmcKzyO/rrutBOePAicHunS1U9/pJIsdjKA4Dq+C1Q==
+	bh=MGuO76z1xVTnvFgcL6pGp9r9+7I0Bp9JcevKKNgr29A=;
+	b=5Y4cMogaPKp+Okp4lp36Vb5wjHOb0Z6aI+ASoFjF6oNhr9RFg2nHOBGvY5/O5ztNaR0b
+	 6wEOJBcM6oInvIWNvaDD5vA4ScgMo8UOjFJYnSNBZwQbTk8f51cIP/Q757NaH9kUCwLgA
+	 uKDEkx2OfVsMkExtK6KexXR/4n/S8eSfWC3fMji1p31s0U5JYOFCJBMxIS9XeJ0aEIaG1
+	 rC2//LE5FrbzHSeZfV8+C2WrZ+nIxD2wFBnrUOyBM7d9WibWNSIXFusC2IttjdHzKBrRn
+	 dQraXp5MmCmty9TRKLLyL4eFL8nB95u4bZglUdhP4C+25Hj6SVCUP6/yvbBpsH2P6mw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Y+tZw4/L";
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=oEBzdj0m;
+	arc=none smtp.remote-ip=192.198.163.8
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4E1606EE95;
-	Wed,  4 Nov 2026 05:46:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF4E1606EE95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5061A606D81C;
+	Wed,  4 Nov 2026 05:46:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5061A606D81C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Y+tZw4/L
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=oEBzdj0m
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793771197; x=1825307197;
+  t=1793771194; x=1825307194;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qhahMrQYHLJ+Qp5l4x02iu2RBmtmF/q7vKTTQcducQ4=;
-  b=Y+tZw4/LSgeNwFygAiznkKhJTPTqVxPshonNRiapGnzHZlxVf4IKO9r0
-   nGeiVOEC1yJ3IbjobBFzmJTa9snv+uxbwWp+XEqKjMJb6gPC7hkGdo+1Y
-   gjuCSj0LxlM3Sz7uoZLA+elYqNpI5StB0mxlnbgt812yw6JsdFaO50nkj
-   Z9WV3w8EC6/QifuplYUZ/gH4SProE2pagywjJ1Kh1zf/jkrGrln2q5nBg
-   K8Xso90J94kG/TxYVEb5EldR/u9JP+FUtqjZ8B1sZOI5saifQV/9RN/uc
-   7xfG+GoCv1wBJ8GMA07KrtqlwBhe8PviArj8u3c9hpsy7K+ywEoUPVM1E
+  bh=Q+6GOJlWx2xQFAN8XCCYt8Uc/Df6m6pxUQ0OnFnC5yQ=;
+  b=oEBzdj0myjcBTCcJbJb6GyaJOo6luTL5xGYaxyvgKQ1huPCbFXMsrPiP
+   rEQtyCzbCkbr6sZTbWTbD1lMId17GtD4ZgcG0CLs0Yq+n4zyr6aQgNevc
+   i93gzsfJGa3nlXK7MlJaA36V5NkyPVJVpPS4ryVTKquBf3DFwD26C3UMA
+   ccmrXC2VbE2ykbq9e2lbN6CNiqmlXxo8fOR4hVUMOmFj4LryO9X6szTnn
+   Hn795HogLcqslxZ+re/DelpvBRiarrDywQJU1GDHaNDuOlJX3hwNKlwQn
+   DsFv6YLUmHQsRfqNrmuxojSrOU9dRvkidkUfX3lWDc44q6EpjYgpQyf5K
    g==;
-X-CSE-ConnectionGUID: O5/86ILpSHGMCP8Wcvg+3g==
-X-CSE-MsgGUID: RxIzeNu9SsG35ebKEMHkCg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2608628"
+X-CSE-ConnectionGUID: ZtnxoNLaRxa/Z1CeIv71Ng==
+X-CSE-MsgGUID: DTNgqM5XRkmzZqpSf5yoSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2403411"
 X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="2608628"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 21:46:36 -0800
-X-CSE-ConnectionGUID: S2thmX75Qq211O7/p4MTlw==
-X-CSE-MsgGUID: BV6HQmkQTH+rilKIKIhjKQ==
+   d="scan'208";a="2403411"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 21:46:32 -0800
+X-CSE-ConnectionGUID: 3hnfM52ZS9yO2FHbyXZ5Ng==
+X-CSE-MsgGUID: E0V8ekVxS9yFdnT3LNJoPw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="6448714"
+   d="scan'208";a="6729631"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 03 Nov 2026 21:46:30 -0800
+  by orviesa009.jf.intel.com with ESMTP; 03 Nov 2026 21:46:30 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xOTpL-00000000jpl-1Agm;
+	id 1xOTpL-00000000jpp-1Yui;
 	Wed, 04 Nov 2026 05:46:27 +0000
-Date: Wed, 4 Nov 2026 13:45:43 +0800
+Date: Wed, 4 Nov 2026 13:45:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Baojun Xu <baojun.xu@ti.com>, broonie@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tiwai@suse.de,
-	andriy.shevchenko@linux.intel.com, 13916275206@139.com,
-	alsa-devel@alsa-project.org, shenghao-ding@ti.com, baojun.xu@ti.com,
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
-	k-yi@ti.com, henry.lo@ti.com, robinchen@ti.com, niranjan.hy@ti.com,
-	pin-hao.huang@hp.com, Syed.SabaKareem@amd.com
-Subject: Re: [PATCH v1] ASoC: tas2783-sdw: Add basic BPT support
-Message-ID: <202611041243.Bn9AJATC-lkp@intel.com>
-References: <20261103133853.1612-1-baojun.xu@ti.com>
+To: wen.yang@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 39/39] sysctl: remove the extra pointers and the
+ compatibility bounds read
+Message-ID: <202611041234.Gjf6kfSR-lkp@intel.com>
+References: <b6e4cbd509687301a8ee2106f19a3ac01e7671a6.1793204511.git.wen.yang@linux.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -88,96 +84,113 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261103133853.1612-1-baojun.xu@ti.com>
+In-Reply-To: <b6e4cbd509687301a8ee2106f19a3ac01e7671a6.1793204511.git.wen.yang@linux.dev>
 
-Hi Baojun,
+Hi,
 
-kernel test robot noticed the following build warnings:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on linus/master next-20261030]
-[cannot apply to v7.3]
+[auto build test ERROR on akpm-mm/mm-everything]
+[cannot apply to sysctl/sysctl-next brauner-vfs/vfs.all linus/master mcgrof/sysctl-next v7.3 next-20261030]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baojun-Xu/ASoC-tas2783-sdw-Add-basic-BPT-support/20261103-213853
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20261103133853.1612-1-baojun.xu%40ti.com
-patch subject: [PATCH v1] ASoC: tas2783-sdw: Add basic BPT support
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20261104/202611041243.Bn9AJATC-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/wen-yang-linux-dev/sysctl-replace-overloaded-extra-pointers-with-typed-bounds-and-context/20261029-003440
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/b6e4cbd509687301a8ee2106f19a3ac01e7671a6.1793204511.git.wen.yang%40linux.dev
+patch subject: [RFC PATCH 39/39] sysctl: remove the extra pointers and the compatibility bounds read
+config: um-defconfig (https://download.01.org/0day-ci/archive/20261104/202611041234.Gjf6kfSR-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611041243.Bn9AJATC-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611041234.Gjf6kfSR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611041243.Bn9AJATC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611041234.Gjf6kfSR-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/tas2783-sdw.c:1369:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-    1369 |         if (ret) {
-         |             ^~~
-   sound/soc/codecs/tas2783-sdw.c:1362:9: note: initialize the variable 'ret' to silence this warning
-    1362 |         s32 ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+>> net/unix/sysctl_net_unix.c:23:4: error: field designator 'extra1' does not refer to any field in type 'const struct ctl_table'
+      23 |                 .extra1         = SYSCTL_ZERO,
+         |                 ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/unix/sysctl_net_unix.c:24:4: error: field designator 'extra2' does not refer to any field in type 'const struct ctl_table'
+      24 |                 .extra2         = SYSCTL_INT_MAX,
+         |                 ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/unix/sysctl_net_unix.c:32:36: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
+      32 |         table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
+         |                                           ^~~~~~~~~~~~
+   include/linux/string.h:315:49: note: expanded from macro 'kmemdup'
+     315 | #define kmemdup(...)    alloc_hooks(kmemdup_noprof(__VA_ARGS__))
+         |                                                    ^~~~~~~~~~~
+   include/linux/alloc_tag.h:270:31: note: expanded from macro 'alloc_hooks'
+     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
+         |                                      ^~~~~~~~~
+   include/linux/alloc_tag.h:256:9: note: expanded from macro 'alloc_hooks_tag'
+     256 |         typeof(_do_alloc) _res;                                         \
+         |                ^~~~~~~~~
+>> net/unix/sysctl_net_unix.c:32:36: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
+      32 |         table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
+         |                                           ^~~~~~~~~~~~
+   include/linux/string.h:315:49: note: expanded from macro 'kmemdup'
+     315 | #define kmemdup(...)    alloc_hooks(kmemdup_noprof(__VA_ARGS__))
+         |                                                    ^~~~~~~~~~~
+   include/linux/alloc_tag.h:270:31: note: expanded from macro 'alloc_hooks'
+     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
+         |                                      ^~~~~~~~~
+   include/linux/alloc_tag.h:260:10: note: expanded from macro 'alloc_hooks_tag'
+     260 |                 _res = _do_alloc;                                       \
+         |                        ^~~~~~~~~
+>> net/unix/sysctl_net_unix.c:32:36: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
+      32 |         table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
+         |                                           ^~~~~~~~~~~~
+   include/linux/string.h:315:49: note: expanded from macro 'kmemdup'
+     315 | #define kmemdup(...)    alloc_hooks(kmemdup_noprof(__VA_ARGS__))
+         |                                                    ^~~~~~~~~~~
+   include/linux/alloc_tag.h:270:31: note: expanded from macro 'alloc_hooks'
+     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
+         |                                      ^~~~~~~~~
+   include/linux/alloc_tag.h:263:10: note: expanded from macro 'alloc_hooks_tag'
+     263 |                 _res = _do_alloc;                                       \
+         |                        ^~~~~~~~~
+   net/unix/sysctl_net_unix.c:54:12: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
+      54 |                                               ARRAY_SIZE(unix_table));
+         |                                               ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   6 errors generated.
 
 
-vim +/ret +1369 sound/soc/codecs/tas2783-sdw.c
+vim +23 net/unix/sysctl_net_unix.c
 
-  1357	
-  1358	static s32 tas_io_init(struct device *dev, struct sdw_slave *slave)
-  1359	{
-  1360		struct tas2783_prv *tas_dev = dev_get_drvdata(dev);
-  1361		uint val;
-  1362		s32 ret;
-  1363	
-  1364		if (tas_dev->hw_init)
-  1365			return 0;
-  1366	
-  1367		regmap_read(tas_dev->regmap, TASDEV_REG_SDW(0, 0, 7), &val);
-  1368		dev_dbg(dev, "Got B0P0R7 = %02X with %d.", val, ret);
-> 1369		if (ret) {
-  1370			dev_err(dev, "Get FW download status failed, err=%d", ret);
-  1371			return ret;
-  1372		}
-  1373		if (val != 0x22) {
-  1374			tas_dev->fw_dl_success = false;
-  1375			ret = regmap_write(tas_dev->regmap, TAS2783_SW_RESET, 0x1);
-  1376			if (ret) {
-  1377				dev_err(dev, "sw reset failed, err=%d", ret);
-  1378				return ret;
-  1379			}
-  1380			usleep_range(2000, 2200);
-  1381			regcache_cache_only(tas_dev->regmap, false);
-  1382			tas_dev->fw_use_fallback = false;
-  1383			ret = tas_fw_load(tas_dev, slave);
-  1384			if (!ret && tas_dev->fw_use_fallback)
-  1385				ret = tas_fw_load(tas_dev, slave);
-  1386		}
-  1387		if (!ret) {
-  1388			if (tas_dev->sa_func_data)
-  1389				ret = sdca_regmap_write_init(dev, tas_dev->regmap,
-  1390							     tas_dev->sa_func_data);
-  1391			else
-  1392				ret = regmap_multi_reg_write(tas_dev->regmap, tas2783_init_seq,
-  1393							     ARRAY_SIZE(tas2783_init_seq));
-  1394	
-  1395			/* Re-active AMP after resume. */
-  1396			regmap_write(tas_dev->regmap, TASDEV_REG_SDW(0, 0, 2), 0);
-  1397			if (ret)
-  1398				dev_err(tas_dev->dev,
-  1399					"init writes failed, err=%d", ret);
-  1400			else
-  1401				tas_dev->hw_init = true;
-  1402		}
-  1403	
-  1404		return ret;
-  1405	}
-  1406	
+84960bf2403123a Kuniyuki Iwashima 2025-03-17  15  
+0abc76bc20826e2 Joel Granados     2026-08-10  16  static const struct ctl_table unix_table[] = {
+^1da177e4c3f415 Linus Torvalds    2005-04-16  17  	{
+^1da177e4c3f415 Linus Torvalds    2005-04-16  18  		.procname	= "max_dgram_qlen",
+a0a53c8ba95451f Denis V. Lunev    2007-12-11  19  		.data		= &init_net.unx.sysctl_max_dgram_qlen,
+^1da177e4c3f415 Linus Torvalds    2005-04-16  20  		.maxlen		= sizeof(int),
+^1da177e4c3f415 Linus Torvalds    2005-04-16  21  		.mode		= 0644,
+1a4e7bc6e3457ad Yingjie Wang      2026-10-16  22  		.proc_handler	= proc_dointvec_minmax,
+1a4e7bc6e3457ad Yingjie Wang      2026-10-16 @23  		.extra1		= SYSCTL_ZERO,
+1a4e7bc6e3457ad Yingjie Wang      2026-10-16 @24  		.extra2		= SYSCTL_INT_MAX,
+^1da177e4c3f415 Linus Torvalds    2005-04-16  25  	},
+^1da177e4c3f415 Linus Torvalds    2005-04-16  26  };
+^1da177e4c3f415 Linus Torvalds    2005-04-16  27  
+0abc76bc20826e2 Joel Granados     2026-08-10  28  static const struct ctl_table *unix_table_dup(struct net *net)
+^1da177e4c3f415 Linus Torvalds    2005-04-16  29  {
+1597fbc0faf88c4 Pavel Emelyanov   2007-12-01  30  	struct ctl_table *table;
+1597fbc0faf88c4 Pavel Emelyanov   2007-12-01  31  
+0abc76bc20826e2 Joel Granados     2026-08-10 @32  	table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
+0abc76bc20826e2 Joel Granados     2026-08-10  33  	if (!table)
+0abc76bc20826e2 Joel Granados     2026-08-10  34  		return NULL;
+0abc76bc20826e2 Joel Granados     2026-08-10  35  
+0abc76bc20826e2 Joel Granados     2026-08-10  36  	table[0].data = &net->unx.sysctl_max_dgram_qlen;
+0abc76bc20826e2 Joel Granados     2026-08-10  37  
+0abc76bc20826e2 Joel Granados     2026-08-10  38  	return table;
+0abc76bc20826e2 Joel Granados     2026-08-10  39  }
+0abc76bc20826e2 Joel Granados     2026-08-10  40  
 
 --
 0-DAY CI Kernel Test Service
