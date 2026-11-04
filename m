@@ -1,53 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793781893;
-	b=NDsHZM3Amet66qrOWZtnBg8G8HDaNs0vUcDAZ7iHm85ynKpNdMwsqlBe24jInHQ4H+Py
-	 XK2ESx3Uh5ofKt11MlsPjfb2DQwV3ZdU0n04+fpwksI37t/IygU/vrayeO+UuhtQ2XUbY
-	 jS/FUS35S+bwUoiOdT1ZyFfPL4nColvb5OPZZizUFDU2qNyZDRZ8q5KfH1Y+cKY1ExGcd
-	 lxk9H4bXiGjDWtQ5K99WIpmRb3SUl6FnD7O607p1g4Q/19QCap9iZcFryJ3BGkuKUjyDy
-	 UvAbovAWf0xPrTMNsZH3qNVntT2DCSHNQEOHOsEGzGGoHkVhVTEcesNQQE22uQZ1uIg==
+	t=1793786401;
+	b=fOJP57eVdnpUQ4O3xiVryPBN6WZU8IB1IIpEG7POeGVbUC8a5/vPOcWBjoZJB/ibpqR2
+	 P0MxE/gWF+J1dJSpwwyoM74zxktqP6vOEteJkDJroAovEEZRwtzJvXS9uxPsHor49vGh9
+	 hGeBU8dbM8dvU/ISyfvBQRXci90orwSqoMkrmVdeHahCMRKBJKuGRArs7lu/qOMe4LkIy
+	 ZMg8nf2hKkzYaZm+z8/52UxwF47kClNOriu8Y1C1/J3pqQpxbNB+hqa0Q5D6IzkoLK2LY
+	 MKYoHIBAAfN+fNWHFGQ0tgd3cOYHy7V6n4DMgyMVoUuivUqYuT7NCMTRdGK8IoKcS8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793781893;
-	h=DMARC-Filter:Received:Received:Date:From:To:cc:Subject:In-Reply-To:
-	 Message-ID:References:User-Agent:MIME-Version:Content-Type;
-	bh=ctB5Vq7rzRA1tmvwFfYQJUZK4yutrxijqadyX44J5Ow=;
-	b=tCvMxf5sp2JOu5LQavzpUCwpq9ftPGKF3JgTHOr6ihvU2scDGi2hIF7hPkseCCS+yd6J
-	 nTNrbJn4OdokbPhH1oaV4rw5g2lI3VuOBfIfuLHeuoeybmdZ9wlZJfDPmo6BSIJc4z7BH
-	 Sb89EuHhpUCaUXRHb1CLhWDmyLLRK+xG4M/rolrhLgV2acRdHKhWzzXW/n9MQ2vd9sV9Q
-	 7AivazBM+LpTB07qaUZ0cfGF+QGlRt4rzK8CE4ffc0Xbo+MsvQCmIHpCpJzXW/yKqtg/k
-	 niaK9aicC5wUnBJwGi+iRe0xQ/dcm0FONmO1JACvauwHicDXZW+yGX9v+oNc749fOeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793786401;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=w3MkGMCq97+h2HFeKSsMiB0gxkCNew6z649DKE+NXAQ=;
+	b=mwaboQoc0HwPNphDxkj+SDf5vqJ85zujMZjD+xN7KNV6wq++DupuddBOlF4vHSfOZ7f6
+	 DohZQas9YIxCjKwtlbt8oBqiLZUHSDwa6OojgeSEvAUJensemQl5OHzC8In3xecy0TjC4
+	 MnGIqQYz1Gb8fkbO1/i5lFNyqmV1GkBqJy5sGMjgHi4JkQpMYWOcr9ReTarCjxychHpGq
+	 zDJdvZ12q0VDPiPAFWOD6N6H0Eyx2O573Stc5iRjxRN8vxErjF48pXde0gXVFDp1F9yIv
+	 +3V/TOkEqn2HiLkjn8r/WOU6Jt1mQzCf/z+5akDbZQo/qXkCsDqfQk9JnMdoNW6PZMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=orcam.me.uk;
-	spf=none smtp.mailfrom=orcam.me.uk;
-	arc=none smtp.remote-ip=78.133.224.34
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF9A606A326
-	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 08:44:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AF9A606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 9144B92009E; Wed,  4 Nov 2026 09:44:50 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 8A1FB92009C;
-	Wed,  4 Nov 2026 08:44:50 +0000 (GMT)
-Date: Wed, 4 Nov 2026 08:44:50 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Tzu-Ching Yang <shingekinocore@gmail.com>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Marco Crivellari <marco.crivellari@suse.com>, 
-    Frederic Weisbecker <frederic@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    linux-mips@vger.kernel.org, llvm@lists.linux.dev, 
-    linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
-    stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Fix genex.S build with LLVM before 21
-In-Reply-To: <20261104030147.3117325-1-shingekinocore@gmail.com>
-Message-ID: <alpine.DEB.2.21.2611040746160.6502@angie.orcam.me.uk>
-References: <20261104030147.3117325-1-shingekinocore@gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XOMsDyFQ;
+	arc=none smtp.remote-ip=192.198.163.14
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4619E606A339;
+	Wed,  4 Nov 2026 10:00:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4619E606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XOMsDyFQ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793786402; x=1825322402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=leAJIaY4346vFpQwajKB2muSu186GkdAL/rL+TODcEc=;
+  b=XOMsDyFQAbR/Z/y8j0SDn+lhzdyZq3W76sw5ksffUn4JWhYoEj4jXN5B
+   blJwWqk2o72xrG4r4b9J497KCcpQGuKt4QKhDIvpeOPrIexh3o+fS0Wzp
+   rJaLsXN35gCEL1m9zIwfRtpVxZnzy8MNLdxRB1T3oJKV/3HXQKbex896H
+   5CefzcwtMXhJC9mkFkR6Z0YmRZ/Z+WSPhUfDVujuXbvdp3fhDGXBCNwqc
+   aCtVGz7RfEtgNgfwTWeMxWTTR0Eo2W5tpdbjX8yvdWakIIexi+5TfWtes
+   6+jkct1KTWUEPbyIk25qhloW5NfhHi+0n53P9PD8cL5AmgfRJ0ONn2dY4
+   w==;
+X-CSE-ConnectionGUID: Anvk75hnT9K6eREFxBPcbA==
+X-CSE-MsgGUID: eeiRBUTeREutSlxCM3P6mw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2562833"
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="2562833"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 02:00:00 -0800
+X-CSE-ConnectionGUID: OdbCFmKUSo6Z7U3QKUMMbw==
+X-CSE-MsgGUID: Vrw3ldT/QVSUe0JzVcvdGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="7071104"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 04 Nov 2026 01:59:58 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xOXme-00000000kCJ-2tYk;
+	Wed, 04 Nov 2026 09:59:56 +0000
+Date: Wed, 4 Nov 2026 17:59:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alan Stead <alan.stead@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC v1 2/3] drm/i915/dip: Send the HDMI 2.1 VTEM when VRR is
+ enabled
+Message-ID: <202611041728.cwJwN22c-lkp@intel.com>
+References: <20261030203314.1085262-3-alan.stead@intel.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -57,62 +82,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261030203314.1085262-3-alan.stead@intel.com>
 
-On Wed, 4 Nov 2026, Tzu-Ching Yang wrote:
+Hi Alan,
 
-> Wrap both expressions in %lo(). For that operator, LLVM 17 to 20
-> emit a LO16 fixup instead of rejecting the operand, and resolve it when
-> writing the object, since both expressions are constants by then; no
-> relocation is left. Both values are between 2 and 30, so %lo() does
-> not change them. 
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
- Seems fair.
+[auto build test ERROR on next-20261029]
+[also build test ERROR on linus/master]
+[cannot apply to drm-i915/for-linux-next drm-i915/for-linux-next-fixes v7.3 v7.3-rc7 v7.3-rc6 v7.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->   - The objects are byte-identical before and after with GCC, with
->     LLVM_IAS=0 and with LLVM 21 to 23. The only exception is the
->     microMIPS ADDIU above. The 4-byte move with LLVM_IAS=0 is harmless:
->     set_vi_handler() computes the offsets and the length of the vectored
->     handler from symbols before copying it, and ejtag_debug_handler and
->     nmi_handler are only referenced through their symbols.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alan-Stead/drm-i915-dip-Send-HDMI-EMPs-early-in-V-Blank-when-VRR-is-in-range/20261030-133220
+base:   next-20261029
+patch link:    https://lore.kernel.org/r/20261030203314.1085262-3-alan.stead%40intel.com
+patch subject: [RFC v1 2/3] drm/i915/dip: Send the HDMI 2.1 VTEM when VRR is enabled
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20261104/202611041728.cwJwN22c-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611041728.cwJwN22c-lkp@intel.com/reproduce)
 
- I would be tempted to accept the GAS microMIPS code size regression as a 
-missed optimisation.  This is a general issue with forward references and 
-%lo() calculation is only one example: we're missing microMIPS relaxation 
-for 16-bit vs 32-bit instruction encodings, except for branches.  We only 
-do it for MIPS16 code.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611041728.cwJwN22c-lkp@intel.com/
 
-> - The malta kernels built with GCC 8.1 and 16.2, LLVM 17, 20 and 23, and
->   LLVM 17 with LLVM_IAS=0 boot under QEMU 6.2 -cpu 24Kf. That CPU uses
->   r4k_wait(), so interrupts go through skipover_handle_int. Each kernel
->   boots to an init that keeps the CPU going in and out of idle and then
->   reboots; a QEMU trace shows every interrupt that lands in the idle
->   region resuming at r4k_wait_exit. A microMIPS kernel does not boot
->   under QEMU -cpu M14Kc with or without this patch, so the microMIPS
->   change was not run.
+All errors (new ones prefixed by >>):
 
- I wouldn't be surprised with a microMIPS kernel not booting.  Support was 
-messy right from the beginning and despite my opposition it was merged as 
-it stood.  Maybe one of the fragile assumptions broke here or there.  Or 
-it could be a QEMU emulation bug too; it doesn't seem too stable compared 
-to actual hardware, microMIPS or not.  I could try bisecting it sometime 
-as I do have an otherwise working microMIPS QEMU setup; sadly no actual 
-microMIPS hardware.
+>> drivers/gpu/drm/i915/display/intel_dip.c:141:27: error: call to undeclared function 'HDMI_EMP_DATA'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     141 |                 intel_de_write(display, HDMI_EMP_DATA(display, cpu_transcoder),
+         |                                         ^
+>> drivers/gpu/drm/i915/display/intel_dip.c:141:27: error: passing 'int' to parameter of incompatible type 'intel_reg_t' (aka 'i915_reg_t')
+     141 |                 intel_de_write(display, HDMI_EMP_DATA(display, cpu_transcoder),
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_de.h:79:59: note: passing argument to parameter 'reg' here
+      79 | intel_de_write(struct intel_display *display, intel_reg_t reg, u32 val)
+         |                                                           ^
+   2 errors generated.
 
-> On 6.18.y, which also allows LLVM 15 and 16, the patch applies after
-> 2b6d718c8dbe, and LLVM 15 and 16 fail and are fixed the same way.
-> 
-> The 56651128e2fb backport was dropped from the 6.14, 6.12 and 6.6
-> stable queues because of this build failure [1], so 6.12.y and 6.6.y
-> still lack that fix.
 
- Shouldn't this use:
+vim +/HDMI_EMP_DATA +141 drivers/gpu/drm/i915/display/intel_dip.c
 
-Cc: <stable@vger.kernel.org> # 6.6.x: 56651128e2fb: MIPS: Fix idle VS timer enqueue
-Cc: <stable@vger.kernel.org> # 6.6.x: 2b6d718c8dbe: MIPS: Fix whitespace damage in r4k_wait from VS timer fix
-Cc: <stable@vger.kernel.org> # 6.6.x
+    85	
+    86	/*
+    87	 * Tell an HDMI 2.1 sink whether VRR is active with a Class 0 (Gaming-VRR)
+    88	 * Video Timing Extended Metadata (VTEM) packet. It is a periodic
+    89	 * pseudo-static EM Data Set: the hardware sends it every frame until it is
+    90	 * reprogrammed. On disable, a last VTEM with VRR_EN=0 and END set is sent,
+    91	 * after which the hardware stops sending it.
+    92	 */
+    93	void intel_dip_write_hdmi_vtem(const struct intel_crtc_state *crtc_state,
+    94				       bool enable)
+    95	{
+    96		struct intel_display *display = to_intel_display(crtc_state);
+    97		enum transcoder cpu_transcoder = crtc_state->cpu_transcoder;
+    98		const struct drm_display_mode *mode = &crtc_state->hw.adjusted_mode;
+    99		u8 vic = crtc_state->infoframes.avi.avi.video_code;
+   100		int base_rr = drm_mode_vrefresh(mode);
+   101		u8 pb[HDMI_EMP_PACKET_BODY] = {};
+   102		int i;
+   103	
+   104		if (DISPLAY_VER(display) < 20 ||
+   105		    !intel_crtc_has_type(crtc_state, INTEL_OUTPUT_HDMI) ||
+   106		    !crtc_state->vrr.in_range)
+   107			return;
+   108	
+   109		/* PB0-PB6: EM Data Set header (Sync = 0, DS_Type = pseudo-static) */
+   110		pb[0] = BIT(7) |			/* NEW */
+   111			BIT(2) |			/* VFR */
+   112			(enable ? 0 : BIT(6));		/* END */
+   113		pb[2] = 1;				/* Organization_ID: HDMI */
+   114		pb[4] = 1;				/* Data_Set_Tag: VTEM */
+   115		pb[6] = VTEM_DATA_SET_LENGTH;		/* Data_Set_Length */
+   116	
+   117		/* PB7-PB10: MD0-MD3 (M_CONST = 0, FVA_Factor_M1 = 0, MD2 bit 2 reserved) */
+   118		if (enable) {
+   119			pb[7] = BIT(0);			/* VRR_EN */
+   120			/* Base_Vfront and Base_Refresh_Rate are only sent without a VIC */
+   121			if (!vic) {
+   122				pb[8] = min(mode->crtc_vsync_start - mode->crtc_vdisplay, 255);
+   123				pb[9] = (base_rr >> 8) & 0x3;
+   124				pb[10] = base_rr & 0xff;
+   125			}
+   126		}
+   127	
+   128		drm_dbg_kms(display->drm,
+   129			    "[TRANSCODER %s] VTEM: VRR_EN=%d VIC=%u Base_Vfront=%u Base_RR=%u\n",
+   130			    transcoder_name(cpu_transcoder), enable, vic, pb[8],
+   131			    pb[9] << 8 | pb[10]);
+   132	
+   133		/*
+   134		 * HDMI_EMP_CTL first, then the payload dwords (PB0 in bits 7:0), then
+   135		 * the header, whose write clock crosses the whole packet. HB0 must be
+   136		 * set to the EMP packet type, the hardware doesn't fill it in.
+   137		 */
+   138		intel_de_write(display, HDMI_EMP_CTL(display, cpu_transcoder),
+   139			       HDMI_EMP_CTL_TYPE_VTEM);
+   140		for (i = 0; i < ARRAY_SIZE(pb); i += 4)
+ > 141			intel_de_write(display, HDMI_EMP_DATA(display, cpu_transcoder),
+   142				       pb[i] | pb[i + 1] << 8 | pb[i + 2] << 16 |
+   143				       pb[i + 3] << 24);
+   144		intel_de_write(display, HDMI_EMP_HEADER(display, cpu_transcoder),
+   145			       HDMI_EMP_HEADER_HB0_EMP |
+   146			       HDMI_EMP_HEADER_DS_TYPE_PSEUDO_STATIC |
+   147			       (enable ? 0 : HDMI_EMP_HEADER_END) |
+   148			       HDMI_EMP_HEADER_NUM_PACKETS(DIV_ROUND_UP(VTEM_EMP_SIZE,
+   149									HDMI_EMP_PACKET_BODY)));
+   150	}
+   151	
 
-then to get this all picked up?  Or is it unsupported annotation syntax 
-where a prerequisite matches a Fixes: tag?
-
-  Maciej
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
