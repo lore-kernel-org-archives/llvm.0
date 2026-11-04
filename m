@@ -1,87 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.121
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793808491;
-	b=UEH9W093pfDQWjriiF7VmjMeVBITClq1QXKCFZQrnHkOnkC425W1G1UFtBeKot14BIOM
-	 Vn9Ir3U3ozYlRGb8ZVHCVxg6wRS0fPh8uWD3Kev/dp3lNvs8NyazWVBtaH23Y974T17hC
-	 EfnRhNLNZAcPxP7y1PxylmZZ/yc0Eu0aCV4jug0GQeirKaM6HLjNhcr80E0C9NyaXJdI7
-	 QwZY6YOgbmyzF4xUo81hqG/IqXOaWEYccs4vXLCeol+AWYyw0jy87xDa8h/rwNIcZTP0D
-	 iHeXlGrrUGtV5Lo3QL9n5hzHn30bKdoOUD9Gn7DZSaenjmwNg+tPBo5B2OuFwDHw9fw==
+	t=1793809380;
+	b=MLUVjMKfiVbZwMcjF7CGQJ/Ex1V/g8wrhr3Q3m5f+Cf5bpzuYWwjtHnhvvbZMArDSt87
+	 YOceLf8/YJW0BiyQz2G3julOkmDt8JB5y2/CFB7tC+AIl7HYWmliefraGZBp3kQkV/DZu
+	 hsg0nEZiT4Sg4nfm+72Lyu7lOFqeUCsK5R1WXwn574If5YqfeDyYor6KKGMzj5bbTggE0
+	 Ia8Lp1d3ebTFjGydsNFvitDXwsDdbiddEOHVK94aURZcO6u8WuuBKL9itMWuDaP9QjwzM
+	 GwMFo12Aylblq1g174mi5QyWMiT4ix2mkaghSnz7zMEnU536/MQBCOxAT5MUU7h7vAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793808491;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=12512aLllXftI9moEQx7MlwEUWUL+y5ReetVj26fF0E=;
-	b=YV5Os6IPoin547Ve4lyFTPgrSkAOM678jskcigGCdhgeJUHzyhhAYCkLGs2fyozAJVjv
-	 VDpb8/U8709ZhxUYH4ZV69Uwo+FuFIFV5uRZtxSVi6wPrWF+Z1tdF2Dg5LDaYYQfvyVt7
-	 YFVhCMFg5b3qf9Fx6uVt67OnSJUvV4L990dH7r3Ryg2jk1C9fgYRjatZZCrgyyHntNNym
-	 RWqTcKWPFesxitEexp8XZWoydBeZjMRYBYxKeH3ra9GxCEm3s5urT7JrfYFlPcxi+UvnH
-	 Fd+SdS7aijBPkfN2Z51cbajEFS4z2nx/0bF2avwZCXVFt5E/18+A5TSwf0WAMxkTEmg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793809380;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=/UTFFBtcvF6fBQlxwPj4B25zkedomIPEoEabA8WmJ1E=;
+	b=duZ0qppL4ZowFthIkIYk5W2OOhhUfXB1XTaqVsIcWCmXwX9UgzU87cOpZkIxR4Ty1D+w
+	 /kJDerE5unOKjD5ODVQ2bv0ZqN4bq0SlmkG6smAU6jU3r5W64jt0dResPcJJ9NX/swBCH
+	 06KwqEVLHkhmSNdD8ZqJcLOkSYS/sAYkWPeyq+vlgquoflY87BZL8nHLlpl+DzIokCriz
+	 zlh77z+QS6+gFniio7MDStK46N55vog6UbCEiA659EK3KUDu1/XGFVYpF6CCOKGJPt9bW
+	 R6prrCfLUjCngyFjADuztfPGgnO1pZIzLv6OPpdIwX5WsMq46hopDAeDeA2lKsVlgcQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="rb+/XLQD";
-	arc=none smtp.remote-ip=95.215.58.121
-Received: from mta1.migadu.com (out-121.mta1.migadu.com [95.215.58.121])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BBy1uR9f;
+	arc=none smtp.remote-ip=198.175.65.12
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51F9606A333
-	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 16:08:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D51F9606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79A6606B8EB;
+	Wed,  4 Nov 2026 16:22:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B79A6606B8EB
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rb+/XLQD
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=TEEBqA5mys4k9gU+dMidncfMYOQA4DDB7pbBCcoYQ8w=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793808487; v=1; x=1794413287;
- b=rb+/XLQDmsVYYxbxM3pGl972/st2pEV7ZbvHwKTQUgpV6MNzyw2KF70URj+Bt2J+vOuRHzCL
- riO0CRGCictBJBAk5Tk2a4cqMqj5SLr7tvHXx3d4Aj8VftTHV86KeYzyqriAc3piAsMLTC2pkyL
- CQudFOs1JOex96IapnoJGxFk=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id ae6b6b9431f873b0;
-	Wed, 04 Nov 2026 16:08:04 +0000
-X-Mizu-Trace-ID: ae6b6b9431f873b0
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	"Joerg Roedel (AMD)" <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Matthew Brost <matthew.brost@intel.com>,
-	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>
-Cc: Vineet Gupta <vineet.gupta@linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	intel-xe@lists.freedesktop.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 4/4] drm/i915: Avoid -Wconstant-logical-operand with GCC 17
-Date: Wed,  4 Nov 2026 08:07:21 -0800
-Message-ID: <20261104160722.1637541-5-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261104160722.1637541-1-vineet.gupta@linux.dev>
-References: <20261104160722.1637541-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BBy1uR9f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793809379; x=1825345379;
+  h=date:from:to:cc:subject:message-id;
+  bh=jwdov69quC0URzQ9ghIuKnIeV2RA/1IlvzCEWqoZS2w=;
+  b=BBy1uR9f8Hv4aSen5UhFdAlpmfwNgwwRubAXdmnhycu2MOSwDa6T+Lua
+   KZZEsReltfoh6257OcVHVCNLGZn/CYdwuCSQuW6FyeYKym8KX+a+u+sII
+   uKysYHpHjH2Prd7PzXXos3jUEaEZXFPto9Jdv1h7M2ipH7gkJRzRZUEwR
+   NC8SHm0GqElAtdTUEyl58w88t6U8Stf7b3kB+ZSO5Hd0V1b3EkVjX8lX6
+   nfmyMxb3r6AwEyFd9g8WdY+PHDBi5CFGbqvRBYJyCOKGFLTJ3czFJ9tIs
+   bTfWN/n8IdCPgMOchrhhcLQGyo4q/MY6Awa5jQdv5j/61JU46I4rSm4u1
+   w==;
+X-CSE-ConnectionGUID: ZeQ/qQc4RUmJgubi1u2ofg==
+X-CSE-MsgGUID: x3ccgnF9ShG4HAbDKFWdCg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2445803"
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="2445803"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 08:22:59 -0800
+X-CSE-ConnectionGUID: K+3r3PUxRt2njYOmdZm0Rg==
+X-CSE-MsgGUID: sOo/4p5oSBCzEwbEy7smUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,195,1787036400"; 
+   d="scan'208";a="6862274"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 04 Nov 2026 08:22:57 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xOdlG-00000000ket-3l9U;
+	Wed, 04 Nov 2026 16:22:54 +0000
+Date: Thu, 05 Nov 2026 00:22:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:dmabuf_map_type 33/34]
+ drivers/dma-buf/st-dma-mapping.c:14:44: warning: variable
+ 'mock_match_exp_arg' set but not used
+Message-ID: <202611050047.orzjpfuU-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -90,74 +80,40 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-GCC 17 adds -Wconstant-logical-operand to -Wall. It warns when an operand
-of && or || folds to a constant other than 0 or 1. Three places break the
-build with CONFIG_WERROR=y:
+tree:   https://github.com/jgunthorpe/linux dmabuf_map_type
+head:   c37cf2824740d833b21eb816e21f94836100291f
+commit: 3256cae07d96cc9fc9c997dec6bd1195289217c6 [33/34] dma-buf: Add kunit tests for mapping type
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261105/202611050047.orzjpfuU-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611050047.orzjpfuU-lkp@intel.com/reproduce)
 
-  include/drm/intel/reg_bits.h:27:48: error: use of logical '&&' with constant operand '256' [-Werror=constant-logical-operand]
-  drivers/gpu/drm/i915/i915_config.c:13:43: error: use of logical '&&' with constant operand '10000' [-Werror=constant-logical-operand]
-  drivers/gpu/drm/i915/gem/i915_gem_context.c:999:45: error: use of logical '&&' with constant operand '20000' [-Werror=constant-logical-operand]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611050047.orzjpfuU-lkp@intel.com/
 
-clang has the same warning, but it checks only a constant right operand
-outside a macro. Here each constant is a left operand, and
-IS_POWER_OF_2() is also a macro.
+All warnings (new ones prefixed by >>):
 
-Commit 1a839e016e49 ("drm/i915: remove IS_ACTIVE") moved
-CONFIG_DRM_I915_FENCE_TIMEOUT to the left of && to avoid the clang
-warning. That does not help with GCC 17.
+>> drivers/dma-buf/st-dma-mapping.c:14:44: warning: variable 'mock_match_exp_arg' set but not used [-Wunused-but-set-global]
+      14 | static const struct dma_buf_mapping_match *mock_match_exp_arg;
+         |                                            ^
+>> drivers/dma-buf/st-dma-mapping.c:15:44: warning: variable 'mock_match_imp_arg' set but not used [-Wunused-but-set-global]
+      15 | static const struct dma_buf_mapping_match *mock_match_imp_arg;
+         |                                            ^
+   2 warnings generated.
 
-Compare each constant against 0, as commit aeedd3a82678 ("drm/i915: Avoid
--Wconstant-logical-operand in nsecs_to_jiffies_timeout()") did.
 
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- drivers/gpu/drm/i915/gem/i915_gem_context.c | 2 +-
- drivers/gpu/drm/i915/i915_config.c          | 2 +-
- include/drm/intel/reg_bits.h                | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+vim +/mock_match_exp_arg +14 drivers/dma-buf/st-dma-mapping.c
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-index c58ffa5a8fa6..1639639dd290 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-@@ -996,7 +996,7 @@ static int intel_context_set_gem(struct intel_context *ce,
- 	    intel_engine_has_semaphores(ce->engine))
- 		__set_bit(CONTEXT_USE_SEMAPHORES, &ce->flags);
- 
--	if (CONFIG_DRM_I915_REQUEST_TIMEOUT &&
-+	if (CONFIG_DRM_I915_REQUEST_TIMEOUT != 0 &&
- 	    ctx->i915->params.request_timeout_ms) {
- 		unsigned int timeout_ms = ctx->i915->params.request_timeout_ms;
- 
-diff --git a/drivers/gpu/drm/i915/i915_config.c b/drivers/gpu/drm/i915/i915_config.c
-index 9e13b1be407c..9bbebe0a6a70 100644
---- a/drivers/gpu/drm/i915/i915_config.c
-+++ b/drivers/gpu/drm/i915/i915_config.c
-@@ -10,7 +10,7 @@
- 
- unsigned long i915_fence_context_timeout(u64 context)
- {
--	if (CONFIG_DRM_I915_FENCE_TIMEOUT && context)
-+	if (CONFIG_DRM_I915_FENCE_TIMEOUT != 0 && context)
- 		return msecs_to_jiffies_timeout(CONFIG_DRM_I915_FENCE_TIMEOUT);
- 
- 	return 0;
-diff --git a/include/drm/intel/reg_bits.h b/include/drm/intel/reg_bits.h
-index 2a9066e1d808..f913c3e61f39 100644
---- a/include/drm/intel/reg_bits.h
-+++ b/include/drm/intel/reg_bits.h
-@@ -24,7 +24,7 @@
- /*
-  * Local integer constant expression version of is_power_of_2().
-  */
--#define IS_POWER_OF_2(__x)		((__x) && (((__x) & ((__x) - 1)) == 0))
-+#define IS_POWER_OF_2(__x)		((__x) != 0 && (((__x) & ((__x) - 1)) == 0))
- 
- /**
-  * REG_FIELD_PREP8() - Prepare a u8 bitfield value
--- 
-2.53.0-Meta
+    11	
+    12	/* Mock tracking state -- reset before each test */
+    13	static bool mock_match_called;
+  > 14	static const struct dma_buf_mapping_match *mock_match_exp_arg;
+  > 15	static const struct dma_buf_mapping_match *mock_match_imp_arg;
+    16	static int mock_match_ret;
+    17	
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
