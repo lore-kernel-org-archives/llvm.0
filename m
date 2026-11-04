@@ -1,99 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793776696;
-	b=QQ3ajKyqTOZoEMUR32z7vS4vuonAF/8kL4w3Rg04drQcG3n6/hoW3oMy69dLHMxefbpU
-	 8BH4Qf3+eS1ZRdSY79ZUVedPb/GCyhgIVzBmUp0NQ35RPDEQGDigpUaZtZVHzOs5bT65s
-	 XlXqdP4OwiycT8WJRirvuGHxtQlDFAPYEGz+/zCIq5uqCEkLEa8I/if3t66WtQqjCIWRp
-	 ffqXvo+UBKF6ufElv5TblZyKcCx3EgEl9iix2Lrlws+0mEAZSS5sWXCJhl5riK0yRm4uZ
-	 L7dq7pRue/bxEdur+3A2kClZCVlDtN1YZ1lCyRIdkKI/sMh6mFK3XABjjWE43oFM3Mw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793776696;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=kpKiQOyrEGQjSkMvaeYi/FA//UJ8PVEGtqBN975yHSg=;
-	b=LyIUbAWxzFtC9/Xxu04aa8M6WtBO3edyAaHWGf3bnRcbzUm//jD3gmxPZ5mtBfu/Udyb
-	 ljDpVbVnWIVIYGee/O56uqIFqJ2B1/vGQqefP/7/AniOnJuHV+xq/LhRtWcXI2uaO2Tyn
-	 BsmfLpnWGIfJ7FJM5+TxDmDLbdGWBM7U9uKuMy05eqmH7Kk1XcpPP8+W606fV7RPKGqKn
-	 zhISmX+Gi+HN9J1Ct3ivmvqWDo/EBQ5ND9q1xwCdV7C4Jl3MVjuhEP4PTkjFP34KVE6Ff
-	 oNxDYgHL+d3Y8siJrHF7qurMZW2Bc4VjYI/RpqvK/2OFqeVLBG7l/v1NMc8KEkPU8yw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mkfwKF7x;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.47
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793781530;
+	b=u+HSzEWdvmzw6GoaNnC/MuSwI4z9QSBomOb8ZmhmQ8yDqj7YAy6YAE/iIdOSVOnmpJq3
+	 USe+AOwRB0NzEeLuiGpX8RdlBNpHMt1+KG+A+dLmXNyAjwAyNb//it58RgRMPHxWnDc6h
+	 zH4tIfvwv25ZZ2K2FRV5NZyF6ylcAfZcM9jMyYivsMOxtBpjflB/wc713zNpO6T6U51Y/
+	 12pyPDjV7h7FDOV5/FddJDgoP/gXEnsePoopDfPfWDzDlrdO4b35sF0nsmxktHhYD4z+J
+	 iTs5QxM6TE1h035hVTVwEL9ceQRp5ySTVioj0eQdkI9tPIuloeHa35QBhGcrXv6kQSg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793781530;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Spam-Flag:X-Spam-Level:
+	 X-Spamd-Result:X-Spam-Score;
+	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
+	b=KR8IbyYUnz+/p97m93YPuoGRdfEms/dNbgwjJST8nyzrgbxVtSybdyszSRyP05Q7JbJ4
+	 5vlLy1j+XM4ziplz9N9mpHtWFIhlbD6hHWWf+zqTi56ItHKmn3ZCLggWAyHPoWEShfyz9
+	 5DvOPN0uV+fgkBiXcMugv6A0j/G/rk24i0VcAu7sZZN7+SD3rFYzPTJ8UMdMnZhhGXnlA
+	 XUPXqJxaxeNEykMEPfDZN3vserBsFM3T5V3VWUiNTjXgt6mY5y3i1az90r3glU3HuQHfM
+	 2NKe9FpxsEvzVr3JVjWike5VEN7bcYUOOVAhbbPdYTW1QwvimrcCn4x3FzP8xI+Np0Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB456606A328
-	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 07:18:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB456606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B86B606A32C
+	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 08:38:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B86B606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mkfwKF7x
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c418e215671so53957566b.0
-        for <llvm@lists.linux.dev>; Tue, 03 Nov 2026 23:18:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793776694; cv=none;
-        d=google.com; s=arc-20260327;
-        b=r+LhV/3mGvGx0pPmNsp3oO057RLtkdU/vJXWs1rLCRUQc8CZx8N7t726XaKeH5rZTF
-         h0/GlzjpZ6R0f2A2BB/d9Uc3xdkdbwOWhUo17pb0vnw5eE8CTHYYmxL8D2rhmPO7WA6E
-         GtD4O3igVpiHFZkjZilkYSY+DIQxGD5BPMq5JnpeS3Tbusl4chXaWg2pj0GUij/WUzlv
-         qTwrI9wwEOXydS+Hq92mti8PsX0JcyK5uBk16wesW02LcbwGUjJczomiduUi8nqtyv72
-         mKiTXGua1iXfTG3FAT3EyTBdtMNsH+jmne1Kv3vvLmNInp72I5gkMk4u/SuSwlFLzhXL
-         anJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=kpKiQOyrEGQjSkMvaeYi/FA//UJ8PVEGtqBN975yHSg=;
-        fh=aHXmtyukycHktfd4TNqqdCgOMLh5dJAh2PwyBCf21EQ=;
-        b=rnga9998jHpkZKU2TZL1BtYQhhjxb2Fdhjgxcd8I4LUxzok08wrrI+7TGjrSdK2phI
-         F16XfX3LhgwpGGDvIPeCOlfzTBry4jKkZ0W5A7Orw4o3FewLCzBQ9NJjob3d+5MFifDl
-         GkuumCR4Qh7AYM2fRLc1vpT68D+numDhedi/L0VpzhfO2PhKrD4ptS1a7IPhwb8rEopB
-         jsVXVJiNlmOJNYRP8dFc1Viojf79k8xZgmlY5g20NluzQvjyVATKDdER4RcOxOBZxsLo
-         5t2uwJMYcKl0HUcENRBCxIiS8xhiDdanRq9jaK8CRsY6BcHbb8tS9zmm1uxDRirnTjnT
-         JNxQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793776694; x=1794381494; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kpKiQOyrEGQjSkMvaeYi/FA//UJ8PVEGtqBN975yHSg=;
-        b=mkfwKF7xDxMQMyD72wubGvj4alCvlna6Kl906dWGpK+F2ADXiClH3XfGJOp2eT1yWz
-         oFXpoecR7Pz9zjqaXid1hB0CyYDedLfZ/XcK9o7X5zgZqAxvhxmAzJ/iORKiqfLzI23w
-         iDJtCduLf8/u5SEPQupELwWpvwex91QvC9Bm9qjnWCccAAPFfSOA+EKPwfoTpFS7LzjJ
-         rxSVqSJceC/+sqL4CucgSyJzDawZdJArgppjwDFWrO/Y42KDn5sebNEXXfVjkyaSlQ1X
-         fMXmAyTDs7ZFlrdOwxTCFs9PmclCFgDo5luv4OL1wSsr6x3rqiOsosMmkpyYiHwlcksP
-         zTaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793776694; x=1794381494;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=kpKiQOyrEGQjSkMvaeYi/FA//UJ8PVEGtqBN975yHSg=;
-        b=GTnJNWh6nGg60U67LpNvqF/Q/ObfLkIgB+xbZ1j/in6UJwxygsn18QAEJzLucHh0ls
-         ga8ekRrkLBft0HtqgSEtOeOM+JxC63ksAIXwl12w01dLNDUBOj8H8GJMYR480HW53lws
-         JSyCQS8H9wYaeGnIYdHJB2YQfMj/eYva6w8pAGD78j5OvpmhZGxDDrO9I1YWPiGR+7Yp
-         ycApOFDOfobaRzlAx0i7oFBG7H20XVcjEPCcOHBzfoahpA0wsvVgek2YOHMeUuLoqIiK
-         FZtGeQGYf+CKLGH7FHJ6XjiBneoHYN43fN4ajsx7zYRL9gMvVtG1jtsuV14oKJtAoCZJ
-         qwgA==
-X-Forwarded-Encrypted: i=1; AKwUvBxrhUOZ+/370T9D20KcAko/qa4HIdLlgpfRaGO+LLanh6AIG7CSveNRtOY9auzcwasLC1M2@lists.linux.dev
-X-Gm-Message-State: APuU4Z/NzrxoI1FZzM+sf8b6F/bM5MxqKc5B1gt3cV+r96RcSONs2Fm0
-	2Gmx9Io3OSYlzsHKXiBt2GaWCPqEMoPr3dtgo+Rp81t58QjiEC/iiUzuOgyjG6pP29k+v9F3hOZ
-	rflQ5LFsCbmlJ2OiX2BnycB/fykb6SqQ=
-X-Gm-Gg: AYBFou116DHlVRJoQPAQ6IThmfYBNSYPh1mg1qUq6dDyXlU6h8bxXg3cuCDiFPd/gvN
-	IOi89UyyiuQyTrW34a9oQflKUSbqOryhKt1Lo3WGwMthXNdlZ6vj2rXVCJ1+PxzIl4mj38tNHdT
-	NDdCMSwolMBt+SlVkdQflBNfaoA6o1wue9VgImQOdfwehv5nwH9eEjUlBS59Gtc+Cdj4olKTN2o
-	9YINctTu24q7MTuV77vLFmr/P8RHnw9RxWRKtw23f4DKP5R5WxaHVO+9hes9szIHv7WEzB+8qWw
-	HTVf93+C1bhA1J4so1jQ4m4zQFK/iAQ1E+QNK6evkl9ExcHR4K/soArJ3GQX2RSjGsEdk1EzDpF
-	K3XF+MeT8KvnmdIFAYafAfTJbe3mr1f2d6YywR3MJwvMrlZkIevzndq+26a38WQwcB3swAA==
-X-Received: by 2002:a17:906:ef0b:b0:c25:91bc:ff55 with SMTP id
- a640c23a62f3a-c4ca7a878bamr1390172766b.23.1793776693850; Tue, 03 Nov 2026
- 23:18:13 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=fA3O9gy4;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=gFBk0IZx
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 476E02009B;
+	Wed,  4 Nov 2026 08:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1793781527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
+	b=fA3O9gy4OyDPyMVktW0BsXoQkkG8Ai0tQSL7cP1inKZRftggtBP7MlNcC4ja2mvjL8v9QK
+	aqG0ZpzF3Y5K2Nn3gqqtiAE7AtaQt89X2AzicwKipGYF02r++U8PuzybIptC4JdsCvUHz+
+	ROw6LIfzWHmC2noeLap+toYBI3Gl+gY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1793781527;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
+	b=gFBk0IZxHinMUg91qFZV9JlDpfMF8eZdv2uNLvZXZs1e9BatBaO+XwNhIKFUz79BDkJcPM
+	0gypWuzwiVk6mOCg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1793781527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
+	b=fA3O9gy4OyDPyMVktW0BsXoQkkG8Ai0tQSL7cP1inKZRftggtBP7MlNcC4ja2mvjL8v9QK
+	aqG0ZpzF3Y5K2Nn3gqqtiAE7AtaQt89X2AzicwKipGYF02r++U8PuzybIptC4JdsCvUHz+
+	ROw6LIfzWHmC2noeLap+toYBI3Gl+gY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1793781527;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fn9pOwl2J0XG5BgCYcngjb7A66uzF2y3ZoLghzGOkZA=;
+	b=gFBk0IZxHinMUg91qFZV9JlDpfMF8eZdv2uNLvZXZs1e9BatBaO+XwNhIKFUz79BDkJcPM
+	0gypWuzwiVk6mOCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4B41B134F0;
+	Wed,  4 Nov 2026 08:38:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id A64HBRbv6mq1AgAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Wed, 04 Nov 2026 08:38:46 +0000
+Message-ID: <6abf56cc-d3df-4ca8-9f6d-fe9fa3462837@suse.de>
+Date: Wed, 4 Nov 2026 09:37:22 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,47 +106,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261103060658.696994-1-martin.ankerl@gmail.com> <auqNT3yNeA1ujmW3@tassilo>
-In-Reply-To: <auqNT3yNeA1ujmW3@tassilo>
-From: Martin Leitner-Ankerl <martin.ankerl@gmail.com>
-Date: Wed, 4 Nov 2026 08:18:01 +0100
-X-Gm-Features: AclHuK9zC-OrowJyDsUEWnW6UL1USeGbybY_wgM3WfrYF13CrvohZ2o801ipwC8
-Message-ID: <CAAFOosbXR=eF=sj9Ap7y3odVgLEPx83rXPE0dWwf-=+f3VH9Qg@mail.gmail.com>
-Subject: Re: [PATCH] x86/cpu: Use prefetcht0 for prefetch() on 64-bit
-To: Andi Kleen <ak@linux.intel.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Youling Tang <youling.tang@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Youling Tang <tangyouling@kylinos.cn>, Nikolay Borisov <nik.borisov@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH nf-next] selftests: netfilter: nf_queue: drop the no-op
+ loop initializer
+To: Sasha Levin <sashal@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>,
+ Florian Westphal <fw@strlen.de>
+Cc: Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20261103165419.687806-1-sashal@kernel.org>
+ <20261103165419.687806-5-sashal@kernel.org>
+Content-Language: en-US
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <20261103165419.687806-5-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spamd-Result: default: False [-13.29 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-0.999];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	ARC_NA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -13.29
 
-> One thing you should check if the inline assembly pessimizes the code on
-> gcc. Normally builtins can be better optimized. Or keep using the builtin
-> on gcc to be safe.
+On 11/3/26 5:54 PM, Sasha Levin wrote:
+> The out-of-order verdict loop starts with "for (ooo_count; ...", and
+> clang warns about the unused expression:
+> 
+>    nf_queue.c:354:10: warning: expression result unused [-Wunused-value]
+> 
+> Leave the initializer empty.
+> 
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+> KernelCI's clang builds show this warning.
+> 
+>   tools/testing/selftests/net/netfilter/nf_queue.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/netfilter/nf_queue.c b/tools/testing/selftests/net/netfilter/nf_queue.c
+> index cca6c3cfa9e46..bc0b2f601a0a4 100644
+> --- a/tools/testing/selftests/net/netfilter/nf_queue.c
+> +++ b/tools/testing/selftests/net/netfilter/nf_queue.c
+> @@ -351,7 +351,7 @@ static int mainloop(void)
+>   		if (opts.out_of_order) {
+>   			ooo_ids[ooo_count] = id;
+>   			if (ooo_count >= 15) {
+> -				for (ooo_count; ooo_count >= 0; ooo_count--) {
+> +				for (; ooo_count >= 0; ooo_count--) {
+>   					nlh = nfq_build_verdict(buf, ooo_ids[ooo_count],
+>   								opts.queue_num, opts.verdict);
+>   					if (mnl_socket_sendto(nl, nlh, nlh->nlmsg_len) < 0) {
 
-I built an x86-64 defconfig vmlinux with and without the patch with
-gcc 16.2.1, and
-compared them function by function. The .text size is exactly the same, both
-have exactly 62 prefetcht0 in the binary, and instruction count differs by just
-one: 7365619 without the patch, 7365620 with it
+Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
 
-23 functions of 130789 actually differ: 21 only in the order of instructions,
-where prefetcht0 comes mostly 1-4 instructions earlier, and tcp_ack() and
-e1000_clean_rx_irq_ps() differ in register allocation, the latter has
-an extra mov.
-
-I timed system calls that reach 8 of the 23 functions in a KVM guest with one
-CPU, 10 boots per kernel. The differences are very small and within
-the noise, in
-range from -0.7% to 0.0%. So the asm might be slightly faster, but
-it's too close to
-say for sure.
-
-So I'd keep one prefetch() for both compilers. The other 15 functions
-that differ
-are mostly NIC receive paths, which would require real hardware to measure.
-
-Martin
+Thanks!
