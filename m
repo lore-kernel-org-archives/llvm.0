@@ -1,78 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793771199;
-	b=QK+mcG24/p7HReQI9zq0rrjU/V81vAcj3GCCi/YujgcAX4MYdIjLxwlkVNHgoWZMuRop
-	 8Eaq53ReDtA/FTJTN9azl+yKfvwVxLQhottfGctk03M4Zyyd5XOVjNdlG8l5abSgLFxqk
-	 FOwWz7Dy82dMXiy6OaXcUeAZGJXqZo/dbesKgnZIYbV8ZvrDGeVDizty6HQQC5ZsJa4EA
-	 fYqz39fgbQCtvifbVao1JKJVzwbuNB8GDdzzlYR2xsZL7XTka4GCKtrFUNcBZx3nfIJCe
-	 JSelECiURBqiMwaqjgZFuaCV+TDlkP8AxXQrQh1gJTpqZJi3WjGtYsk/IvBM69aN5Vg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793771199;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=MGuO76z1xVTnvFgcL6pGp9r9+7I0Bp9JcevKKNgr29A=;
-	b=5Y4cMogaPKp+Okp4lp36Vb5wjHOb0Z6aI+ASoFjF6oNhr9RFg2nHOBGvY5/O5ztNaR0b
-	 6wEOJBcM6oInvIWNvaDD5vA4ScgMo8UOjFJYnSNBZwQbTk8f51cIP/Q757NaH9kUCwLgA
-	 uKDEkx2OfVsMkExtK6KexXR/4n/S8eSfWC3fMji1p31s0U5JYOFCJBMxIS9XeJ0aEIaG1
-	 rC2//LE5FrbzHSeZfV8+C2WrZ+nIxD2wFBnrUOyBM7d9WibWNSIXFusC2IttjdHzKBrRn
-	 dQraXp5MmCmty9TRKLLyL4eFL8nB95u4bZglUdhP4C+25Hj6SVCUP6/yvbBpsH2P6mw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=oEBzdj0m;
-	arc=none smtp.remote-ip=192.198.163.8
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.48
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793774999;
+	b=avzvmq45aIkmBHyo/26EOXf6TcUVGmyHgGEvl82T2p76T1XALhC0H+6KibXAa4IxB5iF
+	 qUtfKdrktIH4SEvrQWDsrupevIlxYBOdwf8o5r6DJXXOqeAdHVD8Oivuq12RVvad5wN8l
+	 yA1oNDKhlp3omhUP5j1NHuskhzh1R9R8j2GP179CB0QCgPJBT5wPOik2PsRnU8kmIXYG2
+	 ZwgMSu8Ht2TZ+mmCovXJEzu0yKSBOMC0Ppg8aFGk4pMpoT5PEJWFURtCbk4IM7/KqZQpJ
+	 LawQqe/+CUA6N4A9JjdJVyl70JY0mK4zCenuZx0/dJ1N7PhWDlxPZYAPPFXbIn8tWrg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793774999;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=5eZ4LEZGvtrRKhIe4vx+pLxIESEbwM8aVSCBjXhFuXk=;
+	b=me/ebg7jy7IEjESf495Od5crLzkYmK3mBz23Hog9+WCcwcqvsDzklSbppxHLYSOsyVHS
+	 4YA7kB4jgwG0zPhoIGJw4UT5NSb85iNM9nti8UwJogsHhkqnYMWWu1J0P6/gBlarJM8M+
+	 LcMpD0sPjxCL1LcenLNOlrhZCf5ebocJbNUUWMSM07HItim1mC+1R+7bAr6qdPd8y05uL
+	 KWdQCaWCpLONiFzQAl3wyOhZZjyEwMZyN4eSScaWNjJ3F5D+KJXypmhh8Zva1e85OnocP
+	 Klfs0zoxAEDmZsnDGvqBxUx/LbMCw6xyj9v0aFlKmfVlWYt+L1wBJoIwhCUzJtwDafg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XAWMkYBG;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.48
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5061A606D81C;
-	Wed,  4 Nov 2026 05:46:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5061A606D81C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE76606A31B
+	for <llvm@lists.linux.dev>; Wed,  4 Nov 2026 06:49:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DE76606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=oEBzdj0m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793771194; x=1825307194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q+6GOJlWx2xQFAN8XCCYt8Uc/Df6m6pxUQ0OnFnC5yQ=;
-  b=oEBzdj0myjcBTCcJbJb6GyaJOo6luTL5xGYaxyvgKQ1huPCbFXMsrPiP
-   rEQtyCzbCkbr6sZTbWTbD1lMId17GtD4ZgcG0CLs0Yq+n4zyr6aQgNevc
-   i93gzsfJGa3nlXK7MlJaA36V5NkyPVJVpPS4ryVTKquBf3DFwD26C3UMA
-   ccmrXC2VbE2ykbq9e2lbN6CNiqmlXxo8fOR4hVUMOmFj4LryO9X6szTnn
-   Hn795HogLcqslxZ+re/DelpvBRiarrDywQJU1GDHaNDuOlJX3hwNKlwQn
-   DsFv6YLUmHQsRfqNrmuxojSrOU9dRvkidkUfX3lWDc44q6EpjYgpQyf5K
-   g==;
-X-CSE-ConnectionGUID: ZtnxoNLaRxa/Z1CeIv71Ng==
-X-CSE-MsgGUID: DTNgqM5XRkmzZqpSf5yoSA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2403411"
-X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="2403411"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 21:46:32 -0800
-X-CSE-ConnectionGUID: 3hnfM52ZS9yO2FHbyXZ5Ng==
-X-CSE-MsgGUID: E0V8ekVxS9yFdnT3LNJoPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="6729631"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 03 Nov 2026 21:46:30 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xOTpL-00000000jpp-1Yui;
-	Wed, 04 Nov 2026 05:46:27 +0000
-Date: Wed, 4 Nov 2026 13:45:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: wen.yang@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 39/39] sysctl: remove the extra pointers and the
- compatibility bounds read
-Message-ID: <202611041234.Gjf6kfSR-lkp@intel.com>
-References: <b6e4cbd509687301a8ee2106f19a3ac01e7671a6.1793204511.git.wen.yang@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XAWMkYBG
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c40e30c26a4so281279366b.0
+        for <llvm@lists.linux.dev>; Tue, 03 Nov 2026 22:49:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793774998; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Nf/SdFk/c4xvZ83rI8nWU5dRGkNE3NJ1VkmMYZq7gZfJsGzNZzGlZv0tj322geSmz9
+         +dxfdX3ToSFbDTLtqdKZCu4+RxlTTuhNYRDxnCB44beIFs92v0ZQsVBVnag3dPfRSif/
+         5DqO4yPu4fH8UBC+tDO9nLHl9gyDveYlUWgA6zM1SXwovPXbBVw92ESvN4bRwAsR7vja
+         SGn1N5XpS11Ett2lN72wQ/NOYrI+vbhoilUSQiOdb5jdWYar66remTw1ArUYUHessiPt
+         6PYjlJfRGyxlYNQdnNtn5l/FZwGPBLxaf+bi+v5xnvZEl4DuxtsoQQeUr3VMFEAMowsr
+         +Qzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=5eZ4LEZGvtrRKhIe4vx+pLxIESEbwM8aVSCBjXhFuXk=;
+        fh=SixAPS/yq0EyxgWyTedVotZjua0et9XX1FTzqGR83S8=;
+        b=qtN+OztWbC/M0JlK3RME6ludySf1ku6hxjveGOzz08cHLsKvfnHJL0WdxTC/GJ50EA
+         /iXwhrJNFkxD2QvQchxjA0Em4ojyfNfMxwRhet8yCsoys5c48o5oiraFsJxJP2TtOLtK
+         kY+tVCD0dJpxMT6DlZhoPDmHoOuX4bZkz5tBroyXOuMWICP71CAzlbKunJCrexy9A1+F
+         /LkjINH99gC+tnuWRNnEAUBdO+OFQB1cAHCZ1Iv3U+zn5kggwQ7Ar1hUafVbIG6ShY1z
+         /VJ+ZfDzOD6M2oy6QodR4lfBaM+G4vG5rYwSDRurkgUox4slh5yqEoIx86qpFgTwk/Lg
+         ci8A==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793774998; x=1794379798; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5eZ4LEZGvtrRKhIe4vx+pLxIESEbwM8aVSCBjXhFuXk=;
+        b=XAWMkYBGssKwfZv/qDhrUKmpEk7KDQI5FcEJPhsUVe/xSovq5eMrX2lQOJwem3BOgv
+         HXxVn0nhDJRvZEqcQWsZns6wyQJqfTkoKmrwocSSNzDhzipp4dt/pZLtbtiHZ9rhdUYl
+         SgnTJttnC/h85v2/9AR/4VANiD3SPsF9lcf5MXrMLT0nDJobr73dlBhlNKknuIIYTkoc
+         4O1CAt1Bq8Unm8wyHWS34hqzj6ciGo5fiASjhyqG5B7qtG6+Ttmu1s1HKv62+vL5pUly
+         zjrUq6Id3Rxwgga35R7whSzYpwabc+SL398yyzIcLCwUJQ4vqRWWFxrUcSDu2VPW8BSi
+         LLrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793774998; x=1794379798;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=5eZ4LEZGvtrRKhIe4vx+pLxIESEbwM8aVSCBjXhFuXk=;
+        b=Zk8ApT+omp8xf2PHBufI6dYbOB+5T2JUR9LrRCWT/MVVxYNPjEvHDEQ0p88b/OklN4
+         okSqHNxs1yg3SAJFSGoWVHnfN6iFhQybvtTMXVqJ/W12r1Q51ROrvJa56LT5yIRy1vaJ
+         zdf4r/sW8NOfndg8I42D03ziWBkIFV4UKp9adLVo6fFyrR6dBwDqHJOR1MYLXZ83ik64
+         v7tW4lxSMAUEvPt5ByS4es7t4tkLCRoBdC3BkM2cBySkTjkqokmdZ8W1c3XJ+Kbd8yfZ
+         YpMgyk6P+IoM9R+X87KyySW0FanjIcaIbY6nnAv6dUlDZw96Ex+92PMB5aYmcYJpotkx
+         WPuw==
+X-Forwarded-Encrypted: i=1; AKwUvBwidWS3vo1u2L2LY8Ne4CrPHgHsQIWFF680hE1hnNIBCHGfY2lbTwk7hdI4aMSAaFwhilvu@lists.linux.dev
+X-Gm-Message-State: APuU4Z/MFZFntEQdsPHv805uGy2bhmc9ltSvdwcdCODeYFGIuL5BHOwW
+	v8cRpcYeczsmbXIdmWH3FnJOKOCK9D0YDgx7tuLC2LOltV6BLDoUj/ThKswHYWfEglYvioa3Kjf
+	VwbzwWfirmr+daAWZze+S3Q/KPTh5HlE=
+X-Gm-Gg: AYBFou3whY1maHigEz6WXmoYln9p4dlMYenmQyBFrYBm5sZHOhVSrrtfrXEqmddKAvD
+	Pqya0ki5O1nquLtOSAviUqhwuKEib/DsGoMtc51MRQu/pHf3SSgzZEg3tmj+vk50GsVT2f0Q+wr
+	CnoXUuRaDNnM+BrEEjKdFk7vKpZ8nI0/QzbLKKNXAb1+cEQKavhLwDZOkuc14xJezKTJsQnc4IM
+	Tapm+Z+sJZhO6anjj6OQ5lljrxAXFGJUvYoqr6VuRn4n0ibpqNU296Geh4jEFSKjKCDmlxflS7W
+	ecM0r6+BDugvj/xnZxKr6Nxx+VZuxVvvpNfheBS8IySDzOIrz1x3JDg990R2BvwhpgpCclbPKFo
+	MJSTzcpk9hF0AFrNMXu0xFzEL/oxVYsfWDcKadIMl0CkPidZh/WWtKU7ITZU7PXtcTdNgFQ==
+X-Received: by 2002:a17:907:3e19:b0:c48:a838:c17e with SMTP id
+ a640c23a62f3a-c49d1307e11mr1648258466b.14.1793774997661; Tue, 03 Nov 2026
+ 22:49:57 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,116 +103,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6e4cbd509687301a8ee2106f19a3ac01e7671a6.1793204511.git.wen.yang@linux.dev>
+References: <20261103060658.696994-1-martin.ankerl@gmail.com> <CAKwvOdmXSH2W0evc6XF+2yjr1qg3oUExiy-pF+LAx4_iHycu7g@mail.gmail.com>
+In-Reply-To: <CAKwvOdmXSH2W0evc6XF+2yjr1qg3oUExiy-pF+LAx4_iHycu7g@mail.gmail.com>
+From: Martin Leitner-Ankerl <martin.ankerl@gmail.com>
+Date: Wed, 4 Nov 2026 07:49:46 +0100
+X-Gm-Features: AclHuK8oh8kpHv8oZjgJYiffPFA4E30_6N-HyxL3xKPXCKJkWV692Org4-Ci9f0
+Message-ID: <CAAFOosZkUXst22MOVUyJW6mdjnAO2XgKWJ_NuFp37QJWk_nk-w@mail.gmail.com>
+Subject: Re: [PATCH] x86/cpu: Use prefetcht0 for prefetch() on 64-bit
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Andi Kleen <ak@linux.intel.com>, 
+	Youling Tang <youling.tang@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Youling Tang <tangyouling@kylinos.cn>, 
+	Nikolay Borisov <nik.borisov@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+> Thanks for the patch!
+> Is there a reason to have the cast vs simply use "r" constraint and
+> deref in the inline asm?
+> asm("prefetcht0 (%0)" : : "r" (x));
+> https://godbolt.org/z/xezh15oMe
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+I mostly did it to be consistent with the 32-bit prefetch() and prefetchw()
+in the same file, but it also has a codegen benefit. With "m" the compiler
+can put an offset or index in the prefetcht0 itself, while with "r" it needs
+to compute the address into a register first:
+https://godbolt.org/z/j311eYzsY
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[cannot apply to sysctl/sysctl-next brauner-vfs/vfs.all linus/master mcgrof/sysctl-next v7.3 next-20261030]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/wen-yang-linux-dev/sysctl-replace-overloaded-extra-pointers-with-typed-bounds-and-context/20261029-003440
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/b6e4cbd509687301a8ee2106f19a3ac01e7671a6.1793204511.git.wen.yang%40linux.dev
-patch subject: [RFC PATCH 39/39] sysctl: remove the extra pointers and the compatibility bounds read
-config: um-defconfig (https://download.01.org/0day-ci/archive/20261104/202611041234.Gjf6kfSR-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261104/202611041234.Gjf6kfSR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611041234.Gjf6kfSR-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/unix/sysctl_net_unix.c:23:4: error: field designator 'extra1' does not refer to any field in type 'const struct ctl_table'
-      23 |                 .extra1         = SYSCTL_ZERO,
-         |                 ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/unix/sysctl_net_unix.c:24:4: error: field designator 'extra2' does not refer to any field in type 'const struct ctl_table'
-      24 |                 .extra2         = SYSCTL_INT_MAX,
-         |                 ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/unix/sysctl_net_unix.c:32:36: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
-      32 |         table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
-         |                                           ^~~~~~~~~~~~
-   include/linux/string.h:315:49: note: expanded from macro 'kmemdup'
-     315 | #define kmemdup(...)    alloc_hooks(kmemdup_noprof(__VA_ARGS__))
-         |                                                    ^~~~~~~~~~~
-   include/linux/alloc_tag.h:270:31: note: expanded from macro 'alloc_hooks'
-     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:256:9: note: expanded from macro 'alloc_hooks_tag'
-     256 |         typeof(_do_alloc) _res;                                         \
-         |                ^~~~~~~~~
->> net/unix/sysctl_net_unix.c:32:36: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
-      32 |         table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
-         |                                           ^~~~~~~~~~~~
-   include/linux/string.h:315:49: note: expanded from macro 'kmemdup'
-     315 | #define kmemdup(...)    alloc_hooks(kmemdup_noprof(__VA_ARGS__))
-         |                                                    ^~~~~~~~~~~
-   include/linux/alloc_tag.h:270:31: note: expanded from macro 'alloc_hooks'
-     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:260:10: note: expanded from macro 'alloc_hooks_tag'
-     260 |                 _res = _do_alloc;                                       \
-         |                        ^~~~~~~~~
->> net/unix/sysctl_net_unix.c:32:36: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
-      32 |         table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
-         |                                           ^~~~~~~~~~~~
-   include/linux/string.h:315:49: note: expanded from macro 'kmemdup'
-     315 | #define kmemdup(...)    alloc_hooks(kmemdup_noprof(__VA_ARGS__))
-         |                                                    ^~~~~~~~~~~
-   include/linux/alloc_tag.h:270:31: note: expanded from macro 'alloc_hooks'
-     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:263:10: note: expanded from macro 'alloc_hooks_tag'
-     263 |                 _res = _do_alloc;                                       \
-         |                        ^~~~~~~~~
-   net/unix/sysctl_net_unix.c:54:12: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
-      54 |                                               ARRAY_SIZE(unix_table));
-         |                                               ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   6 errors generated.
-
-
-vim +23 net/unix/sysctl_net_unix.c
-
-84960bf2403123a Kuniyuki Iwashima 2025-03-17  15  
-0abc76bc20826e2 Joel Granados     2026-08-10  16  static const struct ctl_table unix_table[] = {
-^1da177e4c3f415 Linus Torvalds    2005-04-16  17  	{
-^1da177e4c3f415 Linus Torvalds    2005-04-16  18  		.procname	= "max_dgram_qlen",
-a0a53c8ba95451f Denis V. Lunev    2007-12-11  19  		.data		= &init_net.unx.sysctl_max_dgram_qlen,
-^1da177e4c3f415 Linus Torvalds    2005-04-16  20  		.maxlen		= sizeof(int),
-^1da177e4c3f415 Linus Torvalds    2005-04-16  21  		.mode		= 0644,
-1a4e7bc6e3457ad Yingjie Wang      2026-10-16  22  		.proc_handler	= proc_dointvec_minmax,
-1a4e7bc6e3457ad Yingjie Wang      2026-10-16 @23  		.extra1		= SYSCTL_ZERO,
-1a4e7bc6e3457ad Yingjie Wang      2026-10-16 @24  		.extra2		= SYSCTL_INT_MAX,
-^1da177e4c3f415 Linus Torvalds    2005-04-16  25  	},
-^1da177e4c3f415 Linus Torvalds    2005-04-16  26  };
-^1da177e4c3f415 Linus Torvalds    2005-04-16  27  
-0abc76bc20826e2 Joel Granados     2026-08-10  28  static const struct ctl_table *unix_table_dup(struct net *net)
-^1da177e4c3f415 Linus Torvalds    2005-04-16  29  {
-1597fbc0faf88c4 Pavel Emelyanov   2007-12-01  30  	struct ctl_table *table;
-1597fbc0faf88c4 Pavel Emelyanov   2007-12-01  31  
-0abc76bc20826e2 Joel Granados     2026-08-10 @32  	table = kmemdup(unix_table, sizeof(unix_table), GFP_KERNEL);
-0abc76bc20826e2 Joel Granados     2026-08-10  33  	if (!table)
-0abc76bc20826e2 Joel Granados     2026-08-10  34  		return NULL;
-0abc76bc20826e2 Joel Granados     2026-08-10  35  
-0abc76bc20826e2 Joel Granados     2026-08-10  36  	table[0].data = &net->unx.sysctl_max_dgram_qlen;
-0abc76bc20826e2 Joel Granados     2026-08-10  37  
-0abc76bc20826e2 Joel Granados     2026-08-10  38  	return table;
-0abc76bc20826e2 Joel Granados     2026-08-10  39  }
-0abc76bc20826e2 Joel Granados     2026-08-10  40  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks for the ack!
+Martin
