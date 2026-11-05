@@ -1,86 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793854254;
-	b=4gDeU9ObfBVN28z0ljD58i2GtjTX5TrOljWyWT0rR+KbhiT4MSWy8/AR75d26Bm+6uXi
-	 DOJE0yGC3Z9Op2nGiNrQ1yqofzC150fZBljoZd1k8VzObZETRywVRMOTN53Oe/7T5sCtA
-	 cs6n9qQArK1mnfvu4+F/ngGP6P0LkP4RUaJcDAC7Id1MCvMw+7SGfVtK9AnNOk1J4Uvp9
-	 NgnhPyMjEYGS28sKSe3pFicRhbh0SZtqiVo+7dXBCkmSj0TXQdWQ0AK7HPqLIyYsdEN+f
-	 VHLMtblj7LAHIGOgRqji2J4vF9M1YMiE+yS2Y4fkhE7vzIKyaSu9lTYUWvTs+K1nR/g==
+	t=1793855271;
+	b=ZA7gTluHTdFpEpbZbAPlTReR7j2gKDmQE1NC4XiycuhSaBmgLmjSb9z+DNtwid3D2j5V
+	 N2O/D1pJHhMOfcombBGwos8ccSJw3xjDKqAq1sq4BvXoVLUWSJUO2b1jL3sfcrPXzDcOy
+	 G/sqUcgMHc3SrVkYr8L1TbcThgpD47MuBK+NrUwBhjNQI9mK5Ylsb1yf2I5mdGXtc8n1k
+	 5e8i5odothaF+Mu6zwIqbT79nim1A+/C1Wi9zWMgRPxU2ZlPPJuD+uU79dVD92nP/ByaG
+	 8U2Tt0Dw6g7ZelXHU8gV2KXCRFrSn4BLQlILzWeC4fE3plPsAe2iKpYxt3Xfg1p7LSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793854254;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ga92ovgpP8OrqJArRZ/Ry0RYu0IeBw7kgmd1b1KtRYQ=;
-	b=evdgIGyhw4CStJaouOMdHxFGZudNr8Z6427LS4C/SorrzH5pFaVNhWL06lASIhChLDp/
-	 b+QgtXTRe8M7AOeNidaMV4sAtJLDfcBOsppCejamVl65abwndY+DYep4mcct/SM3I6Arb
-	 yPyODPbjQENrwcmkLIPNPWWemScUtC7sMnhGofq/2Kg3cwllGMia2nk4WiJcEosdMvfw9
-	 WozCWv9QF9BoXBfqjFNvZwphnvEsHJERHKgpPet2UYg/YY1AiKpv7o0WIbsWgYyijP4Jb
-	 go64k51ZUu5uI/7SIFmBL/0bL3LdwUMcm9lhxKSFGnWixk7uys7awtosIuy9LQXcwHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793855271;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Yi6Q0LLSA53/Cz2aURPcplC/4LZHDSvLW4Z3o4uHodg=;
+	b=svs5E2EKuxA0uXHr8Mi14N7HcqMxCjCCjE+5uySazvSD0vE33m4K7j9Jy3mcCnPCV+5G
+	 +ExalP3u/5QvleffpBfir+xIz8KHmZ8hBeBZaMRHFCCskE4osuLlTP14498USh1qfXLDv
+	 pJ6RDcvgDDeqF5ZjjxBFzTUrbzqsXkf0V+mzkHWHNiq3I602MuiFgnHvco4MpoUNmyw6z
+	 l7O7lx09xyAsngRUICqJv65K7gthUAeuJdKCureqBXChfTijZLNAyGDpH8ZPrElLHvcnE
+	 ahbs5WhmZFpyK24aAa89cvrhAMJJm5pxtPnqAmgf2m8FkLfHkt9gdyHWR9Kd5qmtHvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=NtFV31Qf;
-	arc=none smtp.remote-ip=192.198.163.8
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ESEPfJCH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A04606A31B;
-	Thu,  5 Nov 2026 04:50:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95A04606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2D3606A31B;
+	Thu,  5 Nov 2026 05:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=NtFV31Qf
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793854254; x=1825390254;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mayL5uxjA06wbOsebndl7WWQByciFzyi8puZ0FzXVeo=;
-  b=NtFV31QfA89kPIVigx3P1msfdOl2mdeehGCcfNIWmGLvGhYzyGE78DQy
-   7J2GQgQdMCM0IjeGIF3Clzw1K85BGap6l23XXrZwG1bY9JJAsHepMoSmz
-   fav0x85I9m3HEuxI7YS9iSMpvmVnucNcFktfLIMxnEp8eoHMeKUAnkboq
-   Vwg/im1H4YUVzOm1lOi5w8Con4rQpbCDg+SnD+h/CYmYRlzUaAwWzqJ3S
-   jEUJlIo7lfibTJIPQopmTUzw1I7GuqotZMSohP+8Q2O7oOCXnbaKDTwyU
-   7XMdfrUKjMu+dWAffOS/u1T2Bj2B+WzG16CmpBKOdRKEehTLyOgMEpj2z
-   Q==;
-X-CSE-ConnectionGUID: 5svBMJ3RRSqf3KoZ4pUbjg==
-X-CSE-MsgGUID: grHOY+QvTgG2+J9hdPDuUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2514735"
-X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
-   d="scan'208";a="2514735"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 20:50:53 -0800
-X-CSE-ConnectionGUID: 9TMHlpgmTKub36UmJXnIEQ==
-X-CSE-MsgGUID: 42NBspJERJCUUbkNeJcLTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
-   d="scan'208";a="6747481"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 04 Nov 2026 20:50:50 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xOpR1-00000000lfL-3JJn;
-	Thu, 05 Nov 2026 04:50:47 +0000
-Date: Thu, 5 Nov 2026 12:50:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	intel-xe@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Natalie Vock <nat@pixelcluster.dev>,
-	Arun Pravin <arunpravin.paneerselvam@amd.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
-	dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 3/4] drm/ttm, drm/xe: Introduce TTM_TT_FLAG_PARTIAL for
- partially backed-up tts
-Message-ID: <202611051209.k3623JDY-lkp@intel.com>
-References: <20261104201331.2462-4-thomas.hellstrom@linux.intel.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ESEPfJCH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3BB1F000C1;
+	Thu,  5 Nov 2026 05:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793855271;
+	bh=Yi6Q0LLSA53/Cz2aURPcplC/4LZHDSvLW4Z3o4uHodg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ESEPfJCH3dzeJR1ZFCDzOt72+66AITx08TSsYm7Fw/45gx1dQkzKRSruSUUjKUheU
+	 krTPHnTTh8fvkgg4Ehshjjr1z4FDPRdOytJbzRVgOWJyZTM+G1LSyEdtygXbr4t4CJ
+	 FUA0BdGQZ99yv2AhAG/IQnqW1Mx7oJyFhuGTVjJ1J/GgLZhNVBV7xm+4gBKWk64Erx
+	 E9QDkGsuNyM/e8I9ceGSb1Bs9yCDeOmKxm0E4ZgEENj9Qt7hP7/gtqFAgltczuhWnN
+	 s/HKttV1pVWCNFALPhdE9ycSY8AWQnfk5GOiwfbBasen4BcwBpzE0dgMlkIxd1n5cr
+	 07EyjS3Zyc3SQ==
+Date: Wed, 4 Nov 2026 21:07:48 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, james.clark@linaro.org,
+	xueshuai@linux.alibaba.com, Peter Zijlstra <peterz@infradead.org>,
+	leo.yan@linux.dev, Li Huafei <lihuafei1@huawei.com>,
+	Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] perf annotate-data: Show event name in the data-type
+ title
+Message-ID: <auwPJIaRjtfQJdta@z2>
+References: <20261029071510.460873-1-wutengda@huaweicloud.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -90,177 +67,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261104201331.2462-4-thomas.hellstrom@linux.intel.com>
+In-Reply-To: <20261029071510.460873-1-wutengda@huaweicloud.com>
 
-Hi Thomas,
+On Thu, Oct 29, 2026 at 07:15:10AM +0000, Tengda Wu wrote:
+> The same data type can be annotated for multiple sampling events, in
+> which case the data-type header is printed once per event.  But the
+> header only shows the type name and the sample count, so several
+> identical-looking headers are emitted and the user cannot tell which
+> event each of them corresponds to. E.g.
+> 
+>   $ perf annotate --data-type=page --stdio --itrace=f
+>   Annotate type: 'struct page' in [kernel.kallsyms] (59208 samples):
+>   ============================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>       9.95          0        0x8      long unsigned int   flags;
+> 
+>   Annotate type: 'struct page' in [kernel.kallsyms] (59480 samples):
+>   ============================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>      10.15          0        0x8      long unsigned int   flags;
+> 
+> Add the event name to the data-type title in both the TUI browser and
+> the stdio output, so each header can be attributed to its event.  For
+> group events, use evsel__group_desc() to print the group description
+> instead of the leader's name, so the whole group is identified.
+> 
+> While at it, size the underline in the stdio output dynamically based
+> on the length of the header line instead of using a fixed-width string,
+> so it keeps matching the header as the text grows.
+> 
+> Result:
+> 
+>   $ perf annotate --data-type=page --stdio --itrace=f
+>   Annotate type: 'struct page' in [kernel.kallsyms] for l1d-miss (59208 samples):
+>   ===============================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>       9.95          0        0x8      long unsigned int   flags;
+> 
+>   Annotate type: 'struct page' in [kernel.kallsyms] for l1d-access (59480 samples):
+>   =================================================================================
+>    Percent     offset       size  field
+>     100.00          0       0x40  struct page      {
+>      10.15          0        0x8      long unsigned int   flags;
+> 
+> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 
-kernel test robot noticed the following build warnings:
+Applied to perf-tools-next, thanks!
 
-[auto build test WARNING on drm-xe/drm-xe-next]
-[also build test WARNING on drm-tip/drm-tip next-20261030]
-[cannot apply to drm-misc/drm-misc-next daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v7.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Hellstr-m/drm-ttm-Don-t-mark-backed-up-shmem-folios-accessed/20261104-211328
-base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-patch link:    https://lore.kernel.org/r/20261104201331.2462-4-thomas.hellstrom%40linux.intel.com
-patch subject: [PATCH 3/4] drm/ttm, drm/xe: Introduce TTM_TT_FLAG_PARTIAL for partially backed-up tts
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20261105/202611051209.k3623JDY-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611051209.k3623JDY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611051209.k3623JDY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/ttm/ttm_pool.c:1076:17: warning: variable 'mid' set but not used [-Wunused-but-set-variable]
-    1076 |         pgoff_t i, nr, mid;
-         |                        ^
->> drivers/gpu/drm/ttm/ttm_pool.c:1177:7: warning: unused variable 'partial' [-Wunused-variable]
-    1177 |         bool partial = ttm_tt_is_partial(tt);
-         |              ^~~~~~~
-   2 warnings generated.
-
-
-vim +/mid +1076 drivers/gpu/drm/ttm/ttm_pool.c
-
-  1059	
-  1060	/**
-  1061	 * ttm_pool_restore_abort() - Abort an ongoing restore of a partial tt
-  1062	 * @tt: The struct ttm_tt with an active restore.
-  1063	 *
-  1064	 * Abort a partially completed restore, leaving the tt in a consistent
-  1065	 * state for a subsequent backup. The uncommitted in-flight page is
-  1066	 * DMA-unmapped and split; restored sub-pages are kept, unused ones freed.
-  1067	 * Non-cached committed pages are converted to write-back so the
-  1068	 * partial-backup invariant (all resident pages are cached) is maintained.
-  1069	 * Committed pages are left DMA-mapped for the backup path to handle.
-  1070	 * Since restored pages are now resident, &ttm_tt.remaining_pages is
-  1071	 * updated to reflect the number of resident pages.
-  1072	 */
-  1073	static void ttm_pool_restore_abort(struct ttm_tt *tt)
-  1074	{
-  1075		struct ttm_pool_tt_restore *restore = tt->restore;
-> 1076		pgoff_t i, nr, mid;
-  1077	
-  1078		if (!restore)
-  1079			return;
-  1080	
-  1081		/* Handle the uncommitted in-flight page. */
-  1082		if (ttm_pool_restore_valid(restore)) {
-  1083			struct page *page = restore->alloced_page;
-  1084	
-  1085			nr = 1UL << restore->order;
-  1086	
-  1087			if (tt->dma_address)
-  1088				ttm_pool_unmap(restore->pool, restore->first_dma, nr);
-  1089	
-  1090	#ifdef CONFIG_X86
-  1091			if (restore->page_caching != ttm_cached && !PageHighMem(page))
-  1092				set_pages_wb(page, nr);
-  1093	#endif
-  1094			ttm_pool_split_for_swap(restore->pool, page);
-  1095	
-  1096			for (i = 0; i < restore->restored_pages; i++)
-  1097				restore->snapshot_alloc.pages[i] = page + i;
-  1098	
-  1099			/*
-  1100			 * Clear stale DMA addresses for the in-flight sub-pages.
-  1101			 * These pages were never committed via
-  1102			 * ttm_pool_allocated_page_commit(), so tt->dma_address[]
-  1103			 * contains stale values that the backup path would
-  1104			 * incorrectly try to unmap. All @nr entries are stale,
-  1105			 * including restored ones: commit is all-or-nothing per
-  1106			 * compound, and the whole compound was unmapped above.
-  1107			 */
-  1108			if (tt->dma_address) {
-  1109				pgoff_t off = restore->snapshot_alloc.pages -
-  1110					      tt->pages;
-  1111	
-  1112				memset(&tt->dma_address[off], 0,
-  1113				       nr * sizeof(*tt->dma_address));
-  1114			}
-  1115	
-  1116			for (i = restore->restored_pages; i < nr; i++)
-  1117				__free_pages_gpu_account(page + i, 0, false);
-  1118		}
-  1119	
-  1120		/*
-  1121		 * Don't DMA-unmap committed restored pages here; their DMA
-  1122		 * addresses are in tt->dma_address[] and the backup path
-  1123		 * will unmap them.
-  1124		 */
-  1125	
-  1126		/* Convert non-cached committed pages to write-back. */
-  1127		mid = restore->snapshot_alloc.caching_divide - tt->pages;
-  1128	#ifdef CONFIG_X86
-  1129		if (mid > 0 && tt->caching != ttm_cached)
-  1130			set_pages_array_wb(tt->pages, mid);
-  1131	#endif
-  1132	
-  1133		kfree(restore);
-  1134		tt->restore = NULL;
-  1135	
-  1136		for (i = 0, nr = 0; i < tt->num_pages; i++) {
-  1137			struct page *p = tt->pages[i];
-  1138	
-  1139			if (p && !ttm_backup_page_ptr_is_handle(p))
-  1140				nr++;
-  1141		}
-  1142		tt->remaining_pages = nr;
-  1143	}
-  1144	
-  1145	/**
-  1146	 * ttm_pool_backup() - Back up or purge a struct ttm_tt
-  1147	 * @pool: The pool used when allocating the struct ttm_tt.
-  1148	 * @tt: The struct ttm_tt.
-  1149	 * @flags: Flags to govern the backup behaviour.
-  1150	 *
-  1151	 * Back up or purge a struct ttm_tt. If @purge is true, then
-  1152	 * all pages will be freed directly to the system rather than to the pool
-  1153	 * they were allocated from, making the function behave similarly to
-  1154	 * ttm_pool_free(). If @purge is false the pages will be backed up instead,
-  1155	 * exchanged for handles.
-  1156	 * A subsequent call to ttm_pool_restore_and_alloc() will then read back the content and
-  1157	 * a subsequent call to ttm_pool_drop_backed_up() will drop it.
-  1158	 * If backup of a page fails for whatever reason, @ttm will still be
-  1159	 * partially backed up, retaining those pages for which backup fails.
-  1160	 * In that case, this function can be retried, possibly after freeing up
-  1161	 * memory resources.
-  1162	 *
-  1163	 * Return: Number of pages actually backed up or freed, or negative
-  1164	 * error code on error.
-  1165	 */
-  1166	long ttm_pool_backup(struct ttm_pool *pool, struct ttm_tt *tt,
-  1167			     const struct ttm_backup_flags *flags)
-  1168	{
-  1169		struct file *backup = tt->backup;
-  1170		struct page *page;
-  1171		gfp_t alloc_gfp;
-  1172		gfp_t gfp;
-  1173		int ret = 0;
-  1174		pgoff_t shrunken = 0;
-  1175		pgoff_t i, j, num_pages, npages;
-  1176		pgoff_t nr_backed;
-> 1177		bool partial = ttm_tt_is_partial(tt);
-  1178	
-  1179		if (WARN_ON(ttm_tt_is_backed_up(tt)))
-  1180			return -EINVAL;
-  1181	
-  1182		ttm_pool_restore_abort(tt);
-  1183	
-  1184		if ((!ttm_backup_bytes_avail() && !flags->purge) ||
-  1185		    ttm_pool_uses_dma_alloc(pool) || ttm_tt_is_backed_up(tt))
-  1186			return -EBUSY;
-  1187	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards
+Namhyung
