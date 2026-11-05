@@ -1,93 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.43
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793876980;
-	b=VZ593Sg0ZeSoI0/RUxqbJdRDJT8sXg8KHPYwK6j5FOsiwMNAY6m5XohsncKVsPzYvsxD
-	 ELHEV2Q7a6uVYI5u6xGvlyJDHbbm1IUCgAEAkykEYPpoO3WXUvRsXADxEBqhoEzLPjifi
-	 W1t1w2XSvljZrnNVRiws/jwh9TBq6h6Q0BIfOWmNPJYBJ/+JgJ5Y+I29q9uuH2BmiKtZf
-	 FH4u2zdu9LR7RQopEzkOq/Ip4XcW9mwyBYyxoAyebzGnIyclmnvISEJHnDk/iBop9ouzA
-	 RzRIRGFWHl4PYDYPW4TmBcjvpcNeHYmZkUIwXKkDPIDQCzahzMANyQV4jMYc79dPlmQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793876980;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793878927;
+	b=klyeIwOpOrWUENNMmIWaMOgD9gJHwg3OoJdVprLmv/ts6HJFx6nu7ayqse68124XHkzR
+	 D3JbjudGf502aw6UojPl/pvkNuPcJF2zq+MYBJCoU/BMkbVAhbV6C3o4GQRWc4OrrYVQV
+	 acuk9TzA9i/0FOrC6w0WmMury0zailgQPRMh2n6GkDBGIz+VJNj4VSjCk/17xmNrf7UYM
+	 KBZ6E9UL3oWo0OM3PJUXORaq0izOqXG7c1OxgQOGr8l77ndN5eZna6xuYEh3ejelnAwpk
+	 K9DpHbtJOWz4l67D0V8aDTcgG1/AsY2/5c6AEeeHC5X0qJgtZ1EAy/G2fAKdO9sh6Rw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793878927;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=NLxUrhb+i0y7kx7MWfP3g7AgEu7tvuVh8LKyS1nXFQo=;
-	b=nnVW4nxTDNskE63UIr+Fx0hoQVcTJ87ZiTPMqmsZYLA++lWxit0jfKDjGkA9t+lgCNSh
-	 xCQyFzrMP3cmPXBiUQzYXqrUXvca472U5sd4mGEcQ0h7JZXC6EOm2wSIzVjEgZXrx2q0g
-	 i7VssKDfy6b46Limtw/x9/oMRTFhYvgLJ+al0/Vii1Qtqncn0e5n2SMXO1jiWO5JyUJQ0
-	 32atPRhaRUbO5qBfwfs/bvRy6dQvotgmpoyHl7p4/i68NmjdrBTOgy0WXznetLs7+LKbW
-	 d/H0+jZG+aLUXz/nHPeemIPQHW67TeiggGPJdcSZbAgRlP726DuJNOHWLPM0OBjkR/A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chromium.org;
-	spf=pass smtp.mailfrom=chromium.org;
-	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=Y4DgVs1m;
-	arc=none smtp.remote-ip=74.125.82.43
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=LZy2AlGoHMhT5kSino03X+cU+0j9SA9toGXagMkx2FA=;
+	b=oyKnoMoWX2BdB01e0yFZXTFdonSIXsnir4btwnZ2JxMD3haWD+5kQX/uQUCvWbIzg5Uc
+	 RlLKhBQL3pLTh4xDinZLsNPI6I4zQLxMMMuVAQFqgMKvW0AzT99AsI52wtmQ3TpI6tH2K
+	 eHqIX9rH4t7fQTAD1ScqgPpVtgZv22Gj9AsbxKmeBokTQmCq+l93KaIM/ZptBcI0m5gVR
+	 wD9Jckwp+l/3Xg++p/HIth3lrfVyAqCc+LFRGAbhD41JGC7TsSkqumNMbjnlCO2BaR6er
+	 Aymf36328QURNW9GkGqRWunv2WImU9FU4w/WdGXQnojGLs4lLLjZk+wAhMXv6fth+vw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VDvNflRT;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.41
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043D1606A326
-	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 11:09:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 043D1606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF6E606A328
+	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 11:42:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CFF6E606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=Y4DgVs1m
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-1438d9363fbso459077c88.0
-        for <llvm@lists.linux.dev>; Thu, 05 Nov 2026 03:09:39 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VDvNflRT
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-170135e43c7so2606498c88.0
+        for <llvm@lists.linux.dev>; Thu, 05 Nov 2026 03:42:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793878926; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YyDiFF3r3wiiL3iOrVgqqhWZHg9RWRCmWB3xpr2INVLZkzHx9Iu+B09r6WhCKl50/r
+         FTm08+A2egvYUahmjmHhxbdj1f3rAUpvTQJ5+27gzCsUoWgkzKkQzY6u8nu9uc5WSrLU
+         dV6g5ubAMxkeskKw1uRb2mQlk1BnT/28mxN9b113bwVevkz2/SQoYEJfrcRTUzctAU7I
+         8ao0vhHFRsPwYdbt6p6izxV3tvmat1+byBfuljGwj82ovGZdtEzWX2Pt4doOhn6tV+CJ
+         pGmqIjz44AXGKpArX+zsQX6l0t3jORZ+9TOG794Hz4cfxDT8wb9CN+MOFtNscXFP3w5u
+         zt+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LZy2AlGoHMhT5kSino03X+cU+0j9SA9toGXagMkx2FA=;
+        fh=/9E0IYWsJpdj9lMG/4YM9rrXhFyHg9uIOLDYuUWzLUk=;
+        b=LKJQn8pdOTicK6nLHhkLz+cHOuyzPiDR+TnkytXlXP3QZHMo/4BQCkMyujw7w7p5J6
+         AfFreyDJViyDhMMeV/wQDjMlEw5QCqjrpOlXO9vjqZRhOxLfmZRH0cXkV5BTxpBB1D9V
+         J1jbIDf7trBxUcYA+/OZ5pRXn+WlhCVqK13GUiO7mfCwZkdXSyQRupYIGEYAvuCyDZNI
+         +wdE1lgK+v3WHqpAR8i/ikgxi3P35E2vHGkSW+hoGkpKVW8tN/jW532sY+I5XBQF0I9d
+         qysbdXZzZt+o/9pSl045TGg5w9nn1swXb9WFyGYFYzHFYgAJHWTFbCHVqH7ZTaP6b0oo
+         ngQw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1793876979; x=1794481779; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1793878926; x=1794483726; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NLxUrhb+i0y7kx7MWfP3g7AgEu7tvuVh8LKyS1nXFQo=;
-        b=Y4DgVs1mFbgdNGLcgBhvyOBoF1nS7PPyb6/Fh4btEs71o6/fwGXF3hISD6BwQ8S3EN
-         I/2Nnl2vDR71EjJsfXfEmFbz0B6I0nMnJtvIK3YwrG24aForRZPUbGwOPQryNP6XewKt
-         zkt35oHDhO7F356/CQ31ie/UWSTOluOXZAUxU=
+        bh=LZy2AlGoHMhT5kSino03X+cU+0j9SA9toGXagMkx2FA=;
+        b=VDvNflRTa5hTfc5JEkmMI+w1ZxeHoKcDy41xnQB+HPHlG5bx7wjejzJTwH1jEi22om
+         ZlYwh53/+LEBfD+57LVBwn8gHglbjORqfvnOBarmEWCl7zOdIVXfdI7NoVkHjCKwiDEg
+         JYrh9qVKo3sEg7fHPvDGo2xB/8g1N92dl6faxi9kx43V9WEWtbCXsuw1VgMV7WOtmAVM
+         Z/hXedNQeg13NiKwZAuSJL0BxoFLl5PGKPwHgcDfC72zelCZgiKgsVzPRJ3JvpZX9RBD
+         g4SnGHR5qRy+9PG5Cc9guis1QCUTLtBU7OEN4Xn8nrd/xV+4qmovtmmaMKbPFUkltDsR
+         jNGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793876979; x=1794481779;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1793878926; x=1794483726;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NLxUrhb+i0y7kx7MWfP3g7AgEu7tvuVh8LKyS1nXFQo=;
-        b=OKG/189WaI+oglP48ufMrgVOT2K7ZgJxQncjEKTPEFB7nnOexAyTdyOfZH6PLqHiMs
-         5Cl4OYBoDaTjT/JqHvYqOtClvI2ipsc2Ygx9JQYdbkxhAmjO4gB6JOjoZHkODaZoYPe8
-         uGGjys4LPM3yw1JjUJP57LBU2CuUvQd162NFDpl8DAEL9M4xSqSozfd4V+O0YlQZpIz6
-         xDVwX2HO5nrj+EPNXy1Df2IoQxgfriU1GxFSS5YpOTs9cobsUgVa7RVdEVo1V5I8ZBt1
-         Z8RAfGBLvI86b1Qhrq+r5AEmvhq7t1itvJ33YjqXUXQK89UbUiqnd5ji8NAXWXK8xdVK
-         P3dA==
-X-Forwarded-Encrypted: i=1; AKwUvBwVxldOaMeFL9rzxSfrwvxpStIrOp01CxeZuoWZFtxc7/omeu67sh49kPzsf1tYkAnTODWk@lists.linux.dev
-X-Gm-Message-State: APuU4Z/cu30KIyigOT39jupq2+IF8vXx7p9o8oEbzAtdGdHiZBhPLvx1
-	6w3qvyH79fsFKflOuwI7WGOd/UFkp+UYTTuSAVNGM3SKDXhhVceG1n6LSnVPev0D6g==
-X-Gm-Gg: AYBFou1KMs4kGqfLZUX1lxDYJGbpZFxG8FyAeZQeKrRi2Zjq6FYr89otBHiIaE9HuG1
-	lLHSHAXVTvpJkZ0vACqawWVtVcpBLumtbdRxnRVjLUt6u9OE3f/jQ5L6SPZ4BqKMGar1r52OYwx
-	MP6eeDtHFwEsBZzndRJr9fQhvSAlGrjx6/LW7+EtdgFlqKSf0eizGFxXHxaI/WNYTpSsauQlKRe
-	yHJZ57lWzAhBks0yDzddn6QRwKvy4IybqQH/xsI8I18WxAn4K34/ZVAsCbs4suBg+IVRd/evXt4
-	jrK0y6w86Qag7e+R3VrIFLXqG8nes7ivfyu+ZmVrdw0woCqZJMtFSsLF67jP6YCLpN/EF3uIOwH
-	NG7Zp77SHl31/N0Jf9ZuaHfQmECFmE1rr7lhiLVByPJMklXMkZLcv571Tzue/vEj8cgns2rliQP
-	Ya3D634qUnC+CwjD1g4dz/g9jpMvqTBWQ/WPE+Adoml3cqXMIDUhMXTcv16hwm2oZYktdGBR2aK
-	po122ian9ieoyXnNzixwhxkko51lxbvTyPVu4YbltOF4RkQ92fc+OAXsFemr6ylngh93qVnexSk
-	nMmAlddgh6Rch+KScU7t0ZbH8/R3oDDpvB9M0WfvKPjEHAr+M5vI5pC04WXG39mPFvg=
-X-Received: by 2002:a05:7022:5e08:b0:1b2:42db:8a5d with SMTP id a92af1059eb24-1b24f42dcf9mr2938410c88.3.1793876978922;
-        Thu, 05 Nov 2026 03:09:38 -0800 (PST)
-Received: from google.com ([2a00:79e0:2031:6:8bc:6b25:484c:8975])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b245b8822fsm18931590c88.2.2026.11.05.03.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 03:09:38 -0800 (PST)
-Date: Thu, 5 Nov 2026 20:09:34 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Jenhao Chen <jenhaochen@google.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Minchan Kim <minchan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, minchan@google.com, liumartin@google.com, 
-	benwei@google.com
-Subject: Re: [PATCH] mm/zsmalloc: inline obj_malloc() and obj_free()
-Message-ID: <auxjJapQ4j8518aH@google.com>
-References: <20261030121700.260975-1-jenhaochen@google.com>
- <auwR7gnuLsF0lpmG@google.com>
- <20261105103947.7521-1-jenhaochen@google.com>
+        bh=LZy2AlGoHMhT5kSino03X+cU+0j9SA9toGXagMkx2FA=;
+        b=L3MHrvPBOqS2ydUbVwOAyYSIr/ynzO28oh1cGuHgy3H0yn6UkgXCbiwLJ1G2MFuBgN
+         8z7GEcEdjaGGJYSReyXPRwv96054dsQbmRo0MypcHN/jmQQ0qp2UNt8d1f67qttfKhKZ
+         11mIjpgFatso+bfZqFIgULwF8w/xFkol2tEMxtbqgrIe2+oJEwQIqVVWSHGfhaV1FqFQ
+         EDCcJoYY9bm8M/x+YXCJPr3TT7zGQDqtQeRM8icxAIY/06nJSj9PNeuATxnr+SluzD35
+         BUi4l0IEc+vJcdH1RiZiowtawBpgFwcmfLnTLN++1slSEUh6Oqu//PmS48ahE94y/S8t
+         4tyg==
+X-Forwarded-Encrypted: i=1; AKwUvBwGgS6DjksJvK6cpiCN1SIl8Sq2hUB8JHOV/9WyvY4uZXoGWIVi9IBEichKK///g3Qnp4bP@lists.linux.dev
+X-Gm-Message-State: APuU4Z9EVRUAyMYgpOSAfRkXcA/PLN+svqCiHBLhNcU/2Lfbiu9fpgz5
+	vvH0AbwihVE09EmCLQ9YT/d1/+sSYZDpq3V1bYc1a/Ud1zImQGCkMEp+kzwuYWvlGxd/D8KS2JR
+	9EI9qWwQ0GBLYsvS1f5YexIbw2AmK7YE=
+X-Gm-Gg: AYBFou1GDSFrUQTZ8PMLz7o4oWJwSGxW8C8/F1s0PHs/GMvGr+7f9e8K63bFKav6R15
+	NfBnxDxIaHEux/UiAbq0JwVMbw4kNq+y4REgbRJt50/HdvQ8ftXhM5WPdZyL0XMfns+OfQG6DOj
+	jgYpC890K+2YX8An+dw5hib/ZZZQzUHDq6rMWU3L9rG1uzFAdNGaiQ1bVoV92rF+Ft8J9ZnlDJ9
+	ZyCSXCnt+iBfYwhqsZxpMR7NfMond8BPX60SVGi46N5H1L+BC8EU6DNycVQGQKLj6hXzgMpECzJ
+	snCelRd/QdoC8EgZCXKK/oJaIHoPVWyGXQBPdN0bLqBYgPG+UNSjXIbgjKO/aMzQow+f/NYfxUK
+	NxHQENeFeJOdFNgocKwiPk8+aYQTAw+DTfJqW0zr2lwLXouATHmTFi5j6Cyv1aLu+l5s=
+X-Received: by 2002:a05:701b:4281:20b0:158:1ed2:cb58 with SMTP id
+ a92af1059eb24-1ac5e6f5362mr29461112c88.39.1793878925686; Thu, 05 Nov 2026
+ 03:42:05 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -97,69 +104,172 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261105103947.7521-1-jenhaochen@google.com>
+References: <20260927131838.6774-1-demyansh@gmail.com> <20260927184414.6c0c8867@pumpkin>
+ <CAOLeWCt+yFs29yWg6DrRH42HD9ConLgTEbW=wMKtEoTW5ROHvw@mail.gmail.com>
+ <CAHfVqdX4AmqXs_oD5OCjU8R5ts=98=RmgCmJ3D5gLyk=Xtrfkw@mail.gmail.com>
+ <CAOLeWCu4NiedyXmoLwwnTvJitRwgg6PQq9LApO=k36ktN3-XWA@mail.gmail.com>
+ <20261102161426.2403d308@pumpkin> <CAOLeWCviRtGMhGJQx3HHFQOze439576PQqr4tmvjGkMMfYfcog@mail.gmail.com>
+ <20261103223846.5e6a1dfc@pumpkin>
+In-Reply-To: <20261103223846.5e6a1dfc@pumpkin>
+From: Demian Shulhan <demyansh@gmail.com>
+Date: Thu, 5 Nov 2026 12:41:54 +0100
+X-Gm-Features: AclHuK8YmBfrvU8U1rrj8-xeeVAzdXMtREA20yl9x0xVbHvq-vQqOjWILfZrKI8
+Message-ID: <CAOLeWCvDKWAuCJ1cW1bbhtmvhV6ei2cPYcQVw_4sM+i1tc+-wg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] arm64: csum: Add fused copy and Internet checksum
+To: David Laight <david.laight.linux@gmail.com>, 
+	saeed bishara <saeed.bishara.os@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Marco Elver <elver@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Robin Murphy <robin.murphy@arm.com>, David Gow <davidgow@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On (26/11/05 10:39), Jenhao Chen wrote:
-> On (26/11/05 14:23), Sergey Senozhatsky wrote:
-> > I suppose there is performance benefit?
-> > 
-> > I guess I don't mind in principle, one thing to note is that this conflicts
-> > with [1].
-> > 
-> > [1] https://lore.kernel.org/linux-kernel/20261105044752.1997895-1-senozhatsky@chromium.org
-> 
-> Hi Sergey,
+> The scalar path seems like generic C code and not restricted to arm64,
+> curious how that performs against existing (e.g. x86) assembly
+> optimized implementation.
 
-Hello,
+Hi David, Saeed,
 
-> Yes -- in a steady-state microbenchmark of paired alloc+write and free
-> operations across 8 compressed object size classes (384..3136 B):
-> 
-> 1. On current mm-new (zs_malloc + zs_obj_write + zs_free):
->    - Clang 22 -O2: -7.7 (arm64) / -11.8 (x86_64) retired instructions
->      per pair (-3.2% cycles on x86_64).
->    - Clang 22 -O2 + CONFIG_AUTOFDO_CLANG: -13.0 (arm64) / -17.5 (x86_64)
->      retired instructions per pair (-4.8% cycles on x86_64), while
->      shrinking zs_malloc() from 2,872 B to 1,828 B on arm64 (-36%) and
->      2,088 B to 1,474 B on x86_64 (-29%).
->    - GCC 15 -O2 (x86_64, without AutoFDO): GCC leaves both obj_malloc()
->      (306 B) and obj_free() (120 B) out-of-line while inlining the
->      single-caller slow path alloc_zspage() into zs_malloc(); the patch
->      saves -23.7 retired instructions per pair and shrinks zs_malloc()
->      from 1,738 B to 1,441 B (-17%).
+I tested David's sum64() loop, with the store added, on x86-64 and arm64.
+It is portable and correct on both, but no single C form was fast on
+both:
 
-Cool.
+- x86-64, vs csum-copy_64.S (GCC 15, Clang 19-22): with dst alignment
+  and 64 bytes per pass it reaches 0.89-0.94 of the asm. The form costs
+  two ALU ops per word (add + adc $0) against one adc in the asm, so even
+  a hand-written asm version of it stays at 0.94-0.98.
+- arm64, vs the scalar loop from my series (four accumulators,
+  res + (res < data)): the same 64-bit loop is 0.90x, while the same
+  loop on 128-bit val/sum with 2-4 independent lanes is 1.19-1.24x. On
+  x86 those 128-bit lanes drop to 0.40-0.52 of the asm with GCC.
 
-> 2. Rebased on top of [1] (zs_store + zs_free):
->    In [PATCH 6/7], the new static obj_write() helper has two call sites
->    in zs_store(), so both Clang 22 -O2 (360 B on arm64, 219 B on x86_64)
->    and GCC 15 -O2 (obj_write.isra.0, 229 B on x86_64) leave obj_write()
->    out-of-line as well. In the zs_store() fast path, obj_malloc() packs
->    (m_zpdesc, obj, zspage->class) via location_to_obj(), and the
->    out-of-line obj_write() immediately unpacks obj_to_location(),
->    recomputes offset_in_page(class->size * obj_idx), and re-checks
->    !ZsHugePage(zspage).
-> 
->    If we also mark obj_write() __always_inline alongside obj_malloc()
->    and obj_free() (with noinline on alloc_zspage()), the compiler CSEs
->    those redundant operations across the fast path:
->    - arm64 (Clang 22): -31.3 (-O2, -4.0%) / -34.7 (-O2 + AUTOFDO, -4.5%)
->      retired instructions per zs_store() + zs_free() pair (vs. -8.4 for
->      obj_malloc() alone), shrinking zs_store() under AUTOFDO from
->      3,144 B to 2,448 B (-22%).
->    - x86_64 (Clang 22): -26.6 (-O2) / -31.8 (-O2 + AUTOFDO) retired
->      instructions per pair (~4.0-4.5% latency reduction).
->    - x86_64 (GCC 15 -O2): -37.1 retired instructions (-5.1%) and -5.3%
->      latency (-5.5% cycles) per pair, while keeping zs_store() slightly
->      smaller (1,997 B -> 1,943 B).
+So I'll keep it in arch/arm64, and x86 keeps its asm. In the next
+version I'll move the loop to 128-bit val/sum with independent lanes,
+the same way arm64's do_csum() already works on __uint128_t.
 
-Great, I'd love to see that in v2 commit message.
+Demian
 
-> Would you prefer that I send v2 rebased on top of [1] (including
-> __always_inline on obj_write()), or send v2 against current mm-new
-> first?
-
-If it doesn't trouble you too much, can we finalize [1] first so then
-you can send your patch atop of it?  I can ping you when [1] is done.
+=D0=B2=D1=82, 3 =D0=BB=D0=B8=D1=81=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 23:38=
+ David Laight <david.laight.linux@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Tue, 3 Nov 2026 16:47:29 +0100
+> Demian Shulhan <demyansh@gmail.com> wrote:
+>
+> > > .L4:
+> > >         ldr     x1, [x0, x4]
+> > >         adds    x2, x2, x1
+> > >         cinc    x3, x3, cs      # adc $0,%rxx on x86
+> > >         adds    x4, x4, 8
+> > >         bne     .L4
+> > Agreed, that is a nice loop for the sum-only case, one dependent op on
+> > the sum chain and no builtin needed.
+> > For the copy case I tried the same form on x86 (Zen 3, GCC 15, Clang
+> > 19-22, -O2) with a store added, against csum-copy_64.S, as posted it ra=
+n
+> > at 0.85x of the asm with GCC and 0.73-0.76x with Clang (which rewrites
+> > it into setb/adc), and ~0.8x unrolled 2x/4x - a bit slower than the
+> > posted 4-accumulator loop (0.88-0.95x).
+>
+> I just added *(u64 *)(dest + count) =3D val to one of my loops.
+> gcc just replaces the 'add from memory' with mov/mov/add.
+>
+> I'm now confused though, I seem to be getting different output from earli=
+er.
+> With -Os (which I didn't think I was passing) clang is refusing to do the
+> 'offset from end of buffer' loop.
+> With -O2 it bloats everything by unrolling 4 times and adding lots of
+> extra instructions.
+> (AFAICT the optimiser has a completely incorrect cpu model.)
+>
+> If the compiler doesn't generate the expected code it is all pointless.
+> The xor parity code loop had to be in the asm block to stop the compiler
+> changing it to a much slower form.
+>
+> For the checksum code I have managed to work out how many bytes/clock
+> the code was generating and getting it to (reasonably) match the expected
+> values.
+> But you have to use relatively short buffers to avoid D-cache effects.
+>
+> David
+>
+> >
+> > =D0=BF=D0=BD, 2 =D0=BB=D0=B8=D1=81=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 1=
+7:14 David Laight <david.laight.linux@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
+> >
+> >
+> > >
+> > > On Mon, 2 Nov 2026 16:14:06 +0100
+> > > Demian Shulhan <demyansh@gmail.com> wrote:
+> > >
+> > > > > The scalar path seems like generic C code and not restricted to a=
+rm64,
+> > > > > curious how that performs against existing (e.g. x86) assembly
+> > > > > optimized implementation.
+> > > > Depends. I think __builtin_addcll() is needed to get roughly the sa=
+me
+> > > > performance as the asm version. In my tests GCC on arm64 turns it
+> > > > into adds + cset instead of adcs like on x86.
+> > > > But I will look at it, thanks!
+> > >
+> > > The C version I posted earlier has the loop:
+> > >     buf +=3D count;
+> > >     count =3D -count;
+> > >     sum =3D carry =3D 0;
+> > >     do {
+> > >         val =3D *(u64 *)(buf + count);
+> > >         sum +=3D val;
+> > >         carry +=3D sum < val;
+> > >     } while ((count +=3D 8));
+> > >
+> > > for aarch64 you get:
+> > > .L4:
+> > >         ldr     x1, [x0, x4]
+> > >         adds    x2, x2, x1
+> > >         cinc    x3, x3, cs      # adc $0,%rxx on x86
+> > >         adds    x4, x4, 8
+> > >         bne     .L4
+> > >
+> > > I suspect that is close to optimal - especially for fast cpu with
+> > > out of order execution.
+> > >
+> > > https://godbolt.org/z/eso79K7Wq
+> > >
+> > > David
+> > >
+> > > >
+> > > > =D0=BF=D0=BD, 2 =D0=BB=D0=B8=D1=81=D1=82. 2026=E2=80=AF=D1=80. =D0=
+=BE 12:44 saeed bishara <saeed.bishara.os@gmail.com> =D0=BF=D0=B8=D1=88=D0=
+=B5:
+> > > > >
+> > > > > On Sun, Nov 1, 2026 at 3:34=E2=80=AFPM Demian Shulhan <demyansh@g=
+mail.com> wrote:
+> > > > > >
+> > > > > > I would prefer to keep only the scalar version of the fused cop=
+y+csum.
+> > > > > > It reads the data once instead of twice, and on real Armv9 hard=
+ware it
+> > > > > > cuts end-to-end cycles/byte for bulk TCP over WireGuard by 3-12=
+%
+> > > > > > depending on the core (+6-8% throughput). It uses only general-=
+purpose
+> > > > > > registers, so there is no FPSIMD state to save and it is safe i=
+n any
+> > > > > > context.
+> > > > > >
+> > > > > > If you are OK with the scalar path, I can send v2 with NEON dro=
+pped,
+> > > > > > the scalar path only, and the KUnit fix for the x86 zero-length=
+ case
+> > > > > > Jakub reported.
+> > > > > >
+> > > > > The scalar path seems like generic C code and not restricted to a=
+rm64,
+> > > > > curious how that performs against existing (e.g. x86) assembly
+> > > > > optimized implementation.
+> > > > > saeed
+> > >
+>
