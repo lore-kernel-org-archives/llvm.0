@@ -1,96 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793828929;
-	b=18yPWIcKXfOJywRVriv7uArR+IsHwTGjSiLZx5x/mfoz1DuGY0a+FadETbbzK09M5/5s
-	 DFAb29jxcRzh5o9uhPT6nA3GF9ZUTMkYh6QcjDkMC+HqH2JYV6nUHxJu+wXv9SOVozW0+
-	 IZ9XwlFee3mdEA1jizqBjnhM4Exa6IoZG+DswtINqbnej1aqj6kH8noNn/JyaWPeT5nbe
-	 vdiCyUq4P+kAS6F64LJ9EJdeUQv3Ua/oWVC4wV7n2/40xVrQxznzYwCNVGndkURUliV9T
-	 9aulWDNAiQXKkunaQewyWPqsqmwuu1MHZQ/a5iqmrOhCO3SH17pd1WF5d/oVpFPoSJw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793828929;
-	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
-	 Received:Date:From:To:CC:Subject:User-Agent:In-Reply-To:References:
-	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=SHFgE/WaGAeK4UOjOp1+4JBcLoloJxsJmOJMM9MQxG0=;
-	b=AJFkl9vTKFT2pUkBdVrhrUw3KU4oip4msNW04pYH5pao4AIAZjm+mUGqUAKFwcwgYZuo
-	 CBUI1i5WjMhL3PZ56a9XIcrgG+hJbqWbQ7jAFALc94qI6jPqDHtKardAcUdaDvsUf/VRG
-	 kwe0WrZDz5y66O2haagIXMruY5AfjdykvPGRnPO/jJ0I0pIM0A7XrkNviHScEixTE1zVE
-	 OQnD9A5EnDos/NYCN6t8SIwmZl9rWcuUygKsXf3t0J6Gn4rXqhIccnGt+4IoheYcGpI6y
-	 k8eVnCmDqx9P2g2+2i/T35D5r65dmTwDRCZ5N29Kwai2aE6bujZR0I5QXgueqpa5xzw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=alien8.de;
-	spf=pass smtp.mailfrom=alien8.de;
-	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=TD9I12Fp;
-	arc=none smtp.remote-ip=65.109.113.108
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.218.46
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793837167;
+	b=dmw8q/Gh0K6yPgnbsQ9jwd9cVKA+cqB6auHWO7LGtUnW3KqveH/b2wUwlNkIGq/8mFHh
+	 GeWhCRZWxzCEP+Sn0IHYp13O4WGGWDdkpaNfR3CP1VxuDsKAm1BvQj8iMiC7NGDMTnWBu
+	 15kzcsoDLMxlrj2SYsGVJRUL1u2TLapSShatH2hAJQwixZzwxynVxov9fIeRjDiQ0F0E6
+	 nwoystdPY52scO2CRw4PulMUGa5pJgzPjulbkwEq27lOHwhDofVGDlsdpW9pH9l1AqbEe
+	 RhHK5jtq59gkQi8eNTfYVamnWQ2wjBdKc4oEOTPO1uTpK7gmfmucnJPeQT77qq7fd+w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793837167;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+	b=ruRYLR4InKAMXQ+ZfWuGwuUDyQVpzztl1hhaR9gWSZ1Mv6oLOocbgY8qFLpsHvE/u06f
+	 V14uZYRL7lm0DvVRTSNUHPdoKrnHjKNNVEarpyy4T232XFrYY6PuyGAASgNdrDxQCI01M
+	 OmWwcP2C9WcfKLWKCjOhPrwYJoPxeSI/wL9/DAFrzamY2Apeez7LYmGNYON//eLtEwKdL
+	 ckZ/r9ma6OH5So+/+hz2jh04Lwqs6+Ig/zKvU54nrfAaEXsC51cgQccl78xEVyaq2Zm4e
+	 MkIC14LZQnEtaQXliNLLqtLN4Nlln/oBf096l/xRdALykBtqusDPsmonUervx19RSvw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CO3At2pl;
+	arc=fail smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7533607870E;
-	Wed,  4 Nov 2026 21:48:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7533607870E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EA6606A326
+	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 00:06:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6EA6606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key, unprotected) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=TD9I12Fp
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 11C4F40E0299;
-	Wed,  4 Nov 2026 21:48:46 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id CrM7iBdwWbJE; Wed,  4 Nov 2026 21:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1793828922; bh=SHFgE/WaGAeK4UOjOp1+4JBcLoloJxsJmOJMM9MQxG0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=TD9I12Fp2UZ5A34Ph3gVjDhiuACFFoBLifIOLvHudGewVLiKUN9jAJbCKSwAXN+U+
-	 qIRxDR5YTzSCMdNiaPUOyMkSRW1A3xzwOPt8I2TTswLk8GEWvbsLmjrNk6zpCcRRQq
-	 t9wEjIua0/4sejIJclDIU9oaErSzUdHDd3NZKl0qPcZo2E0jUCJQk0DwvmCyW/Yoj0
-	 C/ADlKjsqSqkpzwcc5Yee4JY8irCYXW54m9oz1ERiTQ4CZDiXN4ocSEtmdSiS1rVAe
-	 NmuvfID+rjCKdwFSVMdiv0bZp+AVR1RvdCgDbzCovgFgSnl1SLuSubxjFb7aa64mDM
-	 xKrkXEZxWGfajShqzsU93YnWZKdrDFO7SR3vkhmqy3lU3NVXb6V5QKXUfqEJ8lQsdS
-	 ZU3YUizwExg+8yHw4o9CAGqiqpcEMo3rI5teuL6NapqsljJSX50hhfDAdGL34zw3uS
-	 bMkouWGP8ubTWZ0N9CTxfwGwRmXvwt7ebe+H7wHhGGU0j/2MkhLRHVZmv8Xt9mVGgs
-	 J5YWUKnZkc+skWduuVEx07MRIFHMVCmW+54XnyF8zzonhE8C2LCuJr1GkwLf4CaLJd
-	 vjghyZks58S9u19Vb1DsRUR0M9a7xCIZJ/x6RZbY+K26AUYy0I3HzfN9NNSXPZA0LJ
-	 J92gFY3yG0hwSSXfsnqscL7c=
-Received: from ehlo.thunderbird.net (mobile-166-137-178-199.mycingular.net [166.137.178.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A861E40E0140;
-	Wed,  4 Nov 2026 21:48:01 +0000 (UTC)
-Date: Wed, 04 Nov 2026 21:18:41 +0000
-From: Borislav Petkov <bp@alien8.de>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-CC: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Matthew Brost <matthew.brost@intel.com>,
- =?ISO-8859-1?Q?Thomas_Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Xin Li (Intel)" <xin@zytor.com>,
- Brian Gerst <brgerst@gmail.com>, Nikolay Borisov <nik.borisov@suse.com>,
- linux-kernel@vger.kernel.org, Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
- llvm@lists.linux.dev, Jakub Jelinek <jakub@redhat.com>
-Subject: Re: [PATCH 0/4] Fix the x86 defconfig build with GCC 17
-User-Agent: K-9 Mail for Android
-In-Reply-To: <327c462a-3360-45fa-8398-4c23c1f2bd84@linux.dev>
-References: <20261104160722.1637541-1-vineet.gupta@linux.dev> <20261104162747.GAautdA2q2lw2gsth2@fat_crate.local> <327c462a-3360-45fa-8398-4c23c1f2bd84@linux.dev>
-Message-ID: <9A0C01CD-F821-4156-A975-E7FC67C636E1@alien8.de>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CO3At2pl
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c40f29667e6so205720566b.0
+        for <llvm@lists.linux.dev>; Wed, 04 Nov 2026 16:06:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793837165; cv=none;
+        d=google.com; s=arc-20260327;
+        b=V6HFSAfIYWsJTKESmDtunwJWgBIKRli/MHf6TWLEqUbzDUzmTFcj9JxsBnzhnAttDi
+         k/12TO9lncSQx5gxlFEeRxoiplyb508c0HNjujsoc31qr+3q9e5X3yPo8L3+uU8Vx40a
+         nCbR8EpWXyTvO5vzXIhbdqAxx1qvnnAYtSBiL91JOBMXP1K4FT4K6EtJKBigV8/CNH9c
+         lKvrgziztkJnysb8B3ISHImTpevx+AukJU8RkQv79Rk5zV+QPGXX2haJqIhThQqrXakG
+         TiVQl5ccTGprl8DVQrJkSppGz3xjjj4K2oGEh5Wy0J7H8GuKVtLdcuKnkEsLhQ4x4UTU
+         z9UQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        fh=Ry3OhSniKFN5X/B8XazbRXWa7yc2LKPLfFmkAeyv13A=;
+        b=mF0jCC9mwjn2QnDd81UsQuUQq85Rey5l66Z8vu0B7UWZYRrKrZ0sfWN67XeDtxReqK
+         7/mYwbrdr29/Fw+VG1sN3lSUQac0TlW80pjwEjaqV1UrqI7q29VlWiLmHOMEeZev5fK7
+         lI4+wbrWbjgd7fDjD5Vaw3+r6wJs9fkFpmzzZJFg+cZFcsne/z04dyj/Rye/tmtQIE3E
+         ljXrO8a78Tjux0tLA8F8hPPr1Q9mHPWVua/5adscxR2ADvQznC+i+aGUW0snFT7HYX9v
+         hinWAToSshMRR4WQDX6dzULP5jKtcC/UJ3Thi1ecs7n8V1oefZ04ajXXcWbJGDEZhG6U
+         58aQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793837165; x=1794441965; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        b=CO3At2pl2ZtVyOHXonC4LPA3VgZNjMQpS+vKvwt+I48TBxj9TI4mVWELMmeWf+fjNQ
+         G6sHSmKG3rpLwLtmirXIWsK2ZYyjx0uc5Ap7L0e3Hcc45lMUKzVaCJQX4BY3YdqJD8qJ
+         KoInGRVaZGlHe/f9KVlnc6Oez5F2MoI+gTc8TuU6b6JdIJqmCc/lN+HI8RL6hgrS8NrS
+         RqkIfMtDQ9/cKdQj8HVcVqjgFfuBUsio/bap/upilqyTX/PiMgrzg/YHzpTbIU1C4NYx
+         gN816fN5HTMkS7bXYAVrxDCNfvvNJH0KUWzjoPRTi9CqSqoqHa7Q9dV+KcjO+02ZIohU
+         Rjpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793837165; x=1794441965;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        b=AzlKEMoo3xgoDsbMXheDARI+9wJqDd/FBBw/pSVXoYjY72QY8XEs6b73r2kwVCKS89
+         Zy5drTAvqFFDJLzl50M8LJbsrqiZxPYUWtf5j8TbSmgv0s5NoEsLgcd/C5eLF4FqdLlY
+         jTxCj7prWjbC+K8N5lqrDrgf4jnCGyJrm+cghya5Wpb0AYL08jIKYMAuPm5H7hjCitTV
+         qohX2/RNEAsULS1a/EuzcuGZgEu2LjQEn9hZFfUBVMqhc54UWjVvnxMweiecdR6z1jJ4
+         FNMxY1x48QKkTx+sRq4uljbe+1uj2hZl1QGBbdjstcpeoiY3yTrvStZEkvhwWrVm08mZ
+         pZAA==
+X-Forwarded-Encrypted: i=1; AKwUvByFrx+tUjEO8COsUdrNfDeQ9gElPBqLm9krBNTrWZAY6tiMDk8p+QUVyAY5RKpw3olfI+Is@lists.linux.dev
+X-Gm-Message-State: APuU4Z/5nZnA7DeE2yEdXBJJhSzh/LNZwmiBGf/qwvmwQh6ff52IXx8u
+	rMjSXE5ZyRWltcKRK0TBeYhZh0D2/igIWANC6Ndj+JR6kZ7NIFIZlkkqT6GaFHGIvWlI5Iio5es
+	KOfsep1C7Cy9bbUrqnC/4PP9lJp6Yp2GzPTmAz2nQ
+X-Gm-Gg: AYBFou200kuVSQhzjhWCQSqPruxuqFU6LZi1GGBVnNcAeDYHnJvNj9TByOOaD1PdOfo
+	biDD2Qh0LfvBRXAjDsZicdaKnR/8Wp6BQtfWqkf3GzygyBJi+J4Vsn9fIEfJSBtaSPXTuhJBRtQ
+	zEE1LJG8HBqAZTIlCEryZGUcq+eldAsWLmdqytAmczXEIhW8g8Bemf8/G3mPtkbjp922+GBrEkk
+	3WQDDrn1BTDq0GWlarRB1axOWhRqj+pKcMcFE3BVmRVI4aYOUvlmy4qMB5TMm+RDRxPnXS9G1AN
+	6xmYVPmCw7dLr33HrrvwaW64QlNcBq0H/kXq97LHX5Mmjxeweeuk+E5b/3oTcGLIaIRNwRSYsKZ
+	E3IM71ZUR76mBhhkQWlgAXv/J8xfxAmLIaVQAdQyKNYI83xNzl+lP/clzbCIoCv4qQPFY60s=
+X-Received: by 2002:a17:907:3351:b0:c4c:b560:2a71 with SMTP id
+ a640c23a62f3a-c4cb5603d9emr979541566b.36.1793837164883; Wed, 04 Nov 2026
+ 16:06:04 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -100,56 +104,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
+ <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
+ <20261030100215.6f8e0d4f@pumpkin> <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
+ <20261104142307.431fc12f@pumpkin>
+In-Reply-To: <20261104142307.431fc12f@pumpkin>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 4 Nov 2026 16:05:52 -0800
+X-Gm-Features: AclHuK8Z7yNuvzdyvQXTyXXmXbvszi-XVmOSWc_IPj379xX-z3zgWWYR8Kt4UgU
+Message-ID: <CAG2KctrY6GmVqsKP+fXYCsL6wDR4zp1kdRd7a7uOdCgg_JcMdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On November 4, 2026 6:05:27 PM UTC, Vineet Gupta <vineet=2Egupta@linux=2Ede=
-v> wrote:
->+CC Jakub
+On Wed, Nov 4, 2026 at 6:23=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
 >
->On 11/4/26 8:27 AM, Borislav Petkov wrote:
->> On Wed, Nov 04, 2026 at 08:07:17AM -0800, Vineet Gupta wrote:
->>> Fix build warnings and failures (CONFIG_WERROR=3Dy) with a GCC 17 buil=
-d=2E
->>> GCC 17 adds -Wconstant-logical-operand which is strict about operands
->>> of && or || that fold to a constant other than 0 or 1=2E
->> Just from looking at it, my initial reaction would be to disable that o=
-ption=2E
->>=20
->> Because, frankly, I don't see the point=2E
+> On Tue, 3 Nov 2026 17:14:26 -0800
+> Samuel Wu <wusamuel@google.com> wrote:
 >
->Here's my 2 cents:
+> > On Fri, Oct 30, 2026 at 3:02=E2=80=AFAM David Laight
+> > <david.laight.linux@gmail.com> wrote:
+> > >
+> > > On Thu, 29 Oct 2026 15:05:45 -0700
+> > > Samuel Wu <wusamuel@google.com> wrote:
+> > [...]
+> > > > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
+> > > > would be different symbols at different addresses. Please correct m=
+e
+> > > > if I'm missing something here!
+> > >
+> > > Only that the user might really want one of the copies.
+> > > Sometimes there is only the copy.
+> >
+> > Good point. I'll have v3 add KALLSYMS_F_PREFIX + pos/next_pos
+> > pagination to cover these. A prefix query for "foo." also finds the
+> > copies when plain foo does not exist (expanded on this in my reply to
+> > Andrii's Oct 30 mail in this thread).
 >
->I wondered if this brings any codegen improvements, since we are telling =
-the compiler that something is 0 or 1 vs=2E some other range before=2E And =
-it doesn't, because of the way it is used=2E So focusing on just 1/4=2E
+> I'm busy rebasing my patches - they got stamped all over :-(
+> I should get a v3 that applies by the end of the week.
 >
->- Constant bit: __builtin_constant_p(bit) && MASK_BIT_SET(bit) folds at c=
-ompile time to the same truth value, with or without the !! bool conversion=
-=2E
->- Variable bit: __builtin_constant_p(bit) is 0, so && short-circuits and =
-the mask is never evaluated=2E
->
->Basically, the masked value never reaches generated code, so compiler get=
-s nothing new to work with=2E
->
->So I did some digging, and turns out that it can be helpful to catch bugs=
- in the source code itself=2E In fact GCC implemented the toggle at all, wh=
-en Jakub spotted an issue with a typo: (data->flags && ff_genericize) vs=2E=
- (data->flags & ff_genericize)=2E
->
->In kernel, the predicate like *_BIT_SET() not returning a bool is not cle=
-an IMO and it used to return 0/1 before anyway so its not like we are going=
- out of the way here=2E
->
->I'm mildly in the favor of keeping the warning, but ultimately your call,=
- I can respin with it disabled=2E
->
->Thx,
->-Vineet
+> I will add a 'prefix' variant for you.
+> The 'next symbol matches' flag is exactly that (actually it is a
+> this symbol is a duplicate to avoid issues at the start of the array).
+> So in this case that application would always need to read
+> the next symbol (by name).
 
-You might wanna look at the W=3D switches we have for less popular and mor=
-e noisy options
---=20
-Small device=2E Typos and formatting crap
+Thanks, that would be helpful. For my v3, I'll keep the lower_bound()
+approach so the two series stay independent, but I can switch over
+once your series lands, so there is only one search over the name
+table.
+
+> I think it might be more sensible (less pitfalls later on) to return
+> the symbol number - not that of the next one.
+
+What pitfalls were you anticipating? If the current symbol's position
+is returned, userspace needs another ioctl() call and an -ENOENT
+check, to learn that there are no more matches. Alternatively,
+returning the next position means every call pays for a look-ahead,
+which for an unfiltered query walks the module symbols even when
+userspace only wants the first match.
+
+Andrii, do you have a preference between the two?
