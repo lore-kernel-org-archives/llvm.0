@@ -1,100 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.218.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793837167;
-	b=dmw8q/Gh0K6yPgnbsQ9jwd9cVKA+cqB6auHWO7LGtUnW3KqveH/b2wUwlNkIGq/8mFHh
-	 GeWhCRZWxzCEP+Sn0IHYp13O4WGGWDdkpaNfR3CP1VxuDsKAm1BvQj8iMiC7NGDMTnWBu
-	 15kzcsoDLMxlrj2SYsGVJRUL1u2TLapSShatH2hAJQwixZzwxynVxov9fIeRjDiQ0F0E6
-	 nwoystdPY52scO2CRw4PulMUGa5pJgzPjulbkwEq27lOHwhDofVGDlsdpW9pH9l1AqbEe
-	 RhHK5jtq59gkQi8eNTfYVamnWQ2wjBdKc4oEOTPO1uTpK7gmfmucnJPeQT77qq7fd+w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793837167;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793843187;
+	b=by0os2FxhjCeCvLWPnWjYAdS1sdEncSReImVbtNavZVx/X4y5hbh9kWBrNwxuvA2xJ0n
+	 DBEv4/qGmYaLPDeY93PlsyS2MTd8WhFPPVB7DyCvYK49XpfY90/m792ht0xcTserv2XiJ
+	 mSg86ds5io0tpdXauJdMS66ImXIzEMpB8OCPrB7fBs3xitpEPDDRfN8giI+ZpJPmBEdj7
+	 xlJ3jXE4JvVAKa+AiBZeRFdBHbVVjX1LjcR7TrN62gabKBF97h3AM7y5WiPVRd3CYut5X
+	 Veeq2fNvwTZGF5AS4d1MXFWMP61fkcUUo0QgguqonFrmOFxxWf6CK3RT4d7/SkAdsVg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793843187;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
-	b=ruRYLR4InKAMXQ+ZfWuGwuUDyQVpzztl1hhaR9gWSZ1Mv6oLOocbgY8qFLpsHvE/u06f
-	 V14uZYRL7lm0DvVRTSNUHPdoKrnHjKNNVEarpyy4T232XFrYY6PuyGAASgNdrDxQCI01M
-	 OmWwcP2C9WcfKLWKCjOhPrwYJoPxeSI/wL9/DAFrzamY2Apeez7LYmGNYON//eLtEwKdL
-	 ckZ/r9ma6OH5So+/+hz2jh04Lwqs6+Ig/zKvU54nrfAaEXsC51cgQccl78xEVyaq2Zm4e
-	 MkIC14LZQnEtaQXliNLLqtLN4Nlln/oBf096l/xRdALykBtqusDPsmonUervx19RSvw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CO3At2pl;
-	arc=fail smtp.remote-ip=209.85.218.46
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=ATA0RCqsuqMmSXCAjjT1HB7LWYQ+QvBN0eEjjs3jy80=;
+	b=dAhI0rokLSCBkTSIiWxlU5EWsi+TFTRtXTF3nnqtqr20mnwenPlt4ibeXsuzWHiSBBJs
+	 ZDJnu58F5APlD47WZiOc+8q4bgqo+sJpiiFQDjAy1nHjVtKN8aw+G1Ydru21TmSxa9Ltd
+	 sSwYizz1eQp/VpVL56/pOzw4qGHMzPm5Qxm7CKU/7sPLOy9q8N55yveRQX06L4XWyop0D
+	 6mVJh326tUUYbmvJXpuGEJoxowoC/feUKIlpx4pTyVrfxl2E9h2XrtMETXu7/YwUERtmR
+	 h7TLjZlTwfKUnEGc9PkguTHCr5SOSpncnyRKWuNgIBALhY7vLK7DygZcbXU+EXlU+8Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=chromium.org;
+	spf=pass smtp.mailfrom=chromium.org;
+	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=kDg4uz53;
+	arc=none smtp.remote-ip=74.125.82.172
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EA6606A326
-	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 00:06:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6EA6606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32767606A326
+	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 01:46:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32767606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CO3At2pl
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c40f29667e6so205720566b.0
-        for <llvm@lists.linux.dev>; Wed, 04 Nov 2026 16:06:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793837165; cv=none;
-        d=google.com; s=arc-20260327;
-        b=V6HFSAfIYWsJTKESmDtunwJWgBIKRli/MHf6TWLEqUbzDUzmTFcj9JxsBnzhnAttDi
-         k/12TO9lncSQx5gxlFEeRxoiplyb508c0HNjujsoc31qr+3q9e5X3yPo8L3+uU8Vx40a
-         nCbR8EpWXyTvO5vzXIhbdqAxx1qvnnAYtSBiL91JOBMXP1K4FT4K6EtJKBigV8/CNH9c
-         lKvrgziztkJnysb8B3ISHImTpevx+AukJU8RkQv79Rk5zV+QPGXX2haJqIhThQqrXakG
-         TiVQl5ccTGprl8DVQrJkSppGz3xjjj4K2oGEh5Wy0J7H8GuKVtLdcuKnkEsLhQ4x4UTU
-         z9UQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
-        fh=Ry3OhSniKFN5X/B8XazbRXWa7yc2LKPLfFmkAeyv13A=;
-        b=mF0jCC9mwjn2QnDd81UsQuUQq85Rey5l66Z8vu0B7UWZYRrKrZ0sfWN67XeDtxReqK
-         7/mYwbrdr29/Fw+VG1sN3lSUQac0TlW80pjwEjaqV1UrqI7q29VlWiLmHOMEeZev5fK7
-         lI4+wbrWbjgd7fDjD5Vaw3+r6wJs9fkFpmzzZJFg+cZFcsne/z04dyj/Rye/tmtQIE3E
-         ljXrO8a78Tjux0tLA8F8hPPr1Q9mHPWVua/5adscxR2ADvQznC+i+aGUW0snFT7HYX9v
-         hinWAToSshMRR4WQDX6dzULP5jKtcC/UJ3Thi1ecs7n8V1oefZ04ajXXcWbJGDEZhG6U
-         58aQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key, unprotected) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=kDg4uz53
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-353804b591eso2610915eec.0
+        for <llvm@lists.linux.dev>; Wed, 04 Nov 2026 17:46:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793837165; x=1794441965; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
-        b=CO3At2pl2ZtVyOHXonC4LPA3VgZNjMQpS+vKvwt+I48TBxj9TI4mVWELMmeWf+fjNQ
-         G6sHSmKG3rpLwLtmirXIWsK2ZYyjx0uc5Ap7L0e3Hcc45lMUKzVaCJQX4BY3YdqJD8qJ
-         KoInGRVaZGlHe/f9KVlnc6Oez5F2MoI+gTc8TuU6b6JdIJqmCc/lN+HI8RL6hgrS8NrS
-         RqkIfMtDQ9/cKdQj8HVcVqjgFfuBUsio/bap/upilqyTX/PiMgrzg/YHzpTbIU1C4NYx
-         gN816fN5HTMkS7bXYAVrxDCNfvvNJH0KUWzjoPRTi9CqSqoqHa7Q9dV+KcjO+02ZIohU
-         Rjpg==
+        d=chromium.org; s=google; t=1793843186; x=1794447986; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ATA0RCqsuqMmSXCAjjT1HB7LWYQ+QvBN0eEjjs3jy80=;
+        b=kDg4uz53iyTo3Xk7eFyi0xjkJnyRWuGPXvDRfv+NuEyjFtV1cdXfYSmKHSfed8Crdu
+         eaUsv6BN59B3YLa7hVzkXhrVmfnDJS1U3P5o6RNdqCN9NsJFCy4jtO9bZYALcme7sd6f
+         C28b1YeSUQMjSwPP6om2HJ304CA4UiSqb8TC4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793837165; x=1794441965;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
-        b=AzlKEMoo3xgoDsbMXheDARI+9wJqDd/FBBw/pSVXoYjY72QY8XEs6b73r2kwVCKS89
-         Zy5drTAvqFFDJLzl50M8LJbsrqiZxPYUWtf5j8TbSmgv0s5NoEsLgcd/C5eLF4FqdLlY
-         jTxCj7prWjbC+K8N5lqrDrgf4jnCGyJrm+cghya5Wpb0AYL08jIKYMAuPm5H7hjCitTV
-         qohX2/RNEAsULS1a/EuzcuGZgEu2LjQEn9hZFfUBVMqhc54UWjVvnxMweiecdR6z1jJ4
-         FNMxY1x48QKkTx+sRq4uljbe+1uj2hZl1QGBbdjstcpeoiY3yTrvStZEkvhwWrVm08mZ
-         pZAA==
-X-Forwarded-Encrypted: i=1; AKwUvByFrx+tUjEO8COsUdrNfDeQ9gElPBqLm9krBNTrWZAY6tiMDk8p+QUVyAY5RKpw3olfI+Is@lists.linux.dev
-X-Gm-Message-State: APuU4Z/5nZnA7DeE2yEdXBJJhSzh/LNZwmiBGf/qwvmwQh6ff52IXx8u
-	rMjSXE5ZyRWltcKRK0TBeYhZh0D2/igIWANC6Ndj+JR6kZ7NIFIZlkkqT6GaFHGIvWlI5Iio5es
-	KOfsep1C7Cy9bbUrqnC/4PP9lJp6Yp2GzPTmAz2nQ
-X-Gm-Gg: AYBFou200kuVSQhzjhWCQSqPruxuqFU6LZi1GGBVnNcAeDYHnJvNj9TByOOaD1PdOfo
-	biDD2Qh0LfvBRXAjDsZicdaKnR/8Wp6BQtfWqkf3GzygyBJi+J4Vsn9fIEfJSBtaSPXTuhJBRtQ
-	zEE1LJG8HBqAZTIlCEryZGUcq+eldAsWLmdqytAmczXEIhW8g8Bemf8/G3mPtkbjp922+GBrEkk
-	3WQDDrn1BTDq0GWlarRB1axOWhRqj+pKcMcFE3BVmRVI4aYOUvlmy4qMB5TMm+RDRxPnXS9G1AN
-	6xmYVPmCw7dLr33HrrvwaW64QlNcBq0H/kXq97LHX5Mmjxeweeuk+E5b/3oTcGLIaIRNwRSYsKZ
-	E3IM71ZUR76mBhhkQWlgAXv/J8xfxAmLIaVQAdQyKNYI83xNzl+lP/clzbCIoCv4qQPFY60s=
-X-Received: by 2002:a17:907:3351:b0:c4c:b560:2a71 with SMTP id
- a640c23a62f3a-c4cb5603d9emr979541566b.36.1793837164883; Wed, 04 Nov 2026
- 16:06:04 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793843186; x=1794447986;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ATA0RCqsuqMmSXCAjjT1HB7LWYQ+QvBN0eEjjs3jy80=;
+        b=Jz8JgKLKz6FA7I3mAgQGMGT8bNlL4yEY222AcmnsF1oy+nJrtfY19AiKLDZ5byQnEV
+         lo/Us6DyMtLgXkc/jPUqv7otYM3UcbcKPnD6zI4MYgViUWBgfDcpzNJ4pX5moFII1ZiY
+         IUlNwL6mGMPUBXE2g+r+P8r7IyveqQwHrFs1vel4A7ILRoV/d3CtupAHeRZZtKDZFpR7
+         GrVlvfeE+lq9fk0Ur75+XfJlZWFoM4TjSEEYHDGosAs1BuwlAgRydR3feuS4XU7Fz1Mm
+         LiW13V0Mzc1CCWxuq4A0MHAu7Gs0L8vBMSumU0y6Tqtp97Ds/I9ER2IWTQlEUVDtg2ZG
+         Ikcw==
+X-Gm-Message-State: APuU4Z/0j0o7h2rdHF5QrMmTjakbDMwxP9zgRRUeO4wl/37qRMJcA9co
+	4h0DTF2hDsm9126IkX20SOsAhUTQRSOEiAthSRsN27keCPN7jLXdMqfuWJR3JFCqQj/mbKZoVDV
+	4E0Pm4NWmb4E=
+X-Gm-Gg: AYBFou1yQJvIRLpoB+pZYFOEHZVUPL8Jg/+KrdAkmjrRKtylMStVzXcvaknVisSMCMM
+	Wcq4x2LdkDequAyXUxD7j5HTT6IdzC0DAYVWqDFkUW2OKbvTOS130ADMDrjSbUA/Hv/zCWJSTId
+	f63tSfrpgeWWE2NmI/oTm20TOJ9Dse16AzOaYIVqmHoVzWQwQPdZX8dukLEBkjF37r6NHJUxMLi
+	6I8ST+pos6p9lA/QNqDOs4JAri+Mr0GndFIoQxluZrBqtwrdsPbofyJq+WKcsS169DQy+uIiKxX
+	YDAT5O9Oy6B2z4FcDijY/mYSGrwZGtl350Nm4YjBT6Xelr+PBrfYDWkVRLDjm0A6gr76hsFhCW5
+	icd0kFtYK2pnWOYteX1F+N88dFUOWOKLzaoFPthW4rxmUCIuQ2folzUr3eJ+p0eRMyNPlfcGwVG
+	YA2zPy6S2l2ljBxUhGtvaTOOW06JrSYTs+a8w2hYp+BcbZ63hA2g34AhSEQcUGHGLeTdtHrK11W
+	lGQF/rKqXJQKBuG6JACXVDyErukmiH8XMVbuGpJ7ATrlxXvZAK6TA/Q8udh9JcYT/VIV2Zqq2vl
+	DOJkKmERyvdnSWpyLTBDjuYNk3rbHFkt6ak5CgMcBBZ0zBxWa+BhSDs+If500YSqFXROAGf073Q
+	d166LBqWBHpXgbQ==
+X-Received: by 2002:a05:7300:ae18:b0:369:f035:661 with SMTP id 5a478bee46e88-36a42389027mr22926230eec.15.1793843186083;
+        Wed, 04 Nov 2026 17:46:26 -0800 (PST)
+Received: from dianders.sjc.corp.google.com ([2a00:79e0:2e7c:8:e268:adf5:686b:4655])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca39b8eb3sm15294011eec.27.2026.11.04.17.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 17:46:24 -0800 (PST)
+From: Douglas Anderson <dianders@chromium.org>
+To: llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org,
+	Rong Xu <xur@google.com>,
+	Han Shen <shenhan@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: Han Wang <nesthanwang@google.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Benno Lossin <lossin@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Boqun Feng <boqun@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH] kbuild: AutoFDO: Enable -salvage-stale-profile
+Date: Wed,  4 Nov 2026 17:45:55 -0800
+Message-ID: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
+X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,80 +114,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
- <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
- <20261030100215.6f8e0d4f@pumpkin> <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
- <20261104142307.431fc12f@pumpkin>
-In-Reply-To: <20261104142307.431fc12f@pumpkin>
-From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 4 Nov 2026 16:05:52 -0800
-X-Gm-Features: AclHuK8Z7yNuvzdyvQXTyXXmXbvszi-XVmOSWc_IPj379xX-z3zgWWYR8Kt4UgU
-Message-ID: <CAG2KctrY6GmVqsKP+fXYCsL6wDR4zp1kdRd7a7uOdCgg_JcMdQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 4, 2026 at 6:23=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
->
-> On Tue, 3 Nov 2026 17:14:26 -0800
-> Samuel Wu <wusamuel@google.com> wrote:
->
-> > On Fri, Oct 30, 2026 at 3:02=E2=80=AFAM David Laight
-> > <david.laight.linux@gmail.com> wrote:
-> > >
-> > > On Thu, 29 Oct 2026 15:05:45 -0700
-> > > Samuel Wu <wusamuel@google.com> wrote:
-> > [...]
-> > > > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
-> > > > would be different symbols at different addresses. Please correct m=
-e
-> > > > if I'm missing something here!
-> > >
-> > > Only that the user might really want one of the copies.
-> > > Sometimes there is only the copy.
-> >
-> > Good point. I'll have v3 add KALLSYMS_F_PREFIX + pos/next_pos
-> > pagination to cover these. A prefix query for "foo." also finds the
-> > copies when plain foo does not exist (expanded on this in my reply to
-> > Andrii's Oct 30 mail in this thread).
->
-> I'm busy rebasing my patches - they got stamped all over :-(
-> I should get a v3 that applies by the end of the week.
->
-> I will add a 'prefix' variant for you.
-> The 'next symbol matches' flag is exactly that (actually it is a
-> this symbol is a duplicate to avoid issues at the start of the array).
-> So in this case that application would always need to read
-> the next symbol (by name).
+From: Han Wang <nesthanwang@google.com>
 
-Thanks, that would be helpful. For my v3, I'll keep the lower_bound()
-approach so the two series stay independent, but I can switch over
-once your series lands, so there is only one search over the name
-table.
+AutoFDO profiles are commonly collected on one kernel revision and
+reused across subsequent commits or stable merges before a fresh
+profile is generated. While AutoFDO uses function-relative line
+numbers to tolerate edits above a function, adding or removing lines
+inside a function (or an inlined helper) shifts all subsequent
+relative line offsets within that function. Without stale profile
+salvaging, shifted callsites fail to match their nested inlinee
+profiles in SampleProfileLoader (dropping profile-guided inlining for
+those callees) and basic block sample counts are misattributed to the
+wrong instructions, degrading branch probability estimation and
+machine function splitting.
 
-> I think it might be more sensible (less pitfalls later on) to return
-> the symbol number - not that of the next one.
+Enable LLVM stale profile salvaging (-salvage-stale-profile, supported
+since LLVM 17) for C, Rust, and ThinLTO builds when
+CLANG_AUTOFDO_PROFILE is specified. This instructs SampleProfileMatcher
+to use lexical callsite anchors within functions to fuzzy-match and
+remap shifted line offsets when querying the profile.
 
-What pitfalls were you anticipating? If the current symbol's position
-is returned, userspace needs another ioctl() call and an -ENOENT
-check, to learn that there are no more matches. Alternatively,
-returning the next position means every call pays for a look-ahead,
-which for an unfiltered query walks the module symbols even when
-userspace only wants the first match.
+While -salvage-stale-profile is not enabled by default in LLVM due to
+the minor compile-time/memory cost of sequence-matching callsite
+anchors (which is unnecessary when profiles are freshly generated on
+the exact commit being built) and the heuristic nature of fuzzy
+matching on heavily rewritten functions, enabling it makes sense for
+the kernel: hardware PMU profiles are rarely regenerated on every
+commit, and anchoring on callsite names is strictly more resilient
+than blind line-offset lookup when functions are edited.
 
-Andrii, do you have a preference between the two?
+As a side benefit, remapping shifted line offsets also avoids feeding
+mismatched weights from stale profiles into MIRProfileLoader's flow
+inference solver (applyFlowInference), working around a compiler bug
+[1] where a small intra-function line shift (such as in
+__vm_normal_page() in mm/memory.c) can cause applyFlowInference to
+spend 30+ minutes compiling unmap_page_range().
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/2188 [1]
+Signed-off-by: Han Wang <nesthanwang@google.com>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+Much of the commit-message justification here is AI-generated. Sorry!
+:( Folks who know better, feel free to call bullshit.
+
+Honestly, this patch came about because of AI analysis compiles taking
+30 minutes to run (see the clang bug [1]). It seems to work around the
+problem. Obviously, we should fix the compiler. That being said, upon
+further analysis it seemed like adding this flag was beneficial
+anyway, so I'm posting it upstream. If folks disagree, we can simply
+drop this patch.
+
+ scripts/Makefile.autofdo | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
+index 57a3aba6ffc2..3b1e65a13ffa 100644
+--- a/scripts/Makefile.autofdo
++++ b/scripts/Makefile.autofdo
+@@ -13,13 +13,16 @@ endif
+ ifdef CLANG_AUTOFDO_PROFILE
+   CFLAGS_AUTOFDO_CLANG += -fprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -ffunction-sections
+   CFLAGS_AUTOFDO_CLANG += -fsplit-machine-functions
++  CFLAGS_AUTOFDO_CLANG += -mllvm -salvage-stale-profile
+   RUSTFLAGS_AUTOFDO_CLANG += -Zprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -Zfunction-sections=y
+   RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-split-machine-functions
++  RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-salvage-stale-profile
+ endif
+ 
+ ifdef CONFIG_LTO_CLANG_THIN
+   ifdef CLANG_AUTOFDO_PROFILE
+     KBUILD_LDFLAGS += --lto-sample-profile=$(CLANG_AUTOFDO_PROFILE)
++    KBUILD_LDFLAGS += --mllvm=-salvage-stale-profile
+   endif
+   KBUILD_LDFLAGS += --mllvm=-enable-fs-discriminator=true --mllvm=-improved-fs-discriminator=true -plugin-opt=thinlto
+   KBUILD_LDFLAGS += $(call ld-option,-plugin-opt=-function-splitting=all,-plugin-opt=-split-machine-functions)
+-- 
+2.56.0.455.g6c5a503b38-goog
+
