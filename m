@@ -1,91 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793856235;
-	b=oe+dY3p9BLGaeIRbu7AyV7RESe8oVyL9HW3z43nyP0PmC2gJEmVsyzCyUs95P8sss3WA
-	 rPWbOTJTL2xCgUFMYjf6nHOreywNUYtG+LGJQ/Y43Iax5OYr36ApoKHBeIcvqZ0VfuSYq
-	 F9PIDNCYUOvqFFyEBl/BVK2GElCQrXhHor1v20TELOZbt4xqPC3wEGuFtwCPiGYf2oLAd
-	 7Je+jRthjF/Z/88pMxOeMrq1fYhZ61eYvg/EPbi08uBuoLgf6Tl1xQEAJbFEgk2HzR4UZ
-	 dLYptErzS+Fll6Vc+1x1t1OtbD0DWElcK/djuzlvtmNfiTYW12XDACmp1T8fNccCbGQ==
+	t=1793856249;
+	b=pIo+qtL4BuQ6sRmthtFZNO62QSkyz6EnSlpxhKJsedXRoUdUp3EpZghXxURgaKedQUZP
+	 DYgATphp6a9HfarW0l0bLeklUeTkc6xuQ4nN5RPkDTH8IGttXEY5ZEC3RPSe76Floyq/v
+	 ot5ATi7+FiQEbOXTv0bfvMXhZrazOM7ORTnJ+5bUY6SZMVN63rjhHqmQ9w3CI012gUzpf
+	 WEWgjtL5zCttkq8MLJMePUWpliwuORtI4aETBnFqzHiI7fsz7s5QhcOMo/1A4sKsLIS9G
+	 uCiY7g2CR9bzge7fHjzPS1qcowC+U1g5GIGR9I88hqio3Gx+vKRpD8dxas2oJtQ0Aig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793856235;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=qsGE+zCIXfvkQmpr977qsb3iEFIBRg95jemFmU7wQ5Y=;
-	b=gkKcgFsE7bKow5Kd5tv3bCCh4RkUPBidHGZxeOGsBAG7ua3a/lspyDIW0N3/rXCabBBv
-	 VHgwGG8GrcVCTfB/IJnrmc7JswjbR22L/sx4r5pltRDwu/sAWWwHM8uNvBz1XPSeD4IYq
-	 HBNbHsa9cMStS8PAMjh79izWqHwKKFKURXlfv1+76EKjalk/Rjz1TZCL9w5Lj5QV3SNWm
-	 ahLsx3kC8z7uCxsaU1BPmOiAOo0ekfoJsdnNe+sjmTXPYwN7o2bDxcFw0xqKlk/xkAvc7
-	 U6i3v0YjgyC5ahN5ym2LO+w+Je8cauVpxHyjiOqcWdjDHB5CFenDNrsp26crPUEwFSw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793856249;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=ILoB454xbFbHLsKflWQrUGwexE0/EjSSyi9KCdzFexA=;
+	b=WR+Gpb8BIrNaAhMWs5oGxipgoPN9O6XpG4ttpf0IzilLyeXWUejdX9pbGJ3G1mgt3Zaa
+	 KEMHV0CvA05fXmYWgt9JD6bkJaGiYaZS5EOUwjcwyQkyGLgRTrlhxRaSBNo34VG3/bQQ7
+	 ZUgBpyKY5Kz4DBPL0tT6+9lHnqf+KrPwqk8QcuX3DBTA1o5Rda/0BfMa/PJ9nJfR/d2YY
+	 0RoAVvxOakM37UNULmzdputqflKpX59ArbpTGwKmYiwbzjnMIvHER6ha3aypnOJ50nlxt
+	 Xba9S9A5GgA8b1aQAQLwoQUMuX3HP5a9OfikInU3JRfvTjmQaOml6vNkEfnBNHqPxsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chromium.org;
-	spf=pass smtp.mailfrom=chromium.org;
-	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=mkrLKNqG;
-	arc=none smtp.remote-ip=74.125.82.47
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=al++uHaj;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92708606A326
-	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 05:23:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92708606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B26D606A31B;
+	Thu,  5 Nov 2026 05:24:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=mkrLKNqG
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-15ea896ddc8so2554174c88.0
-        for <llvm@lists.linux.dev>; Wed, 04 Nov 2026 21:23:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1793856229; x=1794461029; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qsGE+zCIXfvkQmpr977qsb3iEFIBRg95jemFmU7wQ5Y=;
-        b=mkrLKNqGd/eT5DJqor+AD1wJa9KNeN90BoNP2Qr+8kc1L9Wwe84LQtDCD0UFt12jj3
-         MHMXSCNweGX3fM9IyPUwiYQwz1mLmBaBZZt95DC6dSP0BP9AwZrS/lhUZ+M6n3J2HUEN
-         JXPafylemxhTMQjT9J5al1q02Q8b9V33FgKuc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793856229; x=1794461029;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qsGE+zCIXfvkQmpr977qsb3iEFIBRg95jemFmU7wQ5Y=;
-        b=aNGS8CCvdf22w0qU7EiWOIoaYHi8omDJkS36DeZU3IDoddQTslKnjNja2eOgtaRwXM
-         1nIz5nL1MZYB/C3LO6vkTuSEburhEdtsSQ+UKHgrVeY5mMLG7rQ8m7v55Kg49kO3S4T9
-         fgxQYEJBi7+QWFHH+uzlS5etaN+fZtTswVH616nxbq/Qg04Df1J18SPiSqxfWPO6PbKY
-         tC0kf3UGAMVLNbvUV/420IC/GJz0TeUHmWz4vlY+zXwUxK9KJyOyw4NXY8C/Rn07YQ2Z
-         /Qi4EHmFk6JV0fkrMkBvm69gqDCSCnyPkIKKCXBo7M9LeOGjNmlcQBV2UrPvDDpNfU8J
-         MsIg==
-X-Forwarded-Encrypted: i=1; AKwUvBzK/OSAForIQH2xXw2mUKk8UUxiiipwRv2FHeLdiz7lZSlPHeNfSzcHNoO+Du1csdx4OFrm@lists.linux.dev
-X-Gm-Message-State: APuU4Z+uvikLfUGbllUAxD/m4eAqKeBiRNdH5LVvCtG+6RChYRUZI79I
-	s4h+i5zrEtjAoZXvJ7Yi6zqPomB0ma6NkN/PgEHPZ8MbLCI1mr6Gtkt4ayRTAce/Ig==
-X-Gm-Gg: AYBFou3kReZVWWd9HjWCyG+O5ALabNJB8X0bh81JE3ZEqKwE8/Oo4P6A290Hq6R8TLZ
-	MknzgkHEzKR87kamV4K12uP73UiKw8ZIvDWbJlB6QAbwTQEuY/BbiJ3XG6lN9/j3SdOJzV/XUc/
-	k53cShGqeByrZGHpiMa1o62QI0Q6K+PefHh8CBnH1bdGZ6FyR511zg1oLyXkG2yMw2pohHoc0Yq
-	4cKE8/Ksgy86IaP/K0IW4pXhFIMnV9oPosOoXTDbF43a4UCpCPaO6c5GR0bEA7AMeTLho6DQNuS
-	edJYlmUMaMvyCNGJhQJXfeL5n8sQ1Dp8lZYjcW0chX08rEdytZJlp94N8zalVe2FhRYnm2UyiwU
-	uQefzak6fGLnoH2FTAiExuciMbWAPmXUiBnKJBVFiTHTv73imxE4hxR414vQ8nqGDICyNUGsV1Z
-	2x1rwaLXO3/qy4JdFF65HBWqTo1j6L4LTVa1W8KnwCO1hquiPZwC6RZvjmXfjz1TgkSHk3yjpuU
-	/efvwlITAt/nLJK9rx3ibZ8cdnXFNrQ4ExPglE15IJU65SCOTVIe7HnX1ihGbQUYspnhAfYRd8Y
-	Um7fbhpMG4eISfyZ5UwBlJo3fqqVFp39MuTFl6kB1m1oXE6Gcux8Mq9I/h06B+RERLiR
-X-Received: by 2002:a05:7022:fc03:b0:1b2:46ee:4cc1 with SMTP id a92af1059eb24-1b246ee5347mr4936175c88.43.1793856228364;
-        Wed, 04 Nov 2026 21:23:48 -0800 (PST)
-Received: from google.com ([2a00:79e0:2031:6:37bc:b763:7ec7:65b4])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b245c463e9sm13218160c88.14.2026.11.04.21.23.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 21:23:47 -0800 (PST)
-Date: Thu, 5 Nov 2026 14:23:43 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Jenhao Chen <jenhaochen@google.com>
-Cc: Minchan Kim <minchan@kernel.org>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, minchan@google.com, liumartin@google.com, 
-	benwei@google.com
-Subject: Re: [PATCH] mm/zsmalloc: inline obj_malloc() and obj_free()
-Message-ID: <auwR7gnuLsF0lpmG@google.com>
-References: <20261030121700.260975-1-jenhaochen@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=al++uHaj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730981F000C1;
+	Thu,  5 Nov 2026 05:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793856249;
+	bh=ILoB454xbFbHLsKflWQrUGwexE0/EjSSyi9KCdzFexA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=al++uHajPhWFtt20R1WcEOxb8Dd6rDvN9EIezhWJy/I4xlz30ZbM5UX2wRMFEjlFl
+	 mTAMAD7jOoOzF7eoXch/QqG1oP36Apuy6IHF94e5zwYSG2ED3O1tktXh3LLuTMOniK
+	 9F7ivGgfG/ZPMC7roQCC2CLZyP1/VpsjOEfAMjkgQ0mWKlZf3Euj4ktxffzPt7olu5
+	 4SF+qGWMOL60bQmZeM/NEx14/lOdhGlOyQT3bTcAdFmxmGRk/GlVyEtn0+1JUu79C9
+	 I9EC7lUWQLeOGZhH3tuSze7oTzV9OU5BDpCGrkC+AW9Aw0618pGMCE+ml9yiG5DP+K
+	 Bt+JSPvZbRapA==
+Date: Wed, 4 Nov 2026 22:24:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Douglas Anderson <dianders@chromium.org>
+Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Han Wang <nesthanwang@google.com>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Benno Lossin <lossin@kernel.org>, Bill Wendling <morbo@google.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Boqun Feng <boqun@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH] kbuild: AutoFDO: Enable -salvage-stale-profile
+Message-ID: <20261105052401.GA862715@ax162>
+References: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -97,28 +75,98 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261030121700.260975-1-jenhaochen@google.com>
+In-Reply-To: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
 
-On (26/10/30 12:17), Jenhao Chen wrote:
-> In zs_malloc(), the fast path (if (likely(zspage))) allocates from an
-> existing zspage via obj_malloc(), while the slow path allocates a new
-> zspage via alloc_zspage().
+On Wed, Nov 04, 2026 at 05:45:55PM -0800, Douglas Anderson wrote:
+> From: Han Wang <nesthanwang@google.com>
 > 
-> Because obj_malloc() has three call sites across zs_malloc() and
-> migrate_zspage(), Clang at -O2 leaves obj_malloc() out-of-line, adding a
-> function call on every fast-path allocation. Conversely, because the
-> 362-instruction slow-path alloc_zspage() is static with a single caller,
-> single-caller inlining under CONFIG_AUTOFDO_CLANG (e.g. with
-> CONFIG_ZSMALLOC=m) inlines alloc_zspage() into zs_malloc(), growing it
-> from 254 to 691 instructions.
+> AutoFDO profiles are commonly collected on one kernel revision and
+> reused across subsequent commits or stable merges before a fresh
+> profile is generated. While AutoFDO uses function-relative line
+> numbers to tolerate edits above a function, adding or removing lines
+> inside a function (or an inlined helper) shifts all subsequent
+> relative line offsets within that function. Without stale profile
+> salvaging, shifted callsites fail to match their nested inlinee
+> profiles in SampleProfileLoader (dropping profile-guided inlining for
+> those callees) and basic block sample counts are misattributed to the
+> wrong instructions, degrading branch probability estimation and
+> machine function splitting.
 > 
-> Mark obj_malloc() and obj_free() __always_inline and mark alloc_zspage()
-> noinline to keep the fast path inline and the slow-path page allocation
-> out-of-line.
+> Enable LLVM stale profile salvaging (-salvage-stale-profile, supported
+> since LLVM 17) for C, Rust, and ThinLTO builds when
+> CLANG_AUTOFDO_PROFILE is specified. This instructs SampleProfileMatcher
+> to use lexical callsite anchors within functions to fuzzy-match and
+> remap shifted line offsets when querying the profile.
+> 
+> While -salvage-stale-profile is not enabled by default in LLVM due to
+> the minor compile-time/memory cost of sequence-matching callsite
+> anchors (which is unnecessary when profiles are freshly generated on
+> the exact commit being built) and the heuristic nature of fuzzy
+> matching on heavily rewritten functions, enabling it makes sense for
+> the kernel: hardware PMU profiles are rarely regenerated on every
+> commit, and anchoring on callsite names is strictly more resilient
+> than blind line-offset lookup when functions are edited.
+> 
+> As a side benefit, remapping shifted line offsets also avoids feeding
+> mismatched weights from stale profiles into MIRProfileLoader's flow
+> inference solver (applyFlowInference), working around a compiler bug
+> [1] where a small intra-function line shift (such as in
+> __vm_normal_page() in mm/memory.c) can cause applyFlowInference to
+> spend 30+ minutes compiling unmap_page_range().
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/2188 [1]
+> Signed-off-by: Han Wang <nesthanwang@google.com>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> Much of the commit-message justification here is AI-generated. Sorry!
+> :( Folks who know better, feel free to call bullshit.
 
-I suppose there is performance benefit?
+The justification does not seem wrong to me on initial read but it
+definitely feels like the first and third paragraphs could be reduced in
+verbosity since this can basically be summarized by "AutoFDO profiles
+are often reused, which can be problematic without profile salvaging
+enabled, which is designed for this exact situation".
 
-I guess I don't mind in principle, one thing to note is that this conflicts
-with [1].
+> Honestly, this patch came about because of AI analysis compiles taking
+> 30 minutes to run (see the clang bug [1]). It seems to work around the
+> problem. Obviously, we should fix the compiler. That being said, upon
+> further analysis it seemed like adding this flag was beneficial
+> anyway, so I'm posting it upstream. If folks disagree, we can simply
+> drop this patch.
 
-[1] https://lore.kernel.org/linux-kernel/20261105044752.1997895-1-senozhatsky@chromium.org
+I would definitely like to see that issue triaged but like you say, it
+probably does not need to done before this is merged since it has
+reasonable justification on its own. I would love to get thoughts from
+other folks though.
+
+>  scripts/Makefile.autofdo | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
+> index 57a3aba6ffc2..3b1e65a13ffa 100644
+> --- a/scripts/Makefile.autofdo
+> +++ b/scripts/Makefile.autofdo
+> @@ -13,13 +13,16 @@ endif
+>  ifdef CLANG_AUTOFDO_PROFILE
+>    CFLAGS_AUTOFDO_CLANG += -fprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -ffunction-sections
+>    CFLAGS_AUTOFDO_CLANG += -fsplit-machine-functions
+> +  CFLAGS_AUTOFDO_CLANG += -mllvm -salvage-stale-profile
+>    RUSTFLAGS_AUTOFDO_CLANG += -Zprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -Zfunction-sections=y
+>    RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-split-machine-functions
+> +  RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-salvage-stale-profile
+>  endif
+>  
+>  ifdef CONFIG_LTO_CLANG_THIN
+>    ifdef CLANG_AUTOFDO_PROFILE
+>      KBUILD_LDFLAGS += --lto-sample-profile=$(CLANG_AUTOFDO_PROFILE)
+> +    KBUILD_LDFLAGS += --mllvm=-salvage-stale-profile
+>    endif
+>    KBUILD_LDFLAGS += --mllvm=-enable-fs-discriminator=true --mllvm=-improved-fs-discriminator=true -plugin-opt=thinlto
+>    KBUILD_LDFLAGS += $(call ld-option,-plugin-opt=-function-splitting=all,-plugin-opt=-split-machine-functions)
+> -- 
+> 2.56.0.455.g6c5a503b38-goog
+> 
+
+-- 
+Cheers,
+Nathan
