@@ -1,95 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793880880;
-	b=CbOD+JYnajZnAGamaYbeRI2+RaEZRF2TCvIak7B7UOZf3x8c2SRVkLF+xLTmswt+46Vt
-	 UzuuQLep1DUd+K5DyjaeuHjG/rMvnubAJCyNUv9/tm5JiStfZdct5Y+NruhZ6oBUpMYiF
-	 0LaAD413Wh3w163Mkx6kRt5PZmlCJQgeBZLyiPz30sZRuJcGx7P/rQJC3V7RgIk9tOhoK
-	 ACdT8L9XcnyVnrc+R+qBSvZyEM/VCu9ZyLs8QgbULdaAWmAckwsLowfQH4+uG6fwuUZY2
-	 hPxzL9CJgdCh5PiwQfh66mDC4J3bjY94ziW1chFygBjleWfK2cTlwgV2KrmmZL6WLAQ==
+	t=1793881543;
+	b=eN86/4TY0AvyieL15K8ewiEj2Y9+2j5OuqWBPbUsXbvC0iKthCDmnOLNIPFkLifxrWta
+	 nKALDWAvHovwmUbWVjcFHpzK2nIdmhWaE+xUOVZlJZcQ38frbqgfqR7T+rwg2eOSLr4WE
+	 j+fDzVHxPFBcs9B8bURV0FhmVaMJULOq6sObgeTyKvjmZzIwbsCawozU0cbGsa1ugdD8p
+	 y9rzwFwrmOABKp2Zo1WV3TilNbfq65qQU3F6Eqy3zXsUgnUtuzIf+rwhXYiY55nWcNRol
+	 dE+Mw5bN7KXYHVeXlzTaXCNtKoKs2fgGDFgBF5TCn5VkbzMvfVrbLnE1RtcScKiWMPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793880880;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881543;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=cRwA5sbmlFTv4dr/TsrihpefpRsTJ7E+PJDAiAJhZlc=;
-	b=H4MtjM+q5HF/DsriJOlegoedWWef/juTEdRTpzNZrN9RBbAvn5xw/EM0LGE/zSxc7xEp
-	 3VvuOkvqznxQUYI3XK317v/ze7pN5hDvEw7bh9P7RFGfLnCD2w2+n07ZrMQIbnRDH+PGE
-	 p74YkdRohZkQroiweQkbwlwqmd7p7up+byEusZkHuXXYMz9J47dltMLcp9BQFtNm3sxS1
-	 t4YSkr7vpwE/fs5xMqY4kZspuYnQCN5xvzPpKTTSXzORyMt4gqYuHUHuv1GczbEhe9Yy/
-	 +lJYGXxcB1FVOd1Azkn9ZYILlIMljtaAIS+GVQyr4HDwC7cKHHL44gwB+SzoHn+fmRQ==
+	bh=ZSqGuWJBbHfF/m30cj+yySLDnLihqLhP2KpRjJlvDzk=;
+	b=GAI4dJz3A0DtRYu0R5+qiMAAtKnCcKmNT1UDaTqG58+h6AM99+z4FisCXhyu7MN8i0f/
+	 9DbKrVIO3ymfOzJp17Pd+91Rz0HiZ2CqbP/2CDjuWsSKIiySvgJ+mdMDD7iOsnmF+Lrlx
+	 A8gP2gNyjkNJkqzn60EzKE1EScTsJOYQjhqEYzdZnQgQEqsyCsLXoUItIKIu0enPsNVN+
+	 twWCAkGNXcqt0HLl7Qi7ppHFvgxBb9jzYHum/jxR3Rb/iG/uD+KYWu1dB98gRzHw4gLp2
+	 DND+GZdqHjPmUflJTBy6YeciWAcMw3Igopq16DFdOi5o8ET9kw9Hjnm0zxuoWzrwf1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=KtCaKHyM;
-	arc=none smtp.remote-ip=192.198.163.13
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kfxrwzy5;
+	arc=none smtp.remote-ip=198.175.65.11
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32658606D81D;
-	Thu,  5 Nov 2026 12:14:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32658606D81D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EBF606D815;
+	Thu,  5 Nov 2026 12:25:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64EBF606D815
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=KtCaKHyM
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kfxrwzy5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793880879; x=1825416879;
+  t=1793881542; x=1825417542;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hNZG3p/TmBT75mwn4JDU6B5IEwPzDkrT+siPwGcILcw=;
-  b=KtCaKHyMHxxht9DcYBJOaBrxoQ2w4pqfTvJ0n4e1LIgsQONR8E2mTAad
-   4x5LkcUHtl/MH0qClFiVu6l4alj7X7tArZlo7MZXhsnktxhk4CjPG7hjO
-   39eb2laydF4uCPMd+ZGeHUCXYLVK3XWNZYgXBQJYj5FaZO3yRxbwujkte
-   jfb3Zhw/wVvXrgbfwgGxhhIBla75nyrhWS16DL4csPsobeG7naU9nl63n
-   J10c6g+VbSmXL4KJpruQI5+cztiLLVyN554tjVxxnSLgVdWiRdn8rku4Y
-   MMBeIyCdaaTJhrp783ahqjsFu7BE1uFh8Ais1kn6roistt1Wr0sUi7xEA
-   A==;
-X-CSE-ConnectionGUID: TNkcB+fjReWjTiRZDbYSOQ==
-X-CSE-MsgGUID: 08/2pPFlRJGIAMWJ8G8EQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2659730"
+  bh=hULj/pENj1t0ZvVqG5iuX9V9t0+YHM1767U5NdVTqL8=;
+  b=kfxrwzy5V7y5TV1PzWdqrxuI+TxSG64UhMazkPQPEtTFcXJTlDEOYPmM
+   tm6SqraMNgl4X0TJ5Kmwcu8m1rBhXv/AOzLjQ4PGdrjG9utGE4o1E6Wrh
+   mJv2EZuuLOnd7Re7iokMkMDFptMoIJeKgnDEhn2iWwlzU9iogXwwKByqH
+   1RgtUL5VwWOuxWW4xQ1ywsWG94Ap9UXugM1BA9D3HUf7G51YjOEtMKior
+   y/uP64pjKbl+DR6qSterZnfa+pJWN+Hd4MHJiq+g12bQQGlrJfMG/uMfM
+   hqWXxPTQcLvilTPR7kylvNGTAp1FNJGT7Y1niCpJVDHvTfZEw2oVKZnIy
+   Q==;
+X-CSE-ConnectionGUID: iPfnISy+SNGusP3prGntlw==
+X-CSE-MsgGUID: 42o5OzZJSFytVheX6ffwGQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2551246"
 X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="2659730"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 04:14:38 -0800
-X-CSE-ConnectionGUID: n1CgJxqsSv2cC6PyZtAf1Q==
-X-CSE-MsgGUID: PaUjo+ZjS1y3BQJZcClOSA==
+   d="scan'208";a="2551246"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 04:25:41 -0800
+X-CSE-ConnectionGUID: oFa3uUGWSeuMY0Gq5/nLlg==
+X-CSE-MsgGUID: WKcOzA8qSq+TnJol5dU2yQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="7401165"
+   d="scan'208";a="8760659"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 05 Nov 2026 04:14:33 -0800
+  by fmviesa012.fm.intel.com with ESMTP; 05 Nov 2026 04:25:34 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xOwMP-00000000mAX-3Cl8;
-	Thu, 05 Nov 2026 12:14:29 +0000
-Date: Thu, 5 Nov 2026 20:13:50 +0800
+	id 1xOwX4-00000000mBP-1ah2;
+	Thu, 05 Nov 2026 12:25:30 +0000
+Date: Thu, 5 Nov 2026 20:24:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Muchun Song <songmuchun@bytedance.com>,
-	David Hildenbrand <david@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
+To: "Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
+	iommu@lists.linux.dev
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Ritesh Harjani <ritesh.list@gmail.com>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Oscar Salvador <osalvador@suse.de>, Qi Zheng <qi.zheng@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, x86@kernel.org,
-	loongarch@lists.linux.dev, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] powerpc/mm: drop powerpc vmemmap_can_optimize()
-Message-ID: <202611052055.TcIXFI7V-lkp@intel.com>
-References: <20261105061217.13302-3-songmuchun@bytedance.com>
+	"Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
+	Alex Williamson <alex@shazbot.org>,
+	Alexey Kardashevskiy <aik@amd.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Joerg Roedel <joro@8bytes.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Krishna Reddy <vdumpa@nvidia.com>, Lukas Wunner <lukas@wunner.de>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Samuel Ortiz <sameo@rivosinc.com>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	Steven Price <steven.price@arm.com>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Vasant Hegde <vasant.hegde@amd.com>, Will Deacon <will@kernel.org>,
+	Xu Yilun <yilun.xu@linux.intel.com>, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-coco@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v8 01/15] PCI/TSM: Move core code into its own directory
+Message-ID: <202611052018.S2OsLHjD-lkp@intel.com>
+References: <20261104161632.3547423-2-aneesh.kumar@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -101,158 +107,45 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261105061217.13302-3-songmuchun@bytedance.com>
+In-Reply-To: <20261104161632.3547423-2-aneesh.kumar@kernel.org>
 
-Hi Muchun,
+Hi Aneesh,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on dba8aba0a9a00ff781c03d82ae534fc6f8c2e263]
+[auto build test WARNING on 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/powerpc-mm-make-vmemmap_populate_compound_pages-static/20261105-141213
-base:   dba8aba0a9a00ff781c03d82ae534fc6f8c2e263
-patch link:    https://lore.kernel.org/r/20261105061217.13302-3-songmuchun%40bytedance.com
-patch subject: [PATCH v2 2/5] powerpc/mm: drop powerpc vmemmap_can_optimize()
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261105/202611052055.TcIXFI7V-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611052055.TcIXFI7V-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V-Arm/PCI-TSM-Move-core-code-into-its-own-directory/20261104-214618
+base:   6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+patch link:    https://lore.kernel.org/r/20261104161632.3547423-2-aneesh.kumar%40kernel.org
+patch subject: [PATCH v8 01/15] PCI/TSM: Move core code into its own directory
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261105/202611052018.S2OsLHjD-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611052018.S2OsLHjD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611052055.TcIXFI7V-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611052018.S2OsLHjD-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:31:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/loongarch/include/asm/pgtable.h:75:
-   include/linux/vmemmap-optimization.h:62:9: error: call to undeclared function 'vmemmap_optimizable_order'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      62 |         return vmemmap_optimizable_order(section_compound_order(section));
-         |                ^
->> include/linux/vmemmap-optimization.h:68:22: error: use of undeclared identifier 'vmemmap'; did you mean 'mem_map'?
-      68 |         unsigned long pfn = page_to_pfn((struct page *)start);
-         |                             ^
-   include/asm-generic/memory_model.h:73:21: note: expanded from macro 'page_to_pfn'
-      73 | #define page_to_pfn __page_to_pfn
-         |                     ^
-   include/asm-generic/memory_model.h:47:54: note: expanded from macro '__page_to_pfn'
-      47 | #define __page_to_pfn(page)     (unsigned long)((page) - vmemmap)
-         |                                                          ^
-   include/linux/mmzone.h:1452:21: note: 'mem_map' declared here
-    1452 | extern struct page *mem_map;
-         |                     ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:31:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/loongarch/include/asm/pgtable.h:75:
-   include/linux/vmemmap-optimization.h:138:20: error: conflicting types for 'vmemmap_optimizable_order'
-     138 | static inline bool vmemmap_optimizable_order(unsigned int order)
-         |                    ^
-   include/linux/vmemmap-optimization.h:62:9: note: previous implicit declaration is here
-      62 |         return vmemmap_optimizable_order(section_compound_order(section));
-         |                ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/loongarch/kernel/asm-offsets.c:11:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:7:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
+>> drivers/pci/tsm/core.c:31:12: warning: variable 'pci_tsm_devsec_count' set but not used [-Wunused-but-set-global]
+      31 | static int pci_tsm_devsec_count;
+         |            ^
+   1 warning generated.
 
 
-vim +68 include/linux/vmemmap-optimization.h
+vim +/pci_tsm_devsec_count +31 drivers/pci/tsm/core.c
 
-    64	
-    65	static inline void section_vmemmap_optimization_disable(unsigned long start,
-    66			unsigned long end)
-    67	{
-  > 68		unsigned long pfn = page_to_pfn((struct page *)start);
-    69		unsigned long nr_pages = (end - start) / sizeof(struct page);
-    70		struct mem_section *section = __pfn_to_section(pfn);
-    71	
-    72		if (nr_pages < PAGES_PER_SECTION) {
-    73			VM_WARN_ON_ONCE(section_vmemmap_optimizable(section));
-    74			return;
-    75		}
-    76	
-    77		VM_WARN_ON_ONCE(!IS_ALIGNED(pfn | nr_pages, PAGES_PER_SECTION));
-    78		section_set_compound_order(section, 0);
-    79	}
-    80	
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  25  
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  26  /*
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  27   * Count of TSMs registered that support physical link operations vs device
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  28   * security state management.
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  29   */
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  30  static int pci_tsm_link_count;
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31 @31  static int pci_tsm_devsec_count;
+3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  32  
 
 --
 0-DAY CI Kernel Test Service
