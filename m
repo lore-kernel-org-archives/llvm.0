@@ -1,81 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793853669;
-	b=P+9GzgljhV/S6OgZZb+98oiOcFQsFhRgQOLiOJzDHx4zXEQilDh2XFD5qQj16hX2AJcj
-	 udt0T7RrzZrMYl9fdZ7cBVWFkhis7wsoqobutjXXEkY/aCULcRR8MRw+S0PzAcgiJowoC
-	 TTMeaeIXEbgzu9ZlZ7fDpg3iOy0q1bjDK0WfDcUIuWWPVW227I8Rw71PpfLICll+gFzgi
-	 EQbeB1YpwJZSpJyyC0usmrytli50/0iQ80WAgbbXsZor4F1N/GfeQuBu2MKMjoy5SORZi
-	 FA/qE2GGJQ6EDZFQjXT8YtWAOg3YzD/gqpVy3SE9yInVqp0Eo4G7NGpdpcC2DZNAlJA==
+	t=1793854254;
+	b=4gDeU9ObfBVN28z0ljD58i2GtjTX5TrOljWyWT0rR+KbhiT4MSWy8/AR75d26Bm+6uXi
+	 DOJE0yGC3Z9Op2nGiNrQ1yqofzC150fZBljoZd1k8VzObZETRywVRMOTN53Oe/7T5sCtA
+	 cs6n9qQArK1mnfvu4+F/ngGP6P0LkP4RUaJcDAC7Id1MCvMw+7SGfVtK9AnNOk1J4Uvp9
+	 NgnhPyMjEYGS28sKSe3pFicRhbh0SZtqiVo+7dXBCkmSj0TXQdWQ0AK7HPqLIyYsdEN+f
+	 VHLMtblj7LAHIGOgRqji2J4vF9M1YMiE+yS2Y4fkhE7vzIKyaSu9lTYUWvTs+K1nR/g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793853669;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793854254;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=+1z1jl80S8glHcdv0ktjwdzA9HN/8y19ZMNtYgwb7/c=;
-	b=nKpF3hXQh59gOu9HNdGDNvLgJ/x4hTGPIddESlaLhH4X/GqVKEEZB64jsTbhPUvzo+DY
-	 VBefr/i6ibBdSlOG7s1NSz9L/xxlDh67Ceu5zZdFNJzxXXb3Wt8FFtPyOsbXDXobUy6uO
-	 X067HVeSgFGNcLveawqOEcOsibbEmfmHg44ybWyaSCTNl8Nol8vW46FYexInBCueD6H1j
-	 J+RumGQVGEWSwMJwNEbjlMG7WFiEP7gmnKDPuxPVZL1NZYpKOlg64F2PuQ7IF/E2MUZiM
-	 PM8hEiNY4A0EH6jIDqllpu0/Ee2/1TPs1YAEI3m5ndCK4pQE4GIxAwgD1868yHTAbMg==
+	bh=ga92ovgpP8OrqJArRZ/Ry0RYu0IeBw7kgmd1b1KtRYQ=;
+	b=evdgIGyhw4CStJaouOMdHxFGZudNr8Z6427LS4C/SorrzH5pFaVNhWL06lASIhChLDp/
+	 b+QgtXTRe8M7AOeNidaMV4sAtJLDfcBOsppCejamVl65abwndY+DYep4mcct/SM3I6Arb
+	 yPyODPbjQENrwcmkLIPNPWWemScUtC7sMnhGofq/2Kg3cwllGMia2nk4WiJcEosdMvfw9
+	 WozCWv9QF9BoXBfqjFNvZwphnvEsHJERHKgpPet2UYg/YY1AiKpv7o0WIbsWgYyijP4Jb
+	 go64k51ZUu5uI/7SIFmBL/0bL3LdwUMcm9lhxKSFGnWixk7uys7awtosIuy9LQXcwHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gz2m0ZWY;
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=NtFV31Qf;
+	arc=none smtp.remote-ip=192.198.163.8
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCE4606A31B;
-	Thu,  5 Nov 2026 04:41:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCCE4606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A04606A31B;
+	Thu,  5 Nov 2026 04:50:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95A04606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gz2m0ZWY
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=NtFV31Qf
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793853668; x=1825389668;
+  t=1793854254; x=1825390254;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NgMGLhx47NQh2mjCkIp/Ij/G0ICuGhK+dixWqndtdDA=;
-  b=Gz2m0ZWYH2kNdIpUEL5PYTvfzuhogi4595ssEJH7CkaqK/n1GQ4eoUzf
-   ajWo1H7l7WMR4of1xAdRcqT5rssXa4JNPonzTTgBDLR4f/W8OQ9VOaFtY
-   sStXQGPZhZGCpi51oogfbGLBNzMihIIpGBZz5Xs7LYyEx///okvFiPwV2
-   MC3+jYMYbDAOeVqCSRK3FbwUuWXctWcvpKLKo0Jh5SYgmz+OG96nWitN8
-   llI5KgCecRT/vKMyPlPSAu+gy40WH+sqNk7Vs3R5muFYttaPgOcYZ99Lh
-   kTSyUAFXE9HOoh80moHg6c4x01EW1lGziugJwV4r1BysE4eIdiLQXCBQX
+  bh=mayL5uxjA06wbOsebndl7WWQByciFzyi8puZ0FzXVeo=;
+  b=NtFV31QfA89kPIVigx3P1msfdOl2mdeehGCcfNIWmGLvGhYzyGE78DQy
+   7J2GQgQdMCM0IjeGIF3Clzw1K85BGap6l23XXrZwG1bY9JJAsHepMoSmz
+   fav0x85I9m3HEuxI7YS9iSMpvmVnucNcFktfLIMxnEp8eoHMeKUAnkboq
+   Vwg/im1H4YUVzOm1lOi5w8Con4rQpbCDg+SnD+h/CYmYRlzUaAwWzqJ3S
+   jEUJlIo7lfibTJIPQopmTUzw1I7GuqotZMSohP+8Q2O7oOCXnbaKDTwyU
+   7XMdfrUKjMu+dWAffOS/u1T2Bj2B+WzG16CmpBKOdRKEehTLyOgMEpj2z
    Q==;
-X-CSE-ConnectionGUID: ujjYJnZVTq21iPvzHkPdZg==
-X-CSE-MsgGUID: eZCWpmnlRFWyRSps8HU3hA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2721494"
+X-CSE-ConnectionGUID: 5svBMJ3RRSqf3KoZ4pUbjg==
+X-CSE-MsgGUID: grHOY+QvTgG2+J9hdPDuUw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2514735"
 X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
-   d="scan'208";a="2721494"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 20:40:52 -0800
-X-CSE-ConnectionGUID: 6dZqlJRuSHi0nAMgB+eckw==
-X-CSE-MsgGUID: XtY4Ma9ZQ2i8a1be1nrUyw==
+   d="scan'208";a="2514735"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 20:50:53 -0800
+X-CSE-ConnectionGUID: 9TMHlpgmTKub36UmJXnIEQ==
+X-CSE-MsgGUID: 42NBspJERJCUUbkNeJcLTA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
-   d="scan'208";a="8670508"
+   d="scan'208";a="6747481"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa012.fm.intel.com with ESMTP; 04 Nov 2026 20:40:50 -0800
+  by orviesa008.jf.intel.com with ESMTP; 04 Nov 2026 20:50:50 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xOpHK-00000000leN-3q2k;
-	Thu, 05 Nov 2026 04:40:46 +0000
-Date: Thu, 5 Nov 2026 12:39:47 +0800
+	id 1xOpR1-00000000lfL-3JJn;
+	Thu, 05 Nov 2026 04:50:47 +0000
+Date: Thu, 5 Nov 2026 12:50:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Johannes Berg <johannes@sipsolutions.net>,
-	linux-wireless@vger.kernel.org
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-xe@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes.berg@intel.com>,
-	Miriam Rachel Korenblit <miriam.rachel.korenblit@intel.com>
-Subject: Re: [PATCH wireless-next 7/7] wifi: mac80211: use sta->active_links
- in for_each_sta_active_link()
-Message-ID: <202611051257.yN72uAKg-lkp@intel.com>
-References: <20261102224349.e1d1ed2eef37.I0f5c26e0f6a05feaf5c578fa048ca5586530f0ba@changeid>
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Natalie Vock <nat@pixelcluster.dev>,
+	Arun Pravin <arunpravin.paneerselvam@amd.com>,
+	Matthew Auld <matthew.auld@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 3/4] drm/ttm, drm/xe: Introduce TTM_TT_FLAG_PARTIAL for
+ partially backed-up tts
+Message-ID: <202611051209.k3623JDY-lkp@intel.com>
+References: <20261104201331.2462-4-thomas.hellstrom@linux.intel.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,92 +92,174 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261102224349.e1d1ed2eef37.I0f5c26e0f6a05feaf5c578fa048ca5586530f0ba@changeid>
+In-Reply-To: <20261104201331.2462-4-thomas.hellstrom@linux.intel.com>
 
-Hi Johannes,
+Hi Thomas,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on wireless-next/main]
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on drm-tip/drm-tip next-20261030]
+[cannot apply to drm-misc/drm-misc-next daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v7.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/wifi-mac80211-rename-ieee80211_sta_activate_link/20261102-224237
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20261102224349.e1d1ed2eef37.I0f5c26e0f6a05feaf5c578fa048ca5586530f0ba%40changeid
-patch subject: [PATCH wireless-next 7/7] wifi: mac80211: use sta->active_links in for_each_sta_active_link()
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20261105/202611051257.yN72uAKg-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611051257.yN72uAKg-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Hellstr-m/drm-ttm-Don-t-mark-backed-up-shmem-folios-accessed/20261104-211328
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20261104201331.2462-4-thomas.hellstrom%40linux.intel.com
+patch subject: [PATCH 3/4] drm/ttm, drm/xe: Introduce TTM_TT_FLAG_PARTIAL for partially backed-up tts
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20261105/202611051209.k3623JDY-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611051209.k3623JDY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611051257.yN72uAKg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611051209.k3623JDY-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/sta.c:6:
-   In file included from include/linux/ieee80211.h:19:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/net/wireless/intel/iwlwifi/mld/sta.c:913:7: error: use of undeclared identifier 'vif'; did you mean 'if'?
-     913 |                 if (vif->type == NL80211_IFTYPE_STATION && !sta->tdls)
-         |                     ^~~
-         |                     if
->> drivers/net/wireless/intel/iwlwifi/mld/sta.c:913:7: error: expected expression
-   drivers/net/wireless/intel/iwlwifi/mld/sta.c:914:32: error: use of undeclared identifier 'vif'; did you mean 'if'?
-     914 |                         iwl_mld_remove_ap_keys(mld, vif, sta, link_id);
-         |                                                     ^~~
-         |                                                     if
-   drivers/net/wireless/intel/iwlwifi/mld/sta.c:914:32: error: expected expression
-   1 warning and 4 errors generated.
+>> drivers/gpu/drm/ttm/ttm_pool.c:1076:17: warning: variable 'mid' set but not used [-Wunused-but-set-variable]
+    1076 |         pgoff_t i, nr, mid;
+         |                        ^
+>> drivers/gpu/drm/ttm/ttm_pool.c:1177:7: warning: unused variable 'partial' [-Wunused-variable]
+    1177 |         bool partial = ttm_tt_is_partial(tt);
+         |              ^~~~~~~
+   2 warnings generated.
 
 
-vim +913 drivers/net/wireless/intel/iwlwifi/mld/sta.c
+vim +/mid +1076 drivers/gpu/drm/ttm/ttm_pool.c
 
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  890  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  891  void iwl_mld_remove_sta(struct iwl_mld *mld, struct ieee80211_sta *sta)
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  892  {
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  893  	struct ieee80211_link_sta *link_sta;
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  894  	u8 link_id;
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  895  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  896  	lockdep_assert_wiphy(mld->wiphy);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  897  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  898  	/* Tell the HW to flush the queues */
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  899  	iwl_mld_flush_sta_txqs(mld, sta);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  900  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  901  	/* Wait for trans to empty its queues */
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  902  	iwl_mld_wait_sta_txqs_empty(mld, sta);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  903  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  904  	/* Now we can remove the queues */
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  905  	for (int i = 0; i < ARRAY_SIZE(sta->txq); i++)
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  906  		iwl_mld_remove_txq(mld, sta->txq[i]);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  907  
-4fa80ba223dd728 Johannes Berg  2026-11-02  908  	for_each_sta_active_link(sta, link_sta, link_id) {
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  909  		/* Mac8011 will remove the groupwise keys after the sta is
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  910  		 * removed, but FW expects all the keys to be removed before
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  911  		 * the STA is, so remove them all here.
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  912  		 */
-67128af05c6419e Johannes Berg  2025-03-09 @913  		if (vif->type == NL80211_IFTYPE_STATION && !sta->tdls)
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  914  			iwl_mld_remove_ap_keys(mld, vif, sta, link_id);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  915  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  916  		/* Remove the link_sta */
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  917  		iwl_mld_remove_link_sta(mld, link_sta);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  918  	}
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  919  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  920  	iwl_mld_destroy_sta(sta);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  921  }
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  922  
+  1059	
+  1060	/**
+  1061	 * ttm_pool_restore_abort() - Abort an ongoing restore of a partial tt
+  1062	 * @tt: The struct ttm_tt with an active restore.
+  1063	 *
+  1064	 * Abort a partially completed restore, leaving the tt in a consistent
+  1065	 * state for a subsequent backup. The uncommitted in-flight page is
+  1066	 * DMA-unmapped and split; restored sub-pages are kept, unused ones freed.
+  1067	 * Non-cached committed pages are converted to write-back so the
+  1068	 * partial-backup invariant (all resident pages are cached) is maintained.
+  1069	 * Committed pages are left DMA-mapped for the backup path to handle.
+  1070	 * Since restored pages are now resident, &ttm_tt.remaining_pages is
+  1071	 * updated to reflect the number of resident pages.
+  1072	 */
+  1073	static void ttm_pool_restore_abort(struct ttm_tt *tt)
+  1074	{
+  1075		struct ttm_pool_tt_restore *restore = tt->restore;
+> 1076		pgoff_t i, nr, mid;
+  1077	
+  1078		if (!restore)
+  1079			return;
+  1080	
+  1081		/* Handle the uncommitted in-flight page. */
+  1082		if (ttm_pool_restore_valid(restore)) {
+  1083			struct page *page = restore->alloced_page;
+  1084	
+  1085			nr = 1UL << restore->order;
+  1086	
+  1087			if (tt->dma_address)
+  1088				ttm_pool_unmap(restore->pool, restore->first_dma, nr);
+  1089	
+  1090	#ifdef CONFIG_X86
+  1091			if (restore->page_caching != ttm_cached && !PageHighMem(page))
+  1092				set_pages_wb(page, nr);
+  1093	#endif
+  1094			ttm_pool_split_for_swap(restore->pool, page);
+  1095	
+  1096			for (i = 0; i < restore->restored_pages; i++)
+  1097				restore->snapshot_alloc.pages[i] = page + i;
+  1098	
+  1099			/*
+  1100			 * Clear stale DMA addresses for the in-flight sub-pages.
+  1101			 * These pages were never committed via
+  1102			 * ttm_pool_allocated_page_commit(), so tt->dma_address[]
+  1103			 * contains stale values that the backup path would
+  1104			 * incorrectly try to unmap. All @nr entries are stale,
+  1105			 * including restored ones: commit is all-or-nothing per
+  1106			 * compound, and the whole compound was unmapped above.
+  1107			 */
+  1108			if (tt->dma_address) {
+  1109				pgoff_t off = restore->snapshot_alloc.pages -
+  1110					      tt->pages;
+  1111	
+  1112				memset(&tt->dma_address[off], 0,
+  1113				       nr * sizeof(*tt->dma_address));
+  1114			}
+  1115	
+  1116			for (i = restore->restored_pages; i < nr; i++)
+  1117				__free_pages_gpu_account(page + i, 0, false);
+  1118		}
+  1119	
+  1120		/*
+  1121		 * Don't DMA-unmap committed restored pages here; their DMA
+  1122		 * addresses are in tt->dma_address[] and the backup path
+  1123		 * will unmap them.
+  1124		 */
+  1125	
+  1126		/* Convert non-cached committed pages to write-back. */
+  1127		mid = restore->snapshot_alloc.caching_divide - tt->pages;
+  1128	#ifdef CONFIG_X86
+  1129		if (mid > 0 && tt->caching != ttm_cached)
+  1130			set_pages_array_wb(tt->pages, mid);
+  1131	#endif
+  1132	
+  1133		kfree(restore);
+  1134		tt->restore = NULL;
+  1135	
+  1136		for (i = 0, nr = 0; i < tt->num_pages; i++) {
+  1137			struct page *p = tt->pages[i];
+  1138	
+  1139			if (p && !ttm_backup_page_ptr_is_handle(p))
+  1140				nr++;
+  1141		}
+  1142		tt->remaining_pages = nr;
+  1143	}
+  1144	
+  1145	/**
+  1146	 * ttm_pool_backup() - Back up or purge a struct ttm_tt
+  1147	 * @pool: The pool used when allocating the struct ttm_tt.
+  1148	 * @tt: The struct ttm_tt.
+  1149	 * @flags: Flags to govern the backup behaviour.
+  1150	 *
+  1151	 * Back up or purge a struct ttm_tt. If @purge is true, then
+  1152	 * all pages will be freed directly to the system rather than to the pool
+  1153	 * they were allocated from, making the function behave similarly to
+  1154	 * ttm_pool_free(). If @purge is false the pages will be backed up instead,
+  1155	 * exchanged for handles.
+  1156	 * A subsequent call to ttm_pool_restore_and_alloc() will then read back the content and
+  1157	 * a subsequent call to ttm_pool_drop_backed_up() will drop it.
+  1158	 * If backup of a page fails for whatever reason, @ttm will still be
+  1159	 * partially backed up, retaining those pages for which backup fails.
+  1160	 * In that case, this function can be retried, possibly after freeing up
+  1161	 * memory resources.
+  1162	 *
+  1163	 * Return: Number of pages actually backed up or freed, or negative
+  1164	 * error code on error.
+  1165	 */
+  1166	long ttm_pool_backup(struct ttm_pool *pool, struct ttm_tt *tt,
+  1167			     const struct ttm_backup_flags *flags)
+  1168	{
+  1169		struct file *backup = tt->backup;
+  1170		struct page *page;
+  1171		gfp_t alloc_gfp;
+  1172		gfp_t gfp;
+  1173		int ret = 0;
+  1174		pgoff_t shrunken = 0;
+  1175		pgoff_t i, j, num_pages, npages;
+  1176		pgoff_t nr_backed;
+> 1177		bool partial = ttm_tt_is_partial(tt);
+  1178	
+  1179		if (WARN_ON(ttm_tt_is_backed_up(tt)))
+  1180			return -EINVAL;
+  1181	
+  1182		ttm_pool_restore_abort(tt);
+  1183	
+  1184		if ((!ttm_backup_bytes_avail() && !flags->purge) ||
+  1185		    ttm_pool_uses_dma_alloc(pool) || ttm_tt_is_backed_up(tt))
+  1186			return -EBUSY;
+  1187	
 
 --
 0-DAY CI Kernel Test Service
