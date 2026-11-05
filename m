@@ -1,82 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.189
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793901418;
-	b=MK4ySfloNThngt7Ax+UvdGC1aW1Z7388Aq31gs1B2V8jECfz06uN8dwonKXVgcC+Nvz2
-	 oRF6IyBkTFYTADuarxaMGQC7J9NB0LPJRQvwFJvLMy5bjFAaZpOiORpiI/PGbpOfhdWih
-	 ksknFBLc49FdYYHyFnoCg8viJFS3gy3GoCrv8DButmkM/X9wGNHUE37C4CqOHCKNNyxsf
-	 JeyMYgz1xDM5MnL7Vt+j9c/mfU7YaHdQkUfC3QepD+rnyPtCZ0GYasXRA2e0+0wJ5uGHV
-	 uJngYuWeJlloOeH3N0pPDhboygmbL2YcIaDvn/VilvqVLiwpMHiREuQa8w//LC/z0cw==
+	t=1793901484;
+	b=jl7ov4kIasXXg5SKI4ASWbylMt3/uKF7mizqWpS/JdvislqLHCazrE2VSZXN6JflVWTa
+	 m0vFOmUDLU91wxNiJrpMZTZrVMmqzDhD8G1SrUg8OVjOgL3P0hULoabXn0IKasY5fedio
+	 vxpUEkG//1O6dCzmfnW/O+UwvhnAeqBk065qmg2G5rya32phuag4zdqzgx/e035yH5hzS
+	 O5guliIA9uOw3UgZK9fXaI4/E9Wp8591Wh/N1OhlPEa9NJ6oonIVFhzHyuZqEKQc1Q6Ta
+	 51yL3fcGt0UhSF9cxDOKfdjl/w6ao55CCbIsYLnpoWPn4H7RSs3VWaV5lzHEp1rSl1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793901418;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
-	 X-Proofpoint-Reinject:X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Authority-Analysis:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=1miHHjHzX+PzIvHEGZ5sEbAebfzqkab44G9tf/WJJPk=;
-	b=2jm0sWmDX32e2il5zlgiJhr0dPuQIXeNDzQVjKWA8zNaWm8ymphhFdZMG2s6Hdd/r/vy
-	 k2bnrdWkjyhjUaetyL+V+oCqj12u4g7X/GdKyVlpTH05yNT10Hv2h4px4UHcQTVlUZwdN
-	 vilTOIaAgNnHPp7r/5n78hOBDSo67EaOJaCl39CL9s0+18DbuBxW8P7KYyipfOoB9eJ7/
-	 GzD+BCgMCAul6NcRad1BL+WdPbI6MHqneXElR2+qcSp4v3FrFtEUsviIVcg7Mqpb+kUpV
-	 Xz2viol3eTlYMleDO3ppM+P29jhZNvIkVXBgzLlp+SoVdaUWquezNUP5SPuqGRUfSNA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793901484;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=jt/ZC4ffziQ7HvruyvzDkrQAXNr+AY6nKD92MbqZCIk=;
+	b=1cwuJR7ICCEOMTFR/xMVnTr6081uHqSnkKXfTBgp9jgB9qB2VXQxvK/lAAN36MJgzEUn
+	 QlW02rJ+huIL9cS1lFKeDfa6A2D7oc/6ecvpxKbmGmt/5MPX7m/NpH+2Zuc3R454fKeq6
+	 OF7AnlUogSeVh9j/F72jxsYs1hIEG7ccSqJbYNBjyEbdGqUS/BIvcO0Q+bBfBVi25U+Ah
+	 0XybQY13+8xF2DVg8q7ubN3NeXgirk3TLoUDrE8hifyf1F9MTAz0bY+FqdXOozIPAmWOw
+	 tRguXfhuAtC9WNfKrVqGTILv5b9kqFRCiRdwbt6OZkoDFys7Hf1fKcGOfih8b1evZGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=Y8sEM9N7;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AgAKc8wg;
+	arc=none smtp.remote-ip=91.218.175.189
+Received: from mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34016606A31B
-	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 17:56:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34016606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFB4606A31B
+	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 17:58:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AFB4606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=Y8sEM9N7
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5Hi5gq2578573;
-	Thu, 5 Nov 2026 17:56:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=1miHHj
-	HzX+PzIvHEGZ5sEbAebfzqkab44G9tf/WJJPk=; b=Y8sEM9N7vKdTj6HjUdcTCE
-	lDre9uofWsAQ7o7uy5AJHZSLEV1PIL00IQugh9KRKMlY62hbMijXhrXSjyO+ed+c
-	J/2Rie84cN6rU96v90RO1WZw5PsqWTupgTAezHl7czmZ7p4qlIEn/dLIUIzZhEM+
-	KsFSNHeh5lGVSkhAzE192O+EKw9/Kjohw1sKpMRHU1UziEkIUwSyewANcWmc295D
-	/3LtCCmCiu6Q43qLmSna0RhHXzv9Ctj56euvM1JN1GRd70nbtTzOlwHu9hqX6fUN
-	xZqI55WsjzQkZPe/i85EQayFpfOQ3fRUkbcdlFfwItk0DKJpce97wCaJq7duqHeQ
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4hn80t48tf-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 05 Nov 2026 17:56:28 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5Hnv1m1992972;
-	Thu, 5 Nov 2026 17:56:27 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4hrk9mkjtx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Nov 2026 17:56:27 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6A5HuRYe55116032
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 5 Nov 2026 17:56:27 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1B19158056;
-	Thu,  5 Nov 2026 17:56:27 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 351EC58052;
-	Thu,  5 Nov 2026 17:56:23 +0000 (GMT)
-Received: from [9.68.10.150] (unknown [9.68.10.150])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  5 Nov 2026 17:56:23 +0000 (GMT)
-Message-ID: <dd2b2658-cb4a-4ba9-b69c-470d433a0ef5@linux.ibm.com>
-Date: Thu, 5 Nov 2026 18:56:10 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AgAKc8wg
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=t/uW8VN3ksFEgU2O3uKnkH6tZzjG+ETFuBB6/SpxnVs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793901481; v=1; x=1794506281;
+ b=AgAKc8wgFWLMex2cNUdFjuEf2C6u0ObZqSX0huen+CbkVNeZbCIfBEieWWXUZL5OohEZ80Qa
+ TZ464/+4niDatN8XLS08scBUgMzaBp7Xpfhf/o3h2ZMbj+Q0GIZu/Fs/uBTnbbA1oPZI6SWi+8s
+ eG+lDm5q9ychMP+YyHCeAtgU=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id ff7274c36764d8fc;
+	Thu, 05 Nov 2026 17:58:01 +0000
+X-Mizu-Trace-ID: ff7274c36764d8fc
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>
+Cc: Vineet Gupta <vineet.gupta@linux.dev>,
+	Borislav Petkov <bp@alien8.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Jakub Jelinek <jakub@redhat.com>,
+	Julian Braha <julianbraha@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] kbuild: move gcc's -Wconstant-logical-operand to W=2
+Date: Thu,  5 Nov 2026 09:57:45 -0800
+Message-ID: <20261105175748.3057520-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -86,99 +73,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 19/20] gcov: add MC/DC condition coverage support
-To: Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
-        Chuck Wolber <chuck@wolber.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com,
-        linux-kbuild@vger.kernel.org, linux-um@lists.infradead.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Nathan Chancellor
- <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nsc@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>, Thomas Gleixner <tglx@kernel.org>,
-        x86@kernel.org
-References: <20261103015238.3780910-1-sashal@kernel.org>
- <20261103015238.3780910-20-sashal@kernel.org>
-From: Peter Oberparleiter <oberpar@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <20261103015238.3780910-20-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: cwJQeRxNyTX6GxuOPvxXzzLS9v8CaHuu
-X-Proofpoint-ORIG-GUID: GbsN-ftVfGBhsujieJJUbKTF56leZQN_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA1MDA3MCBTYWx0ZWRfX1gk+JYltK+M8
- DygLW0mOD+DQkRT3cIKfLw6/lmf+c0JpeETlNklR/Yk+/kcILG5PekV1j9GPGRDxjIQsLmTTAZQ
- 6613WDfbIwSuV6Eim+g+LaCsURCYBJ2OFhcqRtEqU5Dqn6x6MmZpAB0Lyr8esHZN+XMTxEtZgw9
- exf1KMFPDDcmcgQ1xCdwtaEA80GXLLktS/sMMckHqhlBfxTUE0a5GZYpyov7AsmXAXGoN13qxPD
- 7dIl3heqFc2bByOrsP+JU0Hr8p/99ddhdVFFGWls7H+vkWlCoxn4fX619ZnSoufkajtikhHBllR
- 69XpH/7s4tvQsNN27DkG0U3ttWkxL/scslzXxAea2KrkiE3x5IJzU6+Ubl9ssLYCYVjePTCVgLz
- tIiIuLiBlt0wkLI0WOe6oogHb29/uEWyQgQZTEfZFTvMEVeZsKf3G17pq49cxYDSdQeW3+1ZLjp
- S8JDGPgQR+r17YF2TZA==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA1MDA3MCBTYWx0ZWRfX1ozUU4RVvpGI
- 6Lth9lZO3YH9esa47BEBKiHNcBs/H+CcZ91iuk0wP/tbXrw1UaZnFs3Wz0tvuxx0mMXhY2fE8Hl
- 1ltlXCDND+afsZYAasLP12+56MDzI4E=
-X-Authority-Analysis: v=2.4 cv=FIqOVOos c=1 sm=1 tr=0 ts=6aecc34c cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=95rrPwSdFze6aSbNxQIA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-05_05,2026-11-04_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 malwarescore=0 impostorscore=0 spamscore=0 lowpriorityscore=0
- bulkscore=0 suspectscore=0 clxscore=1015 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611050070
+Content-Transfer-Encoding: 8bit
 
-On 03.11.2026 02:52, Sasha Levin wrote:
-> Support CONFIG_COVERAGE_MCDC with gcov, using GCC's MC/DC condition
-> coverage instrumentation (-fcondition-coverage), which is available
-> since GCC 14. The data is shown by "gcov --conditions".
-> 
-> Add -fcondition-coverage to the gcov compiler flags when enabled, and
-> disable the warnings about decisions it leaves out, as is done for
-> Clang. Both are gated on the config option to avoid Clang warnings
-> about unknown options.
-> 
-> Also add -fcondition-coverage to CFLAGS_REMOVE in the x86 UML vDSO
-> Makefile to prevent instrumentation of userspace vDSO code.
-> 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+GCC 17 adds -Wconstant-logical-operand to -Wall. It warns when an operand
+of && or || folds to a constant other than 0 or 1. Unlike clang's version,
+it also checks constant left operands and operators that come from a
+macro expansion. With CONFIG_WERROR=y, an x86 defconfig build fails in
+prepare0:
 
-Looks good, minor comment below.
+  arch/x86/include/asm/cpufeature.h:72:36: error: use of logical '&&' with constant operand '4194304' [-Werror=constant-logical-operand]
 
-Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+The warning is meant to catch && written for &. Kernel history has no
+such catch. Of the 13 earlier kernel fixes for clang's version, only
+commit dd7fe5d9fd6a ("rtc: max31335: Fix comparison in
+max31335_volatile_reg()") fixed a bug that the warning found. Commit
+394b52462020 ("drm/i915/gem: fix bitwise and logical AND mixup") fixed a
+& written for &&, which the warning cannot see. The other fixes rewrote
+correct code. In GCC's own tree, the warning found two sites since it
+was added, and both were false positives.
 
-[...]
+Disable the warning for GCC unless W=2 is given. Keep clang's version,
+which skips macros and constant left operands.
 
-> @@ -108,8 +108,8 @@ config COVERAGE_PROFILE_ALL
->  
->  config COVERAGE_MCDC
->  	bool "Measure modified condition/decision coverage (MC/DC)"
-> -	depends on LLVM_COV_KERNEL
-> -	depends on CLANG_VERSION >= 220000 || !WERROR
-> +	depends on LLVM_COV_KERNEL || (GCOV_KERNEL && CC_HAS_CONDITION_COVERAGE)
-> +	depends on !LLVM_COV_KERNEL || CLANG_VERSION >= 220000 || !WERROR
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Link: https://lore.kernel.org/all/20261104160722.1637541-1-vineet.gupta@linux.dev/
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
+v1 -> v2:
+ - Replace the four per-site fixes with this one change (Borislav, Peter)
+ - Link to v1: https://lore.kernel.org/all/20261104160722.1637541-1-vineet.gupta@linux.dev/
 
-Would it make sense to transform this for readability, i.e.
+ scripts/Kconfig.toolchain | 3 +++
+ scripts/Makefile.warn     | 1 +
+ 2 files changed, 4 insertions(+)
 
-depends on !(LLVM_COV_KERNEL && CLANG_VERSION < 220000 && WERROR)
-
-
+diff --git a/scripts/Kconfig.toolchain b/scripts/Kconfig.toolchain
+index 2acbd40a38f1..1d68075f0469 100644
+--- a/scripts/Kconfig.toolchain
++++ b/scripts/Kconfig.toolchain
+@@ -233,6 +233,9 @@ config CC_OPT_WNO_FORMAT_OVERFLOW
+ config CC_OPT_WNO_STRINGOP_TRUNCATION
+ 	def_string "$(cc-option-str,-Wno-stringop-truncation)"
+ 
++config CC_OPT_WNO_CONSTANT_LOGICAL_OPERAND
++	def_string "$(cc-option-str,-Wno-constant-logical-operand)"
++
+ config CC_HAS_COUNTED_BY
+ 	bool
+ 	# clang needs to be at least 20.1.0 to avoid potential crashes
+diff --git a/scripts/Makefile.warn b/scripts/Makefile.warn
+index 556fa249ca07..03b677bdbb0a 100644
+--- a/scripts/Makefile.warn
++++ b/scripts/Makefile.warn
+@@ -167,6 +167,7 @@ endif
+ 
+ ifdef CONFIG_CC_IS_GCC
+ KBUILD_CFLAGS += -Wno-maybe-uninitialized
++KBUILD_CFLAGS += $(CONFIG_CC_OPT_WNO_CONSTANT_LOGICAL_OPERAND)
+ endif
+ 
+ endif
 -- 
-Peter Oberparleiter
-Linux on IBM Z Development - IBM Germany R&D
+2.53.0-Meta
+
