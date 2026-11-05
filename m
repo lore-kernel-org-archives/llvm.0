@@ -1,75 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793875190;
-	b=ztmt27y2ZsZpfG3SbSH89i0Oy/UDNgv93YwbJoeNfyVI/6EcxPhi+ERi2lA4KACQtufK
-	 ByVEjoIXkKsuxBV6WaLVASUHBaIWW8eTOJhOHYXchTsGoHjjwNBUwhtPeNV1FLg5v/yoX
-	 sIpCxCZgCvy7q/kjc27kcjg2UfpXVsFYUR2AIUNZs2ni6CY8eE2KMsx4DBO7XhQHssY47
-	 j3prcdTCCO5IKpZzB0Xt3k2Kuyee9cLTWpKs/zPZxWkNLO3+r7iuQKoe1mYyZ852cHGF6
-	 tbkr3phPVLXmLYlqhODwEI73pPNJWwtnoEFnm9MwJQBAYClU/AO9pOTujcfR9nx+4+w==
+	t=1793876188;
+	b=dY220U41JxyjIVV7h4a9+mU+AgO1Q2knhr5AbMThPpzMXjMabo3wg3wlywDKvVVRM2zC
+	 w+E81vtZImdS9hqe3faIGIRKOqu2ISLMNggWfTa1TWIWFwt57PUaWeM95ifyn4JE3Hh06
+	 wkZuYZ6/iBTMmcKViEuKyBtI24vtnSXz2d4CMvGEkhw6mNRLvC1+gRScpc75wmIjv1M4z
+	 5VGHeE8soS7xkbHPms6lElGnGOiS/KIL9wCWaAiuqzfSLTSCabtMRm9OmdNfUT5BmUT6K
+	 W46UhTP79p9GfaPBl9mq3+RZmySKQ/ZZ1N4QtZoFPpRgRaZok3wTVJPRMjeBXp/9vNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793875190;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=uFIhQY+79JG5rknzOWA6767gSvTCQmC5gGZYO/Mt64s=;
-	b=2oEBL8hgSaxRQmu3erIvk8PYqaEDRNb9/B+cRmKUgceQF1qS5fszSfYMtHD83Qf++FJa
-	 /sYzKo7pvibRy3QhovOQL2knVeDbt/awfoq0iBQmHuky/OexjJFzPRq/s7M0Fq4ka3KiP
-	 O2IemVvQoKKkfiRgwBVfQUnpUBTgCSNnBKnBYfMTiAg7E772oZ5i2xnSfMJV1RFVmKTUl
-	 E5wFjFs6IrzFhdhy2F4kLZA+FXPQ/ppDk9hNbA+wTuTxX3HFYx99/Ghjogsjfgwdb3uoA
-	 p79o5ixNwsbfAIhJF67+d9EtmYxlc52GlODlbP6LtCFKwD3MkKfc5IeLvuyR/cD1z+A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793876188;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=TsPvZ3BVvxqP10a7IO9divG+E8WhNN6C4RdnHP0+gUg=;
+	b=wInGuSjuwPSw1I6f+rXb1V9qlSRN/3vJBU6X25bsGTdlqVSpD4XPyPlzj6TznwsONoqj
+	 0v57vzFNr+EowRIxIDVhHpWPgtqFCEJxngRtpDpwbYzJta1b7DB5K00pPinWsOAxiDjuG
+	 DdnBOUlOoksYNU7Jdcl+24uw+e0ty+XI3pIPT4z1LkqQV1iolEw4ak2Dv5TlxxWSC0nNk
+	 c6+kmcS8mYRqUQdl6g4K/NSeTNmQ9kN5Gmy1Is+BK8GD0L/GDYDbL49q6xGIHepiVK5NI
+	 DerR2Fu26UEeXGxfnEL3xn7qtjfgx2gl/vYQlfMOQTivxhyTVHtv/UWzXdrI7/7F8CA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="FWKEsQA/";
-	arc=none smtp.remote-ip=209.85.214.197
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=dyt3zPuw;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AB5606A32F
-	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 10:39:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5AB5606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487C9606D803;
+	Thu,  5 Nov 2026 10:56:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 487C9606D803
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=FWKEsQA/
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2e94f72fb9fso17454845ad.1
-        for <llvm@lists.linux.dev>; Thu, 05 Nov 2026 02:39:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793875189; x=1794479989; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uFIhQY+79JG5rknzOWA6767gSvTCQmC5gGZYO/Mt64s=;
-        b=FWKEsQA/jhfd3B+C2dVsAXTpct2/eg5YnjPj+9HvrgJoatfI4R72ziQOGtbA9BErFE
-         NUnkvWmMxC9lDrZgCiJZhWEnqf9d8aliIK1MnQw8NTphjQAZjNZPVkXNoFwsNIWfvPvX
-         X3foToXqcAkVztMsmpLZx53s2OUd1GOwbEDS8sS+uKArphSwciXOQCU8M1yKQV5EdoD5
-         EKzUgaRu5SACM+fWr2Q3LtgwtxrLIlIyImR3sTH/1Fp/dXLZzCNqu2/yBCjRBZK/EBSY
-         g8IrQNQxyCnYA66LM4FEa5lr6EnC6IgzvBhF8iCeb98tj0D0OXQiZ6j1iQ0YBOhyjW41
-         oQcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793875189; x=1794479989;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uFIhQY+79JG5rknzOWA6767gSvTCQmC5gGZYO/Mt64s=;
-        b=mf2a/PlVPWdYxoyNIYprwrGnQ8qJbEzn0XSGcFnY23iK/DM5RN61GDXm1wLi7LaVUO
-         UV3J0lkhU6jYH+DETvsbLIORFuD8ULDizENkFC3JokRpen+BAWLV0R4nDIm2xIEmA/4p
-         zC0gwUgb+dUVVnWT+e8KnySZNRLHwtoqG+ctkQAdXhA7cAcQnD98nCu5TsQG0GoKdo8Y
-         wjGV6Uxb+LRq33F7iPlUrtc4Z4aGnGnj1It2zzks3tyD57pGYllrGWXKihH26mvzdLOQ
-         bQp5r6xPKqnS4X6SrJaOMPzTlbjt+SP9d+WgqH/SVupjSy1mYEnbrbM+zxsW1rD+CRpL
-         ptQA==
-X-Forwarded-Encrypted: i=1; AKwUvBw+lPD/yezr7ydJxqSPdr5XdPSvI9YDZ0fsyEKWBD6V2oUMhUaAHk1xLdjrpDqffeGC3g6L@lists.linux.dev
-X-Gm-Message-State: APuU4Z8r0JKMZ0JsTvGbRKG/tl3WTcAxERe6HakGBSZyTOGcVVJvSKDI
-	WxT1tBXetldSccRaq4A3fRGmBcH5678b+UP/tafxMhHFs3jkHQ3oo4Yslw6dTnYIAF1y2VeGXQn
-	lj7YhRY79X7nSoFzOL03mBQ==
-X-Received: from plao13.prod.google.com ([2002:a17:903:300d:b0:2ea:775d:de30])
- (user=jenhaochen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:2ec3:b0:2d9:464f:d45f with SMTP id d9443c01a7336-2eb364025a8mr173003765ad.5.1793875188940;
- Thu, 05 Nov 2026 02:39:48 -0800 (PST)
-Date: Thu,  5 Nov 2026 10:39:47 +0000
-In-Reply-To: <auwR7gnuLsF0lpmG@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=dyt3zPuw
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=TsPvZ3BVvxqP10a7IO9divG+E8WhNN6C4RdnHP0+gUg=; b=dyt3zPuwsRWOl0uAf7ZY8W147o
+	1k+SC8N7uwgLD8XyylybdrZa+m8Rwc3ZPMR+Jsf+CzN1NE7+HgqOozic7dYa3gVRh0G/Gju1eS1KU
+	ZiqxF7aeZgXB4w3k0/ZTiIMNOMRf4BchOHjw5omLVhqeapBDy4I9wMHPSon2WCCXG0JLrXhdY3CmT
+	iPirhpMpUtPYhjLn3pRsnJg2iseFMxczEqG6xrYWwVKm03495PFlWZeKJlgvYU8iL+zpsO2B4THau
+	DMbgUAL8DQVtgFK+PuIaE4xeCl9il1RcNZEMUNgyejaW46juVxt/KJSkfpcjR8VsJZR5z35xBIN/z
+	J+jqK/aw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xOv8p-00000002rDc-1XF3;
+	Thu, 05 Nov 2026 10:56:23 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id CE8DD3002F0; Thu, 05 Nov 2026 11:56:21 +0100 (CET)
+Date: Thu, 5 Nov 2026 11:56:21 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Breno Leitao <leitao@debian.org>, Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel-team@meta.com,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when
+ Spectre v2 and BHI are off
+Message-ID: <20261105105621.GN1813469@noisy.programming.kicks-ass.net>
+References: <20261029-syscall-table-dispatch-v1-1-bca9dbb886de@debian.org>
+ <20261029104938.GC1813469@noisy.programming.kicks-ass.net>
+ <auM6mSXz-BVIjYBc@gmail.com>
+ <CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,70 +80,80 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261030121700.260975-1-jenhaochen@google.com> <auwR7gnuLsF0lpmG@google.com>
-X-Mailer: git-send-email 2.56.0.398.g882cbad275-goog
-Message-ID: <20261105103947.7521-1-jenhaochen@google.com>
-Subject: Re: [PATCH] mm/zsmalloc: inline obj_malloc() and obj_free()
-From: Jenhao Chen <jenhaochen@google.com>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Minchan Kim <minchan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, minchan@google.com, 
-	liumartin@google.com, benwei@google.com, Jenhao Chen <jenhaochen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
 
-On (26/11/05 14:23), Sergey Senozhatsky wrote:
-> I suppose there is performance benefit?
+On Fri, Oct 30, 2026 at 08:56:12AM -1000, Linus Torvalds wrote:
+> On Thu, 29 Oct 2026 at 02:30, Breno Leitao <leitao@debian.org> wrote:
+> >
+> > With "x86_64/entry: Unconditionally use -fno-jump-table", x64_sys_call()
+> > becomes a compare tree on every x86_64 build, so system call dispatch is
+> > the same whether the mitigations are disabled at boot or at build time,
+> > which is basically my end goal.
 > 
-> I guess I don't mind in principle, one thing to note is that this conflicts
-> with [1].
+> You're basically saying "with that patch, both cases do equally badly
+> whether disabled at boot or build time".
 > 
-> [1] https://lore.kernel.org/linux-kernel/20261105044752.1997895-1-senozhatsky@chromium.org
+> That's not a good end goal. You want both cases to do equally *well*.
+> 
+> I do wonder if we could do computed jumps. It would be lovely if we
+> could basically do something like
+> 
+>       # syscall number in %rax
+>       leaq table(%rax,%rax,4),%rax
+>       jmp *%rax
+> table:
+>      jmp syscall0
+>      jmp syscall1
+>      jmp syscall2
+>     ....
+> 
+> and avoid any indirect memory lookup or indirect branches (outside of
+> the one computed one). And no extra call/ret frame.
+> 
+> It's possible that the branch prediction hardware hates those kinds of
+> very dense jmp patterns, though. I don't know.
+> 
+> We could have a single static jump that picks between this one and the
+> "conditional branch tree" version, as in your patch at the beginning
+> of the thread.
 
-Hi Sergey,
+The thinking here being that you would still not actually load any value
+from the sys_call_table and keep it all in code?
 
-Yes -- in a steady-state microbenchmark of paired alloc+write and free
-operations across 8 compressed object size classes (384..3136 B):
+As Andrew already pointed out, this required ENDBR (yes 4 bytes) in
+addition to the JMP.d32 (5 bytes). But when building with kCFI that
+would require even more.
 
-1. On current mm-new (zs_malloc + zs_obj_write + zs_free):
-   - Clang 22 -O2: -7.7 (arm64) / -11.8 (x86_64) retired instructions
-     per pair (-3.2% cycles on x86_64).
-   - Clang 22 -O2 + CONFIG_AUTOFDO_CLANG: -13.0 (arm64) / -17.5 (x86_64)
-     retired instructions per pair (-4.8% cycles on x86_64), while
-     shrinking zs_malloc() from 2,872 B to 1,828 B on arm64 (-36%) and
-     2,088 B to 1,474 B on x86_64 (-29%).
-   - GCC 15 -O2 (x86_64, without AutoFDO): GCC leaves both obj_malloc()
-     (306 B) and obj_free() (120 B) out-of-line while inlining the
-     single-caller slow path alloc_zspage() into zs_malloc(); the patch
-     saves -23.7 retired instructions per pair and shrinks zs_malloc()
-     from 1,738 B to 1,441 B (-17%).
+Notably, you do not want the syscall dispatch to be a kCFI evasion
+gadget.
 
-2. Rebased on top of [1] (zs_store + zs_free):
-   In [PATCH 6/7], the new static obj_write() helper has two call sites
-   in zs_store(), so both Clang 22 -O2 (360 B on arm64, 219 B on x86_64)
-   and GCC 15 -O2 (obj_write.isra.0, 229 B on x86_64) leave obj_write()
-   out-of-line as well. In the zs_store() fast path, obj_malloc() packs
-   (m_zpdesc, obj, zspage->class) via location_to_obj(), and the
-   out-of-line obj_write() immediately unpacks obj_to_location(),
-   recomputes offset_in_page(class->size * obj_idx), and re-checks
-   !ZsHugePage(zspage).
+The kCFI landing pad would basically add another 16 bytes on top of
+those earlier 9 bytes, at which point you might as well round up and use
+32 bytes per entry.
 
-   If we also mark obj_write() __always_inline alongside obj_malloc()
-   and obj_free() (with noinline on alloc_zspage()), the compiler CSEs
-   those redundant operations across the fast path:
-   - arm64 (Clang 22): -31.3 (-O2, -4.0%) / -34.7 (-O2 + AUTOFDO, -4.5%)
-     retired instructions per zs_store() + zs_free() pair (vs. -8.4 for
-     obj_malloc() alone), shrinking zs_store() under AUTOFDO from
-     3,144 B to 2,448 B (-22%).
-   - x86_64 (Clang 22): -26.6 (-O2) / -31.8 (-O2 + AUTOFDO) retired
-     instructions per pair (~4.0-4.5% latency reduction).
-   - x86_64 (GCC 15 -O2): -37.1 retired instructions (-5.1%) and -5.3%
-     latency (-5.5% cycles) per pair, while keeping zs_store() slightly
-     smaller (1,997 B -> 1,943 B).
+At which point one has to ask the obvious question on whether this is
+actually better than just keeping the sys_call_table and syscall
+functions as is.
 
-Would you prefer that I send v2 rebased on top of [1] (including
-__always_inline on obj_write()), or send v2 against current mm-new
-first?
 
-Thanks,
-Jenhao
+That is; do we want to go back to unconditionally doing:
+
+	nr = array_index_nospec(nr, NR_syscalls);
+	regs->ax = sys_call_table[nr](regs);
+
+Yes, this will turn into retpoline for old hardware, get patched back
+into regular indirect call on recent hardware, and will get kCFI/FineIBT
+crud on for 'free' when your build swings that way.
+
+It does mean syscall hijack through sys_call_table[] is a thing again,
+but it will be the fastest option on modern chips and automagically
+'scale' with the mitigation options selected.
+
+
+OTOH there are still million upon millions of that old stuff out there
+in data centers :/
+
+
