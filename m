@@ -1,101 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.172
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793908041;
-	b=pU5O4ZZA7dvxdKj9i+QwT8+CzIKksGegDoe3ikJPNmY+1w5WHcal9LyyhSbhXnhpNA7w
-	 Uwx9OsZKBxGjzkSakDPqs0DxGdzYMRPImnJ/dPdMHfCpsMpAST0Ldc2CpGvEp5VtBUWsV
-	 rTMYATai++Day62Xoxn3UqdwmjiN9L3nb1fvVoyC+16NZJxNVikH/fspR+1xA9SV8WCey
-	 eDppBf4xSgyVKOjbORjxqqq1TX7yMuIrOUV4b9LT+3gSzR/NUjx/HZ9OOXgIYLoM9xM1w
-	 arU03L0hufrnF9YjdyoDUe7WapWjOlQ4rjge1xTDWnYeBIe0bvuSVdQeqNdsFrIfheg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793908041;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=K7Rvc2eAAc7Ttj0gHC/vXpmQNYUgAbcj5VvsQjcHkOQ=;
-	b=LI7v1yzQxLgurF/SjgLvOsyf7b2p3wR7eDDd/teOifk9x9t12oeExrt9WqUJQC55ww8k
-	 xxGrAdkBBKwcV4pC6z/DUnLUFkeLjs5fAxFWDqjiC5z54MzV/4bcOcBydjEQxEIUXo4Gp
-	 +XAJ0MOBHhQd4n/sN4v+DIzVHEUf/3zWGF9wReNSOGumzRqIlERa1RpsJgPitq68Yt12E
-	 262ZcUlebJeR/7/NvKD7ECgyNrHBMmGkA0aQ+QiPmODiGRiP4nJW2zifrShPJGr8S93AV
-	 4J2QY5kIIRDToiqPYkKCCIxWhwCtUWUf3UEofGjxbHHiKL/G2AYIA5xJaIpJ02pwVIw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UHMtunaU;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.172
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.12
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793912952;
+	b=cfdq+78c3WVHhGuvTPBRvKDl7HXeUHP29e2BkhKe1fKQKZZ6cvXygTT7a/bEro2oEl6g
+	 hOhBFh44V46EGxsQ/Lsn5BPaBCHxy2Wd/gKdQt7xaH7O2dMjXeHtmZrs/OmZBg1sZ0jzq
+	 s+0sGqO5q79PopBG7mpCv8Bb06yv9+3lJjtHDPvVLbAAMk0sf0yAVGI50e2tCv2i785dO
+	 PTMeNxrdeCPQOhULd+iyHjb7q6dfxRAsRD0wzUcRWEP6p4gaecsSSegxALMdBJSKBffme
+	 9Ad5AQh0FOBEMQGP7tL46VBRA2bOii0MdM3jNtpFis0p1HaUQ2FIToYnuGQVFzL7KKw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793912952;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=mmXsAkOvTe3WVQAMlZboYyv00aEx2jHw2gWIu9EAFE0=;
+	b=g2a8xZzXlq5RaaPoiU1GNXd441z1eS0GZOUmZS9R2OFOxNDYccxJwkYgxcw1piMdhzRe
+	 aMgb+nwqH7u/zyVHHlOMgyduMHxkdBEnXVb0EHjQOnP+sM523TQsJyPbDuftkxJQsSHsc
+	 NOkzxqyNFXYNl+IGA6J2GSrUev+Vow2omrwZNnQNDWUFd3DMEwfS2Q1S91AWfxJCb8nxS
+	 qbbu1LoHZ/WxR6hq97oJzC21P+kPakebqE21o77h1/w2OZ7oSxEo+HS5RA60pnjtUaVcl
+	 V6NhJNl5lpQj/34yYpJDy6v5FciCgV1P4QdvHXXYU1pIPQ0rkE7q07fYgFyjTmIji3Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IRmExOyB;
+	arc=none smtp.remote-ip=192.198.163.12
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA828606B04C
-	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 19:47:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA828606B04C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C169606D805;
+	Thu,  5 Nov 2026 21:09:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C169606D805
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UHMtunaU
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-36d499f6ab6so250911eec.3
-        for <llvm@lists.linux.dev>; Thu, 05 Nov 2026 11:47:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793908040; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fRck06LOp/XmvycDoYlWIhmvQyahpbMayca/wCKuubhcrXilJHrNF0Ig+4vxbNrJ3u
-         XC2bY3fp8KJ4O/vynzONXvnuvnlA5eFIUgN8qXITNquPJ1mqcENc6RgNN55ALL7pK/vD
-         X/OEVzj7ZSzuTOaw1nWZr0eWe1hMvgjxpdDGc+Py1+pgABVuW9q4SHZ2KNKP0wra43/n
-         NjlW2IUvn8xQ2NM65ATlFfwzVmg7SOpMiCqZfUG+N/HgYLWQ8cQwmh0WFXFfNbcSADuu
-         qzTcXbxTsa2PKYZc1I52KOAu1f1l0VjhDwNHqKHHF97gd+7CAbesrxHiQfOhVF19OXj0
-         k+7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=K7Rvc2eAAc7Ttj0gHC/vXpmQNYUgAbcj5VvsQjcHkOQ=;
-        fh=v0hH/L4dQZRd3+xpuXCWT4h2ogqj8MUR/adf37fs2OY=;
-        b=EcVbFr4JJid/CFe+M3EYnx+uXkMqrpHVQU2HaLP8Z6KVi4jLhCuOxwUF56CvviM3Tg
-         qSoJuQnSiVAaiSd86oKZT0M2askUvzGWX98gkNFcnhXUR8C5FypiQq6uGypM6kY6Vbrs
-         f4I3piNktgfuZ7tYW9Q6nVCNJuHhfCI8qhIp3skcr5v0EWGcHzJdbZ4etlMc2ynvTRjP
-         4RzYH/SNux3LLr2vDBI59g+l/cx7nvNPX8l6Z9q5ySFOifRgb7kq2ognQCIlfzR7h+EV
-         KkoRYJviCqgG4YkjSsuFOgEQGBis0aMl+sYnu3a8PQo0hivNZcxvKzvZ6Li8k8Sg3hjh
-         qHSw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793908040; x=1794512840; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=K7Rvc2eAAc7Ttj0gHC/vXpmQNYUgAbcj5VvsQjcHkOQ=;
-        b=UHMtunaUsTpK/XILpbO997jFCOWus5Tnc4+GCqO0EZeuQvpCPye5/rS/dGP90i9RkQ
-         05wloS9J9ZQVSAke8TOicRlyhJSva+s3oTTIWUEuUKxp7kXVWX1VXkbzSmd/EDklgL/A
-         UNIyy2sEATP26A8dIXMerDRZpccd05Zv8lUTuyP+otTeeHQVtAOhVCAJ1kXHDBO2OwDl
-         HFWvL86QPapgin9q6oef9BTT3KZBfP+NpacaK6pAPA2zk4zFn6brZH6UPTaL/u16MshM
-         XpwbW1vhP/vvj6Fkkw2fs7ycc/pRv4iYxFlvlgQOf53YHW0/sMMioTP7Zno3+EchxnsA
-         OvXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793908040; x=1794512840;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=K7Rvc2eAAc7Ttj0gHC/vXpmQNYUgAbcj5VvsQjcHkOQ=;
-        b=lU823semDkpHk2XoGKkqhPYO+aYszq61/B9KOR7TdYpU2TwNCvwnJzNXLxC8sU6bXp
-         u/PKUoGuT2+36GXlmQx+YLPmOQsP6jo9N1gD5jU+C6MQnayb2LOOnCnHjQX9tjDrIU/a
-         gQdQ1qVtHCxK/JV9LolHjCa36/4ZfEism7KT22AnptlT7Dfn2dJo7EifT4Y5BWBUsS08
-         /11Z4NXY+okO5lmhXrDqCCCbVWXOfPju8Pu6dfodKtU1YlAwhXVlEHm9cQkTa1yvorEr
-         dqMEBqNmmwTmcZo9ah2KAxORKoaqt0/eW4QsftBcPVWAsicosxfJqsWbirI3dHDlkhke
-         iUDQ==
-X-Gm-Message-State: APuU4Z94HbhWTIOPXhG58EmaSENcLdqtBkj171tWSPeMMMhmqsxbXfxD
-	mN+RR6w/du9aMhEzUyyBCVcPmCRJsA62xCn4hZFDnk96aFZCbnjAcmOCci4jToRurSDX6yAISyU
-	bYv7UakfwlywnvQbZGswg3BO5XvIwr7g=
-X-Gm-Gg: AYBFou0cFOh8s2HKBGZUmbxgaKUmNhg+nSEDscE5xz73zrZfhxDJ+nPaVLsY6Qxiym8
-	z/J4xrr/NmtT0JMblQ48ZcwIT6gygcumYK+Sk/koi0lyvyAff2fByl4M3vaYL2QUbB00bDKYPkC
-	RwXFpYNoX6Dmrw5DMKQz9DeZavldaJgLFzDavPQW7Rj0Jj+8a950EUhnfOZgAQO2iCZ41z/NpJK
-	HBIidnnrR5H23qunBBSWeuK+fsAYiDTb8WqpIMe46UQmYjKB47/nnqIt6HlMEYKyZxkQEV5GGuU
-	CKQGvFGJJD5NWJSNPQL3AVTvmozjeIlFwWOeKKspV05OaqhgoHBh0qcGi/LL8RuiYKpxAoRdwse
-	Xkx4ZwMzm1cPYQbtoSz+fS8cTnTHC1muHRQgXKYrXfpYv+L5v5RFn48a27dIhw/Ibhlxw9/Lbli
-	5AURya4E9Xw+LSYgcxhVXYOwbtFrPx1tYBiTEldS3zjrP27hAki+gLwOxJUke8oxiRUeSq9f0K9
-	Px7FDBvEyn/DjL6qhzUF26+F7VnjtA5Achn
-X-Received: by 2002:a05:7301:da07:b0:36d:cd5d:d809 with SMTP id
- 5a478bee46e88-36f75831c52mr274847eec.1.1793908039634; Thu, 05 Nov 2026
- 11:47:19 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IRmExOyB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793912951; x=1825448951;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=15sfF/mRhvZ1F7gdjnRCZKZBTwsyrEZmFW3hQmxHWxo=;
+  b=IRmExOyB7SgM0TwjrCrjAeih6W6sdQnJ1p222CTiK3mYVICs+fMdXyvm
+   w52DWwPacEnoyma0DEfRR15HAJwb3Gu3NYmunvjAgs9oCeu++Wwkaewhn
+   kCUzI6eME/PPjHtv5Z7E0GO65YjC/y9p77IrhOiAxz9kHFo+gpkVAkcFT
+   /qHo3Er8SU3pIPkpIw9kop38CCupea+nlK43E9taA8KMPolmAhwr3sRKY
+   5kIzPKlNEN6QrdkIVaXF8mmPmVj/bkdFAM8zZ95Q3lwVwmLBabYo5/KPk
+   wVazWacyApXnTakvIWTbVZxTDIDdrEeGp/daNm7mrySRC/F0xy5FGrKYL
+   A==;
+X-CSE-ConnectionGUID: ndMbOmgqRA6BN228bzdhXA==
+X-CSE-MsgGUID: mqxA10piQtqDSIAqvGWgoA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2623514"
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="2623514"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 13:09:10 -0800
+X-CSE-ConnectionGUID: hgM2W9RuSFC+rx2wvSI2pw==
+X-CSE-MsgGUID: w+vm6vohQn6zuZh1/0dk1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="6944811"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 05 Nov 2026 13:09:07 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xP4hk-00000000mrj-3UBk;
+	Thu, 05 Nov 2026 21:09:04 +0000
+Date: Fri, 6 Nov 2026 05:08:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nikhil Gautam <nikhilgtr@gmail.com>, linux-iio@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, jic23@kernel.org,
+	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
+	Nikhil Gautam <nikhilgtr@gmail.com>
+Subject: Re: [PATCH v5] iio: chemical: ccs811: Make sampling frequency
+ configurable
+Message-ID: <202611060402.20veo4W8-lkp@intel.com>
+References: <20261104151138.9968-1-nikhilgtr@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -105,44 +85,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
-In-Reply-To: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 5 Nov 2026 20:47:05 +0100
-X-Gm-Features: AclHuK8sCw5nDzEQ97QtRVn9Wki3tWu_M3cQQh4H35CVD10ErpOISlcCaQDiaQU
-Message-ID: <CANiq72==m058rRQfZTLSsSSSRhNLgSEkLnREmAo=52Vj70yWdg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: AutoFDO: Enable -salvage-stale-profile
-To: Douglas Anderson <dianders@chromium.org>
-Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Han Wang <nesthanwang@google.com>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Benno Lossin <lossin@kernel.org>, 
-	Bill Wendling <morbo@google.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Boqun Feng <boqun@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Tamir Duberstein <tamird@kernel.org>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104151138.9968-1-nikhilgtr@gmail.com>
 
-On Thu, Nov 5, 2026 at 2:46=E2=80=AFAM Douglas Anderson <dianders@chromium.=
-org> wrote:
->
-> Enable LLVM stale profile salvaging (-salvage-stale-profile, supported
-> since LLVM 17) for C, Rust, and ThinLTO builds when
+Hi Nikhil,
 
-> +  RUSTFLAGS_AUTOFDO_CLANG +=3D -Cllvm-args=3D-salvage-stale-profile
+kernel test robot noticed the following build errors:
 
-I double-checked that the flag was introduced in LLVM 17 as the cover
-letter mentions, and so it is likely fine given the Rust 1.85.0
-compiler (i.e. our minimum) supports LLVM 18 as the minimum major
-version, but if the patch goes ahead in the end, then we should make
-sure it works well with that one (or probably you already did, in
-which case, please ignore this!).
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v7.4-rc1 next-20261105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Miguel
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikhil-Gautam/iio-chemical-ccs811-Make-sampling-frequency-configurable/20261104-204138
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20261104151138.9968-1-nikhilgtr%40gmail.com
+patch subject: [PATCH v5] iio: chemical: ccs811: Make sampling frequency configurable
+config: x86_64-randconfig-1004-20261105 (https://download.01.org/0day-ci/archive/20261106/202611060402.20veo4W8-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261106/202611060402.20veo4W8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611060402.20veo4W8-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/iio/chemical/ccs811.c:359:2: error: cannot jump from switch statement to this case label
+     359 |         default:
+         |         ^
+   drivers/iio/chemical/ccs811.c:354:42: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     354 |                 IIO_DEV_ACQUIRE_DIRECT_MODE(indio_dev, claim);
+         |                                                        ^
+   1 error generated.
+
+
+vim +359 drivers/iio/chemical/ccs811.c
+
+   345	
+   346	static int ccs811_write_raw(struct iio_dev *indio_dev,
+   347				    struct iio_chan_spec const *chan,
+   348				    int val, int val2, long mask)
+   349	{
+   350		struct ccs811_data *data = iio_priv(indio_dev);
+   351	
+   352		switch (mask) {
+   353		case IIO_CHAN_INFO_SAMP_FREQ:
+   354			IIO_DEV_ACQUIRE_DIRECT_MODE(indio_dev, claim);
+   355			if (IIO_DEV_ACQUIRE_FAILED(claim))
+   356				return -EBUSY;
+   357	
+   358			return ccs811_set_sampling_freq(data, val, val2);
+ > 359		default:
+   360			return -EINVAL;
+   361		}
+   362	}
+   363	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
