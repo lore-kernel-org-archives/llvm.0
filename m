@@ -1,110 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793843187;
-	b=by0os2FxhjCeCvLWPnWjYAdS1sdEncSReImVbtNavZVx/X4y5hbh9kWBrNwxuvA2xJ0n
-	 DBEv4/qGmYaLPDeY93PlsyS2MTd8WhFPPVB7DyCvYK49XpfY90/m792ht0xcTserv2XiJ
-	 mSg86ds5io0tpdXauJdMS66ImXIzEMpB8OCPrB7fBs3xitpEPDDRfN8giI+ZpJPmBEdj7
-	 xlJ3jXE4JvVAKa+AiBZeRFdBHbVVjX1LjcR7TrN62gabKBF97h3AM7y5WiPVRd3CYut5X
-	 Veeq2fNvwTZGF5AS4d1MXFWMP61fkcUUo0QgguqonFrmOFxxWf6CK3RT4d7/SkAdsVg==
+	t=1793850291;
+	b=SENe+2aNwOXUtOZI+CyLeRFiXyoessv93Ic/QgXx0kXHcyIZ2Au9VmNhuRtRYVLhb2rg
+	 U0/uQftM+gn2TntkGGwh3GyiCLR5i880SLuyTbYo/KQjrt/hi/5SSZkfsBV+TzeVAaau0
+	 b93+4gOppFJt+cJ7rvWlq95ojgJ1oQrY32qmGxF+9iMzAufKsycrTDXfgdUVX9JUnIVMW
+	 NcyLo17XFwDlPn9/XluZe923v5La0qLu7BoZ+le7F4vohd0FpawN8YgwfUaNMyaee9Val
+	 x7gdREQZXLLxn6D//GgL0vul2aLhY2hM0eP0sL2n2j3AyrcqBvTol+h7l5efOntQD1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793843187;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=ATA0RCqsuqMmSXCAjjT1HB7LWYQ+QvBN0eEjjs3jy80=;
-	b=dAhI0rokLSCBkTSIiWxlU5EWsi+TFTRtXTF3nnqtqr20mnwenPlt4ibeXsuzWHiSBBJs
-	 ZDJnu58F5APlD47WZiOc+8q4bgqo+sJpiiFQDjAy1nHjVtKN8aw+G1Ydru21TmSxa9Ltd
-	 sSwYizz1eQp/VpVL56/pOzw4qGHMzPm5Qxm7CKU/7sPLOy9q8N55yveRQX06L4XWyop0D
-	 6mVJh326tUUYbmvJXpuGEJoxowoC/feUKIlpx4pTyVrfxl2E9h2XrtMETXu7/YwUERtmR
-	 h7TLjZlTwfKUnEGc9PkguTHCr5SOSpncnyRKWuNgIBALhY7vLK7DygZcbXU+EXlU+8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793850291;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=NtBPXQzyXSwprcmm0MVbEM1wJo3HjgUml/0870WFfiI=;
+	b=SNQGu5X/QA0h7TtSPIHvg/lbBoPblaFrLVzI/RTVVuZg2AymuXrcDR+u8JlsnflkRHJO
+	 gwojIQj5NL0gkkQaARPuRx+UTVqLaoq523XH816gennRc1I9lCJGLar4yYnD0kzaC1C9d
+	 WZlUlABEEuvADVgrnTwUvoJsn4618tSNP92HDi6bO/Xv3TuuBjF2e/qy/RZ5uOncC51ci
+	 fM9zDC054whVR8klvjMQgUuguyCbq7uK5k3Ya1eHjUNkfdK+udE+lRm8ZviFtdJdKLyEO
+	 cGKEaLBk/r4XGzyv1zqTHiUvHOJuam9rTu8d4IsUN41/PcTZkgg5XZn42Vlx0l9S3ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chromium.org;
-	spf=pass smtp.mailfrom=chromium.org;
-	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=kDg4uz53;
-	arc=none smtp.remote-ip=74.125.82.172
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BzHf5Bfl;
+	arc=none smtp.remote-ip=192.198.163.9
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32767606A326
-	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 01:46:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32767606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975B1606A329;
+	Thu,  5 Nov 2026 03:44:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 975B1606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=kDg4uz53
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-353804b591eso2610915eec.0
-        for <llvm@lists.linux.dev>; Wed, 04 Nov 2026 17:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1793843186; x=1794447986; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ATA0RCqsuqMmSXCAjjT1HB7LWYQ+QvBN0eEjjs3jy80=;
-        b=kDg4uz53iyTo3Xk7eFyi0xjkJnyRWuGPXvDRfv+NuEyjFtV1cdXfYSmKHSfed8Crdu
-         eaUsv6BN59B3YLa7hVzkXhrVmfnDJS1U3P5o6RNdqCN9NsJFCy4jtO9bZYALcme7sd6f
-         C28b1YeSUQMjSwPP6om2HJ304CA4UiSqb8TC4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793843186; x=1794447986;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ATA0RCqsuqMmSXCAjjT1HB7LWYQ+QvBN0eEjjs3jy80=;
-        b=Jz8JgKLKz6FA7I3mAgQGMGT8bNlL4yEY222AcmnsF1oy+nJrtfY19AiKLDZ5byQnEV
-         lo/Us6DyMtLgXkc/jPUqv7otYM3UcbcKPnD6zI4MYgViUWBgfDcpzNJ4pX5moFII1ZiY
-         IUlNwL6mGMPUBXE2g+r+P8r7IyveqQwHrFs1vel4A7ILRoV/d3CtupAHeRZZtKDZFpR7
-         GrVlvfeE+lq9fk0Ur75+XfJlZWFoM4TjSEEYHDGosAs1BuwlAgRydR3feuS4XU7Fz1Mm
-         LiW13V0Mzc1CCWxuq4A0MHAu7Gs0L8vBMSumU0y6Tqtp97Ds/I9ER2IWTQlEUVDtg2ZG
-         Ikcw==
-X-Gm-Message-State: APuU4Z/0j0o7h2rdHF5QrMmTjakbDMwxP9zgRRUeO4wl/37qRMJcA9co
-	4h0DTF2hDsm9126IkX20SOsAhUTQRSOEiAthSRsN27keCPN7jLXdMqfuWJR3JFCqQj/mbKZoVDV
-	4E0Pm4NWmb4E=
-X-Gm-Gg: AYBFou1yQJvIRLpoB+pZYFOEHZVUPL8Jg/+KrdAkmjrRKtylMStVzXcvaknVisSMCMM
-	Wcq4x2LdkDequAyXUxD7j5HTT6IdzC0DAYVWqDFkUW2OKbvTOS130ADMDrjSbUA/Hv/zCWJSTId
-	f63tSfrpgeWWE2NmI/oTm20TOJ9Dse16AzOaYIVqmHoVzWQwQPdZX8dukLEBkjF37r6NHJUxMLi
-	6I8ST+pos6p9lA/QNqDOs4JAri+Mr0GndFIoQxluZrBqtwrdsPbofyJq+WKcsS169DQy+uIiKxX
-	YDAT5O9Oy6B2z4FcDijY/mYSGrwZGtl350Nm4YjBT6Xelr+PBrfYDWkVRLDjm0A6gr76hsFhCW5
-	icd0kFtYK2pnWOYteX1F+N88dFUOWOKLzaoFPthW4rxmUCIuQ2folzUr3eJ+p0eRMyNPlfcGwVG
-	YA2zPy6S2l2ljBxUhGtvaTOOW06JrSYTs+a8w2hYp+BcbZ63hA2g34AhSEQcUGHGLeTdtHrK11W
-	lGQF/rKqXJQKBuG6JACXVDyErukmiH8XMVbuGpJ7ATrlxXvZAK6TA/Q8udh9JcYT/VIV2Zqq2vl
-	DOJkKmERyvdnSWpyLTBDjuYNk3rbHFkt6ak5CgMcBBZ0zBxWa+BhSDs+If500YSqFXROAGf073Q
-	d166LBqWBHpXgbQ==
-X-Received: by 2002:a05:7300:ae18:b0:369:f035:661 with SMTP id 5a478bee46e88-36a42389027mr22926230eec.15.1793843186083;
-        Wed, 04 Nov 2026 17:46:26 -0800 (PST)
-Received: from dianders.sjc.corp.google.com ([2a00:79e0:2e7c:8:e268:adf5:686b:4655])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca39b8eb3sm15294011eec.27.2026.11.04.17.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 17:46:24 -0800 (PST)
-From: Douglas Anderson <dianders@chromium.org>
-To: llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org,
-	Rong Xu <xur@google.com>,
-	Han Shen <shenhan@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: Han Wang <nesthanwang@google.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Benno Lossin <lossin@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Boqun Feng <boqun@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: [PATCH] kbuild: AutoFDO: Enable -salvage-stale-profile
-Date: Wed,  4 Nov 2026 17:45:55 -0800
-Message-ID: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
-X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BzHf5Bfl
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793850290; x=1825386290;
+  h=date:from:to:cc:subject:message-id;
+  bh=eSbGIHODvruJdjFkuYMY7XymtZzSTPMqGzu0hZe2okE=;
+  b=BzHf5BflsmRWd/SQMaZvFJzRJ16D6Yj7NO9OsBes9B/ptmqNIaS/f1ru
+   0rRCo8isR4/LkKuWRE7GWUGLyTIgxGQB9ipsj6gzEFxbZIDEGG5h6NVO6
+   KEcaeDJm/RhFuTrtseLj5PRfftIVDy9+1OVil/DZuX/K95h4PMuz0DuKH
+   we4dF95qwD3AlVy5bpW4c+KrnIrsyNz83DD2GYLX8tr5kw2yu6Gu3fvNo
+   UAylYDkDz664VS2TZfs/eADvxAIl+RsRi9RaZiG0T2MeRmC3mf3StXzAw
+   Pm6xdaR8izNGmHsMCIB/UQxW+6okukVzR6+kgkm96+lw5blMOVl+nzWvG
+   g==;
+X-CSE-ConnectionGUID: degmDCrXQAyCXMzkt/Y+KA==
+X-CSE-MsgGUID: MILQnmApTDmccdmnPzsTwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2500861"
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="2500861"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 19:44:49 -0800
+X-CSE-ConnectionGUID: D6vf+7gORCCJ1aT7cGYEig==
+X-CSE-MsgGUID: Q+rqmSawQ/iMpDlu2GwVVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="7230755"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Nov 2026 19:44:48 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xOoP6-00000000lb9-3Q3g;
+	Thu, 05 Nov 2026 03:44:44 +0000
+Date: Thu, 05 Nov 2026 11:44:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bvanassche:thread-safety 442/445]
+ include/linux/radix-tree.h:242:2: warning: unknown attribute
+ 'try_acquire_capability_range' ignored; did you mean
+ 'try_acquire_capability'?
+Message-ID: <202611051146.cRUZsyyx-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -113,83 +81,397 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Han Wang <nesthanwang@google.com>
+tree:   https://github.com/bvanassche/linux thread-safety
+head:   d7fccb0c43af0d515fd23b885eb43ee9c38a6247
+commit: 2bcc94cede043acc8b73b2078d0101f8bdf2ae1e [442/445] treewide: Annotate interruptible and killable locks with range acquire
+config: s390-randconfig-1001-20261105 (https://download.01.org/0day-ci/archive/20261105/202611051146.cRUZsyyx-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611051146.cRUZsyyx-lkp@intel.com/reproduce)
 
-AutoFDO profiles are commonly collected on one kernel revision and
-reused across subsequent commits or stable merges before a fresh
-profile is generated. While AutoFDO uses function-relative line
-numbers to tolerate edits above a function, adding or removing lines
-inside a function (or an inlined helper) shifts all subsequent
-relative line offsets within that function. Without stale profile
-salvaging, shifted callsites fail to match their nested inlinee
-profiles in SampleProfileLoader (dropping profile-guided inlining for
-those callees) and basic block sample counts are misattributed to the
-wrong instructions, degrading branch probability estimation and
-machine function splitting.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611051146.cRUZsyyx-lkp@intel.com/
 
-Enable LLVM stale profile salvaging (-salvage-stale-profile, supported
-since LLVM 17) for C, Rust, and ThinLTO builds when
-CLANG_AUTOFDO_PROFILE is specified. This instructs SampleProfileMatcher
-to use lexical callsite anchors within functions to fuzzy-match and
-remap shifted line offsets when querying the profile.
+All warnings (new ones prefixed by >>):
 
-While -salvage-stale-profile is not enabled by default in LLVM due to
-the minor compile-time/memory cost of sequence-matching callsite
-anchors (which is unnecessary when profiles are freshly generated on
-the exact commit being built) and the heuristic nature of fuzzy
-matching on heavily rewritten functions, enabling it makes sense for
-the kernel: hardware PMU profiles are rarely regenerated on every
-commit, and anchoring on callsite names is strictly more resilient
-than blind line-offset lookup when functions are edited.
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:186:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     186 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:176:10: note: expanded from macro '_SIG_SET_OP'
+     176 |         case 2: set->sig[1] = op(set->sig[1]);                          \
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:10:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:197:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     197 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:10:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:210:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     210 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:10:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:241:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     241 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:10:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:254:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     254 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:10:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:10:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:13:
+   In file included from arch/s390/include/asm/uaccess.h:16:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:20:
+>> include/linux/radix-tree.h:242:2: warning: unknown attribute 'try_acquire_capability_range' ignored; did you mean 'try_acquire_capability'? [-Wunknown-attributes]
+     242 |         __cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:347:2: note: expanded from macro '__cond_acquires_range'
+     347 |         __try_acquires_ctx_lock_range(first, last, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:22:17: note: expanded from macro '__try_acquires_ctx_lock_range'
+      22 |         __attribute__((try_acquire_capability_range(first, last, __VA_ARGS__)))
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:10:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:10:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:13:
+   In file included from arch/s390/include/asm/uaccess.h:16:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:20:
+   include/linux/radix-tree.h:244:2: warning: unknown attribute 'try_acquire_capability_range' ignored; did you mean 'try_acquire_capability'? [-Wunknown-attributes]
+     244 |         __cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:347:2: note: expanded from macro '__cond_acquires_range'
+     347 |         __try_acquires_ctx_lock_range(first, last, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:22:17: note: expanded from macro '__try_acquires_ctx_lock_range'
+      22 |         __attribute__((try_acquire_capability_range(first, last, __VA_ARGS__)))
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:10:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:10:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:13:
+   In file included from arch/s390/include/asm/uaccess.h:16:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:22:
+   include/linux/mmap_lock.h:548:37: error: use of undeclared identifier 'mm'
+     548 |         __cond_acquires_range(0, INT_MAX, &mm->mmap_lock)
+         |                                            ^~
+   include/linux/mmap_lock.h:612:44: error: use of undeclared identifier 'mm'
+     612 |         __cond_acquires_shared_range(0, INT_MAX, &mm->mmap_lock)
+         |                                                   ^~
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:175:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:1968:
+   In file included from include/linux/huge_mm.h:7:
+   include/linux/fs.h:1037:37: error: use of undeclared identifier 'inode'
+    1037 |         __cond_acquires_range(0, INT_MAX, &inode->i_rwsem)
+         |                                            ^~~~~
+   include/linux/fs.h:1055:44: error: use of undeclared identifier 'inode'
+    1055 |         __cond_acquires_shared_range(0, INT_MAX, &inode->i_rwsem)
+         |                                                   ^~~~~
+   In file included from arch/s390/kernel/idle.c:15:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   include/linux/device.h:1114:37: error: use of undeclared identifier 'dev'
+    1114 |         __cond_acquires_range(0, INT_MAX, &dev->mutex)
+         |                                            ^~~
+   39 warnings and 12 errors generated.
+--
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:8:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:17:
+   In file included from include/linux/seqlock.h:20:
+   include/linux/mutex.h:188:63: error: use of undeclared identifier 'lock'
+     188 |                                         unsigned int subclass) __cond_acquires_range(0, INT_MAX, lock);
+         |                                                                                                  ^~~~
+   include/linux/mutex.h:190:91: error: use of undeclared identifier 'lock'
+     190 |                 unsigned int subclass, struct lockdep_map *nest_lock) __cond_acquires_range(0, INT_MAX, lock);
+         |                                                                                                         ^~~~
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:8:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:13:
+   include/linux/rwsem.h:231:116: error: use of undeclared identifier 'sem'
+     231 | extern int __must_check down_read_interruptible(struct rw_semaphore *sem) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                                    ^~~
+   include/linux/rwsem.h:232:111: error: use of undeclared identifier 'sem'
+     232 | extern int __must_check down_read_killable(struct rw_semaphore *sem) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                               ^~~
+   include/linux/rwsem.h:243:105: error: use of undeclared identifier 'sem'
+     243 | extern int __must_check down_write_killable(struct rw_semaphore *sem) __cond_acquires_range(0, INT_MAX, sem);
+         |                                                                                                         ^~~
+   include/linux/rwsem.h:306:132: error: use of undeclared identifier 'sem'
+     306 | extern int __must_check down_read_killable_nested(struct rw_semaphore *sem, int subclass) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                                                    ^~~
+   include/linux/rwsem.h:308:113: error: use of undeclared identifier 'sem'
+     308 | extern int down_write_killable_nested(struct rw_semaphore *sem, int subclass) __cond_acquires_range(0, INT_MAX, sem);
+         |                                                                                                                 ^~~
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:18:
+   include/linux/mmap_lock.h:548:37: error: use of undeclared identifier 'mm'
+     548 |         __cond_acquires_range(0, INT_MAX, &mm->mmap_lock)
+         |                                            ^~
+   include/linux/mmap_lock.h:612:44: error: use of undeclared identifier 'mm'
+     612 |         __cond_acquires_shared_range(0, INT_MAX, &mm->mmap_lock)
+         |                                                   ^~
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:31:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:20:
+>> include/linux/radix-tree.h:242:2: warning: unknown attribute 'try_acquire_capability_range' ignored; did you mean 'try_acquire_capability'? [-Wunknown-attributes]
+     242 |         __cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:347:2: note: expanded from macro '__cond_acquires_range'
+     347 |         __try_acquires_ctx_lock_range(first, last, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:22:17: note: expanded from macro '__try_acquires_ctx_lock_range'
+      22 |         __attribute__((try_acquire_capability_range(first, last, __VA_ARGS__)))
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:31:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:20:
+   include/linux/radix-tree.h:244:2: warning: unknown attribute 'try_acquire_capability_range' ignored; did you mean 'try_acquire_capability'? [-Wunknown-attributes]
+     244 |         __cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:347:2: note: expanded from macro '__cond_acquires_range'
+     347 |         __try_acquires_ctx_lock_range(first, last, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:22:17: note: expanded from macro '__try_acquires_ctx_lock_range'
+      22 |         __attribute__((try_acquire_capability_range(first, last, __VA_ARGS__)))
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
+     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:3: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 r->sig[3] = op(a3, b3);                                 \
+         |                 ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/syscall.c:19:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:140:3: note: expanded from macro '_SIG_SET_BINOP'
+     140 |                 r->sig[2] = op(a2, b2);                                 \
+         |                 ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/syscall.c:19:
+..
 
-As a side benefit, remapping shifted line offsets also avoids feeding
-mismatched weights from stale profiles into MIRProfileLoader's flow
-inference solver (applyFlowInference), working around a compiler bug
-[1] where a small intra-function line shift (such as in
-__vm_normal_page() in mm/memory.c) can cause applyFlowInference to
-spend 30+ minutes compiling unmap_page_range().
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/2188 [1]
-Signed-off-by: Han Wang <nesthanwang@google.com>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-Much of the commit-message justification here is AI-generated. Sorry!
-:( Folks who know better, feel free to call bullshit.
+vim +242 include/linux/radix-tree.h
 
-Honestly, this patch came about because of AI analysis compiles taking
-30 minutes to run (see the clang bug [1]). It seems to work around the
-problem. Obviously, we should fix the compiler. That being said, upon
-further analysis it seemed like adding this flag was beneficial
-anyway, so I'm posting it upstream. If folks disagree, we can simply
-drop this patch.
+   220	
+   221	int radix_tree_insert(struct radix_tree_root *, unsigned long index,
+   222				void *);
+   223	void *__radix_tree_lookup(const struct radix_tree_root *, unsigned long index,
+   224				  struct radix_tree_node **nodep, void __rcu ***slotp);
+   225	void *radix_tree_lookup(const struct radix_tree_root *, unsigned long);
+   226	void __rcu **radix_tree_lookup_slot(const struct radix_tree_root *,
+   227						unsigned long index);
+   228	void __radix_tree_replace(struct radix_tree_root *, struct radix_tree_node *,
+   229				  void __rcu **slot, void *entry);
+   230	void radix_tree_iter_replace(struct radix_tree_root *,
+   231			const struct radix_tree_iter *, void __rcu **slot, void *entry);
+   232	void radix_tree_replace_slot(struct radix_tree_root *,
+   233				     void __rcu **slot, void *entry);
+   234	void radix_tree_iter_delete(struct radix_tree_root *,
+   235				struct radix_tree_iter *iter, void __rcu **slot);
+   236	void *radix_tree_delete_item(struct radix_tree_root *, unsigned long, void *);
+   237	void *radix_tree_delete(struct radix_tree_root *, unsigned long);
+   238	unsigned int radix_tree_gang_lookup(const struct radix_tree_root *,
+   239				void **results, unsigned long first_index,
+   240				unsigned int max_items);
+   241	int radix_tree_preload(gfp_t gfp_mask)
+ > 242		__cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+   243	int radix_tree_maybe_preload(gfp_t gfp_mask)
+   244		__cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+   245	void radix_tree_init(void);
+   246	void *radix_tree_tag_set(struct radix_tree_root *,
+   247				unsigned long index, unsigned int tag);
+   248	void *radix_tree_tag_clear(struct radix_tree_root *,
+   249				unsigned long index, unsigned int tag);
+   250	int radix_tree_tag_get(const struct radix_tree_root *,
+   251				unsigned long index, unsigned int tag);
+   252	void radix_tree_iter_tag_clear(struct radix_tree_root *,
+   253			const struct radix_tree_iter *iter, unsigned int tag);
+   254	unsigned int radix_tree_gang_lookup_tag(const struct radix_tree_root *,
+   255			void **results, unsigned long first_index,
+   256			unsigned int max_items, unsigned int tag);
+   257	unsigned int radix_tree_gang_lookup_tag_slot(const struct radix_tree_root *,
+   258			void __rcu ***results, unsigned long first_index,
+   259			unsigned int max_items, unsigned int tag);
+   260	int radix_tree_tagged(const struct radix_tree_root *, unsigned int tag);
+   261	
 
- scripts/Makefile.autofdo | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
-index 57a3aba6ffc2..3b1e65a13ffa 100644
---- a/scripts/Makefile.autofdo
-+++ b/scripts/Makefile.autofdo
-@@ -13,13 +13,16 @@ endif
- ifdef CLANG_AUTOFDO_PROFILE
-   CFLAGS_AUTOFDO_CLANG += -fprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -ffunction-sections
-   CFLAGS_AUTOFDO_CLANG += -fsplit-machine-functions
-+  CFLAGS_AUTOFDO_CLANG += -mllvm -salvage-stale-profile
-   RUSTFLAGS_AUTOFDO_CLANG += -Zprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -Zfunction-sections=y
-   RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-split-machine-functions
-+  RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-salvage-stale-profile
- endif
- 
- ifdef CONFIG_LTO_CLANG_THIN
-   ifdef CLANG_AUTOFDO_PROFILE
-     KBUILD_LDFLAGS += --lto-sample-profile=$(CLANG_AUTOFDO_PROFILE)
-+    KBUILD_LDFLAGS += --mllvm=-salvage-stale-profile
-   endif
-   KBUILD_LDFLAGS += --mllvm=-enable-fs-discriminator=true --mllvm=-improved-fs-discriminator=true -plugin-opt=thinlto
-   KBUILD_LDFLAGS += $(call ld-option,-plugin-opt=-function-splitting=all,-plugin-opt=-split-machine-functions)
--- 
-2.56.0.455.g6c5a503b38-goog
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
