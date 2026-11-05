@@ -1,101 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881543;
-	b=eN86/4TY0AvyieL15K8ewiEj2Y9+2j5OuqWBPbUsXbvC0iKthCDmnOLNIPFkLifxrWta
-	 nKALDWAvHovwmUbWVjcFHpzK2nIdmhWaE+xUOVZlJZcQ38frbqgfqR7T+rwg2eOSLr4WE
-	 j+fDzVHxPFBcs9B8bURV0FhmVaMJULOq6sObgeTyKvjmZzIwbsCawozU0cbGsa1ugdD8p
-	 y9rzwFwrmOABKp2Zo1WV3TilNbfq65qQU3F6Eqy3zXsUgnUtuzIf+rwhXYiY55nWcNRol
-	 dE+Mw5bN7KXYHVeXlzTaXCNtKoKs2fgGDFgBF5TCn5VkbzMvfVrbLnE1RtcScKiWMPw==
+	t=1793890094;
+	b=0mkilMpocRuN62+bGPE0AxtCRIDH061Bo+QF6UysLWWGFsacYLth5WnZxRM19OlCquww
+	 ss6pPQLcD3Xv00yv1gNNTswB/11zYMl1CvF8hbUmaJ+UjX6la9FLlwLUMHbNKQb3Tvzi1
+	 0rk0IGfNfluNA9XT4tKGHccD0SldSvF3uMg2/qljwdJ94U2/hkAiGyIoH4Np11jZA388A
+	 +1kqop3tvgGz5PiaEDR76k+qNcguiyVZCy4bwHkBu72u5Vz1QQIUKq81w6t/X8gpDUssB
+	 Cs013r+7h6Rbt1IrvopLEuozYAwRl0t+/+4/4GpFCENBXxEiClC+4HEiv9yQgLtPfQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881543;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793890094;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=ZSqGuWJBbHfF/m30cj+yySLDnLihqLhP2KpRjJlvDzk=;
-	b=GAI4dJz3A0DtRYu0R5+qiMAAtKnCcKmNT1UDaTqG58+h6AM99+z4FisCXhyu7MN8i0f/
-	 9DbKrVIO3ymfOzJp17Pd+91Rz0HiZ2CqbP/2CDjuWsSKIiySvgJ+mdMDD7iOsnmF+Lrlx
-	 A8gP2gNyjkNJkqzn60EzKE1EScTsJOYQjhqEYzdZnQgQEqsyCsLXoUItIKIu0enPsNVN+
-	 twWCAkGNXcqt0HLl7Qi7ppHFvgxBb9jzYHum/jxR3Rb/iG/uD+KYWu1dB98gRzHw4gLp2
-	 DND+GZdqHjPmUflJTBy6YeciWAcMw3Igopq16DFdOi5o8ET9kw9Hjnm0zxuoWzrwf1A==
+	bh=+KEO8mCidqSQviZa7+VsKyZl/2osmPqVxDkGw1K3410=;
+	b=Ks/AIlk5qUyTzUXSTs+wSHeBOCjvfmOmjjsK9kJpCsonbyiY0HExtCBvjcsTdi9wskmn
+	 ccK9ptujtzXAwz6XdUEZ9SBa47sus9kr5nVG7uT6NC1EeunO7KK/D7/g8ywvtM0ELoNZn
+	 CX10U9Lw/kXrqDIt9eDFx1tyLiCgjT8FDCgbRVFm9/U4l2KYXlyCMV0/sswvNGR7/qEQ/
+	 NKuUxyDRU72sEA8Dlxan4pebBe6V2eEvmrTn4xH9CY23kPjox6j/BCmdqWheTNFv1IyrW
+	 ICv+DTwqHyZqqgJ539G1xxZgP7pSsrNGRlGjuj368RL54d/6sEpyCOob5LRPUtov2tg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kfxrwzy5;
-	arc=none smtp.remote-ip=198.175.65.11
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=LZW6tDxs;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EBF606D815;
-	Thu,  5 Nov 2026 12:25:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64EBF606D815
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98974606A328;
+	Thu,  5 Nov 2026 14:48:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98974606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kfxrwzy5
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=LZW6tDxs
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793881542; x=1825417542;
+  t=1793890094; x=1825426094;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hULj/pENj1t0ZvVqG5iuX9V9t0+YHM1767U5NdVTqL8=;
-  b=kfxrwzy5V7y5TV1PzWdqrxuI+TxSG64UhMazkPQPEtTFcXJTlDEOYPmM
-   tm6SqraMNgl4X0TJ5Kmwcu8m1rBhXv/AOzLjQ4PGdrjG9utGE4o1E6Wrh
-   mJv2EZuuLOnd7Re7iokMkMDFptMoIJeKgnDEhn2iWwlzU9iogXwwKByqH
-   1RgtUL5VwWOuxWW4xQ1ywsWG94Ap9UXugM1BA9D3HUf7G51YjOEtMKior
-   y/uP64pjKbl+DR6qSterZnfa+pJWN+Hd4MHJiq+g12bQQGlrJfMG/uMfM
-   hqWXxPTQcLvilTPR7kylvNGTAp1FNJGT7Y1niCpJVDHvTfZEw2oVKZnIy
-   Q==;
-X-CSE-ConnectionGUID: iPfnISy+SNGusP3prGntlw==
-X-CSE-MsgGUID: 42o5OzZJSFytVheX6ffwGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2551246"
+  bh=LcqnTFFjXD7S999oBGGwZsDLxCeSNRsnNa/cTmTmO2w=;
+  b=LZW6tDxsZvV2oFvfh1eubyYgXK5Iy7deCVVBqN5Qt+9PUjRr+qrxWkG/
+   YuD0ubFqkKF9ifiXlSkuuVJ/7KG5m9hOFZvEx7bJjMn8b8cktrzp34K61
+   KPZRCC/kh49189DYMHF+MV9xIcakk+AD3QiciuJE/7XrRvtFw0CHfLBaB
+   Dfdn1ltOA+GjuQ1KyxJUBe8ttZ8j4UDxHuOxMabpp/0zzU+gteL8+asE9
+   EQP7VgU2r0vF9NdTNVEw6MzK2OjB5yprinxoBumN9tn1HKINYj3fAnsgg
+   rYvIv1/adoiyKEnMlHdp1SKkb39OtqEBs6yZnO52GfxxuLC8r19K283B1
+   g==;
+X-CSE-ConnectionGUID: D2J0W6mzTL+apr8l98BLiA==
+X-CSE-MsgGUID: mM+cSXDDT7+Osl7BJdVnTA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2674336"
 X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="2551246"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 04:25:41 -0800
-X-CSE-ConnectionGUID: oFa3uUGWSeuMY0Gq5/nLlg==
-X-CSE-MsgGUID: WKcOzA8qSq+TnJol5dU2yQ==
+   d="scan'208";a="2674336"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 06:48:13 -0800
+X-CSE-ConnectionGUID: r9Olhf3/Re6x1iMuA+Petg==
+X-CSE-MsgGUID: sznsQMtNSRayjim39ZIgFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="8760659"
+   d="scan'208";a="7033010"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa012.fm.intel.com with ESMTP; 05 Nov 2026 04:25:34 -0800
+  by orviesa002.jf.intel.com with ESMTP; 05 Nov 2026 06:48:11 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xOwX4-00000000mBP-1ah2;
-	Thu, 05 Nov 2026 12:25:30 +0000
-Date: Thu, 5 Nov 2026 20:24:42 +0800
+	id 1xOyl7-00000000mL7-1mJF;
+	Thu, 05 Nov 2026 14:48:09 +0000
+Date: Thu, 5 Nov 2026 22:47:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
-	iommu@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Aneesh Kumar K.V (Arm)" <aneesh.kumar@kernel.org>,
-	Alex Williamson <alex@shazbot.org>,
-	Alexey Kardashevskiy <aik@amd.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Joerg Roedel <joro@8bytes.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Krishna Reddy <vdumpa@nvidia.com>, Lukas Wunner <lukas@wunner.de>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Samuel Ortiz <sameo@rivosinc.com>,
-	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-	Steven Price <steven.price@arm.com>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Thierry Reding <thierry.reding@kernel.org>,
-	Vasant Hegde <vasant.hegde@amd.com>, Will Deacon <will@kernel.org>,
-	Xu Yilun <yilun.xu@linux.intel.com>, kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-coco@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v8 01/15] PCI/TSM: Move core code into its own directory
-Message-ID: <202611052018.S2OsLHjD-lkp@intel.com>
-References: <20261104161632.3547423-2-aneesh.kumar@kernel.org>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	linux-bluetooth@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 6/6] Bluetooth: Add EKS Opportunistic Encryption
+ support
+Message-ID: <202611052210.pgQkfWp2-lkp@intel.com>
+References: <20261104221321.1200529-7-luiz.dentz@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -107,45 +85,104 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261104161632.3547423-2-aneesh.kumar@kernel.org>
+In-Reply-To: <20261104221321.1200529-7-luiz.dentz@gmail.com>
 
-Hi Aneesh,
+Hi Luiz,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4]
+[auto build test WARNING on bluetooth-next/master]
+[also build test WARNING on bluetooth/master]
+[cannot apply to linus/master v7.3 next-20261030]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V-Arm/PCI-TSM-Move-core-code-into-its-own-directory/20261104-214618
-base:   6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-patch link:    https://lore.kernel.org/r/20261104161632.3547423-2-aneesh.kumar%40kernel.org
-patch subject: [PATCH v8 01/15] PCI/TSM: Move core code into its own directory
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261105/202611052018.S2OsLHjD-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-Add-initial-support-for-HDT-PHY/20261104-171316
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20261104221321.1200529-7-luiz.dentz%40gmail.com
+patch subject: [PATCH v3 6/6] Bluetooth: Add EKS Opportunistic Encryption support
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20261105/202611052210.pgQkfWp2-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611052018.S2OsLHjD-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611052210.pgQkfWp2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611052018.S2OsLHjD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611052210.pgQkfWp2-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/pci/tsm/core.c:31:12: warning: variable 'pci_tsm_devsec_count' set but not used [-Wunused-but-set-global]
-      31 | static int pci_tsm_devsec_count;
-         |            ^
+>> net/bluetooth/hci_sync.c:8779:6: warning: calling function 'smp_pairing_in_progress' requires holding mutex 'hci_conn_hash_lookup_handle(hdev, data->handle)->hdev->lock' exclusively [-Wthread-safety-precise]
+    8779 |         if (smp_pairing_in_progress(conn)) {
+         |             ^
+   net/bluetooth/hci_sync.c:8779:6: note: found near match 'hdev->lock'
    1 warning generated.
 
 
-vim +/pci_tsm_devsec_count +31 drivers/pci/tsm/core.c
+vim +8779 net/bluetooth/hci_sync.c
 
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  25  
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  26  /*
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  27   * Count of TSMs registered that support physical link operations vs device
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  28   * security state management.
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  29   */
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  30  static int pci_tsm_link_count;
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31 @31  static int pci_tsm_devsec_count;
-3225f52cde56f4 drivers/pci/tsm.c Dan Williams 2025-10-31  32  
+  8754	
+  8755	/* The opportunistic encryption is queued when the connection is set up, so
+  8756	 * by the time it runs the connection may be gone, already encrypted, have
+  8757	 * SMP encryption pending or SMP pairing in progress, so check again right
+  8758	 * before sending the command and leave the link to SMP in those cases.
+  8759	 *
+  8760	 * HCI_CONN_OPP_ENCRYPT, without HCI_CONN_ENCRYPT, marks the request in
+  8761	 * flight. HCI_CONN_ENCRYPT_PEND is not used for it, so SMP is not blocked
+  8762	 * by it: SMP pairing over a link being encrypted works, and the encryption
+  8763	 * started by SMP afterwards replaces the opportunistic key.
+  8764	 */
+  8765	static int hci_le_eks_oppt_encrypt_sync(struct hci_dev *hdev, void *data)
+  8766	{
+  8767		struct hci_cp_le_enable_encrypt_v2 *cp = data;
+  8768		struct hci_conn *conn;
+  8769		int err;
+  8770	
+  8771		hci_dev_lock(hdev);
+  8772	
+  8773		conn = hci_conn_hash_lookup_handle(hdev, le16_to_cpu(cp->handle));
+  8774		if (!conn || conn->state != BT_CONNECTED ||
+  8775		    test_bit(HCI_CONN_ENCRYPT, conn->flags) ||
+  8776		    test_bit(HCI_CONN_ENCRYPT_PEND, conn->flags))
+  8777			goto unlock;
+  8778	
+> 8779		if (smp_pairing_in_progress(conn)) {
+  8780			bt_dev_dbg(hdev, "SMP in progress, skipping hcon %p", conn);
+  8781			goto unlock;
+  8782		}
+  8783	
+  8784		if (test_and_set_bit(HCI_CONN_OPP_ENCRYPT, conn->flags))
+  8785			goto unlock;
+  8786	
+  8787		/* Use the MIC length requested by now, or the default one if unset */
+  8788		cp->mic_len = conn->req_mic_len ? conn->req_mic_len :
+  8789						  hdev->hdt_def_mic_len;
+  8790	
+  8791		bt_dev_dbg(hdev, "starting EKS opportunistic encryption hcon %p", conn);
+  8792	
+  8793		hci_dev_unlock(hdev);
+  8794	
+  8795		err = hci_le_enable_encrypt_v2_sync(hdev, data);
+  8796		if (!err)
+  8797			return 0;
+  8798	
+  8799		/* No result will come for a command that was not sent or failed */
+  8800		hci_dev_lock(hdev);
+  8801	
+  8802		conn = hci_conn_hash_lookup_handle(hdev, le16_to_cpu(cp->handle));
+  8803		if (conn && !test_bit(HCI_CONN_ENCRYPT, conn->flags))
+  8804			clear_bit(HCI_CONN_OPP_ENCRYPT, conn->flags);
+  8805	
+  8806		hci_dev_unlock(hdev);
+  8807	
+  8808		return err;
+  8809	
+  8810	unlock:
+  8811		hci_dev_unlock(hdev);
+  8812		return 0;
+  8813	}
+  8814	
 
 --
 0-DAY CI Kernel Test Service
