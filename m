@@ -1,69 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793856249;
-	b=pIo+qtL4BuQ6sRmthtFZNO62QSkyz6EnSlpxhKJsedXRoUdUp3EpZghXxURgaKedQUZP
-	 DYgATphp6a9HfarW0l0bLeklUeTkc6xuQ4nN5RPkDTH8IGttXEY5ZEC3RPSe76Floyq/v
-	 ot5ATi7+FiQEbOXTv0bfvMXhZrazOM7ORTnJ+5bUY6SZMVN63rjhHqmQ9w3CI012gUzpf
-	 WEWgjtL5zCttkq8MLJMePUWpliwuORtI4aETBnFqzHiI7fsz7s5QhcOMo/1A4sKsLIS9G
-	 uCiY7g2CR9bzge7fHjzPS1qcowC+U1g5GIGR9I88hqio3Gx+vKRpD8dxas2oJtQ0Aig==
+	t=1793860150;
+	b=ygRtHrdFrkLmF0NgqJUYYrHY5Gg/seTX9eOwxHQR4/GqUklMZwxRrsEWKgnWfLjTfoPV
+	 zoF1S8eJGI9forQ7GN2osS8Vl3ejYVqjh8H7KRn+INT9d7kaWRvjS6jZmoFhZtWI8nvke
+	 p/f3QsU2Z5fMIro6DcsfRPEdWEM5Aeug/rJIIdmuw0lDEL1QKqzdEox7I2ilFC9wXtpB9
+	 pQMRPkzIjhzAm4OlB6fMRYvWnVmpfBrpBo74+0jNnlISLNxmmze66SZ0W5xVOySpceEl0
+	 DQfsJN95GcVam7E0YToASD8bY2xEGVUhr73i6MUE/Bdbi8NL8fyaje3/WN7wjgoR3aA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793856249;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ILoB454xbFbHLsKflWQrUGwexE0/EjSSyi9KCdzFexA=;
-	b=WR+Gpb8BIrNaAhMWs5oGxipgoPN9O6XpG4ttpf0IzilLyeXWUejdX9pbGJ3G1mgt3Zaa
-	 KEMHV0CvA05fXmYWgt9JD6bkJaGiYaZS5EOUwjcwyQkyGLgRTrlhxRaSBNo34VG3/bQQ7
-	 ZUgBpyKY5Kz4DBPL0tT6+9lHnqf+KrPwqk8QcuX3DBTA1o5Rda/0BfMa/PJ9nJfR/d2YY
-	 0RoAVvxOakM37UNULmzdputqflKpX59ArbpTGwKmYiwbzjnMIvHER6ha3aypnOJ50nlxt
-	 Xba9S9A5GgA8b1aQAQLwoQUMuX3HP5a9OfikInU3JRfvTjmQaOml6vNkEfnBNHqPxsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793860150;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=p8OHPX84+PpjnBVHqR278mIsTE1FJl7wHGftlt7gLk4=;
+	b=QyfBV9ib8UAGt2sDoV8Qwmtt1HoD+9+OsKVyi3I28UGfE6+FvLqrC7IQ/3T2EPeaLphp
+	 VMr0yeO13R1fgqUGm/aCqpK5S7QW9alW0b5iiCEDyoEBPg2+xij5kfW2YpFBA09K4HN6A
+	 Ok1nCKVw9twiAoibsrZIvb2KbqEFx3LTNqdjbCXmgwxqH2GLBsARNWGjkDqGwbcA1NU/Y
+	 uxK60aikJf4wNFEeRgkeGLySwOYMqb06jhN7eDJr0S66rxSsZe/kouL9FyFlN8WJBOlR+
+	 Zk+APwuITRhEKBFhI2i8l0rZ/ONhRPywjEYK8D1Cy2G2EXwgXq8a8XLVZKp2vj7zebQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=al++uHaj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XfPu5DWm;
+	arc=none smtp.remote-ip=192.198.163.15
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B26D606A31B;
-	Thu,  5 Nov 2026 05:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3619606A31B;
+	Thu,  5 Nov 2026 06:29:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3619606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=al++uHaj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730981F000C1;
-	Thu,  5 Nov 2026 05:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793856249;
-	bh=ILoB454xbFbHLsKflWQrUGwexE0/EjSSyi9KCdzFexA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=al++uHajPhWFtt20R1WcEOxb8Dd6rDvN9EIezhWJy/I4xlz30ZbM5UX2wRMFEjlFl
-	 mTAMAD7jOoOzF7eoXch/QqG1oP36Apuy6IHF94e5zwYSG2ED3O1tktXh3LLuTMOniK
-	 9F7ivGgfG/ZPMC7roQCC2CLZyP1/VpsjOEfAMjkgQ0mWKlZf3Euj4ktxffzPt7olu5
-	 4SF+qGWMOL60bQmZeM/NEx14/lOdhGlOyQT3bTcAdFmxmGRk/GlVyEtn0+1JUu79C9
-	 I9EC7lUWQLeOGZhH3tuSze7oTzV9OU5BDpCGrkC+AW9Aw0618pGMCE+ml9yiG5DP+K
-	 Bt+JSPvZbRapA==
-Date: Wed, 4 Nov 2026 22:24:01 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Douglas Anderson <dianders@chromium.org>
-Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Han Wang <nesthanwang@google.com>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Benno Lossin <lossin@kernel.org>, Bill Wendling <morbo@google.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Boqun Feng <boqun@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>,
-	Justin Stitt <justinstitt@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH] kbuild: AutoFDO: Enable -salvage-stale-profile
-Message-ID: <20261105052401.GA862715@ax162>
-References: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XfPu5DWm
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793860149; x=1825396149;
+  h=date:from:to:cc:subject:message-id;
+  bh=24+JBeDshny+LeBaWjebV7XNHNIVxzo8b2kJN/NWKKA=;
+  b=XfPu5DWmwtGTxwvIJKmgla1oS0N991xn3Rid/JdlIE5H2Pizw6CrKnyN
+   TX1RGimnqeXywE4Umbe48HDG37XOZcf0kk0DfgI/UL1VbrzbTNIDZk1Q1
+   a7AkxkTj8v6t364Vz0iO2zlirn9cNbm4spmPPiJi4CJlR8va5IqX4CwLf
+   Urw+9N/rN8wFrZaSbTQ4bCpvL7v7CD0dmPckwuSUq5GLKiwEzi9+isutl
+   7yJO4KusKJN/udsZDp4vPwrn5kwN73PyGvP4GFvkOi/ZvY4W3kuTKTfD8
+   tI0zAgTafe2g2vdefYlwfvAuZDaKv+NsuFlKUYNuXnJWTNQ9i8CSjIbdn
+   A==;
+X-CSE-ConnectionGUID: Hus7Wm2ESHKpZN6mWUx5Jg==
+X-CSE-MsgGUID: DqtpfHZiSd+qL+XIFP9v3Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2629108"
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="2629108"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 22:29:09 -0800
+X-CSE-ConnectionGUID: acDMt3uXR1e17CQcMLMeeg==
+X-CSE-MsgGUID: qJ4ZeimQSvaklnHSw5CCZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="7334275"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 04 Nov 2026 22:29:03 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xOqy2-00000000lnP-34JD;
+	Thu, 05 Nov 2026 06:28:58 +0000
+Date: Thu, 05 Nov 2026 14:28:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bvanassche:thread-safety 442/445]
+ include/linux/mutex.h:188:63: error: use of undeclared identifier 'lock'
+Message-ID: <202611051415.ahjEXnyk-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -72,101 +79,410 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261104174554.1.I8556199ea4f1335169ce16e97309aa63ae2e2310@changeid>
 
-On Wed, Nov 04, 2026 at 05:45:55PM -0800, Douglas Anderson wrote:
-> From: Han Wang <nesthanwang@google.com>
-> 
-> AutoFDO profiles are commonly collected on one kernel revision and
-> reused across subsequent commits or stable merges before a fresh
-> profile is generated. While AutoFDO uses function-relative line
-> numbers to tolerate edits above a function, adding or removing lines
-> inside a function (or an inlined helper) shifts all subsequent
-> relative line offsets within that function. Without stale profile
-> salvaging, shifted callsites fail to match their nested inlinee
-> profiles in SampleProfileLoader (dropping profile-guided inlining for
-> those callees) and basic block sample counts are misattributed to the
-> wrong instructions, degrading branch probability estimation and
-> machine function splitting.
-> 
-> Enable LLVM stale profile salvaging (-salvage-stale-profile, supported
-> since LLVM 17) for C, Rust, and ThinLTO builds when
-> CLANG_AUTOFDO_PROFILE is specified. This instructs SampleProfileMatcher
-> to use lexical callsite anchors within functions to fuzzy-match and
-> remap shifted line offsets when querying the profile.
-> 
-> While -salvage-stale-profile is not enabled by default in LLVM due to
-> the minor compile-time/memory cost of sequence-matching callsite
-> anchors (which is unnecessary when profiles are freshly generated on
-> the exact commit being built) and the heuristic nature of fuzzy
-> matching on heavily rewritten functions, enabling it makes sense for
-> the kernel: hardware PMU profiles are rarely regenerated on every
-> commit, and anchoring on callsite names is strictly more resilient
-> than blind line-offset lookup when functions are edited.
-> 
-> As a side benefit, remapping shifted line offsets also avoids feeding
-> mismatched weights from stale profiles into MIRProfileLoader's flow
-> inference solver (applyFlowInference), working around a compiler bug
-> [1] where a small intra-function line shift (such as in
-> __vm_normal_page() in mm/memory.c) can cause applyFlowInference to
-> spend 30+ minutes compiling unmap_page_range().
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/2188 [1]
-> Signed-off-by: Han Wang <nesthanwang@google.com>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> Much of the commit-message justification here is AI-generated. Sorry!
-> :( Folks who know better, feel free to call bullshit.
+tree:   https://github.com/bvanassche/linux thread-safety
+head:   d7fccb0c43af0d515fd23b885eb43ee9c38a6247
+commit: 2bcc94cede043acc8b73b2078d0101f8bdf2ae1e [442/445] treewide: Annotate interruptible and killable locks with range acquire
+config: s390-randconfig-1001-20261105 (https://download.01.org/0day-ci/archive/20261105/202611051415.ahjEXnyk-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 65303e81f481bbfe386b8596423f94c43198ba94)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611051415.ahjEXnyk-lkp@intel.com/reproduce)
 
-The justification does not seem wrong to me on initial read but it
-definitely feels like the first and third paragraphs could be reduced in
-verbosity since this can basically be summarized by "AutoFDO profiles
-are often reused, which can be problematic without profile salvaging
-enabled, which is designed for this exact situation".
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611051415.ahjEXnyk-lkp@intel.com/
 
-> Honestly, this patch came about because of AI analysis compiles taking
-> 30 minutes to run (see the clang bug [1]). It seems to work around the
-> problem. Obviously, we should fix the compiler. That being said, upon
-> further analysis it seemed like adding this flag was beneficial
-> anyway, so I'm posting it upstream. If folks disagree, we can simply
-> drop this patch.
+All errors (new ones prefixed by >>):
 
-I would definitely like to see that issue triaged but like you say, it
-probably does not need to done before this is merged since it has
-reasonable justification on its own. I would love to get thoughts from
-other folks though.
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:7:
+   In file included from include/linux/list_lru.h:14:
+   In file included from include/linux/xarray.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:17:
+   In file included from include/linux/seqlock.h:20:
+>> include/linux/mutex.h:188:63: error: use of undeclared identifier 'lock'
+     188 |                                         unsigned int subclass) __cond_acquires_range(0, INT_MAX, lock);
+         |                                                                                                  ^~~~
+   include/linux/mutex.h:190:91: error: use of undeclared identifier 'lock'
+     190 |                 unsigned int subclass, struct lockdep_map *nest_lock) __cond_acquires_range(0, INT_MAX, lock);
+         |                                                                                                         ^~~~
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:7:
+   In file included from include/linux/list_lru.h:14:
+   In file included from include/linux/xarray.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:13:
+>> include/linux/rwsem.h:231:116: error: use of undeclared identifier 'sem'
+     231 | extern int __must_check down_read_interruptible(struct rw_semaphore *sem) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                                    ^~~
+   include/linux/rwsem.h:232:111: error: use of undeclared identifier 'sem'
+     232 | extern int __must_check down_read_killable(struct rw_semaphore *sem) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                               ^~~
+   include/linux/rwsem.h:243:105: error: use of undeclared identifier 'sem'
+     243 | extern int __must_check down_write_killable(struct rw_semaphore *sem) __cond_acquires_range(0, INT_MAX, sem);
+         |                                                                                                         ^~~
+   include/linux/rwsem.h:306:132: error: use of undeclared identifier 'sem'
+     306 | extern int __must_check down_read_killable_nested(struct rw_semaphore *sem, int subclass) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                                                    ^~~
+   include/linux/rwsem.h:308:113: error: use of undeclared identifier 'sem'
+     308 | extern int down_write_killable_nested(struct rw_semaphore *sem, int subclass) __cond_acquires_range(0, INT_MAX, sem);
+         |                                                                                                                 ^~~
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
+     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:3: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 r->sig[3] = op(a3, b3);                                 \
+         |                 ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+--
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:197:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     197 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:210:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     210 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:241:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     241 |         case 2: set->sig[1] = 0;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:254:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     254 |         case 2: set->sig[1] = -1;
+         |                 ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:10:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:13:
+   In file included from arch/s390/include/asm/uaccess.h:16:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:20:
+   include/linux/radix-tree.h:242:2: warning: unknown attribute 'try_acquire_capability_range' ignored; did you mean 'try_acquire_capability'? [-Wunknown-attributes]
+     242 |         __cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:347:2: note: expanded from macro '__cond_acquires_range'
+     347 |         __try_acquires_ctx_lock_range(first, last, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:22:17: note: expanded from macro '__try_acquires_ctx_lock_range'
+      22 |         __attribute__((try_acquire_capability_range(first, last, __VA_ARGS__)))
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:10:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:13:
+   In file included from arch/s390/include/asm/uaccess.h:16:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:20:
+   include/linux/radix-tree.h:244:2: warning: unknown attribute 'try_acquire_capability_range' ignored; did you mean 'try_acquire_capability'? [-Wunknown-attributes]
+     244 |         __cond_acquires_range(0, INT_MAX, &radix_tree_preloads.lock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:347:2: note: expanded from macro '__cond_acquires_range'
+     347 |         __try_acquires_ctx_lock_range(first, last, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:22:17: note: expanded from macro '__try_acquires_ctx_lock_range'
+      22 |         __attribute__((try_acquire_capability_range(first, last, __VA_ARGS__)))
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:10:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:13:
+   In file included from arch/s390/include/asm/uaccess.h:16:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/s390/include/asm/pgtable.h:22:
+>> include/linux/mmap_lock.h:548:37: error: use of undeclared identifier 'mm'
+     548 |         __cond_acquires_range(0, INT_MAX, &mm->mmap_lock)
+         |                                            ^~
+   include/linux/mmap_lock.h:612:44: error: use of undeclared identifier 'mm'
+     612 |         __cond_acquires_shared_range(0, INT_MAX, &mm->mmap_lock)
+         |                                                   ^~
+   In file included from kernel/kcov.c:11:
+>> include/linux/fs.h:1037:37: error: use of undeclared identifier 'inode'
+    1037 |         __cond_acquires_range(0, INT_MAX, &inode->i_rwsem)
+         |                                            ^~~~~
+   include/linux/fs.h:1055:44: error: use of undeclared identifier 'inode'
+    1055 |         __cond_acquires_shared_range(0, INT_MAX, &inode->i_rwsem)
+         |                                                   ^~~~~
+   39 warnings and 11 errors generated.
+--
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:7:
+   In file included from include/linux/list_lru.h:14:
+   In file included from include/linux/xarray.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:17:
+   In file included from include/linux/seqlock.h:20:
+>> include/linux/mutex.h:188:63: error: use of undeclared identifier 'lock'
+     188 |                                         unsigned int subclass) __cond_acquires_range(0, INT_MAX, lock);
+         |                                                                                                  ^~~~
+   include/linux/mutex.h:190:91: error: use of undeclared identifier 'lock'
+     190 |                 unsigned int subclass, struct lockdep_map *nest_lock) __cond_acquires_range(0, INT_MAX, lock);
+         |                                                                                                         ^~~~
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:7:
+   In file included from include/linux/list_lru.h:14:
+   In file included from include/linux/xarray.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:13:
+>> include/linux/rwsem.h:231:116: error: use of undeclared identifier 'sem'
+     231 | extern int __must_check down_read_interruptible(struct rw_semaphore *sem) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                                    ^~~
+   include/linux/rwsem.h:232:111: error: use of undeclared identifier 'sem'
+     232 | extern int __must_check down_read_killable(struct rw_semaphore *sem) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                               ^~~
+   include/linux/rwsem.h:243:105: error: use of undeclared identifier 'sem'
+     243 | extern int __must_check down_write_killable(struct rw_semaphore *sem) __cond_acquires_range(0, INT_MAX, sem);
+         |                                                                                                         ^~~
+   include/linux/rwsem.h:306:132: error: use of undeclared identifier 'sem'
+     306 | extern int __must_check down_read_killable_nested(struct rw_semaphore *sem, int subclass) __cond_acquires_shared_range(0, INT_MAX, sem);
+         |                                                                                                                                    ^~~
+   include/linux/rwsem.h:308:113: error: use of undeclared identifier 'sem'
+     308 | extern int down_write_killable_nested(struct rw_semaphore *sem, int subclass) __cond_acquires_range(0, INT_MAX, sem);
+         |                                                                                                                 ^~~
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
+     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
+     137 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                                      ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:7:
+   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     156 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:3: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 r->sig[3] = op(a3, b3);                                 \
+         |                 ^      ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/crypto/prng.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+..
 
->  scripts/Makefile.autofdo | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
-> index 57a3aba6ffc2..3b1e65a13ffa 100644
-> --- a/scripts/Makefile.autofdo
-> +++ b/scripts/Makefile.autofdo
-> @@ -13,13 +13,16 @@ endif
->  ifdef CLANG_AUTOFDO_PROFILE
->    CFLAGS_AUTOFDO_CLANG += -fprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -ffunction-sections
->    CFLAGS_AUTOFDO_CLANG += -fsplit-machine-functions
-> +  CFLAGS_AUTOFDO_CLANG += -mllvm -salvage-stale-profile
->    RUSTFLAGS_AUTOFDO_CLANG += -Zprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -Zfunction-sections=y
->    RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-split-machine-functions
-> +  RUSTFLAGS_AUTOFDO_CLANG += -Cllvm-args=-salvage-stale-profile
->  endif
->  
->  ifdef CONFIG_LTO_CLANG_THIN
->    ifdef CLANG_AUTOFDO_PROFILE
->      KBUILD_LDFLAGS += --lto-sample-profile=$(CLANG_AUTOFDO_PROFILE)
-> +    KBUILD_LDFLAGS += --mllvm=-salvage-stale-profile
->    endif
->    KBUILD_LDFLAGS += --mllvm=-enable-fs-discriminator=true --mllvm=-improved-fs-discriminator=true -plugin-opt=thinlto
->    KBUILD_LDFLAGS += $(call ld-option,-plugin-opt=-function-splitting=all,-plugin-opt=-split-machine-functions)
-> -- 
-> 2.56.0.455.g6c5a503b38-goog
-> 
 
--- 
-Cheers,
-Nathan
+vim +/lock +188 include/linux/mutex.h
+
+   176	
+   177	#define devm_mutex_init(dev, mutex) \
+   178		__devm_mutex_init(dev, __mutex_init_ret(mutex))
+   179	
+   180	/*
+   181	 * See kernel/locking/mutex.c for detailed documentation of these APIs.
+   182	 * Also see Documentation/locking/mutex-design.rst.
+   183	 */
+   184	#ifdef CONFIG_DEBUG_LOCK_ALLOC
+   185	extern void mutex_lock_nested(struct mutex *lock, unsigned int subclass) __acquires(lock);
+   186	extern void _mutex_lock_nest_lock(struct mutex *lock, struct lockdep_map *nest_lock) __acquires(lock);
+   187	extern int __must_check mutex_lock_interruptible_nested(struct mutex *lock,
+ > 188						unsigned int subclass) __cond_acquires_range(0, INT_MAX, lock);
+   189	extern int __must_check _mutex_lock_killable(struct mutex *lock,
+   190			unsigned int subclass, struct lockdep_map *nest_lock) __cond_acquires_range(0, INT_MAX, lock);
+   191	extern void mutex_lock_io_nested(struct mutex *lock, unsigned int subclass) __acquires(lock);
+   192	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
