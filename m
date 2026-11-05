@@ -1,78 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793871262;
-	b=BTSZsGYqtpa3M9PNvOsHzxE7j1sL/e5hWc8+DDFD3Uk8vORWyCT6khigaI7Xcc8ju/pe
-	 Tz+/WxPf2KH/SIYARzR8JDfMh5Xy2jEaJqJRBEFhodC94A8yYQx43lEl08gy7LfK+EuTm
-	 Kozgtyccm2Jerp4vB8s6cNEmy91+Yp794ngxQZ/OTuboHIeMzfZzIxJzWRzMpKD9saQrL
-	 pyOgO2lY72m8vLDn+sVBP0FN9dpNDiVMrlVCaNo4oPGr/H3ie8zhVwVCO2Q/zxrzp9uHX
-	 00TXuKZLvbFq7/ghbFYCoPZFYmsuZ7oxDa8jOgn3WXgCCcfP6+QDVEAxKfVoSqy8Tsg==
+	t=1793871623;
+	b=Mf/Sbj0RGkojQ9PWaabuTsCVI2KWCuug3w9jC2WW8IaaBW95ls4hiky1SvVBdRFO6vKi
+	 qiROWbvGcWbZ4F5YtikrVtyXiuDI0UIXwJcM/gQgFHzHfaniJslt7JUkrAP+LSSFc5ILy
+	 pxrhKNv11UfzACEESWvivycEN1+AMw0QiTk6so/Xo1lQKP0jLDdNXpRe3ODZ6dJBHTTxT
+	 mnXUBhLGzr+G4G7UwowmthLD9bYMRXJvAmWD2k6u40iEGk4BtmRJbsvifeoU+sSCuXOWD
+	 j5PKKDnbkK8r3U96U317FoCQXj3zS2vae33HRX9upKIXL1UU0/HDmi1ZnwCOqIgYXmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793871262;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=9wmtx/cKzR5gKAa3MQZo80HEPKTIvmnLzoW7u/Hd8Gc=;
-	b=3KqxeeyaxJg+rGKlRyDXbwIWTYCEQU1yzY8YIaHFE3Xkn0zzA+HrT1iIri2VQyZbwTAk
-	 qG+fYROxSDw1nsv9R8JlGVVFqQS0I/JvMVP3XH+AB3rJFUcBLiJLGp1SDfwx7KnuiSVuB
-	 FV5PdLD9s0fs8TWvWzznxQdpnagMCHDPP/1wLGolOS2UQFgTbPr+/N+PWYj+bqhUyxCSp
-	 r6rnMnBJ0zmJDx+vzCOJTtJk4lQr+tlfhloDBAeQWk+ERPXWd9VwmL5vSSULINmrOf20c
-	 7PLzr2AgPcYJO3pt5AsPb/qhsfRVp32+HRUsor3VmJDOhmi9jVpSVrIxB3i0QHKk33Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793871623;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=lYsXkKVBI3elcgfP7o+pYYG0Co8UOrNMmFiJfe3lbYM=;
+	b=XDXQT7p2B7nqsIn92xCbQJQ/wiOWb4xEzKNXd/kUOTZBx3mdEvo0A91B6NxQdL+q3DDu
+	 KiKI9gOR3AU3SQwDkfZFGbT7a/MKpk66mnK7KE/C52KaZoMkqYNibm9UAi8B7CdNudZcX
+	 XBwuO1hCIIrtB3kIV1bS0lNzB0qb23hjv+0r09c7LED8jzU5Uws7zwNpNWeYDTZqfQnLS
+	 zmsMsJ92wc+ot7Ufuh26wlF19cwJqgSWQ43FZU19TRtiZCyVp034/WjhD+kc14JXgjn6Y
+	 SpOZWGV0eWdZrihIPQZr9a/Puyp8ICa2DpWH2zjn5vPhqovwf73ov2+zcGZASMaMxYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kdAevENF;
-	arc=none smtp.remote-ip=192.198.163.8
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="ayHm/tP3";
+	arc=none smtp.remote-ip=209.85.128.47
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D0E606A326;
-	Thu,  5 Nov 2026 09:34:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60D0E606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFC8606A333
+	for <llvm@lists.linux.dev>; Thu,  5 Nov 2026 09:40:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2CFC8606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kdAevENF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793871262; x=1825407262;
-  h=date:from:to:cc:subject:message-id;
-  bh=dV+OI1BsfFB9pMtNPGN9+Msb7D0q5d85mFIpAxO0Ca8=;
-  b=kdAevENFT65GUUCu3HtoUu1XopWf4Xa0xds0UmZXTqxclnvzSWUSNzER
-   J8TLDiuZDKADeZwb/Ve/E3aaWp4gQVrKy3W58/yZCUUjS1OYiQcewi9/f
-   1JEILRSZ/BivFlzEUAUICcCrRU5IBVlxg2293xu7Fts1zFWmq5+DDLy9d
-   Y0qM44xZpMvJprPk3VuZVFRnzqRILzg/L6FsOuiVC6ION/KNg4tCTK/1C
-   yOcQaMPGZ4LuG0DwVxUFMiBG7ECnyG3u0DBGH/xN1/KAb+tUxKkYJyG59
-   bYVKAgaOf+eaNMRJE9Y3LYb8KxygRBt+QVsdQO18tLngEIk2/bSwaZLSt
-   A==;
-X-CSE-ConnectionGUID: 4d+G7K1LSQ2c9ATlay7Uqw==
-X-CSE-MsgGUID: 1IcxTlwSQoWKnVFu2M9gUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2537192"
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="2537192"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 01:34:21 -0800
-X-CSE-ConnectionGUID: 4ZPNxg7cTpqdgmBkOz90vg==
-X-CSE-MsgGUID: SKWvFJUdSKygIepA+IUw9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="6843321"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 05 Nov 2026 01:34:20 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xOtrM-00000000m0l-3CXt;
-	Thu, 05 Nov 2026 09:34:16 +0000
-Date: Thu, 05 Nov 2026 17:33:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Jones <andrew.jones@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_iommu_misc_v1 27/35]
- arch/riscv/kvm/aia_imsic.c:838:2: warning: variable 'vcpu' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202611051709.5WUCGlXC-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ayHm/tP3
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a2d6cf958bso7628915e9.1
+        for <llvm@lists.linux.dev>; Thu, 05 Nov 2026 01:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793871621; x=1794476421; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lYsXkKVBI3elcgfP7o+pYYG0Co8UOrNMmFiJfe3lbYM=;
+        b=ayHm/tP3vhkGyTGgtpui7+1d6qa12PyV161OWrt4jMQYtd1Q09gC1nGCzOKvwLPe1A
+         fS/VAHHt6W41oFNs0B6Hg48GLsE2BWna9zCTY/TZxmR/BJDupaNJbvDWpnMA2sxi+M3Z
+         OShetflq2P+sZWxURRGY2o7i/bDozFR8mrlZKr+evrVvcCmOFc1G58Sy9QU9RQtUMVeu
+         1I2cxW8G7sYgp4RHtiVyh4vww5NLyFwusjL/HNxR2GupOkdlUIsHYgCdTrPVAJbzsedC
+         kRAnqiu2ZcLpzbKRni5GIR6Tog+e0FpPVwpeMo4UJjSW2DzS4M/qTXaDwxlGhTHlXzg7
+         GBig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793871621; x=1794476421;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lYsXkKVBI3elcgfP7o+pYYG0Co8UOrNMmFiJfe3lbYM=;
+        b=ZgkV0VyeHEvSD1zOcXOHeEM72NtqzA2yZ/br7c/sK4dlZL62Y/7QtFfNsnrgvqXHpK
+         cWsrBVLZ3TArxdU7iQcS/cWb3hgkl5Llvu3iytmRumo11IsOXiOrWowxAOd9V2eOCiOp
+         F+WG8+Zy4Y7OofrsFFS3sNE8aCrm0cOldAZLl0nZfX9qAdt3h8LBerbYdfCi0owmhNvE
+         sKBFxbZ0hRalllo3llXq5Te2A+/jS6OsCFvN4p13ZrLmB3l/iL3eEdliKb6yMCV3oXdV
+         /XbQ9RaSyfJCcJlTS7CNpLPCXH4zxWw5i8eZ1PDKrEnhldmFW4Xc8FQfCeU9gSXXVTga
+         SEBg==
+X-Forwarded-Encrypted: i=1; AKwUvBy0cV5KBb8srJVrkrO8pkq/ZJG4ACTrKxP4+E5cEUlnBrPSaATHIZysp/9K5FA/pp+mwYcD@lists.linux.dev
+X-Gm-Message-State: APuU4Z/M75BqFk6Lq+T/n6zMzc5sYSO/rcC2u1WRTBGsX67u2IUMKNPI
+	/xDw1g+VM+jKVzEFlRAhwpnuJBigkfOkB4kHk/uvzmUKGcAfMb+rmFeZ
+X-Gm-Gg: AYBFou2PNn+YjVmwvcksE5fsdREXd0J/ekyogDF/AL49Mi/lOv4ANZiEkKdtkhtSZsf
+	vuASZzIkt1DuqrUT1ri9pBeksTonGZ2xhu8H9V4n16yUHZ80WBElrJF/u40sA4EwbSzMCo+xybn
+	wztZ/gXHZK/YQ6sSfKkkjdq/3MZb/qxHawT/GIuFZ0FJWkBvZfoqfwKu60oDICjXuxcQB44v/BH
+	K8dq98u1Aiiyh2K/gEcbYL8lR7HSuhE/JgOuQOfe9vB2Iqq4nXIOsPMbEEmtizjLizsV7c/bThi
+	Awee8bdV7w02jYVCnkrsMLWr57KBWYAs6MdPqy0lnS/L/vWcS/e+jZlEQftbJCFI5A5x5tPK3UR
+	ATbgS2TaEhakHg8fQrK/aj9XCSOfUqT4/OySFBiitRJQP9S78JBvtQuW+GdmSsmyfMDslyLfj3s
+	AGWO8lesEluWOINkc2DGIs+C7XYKt7dCoep2XzzQJlKoqd999GrSSEwTvxWFRU8WmY716I3F4sL
+	7SMEuo8Y+9DI+ut0bpRDafxuOjYw6R5INw//LrkLuVNaOdQSOAzKfnvFff3liBc4Evmwz03pfbs
+	HNLNSAvZbI6SDcszdDuiZ6s71+xEwCBe7A8yzgbyHpi9GFv89i/YdginaztOl2eS
+X-Received: by 2002:a05:600c:1f93:b0:49f:ce78:356d with SMTP id 5b1f17b1804b1-4ac180f2fd3mr431560105e9.30.1793871621024;
+        Thu, 05 Nov 2026 01:40:21 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56f5e65b0sm58866395e9.11.2026.11.05.01.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 01:40:20 -0800 (PST)
+Date: Thu, 5 Nov 2026 09:40:19 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Breno Leitao <leitao@debian.org>, Peter Zijlstra <peterz@infradead.org>,
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo
+ Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta
+ <pawan.kumar.gupta@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, kernel-team@meta.com
+Subject: Re: [PATCH RFC] x86/syscall: Dispatch via sys_call_table when
+ Spectre v2 and BHI are off
+Message-ID: <20261105094019.1ec31c30@pumpkin>
+In-Reply-To: <CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
+References: <20261029-syscall-table-dispatch-v1-1-bca9dbb886de@debian.org>
+	<20261029104938.GC1813469@noisy.programming.kicks-ass.net>
+	<auM6mSXz-BVIjYBc@gmail.com>
+	<CAHk-=wjg-mre6diNHCTYUtc=X26462GGxgJMw8cE20Wh1-5qBQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,135 +108,68 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/avpatel/linux.git riscv_iommu_misc_v1
-head:   bfa7a6c4f67f2d4d155c3aa2fbc606e5c5189ca0
-commit: ef0d72018fdf0d8d92e9031e7c12f621e1f36d7e [27/35] RISC-V: KVM: Add guest file irqbypass support
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20261105/202611051709.5WUCGlXC-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261105/202611051709.5WUCGlXC-lkp@intel.com/reproduce)
+On Fri, 30 Oct 2026 08:56:12 -1000
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611051709.5WUCGlXC-lkp@intel.com/
+> On Thu, 29 Oct 2026 at 02:30, Breno Leitao <leitao@debian.org> wrote:
+> >
+> > With "x86_64/entry: Unconditionally use -fno-jump-table", x64_sys_call()
+> > becomes a compare tree on every x86_64 build, so system call dispatch is
+> > the same whether the mitigations are disabled at boot or at build time,
+> > which is basically my end goal.  
+> 
+> You're basically saying "with that patch, both cases do equally badly
+> whether disabled at boot or build time".
+> 
+> That's not a good end goal. You want both cases to do equally *well*.
+> 
+> I do wonder if we could do computed jumps. It would be lovely if we
+> could basically do something like
+> 
+>       # syscall number in %rax
+>       leaq table(%rax,%rax,4),%rax
+>       jmp *%rax
+> table:
+>      jmp syscall0
+>      jmp syscall1
+>      jmp syscall2
+>     ....
+> 
+> and avoid any indirect memory lookup or indirect branches (outside of
+> the one computed one). And no extra call/ret frame.
 
-All warnings (new ones prefixed by >>):
+Could it be a table of 32bit offsets (from some point) so that it is
+a data cache access (or miss) rather than an instruction pipeline stall.
+You might need to use a retpoline to avoid needing endbra.
+(or is there another way of avoiding the need for endbra?)
+You probably need to patch at least some of the code to nops when it isn't
+being used.
 
->> arch/riscv/kvm/aia_imsic.c:838:2: warning: variable 'vcpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     838 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kvm_host.h:1014:6: note: expanded from macro 'kvm_for_each_vcpu'
-    1014 |         if (atomic_read(&kvm->online_vcpus))                            \
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_imsic.c:842:7: note: uninitialized use occurs here
-     842 |         if (!vcpu)
-         |              ^~~~
-   arch/riscv/kvm/aia_imsic.c:838:2: note: remove the 'if' if its condition is always true
-     838 |         kvm_for_each_vcpu(tmp, vcpu, kvm) {
-         |         ^
-   include/linux/kvm_host.h:1014:2: note: expanded from macro 'kvm_for_each_vcpu'
-    1014 |         if (atomic_read(&kvm->online_vcpus))                            \
-         |         ^
-   arch/riscv/kvm/aia_imsic.c:802:23: note: initialize the variable 'vcpu' to silence this warning
-     802 |         struct kvm_vcpu *vcpu;
-         |                              ^
-         |                               = NULL
-   1 warning generated.
+> 
+> It's possible that the branch prediction hardware hates those kinds of
+> very dense jmp patterns, though. I don't know.
 
+Some cpu have definitely not liked having a lot of branches in one cache line.
 
-vim +838 arch/riscv/kvm/aia_imsic.c
+And performance will be absolutely horrid unless you are doing a benchmark
+that keeps doing the same system call.
 
-   791	
-   792	void kvm_arch_update_irqfd_routing(struct kvm_kernel_irqfd *irqfd,
-   793					   struct kvm_kernel_irq_routing_entry *old,
-   794					   struct kvm_kernel_irq_routing_entry *new)
-   795	{
-   796		struct riscv_iommu_ir_vcpu_info vcpu_info;
-   797		struct kvm *kvm = irqfd->kvm;
-   798		struct kvm_aia *aia = &kvm->arch.aia;
-   799		int host_irq;
-   800		struct irq_data *irqdata;
-   801		unsigned long tmp, flags;
-   802		struct kvm_vcpu *vcpu;
-   803		struct imsic *imsic;
-   804		struct msi_msg msg;
-   805		u64 msi_addr_mask;
-   806		gpa_t target;
-   807		int ret;
-   808	
-   809		host_irq = irqfd->producer->irq;
-   810		irqdata = irq_get_irq_data(host_irq);
-   811	
-   812		if (old && old->type == KVM_IRQ_ROUTING_MSI &&
-   813		    new && new->type == KVM_IRQ_ROUTING_MSI &&
-   814		    !memcmp(&old->msi, &new->msi, sizeof(new->msi)))
-   815			return;
-   816	
-   817		if (!new) {
-   818			if (!WARN_ON_ONCE(!old) && old->type == KVM_IRQ_ROUTING_MSI) {
-   819				ret = irq_set_vcpu_affinity(host_irq, NULL);
-   820				WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
-   821			}
-   822			return;
-   823		}
-   824	
-   825		if (new->type != KVM_IRQ_ROUTING_MSI)
-   826			return;
-   827	
-   828		target = ((gpa_t)new->msi.address_hi << 32) | new->msi.address_lo;
-   829		if (WARN_ON_ONCE(target & (IMSIC_MMIO_PAGE_SZ - 1)))
-   830			return;
-   831	
-   832		msg = (struct msi_msg){
-   833			.address_hi = new->msi.address_hi,
-   834			.address_lo = new->msi.address_lo,
-   835			.data = new->msi.data,
-   836		};
-   837	
- > 838		kvm_for_each_vcpu(tmp, vcpu, kvm) {
-   839			if (target == vcpu->arch.aia_context.imsic_addr)
-   840				break;
-   841		}
-   842		if (!vcpu)
-   843			return;
-   844	
-   845		msi_addr_mask = kvm_riscv_aia_msi_addr_mask(aia);
-   846		vcpu_info = (struct riscv_iommu_ir_vcpu_info){
-   847			.gpa = target,
-   848			.msi_addr_mask = msi_addr_mask,
-   849			.msi_addr_pattern = (target >> IMSIC_MMIO_PAGE_SHIFT) & ~msi_addr_mask,
-   850			.group_index_bits = aia->nr_group_bits,
-   851			.group_index_shift = aia->nr_group_shift,
-   852		};
-   853	
-   854		imsic = vcpu->arch.aia_context.imsic_state;
-   855	
-   856		read_lock_irqsave(&imsic->vsfile_lock, flags);
-   857	
-   858		if (imsic->vsfile_cpu < 0)
-   859			goto out;
-   860	
-   861		vcpu_info.hpa = imsic->vsfile_pa;
-   862	
-   863		ret = irq_set_vcpu_affinity(host_irq, &vcpu_info);
-   864		WARN_ON_ONCE(ret && ret != -EOPNOTSUPP);
-   865		if (ret)
-   866			goto out;
-   867	
-   868		/*
-   869		 * Unlike x86 (which updates the IRTE) and arm64 (which updates
-   870		 * the ITS ITTE), RISC-V reprograms the device MSI target address
-   871		 * to the guest IMSIC GPA. The device writes to the guest GPA;
-   872		 * the IOMMU MSI table maps guest GPA -> host VS-file HPA.
-   873		 */
-   874		irq_data_get_irq_chip(irqdata)->irq_write_msi_msg(irqdata, &msg);
-   875	
-   876	out:
-   877		read_unlock_irqrestore(&imsic->vsfile_lock, flags);
-   878	}
-   879	
+The cost of each branch miss is likely to be at least 20 clocks.
+For a random system call half of the branches will be misses.
+Plus all the cache line reads and other delays.
+Definitely non-trivial.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+David
+ 
+> 
+> We could have a single static jump that picks between this one and the
+> "conditional branch tree" version, as in your patch at the beginning
+> of the thread.
+> 
+>              Linus
+> 
+
