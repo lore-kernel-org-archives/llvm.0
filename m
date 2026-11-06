@@ -1,75 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793965128;
-	b=W6r0oC7Gc6T3Gwty2fYuVdfRDDC6iF1xTGpJMAhmVBBc1NKGgptFUlRaEEsp8ck6Yn22
-	 IMyyVwZzttzEJcscnQkMv/L3fuEq/O6kRSndkvOBgsQi6wBDtFUBu6OaopljmeUNqgnqZ
-	 4TNidgcgzoxM21VS/m79pN+edJoVhCladJms8JwXD/0v8F4Nkm+GS7KRvuW/6P6Jv1Fy9
-	 UxKfGW19s6nAqzHMyPJA0vIN09cGmKR1Jbaqtv6EwNRDKIdUCRAby93t5KYYTyvsAUBHE
-	 1Avg5bINDMnTYe4/DCrWQrk9s7c2KuqtCiMB1mD/OtuiffJOg1sDKXuAztOCDbjzYNg==
+	t=1793968114;
+	b=XkioN2VlHL9uwXfhexVVixJIpA7kjXku1MDbZYhHuqhdgmemM2GyovrY5um1NcrXMxEc
+	 KaCpBtvS3eUzDlI5toibu9OPEaai8f9cSdjSxWkWPnTVGNFagGowbT1LcT1xk1P3oetHW
+	 K6f+pRS5ikfiK3zvAawLRDRuXa+nist5hBFIyvbp1t7vsLropCIKwzg7eEPJQzWkBkcy6
+	 fTx2eDjpOGOfJMhRFu94lgyVLQP9ClmDxLVnipbpdEeZbpH+7WC2u9yyGTChVMzB5ejGX
+	 gDc9rR5ARzBgom9jEiRwwImK+Xqaqf8TdJSbla1oSsGFO6npTpTjA7/DgObAzbASifA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793965128;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition;
-	bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
-	b=wSsf4gR0SAMqZg7LN1hTNcYQfTBGQLDoemD2u5X0Pez7UJoex8mSGN3MaQhPDRKK66hk
-	 BBoDenyOV0s0RSckCqKULk22GvYlHlyDF95K9HjMJXUfCvJg04u0ZtAwggHCVU2PgJq8V
-	 DVidAwpKsQv8QWCzEG8XSL4qD431d2RjqsuUatB1loNRUJKIFlwabo7/+jw/E1HteaDX/
-	 c5jtXmHtvuo+SGW+CvnKd33CRDAM5NdLdPUGfC5W3LV8OuiRNwYUsHF7e15Sr7wSRg4Uy
-	 +wjDOWCrDjzLNgZuJLgsy5ClyND0qyliL5NBtxlMUkecUo56SuT/tMZ8tz2iC83mKZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793968114;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=hQVrnxdz+rbVpJRSfgeT0cSc/1aHJR+DP3Q1DQOKUSE=;
+	b=T7ldlCUUjWnsVqVEUv2GqTVhytO25X/zIhsU3T+A8SbNt5dcUpnwSNXmH2k7gIDWgzlj
+	 eZvRYm4QTyV0Gm4ShlcBkHNP9JuC9JcaY4Pqm3OnB37XG6FiCPj9qG6gsthEpI49mSMs7
+	 LW7LHkJiFB7Ykxr0KpjiVTOPW92bypGV+LQ5c7oy8g4dhxkq+NAxBdAtQGOsK+HMLV0W4
+	 X3M0448/tbwumXbEaNUTUjqpAX1RYeKnSWhmH8OFoU7MIAgjPYhWA6/+39hMHYoy3vGge
+	 p9uqhSXqmjz0uyFfPYE9GY+hQmOODOIDcAUd70ghaORCZU2PwCtSG1ecnRB0xQHnt7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=debian.org;
-	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=74.125.224.52
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=igiRGWuS;
+	arc=none smtp.remote-ip=192.198.163.17
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD96606A339
-	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 11:38:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CD96606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-67bf27f179aso548379d50.0
-        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 03:38:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793965126; x=1794569926;
-        h=content-disposition:content-type:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
-        b=LRJomvvZh1SLBXty5j6vJprmWecV2KJd5umllC+RUWaxmzhruJodBynn1TKqilYgSY
-         hg97FH/Zkp+e4i2Ak94M83gbfNgyRAmC6oknLTSdghdWrTryEu07r+a2SAlLkojDvWrl
-         b1TA93x9fhFysyG7zn8GvprWW2E6Pnyg7sag5hO33gRmdxL3uvzGwiWeCnpvS50rV22c
-         bXCkT+M4JKiYLjAwM46cBeiIly9XI5hpXfJ2pedhH5yUPYp+9kDtVwH+O5hPvgFvtsdt
-         fYl7kfU6k5Ysi+9z8bIxuheLX0jVV3VdMVNkDo+ozaR66K/LiwQHFEneSgRzLp5qJywO
-         H7gQ==
-X-Forwarded-Encrypted: i=1; AL+hErEZLvg5t6hPihseR6ecYjhIVy8qRD4jQgrGCSnu1cNzwbYnobQ+DurP19ceoxnUm1XO2eX4@lists.linux.dev
-X-Gm-Message-State: APuU4Z+mujTzfFKuJVyADV9KSreINVTyaCvg6bxLG5Ju+Dc1VJLPwE1J
-	4UrGHmqAKm7+jSOwqSI/f6Ew1GxwcZJOEGa/F6We/We5g2Z/1BJGChlg
-X-Gm-Gg: AYBFou2jYu/77oHnbXQoEtjwoWX+qyCkcLiRBb8fJF4YgYTo6EbOSxgLjDW11Q+YSSU
-	9N8+Ic9oqKWdXiE08efxrMtce368LzqLQtrtF5V82+YJlCL+JS1C/1W2CrxdVBXXMSRZO227tlJ
-	HSwkCmR8lHFIw2BzgfGgJ7mBefQodkuuH9rT542kjIhzkNZAwYoKuupqE+mZ276ODmn5jhCjpdT
-	J1oI0LQn+LFcmw5Pwdw63hWBQMUwdX1/XmJlLbGy+tc0cj7ZqsTtVSBjWDAqI3Q6U+CLQPCiSh/
-	J3D/UXzrGf1whBVrD09xKQZJk44hJDzWl9foobggHeJWVL/BURLTLm3ACyaTcB0GGDHeUUVYJRu
-	t4og5JcPeXsd0ijAaQnIj7bYM4DbBC3oTLVquJLDBeImsf3UD11hrF2+d2IFzGySOqnUlWUDUiB
-	9v9ZNJnLSlZ3Ii5Mfj9ov//PLuIjG2kOk+bzRm8bsTGKMj/W9YlI66Dm8uY7/fdZ9FjTOaiYOo+
-	xePmvVdYNVjVCB/LAlinbk8Gp1VZP3+CDgB4sBQJGcqFuGViE0TGnFJeWtSVhPRiLDBI2fbhc2D
-	4Y64I8RZxvNMOOWjrACo8kYqFeUWA9dJQvuoM33+
-X-Received: by 2002:a05:690e:b8e:b0:67c:1da0:6bd8 with SMTP id 956f58d0204a3-67c1da07981mr297045d50.68.1793965126563;
-        Fri, 06 Nov 2026 03:38:46 -0800 (PST)
-Received: from gmail.com ([2a03:2880:24ff:5e::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f8221absm16709167b3.27.2026.11.06.03.38.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 03:38:45 -0800 (PST)
-Date: Fri, 6 Nov 2026 03:38:44 -0800
-From: Breno Leitao <leitao@debian.org>
-To: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev
-Cc: ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, 
-	kuba@kernel.org, tj@kernel.org
-Subject: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-Message-ID: <au27Y9m78_3EH2v1@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECB8606A334;
+	Fri,  6 Nov 2026 12:28:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1ECB8606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=igiRGWuS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793968112; x=1825504112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jUA+TebI3m9/LhLb8tKLu6TX6W1ZynxPrDltBatVwPc=;
+  b=igiRGWuSEd+5s3skViZsEe9aBV6k086+7unLKQuGI4qCgmbWLxoADRfD
+   b7pdDb2dtjT5Wo9IcsDfvgmslT/V+N88kHAmLQdGyBFlj59OSpbGTOzVt
+   a8xocQQpjTm4gQrazgQ4UpyfhqBDUZ7oBjJpHjC84Rw2R2fz79ZyPT9ss
+   CDnxI7nLXvTPnW5TNODev7P/sUQYJ6cOH3uIlGp77liCka+7lkRR4OH23
+   a48pp6UPttjaoB3gE5awLitf/AsH940rLqPec7kwvBJV5REU0Y4jcGtrU
+   3zJte0FDOLd85gzQb0HxSYMdDvLv4JRwqZXkuh9JllnapEKBGcVKqGDvo
+   g==;
+X-CSE-ConnectionGUID: pJLzCl/QQheChEndJH/JZw==
+X-CSE-MsgGUID: hlrARthORz24tQNDGBGFYw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2783318"
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="2783318"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2026 04:28:31 -0800
+X-CSE-ConnectionGUID: LDJQMKt1RRSdHbxIIuWJIg==
+X-CSE-MsgGUID: IN5rR5B7TBqELLczD0z1Ng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="7315719"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 06 Nov 2026 04:28:30 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xPJ3S-00000000pFP-3hkN;
+	Fri, 06 Nov 2026 12:28:26 +0000
+Date: Fri, 6 Nov 2026 20:28:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mike Snitzer <snitzer@kernel.org>, Anna Schumaker <anna@kernel.org>,
+	Trond Myklebust <trondmy@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Flynn <jonathan.flynn@hammerspace.com>,
+	linux-nfs@vger.kernel.org, Mike Snitzer <snitzer@hammerspace.com>
+Subject: Re: [PATCH v2 01/12] NFSv4/flexfiles: move layoutstats accounting to
+ a per-stripe lock
+Message-ID: <202611062010.UcNJzsW9-lkp@intel.com>
+References: <20261106001251.73472-2-snitzer@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,62 +87,97 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20261106001251.73472-2-snitzer@kernel.org>
 
-My arm64 KCSAN builds of linux-next fail since next-20261015, because
-bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
+Hi Mike,
 
-  WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
-  WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-  Failed to generate BTF for vmlinux
-  Try to disable CONFIG_DEBUG_INFO_BTF
-  make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+kernel test robot noticed the following build errors:
 
-This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
-same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
-v7.4-rc1 is affected as well. With pahole 1.31, the same config without
-KCSAN builds fine.
+[auto build test ERROR on 8cdff0c1549d3fce6bb652e6bc5dd7546e1cd1e3]
 
-The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
-sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
---fatal_warnings exit status") made the missing BTF fatal with
-CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
-is never registered:
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Snitzer/NFSv4-flexfiles-move-layoutstats-accounting-to-a-per-stripe-lock/20261105-191238
+base:   8cdff0c1549d3fce6bb652e6bc5dd7546e1cd1e3
+patch link:    https://lore.kernel.org/r/20261106001251.73472-2-snitzer%40kernel.org
+patch subject: [PATCH v2 01/12] NFSv4/flexfiles: move layoutstats accounting to a per-stripe lock
+config: arm-mps2_defconfig (https://download.01.org/0day-ci/archive/20261106/202611062010.UcNJzsW9-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261106/202611062010.UcNJzsW9-lkp@intel.com/reproduce)
 
-  initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611062010.UcNJzsW9-lkp@intel.com/
 
-This seems similar to pahole behaviour sched_ext hit with a bool
-argument, discussed in [2] and worked around in f2f095c87603
-("sched_ext: Work around pahole 1.32 dropping
-scx_bpf_task_set_lazy_resched() from BTF").
+All errors (new ones prefixed by >>):
 
-Here the argument is an int that clang reassigns, its location list has
-no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
-pahole 1.31 does not help.
+   In file included from fs/nfs/flexfilelayout/flexfilelayout.c:10:
+   In file included from include/linux/nfs_fs.h:22:
+   In file included from include/linux/in.h:19:
+   In file included from include/uapi/linux/in.h:25:
+   In file included from include/linux/socket.h:8:
+   In file included from include/linux/uio.h:8:
+   In file included from include/linux/kernel.h:23:
+   In file included from include/linux/bitops.h:67:
+   In file included from arch/arm/include/asm/bitops.h:245:
+   In file included from include/asm-generic/bitops/lock.h:5:
+   In file included from include/linux/atomic.h:7:
+   In file included from arch/arm/include/asm/atomic.h:16:
+>> arch/arm/include/asm/cmpxchg.h:260:1: error: instruction requires: !armv*m
+     260 | "1:     ldrexd          %1, %H1, [%3]\n"
+         | ^
+   <inline asm>:1:5: note: instantiated into assembly here
+       1 |         1:      ldrexd          r2, r3, [r0]
+         |                 ^
+   In file included from fs/nfs/flexfilelayout/flexfilelayout.c:10:
+   In file included from include/linux/nfs_fs.h:22:
+   In file included from include/linux/in.h:19:
+   In file included from include/uapi/linux/in.h:25:
+   In file included from include/linux/socket.h:8:
+   In file included from include/linux/uio.h:8:
+   In file included from include/linux/kernel.h:23:
+   In file included from include/linux/bitops.h:67:
+   In file included from arch/arm/include/asm/bitops.h:245:
+   In file included from include/asm-generic/bitops/lock.h:5:
+   In file included from include/linux/atomic.h:7:
+   In file included from arch/arm/include/asm/atomic.h:16:
+   arch/arm/include/asm/cmpxchg.h:264:2: error: instruction requires: !armv*m
+     264 | "       strexd          %0, %5, %H5, [%3]\n"
+         |  ^
+   <inline asm>:5:2: note: instantiated into assembly here
+       5 |         strexd          r1, r10, r11, [r0]
+         |         ^
+   2 errors generated.
 
-Not reassigning the parameter is a workaround for me, with any pahole: clang
-then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
-and __bpf_tcp_ops_init() returns 0 (tested in virtme):
 
-diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-index 2ba73dd6c52cce..1afa6bd7f508ef 100644
---- a/net/ipv4/bpf_tcp_ops.c
-+++ b/net/ipv4/bpf_tcp_ops.c
-@@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
- 	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
- 		wakeup = true;
+vim +260 arch/arm/include/asm/cmpxchg.h
 
--	if (rcvlowat < 0)
--		rcvlowat = INT_MAX;
--
--	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
-+	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
-+	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
-+				  wakeup);
- }
+e001bbae7147b1 Russell King 2015-05-26  249  
+2523c67bb6962f Will Deacon  2013-10-09  250  static inline unsigned long long __cmpxchg64(unsigned long long *ptr,
+2523c67bb6962f Will Deacon  2013-10-09  251  					     unsigned long long old,
+2523c67bb6962f Will Deacon  2013-10-09  252  					     unsigned long long new)
+2523c67bb6962f Will Deacon  2013-10-09  253  {
+2523c67bb6962f Will Deacon  2013-10-09  254  	unsigned long long oldval;
+2523c67bb6962f Will Deacon  2013-10-09  255  	unsigned long res;
+2523c67bb6962f Will Deacon  2013-10-09  256  
+c32ffce0f66e5d Will Deacon  2014-02-21  257  	prefetchw(ptr);
+c32ffce0f66e5d Will Deacon  2014-02-21  258  
+2523c67bb6962f Will Deacon  2013-10-09  259  	__asm__ __volatile__(
+2523c67bb6962f Will Deacon  2013-10-09 @260  "1:	ldrexd		%1, %H1, [%3]\n"
+2523c67bb6962f Will Deacon  2013-10-09  261  "	teq		%1, %4\n"
+2523c67bb6962f Will Deacon  2013-10-09  262  "	teqeq		%H1, %H4\n"
+2523c67bb6962f Will Deacon  2013-10-09  263  "	bne		2f\n"
+2523c67bb6962f Will Deacon  2013-10-09  264  "	strexd		%0, %5, %H5, [%3]\n"
+2523c67bb6962f Will Deacon  2013-10-09  265  "	teq		%0, #0\n"
+2523c67bb6962f Will Deacon  2013-10-09  266  "	bne		1b\n"
+2523c67bb6962f Will Deacon  2013-10-09  267  "2:"
+2523c67bb6962f Will Deacon  2013-10-09  268  	: "=&r" (res), "=&r" (oldval), "+Qo" (*ptr)
+2523c67bb6962f Will Deacon  2013-10-09  269  	: "r" (ptr), "r" (old), "r" (new)
+2523c67bb6962f Will Deacon  2013-10-09  270  	: "cc");
+2523c67bb6962f Will Deacon  2013-10-09  271  
+2523c67bb6962f Will Deacon  2013-10-09  272  	return oldval;
+2523c67bb6962f Will Deacon  2013-10-09  273  }
+2523c67bb6962f Will Deacon  2013-10-09  274  
 
- __bpf_kfunc_end_defs();
-
-Would this be acceptable?
-
-[1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
-[2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
