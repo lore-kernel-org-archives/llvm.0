@@ -1,81 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.243
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793968114;
-	b=XkioN2VlHL9uwXfhexVVixJIpA7kjXku1MDbZYhHuqhdgmemM2GyovrY5um1NcrXMxEc
-	 KaCpBtvS3eUzDlI5toibu9OPEaai8f9cSdjSxWkWPnTVGNFagGowbT1LcT1xk1P3oetHW
-	 K6f+pRS5ikfiK3zvAawLRDRuXa+nist5hBFIyvbp1t7vsLropCIKwzg7eEPJQzWkBkcy6
-	 fTx2eDjpOGOfJMhRFu94lgyVLQP9ClmDxLVnipbpdEeZbpH+7WC2u9yyGTChVMzB5ejGX
-	 gDc9rR5ARzBgom9jEiRwwImK+Xqaqf8TdJSbla1oSsGFO6npTpTjA7/DgObAzbASifA==
+	t=1793970992;
+	b=p4VJa0h/j5CL7Xdtdls+UMuqDcX+l4szzj0nVTK7MEBfTc4TI8Ia9W7ZguK7uZH1cOt9
+	 uk9f883beh7FSrAunLieOUm41Oxp+dph9ASgw+IEjYQVCzyMiCzRJxpMcHla9Gv56h5gN
+	 sl3owYRRXWo8DMM0LCfjkbmD1Wo4eOAq3MAN24kJ/pKqEc8FyiwMpZKKXnBaT2z0fZKt7
+	 KkdxUfnmNHNj6a6mp/2ualgdEpvppwpW5wLGIxK+YTBemVH/PylVKXx42F3gCNtLpbh/n
+	 F2W34DlnM9R65ORVBE/y5QhMkXdKi0xR4b9pvMx5LGzIZ35fZde4BsrLr9meAYnqRCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793968114;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=hQVrnxdz+rbVpJRSfgeT0cSc/1aHJR+DP3Q1DQOKUSE=;
-	b=T7ldlCUUjWnsVqVEUv2GqTVhytO25X/zIhsU3T+A8SbNt5dcUpnwSNXmH2k7gIDWgzlj
-	 eZvRYm4QTyV0Gm4ShlcBkHNP9JuC9JcaY4Pqm3OnB37XG6FiCPj9qG6gsthEpI49mSMs7
-	 LW7LHkJiFB7Ykxr0KpjiVTOPW92bypGV+LQ5c7oy8g4dhxkq+NAxBdAtQGOsK+HMLV0W4
-	 X3M0448/tbwumXbEaNUTUjqpAX1RYeKnSWhmH8OFoU7MIAgjPYhWA6/+39hMHYoy3vGge
-	 p9uqhSXqmjz0uyFfPYE9GY+hQmOODOIDcAUd70ghaORCZU2PwCtSG1ecnRB0xQHnt7Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793970992;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=xA2j3ADzCoYTFXkm6p5Y+S9TcrGcEwcHd75/49R2NEY=;
+	b=3+ytFVWwimRxZyPnScgJR+TTkIYJWOto+iGdW3fAWc9qcixt3jg8pdSdd67YTXSLU6e4
+	 LvM1tUVFKVt9paVNzdeoVA+jUanu81Cmo2956vde5QDEjlHUWvgH/zIxqk9DXglzRgXZt
+	 LXxNR6FcJCtN9rFze9sBFpds9bMGk/Df589Lf39w1Z/wEy82r56s6x3c6nX68YCdUhXR6
+	 XURhQmd3XsDAW17bVDFh/NaWei8vwfEJSmJg9f/hZK4aQAhfMuPrnxbxIk22V2PitAQaf
+	 kYStgWuD0i3hbDJ5DlNS5W2M4zkw6kT0XXA4JyAY+l4scm3aDE/fnNidPlmRZLKC4Cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=igiRGWuS;
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aDz0gt7T;
+	arc=none smtp.remote-ip=91.218.175.243
+Received: from mta0.migadu.com (out-243.mta0.migadu.com [91.218.175.243])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECB8606A334;
-	Fri,  6 Nov 2026 12:28:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1ECB8606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB47F606A32F
+	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 13:16:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB47F606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=igiRGWuS
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793968112; x=1825504112;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jUA+TebI3m9/LhLb8tKLu6TX6W1ZynxPrDltBatVwPc=;
-  b=igiRGWuSEd+5s3skViZsEe9aBV6k086+7unLKQuGI4qCgmbWLxoADRfD
-   b7pdDb2dtjT5Wo9IcsDfvgmslT/V+N88kHAmLQdGyBFlj59OSpbGTOzVt
-   a8xocQQpjTm4gQrazgQ4UpyfhqBDUZ7oBjJpHjC84Rw2R2fz79ZyPT9ss
-   CDnxI7nLXvTPnW5TNODev7P/sUQYJ6cOH3uIlGp77liCka+7lkRR4OH23
-   a48pp6UPttjaoB3gE5awLitf/AsH940rLqPec7kwvBJV5REU0Y4jcGtrU
-   3zJte0FDOLd85gzQb0HxSYMdDvLv4JRwqZXkuh9JllnapEKBGcVKqGDvo
-   g==;
-X-CSE-ConnectionGUID: pJLzCl/QQheChEndJH/JZw==
-X-CSE-MsgGUID: hlrARthORz24tQNDGBGFYw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2783318"
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="2783318"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2026 04:28:31 -0800
-X-CSE-ConnectionGUID: LDJQMKt1RRSdHbxIIuWJIg==
-X-CSE-MsgGUID: IN5rR5B7TBqELLczD0z1Ng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="7315719"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 06 Nov 2026 04:28:30 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xPJ3S-00000000pFP-3hkN;
-	Fri, 06 Nov 2026 12:28:26 +0000
-Date: Fri, 6 Nov 2026 20:28:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Snitzer <snitzer@kernel.org>, Anna Schumaker <anna@kernel.org>,
-	Trond Myklebust <trondmy@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Flynn <jonathan.flynn@hammerspace.com>,
-	linux-nfs@vger.kernel.org, Mike Snitzer <snitzer@hammerspace.com>
-Subject: Re: [PATCH v2 01/12] NFSv4/flexfiles: move layoutstats accounting to
- a per-stripe lock
-Message-ID: <202611062010.UcNJzsW9-lkp@intel.com>
-References: <20261106001251.73472-2-snitzer@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aDz0gt7T
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=jLNhKHAo8WkYWpOAlEVTpu1rdFumCTRvxuDgeqU41cA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793970989; v=1; x=1794575789;
+ b=aDz0gt7TRM8PKPaqo2K+Us1WojVdhUjTG3hYjxXY/phiMs0mqxV/qCQ8VFHQ7DlYrig+IYd+
+ sRH6+JTGHGhkaujVS4ZAeMCwIP5c4vXfcP1Xi1q/GdABm1L2WsJAg09Y5Bcr05TLCeQff+4sY7N
+ 01zVtSokc9gGwmCYgIXlQX+M=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 2c5374bb68f6f20c;
+	Fri, 06 Nov 2026 13:16:29 +0000
+X-Mizu-Trace-ID: 2c5374bb68f6f20c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
+Date: Fri, 6 Nov 2026 21:16:24 +0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -85,99 +58,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261106001251.73472-2-snitzer@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
+ clang KCSAN
+To: Breno Leitao <leitao@debian.org>, kuniyu@google.com,
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+Cc: ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org,
+ kuba@kernel.org, tj@kernel.org
+References: <au27Y9m78_3EH2v1@gmail.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <au27Y9m78_3EH2v1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Mike,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 8cdff0c1549d3fce6bb652e6bc5dd7546e1cd1e3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Snitzer/NFSv4-flexfiles-move-layoutstats-accounting-to-a-per-stripe-lock/20261105-191238
-base:   8cdff0c1549d3fce6bb652e6bc5dd7546e1cd1e3
-patch link:    https://lore.kernel.org/r/20261106001251.73472-2-snitzer%40kernel.org
-patch subject: [PATCH v2 01/12] NFSv4/flexfiles: move layoutstats accounting to a per-stripe lock
-config: arm-mps2_defconfig (https://download.01.org/0day-ci/archive/20261106/202611062010.UcNJzsW9-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261106/202611062010.UcNJzsW9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611062010.UcNJzsW9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/nfs/flexfilelayout/flexfilelayout.c:10:
-   In file included from include/linux/nfs_fs.h:22:
-   In file included from include/linux/in.h:19:
-   In file included from include/uapi/linux/in.h:25:
-   In file included from include/linux/socket.h:8:
-   In file included from include/linux/uio.h:8:
-   In file included from include/linux/kernel.h:23:
-   In file included from include/linux/bitops.h:67:
-   In file included from arch/arm/include/asm/bitops.h:245:
-   In file included from include/asm-generic/bitops/lock.h:5:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/arm/include/asm/atomic.h:16:
->> arch/arm/include/asm/cmpxchg.h:260:1: error: instruction requires: !armv*m
-     260 | "1:     ldrexd          %1, %H1, [%3]\n"
-         | ^
-   <inline asm>:1:5: note: instantiated into assembly here
-       1 |         1:      ldrexd          r2, r3, [r0]
-         |                 ^
-   In file included from fs/nfs/flexfilelayout/flexfilelayout.c:10:
-   In file included from include/linux/nfs_fs.h:22:
-   In file included from include/linux/in.h:19:
-   In file included from include/uapi/linux/in.h:25:
-   In file included from include/linux/socket.h:8:
-   In file included from include/linux/uio.h:8:
-   In file included from include/linux/kernel.h:23:
-   In file included from include/linux/bitops.h:67:
-   In file included from arch/arm/include/asm/bitops.h:245:
-   In file included from include/asm-generic/bitops/lock.h:5:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/arm/include/asm/atomic.h:16:
-   arch/arm/include/asm/cmpxchg.h:264:2: error: instruction requires: !armv*m
-     264 | "       strexd          %0, %5, %H5, [%3]\n"
-         |  ^
-   <inline asm>:5:2: note: instantiated into assembly here
-       5 |         strexd          r1, r10, r11, [r0]
-         |         ^
-   2 errors generated.
+Thanks for the report !
 
 
-vim +260 arch/arm/include/asm/cmpxchg.h
+On 11/6/26 7:38 PM, Breno Leitao wrote:
+> My arm64 KCSAN builds of linux-next fail since next-20261015, because
+> bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
+>
+>   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+>   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+>   Failed to generate BTF for vmlinux
+>   Try to disable CONFIG_DEBUG_INFO_BTF
+>   make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
 
-e001bbae7147b1 Russell King 2015-05-26  249  
-2523c67bb6962f Will Deacon  2013-10-09  250  static inline unsigned long long __cmpxchg64(unsigned long long *ptr,
-2523c67bb6962f Will Deacon  2013-10-09  251  					     unsigned long long old,
-2523c67bb6962f Will Deacon  2013-10-09  252  					     unsigned long long new)
-2523c67bb6962f Will Deacon  2013-10-09  253  {
-2523c67bb6962f Will Deacon  2013-10-09  254  	unsigned long long oldval;
-2523c67bb6962f Will Deacon  2013-10-09  255  	unsigned long res;
-2523c67bb6962f Will Deacon  2013-10-09  256  
-c32ffce0f66e5d Will Deacon  2014-02-21  257  	prefetchw(ptr);
-c32ffce0f66e5d Will Deacon  2014-02-21  258  
-2523c67bb6962f Will Deacon  2013-10-09  259  	__asm__ __volatile__(
-2523c67bb6962f Will Deacon  2013-10-09 @260  "1:	ldrexd		%1, %H1, [%3]\n"
-2523c67bb6962f Will Deacon  2013-10-09  261  "	teq		%1, %4\n"
-2523c67bb6962f Will Deacon  2013-10-09  262  "	teqeq		%H1, %H4\n"
-2523c67bb6962f Will Deacon  2013-10-09  263  "	bne		2f\n"
-2523c67bb6962f Will Deacon  2013-10-09  264  "	strexd		%0, %5, %H5, [%3]\n"
-2523c67bb6962f Will Deacon  2013-10-09  265  "	teq		%0, #0\n"
-2523c67bb6962f Will Deacon  2013-10-09  266  "	bne		1b\n"
-2523c67bb6962f Will Deacon  2013-10-09  267  "2:"
-2523c67bb6962f Will Deacon  2013-10-09  268  	: "=&r" (res), "=&r" (oldval), "+Qo" (*ptr)
-2523c67bb6962f Will Deacon  2013-10-09  269  	: "r" (ptr), "r" (old), "r" (new)
-2523c67bb6962f Will Deacon  2013-10-09  270  	: "cc");
-2523c67bb6962f Will Deacon  2013-10-09  271  
-2523c67bb6962f Will Deacon  2013-10-09  272  	return oldval;
-2523c67bb6962f Will Deacon  2013-10-09  273  }
-2523c67bb6962f Will Deacon  2013-10-09  274  
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Has pahole fixed this issue?
+
+
+> This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
+> same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
+> v7.4-rc1 is affected as well. With pahole 1.31, the same config without
+> KCSAN builds fine.
+>
+> The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
+> sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
+> --fatal_warnings exit status") made the missing BTF fatal with
+> CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
+> is never registered:
+>
+>   initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
+>
+> This seems similar to pahole behaviour sched_ext hit with a bool
+> argument, discussed in [2] and worked around in f2f095c87603
+> ("sched_ext: Work around pahole 1.32 dropping
+> scx_bpf_task_set_lazy_resched() from BTF").
+
+
+This sets a bad example for future kfuncs, as if kfunc arguments must not be reassigned......
+
+
+>
+> Here the argument is an int that clang reassigns, its location list has
+> no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
+> pahole 1.31 does not help.
+>
+> Not reassigning the parameter is a workaround for me, with any pahole: clang
+> then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
+> and __bpf_tcp_ops_init() returns 0 (tested in virtme):
+>
+> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+> index 2ba73dd6c52cce..1afa6bd7f508ef 100644
+> --- a/net/ipv4/bpf_tcp_ops.c
+> +++ b/net/ipv4/bpf_tcp_ops.c
+> @@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
+>  	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
+>  		wakeup = true;
+>
+> -	if (rcvlowat < 0)
+> -		rcvlowat = INT_MAX;
+> -
+> -	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
+> +	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
+> +	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
+> +				  wakeup);
+>  }
+>
+>  __bpf_kfunc_end_defs();
+>
+> Would this be acceptable?
+>
+> [1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
+> [2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
