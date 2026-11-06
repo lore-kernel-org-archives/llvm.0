@@ -1,45 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793932953;
-	b=adbzxjwmTe1XjncHI8G9kkN0NOeG0EJjPdl3RqbxFO8EhBPvNsHdDNkJiB1IB7/1/gyj
-	 KHt1+5PL8waY6oFBozhaJecIWoBZBofrP6XdlyKl75mezMFQq5DPKG+UkxcKRXWd2WBiC
-	 UWZ5PSyLLHWRwPMKCXmapz5wJPs418ptat7a5s7FhxDXllf9p8KOVZpTasIAghoYCr5vP
-	 enMSguEYNqtMSRZYmgMSsifAYtIRREK5xXOE5lSVMBiWGBQ4wCKsrsu1o2ouXaxKWaVsB
-	 4kH6W6WhJXGJ4WUvIgA/wOl8kIK+KMEe75xoaMNJpu4rRRWI+Z/YVObDqh85AE2pudQ==
+	t=1793934117;
+	b=U+2pIBAcKHHJvlP33yaguMh39/7MWXN4S4syBgTVc9kVGRg10eeu27KOBYT4s4ga1lhF
+	 rapH3tX2yBvuCMQmp0H1l7rRO5N17Jhk/EyRSlqArBZt3CE2sG1S/m8ofdo9hmQd1Pt1B
+	 5sQXhb4yf7xKeyEWxNEMqzcMet6OzVnf4sJd/cjk/pJQuris4xrCDSRCGnMOLqYnujtPL
+	 P3tm0cPZ8jCPl5nN/sl1XI6OPn5Wq8RQhrrEgvFPu+8h0NEXxKPQn+Jl9jYeEEbC3Yp4W
+	 INKfUXOOyc2LE82tby5N7k0THGbHKA/4GqlBlGMObrteW6DJE3hbHd8kxDifLssDHUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793932953;
-	h=Received:DKIM-Signature:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=thdVigjkFcdB80wzco5t+F/NbNYFFWE5g57QCgD+R6E=;
-	b=DqmkvkEeoB5AuvermwbODjZicZCgIl/x49PT0nauQhyU4RZmjueOqPtFM2mYXNgF5yyV
-	 1+Jpmf9fKN1N8hSSHt0/6aFZ2WoBxKcy83JsKPYmo+mgdoECvA4tZ0emnmV3jN+oqMXzV
-	 cLihEBECUPD1Et3NRDA+dCX2np8jCFkaZLWvSQZXZDkEjcabhB7WGiXLhSXpqrBkJB1TD
-	 KGAPtBH9/sgPNTTwiBMnXskZCwnDcokSXWNvErPuHdPaBKqnCJ+aygaXxXMsCW1tPbBB8
-	 jJkDO32kYRQ2wcHBG6g39CZAdJF48LZR/c1L75EvARLVG28xSVZmGwN3e1uAcHR53Dg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793934117;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=n90xYOYRecs+yLRqpuRRcGw8wdLml7i48qgV7WcSPdY=;
+	b=uMbVahq6ik5JVO8M9zqJwS05/rK9GL/M2hFSba84+ecZcSC/3EA5zFe+E0S7Un9QoUz9
+	 aH96wlxhCYJs9i1vK/Pa3qNfRrUQ8lbVurRiXjGmKxCs2KIKqs/+iOYNt4OHF0w2s1I5c
+	 CIchCHon96AnGLqln7uwC2BRjb74pO+rj5Nqrnxw6XLV2iyT+yA1Lr9Cd5XIs3g0w45DX
+	 QeVQiPnEs52b8NsW1m7xz7DxgexC1TJu8hXaqgDdgT0olXRnnfR2MFA1teu03agfJVRJx
+	 ddEc/tZ3+14UMj8CuT+sB71jktdSLRrcxBV4fFF5Uo29/CM0DGrsVjmaHqosITUPxuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XozpImpV;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cYpico84;
+	arc=none smtp.remote-ip=198.175.65.13
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C25606A328;
-	Fri,  6 Nov 2026 02:42:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77005606A32C;
+	Fri,  6 Nov 2026 03:01:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77005606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XozpImpV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A05BA1F0089F;
-	Fri,  6 Nov 2026 02:42:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793932953;
-	bh=thdVigjkFcdB80wzco5t+F/NbNYFFWE5g57QCgD+R6E=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=XozpImpVirxN2nQ0Gze/2lk0g6nWV1VMVKP3BUJ4aSG2MpvW9JUxcrT8dAoJEE05W
-	 eazUQFG8qnK1wF9niviEwq2k9qrGZO5bNbnxy7+CpPHAdbs+fFXfw9B0di2vpBW+nu
-	 4PpjqrWejoKEE2N47Jv3QYrwRPvrLyNFeUccbDEhWnrgICxwT1kuBK4yaj31WEBdoc
-	 6zJTtntr2zY62ZubKz9pGACft1eNz1CDDSh5j5zGolsZfLAOMupCTuLbwnCgeZ+QGa
-	 OYwpX2U9j4uyg10UzuhxWHewcMRTNeBtKfNJ2qlJMSloz+GTTy99eCu2nJeNfLU7Gh
-	 DaEYoUvUCXZbA==
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cYpico84
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793934115; x=1825470115;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l7Th8NqpzkzSbTd9bubw0RIf0Ptss2DMkEUq3dw8Fl8=;
+  b=cYpico8499fNRENTxbDvAZs7AQoV8aJbsxH9I8HkZymlOmn2z7HmsGKU
+   YXmvOSxvPMaELhLOEeFjOYiFTVGrHXaPwCLTaqVs8vqSmt92GQJqfZ73E
+   R6YV0irKRdcum6z228hGFr7u3K0H223jjhA+xWpUi1rFwZvUUnr+TLCvW
+   v3ca1I6NUOocqnrD1xvEOmkLi8SPnVNY2yHY+2LUMcop1cJfkvg2cX6hC
+   jRcZ0ZCgopgfntY4ivxWr4Ls1PynGLSyf25djb91/+lWTnhKu6H1+DgAB
+   WIjUGfXyUFZWgIVba4vMYXV1KIr6NvFU7HnOkId0evaC6Szg3E1+dNa9F
+   A==;
+X-CSE-ConnectionGUID: K9k55a42RmSDkSPFyApy8w==
+X-CSE-MsgGUID: qm9qhHrQQJmHwkPRc768oA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2622025"
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="2622025"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 19:01:55 -0800
+X-CSE-ConnectionGUID: EW294U1XSmGsQ9ZUSGqIWA==
+X-CSE-MsgGUID: UUKxHlTgQ1OdfRcP2OmXiw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="7732913"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 05 Nov 2026 19:01:53 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xPAD8-00000000nDj-3eZ2;
+	Fri, 06 Nov 2026 03:01:50 +0000
+Date: Fri, 6 Nov 2026 11:01:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pooventhiran G <pooventhiran.g@oss.qualcomm.com>,
+	Johannes Berg <johannes@sipsolutions.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+	pooventhiran.g@oss.qualcomm.com
+Subject: Re: [PATCH wireless-next v3 15/21] wifi: mac80211: filter uplink and
+ downlink frames based on SMD states
+Message-ID: <202611061037.MK46LPkJ-lkp@intel.com>
+References: <20261106-smd-v3-15-1723950e3cf8@oss.qualcomm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -49,87 +85,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] kbuild: rust: pass AutoFDO flags to Clang with inline
- helpers
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jenhao Chen <jenhaochen@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nsc@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
- Matthew Maurer <mmaurer@google.com>, Rong Xu <xur@google.com>, 
- Han Shen <shenhan@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Qais Yousef <qyousef@google.com>, Ben Wei <benwei@google.com>, 
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-In-Reply-To: <20261031030807.4101384-1-jenhaochen@google.com>
-References: <20261031030807.4101384-1-jenhaochen@google.com>
-Date: Thu, 05 Nov 2026 19:42:18 -0700
-Message-Id: <179393293858.309869.13707261529438979905.b4-review@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2638; i=nathan@kernel.org;
- h=from:subject:message-id; bh=VGJ2ubzK7WAUjZ5bjU8xEGxhCY1jRXw6CJzzqoz4ocw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlv7Sayqc5bHtlR5mb3cYWUaqNFl5RofsFN/uLCm9suH
- i26Zvy9o5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzk5ipGhl+T+moanZuli/8s
- uZmcZKm37IX9aeN7d7rSf5mUhsZ5ZzD8lT0S4rzukVd2cLfS0nnrNhp+Pup+WI5LtbNU5nHd4hN
- s/AA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261106-smd-v3-15-1723950e3cf8@oss.qualcomm.com>
 
-> When CONFIG_RUST_INLINE_HELPERS=y, cmd_rustc_o_rs and cmd_rustc_library
-> compile Rust sources to LLVM bitcode (.bc), link rust/helpers/helpers.bc
-> via llvm-link, and then invoke $(CC) to compile the combined bitcode
-> into the final ELF object (.o).
-> 
-> When commit a960c2cdb19e ("kbuild: rust: add AutoFDO support") was
-> tested with CONFIG_RUST_INLINE_HELPERS=y and CONFIG_LTO_CLANG_THIN=y,
-> cmd_rustc_o_rs skipped the post-llvm-link $(CC) step under
-> CONFIG_LTO_CLANG and handed the linked bitcode directly to ld.lld, where
-> the ThinLTO backend applied --lto-sample-profile,
-> -plugin-opt=-split-machine-functions, and LLD's default function
-> sections. Non-LTO builds (!CONFIG_LTO_CLANG), however, ran the
-> post-llvm-link $(CC) step without $(CFLAGS_AUTOFDO_CLANG) ever since
-> commit 3a2486cc1da5 ("kbuild: rust: provide an option to inline C
-> helpers into Rust").
-> 
-> Subsequently, commit 5febf432df1c ("kbuild: rust: keep Rust objects out
-> of Clang LTO with inline helpers") updated cmd_rustc_o_rs and
-> rust/Makefile to always invoke $(CC) on the linked bitcode even when
-> CONFIG_LTO_CLANG=y. Because that $(CC) invocation only passes
-> $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS)) and does not include
-> $(CFLAGS_AUTOFDO_CLANG) (which is normally appended to _c_flags in
-> scripts/Makefile.lib), the final code generation step for Rust objects
-> is compiled without -ffunction-sections, -fsplit-machine-functions,
-> -fprofile-sample-use, or flow-sensitive discriminator flags whenever
-> CONFIG_RUST_INLINE_HELPERS=y.
-> 
-> As a result, Rust crates built with both CONFIG_RUST_INLINE_HELPERS=y
-> and CONFIG_AUTOFDO_CLANG=y emit all functions into a single monolithic
-> .text section (0 .text.<func> sections instead of 417 in
-> rust_binder_main.o and 424 in rust/kernel.o on arm64 with
-> CLANG_AUTOFDO_PROFILE set), preventing the linker from performing
-> AutoFDO hot/cold function clustering and discarding SamplePGO weights on
-> the inlined C helpers during final code generation.
-> 
-> Factor out _autofdo_c_flags in scripts/Makefile.lib (preserving per-file
-> and per-directory AUTOFDO_PROFILE opt-outs) and pass it to the
-> post-llvm-link $(CC) invocation in scripts/Makefile.build and
-> rust/Makefile.
-> 
-> Fixes: 3a2486cc1da5 ("kbuild: rust: provide an option to inline C helpers into Rust")
-> Fixes: 5febf432df1c ("kbuild: rust: keep Rust objects out of Clang LTO with inline helpers")
-> Signed-off-by: Jenhao Chen <jenhaochen@google.com>
+Hi Pooventhiran,
 
-I am assuming this will go via the Rust tree.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+[auto build test WARNING on b8e5b0ae8ff47240366d38e5d12c65f878724316]
 
--- 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Pooventhiran-G/wifi-nl80211-define-Seamless-Mobility-Domain-SMD-device-capability/20261106-010836
+base:   b8e5b0ae8ff47240366d38e5d12c65f878724316
+patch link:    https://lore.kernel.org/r/20261106-smd-v3-15-1723950e3cf8%40oss.qualcomm.com
+patch subject: [PATCH wireless-next v3 15/21] wifi: mac80211: filter uplink and downlink frames based on SMD states
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261106/202611061037.MK46LPkJ-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261106/202611061037.MK46LPkJ-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611061037.MK46LPkJ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/mac80211/tx.c:318:48: warning: overlapping comparisons always evaluate to true [-Wtautological-overlap-compare]
+     318 |             (tx->sdata->vif.type != NL80211_IFTYPE_AP ||
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+     319 |              tx->sdata->vif.type != NL80211_IFTYPE_AP_VLAN) ||
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +318 net/mac80211/tx.c
+
+   310	
+   311	static ieee80211_tx_result debug_noinline
+   312	ieee80211_tx_h_smd_state(struct ieee80211_tx_data *tx)
+   313	{
+   314		struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)tx->skb->data;
+   315		__le16 fc = hdr->frame_control;
+   316	
+   317		if (!tx->sta ||
+ > 318		    (tx->sdata->vif.type != NL80211_IFTYPE_AP ||
+   319		     tx->sdata->vif.type != NL80211_IFTYPE_AP_VLAN) ||
+   320		    !test_sta_flag(tx->sta, WLAN_STA_ASSOC) ||
+   321		    !(tx->flags & IEEE80211_TX_UNICAST))
+   322			return TX_CONTINUE;
+   323	
+   324		switch (tx->sta->smd_state) {
+   325		case IEEE80211_STA_SMD_NONE:
+   326			break;
+   327		case IEEE80211_STA_SMD_PREP:
+   328			/* 4a: Class 3 disallowed except ST Execution Response */
+   329			if (ieee80211_is_st_exec_resp(tx->skb))
+   330				break;
+   331			if (ieee80211_is_class3(tx->skb))
+   332				return TX_DROP;
+   333			break;
+   334		case IEEE80211_STA_SMD_EXEC:
+   335			/* 4b: no restriction */
+   336			break;
+   337		case IEEE80211_STA_SMD_DRAIN:
+   338			/* 4c: Class 3 disallowed except Data, Control,
+   339			 * UHR Reconfiguration Notify
+   340			 */
+   341			if (ieee80211_is_ctl(fc) || ieee80211_is_data(fc) ||
+   342			    ieee80211_is_uhr_link_reconf_notify(tx->skb))
+   343				break;
+   344			if (ieee80211_is_class3(tx->skb))
+   345				return TX_DROP;
+   346			break;
+   347		}
+   348	
+   349		return TX_CONTINUE;
+   350	}
+   351	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
