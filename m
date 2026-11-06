@@ -1,64 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793964322;
-	b=tDWHFvcRG7P/SD8+qE/tdk4/maAPFBpTXdfZ0H/r5YQ+seLwk2+B4NQUSatJ5+/DGH1k
-	 EoVW/H+pz+pbUrxJXRYBqTlwpgBFordqPlUWYND0K/meZftvly3z74Nx8q1ofRmJCz0+X
-	 lpzEz3PPAjnWAIOoEEdKpjeH/qTMKNvZ4cNF6U/0st41YlAyRvxXzYKXTsvb3gmm6+1yo
-	 TQwaPmFWupLkXY85iYVKdpj88txKlFIHCukKXxOxmQjMNuXnIQ98er9X6EmjCzLMXOsI1
-	 1UTy7wwOHxfhYL64KNOTGgCCCvLWiVi+PoEqFvj7iQyE3EvVFROWPzByO1Hm9lDVigQ==
+	t=1793965128;
+	b=W6r0oC7Gc6T3Gwty2fYuVdfRDDC6iF1xTGpJMAhmVBBc1NKGgptFUlRaEEsp8ck6Yn22
+	 IMyyVwZzttzEJcscnQkMv/L3fuEq/O6kRSndkvOBgsQi6wBDtFUBu6OaopljmeUNqgnqZ
+	 4TNidgcgzoxM21VS/m79pN+edJoVhCladJms8JwXD/0v8F4Nkm+GS7KRvuW/6P6Jv1Fy9
+	 UxKfGW19s6nAqzHMyPJA0vIN09cGmKR1Jbaqtv6EwNRDKIdUCRAby93t5KYYTyvsAUBHE
+	 1Avg5bINDMnTYe4/DCrWQrk9s7c2KuqtCiMB1mD/OtuiffJOg1sDKXuAztOCDbjzYNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793964322;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=Trrv0iMPhTtQUqyITn36BdI+UF3+7yotm3GSUj/OMh8=;
-	b=DoyjWJ3WBJyYyxkN3ALdVcTRA5fS+s2lgl7XUp1ml2x3I5vNh21MkVB/W/010B0Mq00l
-	 Y6QXhNBqp7T1pbbc5Awr5JIR6NjkNSq7SzvXcbwIM9MX77beTzbg7S37Ltda9As/hIODw
-	 xAH+3RwCQNMgYmz2kjbMxDWZ8894Ew/wtv6x97pYT+aRHjeHpJtVBl1itDk+9G43DHd3T
-	 rmxbZHOI2fNakk6KMiEHmFEvSwO+6h2eCCgMhqKDM4/qJHdaw9rTQkPPua6TMrwv2T5Wr
-	 zPs8vStFYfJC7QVUTRpPbwmqjZNLMXEgX/XKXn1kUijVv4cnKN5UzSVO/ORt2oDdt9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793965128;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition;
+	bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
+	b=wSsf4gR0SAMqZg7LN1hTNcYQfTBGQLDoemD2u5X0Pez7UJoex8mSGN3MaQhPDRKK66hk
+	 BBoDenyOV0s0RSckCqKULk22GvYlHlyDF95K9HjMJXUfCvJg04u0ZtAwggHCVU2PgJq8V
+	 DVidAwpKsQv8QWCzEG8XSL4qD431d2RjqsuUatB1loNRUJKIFlwabo7/+jw/E1HteaDX/
+	 c5jtXmHtvuo+SGW+CvnKd33CRDAM5NdLdPUGfC5W3LV8OuiRNwYUsHF7e15Sr7wSRg4Uy
+	 +wjDOWCrDjzLNgZuJLgsy5ClyND0qyliL5NBtxlMUkecUo56SuT/tMZ8tz2iC83mKZg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gondor.apana.org.au;
-	spf=pass smtp.mailfrom=gondor.apana.org.au;
-	dkim=pass header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.a=rsa-sha256 header.s=h01 header.b="Xalt/f/X";
-	arc=none smtp.remote-ip=180.181.231.80
-Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=fail header.from=debian.org;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=none smtp.remote-ip=74.125.224.52
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12F8606D804;
-	Fri,  6 Nov 2026 11:25:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D12F8606D804
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.a=rsa-sha256 header.s=h01 header.b=Xalt/f/X
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
-	from:content-type:reply-to; bh=Trrv0iMPhTtQUqyITn36BdI+UF3+7yotm3GSUj/OMh8=; 
-	b=Xalt/f/Xt043Y/+vTNh22MawDBUQuE5XrAWejw2UqhqH86/kmWLOr56SEwjKGH0dB9nmNhenZd8
-	THDoek5i9hqco5cS9ZPBbmxi8BLmgfLmEvYAFaiHwm098u95fmEwUM7zX6tJtctMRxTiQg/dN8V6X
-	6zg9fvQlWzCyeuDRAEKikDcVbqGzN1RoqSzAX57HVpgcTEpnW0LICB1EkGh59hK1BBc98welye82F
-	UQaz0GB4CZbNsFiX8kuW16UrQQSFZ+jJ8DMNETyABiYIIhvvDEBgjxk00lEcjsWzz7w3EtAR3CMUp
-	Uly5qmBLIRfOmk4ipAAwIIN6kSEq+rcDe5sA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.98.2 #2 (Debian))
-	id 1xPI4L-0000000Br0M-2Ou9;
-	Fri, 06 Nov 2026 19:25:18 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 06 Nov 2026 19:25:17 +0800
-Date: Fri, 6 Nov 2026 19:25:17 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Kees Cook <kees@kernel.org>
-Cc: Taehee Yoo <ap420073@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-crypto@vger.kernel.org, llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] crypto: x86/aria - Take the address of each asm function
- in one file
-Message-ID: <au25HZSyqJMjW-F2@gondor.apana.org.au>
-References: <20261012031920.i.329-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD96606A339
+	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 11:38:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CD96606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-67bf27f179aso548379d50.0
+        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 03:38:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793965126; x=1794569926;
+        h=content-disposition:content-type:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
+        b=LRJomvvZh1SLBXty5j6vJprmWecV2KJd5umllC+RUWaxmzhruJodBynn1TKqilYgSY
+         hg97FH/Zkp+e4i2Ak94M83gbfNgyRAmC6oknLTSdghdWrTryEu07r+a2SAlLkojDvWrl
+         b1TA93x9fhFysyG7zn8GvprWW2E6Pnyg7sag5hO33gRmdxL3uvzGwiWeCnpvS50rV22c
+         bXCkT+M4JKiYLjAwM46cBeiIly9XI5hpXfJ2pedhH5yUPYp+9kDtVwH+O5hPvgFvtsdt
+         fYl7kfU6k5Ysi+9z8bIxuheLX0jVV3VdMVNkDo+ozaR66K/LiwQHFEneSgRzLp5qJywO
+         H7gQ==
+X-Forwarded-Encrypted: i=1; AL+hErEZLvg5t6hPihseR6ecYjhIVy8qRD4jQgrGCSnu1cNzwbYnobQ+DurP19ceoxnUm1XO2eX4@lists.linux.dev
+X-Gm-Message-State: APuU4Z+mujTzfFKuJVyADV9KSreINVTyaCvg6bxLG5Ju+Dc1VJLPwE1J
+	4UrGHmqAKm7+jSOwqSI/f6Ew1GxwcZJOEGa/F6We/We5g2Z/1BJGChlg
+X-Gm-Gg: AYBFou2jYu/77oHnbXQoEtjwoWX+qyCkcLiRBb8fJF4YgYTo6EbOSxgLjDW11Q+YSSU
+	9N8+Ic9oqKWdXiE08efxrMtce368LzqLQtrtF5V82+YJlCL+JS1C/1W2CrxdVBXXMSRZO227tlJ
+	HSwkCmR8lHFIw2BzgfGgJ7mBefQodkuuH9rT542kjIhzkNZAwYoKuupqE+mZ276ODmn5jhCjpdT
+	J1oI0LQn+LFcmw5Pwdw63hWBQMUwdX1/XmJlLbGy+tc0cj7ZqsTtVSBjWDAqI3Q6U+CLQPCiSh/
+	J3D/UXzrGf1whBVrD09xKQZJk44hJDzWl9foobggHeJWVL/BURLTLm3ACyaTcB0GGDHeUUVYJRu
+	t4og5JcPeXsd0ijAaQnIj7bYM4DbBC3oTLVquJLDBeImsf3UD11hrF2+d2IFzGySOqnUlWUDUiB
+	9v9ZNJnLSlZ3Ii5Mfj9ov//PLuIjG2kOk+bzRm8bsTGKMj/W9YlI66Dm8uY7/fdZ9FjTOaiYOo+
+	xePmvVdYNVjVCB/LAlinbk8Gp1VZP3+CDgB4sBQJGcqFuGViE0TGnFJeWtSVhPRiLDBI2fbhc2D
+	4Y64I8RZxvNMOOWjrACo8kYqFeUWA9dJQvuoM33+
+X-Received: by 2002:a05:690e:b8e:b0:67c:1da0:6bd8 with SMTP id 956f58d0204a3-67c1da07981mr297045d50.68.1793965126563;
+        Fri, 06 Nov 2026 03:38:46 -0800 (PST)
+Received: from gmail.com ([2a03:2880:24ff:5e::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f8221absm16709167b3.27.2026.11.06.03.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2026 03:38:45 -0800 (PST)
+Date: Fri, 6 Nov 2026 03:38:44 -0800
+From: Breno Leitao <leitao@debian.org>
+To: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev
+Cc: ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, 
+	kuba@kernel.org, tj@kernel.org
+Subject: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
+ clang KCSAN
+Message-ID: <au27Y9m78_3EH2v1@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -70,47 +81,62 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261012031920.i.329-kees@kernel.org>
 
-On Sun, Oct 11, 2026 at 08:19:21PM -0700, Kees Cook wrote:
-> A Clang Full LTO bug[1] was fixed in Clang 23 where multiple .o files
-> performing an address-take of the same asm-originating typeid weak symbols
-> would have those symbols get completely removed instead of just keeping
-> one, seen at link time:
-> 
->   ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_encrypt_16way
->   >>> referenced by aria-aesni-avx-asm_64.S:962
->   >>>               vmlinux.o:(__cfi_aria_aesni_avx_encrypt_16way)
-> 
-> As a work-around for earlier Clang, add aria_avx_setup_16way_ops() and
-> aria_avx2_setup_32way_ops(), exported by the glue that owns each tier's
-> asm functions, and fill all three tables with them, so that each asm
-> function has its address taken in only one file.
-> 
-> Build tested ARCH=x86_64 with the kernel test robot's randconfig
-> (CONFIG_LTO_CLANG_FULL=y, CONFIG_CFI=y, and all three ARIA drivers built
-> in) and W=1, with Clang 22.1.8 and Clang 24.0.0git: vmlinux.o defines all
-> fifteen __kcfi_typeid_aria_* symbols, and vmlinux links. Without this
-> change, Clang 22.1.8 fails to link it as above, and Clang 24.0.0git,
-> which has the LLVM fix, links it.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202606041643.GyTZgCk1-lkp@intel.com/
-> Closes: https://lore.kernel.org/oe-kbuild-all/202606122021.pA9TozrA-lkp@intel.com/
-> Closes: https://lore.kernel.org/oe-kbuild-all/202608100432.yIX7TckM-lkp@intel.com/
-> Closes: https://lore.kernel.org/oe-kbuild-all/202610112311.o9XQsWsa-lkp@intel.com/
-> Link: https://github.com/llvm/llvm-project/pull/204025 [1]
-> Assisted-by: LLM
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
->  arch/x86/crypto/aria-avx.h              |  3 +++
->  arch/x86/crypto/aria_aesni_avx2_glue.c  | 35 ++++++++++++++-----------
->  arch/x86/crypto/aria_aesni_avx_glue.c   | 29 +++++++++++++-------
->  arch/x86/crypto/aria_gfni_avx512_glue.c |  8 ++----
->  4 files changed, 45 insertions(+), 30 deletions(-)
+My arm64 KCSAN builds of linux-next fail since next-20261015, because
+bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
 
-Patch applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+  WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+  WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+  Failed to generate BTF for vmlinux
+  Try to disable CONFIG_DEBUG_INFO_BTF
+  make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+
+This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
+same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
+v7.4-rc1 is affected as well. With pahole 1.31, the same config without
+KCSAN builds fine.
+
+The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
+sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
+--fatal_warnings exit status") made the missing BTF fatal with
+CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
+is never registered:
+
+  initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
+
+This seems similar to pahole behaviour sched_ext hit with a bool
+argument, discussed in [2] and worked around in f2f095c87603
+("sched_ext: Work around pahole 1.32 dropping
+scx_bpf_task_set_lazy_resched() from BTF").
+
+Here the argument is an int that clang reassigns, its location list has
+no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
+pahole 1.31 does not help.
+
+Not reassigning the parameter is a workaround for me, with any pahole: clang
+then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
+and __bpf_tcp_ops_init() returns 0 (tested in virtme):
+
+diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+index 2ba73dd6c52cce..1afa6bd7f508ef 100644
+--- a/net/ipv4/bpf_tcp_ops.c
++++ b/net/ipv4/bpf_tcp_ops.c
+@@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
+ 	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
+ 		wakeup = true;
+
+-	if (rcvlowat < 0)
+-		rcvlowat = INT_MAX;
+-
+-	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
++	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
++	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
++				  wakeup);
+ }
+
+ __bpf_kfunc_end_defs();
+
+Would this be acceptable?
+
+[1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
+[2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
