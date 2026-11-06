@@ -1,54 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.243
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.118.77.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793970992;
-	b=p4VJa0h/j5CL7Xdtdls+UMuqDcX+l4szzj0nVTK7MEBfTc4TI8Ia9W7ZguK7uZH1cOt9
-	 uk9f883beh7FSrAunLieOUm41Oxp+dph9ASgw+IEjYQVCzyMiCzRJxpMcHla9Gv56h5gN
-	 sl3owYRRXWo8DMM0LCfjkbmD1Wo4eOAq3MAN24kJ/pKqEc8FyiwMpZKKXnBaT2z0fZKt7
-	 KkdxUfnmNHNj6a6mp/2ualgdEpvppwpW5wLGIxK+YTBemVH/PylVKXx42F3gCNtLpbh/n
-	 F2W34DlnM9R65ORVBE/y5QhMkXdKi0xR4b9pvMx5LGzIZ35fZde4BsrLr9meAYnqRCQ==
+	t=1793976171;
+	b=bAhq8kL5zn1xHKbjJVi2gITjnWoAEgm3MAidF6qfGJWVzK23vOTPJgYg1bqvMi6Q35Ie
+	 VtRr/EdbxZZ6rOxs+ymcCjt2HreD/ffgyj7c4ecPktDL0Y/6OlqaUConX23h6BYfjwt5g
+	 iVH8BJHmHOXOocIQkh/qm3PGQFkhDkZhKd/KfKmhPdGugCsdwPwK5JFcIGn5EpMuZrJ1L
+	 pUHkHDEQre4L3pDQzC9Ew1IU0Ot8xfssCOCIVO62kK3KxX6XXpMfW5DMOCRRsT4PINKaB
+	 Gseg5lgqn+XLPyz845fELBzGGXX/oWGUwbdYLdDKwUuzH55Jm192zuN46f/eia7UiLw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793970992;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=xA2j3ADzCoYTFXkm6p5Y+S9TcrGcEwcHd75/49R2NEY=;
-	b=3+ytFVWwimRxZyPnScgJR+TTkIYJWOto+iGdW3fAWc9qcixt3jg8pdSdd67YTXSLU6e4
-	 LvM1tUVFKVt9paVNzdeoVA+jUanu81Cmo2956vde5QDEjlHUWvgH/zIxqk9DXglzRgXZt
-	 LXxNR6FcJCtN9rFze9sBFpds9bMGk/Df589Lf39w1Z/wEy82r56s6x3c6nX68YCdUhXR6
-	 XURhQmd3XsDAW17bVDFh/NaWei8vwfEJSmJg9f/hZK4aQAhfMuPrnxbxIk22V2PitAQaf
-	 kYStgWuD0i3hbDJ5DlNS5W2M4zkw6kT0XXA4JyAY+l4scm3aDE/fnNidPlmRZLKC4Cw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793976171;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key:X-CMS-MailID:X-Msg-Generator:Content-Type:X-RootMTR:
+	 X-EPHeader:X-CMS-RootMailID:References;
+	bh=qEvUsSQ8oHgd+U12jDuRB72u7Zwo8Q4AXWrOiHlDlZI=;
+	b=Dlyie4bskYiyX8aw1cVCXPwtVqX8fXejOaLolApnVOLZFeXoNvnYg3AyfmWvxtbt3gCF
+	 +/t7Lad9eBHfpvIH1HCe/RQB4ZG8f1ohDjXMaOl5kSp6LU42g48wvFE5p9/dXSQ+rIoW2
+	 OfORxP+4hnnWi7Th1KlRXfqZ5TOYiQNxGEPyOokjmXVe0CPZBg5LwXrY/ZUllUuuI+trV
+	 4rZpSHSx4o5301BPPMQxxxBKEE5l2uOkqya7KyVVqhNea9CzV61W9IyQpvkDe+5He4wpv
+	 gX0ju2XpMcfvFXaBoUoFxbxlN3kMqJm4Sily1dIBwYHCXltM2KAcEtRpbGZ9Nh0tSuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aDz0gt7T;
-	arc=none smtp.remote-ip=91.218.175.243
-Received: from mta0.migadu.com (out-243.mta0.migadu.com [91.218.175.243])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=samsung.com;
+	spf=pass smtp.mailfrom=samsung.com;
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b="O/KOIhPM";
+	arc=none smtp.remote-ip=210.118.77.12
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB47F606A32F
-	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 13:16:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB47F606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC75606A326
+	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 14:42:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0BC75606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aDz0gt7T
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=jLNhKHAo8WkYWpOAlEVTpu1rdFumCTRvxuDgeqU41cA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793970989; v=1; x=1794575789;
- b=aDz0gt7TRM8PKPaqo2K+Us1WojVdhUjTG3hYjxXY/phiMs0mqxV/qCQ8VFHQ7DlYrig+IYd+
- sRH6+JTGHGhkaujVS4ZAeMCwIP5c4vXfcP1Xi1q/GdABm1L2WsJAg09Y5Bcr05TLCeQff+4sY7N
- 01zVtSokc9gGwmCYgIXlQX+M=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 2c5374bb68f6f20c;
-	Fri, 06 Nov 2026 13:16:29 +0000
-X-Mizu-Trace-ID: 2c5374bb68f6f20c
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
-Date: Fri, 6 Nov 2026 21:16:24 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=O/KOIhPM
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20261106144248euoutp02f49d0ceb5c399c84a56a0d9efbe9d496~le9Hs_U2k1199311993euoutp02B;
+	Fri,  6 Nov 2026 14:42:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20261106144248euoutp02f49d0ceb5c399c84a56a0d9efbe9d496~le9Hs_U2k1199311993euoutp02B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1793976168;
+	bh=qEvUsSQ8oHgd+U12jDuRB72u7Zwo8Q4AXWrOiHlDlZI=;
+	h=From:Subject:Date:To:Cc:References:From;
+	b=O/KOIhPMNr5fvGwnIFx0OHpQiEz8JdSZLEtl0RQ/qRetqaNI1X9cja2oaka5Lhopz
+	 o3+qiAgVYknoP4vOvWrVkK55MsAy+4qtuMElPNieKOyEMrnUQUobYKR4Do09K0IlAW
+	 5lluxIhdkIx047/zGIDlcEmnqr+P6uuq8knZHMCQ=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3~le9G5JH1c0320803208eucas1p1W;
+	Fri,  6 Nov 2026 14:42:47 +0000 (GMT)
+Received: from AMDC4942.eu.corp.samsungelectronics.net (unknown
+	[106.210.136.40]) by eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20261106144245eusmtip1424e79dc85f8d505d60f5a807f37d8a5~le9FUmO2M0066400664eusmtip1W;
+	Fri,  6 Nov 2026 14:42:45 +0000 (GMT)
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+Subject: [PATCH v2 00/15] lib/lz4: stop forking upstream LZ4, vendor it
+ instead
+Date: Fri, 06 Nov 2026 15:42:40 +0100
+Message-Id: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -58,88 +67,260 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-To: Breno Leitao <leitao@debian.org>, kuniyu@google.com,
- netdev@vger.kernel.org, llvm@lists.linux.dev
-Cc: ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org,
- kuba@kernel.org, tj@kernel.org
-References: <au27Y9m78_3EH2v1@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <au27Y9m78_3EH2v1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGDn7WoC/22NwQ6CMBBEf4Xs2TVtUzV68j8Ih1K20ERa0oVGJ
+	fy7lXj0+CYzb1ZgSp4YbtUKibJnH0MBdajADib0hL4rDEqos7gKjY+3xkyhiwmXiedEZkTdWlU
+	KnXDOQllOiZx/7ta6KTx4nmN67SdZftOfT53++rJEgdJenGtJSavbO5uRl9AfbRyh2bbtA0LW5
+	9G4AAAA
+X-Change-ID: 20260904-lz4-vendor-upstream-4bc2202d0ffc
+To: Michal Wilczynski <m.wilczynski@samsung.com>,  Nathan Chancellor
+	<nathan@kernel.org>,  Nick Desaulniers <ndesaulniers@google.com>,  Bill
+	Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,  Russell
+	King <linux@armlinux.org.uk>,  Thomas Bogendoerfer
+	<tsbogend@alpha.franken.de>,  "James E.J. Bottomley"
+	<James.Bottomley@HansenPartnership.com>,  Helge Deller <deller@gmx.de>,
+	Heiko Carstens <hca@linux.ibm.com>,  Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>,  Christian Borntraeger
+	<borntraeger@linux.ibm.com>,  Sven Schnelle <svens@linux.ibm.com>, Thomas
+	Gleixner <tglx@kernel.org>,  Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>,  Sergey
+	Senozhatsky <senozhatsky@chromium.org>, Jens Axboe <axboe@kernel.dk>, 
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>,  Nick
+	Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>,  Chao Yu
+	<chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,  Eric Biggers
+	<ebiggers@kernel.org>,  Herbert Xu <herbert@gondor.apana.org.au>,  David
+	Laight <david.laight.linux@gmail.com>,  Sungguk <sungguk.na@samsung.com>,
+	Jaehoon Chung <jh80.chung@samsung.com>,  Marek Szyprowski
+	<m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org, 
+	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10637;
+	i=m.wilczynski@samsung.com; h=from:subject:message-id;
+	bh=wz6WKeqe9aM/51sYWqggJMCdGKknzWWNE5KRnyp6sjs=;
+	b=owGbwMvMwCGWumv6zndzRCIZT6slMWS9fZ4y20Jt3qO5Hc4C/EfW7vFdUCzJIrNi5qfGlESR2
+	T0TnCSudJSyMIhxMMiKKbKc3RhtJPmP4Wn58ce/YOawMoEMYeDiFICJmMcx/DOtMv9k+ftIImMA
+	m+V9X+Ulr5ItPu+eu2z1muXeRTK2i94xMjTuE3xZtyDYes7GKJVcMTur+hn7twUyrGHYd1Ppdfx
+	na3YA
+X-Developer-Key: i=m.wilczynski@samsung.com; a=openpgp;
+	fpr=CDB15B3219FE00E577C7E3FA65BA97B9EE9C1459
+X-CMS-MailID: 20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3
+X-EPHeader: CA
+X-CMS-RootMailID: 20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3
+References: <CGME20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3@eucas1p1.samsung.com>
 
-Thanks for the report !
+The in-kernel LZ4 is a fork. The decompressor was last synced with
+upstream v1.8.3 in 2018 and the compressor with v1.7.3 in 2017, both by
+hand. Upstream has made 488 commits against lib/ since, and the gap is
+maintained one cherry-pick at a time.
 
+That has left real bugs in place for example the forked
+LZ4_decompress_fast() has no bounds checks on its input, so corrupted
+input reads past its end and before the output buffer.
 
-On 11/6/26 7:38 PM, Breno Leitao wrote:
-> My arm64 KCSAN builds of linux-next fail since next-20261015, because
-> bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
->
->   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
->   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
->   Failed to generate BTF for vmlinux
->   Try to disable CONFIG_DEBUG_INFO_BTF
->   make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+This series vendors the upstream sources unmodified and adapts them at
+build time, so a re-sync becomes a directory copy:
 
+  upstream/lz4.c, upstream/lz4.h    verbatim upstream sources
+  upstream/lz4hc.c, upstream/lz4hc.h
+  lz4_deps.h                        the build environment
+  lz4_kernel_api.h                  hands the LZ4 names back
+  freestanding/                     ISO C headers -nostdinc drops
+  lz4_compress.c                    the kernel's entry points
+  lz4_decompress.c
+  lz4hc_compress.c
 
+Patches 1-3 apply to the fork as it stands: patch 1 moves the pre-boot
+decompressor off LZ4_decompress_fast(), patch 2 removes it and its
+variants, and patch 3 stops zram's lz4hc backend resetting its stream
+for every page. Patch 4 imports the sources. Patches 5-7 backport the
+upstream fixes the kernel needs on top of v1.10.0. Patch 8 adds the
+build environment. Patch 9 puts the freestanding headers on the pre-boot
+decompressor path. Patches 10, 11 and 13 convert the compressor, HC
+compressor and decompressor in turn; patch 12 widens the in-place margin
+erofs relies on for the new decoder. Patch 14 drops the last duplicated
+prototype list. Patch 15 gives lib/lz4 a MAINTAINERS entry, which it has
+never had.
 
-Has pahole fixed this issue?
+This is meant to go through Andrew's tree; patch 9 needs acks from the
+boot maintainers.
 
+The exported API changes in four ways.
 
-> This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
-> same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
-> v7.4-rc1 is affected as well. With pahole 1.31, the same config without
-> KCSAN builds fine.
->
-> The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
-> sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
-> --fatal_warnings exit status") made the missing BTF fatal with
-> CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
-> is never registered:
->
->   initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
->
-> This seems similar to pahole behaviour sched_ext hit with a bool
-> argument, discussed in [2] and worked around in f2f095c87603
-> ("sched_ext: Work around pahole 1.32 dropping
-> scx_bpf_task_set_lazy_resched() from BTF").
+The three stream types become incomplete. <linux/lz4.h> spelled out their
+layout for the fork's benefit, upstream headers define the same types and
+lib/decompress_unlz4.c ends up with both in one translation unit. Callers
+allocate LZ4_MEM_COMPRESS, LZ4HC_MEM_COMPRESS or LZ4_MEM_DECOMPRESS bytes
+instead of sizeof() every caller but zram already did. Each conversion
+patch makes its own type incomplete so no step leaves the tree broken.
 
+Sixteen macros go with them: the hash geometry (LZ4_HASHLOG,
+LZ4_HASHTABLESIZE, LZ4_HASH_SIZE_U32, LZ4HC_DICTIONARY_LOGSIZE, LZ4HC_MAXD,
+LZ4HC_MAXD_MASK, LZ4HC_HASH_LOG, LZ4HC_HASHTABLESIZE, LZ4HC_HASH_MASK) and
+the sizes derived from it (LZ4_MEMORY_USAGE, LZ4_STREAMSIZE{,_U64},
+LZ4_STREAMHCSIZE{,_SIZET}, LZ4_STREAMDECODESIZE{,_U64}). They existed to
+lay out structures the fork defined here none has an in tree user outside
+lib/lz4. LZ4_compressBound() goes too a static inline whose only caller
+was lib/decompress_unlz4.c, now using the LZ4_COMPRESSBOUND() macro.
 
-This sets a bad example for future kfuncs, as if kfunc arguments must not be reassigned......
+LZ4_MEM_DECOMPRESS and LZ4HC_CLAMP_CLEVEL are new.
 
+LZ4_decompress_fast(), LZ4_decompress_fast_continue() and
+LZ4_decompress_fast_usingDict() go. Upstream has deprecated them since
+v1.9, and their last in-tree user, the pre-boot decompressor, now uses
+LZ4_decompress_safe_partial().
 
->
-> Here the argument is an int that clang reassigns, its location list has
-> no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
-> pahole 1.31 does not help.
->
-> Not reassigning the parameter is a workaround for me, with any pahole: clang
-> then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
-> and __bpf_tcp_ops_init() returns 0 (tested in virtme):
->
-> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> index 2ba73dd6c52cce..1afa6bd7f508ef 100644
-> --- a/net/ipv4/bpf_tcp_ops.c
-> +++ b/net/ipv4/bpf_tcp_ops.c
-> @@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
->  	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
->  		wakeup = true;
->
-> -	if (rcvlowat < 0)
-> -		rcvlowat = INT_MAX;
-> -
-> -	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
-> +	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
-> +	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
-> +				  wakeup);
->  }
->
->  __bpf_kfunc_end_defs();
->
-> Would this be acceptable?
->
-> [1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
-> [2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
+There are some behaviour changes. All of them come from upstream rather
+than from this series and I have kept them rather than patching them
+out: a local fix on top of vendored sources is exactly the divergence
+this series exists to remove.
+
+ - LZ4HC levels 10 and up are clamped to 9. Upstream routes them to its
+   optimal parser, whose ~64K opt[] does not fit a kernel stack. The
+   fork had no optimal parser at all - level only scaled search depth -
+   so its levels 10-16 beat its own level 9 by 0.01%. Clamping rather
+   than rejecting keeps existing f2fs and zram settings working.
+
+ - LZ4_decompress_safe_partial() with a zero-length target returns 0
+   rather than -1, matching upstream since 725cb0aafdf7. No in-tree
+   caller depends on it.
+
+ - The compressors require wrkmem aligned to 8 bytes. Upstream checks
+   this and LZ4_initStream() returns NULL, which upstream's own callers
+   then dereference or ignore. The entry points check the alignment
+   themselves, warn once and fail the call. Every in-tree caller uses
+   kmalloc() or vmalloc() and is already aligned; <linux/lz4.h> now
+   documents the requirement.
+
+The layout follows lib/zstd, which keeps upstream's sources in a
+subdirectory and the kernel glue on top. zstd has an upstream import
+tool and an upstream zstd_deps.h; LZ4 has neither, so the kernel glue
+here lives outside the vendored files.
+
+The import is the v1.10.0 release tag. It does not build under
+-Wmissing-prototypes without upstream commit 5ef1f16929b5, which patch 5
+backports. Patch 6 backports upstream's arm64 fast decode loop and patch
+7 its match length limit fix; those are the only deviations from the
+tag. The rest of PR #1753 fixes code added after v1.10.0, so it will
+come with the next release.
+
+checkpatch reports some 3500 errors against patch 4: upstream's coding
+style, and no SPDX tags, in files kept verbatim.
+
+Measured in the kernel: three kernels differing only in lib/lz4, booted
+one core under KVM, each reading 1.3GB of kernel source from an LZ4
+erofs image with the page cache dropped before every pass. For v2 this
+was remeasured with more runs on an idle machine: median of 140 passes.
+The middle column is upstream v1.10.0 with LZ4_FAST_DEC_LOOP=0,
+to separate the version bump from the decode loop upstream added in
+v1.9.0.
+
+                        erofs read, MB/s
+  erofs cluster    today   v1.10.0   + fast loop    net
+             4K     2486      2549          2665    +7%
+            64K     3013      3104          3225    +7%
+
+The same three decoders at the library level, each block decompressed
+on its own the way zram treats a page. x86_64, the fork's and upstream's
+sources built with the kernel's code generation flags (so no SSE), all
+decoding the same compressed input, median of 21 interleaved runs. The
+first corpus is upstream's tests/datagen with a fixed seed, so it is
+byte-identical anywhere; the second is a tar of kernel sources:
+
+                                 decompression, MB/s
+  corpus           block  ratio    today   v1.10.0  + fast loop   net
+  datagen -s0 -P60   4K  1.09x     4584      4535         5097   +11%
+                    16K  1.34x     3960      3978         4828   +22%
+                    64K  1.90x     4797      4802         5598   +17%
+                   256K  1.92x     6749      6559         7600   +13%
+  kernel source tar  4K  2.29x     3719      3832         4219   +13%
+                    16K  2.57x     3778      3880         4203   +11%
+                    64K  2.80x     3792      3886         4179   +10%
+                   256K  2.95x     4165      4280         4750   +14%
+
+Compression is not uniformly faster: lz4hc on small blocks of poorly
+compressible data is up to 15% slower. Patches 10 and 11 have the
+numbers.
+
+The cost is size: lib/lz4 grows from 45K to 86K of text on x86_64,
+lz4hc most (12K to 39K). That is upstream code the fork never had.
+
+---
+Changes in v2:
+- Drop the RFC prefix
+- New patches 1-2: move the pre-boot decompressor to
+  LZ4_decompress_safe_partial() and remove LZ4_decompress_fast() and its
+  variants from the fork, ahead of the import (Sergey)
+- New patch 3: zram's lz4hc backend resets its stream once, not per page
+- New patches 6-7: backport upstream's arm64 fast decode loop (Sergey)
+  and its match length limit fix
+- New patch 12: widen LZ4_DECOMPRESS_INPLACE_MARGIN for the fast decode
+  loop
+- Compressor entry points check wrkmem alignment, warn and fail (Sergey)
+- Patch 13 names the upstream counterpart of each retired local patch
+  (Sergey)
+- MAINTAINERS: also cover lib/decompress_unlz4.c and
+  include/linux/decompress/unlz4.h (Eric)
+- Remeasure erofs reads with more runs on an idle machine
+- Link to v1: https://lore.kernel.org/r/20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com
+
+---
+Michal Wilczynski (15):
+      lib/decompress_unlz4: use LZ4_decompress_safe_partial() before boot
+      lib/lz4: remove LZ4_decompress_fast() and its variants
+      zram: lz4hc: reset the dictionary stream once, not per page
+      lib/lz4: import upstream LZ4 sources verbatim
+      lib/lz4: backport upstream's -Wmissing-prototypes fix
+      lib/lz4: backport upstream's aarch64 fast decode loop enablement
+      lib/lz4: backport upstream's match length limit fix
+      lib/lz4: add the build environment for the vendored sources
+      arch: boot: put the LZ4 freestanding headers on the decompressor path
+      lib/lz4: switch the compressor to the vendored sources
+      lib/lz4: switch the HC compressor to the vendored sources
+      lib/lz4: widen LZ4_DECOMPRESS_INPLACE_MARGIN for the fast decode loop
+      lib/lz4: switch the decompressor to the vendored sources
+      lib/lz4: replace lz4_kernel_api.h's prototypes with <linux/lz4.h>
+      MAINTAINERS: add an entry for the LZ4 compression library
+
+ Documentation/filesystems/f2fs.rst   |    2 +
+ MAINTAINERS                          |   10 +
+ arch/arm/boot/compressed/Makefile    |    3 +
+ arch/mips/boot/compressed/Makefile   |    4 +
+ arch/parisc/boot/compressed/Makefile |    3 +
+ arch/s390/boot/Makefile              |    3 +
+ arch/x86/boot/compressed/Makefile    |    3 +
+ drivers/block/zram/backend_lz4.c     |    8 +-
+ drivers/block/zram/backend_lz4hc.c   |    8 +-
+ include/linux/lz4.h                  |  253 +--
+ lib/decompress_unlz4.c               |   17 +-
+ lib/lz4/Makefile                     |   16 +-
+ lib/lz4/freestanding/limits.h        |   14 +
+ lib/lz4/freestanding/stddef.h        |   15 +
+ lib/lz4/freestanding/stdint.h        |   14 +
+ lib/lz4/freestanding/string.h        |   14 +
+ lib/lz4/lz4_compress.c               |  946 +-----------
+ lib/lz4/lz4_decompress.c             |  724 +--------
+ lib/lz4/lz4_deps.h                   |  118 ++
+ lib/lz4/lz4_kernel_api.h             |   34 +
+ lib/lz4/lz4defs.h                    |  247 ---
+ lib/lz4/lz4hc_compress.c             |  792 +---------
+ lib/lz4/upstream/lz4.c               | 2824 ++++++++++++++++++++++++++++++++++
+ lib/lz4/upstream/lz4.h               |  884 +++++++++++
+ lib/lz4/upstream/lz4hc.c             | 2192 ++++++++++++++++++++++++++
+ lib/lz4/upstream/lz4hc.h             |  414 +++++
+ 26 files changed, 6813 insertions(+), 2749 deletions(-)
+---
+base-commit: 93f51579e7df248780214094418f205253383cc5
+change-id: 20260904-lz4-vendor-upstream-4bc2202d0ffc
+
+Best regards,
+-- 
+Michal Wilczynski <m.wilczynski@samsung.com>
+
