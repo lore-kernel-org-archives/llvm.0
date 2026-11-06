@@ -1,100 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793987586;
-	b=XNKmEvVseuZ83SE3KOSPwaB5Av+TFiP3Tie8lDgtJrDn2rl9fynHHjzfUSrft+oo2HTH
-	 1IpismT+P72MM71bPciU4SF6aRvRKvLW8TjswIejZdS156j2HtQbI0IsanSCBENRjVFEO
-	 7s1JasorgV0H+7FC7jyZAxUWIH6crfEF3fr8TWq3N/HR1nxFichzku6pFzfesNlhFlWIC
-	 Gzka+B2GE0EDz+e5Nvx98FjoBgFcsCllMleLFC6YbkP4C2MJ+g3rssXNkS3GvEPDX/bnj
-	 wRZrmZfyQi4+O5pl3X8qi5PoihWcmwTdDaZlzeN+DeYb3nvAmqHh/hBwwqRXyQv5C2Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793987586;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.45
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793988003;
+	b=WC/nvBpatKpF3QvvbSzDN6T6lItF8bOGnM7CuxnvuUQBa9jrAJUF41oTfdj9D8e/D7mg
+	 qKyfc7BtVBydg4/ueeXIf3uRO7fsbNY5w++Lmc0spI+W0AAdkYkpIq5qjgQrswoW9p7QL
+	 GZQ/5F1ARotVIvKTHsUoadXliIdswlnGTaTicNJC8WnNrmA6qRqhjGzdNF23Y6xJEEyAZ
+	 VlGD/ZaFagLhrviuvcaBb6eHBq0IPEQcaIumZQmn32lyFbWvruPQoZ7f+wpV+NEabo4gD
+	 oNrnnTMSoD441aialYSGGrXCoDxvWsOiazKPy78jnzxPO0DP8qHRlXUBsPxXWv2WoEw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793988003;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZZ43LFlhd+sk5fh/FJb4zHzz1CW3FUt2jfsXu1lejAk=;
-	b=xihGUuJMwSlojC7YFg1rbXwHeerYh+Nyb18TcOA9+WgV/YRLIHDaJ7pBs/w4AHvFT8P/
-	 gl+Tl1ezxv9N35zJnbzPZkG9CiZEcjlXlw8MWviB1eb0Ho2tbUdoLK6Qlf0w/nuvvJjdR
-	 Kc7r9XWfAfBy6QlFMWR5OLom8Wrk1/bJ2RLRbotLNLkyaEa7uvmWUoWlWShCAIeQ/KEi3
-	 cyL4hXUiLJsLY18D7mmO8EBPcm83izDwEcw3OIobIiyc+Yo7vavaw6ILIZ+aDygSBWAyh
-	 CWejumkPIg29gK8RwHGSzfLxal9DZ8RJYJDY5DxOY7eT54smI9khH6zyfrxsEpA+ghQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RB6OnD8m;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=l+HBRH6Z2Sf6XQfzze6i5pft1TRrO4lvAq6O629kQwQ=;
+	b=lUdHzXBSUu2BCDVwUyqxj2X9uPiZE0VSf3EA6nKpqw3VBeyIB9wAt0F00g4TXb98cXYB
+	 xffnalcpIl4iltT/3JSc0+Ab9hE+gqy9xdJuHsSahi3Uy0N2PpFsdQEv2wgK8BDpv6CA3
+	 pqvdqSumySIp3BW7eJ6kfLcqn0IZnqbyxAJLebfioWxti7QZ31diTwuONAFmmScLVQdcL
+	 Fy+qQR4rBaHcNrpz4cYYDtzmJP8q02/MUwGU6gnJaT1M3qs2QnNuGfj1B25NJyob1xg3R
+	 NdMeuzyJNTvjfaW/E+yCI7hlhjQf9PqgQGXVocpFkEavUSB6BJYSVHUzzJZFkNF4CbA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=chromium.org;
+	spf=pass smtp.mailfrom=chromium.org;
+	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b="h/Wf1xar";
+	arc=none smtp.remote-ip=209.85.208.45
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10C7606A334
-	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 17:53:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D10C7606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4E3606A33C
+	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 18:00:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B4E3606A33C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RB6OnD8m
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a1fbd52ab6so6309855e9.0
-        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 09:53:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793987584; cv=none;
-        d=google.com; s=arc-20260327;
-        b=aanDeuJ/Y6vPR6Amqrg7cHJ/CQuwBvvti39YtvsyZGP2Ca9Fy5cMOk5yW+FPoPhMMW
-         skPPUBqY5Nzw4twQUtK+GNdyR2wkfwHeydla/v+B1bNa/pKo/Vl9jkh2544QiVqQGJYd
-         Ni54tgo+dOS91Hy6maHVQYXfO86T5doX/+VC6vqchx+iuIde+E7usMD7Qhs4JHYHws1F
-         Kk6bQchlk2XH024QSctEUu4WfNRmCdA82f5erEbB1JYkNIhbLbSnTp2tzsMJSqEwgxRe
-         t0YvPexzY75sC9RmfsObJK5vJFCk+0VfuLsE0yoYd5zr8ot5O8GAvmKriDdtqOlM1g7R
-         0P6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZZ43LFlhd+sk5fh/FJb4zHzz1CW3FUt2jfsXu1lejAk=;
-        fh=4VEi+g4FWVSi4v7vzN6tqvgagQK5E/8dVa7sQFKzWwg=;
-        b=HLVuIOjhaE36m8k1BPFkauVurP7sorCQmJE380fYOoxaMw4mu557DUjfJCL63ac/0T
-         3WEIFzb6xT4T7xOBb6+/pXaRhYQDIwnvmncf4Wlc0D5IDqdNOGbs7We0gSt4RsAZgj1U
-         PxNjNaipnYMeV6i82Fqb47wxKhpSb7IjBjLmvD7IZmu4TaIftUlrdUlbjSOKUWaq+K2h
-         KWPb2+ZMffevEcUyDEo8ZSUDMQpErLpihUYwtVb3/sOcWqDbO3Nyq6IQFl9iZE8Vv1FS
-         JR1zTtaUvnQGh5tc0jGBBWb4xNfWEJ+KtlaXeHBH5G4mdbdO5Odewv4ijVzXnLBjY1im
-         ntfg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key, unprotected) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=h/Wf1xar
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6b56c428212so1020896a12.2
+        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 10:00:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793987584; x=1794592384; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1793988001; x=1794592801; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ZZ43LFlhd+sk5fh/FJb4zHzz1CW3FUt2jfsXu1lejAk=;
-        b=RB6OnD8mvKjoOLeI8Xbl0uddOKUowagGnDUfTX9xrnKnANrKD7Zp+7LGL39YMv/KGl
-         jHZ5qSqEZT0qe3Ou9rm7caLpe0pwrtlU5PJ027rh20DZWlHifO4gS4JqDY02cfoLOrwO
-         D4R0aIz90tequLoJKCf/667iSsMBckxetg4L7Xw7ec12StxoPP9YN8aETxuf7JwRk5Ww
-         14ekV+AOGgbgD43uQJ0aLmG0+i3mphaKrRPVPwRETgcMSj8ovydrh6xy/+fDHz8HFgw/
-         ULDGqI4OK3nicqpUn2uZs9gM2ScHpTm3AAPHO5X2E3LQ9GY+laVQ8eHAVolwrG0n81dL
-         /zsQ==
+        bh=l+HBRH6Z2Sf6XQfzze6i5pft1TRrO4lvAq6O629kQwQ=;
+        b=h/Wf1xar8IxR1O4ql6cSO72HH+9+jHpDu/m+Vc/M5vdTB/geqTl8iF49pgMkkW1BO6
+         aFwkodQlPUqfO3asGWczAqAbm/6iXZw5m/4KldjE53C4ma7G2rzu7vu7qTJi1fI/wUCy
+         h0/uA7/ZumS8Z8NVjGqTBq9KU0kJZ+/ozTReU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793987584; x=1794592384;
+        d=1e100.net; s=20260707; t=1793988001; x=1794592801;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZZ43LFlhd+sk5fh/FJb4zHzz1CW3FUt2jfsXu1lejAk=;
-        b=FsxQLGIeCF5NQbOkfGvC2WQZfyxhy8aLPyueIJ/TqPURfTp5FJNFctrEtrXhB5ELFF
-         zP4EEEQGJfa5xy7dFSWM2qd1A3ezsoQ0oTBumuHwpvYF6bRrTS51CWS9c11bp2wZBAlj
-         ZRsLY26PcOlGqcVYOam9mqJcxIsePRlVebf83m+Qs7csbjq4K4RX3CjbvKJ51qhFWb2X
-         ic2CNGhqPA18hPORyjjhhzHAB2swJovUGnG2qUhutmDbiQ0HzJoGNC48rdU0p2eOZ/tA
-         D03e0bLD7+fbhSd6LMEyNKICqGwubUcscFvg3b611KVw/jSGWZHZMZdirtVugJqXFu6u
-         iF+Q==
-X-Forwarded-Encrypted: i=1; AKwUvBxwhQbQkFm4QA1Mv0Zks8ALDEwTkuuTVP84UZiYQIxbCh6k9cJGJY2XpUjrZ7WQT1POiOaZ@lists.linux.dev
-X-Gm-Message-State: APuU4Z9WvPDu0IGT5HlXDV2hlouFvOBxuaaK+SCDZ5zgC0725GbuR2Xn
-	icn+joUJ73zC/Ztwg6wfxEmO+dOXCluhnxPtRq4ClnZHPwYQd64guw6/lcSYYwF+4L55NzmdG3Q
-	ysSE7R7gmjVoMz4d1juzZr9lD+pmZuaxha7iz9BT5
-X-Gm-Gg: AYBFou0xUnM/cr8M9ULnVIDMFjPqFJOu3QbamhfmnE9HuqkgSEBfXp+OYaJPU0zqQ25
-	xhmoPjQJgfvV8q4xmDhE2d5G7HkB2xu+XalWjjlWurb99T/g6pRA1Blw5dRSVUl9qF9TrEL0xtC
-	WB07OJ89Zz/AY9YGmMjZE06g6gUmlZOpRTGA/mlM7nNz6I7KGMrWPVTSxrBYIGVWF9C3t8R+Qud
-	H9ByqyOOzl+uSbOE2lnkwLWEw7lZWetkkyi+u08tqTJNBS7SXBxDPz0keAkOtjGahRS8Ro0LaMM
-	pFfU7tYk+5CV/O6oK9Y6SQ1XBXW4TWHJy7dYTvPNYvcLQp/hGMq6Z+vWMrvha649VF3Ou2mIcko
-	5LcFpoFM3oXHks1YnWKoJNPikaWD+Kp50rwYkbnCZTErk0gvo2lOYj1/jTw==
-X-Received: by 2002:a05:600c:6387:b0:4a7:9025:5c3b with SMTP id
- 5b1f17b1804b1-4b6de1c6450mr56262855e9.19.1793987583819; Fri, 06 Nov 2026
- 09:53:03 -0800 (PST)
+        bh=l+HBRH6Z2Sf6XQfzze6i5pft1TRrO4lvAq6O629kQwQ=;
+        b=qd74J2UM5t20FpI7kM6p7eS9CVZmZdIPLBZn720VbG8fNz5KnqnvXFpJUs1wy0WvMB
+         DV0JlWL3Z0rHZQazoQdbIqu5XapdBxNlzmk+Yo6SG3UJkOTDxXfx5ISXfXXqY4wdsAVD
+         hV51BuCPkF9P3Z1PL4TkZ1RC7rxebowCdXTuH7zVUCYCXu7eS/gclyJY45qDqyxXrHrF
+         H/yfwB6rEKCyOiSXXzqMZz/kKrDYU1aCSOxt6dQ7hLYeB+JBPRacsC/aiB1T17fkR7Q6
+         vmi6nG76TjuLOTzRfk9sUzENm5FyTb36xOiPBeKWo/25i7xbCAbU9xFmttPUt/FG+yIm
+         mssw==
+X-Gm-Message-State: APuU4Z/pi8XBioiKc/C3fgvS+XAPf9oKnsENJME/tk53eh68o5/d1ou1
+	UEai7tb+ysi9JxjAcTLWUr6DEKLheUF2dheqaFzCnyDHjgROF2JcNSgX/Tra2JqkHycY2SZzkFA
+	ebwoM6XRo
+X-Gm-Gg: AYBFou3vkWBjulvQ1bdkwXC4kw+u4Rceb6pvS42q8YRnIZUjmm3TxJoWwbXAHVOzyZk
+	D1pCXKqJ6HKygeAYvdhTeutQgVzS5tsPQbwRPKf+8MU5iWYRnKf2yqvn8kfOQdrm/ccZFP5VJT2
+	nb8YcBwzdLUMmRCyi48phkba6Qe2QWL6WS7PT0hxUo3vC7XaPwFOdTbdnfhRlZodnOHHMx3N43J
+	yCSgD7bGKTtMjf7cfczlt5iL6pVrEYbq7QP+tdKZMIUE37AiZsAwCbVaYxjkivO7NVGTzGkeG29
+	L6Xj0tABbjRrYLQy+tHQtJgTeSoVaYYDXhUr4x3ps7SXQCU0Aw0ZlqgJWEs5p++FV9ycnNDoZ47
+	X6ON+0ebMPr1NSAChN7pOkAzLjWvdOrCyvhuvn1PLJU+zuI5WnGvaOlWKSWSuvs2XZUeNnnKolP
+	/288hvbnlZh/a2PC1kVSyUot/iLk798haD1uSGk2qKQKjAaYH2JHkbzpteumvhoK94qp5zB2QcF
+	kBNQdKqQPBnhlZom6MRveJ3IJorKTu/QKe2RJfrvzo76tHXI3qSxIwGdNK1cirM+eAWcQTb51gA
+	HhBx8KexLwIL+WuIYv54UU7y0dyW8KJL3mS3ajgtCydHtFU8ijRv3nkayUYLn4dxnzE=
+X-Received: by 2002:a05:6402:43c7:b0:6b1:c7d9:b622 with SMTP id 4fb4d7f45d1cf-6b5977dffeamr2446444a12.26.1793988001545;
+        Fri, 06 Nov 2026 10:00:01 -0800 (PST)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b664afe901sm962895a12.24.2026.11.06.09.59.58
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Nov 2026 10:00:01 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a214c5c4c0so7734725e9.3
+        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 09:59:58 -0800 (PST)
+X-Received: by 2002:a05:600c:8b28:b0:4a1:9663:7633 with SMTP id
+ 5b1f17b1804b1-4b6dd54b16dmr53499975e9.11.1793987997939; Fri, 06 Nov 2026
+ 09:59:57 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -107,58 +95,36 @@ MIME-Version: 1.0
 References: <20261105151159.1.I0b27923381ef34cc99cdf8b65fea2e1bafce6370@changeid>
  <CAF1bQ=QkGntJu8G67ssH2dS3Sn200_JuYitjtAfNPBu_hn0fZA@mail.gmail.com> <CAF1bQ=QiP4fb-+Kn8wzEH7wqjAjZaagxUd3sYpv2SkwDcnFPWQ@mail.gmail.com>
 In-Reply-To: <CAF1bQ=QiP4fb-+Kn8wzEH7wqjAjZaagxUd3sYpv2SkwDcnFPWQ@mail.gmail.com>
-From: Snehasish Kumar <snehasishk@google.com>
-Date: Fri, 6 Nov 2026 09:52:27 -0800
-X-Gm-Features: AclHuK9INR2TnwJM3Zpn1cFZ_averI8IiQe0rbAuzb--L9go7NViW8h1McGlP0Q
-Message-ID: <CA+aGii5ZbLRMsvOZ=Xk_gS10O_WgjEc=oW9vJ2yYPrRdwpZbZA@mail.gmail.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Fri, 6 Nov 2026 09:59:46 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WGKOnDoY1W7CuZw=s3e8f3jrXzkJ5_Qp_Y4WfT0XwXDg@mail.gmail.com>
+X-Gm-Features: AclHuK8dSVweZwLxaeldnIMbndWhz_-q2OKzaAPnRAmMzhlMe2QAncAFrE9VlH0
+Message-ID: <CAD=FV=WGKOnDoY1W7CuZw=s3e8f3jrXzkJ5_Qp_Y4WfT0XwXDg@mail.gmail.com>
 Subject: Re: [PATCH] kbuild: AutoFDO: Disable Profi (-fno-sample-profile-use-profi)
 To: Rong Xu <xur@google.com>
-Cc: Douglas Anderson <dianders@chromium.org>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, Han Shen <shenhan@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+	Han Shen <shenhan@google.com>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Han Wang <nesthanwang@google.com>, 
-	Nilanjana Basu <nilanjana.basu87@gmail.com>, Yabin Cui <yabinc@google.com>, stable@vger.kernel.org, 
+	Snehasish Kumar <snehasishk@google.com>, Nilanjana Basu <nilanjana.basu87@gmail.com>, 
+	Yabin Cui <yabinc@google.com>, stable@vger.kernel.org, 
 	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
 	Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Hi,
+
 On Fri, Nov 6, 2026 at 9:43=E2=80=AFAM Rong Xu <xur@google.com> wrote:
 >
 > Just one thing: I think we should also have this flag for Rust so Rust
 > and c are consistent.
->
-> Rong
->
-> On Fri, Nov 6, 2026 at 9:38=E2=80=AFAM Rong Xu <xur@google.com> wrote:
-> >
-> > This looks good to me. Thanks!
-> >
-> > Reviewed-by: Rong Xu <xur@google.com>
-> >
-> > -Rong
-> >
-> > On Thu, Nov 5, 2026 at 3:12=E2=80=AFPM Douglas Anderson <dianders@chrom=
-ium.org> wrote:
-> > >
-> > > Starting in Clang 21 (LLVM commit 2fc4a4a9d3a8 ("[Driver][SamplePGO]
-> > > Enable -fsample-profile-use-profi (#146795)") [1]), the Clang driver
-> > > automatically passes -mllvm -sample-profile-use-profi whenever
-> > > -fprofile-sample-use is specified, enabling LLVM's flow-based profile
-> > > inference algorithm (Profi) by default.
-> > >
-> > > However, as Rong Xu noted [2], the kernel's AutoFDO implementation us=
-es
-> > > flow-sensitive discriminators (FS-AFDO), and Profi has known issues w=
-ith
-> > > FS-AFDO that degrade runtime performance compared to LLVM's original
-> > > profile propagation algorithm. In addition, Profi's min-cost max-flow
-> > > solver (applyFlowInference) can hit pathological compile times (30+
-> > > minutes or hangs) on certain kernel control-flow graphs when profiles
-> > > drift slightly or when combined with GCOV [3].
 
-LGTM. I've seen degradations without FSAFDO too, reproducible on SPEC
-workloads 531.deepsjeng and 502.gcc while controlling for profile
-drift with newer versions of clang.
+Please see the commit message, which says:
 
-Reviewed-by: Snehasish Kumar <snehasishk@google.com>
+> RUSTFLAGS_AUTOFDO_CLANG and KBUILD_LDFLAGS do not need changes because
+> SampleProfileUseProfi remains false by default in the LLVM backend and
+> is only enabled by the Clang driver.
+
+Is that incorrect?
+
+-Doug
