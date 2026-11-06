@@ -1,65 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793980693;
-	b=yj3kEdLrHK0gLIN42FXv4bCpt2IgtAO3Vz5njEj0JMhOKEq/NT0Zihh9c9t5F2D2PwSF
-	 fWxfHiDDN/mkc3Tciig5Mf1JDgjjAs5pihvVhVbhAG38gzo+ntp4uqchRDhz4K4Dp6gpP
-	 NX0ikRat73FXc/q2+FJopVdqhwFrGr2s1ffyHoz/vGJsAd0SuFnJkO8YGkVwo+IGPh96S
-	 41M4msofL+Oi3vboG+92jJOya9Q5c2L1Y7eyGSdCjRKnD7UMDsvYMIvHKc2ZlJjIB7PLT
-	 3q6tHyibIV5hk8tupJ/Je3k+GrrS/ZUiumn7Ug5lFIAT25Kq6kXEC0I4L52EJvOLKCA==
+	t=1793982723;
+	b=VmwU67A2JynuA0HxT//C5wH1LELu5Bg2n5PxoArfRQfaFVrgWuwrYoRu9sjKChlDbY8f
+	 8ezHhEFw5KeLKsOJqyvC1jzC8KjSODILEGERWQUE2LeW56i2KShGK/4EXgh9zJ6La6dkY
+	 gEPmsLsD2mLRm2dx8gapqKdExPuccqTPMlwTnbQ38UaubZNa8Y1xeYcGbNhIGsMCcY2ko
+	 wrsWEZwK0vyHKvrk5C1BxP5kbe29rDMJ6N2wbFNWQWlnCznxEL/E6qweONq8/b920/m2q
+	 zp3QPXku/ApM/BmYlqvM/E5ajSTZvVTj3BEEYfg5Y8cM3XyBzPnMNf/OZAOLt4p4bOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793980693;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Debian-User;
-	bh=m/XHSoz1deN/ONmn+rJC+0iAtRvNH3rJU7syscPU2ow=;
-	b=w7sWe7Fq59DiqleqEFKXvIJEYF42veWiRK0WbQST00eFh8MnFJc0g0vBVyNzrkLJ5OLW
-	 zfDi+PU7Jt+pthTCVUIuKvBkgyOvjsWe/WpgxtlALiMFNqE5net0s3AjKLVN2ZCV5GyuE
-	 wFEwyvNhlDiGMPErfz232LRErkeC+Dv9Ug7njQkuy+pfKBeYz6I9FlpAHxNpUHXvWzcNi
-	 hYfDMwEX4pk9K2BRyYKVE9dKNWhXvUKPs8q3P+VfTAMdU+Ko5q9n90dtKi7x6r9L7Og2i
-	 aFrOxgDxegpN9wCsLCA3EgNo1ATAA8DZpvVIDF5dpaDv7M5yDXtLfVK/crD0tJKc6eQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793982723;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=u2SCrHOVUXEGOU6PzpfyALRh4zq5mAoi1mG4dsi6uJY=;
+	b=LfeqtnDIbqcR12okmpvF+r7pywo20z0TPmnDokAUdy3YNQqkNQAu/9IXdxsIt2TkkfOO
+	 71G5Xc7PUOfBe/jhlxDn7k7RQXdtuJzgjLMNN0/tQHAbJNaq0sWJ7JeL68+WiSNj8xFzI
+	 OupPtbXh4lCFVn7chE2TlAeAqHRWKGFpp1wGZTNti2TRWyx+XnOSAMTbIOoSGJdZUDxGM
+	 jev/8DXGU7UbGncLSwsl5s77RJQdXPJRiGzGNMNKUCkhJZELN6lf1qw/w7paA3C9qRXHW
+	 S0veW8cxic3DKMRRsiCVd1zwlaGLDCsRToivAzkp0Q9P+U76Qshems+X26+D3DP0dHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=elwkYRr0;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UdYrXMTO;
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4DE606A326;
-	Fri,  6 Nov 2026 15:58:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D4DE606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81572606A329;
+	Fri,  6 Nov 2026 16:32:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81572606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=elwkYRr0
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=m/XHSoz1deN/ONmn+rJC+0iAtRvNH3rJU7syscPU2ow=; b=elwkYRr0dqg+hDAASsQPtUIwGn
-	K0oJEdbmDZYspUHyxDb2AkXDlVbNXc9F35rCmsoNBQkPr3f3zhxcp13P0Rm5EAkB+lXs8f6jSWZtG
-	TnsAfnbI6v6gVz7/hQxvmXm60oOZoC5XFxmmwiYiiALZh0CgDvAeTuTNmEPCXX/+gzkP1NvQwDMND
-	OQHrReVMGPaXJtzmUPncXiMdtUsJfMxpTd6MhFGmqJM7XDAiCeGCxlhlENF/kJmbNi4Re3cNxCQJv
-	Y7Bw3r2IDnAFORObDNd0w+d9MAoht/D4Vf02jHxoIS2MtUfPUQOioHqXm2zBpzJPmvm4w++Vq+os6
-	gbGnBUpw==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xPMKM-009Od9-1i;
-	Fri, 06 Nov 2026 15:58:06 +0000
-Date: Fri, 6 Nov 2026 07:58:01 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, acme@kernel.org
-Cc: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev, 
-	ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, kuba@kernel.org, 
-	tj@kernel.org
-Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-Message-ID: <au347UiVUe5oUuxM@gmail.com>
-References: <au27Y9m78_3EH2v1@gmail.com>
- <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UdYrXMTO
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793982721; x=1825518721;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aOOkyogIN8a4vOErcW4xzAmp9hDHePD6T4i5oTwBmvo=;
+  b=UdYrXMTOBJZLXgpnLEP64phLmYMDouvohn6qmjIuqLoZlV2Xwl3UlmPe
+   WawVn+t3sJlJfWW5Y5KM1vzFdCGSdRhrl5emyXxGKBL63UVyuR8Xt4IFr
+   1kqqOxebMzq/DXPs6kuBLFaWWmCp1CwlD9rPBwFtELgoOEfAAIqCUEEcF
+   Wa8nhayPBrEFcZzKDOJ5RYUHZRR0LgpPxbXs11OtTkNEzQgGgYUc+GO6s
+   1DMxxMveN4BGMLCMS2QIFslQnstFghOc3zZk7L2NdFNUYooXxT7lvct4m
+   3tv4OZW15wBJ2J/A3J05EOCH7HUdxuHVaoD6/e5PubHMQZGwSqfa+qoQr
+   g==;
+X-CSE-ConnectionGUID: QlLDIhIHQBGDbc8UYtIdWg==
+X-CSE-MsgGUID: AmJr1UiJS9KZtgr1+Y790g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11958"; a="2841123"
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="2841123"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2026 08:32:00 -0800
+X-CSE-ConnectionGUID: QkItusjTQiyb9564qtZRRw==
+X-CSE-MsgGUID: d8a+nk9rQtSLvDGxXHfqHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="7152479"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 06 Nov 2026 08:31:58 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xPMr5-00000000pYJ-1pmH;
+	Fri, 06 Nov 2026 16:31:55 +0000
+Date: Sat, 7 Nov 2026 00:31:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Laurijssen <lauserve@gmail.com>, linux-kernel@vger.kernel.org,
+	pjw@kernel.org, akpm@linux-foundation.org, jannh@google.com,
+	brauner@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Laurijssen <laurijssen@protonmail.com>
+Subject: Re: [PATCH] add utsname_set_field to reuse code in setdomainname and
+ sethostname
+Message-ID: <202611070006.O8jXXb72-lkp@intel.com>
+References: <20261105120751.920311-1-laurijssen@protonmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -71,28 +87,39 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
-X-Debian-User: leitao
+In-Reply-To: <20261105120751.920311-1-laurijssen@protonmail.com>
 
-On Fri, Nov 06, 2026 at 09:16:24PM +0800, Jiayuan Chen wrote:
-> Thanks for the report !
-> 
-> 
-> On 11/6/26 7:38 PM, Breno Leitao wrote:
-> > My arm64 KCSAN builds of linux-next fail since next-20261015, because
-> > bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
-> >
-> >   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
-> >   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-> >   Failed to generate BTF for vmlinux
-> >   Try to disable CONFIG_DEBUG_INFO_BTF
-> >   make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
-> 
-> 
-> 
-> Has pahole fixed this issue?
+Hi Laurijssen,
 
-I don't think so, see the line below:
+kernel test robot noticed the following build errors:
 
-> > This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
-> > same),
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on brauner-vfs/vfs.all linus/master v7.4-rc1 next-20261105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Laurijssen/add-utsname_set_field-to-reuse-code-in-setdomainname-and-sethostname/20261105-130751
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20261105120751.920311-1-laurijssen%40protonmail.com
+patch subject: [PATCH] add utsname_set_field to reuse code in setdomainname and sethostname
+config: riscv-randconfig-1001-20261106 (https://download.01.org/0day-ci/archive/20261107/202611070006.O8jXXb72-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261107/202611070006.O8jXXb72-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611070006.O8jXXb72-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: utsname_set_field
+   >>> referenced by sys.c:1424 (kernel/sys.c:1424)
+   >>>               vmlinux.o:(___se_sys_sethostname)
+   >>> referenced by sys.c:1457 (kernel/sys.c:1457)
+   >>>               vmlinux.o:(___se_sys_setdomainname)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
