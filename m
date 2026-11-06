@@ -1,97 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.54
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793988812;
-	b=ajEORCqxtEXdftxZOTFjwT7CEkKp5Gpk0ZJYSUZ3KPcA6/tfrY4/Wfyca8MmlGln2A+l
-	 Htnl4jRO/E61T9GNgUTGmid85OdUSrFlb4NVFkOwZeo+4BArSgfFdne8ltWyoS1lnNUTB
-	 zTGVuii5vw4NFkYrS+ukLGVXGVqCsR2xtNrRBY8Zde2ajqFnmFcx48l7xqVz6yrvZ+iGu
-	 leAS+w1qirvNL9iLUfaat+FYSACqst5pzYqPjMURSGnP3RC1P6yFCMu/b/8RyvBmcLgu6
-	 hb80uZocO6A//MSnnpR9zsFihfmHcfyxMAbSrQ+XiVvFTxf58Z8Y7wpk6BwbSDen+aQ==
+	t=1793989034;
+	b=tvk9l2+eROdVxhqG9Wr+T57xDU8doj5Nsn8m1zEgq/0j+gbFM9hRdLYfJOURWjMY0je2
+	 v6X2zUFTZpiU1gDMgIfeXZcREx3rYCim/sY5qFMhbxJIRNM1bcC80lMYC1qR9DUUGoeBc
+	 8OGkty0jklpMSWuaG9d2rd1TKXs6f/2I6FmKR3kDuUotEfa51UdCSWX4IAATS6OFAUGst
+	 zNjVvRrIFNQYaoYOjEsVKsKJEPXQVn4BAnG1FqB/ygO8pi2rLPVwUEQHVXM3+wXJ0SZnH
+	 GMD0Wcr4bTFDLDGRUNgZbGKhe7ysQd9oHmywDMXlXC93HiB3BVpjDReg4jm3Qtij04w==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793988812;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793989034;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
 	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=IN6twHDIaLh5ilgymQBvZ60S6ffcPsE8wQzp8ZyOj44=;
-	b=3F5F3RNmcN4vq/7tZ7+Gryp4p403V38gqu6wfvN7SJ+knK28xXcUCLPfGH2xErjgM5Dt
-	 MkLvO7WRhlZSwZr+xMJvTndeVpOauxuoGqDJV1GOHM6/TxgDIBjNR8dBvHxaqnh6otxbX
-	 vKv7gOlscnitr3dEXIXCjayiOk09r7iXzaYXQJDyMTrXNNOtQioLlcI5z2K1eqiyWmcwK
-	 ppk/nBRLOzUoYp9qdfHZH0Tnp3gqNMsgUuS42casQgTjt2az9JhCEePOQkiNQQMYAvrdH
-	 dqB0ykTWTerIzF/T8hb/VZiz/tFatJ0avlVI+vRQgCGHpi4K395uL4vJb2fuTLk0ESQ==
+	bh=iO2JEAydHDgBReyWjoaKwK3iFfajRHjkVPraMabJC1Y=;
+	b=mP1+rNq9hafNa4Ch5tdtXWkBxcqR3BYNcC+7vDWFMhCa4gtpqMXw6cB+FooBMQLLh0Y7
+	 XYmVDmhgoTOwzmvEJJGC35FDFFkA64hAD6s2M5vqqbyy6CF6hzZWbAIzFp5xQrRmnxsYo
+	 WK/jF6mZPinWSbxWCBZj2GPRA15szgHOTvd423KbA+sMB5LakMx5wTYo8xDiTs4cJXgzb
+	 sw/ihXBeqyy17p8NJ8R+XMFSa3Fj7VHo90V6vPCnb8CTQx39EW0E2aro2LrUkeQfebdkY
+	 yUNLms8C0FNttZ4INAiCMjUwY9vCL+2eLcfvtrzuaGnjSkleg8ekR60IGdUeyxN9a0g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.42
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ghxOrqJW;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E30C606A332
-	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 18:13:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E30C606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282BC606A337
+	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 18:17:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 282BC606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6b579ed8da6so933a12.1
-        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 10:13:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793988800; cv=none;
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ghxOrqJW
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-491971ac844so844023f8f.2
+        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 10:17:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793989032; cv=none;
         d=google.com; s=arc-20260327;
-        b=eGYToTCyePp3FUYdcwaD9mmB7icipCPdu9qY2FKK43rWXuZfxngEeF4fZq9FTDVAWf
-         UGWQmh3l65oB6CX0ha+NTYAnBUKmYT1j03nIpsooeRvJW1VVlM2WRihDw5ogqNofLqOr
-         zW+9fEtHTnnJIpsELv24kAuf5SKxsczH/nbKo1E08eK6THa4rUP1jS6lv6OvqhfvpCqw
-         8L2RNhGl8eOGElqFa0PO8O5ohgkuDA6vsc+tZGvWcnLEhg1mm8iCzzTvLyPEHS15/nz3
-         t0q5nTxhsXt9n4jfIgcO5KJAPdw7nBKP2QZVlovnwpEPm0Q9EX/ubwMFvtuQDdcwPMdW
-         LkQg==
+        b=CoexZ8/tarJu7UYqWk0i30OF5Hp1HC09LAmkYFduwLucO6e7nFoERxP7FytQHl9WNy
+         3NxvlFcx5arEUwDAi3Be/4njfjdGmg+0Z+d/tvUfdXllD2puTlOrzkELB0A5VxzmO4NM
+         iWigtZMyQjNGNZycz+ulxI0ZzQ4Rl2SuXGQJy7UizYh6E8h/BgomJBmLeu812iv/dPt+
+         vSPR9V/FUC3xH8G9WGxnrgKg5akPeXoZwXT5MYrVcIoD1W5SASsP8SX4heTD4pPMqH03
+         XkiF0gJTNRVIF1l9W1yzent06UK2pQu2sEZWxkIg1/ImEVmc9in27dJa/GiJ7rlzj8Hu
+         I5/g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=IN6twHDIaLh5ilgymQBvZ60S6ffcPsE8wQzp8ZyOj44=;
-        fh=tHDV++SiXO+kKwgP7MhwmBE2a391OGIyb9L+iUHHkRw=;
-        b=cCcxuUfZ0pVM8QCeyvKI+FMTtzWlk6cdE/bbNeLFF36oYbYEAwvjdNUvUpANrnp/s3
-         2LsVr6rFwpRgS9m26fwsJBnrD0IdeJjDdDh9FnO0wFmx+f4H5ZN5B7Lgfq44zfbJHfU5
-         vj4ts19bILz3ObwpFXJI6rtJqwPp3vKPU9u4Ysrt1BWni58Za2iujMlJOknP4xl1w65B
-         G5YJdYT+NReBsCYT77g8hA6Zc/W5QaDge8QfJmSozJORz87vX8omd9jRq9Jq/EOQU7Oc
-         b2R/50VeycDx6bl5W2PCUiyCaSaM3w+dkkHj6WZeNBbuTehhyTmt7iZLIgHkQ6cpjkSN
-         xpKQ==;
+        bh=iO2JEAydHDgBReyWjoaKwK3iFfajRHjkVPraMabJC1Y=;
+        fh=qgGyuDgGrzDqN//oZ8Xy8Eiomo1iGOQvi6sghCG1lqY=;
+        b=lntGRVmj0qPtNE6zZVCcPKsxJalk9WnhMBMp1DYf5Ppxdq07dWYEpN/CQxwaUluYC/
+         WYjsKNBjdX6KjX0xvjnw1ZaWg2Bw+UkwZLpLrwBte0ql8QPwavk5AXMZetTER9A0i9Hy
+         wRD8733VQcA2vHBwePJgt7vqBVcwLjBf/bfRmqCJwet59vJh0Q2UsWFgkRyM/sfjXOPZ
+         m+5mIdNkBeZ/BPs5+rRg7GG09SfnhNJ8Evo4Dxwlr2I+MOAoR/ELDy3E2jNTMcMOYZni
+         z9LbwRUCwycGd01s8KeeNCfy8N9lwB+Z+olP6cZVyyvgyv+dCFPSXoqEmWLyJn/Q5wlw
+         qHTQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793988800; x=1794593600; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1793989032; x=1794593832; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=IN6twHDIaLh5ilgymQBvZ60S6ffcPsE8wQzp8ZyOj44=;
-        b=CQ+laNLoFLrqrm7TTpnUtzD03HPw5pudLxbj3r7h/rkMK6OCXcUoDPmhULpFFzm5AW
-         FuQOwg27WAfbh8Y5HF42wZpj6/diFoyvqI4CA0/oDQsLGM7YvyIMgamKRCKLYoIQg/IQ
-         YmMHh+iZ0Fkx5Pu/K5wHgTiJjiri3KTmYN6h/dhl8YjlRykqAaR+1zo3tGI81u+ViZgB
-         p06Y3rHXrR0v+pNWpUsN1NSJNM6QnDpy1rNpW5asgMW3a6oWzvj+5rA5CYvGCaEcw+tF
-         HTyakDztcLygZ6WmJNTPV+ULRvQj0wBU0Ig1JzoOTH9FG1I+mS+3PxtYyFKuYE7tALJm
-         9Y2g==
+        bh=iO2JEAydHDgBReyWjoaKwK3iFfajRHjkVPraMabJC1Y=;
+        b=ghxOrqJWxkGFpy5tKhA9vkE7LFHPMbWx/anvXOZJ2ettGw+Ae4YQJmDloohzFnXz3w
+         HBwQLHqGOj8X2z7Rz7TqNIultOdHBgGNtnKSY1Ovcj3lfTAzTM3dUTLUKbYCObaVvOrJ
+         5mmvnH+1GgkZTWgdKSrNBMKH48d0jUYTZIX2F0l586G50/rQbngI1UUAQMMwCDNwyMc8
+         Fl8HS5B+u8orpkQe+TpHhhvQT8gDm1eNIUpMILp0OHPrFHILWhKGzL4+2oSRL9Pbwo9+
+         q4nqWyM2ZF+McNVjbqMvdliS26DT4ZzX9er92yZJL4gxmZwFKKgXL+J07vZZdjlgjnhG
+         RsEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793988800; x=1794593600;
+        d=1e100.net; s=20260707; t=1793989032; x=1794593832;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IN6twHDIaLh5ilgymQBvZ60S6ffcPsE8wQzp8ZyOj44=;
-        b=WjaPFzkIKaWN85gwCo6Bb+FotF1C/9ZcjPXZh60pay+wZuuf9slOElR3nJ9m5HkClT
-         IL/QV6DWB91cvuQ0WXlp/oAjufftrlU+/VJW3yYGAOhef6Il/Wxkt3IBsTTl/6BzCnzg
-         reOi5lj+IgbgPXVg/WmOg5euvNTYyYQp7dw3wP9+cbPGJxv1fy+1GF9qnDn6hXmTmU5M
-         mze4Cg0g7wdQhjOHlt0GqH0nqItcmbRUnUQx4geWBy+l13641ClD3ymHE+ZWB+Ou+FEG
-         8z7tNwpnzjafd7QO7aIWqPcVvYD3NZNUVs4kNHJSHGkNVXwgaylZI27zgwyQerKET3Ii
-         PIRA==
-X-Gm-Message-State: APuU4Z+KnMZxZskKgyH0foaBQK8l5NL6QFDHEoQYFqp70VeDsLgd8ctW
-	ekEjqJ0JOmtcoi+HFlq3DyT2/MbJjcjWkGZPtRHCJME8OE1QjPN0QIs8h4COhKxOSYeg673oy2R
-	UgXf/5u6BTOnrwkkLCejJgAcrbTMZ3Cvu59WEYNSg
-X-Gm-Gg: AYBFou2kRX4WIvMFir+sgv1lPrynV3ZtpeAbM8QHA3m4jLHnlQFBJsslrs6Q+ba+fEy
-	0W/IuoRwZnOe53C059zOaA8+m7krThESgK8U8GRxpmwb0ymBrH7YxwZYJJDcIBitB3iXEolpU3M
-	wF6dahEjcnP5vxVmVUg0chNThWGHTow/o1yrbDPotqEodkj9dabpd4iuyQVhSDGlTvFEFnpmCZg
-	O3q8d8GJ9gisG13zEAxl4t2nZD+y911U2Jlodzg4Wz3RLGlTJjssnnvzJuvsu/1OGvjcOMM5Jdx
-	g4gnC9KkxnLWlotMUGEat7g23izGFHriLrxyPKVhp56yjBnbnvcde4uSf2YUhvr+U1h+OHpxEHE
-	eYIvyLKP2liKJTS1Jk0G237oT6EFrl132uExvvQ7PGXvuPUSmUdx0I0fi8KqbD33pK0ExDSKNK1
-	STz9+O14Vw2wI+
-X-Received: by 2002:a05:6402:4025:b0:6b5:70a4:c77c with SMTP id
- 4fb4d7f45d1cf-6b6f8405023mr6118a12.11.1793988799653; Fri, 06 Nov 2026
- 10:13:19 -0800 (PST)
+        bh=iO2JEAydHDgBReyWjoaKwK3iFfajRHjkVPraMabJC1Y=;
+        b=xiX7XVCVUndgUl/NM04sUlOdyrxvz+lzUwBkmSJMcnY7DahRrcXzbMxoALLFM5gkAQ
+         qJStITu2VwmT84qT2PWH9NX08jXfnp1NymW3pPUj0pfIDOxJJxdLgEsJKB39QiBpU+26
+         GpxC12sxjGVoQMEumvucDh370Rwn0o62SHzh9peQbWkNbWb2GcLpUESaUlM2zdrmIFXx
+         MX+5jLfNxcpjYCUtLREHTYi1OzayjnyxvTZu9W9NkNvWJUGb13Byd1Tc81aihxTDeTlZ
+         9WT7VZSg8lBU6Z+qIu55BFQ4uEuiy5qGCysTGPKcfXvSZyuCcyA0YNbBpyxRpFvPQjbX
+         ZiGw==
+X-Gm-Message-State: APuU4Z+yhqQJkNbVu7lOW4PLaCVjf3Xj+h8SONzc/mo4PjiXetC5zcq6
+	65dMKwBP4at7Llb8yW2v8uCC75UUNi4t5hnCVoAGA2dDA/YK714Ek4twYqQyE08jSWVdVz/mMcd
+	Lc67WGex0dsfmPHHmEJ6/qg5gLsKZ+sHEqFXXiPWk
+X-Gm-Gg: AYBFou3VZHOEf+Z3oIlxxdQigVYMytRFb/zR4nsLo8NYruJSZjrMGtdrThvTqIzL8ih
+	i91TyUMfDJpEK12JAtzuYJUu/TCuivge9MnT6taRpS8gJ5IL1L6VcZVXI5gDhbVxf74immq0H3M
+	F97270Tot9wu99xXI2/gWe5QzJtCcx7mvn0h/ODHVcqqtzgSyP/pijVP2+y5cDhezPlsndppTax
+	nhHWSy6bo7icbvMR6jxH7aRjpB/TrjlxeJn+swiOmlYJy6GzfejtsgYx2awKcJMfKlDdcx1c/bT
+	NRVKEN/ioDDDzASR6rzM+IZHs0oec0QvlKGaG8vtRTTYatBaqoAYwlTrsLW/ZYZd9vNI1UnIanL
+	/+o4ziPdJVKlXnrNEqzlKSenvaShWoRm63w9EoSAGCDmk3guCEDNQDQzsW6Bt2V3HMmnC/bHpQK
+	gtAxAzKH9EgjKm1ZBnMQopxBPR4XmaIANjNhi4HdNPEwt7SV7PFEtsLVYQpAVQDU/S6khEWw7+G
+	3fc4wo9xsUTGQkKbqtjqWIWyxDfHc0WrMjxQRYZya/bv803rCpESCk5Y0M=
+X-Received: by 2002:a05:6000:2892:b0:48d:c186:dcc6 with SMTP id
+ ffacd0b85a97d-492777dbb54mr6867359f8f.57.1793989031973; Fri, 06 Nov 2026
+ 10:17:11 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,49 +107,64 @@ Precedence: list
 MIME-Version: 1.0
 References: <20261105151159.1.I0b27923381ef34cc99cdf8b65fea2e1bafce6370@changeid>
  <CAF1bQ=QkGntJu8G67ssH2dS3Sn200_JuYitjtAfNPBu_hn0fZA@mail.gmail.com>
- <CAF1bQ=QiP4fb-+Kn8wzEH7wqjAjZaagxUd3sYpv2SkwDcnFPWQ@mail.gmail.com> <CAD=FV=WGKOnDoY1W7CuZw=s3e8f3jrXzkJ5_Qp_Y4WfT0XwXDg@mail.gmail.com>
-In-Reply-To: <CAD=FV=WGKOnDoY1W7CuZw=s3e8f3jrXzkJ5_Qp_Y4WfT0XwXDg@mail.gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Fri, 6 Nov 2026 10:13:07 -0800
-X-Gm-Features: AclHuK8M7aEN7HUd8VzCV7EfdL7Os2jiojoMycd1W00kFFu83GOEk2kpHYqCCkk
-Message-ID: <CAF1bQ=TWZ=u1h92Nt9NgGcaDNTo=BOHmUp1DCWEeUMfwBb3WhQ@mail.gmail.com>
+ <CAF1bQ=QiP4fb-+Kn8wzEH7wqjAjZaagxUd3sYpv2SkwDcnFPWQ@mail.gmail.com>
+ <CAD=FV=WGKOnDoY1W7CuZw=s3e8f3jrXzkJ5_Qp_Y4WfT0XwXDg@mail.gmail.com> <CAF1bQ=TWZ=u1h92Nt9NgGcaDNTo=BOHmUp1DCWEeUMfwBb3WhQ@mail.gmail.com>
+In-Reply-To: <CAF1bQ=TWZ=u1h92Nt9NgGcaDNTo=BOHmUp1DCWEeUMfwBb3WhQ@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 6 Nov 2026 10:17:00 -0800
+X-Gm-Features: AclHuK9SWyCEYtuJGMl-fJhTBaGxGHpWXefZx7LtX8R0YzDCJePA2Pf99_IEKbE
+Message-ID: <CAKwvOdmTaMQf4Wyk_sygaushmMd9dRR3xPZ6K9rbKYB25uz7jg@mail.gmail.com>
 Subject: Re: [PATCH] kbuild: AutoFDO: Disable Profi (-fno-sample-profile-use-profi)
-To: Doug Anderson <dianders@chromium.org>
+To: Rong Xu <xur@google.com>, Doug Anderson <dianders@chromium.org>
 Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
 	Han Shen <shenhan@google.com>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Han Wang <nesthanwang@google.com>, 
-	Snehasish Kumar <snehasishk@google.com>, Nilanjana Basu <nilanjana.basu87@gmail.com>, 
-	Yabin Cui <yabinc@google.com>, stable@vger.kernel.org, 
+	Han Wang <nesthanwang@google.com>, Snehasish Kumar <snehasishk@google.com>, 
+	Nilanjana Basu <nilanjana.basu87@gmail.com>, Yabin Cui <yabinc@google.com>, stable@vger.kernel.org, 
 	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
 	Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-As far as I know, Profi is enabled in the Clang front-end initially. I
-remember reviewing a patch that enabled Profi for the Rust front-end,
-though it's possible that has already been merged.
-
-It seems strange that these flags diverge between C and Rust. Could we
-add a comment to indicate that Profi is currently not enabled in Rust?
-
-Rong
-
-On Fri, Nov 6, 2026 at 10:06=E2=80=AFAM Doug Anderson <dianders@chromium.or=
-g> wrote:
+On Fri, Nov 6, 2026 at 10:13=E2=80=AFAM Rong Xu <xur@google.com> wrote:
 >
-> Hi,
+> As far as I know, Profi is enabled in the Clang front-end initially. I
+> remember reviewing a patch that enabled Profi for the Rust front-end,
+> though it's possible that has already been merged.
 >
-> On Fri, Nov 6, 2026 at 9:43=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+> It seems strange that these flags diverge between C and Rust. Could we
+> add a comment to indicate that Profi is currently not enabled in Rust?
+>
+> Rong
+>
+> On Fri, Nov 6, 2026 at 10:06=E2=80=AFAM Doug Anderson <dianders@chromium.=
+org> wrote:
 > >
-> > Just one thing: I think we should also have this flag for Rust so Rust
-> > and c are consistent.
->
-> Please see the commit message, which says:
->
-> > RUSTFLAGS_AUTOFDO_CLANG and KBUILD_LDFLAGS do not need changes because
-> > SampleProfileUseProfi remains false by default in the LLVM backend and
-> > is only enabled by the Clang driver.
->
-> Is that incorrect?
->
-> -Doug
+> > Hi,
+> >
+> > On Fri, Nov 6, 2026 at 9:43=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+> > >
+> > > Just one thing: I think we should also have this flag for Rust so Rus=
+t
+> > > and c are consistent.
+> >
+> > Please see the commit message, which says:
+> >
+> > > RUSTFLAGS_AUTOFDO_CLANG and KBUILD_LDFLAGS do not need changes becaus=
+e
+> > > SampleProfileUseProfi remains false by default in the LLVM backend an=
+d
+> > > is only enabled by the Clang driver.
+> >
+> > Is that incorrect?
+
+Probably better to be explicit, rather than rely on the implicit
+default value, which sounds like it may be changing over time.
+
+> >
+> > -Doug
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
