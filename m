@@ -1,75 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793927557;
-	b=fbb0BlKm2+38fJsz6aalVsNp5Or0UuvbepO5lG9+CtncjO6M3wjTQEn/6ir1Hf1BBl/r
-	 1lQEaFzM+fG/ak+DTcZByh2rKxXofNAmspUjUqHR7hy4D3+jaxXZny9MDi00bB1BlIa3K
-	 SHFT+pDsyi8Qe4TiqbsLiEuNXbyU9VSsoM9i26qlFT/Dd2VoCEVxpDfk6hACrU2baMhsk
-	 bHSf35O3hlQ1jtKYNRWrjL+cKwAXJqa5nJa9R+x4HvdRSYF7Emw6myAS/WV3CEk8CoIJM
-	 CiWweYVlSW5oEtBr4sPak8Dgqq95aYdbD73+eA+mWxDPC2pZuPBShcjtPryQkQwFy0Q==
+	t=1793929950;
+	b=xdVXGILbB1cbJMR1iE12x0ulnTkshZm+L5PdhRcPzQwdypbRqxhapblAe0tdVsslDyGa
+	 yBSBbDby1joGpb1fUgAuV6e5ls27YYFr4IxEu9YneVw1dROkR5g/Q3zPbRe7sKc7SBCXT
+	 QV6W6cc0mTOFOKe61QnreFhb030qclv2KtcgoXHC8fcywmgglrsCscjhazwL5u4sROy3n
+	 5SLy3nAoxcD8PkUnLFValQM/Zycw2uVEthuWibhsCZ0C1PgyUj5F28PoftPfvvY1nVuME
+	 Vaq/6qFB8W9EmZbC461B13JjC/PK6ojVbGuqnnhsuJoljPDgUz6DsqzFSOO1zBSomSQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793927557;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=Br8dhDWTMEC1IX0hIx4rLmHT+plyiVBiJUhQUy7wYRs=;
-	b=eL9VxOu7chIsBn7e/dePS6aMGZdNlZVrayyJNSFXotOXmzvcypBalo2ML8Tgrw7dvPUf
-	 it9WbbZWbuwQbPW88XSCTEMARTInjYEffEUvrTukPGs71mrE4AxFgsVyhfPRDH1mITZ20
-	 2Gkf3mwFUOew1D/bLaO6QCeVMwe7HlZ/jKm0LE6d0E9iKi+V5rK6761deLju39iqCVp54
-	 kS0PMtUCkAvNeErAQJhb+Jr30XIpZVljHFOPnEC8MBMSXM3eVcmsXv2RniV7lGNLowooM
-	 c5HyyMwrWvLAZlAgw1eLXYV1LTCaPK2EfxnQz9UFniQlf2xdzsE5aFHY1X2YyrOGa4Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793929950;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=3bd1KiA0pB2vbrGDlNRlcrXdbbR50j7O7RMZuib5bX8=;
+	b=ZEmFyp/jG4nIoXQfVSlxTS9W992VmDf8cLw/du0WXDwdQ6xraTVI1DrnhShvWEdwOQx2
+	 AjJVEFI8GEGpXaAw1N8MW+z5vrNY7aDe3/4VmcHGDGpwWNfSxbbHEWB5Ieoj02oPq+u/P
+	 VkzPjgAn+MCQXcRfykS+VN4u+gsed0YFEFSm6njjoZ8r5YXOxPEzqqreYi3CrjUg+4xyK
+	 T6dZtVo+SyJKTgBETUPzFgzPpVd4sIxyagJU8RyLEpItxfmV+vPQIpErIH55TcUYlsLYq
+	 w6C0gtSWQgCSq2V8KpxUZNKa+Jap8fNrCmnMZtwDaApp/VAqNftjDx044F1IovMYb/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SJQlTzbf;
-	arc=none smtp.remote-ip=209.85.214.200
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WRfGw593;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF865606A333
-	for <llvm@lists.linux.dev>; Fri,  6 Nov 2026 01:12:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF865606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6342606A31B;
+	Fri,  6 Nov 2026 01:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SJQlTzbf
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2ed283cb5b9so7307185ad.1
-        for <llvm@lists.linux.dev>; Thu, 05 Nov 2026 17:12:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793927556; x=1794532356; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Br8dhDWTMEC1IX0hIx4rLmHT+plyiVBiJUhQUy7wYRs=;
-        b=SJQlTzbffhS3tIgt/L+vCvb3HfHFCn2miC+u3MP4NaAlR61fi8drEIF3g2gUzeWs8e
-         hA/V+QZJggaaa9I79MUq3SvyQ+m6TuBhYVLo1iHUEAHSs47vKmTm5vzYnisDtYVVBgcP
-         A7YOj4Wft9G6QGotcQruFRXfpxkDq0P0ZL/gw9UPALYoGvT7YWdvAH/Hju/aVFAiQtFY
-         dlcrd8rBqwrTKl6tF00f2pRqeOhWZjD07r9mwD1J+jF8+Mvy64aYgETp03VBpRiqfSFu
-         0CJpwSZHpSoeu8YCRUgyytneK9IwgCG91S5HWmWoYYBmhK5lhMBl+509k2hpU35k0Pzd
-         kVoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793927556; x=1794532356;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Br8dhDWTMEC1IX0hIx4rLmHT+plyiVBiJUhQUy7wYRs=;
-        b=i7qbHUJFLAv4UXPu9o9TsG54NUIx4uCUfCJfdSDgVB4708ASQpaHaroJ/32H6hD2Mu
-         PqFocIBlUWO+ZP2XSr1jM6szvc9GF+VW0KbmvMju5ZU3mcbL1WRGj3hiIWe1wQxb2dqe
-         tnYI0QKIEC83/x4ln+lVkOjO5tybOuD+1PhhV6R2m71OBRdZx8af4U/CwzPHao0lDe/y
-         p6Yfi9YikUZL7yn+HiJFyCq6lN3yimYHvl9WPgJ73xH7O2YnOdg7m+nEcn0eQugMKwH2
-         YYWuq5iuhNmVzYWSX4BoI5iXrH31n+9DypUdh6dcaSK9v9+xhZQ49VKF6Vw+DtRT016D
-         FZcg==
-X-Forwarded-Encrypted: i=1; AKwUvBxQsJl/8mi0usTSJwMPq7NWhU8iKwWUIczV9UzhvmDj7d0L8iCX7FdhqScSxKdXr4oz1vAY@lists.linux.dev
-X-Gm-Message-State: APuU4Z+2VQvvrJw1soeKyC+F603DaHGZ7bX3mWm/zmy/YeFvz+dhDO5n
-	W9qOl2ZL/tfaa1vukgAfrHjHt+TbxV/hLeiBCFWmk+aFl/TvVzd0Q8tC7qAgawuLMn2UMl1YD03
-	UUzLcAHsn5j+/mIN3S85qMQ==
-X-Received: from plbkh3.prod.google.com ([2002:a17:903:643:b0:2ed:27e1:d579])
- (user=jenhaochen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:cf42:b0:2ed:520:2641 with SMTP id d9443c01a7336-2ed244ecb8emr32394355ad.31.1793927555492;
- Thu, 05 Nov 2026 17:12:35 -0800 (PST)
-Date: Fri,  6 Nov 2026 01:12:33 +0000
-In-Reply-To: <auxjJapQ4j8518aH@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WRfGw593
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A0AD1F0089F;
+	Fri,  6 Nov 2026 01:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793929949;
+	bh=3bd1KiA0pB2vbrGDlNRlcrXdbbR50j7O7RMZuib5bX8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=WRfGw593EM7T7lIMrOfsUn0/yD0X4yHccFfOojvCKgpzNVXetokkE7YRCkdjYt9v8
+	 pi/3RtQ+6VeXG+5UPedy8rt89CzJ20yzV94ZRukYsXUa7/W6HWw2vRo5t9zrNKQNkl
+	 028Bx7I5cobgAxwuPb7HmX4Q+hxXpZZYK33xLlaWATGuoDJy0aEJL0iHC/aRW0XFLe
+	 fvzOeI/5waeRZzQ1h9u1FHTdyTRrrvGzXQeTbhCWMaJ7q1GUF1xUrF8cQ0m8U1Mx3t
+	 YNw+IqHBGfP2gROvKdyA9eLrpnQuLI2arKHOszsQm1Jvmddm2aaWrKXUfWu/UpSVRz
+	 w165EjytChetw==
+From: Sasha Levin <sashal@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: add namespaces to TARGETS
+Date: Thu,  5 Nov 2026 20:52:27 -0500
+Message-ID: <20261106015227.3718251-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261105-burggraben-wegrand-seeufer-18d3c8517fef@brauner>
+References: <20261103165419.687806-1-sashal@kernel.org> <20261103165419.687806-4-sashal@kernel.org> <20261105-burggraben-wegrand-seeufer-18d3c8517fef@brauner>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,46 +61,36 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261030121700.260975-1-jenhaochen@google.com>
- <auwR7gnuLsF0lpmG@google.com> <20261105103947.7521-1-jenhaochen@google.com> <auxjJapQ4j8518aH@google.com>
-X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261106011233.3270937-1-jenhaochen@google.com>
-Subject: Re: [PATCH] mm/zsmalloc: inline obj_malloc() and obj_free()
-From: Jenhao Chen <jenhaochen@google.com>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Minchan Kim <minchan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, minchan@google.com, 
-	liumartin@google.com, benwei@google.com, Jenhao Chen <jenhaochen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On (26/11/05 20:09), Sergey Senozhatsky wrote:
-> >    If we also mark obj_write() __always_inline alongside obj_malloc()
-> >    and obj_free() (with noinline on alloc_zspage()), the compiler CSEs
-> >    those redundant operations across the fast path:
-> >    - arm64 (Clang 22): -31.3 (-O2, -4.0%) / -34.7 (-O2 + AUTOFDO, -4.5%)
-> >      retired instructions per zs_store() + zs_free() pair (vs. -8.4 for
-> >      obj_malloc() alone), shrinking zs_store() under AUTOFDO from
-> >      3,144 B to 2,448 B (-22%).
-> >    - x86_64 (Clang 22): -26.6 (-O2) / -31.8 (-O2 + AUTOFDO) retired
-> >      instructions per pair (~4.0-4.5% latency reduction).
-> >    - x86_64 (GCC 15 -O2): -37.1 retired instructions (-5.1%) and -5.3%
-> >      latency (-5.5% cycles) per pair, while keeping zs_store() slightly
-> >      smaller (1,997 B -> 1,943 B).
-> 
-> Great, I'd love to see that in v2 commit message.
-> 
-> > Would you prefer that I send v2 rebased on top of [1] (including
-> > __always_inline on obj_write()), or send v2 against current mm-new
-> > first?
-> 
-> If it doesn't trouble you too much, can we finalize [1] first so then
-> you can send your patch atop of it?  I can ping you when [1] is done.
+The namespaces tests are not in TARGETS, so "make kselftest" and the CI
+systems that use the top-level Makefile never build or run them. Add
+them.
 
-Sounds good to me -- no trouble at all. Let's finalize [1] first, and
-I'll send v2 on top of it (with __always_inline on obj_write() and the
-benchmark numbers in the commit message) once [1] is ready. Thanks for
-offering to ping!
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+Tested on vfs-7.5.misc with gcc 16 and clang 21 on x86_64: all 13
+tests pass in a VM with the namespaces config fragment, and they also
+build for i386 and arm64.
 
-Best,
-Jenhao
+ tools/testing/selftests/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 07c3719f8b04b..f8fb771d3b0e8 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -85,6 +85,7 @@ TARGETS += mount_setattr
+ TARGETS += move_mount_set_group
+ TARGETS += mqueue
+ TARGETS += mseal_system_mappings
++TARGETS += namespaces
+ TARGETS += nci
+ TARGETS += net
+ TARGETS += net/af_unix
+
+base-commit: 8f92edb375bc5b54b211686231d489912a91b32a
+-- 
+2.53.0
+
