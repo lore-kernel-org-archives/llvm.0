@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794026504;
-	b=AYCy5q0F5D2TABX1dOX0YQHBiOLhUnk1JEVm/qmvFQt18ptzOCAcoopNlvvmcVsbNnly
-	 okFJ1dc13xyv+76FdSlba/pQtOERpuja1WpnPBWNZyBPQbnjESikN1Y2ztCRT3c3boDE4
-	 05IRH1chAYXExY5U375dDhAJSLZIBs8RTJxIRgmE+JnLuPvqchTSD9BzZi18/gIWMTj4N
-	 fj7EFeU5Pdn37pKcoL+BqMiIQEgxqhcPFF84u/kgrPOjc8N3gbj5G9EB8E/bLL5f5tN7S
-	 /lwYbtZuM80aA8jhPuzkN8WPiVT/5tr6ZyKq6XpeoVdLQfRtsYMW8Qwb4Wqe+YpyqZQ==
+	t=1794026498;
+	b=V7UqsQxmHGK+mUCnRPmDQAInoq/VfdzK2B3lDSIhtd9SkDnDWlrigt5Fx6Z3FH+JY1JN
+	 4kRyW+jz805jR+W5GaWFVKwk/LNSvDyulVKB+oOWPQh0ad392boBrZNpVvdUfHTxFZhcT
+	 E29lyoAmwGl3moRi8rPivXejf6gxkpmTzrCSmINF4f5GORhB4SWm8hUEoEy+ce/Ps6A9V
+	 JZ5Pp5WBozFBk/5wWlwC7oqssrLDjRPhX1Md7TUtt07xRY0YGPE0tdbGM4rjTm/+zD2uy
+	 x/qgT6B52T4lC0ripunpAWTIV0pieZ2dqtSW4VEOa6np+k6AZYthvxKQ/X9t/XLdsKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794026504;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794026498;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=8fpDtewxya+EYK3jmswcs9yxCGy73I7vhb7kQLzwzLs=;
-	b=omDtCKmtlqkLrJXUadEQTiGnPVJWQRXvWFLS77KkyeYa3WEsvP1XHah+rCib0tW9ptCV
-	 P2A4F5jqDSFLsqNz1/LJ25O7DfR25SEAk22OkoAsdDCxiufdPM4WniVrEEC/7fAWgd1qQ
-	 eeh7SW3PS+MlZi2D46JaQ1KJ37BAmsiVtMYJz2GRBOQrz0JQ1hBaTs9lgI492rzaIanJL
-	 7XRwOwHxXq870/59Y2OvGIENiGi4Ox9VMY/ac5laSLnivMontoKO3aL1ewmiN+1Uvxi7z
-	 uw/zPWe+i5Pa5tOhU6aMchADstLOVT/kS2JUAj88ztlypesxmGLFceF1i2aaA5RVGJg==
+	bh=o7CTrAhrkmxdP5PCIw1MA98wNNK+lzvPv6pZbJYyzjo=;
+	b=vlaxeTcncAPd1i+Hyr7qG0O/HQc0DbiIFbdA2dYioeiDX2F0cx73P3bhd2un4jwfNIcH
+	 VaGyYdVBy0P98ktv7POhp0XAPCRepMsrYz/v3AgPT22ShrT3HgMn5s1pnr5gPpTgW/hEj
+	 CpBm/KddMYzHGh5EPKRlv1LpIr4JyGq9B7Ui5kkRxJMOhlB3x53rzrU0kmyeogGlyDT1p
+	 sWhGUfrBfDSSYoNKRYf0NF0khGENtsiMxdpsaiYR0d6l+RfQSwJRlKNC9cpvJCDtn+VG7
+	 2LMLhpSFho35Qv3FzlqNXyuIAer2Ca7OjlzjNxeEKfpzU8xBn0aqFwUzMMDcAfwlxlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UQJHqgMp;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Buwl0FxA;
 	arc=none smtp.remote-ip=74.125.82.200
 Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122D8606A33B
-	for <llvm@lists.linux.dev>; Sat,  7 Nov 2026 04:41:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 122D8606A33B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECC4606D807
+	for <llvm@lists.linux.dev>; Sat,  7 Nov 2026 04:41:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5ECC4606D807
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UQJHqgMp
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-30c0d568830so2830058eec.1
-        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 20:41:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Buwl0FxA
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-36efb506f29so4002480eec.1
+        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 20:41:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794026503; x=1794631303; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1794026498; x=1794631298; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8fpDtewxya+EYK3jmswcs9yxCGy73I7vhb7kQLzwzLs=;
-        b=UQJHqgMpYYO6FqEX75FK7T1y2bPW91fZM42VQXxb1tsEKRA4iir0wzb+0KwQ7da8O+
-         a2R73sz6AUDMzBzij19OMiDFdNpQYLEa41TC737qEz/7Mxs79vLLlzKo+eDkUXbL3pDL
-         UxkBh8kSnQ+ZVxwKnpGe5iYsZwvrLztqeUKm72cOa8BmRsG2P8/+VK6QQczaTQ9GbC3D
-         Ppz4NI4Fo3qsfWs6+HyHJr6zgMX5qrAR3RmLtFqjUh9GYa+SQVwLPp+L1LqTafhvKMYb
-         0iI1Xbi7c8x6YcPqF2BUET8MCralEypf9hoYn53Ft9U5PsnfbPoGoFYTHzwdMFhKL8ox
-         /RoA==
+        bh=o7CTrAhrkmxdP5PCIw1MA98wNNK+lzvPv6pZbJYyzjo=;
+        b=Buwl0FxAJmbehdj45olz68XdGBoQgVDNwQE3w1HhmOdKFUHglebGn8VZ101Y+7uGTN
+         H2JSYqDcXGJOthniVjC6aKy18d8qFFknLQiL9M7f0CybUHfh1JadrSuZ+nJ5+m4W163o
+         9YhWDwezbSujhyKi2N67Cb9jhgsvW363frb1aqrriovla7cGzYZKK2b9HWLZZ31NyNjy
+         9ZJA+Y/aYkeoLtZbp9Q7SOVuevsXygZhtGMGQZ0Vzt08qYu7YfquI7VNK7rlAL5wpcxj
+         s922nWHyZVieHfxc1LJvRUY2t4OMGQcJGiu6tASjyqwrgY1iZMoRJdPiGxB0SvmVfoSj
+         1l8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794026503; x=1794631303;
+        d=1e100.net; s=20260707; t=1794026498; x=1794631298;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8fpDtewxya+EYK3jmswcs9yxCGy73I7vhb7kQLzwzLs=;
-        b=JETFEtM49sY0gycdhsLS4YIqo6/anYb3ydGVp9RQKPyfPGZjPdCH9YROKBsqosmoTT
-         xert5W75kTBVq+VebmxsASh3na+x/fTS5406hthIP0p/e+qTO50NMPSU3purL6prWBBp
-         I0pqgC0e3ni60laUzgo26hFtsOljxunAvqU9JHmswsvkqanypm7sI12D4qXNlWXv7riN
-         41SQigfYojyKw236eO/zqHrBQNgC8UKpVtutQiX/eYwY0FNPgXcHohHKdgtRHoZM5jzj
-         9aHt4qTkQ8VUjcqq2bZQ6LUlmX//66ICNEtzU/BOfeetnRyM+19EpdG4elkA+EPSB+m5
-         o3Bg==
-X-Forwarded-Encrypted: i=1; AL+hErG1UMJkey7VOkEwwf6u6XGLw9DUXjcqWm5WFFXqT/yNc28DwFC0o7NCqNZHazvWH1wS1PU+@lists.linux.dev
-X-Gm-Message-State: APuU4Z8geLd7TQ/PkiaZ4vYS8Bw2/VIjkpQOuPDBohIOf59yVb3udGJo
-	WOpCJEMSxQ1nF59F48FVRWZIIaJz+Yz9Ihi1F1AtMCZ3om8P994biEVji/fFzm9bciL7UHRGr/1
-	FPG8cBemyHA==
-X-Received: from dybqr3.prod.google.com ([2002:a05:7301:6083:b0:369:f60c:3f6b])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:88dc:10b0:370:19d2:ad0a
- with SMTP id 5a478bee46e88-37019d2b224mr4209163eec.3.1794026502954; Fri, 06
- Nov 2026 20:41:42 -0800 (PST)
-Date: Fri,  6 Nov 2026 20:40:58 -0800
+        bh=o7CTrAhrkmxdP5PCIw1MA98wNNK+lzvPv6pZbJYyzjo=;
+        b=mBjemm8pCvA2RFO2th+0QCoUFMSdDE2JNtgHzlGUdiEBuaGPPJ4D+I+Vb2dX/m5Biz
+         Hq+LEYv/2xi4L2UV0Zf76L+cOztQbF1Cta2K6Ie9YvAx2z/l0Z9ReDrsuoo7XmcC3Rmq
+         V+4oWDv8vSOsleq6nnsF5XzLGtbV1F4Hw7jAVnADpD02y11dOU1h82+sKHJbhIuoCLlO
+         FKKvCM+aDQGZ9XfdyTHkzv6a2Qk2QfOMSoqp4CTjVO3xEs7bcJnNZtTsN3EvZT3mU47I
+         SC/a+hWeDflRO2rqhTbYv6c7ctls1jWiYdnUG/gAY4kovfYH26peZkObKzRbW2M+sQIE
+         m00g==
+X-Forwarded-Encrypted: i=1; AL+hErFJBWy43dX5VqZmpyjmgD7/6XBCzDYbSM6VKscVx/E8IDP9rsLFJTJEF2XP3TbzUu57B+f9@lists.linux.dev
+X-Gm-Message-State: APuU4Z+MODHYktM4dhxg4ReeQZqEsyWT6v0YTkhyQa1Jqbq7gXB3VSB4
+	xS+SE9rd+B7EA5csB9llx9FuBoead5CxLuRw+Vm1gJXUCZbbZojte9kOLhdUqjKctAHYXFL8ui+
+	MazEQeI/nzQ==
+X-Received: from dybmb9.prod.google.com ([2002:a05:7301:1909:b0:36f:7f0f:e2e1])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:ea0f:b0:36a:1f8:a5a4
+ with SMTP id 5a478bee46e88-36f772fa36cmr6328613eec.38.1794026496928; Fri, 06
+ Nov 2026 20:41:36 -0800 (PST)
+Date: Fri,  6 Nov 2026 20:40:55 -0800
 In-Reply-To: <20261107044102.1506626-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261107044102.1506626-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261107044102.1506626-18-irogers@google.com>
-Subject: [PATCH v11 17/20] perf config, intel-tpebs, env: Add __guarded_by and
- __must_hold annotations
+Message-ID: <20261107044102.1506626-15-irogers@google.com>
+Subject: [PATCH v11 14/20] perf thread: Expand context analysis annotations to
+ threads and namespaces_lock
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
 Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com, 
@@ -93,273 +93,160 @@ Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com,
 	ndesaulniers@google.com, peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add __guarded_by() and __must_hold() annotations to static parser and
-config state in util/config.c, TPEBS state in util/intel-tpebs.c, and
-bpf_progs and cgroups trees in struct perf_env.
+Annotate shard and last_match in struct threads_table_entry with
+__guarded_by(&lock) and add __must_hold_shared()/__must_hold() to the
+last_match helpers in util/threads.c.
+
+In util/thread.h and util/thread.c, add __returns_ctx_lock() to
+thread__namespaces_lock() and thread__comm_lock(), annotate
+namespaces_list and comm_list with __guarded_by(), and add
+__must_hold_shared()/__must_hold() to the namespaces_list helpers.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/bpf-event.h   |  5 ++--
- tools/perf/util/config.c      | 47 +++++++++++++++++++++--------------
- tools/perf/util/env.c         |  1 +
- tools/perf/util/env.h         | 19 ++++++++------
- tools/perf/util/intel-tpebs.c | 16 ++++++------
- 5 files changed, 53 insertions(+), 35 deletions(-)
+ tools/perf/util/thread.c  |  2 ++
+ tools/perf/util/thread.h  | 28 +++++++++++++++++-----------
+ tools/perf/util/threads.c |  4 ++++
+ tools/perf/util/threads.h |  6 +++---
+ 4 files changed, 26 insertions(+), 14 deletions(-)
 
-diff --git a/tools/perf/util/bpf-event.h b/tools/perf/util/bpf-event.h
-index da4eeb4a1a73..3f3323f98f49 100644
---- a/tools/perf/util/bpf-event.h
-+++ b/tools/perf/util/bpf-event.h
-@@ -6,11 +6,11 @@
- #include <linux/rbtree.h>
- #include <api/fd/array.h>
- #include <stdio.h>
-+#include "env.h"
- 
- struct bpf_prog_info;
- struct machine;
- union perf_event;
--struct perf_env;
- struct perf_sample;
- struct perf_session;
- struct record_opts;
-@@ -42,7 +42,8 @@ int machine__process_bpf(struct machine *machine, union perf_event *event,
- int evlist__add_bpf_sb_event(struct evlist *evlist, struct perf_env *env);
- void __bpf_event__print_bpf_prog_info(struct perf_bpil *info_linear,
- 				      struct perf_env *env,
--				      FILE *fp);
-+				      FILE *fp)
-+	__must_hold_shared(&env->bpf_progs.lock);
- void bpf_metadata_free(struct bpf_metadata *metadata);
- #else
- static inline int machine__process_bpf(struct machine *machine __maybe_unused,
-diff --git a/tools/perf/util/config.c b/tools/perf/util/config.c
-index 287401f159e6..0e6b77a0a5e7 100644
---- a/tools/perf/util/config.c
-+++ b/tools/perf/util/config.c
-@@ -64,15 +64,29 @@ struct perf_stat_config stat_config = {
- 
- char buildid_dir[MAXPATHLEN]; /* root dir for buildid, binary cache */
- 
--static FILE *config_file;
--static const char *config_file_name;
--static int config_linenr;
--static int config_file_eof;
--static struct perf_config_set *config_set;
-+/* Parsing and rewriting share the static parser state. */
-+static DEFINE_MUTEX(config_mutex);
-+
-+/* Serializes whole perf_config__set_variable() updates. */
-+static DEFINE_MUTEX(config_update_mutex);
-+
-+/*
-+ * Protects the global config_set. Separate from config_mutex because
-+ * initializing config_set parses the config files, which acquires
-+ * config_mutex.
-+ */
-+static DEFINE_MUTEX(config_set_mutex);
-+
-+static FILE *config_file __guarded_by(&config_mutex);
-+static const char *config_file_name __guarded_by(&config_mutex);
-+static int config_linenr __guarded_by(&config_mutex);
-+static int config_file_eof __guarded_by(&config_mutex);
-+static struct perf_config_set *config_set __guarded_by(&config_set_mutex);
- 
- const char *config_exclusive_filename;
- 
- static int get_next_char(void)
-+	__must_hold(&config_mutex)
- {
- 	int c;
- 	FILE *f;
-@@ -99,8 +113,9 @@ static int get_next_char(void)
+diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
+index 616d5bf87baf..af761b1fc5d5 100644
+--- a/tools/perf/util/thread.c
++++ b/tools/perf/util/thread.c
+@@ -149,6 +149,7 @@ void thread__put(struct thread *thread)
  }
  
- static char *parse_value(void)
-+	__must_hold(&config_mutex)
+ static struct namespaces *__thread__namespaces(struct thread *thread)
++	__must_hold_shared(thread__namespaces_lock(thread))
  {
--	static char value[1024];
-+	static char value[1024] __guarded_by(&config_mutex);
- 	int quote = 0, comment = 0, space = 0;
- 	size_t len = 0;
+ 	if (list_empty(thread__namespaces_list(thread)))
+ 		return NULL;
+@@ -169,6 +170,7 @@ struct namespaces *thread__namespaces(struct thread *thread)
  
-@@ -170,6 +185,7 @@ static inline int iskeychar(int c)
+ static int __thread__set_namespaces(struct thread *thread, u64 timestamp,
+ 				    struct perf_record_namespaces *event)
++	__must_hold(thread__namespaces_lock(thread))
+ {
+ 	struct namespaces *new, *curr = __thread__namespaces(thread);
+ 
+diff --git a/tools/perf/util/thread.h b/tools/perf/util/thread.h
+index 9d0ce7742c06..a7850eebce4e 100644
+--- a/tools/perf/util/thread.h
++++ b/tools/perf/util/thread.h
+@@ -48,10 +48,10 @@ DECLARE_RC_STRUCT(thread) {
+ 	bool			exited;
+ 	bool			comm_set;
+ 	int			comm_len;
+-	struct list_head	namespaces_list;
+ 	struct rw_semaphore	namespaces_lock;
+-	struct list_head	comm_list;
++	struct list_head	namespaces_list __guarded_by(&namespaces_lock);
+ 	struct rw_semaphore	comm_lock;
++	struct list_head	comm_list __guarded_by(&comm_lock);
+ 	u64			db_id;
+ 
+ 	void			*priv;
+@@ -230,30 +230,36 @@ static inline void thread__set_comm_len(struct thread *thread, int len)
+ 	RC_CHK_ACCESS(thread)->comm_len = len;
  }
  
- static int get_value(config_fn_t fn, void *data, char *name, unsigned int len)
-+	__must_hold(&config_mutex)
+-static inline struct list_head *thread__namespaces_list(struct thread *thread)
++static inline struct rw_semaphore *thread__namespaces_lock(const struct thread *thread)
++	__returns_ctx_lock(&RC_CHK_ACCESS(thread)->namespaces_lock)
  {
- 	int c;
- 	char *value;
-@@ -201,6 +217,7 @@ static int get_value(config_fn_t fn, void *data, char *name, unsigned int len)
+-	return &RC_CHK_ACCESS(thread)->namespaces_list;
++	return (struct rw_semaphore *)&RC_CHK_ACCESS(thread)->namespaces_lock;
  }
  
- static int get_extended_base_var(char *name, int baselen, int c)
-+	__must_hold(&config_mutex)
+-static inline int thread__namespaces_list_empty(const struct thread *thread)
++static inline struct list_head *thread__namespaces_list(struct thread *thread)
++	__must_hold_shared(thread__namespaces_lock(thread))
  {
- 	do {
- 		if (c == '\n')
-@@ -237,6 +254,7 @@ static int get_extended_base_var(char *name, int baselen, int c)
+-	return list_empty(&RC_CHK_ACCESS(thread)->namespaces_list);
++	/* Readers hold the shared lock; writers hold the exclusive lock. */
++	return context_unsafe(&RC_CHK_ACCESS(thread)->namespaces_list);
  }
  
- static int get_base_var(char *name)
-+	__must_hold(&config_mutex)
+-static inline struct rw_semaphore *thread__namespaces_lock(struct thread *thread)
++static inline int thread__namespaces_list_empty(const struct thread *thread)
++	__must_hold_shared(thread__namespaces_lock(thread))
  {
- 	int baselen = 0;
- 
-@@ -257,10 +275,11 @@ static int get_base_var(char *name)
+-	return &RC_CHK_ACCESS(thread)->namespaces_lock;
++	return list_empty(&RC_CHK_ACCESS(thread)->namespaces_list);
  }
  
- static int perf_parse_file(config_fn_t fn, void *data)
-+	__must_hold(&config_mutex)
+-static inline struct rw_semaphore *thread__comm_lock(struct thread *thread)
++static inline struct rw_semaphore *thread__comm_lock(const struct thread *thread)
++	__returns_ctx_lock(&RC_CHK_ACCESS(thread)->comm_lock)
  {
- 	int comment = 0;
- 	int baselen = 0;
--	static char var[MAXNAME];
-+	static char var[MAXNAME] __guarded_by(&config_mutex);
- 
- 	/* U+FEFF Byte Order Mark in UTF8 */
- 	static const unsigned char *utf8_bom = (unsigned char *) "\xef\xbb\xbf";
-@@ -549,12 +568,6 @@ int perf_default_config(const char *var, const char *value,
- 	return 0;
+-	return &RC_CHK_ACCESS(thread)->comm_lock;
++	return (struct rw_semaphore *)&RC_CHK_ACCESS(thread)->comm_lock;
  }
  
--/* Parsing and rewriting share the static parser state. */
--static DEFINE_MUTEX(config_mutex);
--
--/* Serializes whole perf_config__set_variable() updates. */
--static DEFINE_MUTEX(config_update_mutex);
--
- static int perf_config_from_file(config_fn_t fn, const char *filename, void *data)
+ static inline struct list_head *thread__comm_list(struct thread *thread)
+ 	__must_hold_shared(thread__comm_lock(thread))
  {
- 	int ret;
-@@ -737,6 +750,7 @@ static int set_value(struct perf_config_item *item, const char *value)
- 
- static int collect_config(const char *var, const char *value,
- 			  void *perf_config_set)
-+	__must_hold(&config_mutex)
- {
- 	int ret = -1;
- 	char *ptr, *key;
-@@ -853,11 +867,8 @@ struct perf_config_set *perf_config_set__load_file(const char *file)
- 	return set;
+-	return &RC_CHK_ACCESS(thread)->comm_list;
++	/* Readers hold the shared lock; writers hold the exclusive lock. */
++	return context_unsafe(&RC_CHK_ACCESS(thread)->comm_list);
  }
  
--/* Not config_mutex: building the set parses the config files, which takes it. */
--static DEFINE_MUTEX(config_set_mutex);
--
--/* Called with config_set_mutex held. */
- static int perf_config__init(void)
-+	__must_hold(&config_set_mutex)
- {
- 	if (config_set == NULL)
- 		config_set = perf_config_set__new();
-@@ -975,7 +986,7 @@ int perf_config__set_variable(const char *var, const char *value)
- 
- 	/* Static: the parser publishes it as config_file_name. */
- 	{
--		static char path[PATH_MAX];
-+		static char path[PATH_MAX] __guarded_by(&config_update_mutex);
- 		char *user_config = mkpath(path, sizeof(path), "%s/.perfconfig", getenv("HOME"));
- 
- 		config_filename = config_exclusive_filename ?: user_config;
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index 50993b0dedc5..9e8e5d1d822a 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -302,6 +302,7 @@ void perf_env__exit(struct perf_env *env)
+ static inline u64 thread__db_id(const struct thread *thread)
+diff --git a/tools/perf/util/threads.c b/tools/perf/util/threads.c
+index 6ca0b178fb6c..39b3c420635a 100644
+--- a/tools/perf/util/threads.c
++++ b/tools/perf/util/threads.c
+@@ -21,6 +21,7 @@ static bool key_equal(long key1, long key2, void *ctx __maybe_unused)
  }
  
- void perf_env__init(struct perf_env *env)
+ void threads__init(struct threads *threads)
 +	__context_unsafe(/* initialization */)
  {
- 	memset(env, 0, sizeof(*env));
- #ifdef HAVE_LIBBPF_SUPPORT
-diff --git a/tools/perf/util/env.h b/tools/perf/util/env.h
-index 23d35425efe3..6b2083e3640c 100644
---- a/tools/perf/util/env.h
-+++ b/tools/perf/util/env.h
-@@ -139,16 +139,16 @@ struct perf_env {
- 	 */
- 	struct {
- 		struct rw_semaphore	lock;
--		struct rb_root		infos;
--		u32			infos_cnt;
--		struct rb_root		btfs;
--		u32			btfs_cnt;
-+		struct rb_root		infos __guarded_by(&lock);
-+		u32			infos_cnt __guarded_by(&lock);
-+		struct rb_root		btfs __guarded_by(&lock);
-+		u32			btfs_cnt __guarded_by(&lock);
- 	} bpf_progs;
- #endif // HAVE_LIBBPF_SUPPORT
- 	/* same reason as above (for perf-top) */
- 	struct {
- 		struct rw_semaphore	lock;
--		struct rb_root		tree;
-+		struct rb_root		tree __guarded_by(&lock);
- 	} cgroups;
+ 	for (int i = 0; i < THREADS__TABLE_SIZE; i++) {
+ 		struct threads_table_entry *table = &threads->table[i];
+@@ -32,6 +33,7 @@ void threads__init(struct threads *threads)
+ }
  
- 	/* For fast cpu to numa node lookup via perf_env__numa_node */
-@@ -223,7 +223,8 @@ int perf_env__nr_cpus_avail(struct perf_env *env);
- void perf_env__init(struct perf_env *env);
- #ifdef HAVE_LIBBPF_SUPPORT
- bool __perf_env__insert_bpf_prog_info(struct perf_env *env,
--				      struct bpf_prog_info_node *info_node);
-+				      struct bpf_prog_info_node *info_node)
-+	__must_hold(&env->bpf_progs.lock);
- bool perf_env__insert_bpf_prog_info(struct perf_env *env,
- 				    struct bpf_prog_info_node *info_node);
- struct bpf_prog_info_node *perf_env__find_bpf_prog_info(struct perf_env *env,
-@@ -233,9 +234,11 @@ void perf_env__iterate_bpf_prog_info(struct perf_env *env,
- 						void *data),
- 				     void *data);
- bool perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node);
--bool __perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node);
-+bool __perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
-+	__must_hold(&env->bpf_progs.lock);
- struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id);
--struct btf_node *__perf_env__find_btf(struct perf_env *env, __u32 btf_id);
-+struct btf_node *__perf_env__find_btf(struct perf_env *env, __u32 btf_id)
-+	__must_hold_shared(&env->bpf_progs.lock);
- #endif // HAVE_LIBBPF_SUPPORT
- 
- int perf_env__numa_node(struct perf_env *env, struct perf_cpu cpu);
-diff --git a/tools/perf/util/intel-tpebs.c b/tools/perf/util/intel-tpebs.c
-index 525e38506737..b61ad72f93b1 100644
---- a/tools/perf/util/intel-tpebs.c
-+++ b/tools/perf/util/intel-tpebs.c
-@@ -39,14 +39,15 @@
- bool tpebs_recording;
- enum tpebs_mode tpebs_mode;
- static DEFINE_MUTEX(tpebs_mtx);
--static LIST_HEAD(tpebs_results);
--static pthread_t tpebs_reader_thread;
--static struct child_process tpebs_cmd;
-+static struct list_head tpebs_results __guarded_by(&tpebs_mtx) = LIST_HEAD_INIT(tpebs_results);
-+static pthread_t tpebs_reader_thread __guarded_by(&tpebs_mtx);
-+static struct child_process tpebs_cmd __guarded_by(&tpebs_mtx);
- static struct cond tpebs_cmd_cond = { .cond = PTHREAD_COND_INITIALIZER };
--static int control_fd[2] = { -1, -1 }, ack_fd[2] = { -1, -1 };
--static bool tpebs_stopping;
--static bool tpebs_cmd_in_flight;
--static uint64_t tpebs_gen;
-+static int control_fd[2] __guarded_by(&tpebs_mtx) = { -1, -1 };
-+static int ack_fd[2] __guarded_by(&tpebs_mtx) = { -1, -1 };
-+static bool tpebs_stopping __guarded_by(&tpebs_mtx);
-+static bool tpebs_cmd_in_flight __guarded_by(&tpebs_mtx);
-+static uint64_t tpebs_gen __guarded_by(&tpebs_mtx);
- 
- struct tpebs_retire_lat {
- 	struct list_head nd;
-@@ -66,6 +67,7 @@ static struct tpebs_retire_lat *tpebs_retire_lat__find(struct evsel *evsel)
- 	__must_hold(&tpebs_mtx);
- 
- static int evsel__tpebs_start_perf_record(struct evsel *evsel)
-+	__must_hold(&tpebs_mtx)
+ void threads__exit(struct threads *threads)
++	__context_unsafe(/* teardown */)
  {
- 	const char **record_argv;
- 	int tpebs_event_size = 0, i = 0, ret;
+ 	threads__remove_all_threads(threads);
+ 	for (int i = 0; i < THREADS__TABLE_SIZE; i++) {
+@@ -63,6 +65,7 @@ size_t threads__nr(struct threads *threads)
+  */
+ static struct thread *__threads_table_entry__get_last_match(struct threads_table_entry *table,
+ 							    pid_t tid)
++	__must_hold_shared(&table->lock)
+ {
+ 	struct thread *th, *res = NULL;
+ 
+@@ -76,6 +79,7 @@ static struct thread *__threads_table_entry__get_last_match(struct threads_table
+ 
+ static void __threads_table_entry__set_last_match(struct threads_table_entry *table,
+ 						  struct thread *th)
++	__must_hold(&table->lock)
+ {
+ 	thread__put(table->last_match);
+ 	table->last_match = thread__get(th);
+diff --git a/tools/perf/util/threads.h b/tools/perf/util/threads.h
+index da68d2223f18..54fba16657db 100644
+--- a/tools/perf/util/threads.h
++++ b/tools/perf/util/threads.h
+@@ -11,10 +11,10 @@ struct thread;
+ #define THREADS__TABLE_SIZE	(1 << THREADS__TABLE_BITS)
+ 
+ struct threads_table_entry {
+-	/* Key is tid, value is struct thread. */
+-	struct hashmap	       shard;
+ 	struct rw_semaphore    lock;
+-	struct thread	       *last_match;
++	/* Key is tid, value is struct thread. */
++	struct hashmap	       shard __guarded_by(&lock);
++	struct thread	       *last_match __guarded_by(&lock);
+ };
+ 
+ struct threads {
 -- 
 2.56.0.455.g6c5a503b38-goog
 
