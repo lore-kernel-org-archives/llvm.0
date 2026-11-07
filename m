@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794026470;
-	b=hADYH0mDkLlOVm+6L88jWJm3RrGiyjCeT0oZb3gZPoISiaoAlvPfHTCM4Aum4GgG2Hy3
-	 TxnFuZXGKR6L6iTfT1h8fzJkW48SzAI+ktMNWlXmqQPyej1w0JAEbF1RvCD2rrCT3gMQA
-	 LcfvAU0VCAbuh/i0iLHnD7hzZcDfew7AnPC6d/dXfDcxO28uiHh0L9bxfaYFj0VMQ/EV4
-	 ZzXrAUcaYxZKxqmsrYyKGjWfNLEuOweJK0IZ6lTkUsSeJrfPJ6RumsJaIeWUIs2kyWgr8
-	 KU0j2rzKBtiWdV/RVDVfR0snwATc6X/3RKNuE+IGUwLjwXN6bF/lNycok5ODtB8Ipag==
+	t=1794026472;
+	b=4nkXqUdiGxptmenvw4VzlbqI4HCmNTMOsyBRWbQfRvi4UbXCbJtcOdyisFi9DhZXMdho
+	 qgtM8kubd7K1z+6aJDtQvDPBhf7V+54mmAzk3nNE1LLfavZWkmJqIKUmvkQPyLet+2w32
+	 fit0ygoZOPt6Fa/CR+VyPnvaz8KTh7Er7EaAdKX/3uJJ5WSiyanqra86Kql/jNFBPBmXd
+	 inz/Sofl4m2zlDgFJQ4ZcWNfTZNol+yGnmfo4RiVwIN68ZN3KroBDJ9dhMARXyN2RljiS
+	 eKXn3ATcNo6wv7VmVPdbt23OJkP3dRKbVHcxHxYCtxMtyGL1YoMxmW9Hpez01whSIxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794026470;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794026472;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=pVkLc8xSyhslD11C4DSvZnRo7dsv6FWhh8v0TPGw3qA=;
-	b=AIGJKnRu3G+mh0dZLwvg2eKjaeAbdUQvzOO+w3DmDjnu5DA6jJ0fytrYvIXp9VQDxaKy
-	 3Z+T2usfFiO5mcmoyECaOrHehfsfFSnHQ8qk9cO/+snpEeIpNiTyhiMCK9XSHPS4w9z3Z
-	 2zOIFYVpXv7IUGEboc/fLyk0bFdyTIuN0bUKU5ze9IE5MllObeT5pUBn4RCrgjjTeiOih
-	 uJt9wvcta8ObU02ZNmLyo3kx8h848C9XM5T141woxy2TCgdKHhiarpXa4VNJNCu6u4zno
-	 Y0ItImshGo+SclKeGj5XcdfvqkW5+BxTMXsOT32zfR2+XABdQiibnfGAHhr1BpGSsUA==
+	bh=agR2Maj+nLlCFUT8WqDaPicUpRJX2+6iDrjUBeggcFs=;
+	b=w+iN3Xjot8tUzAEo9N/4KCbq3KWgKlmyxRLCkgGr4HsjaIYKbpoEML78JzESO8oCMUJE
+	 tHzX6pWE1axmrcCqTle8yk7ic3eDjzIMLue7GsT/AmRN3Dc/Fes2xD0u92lyeRqZMWzgz
+	 DzK7DvjsmCker6MTZFzaM1rh/c0OcV2jf+pVY4KPrE0/BJ6I4Vos1KTUz6fhnODW7PPMC
+	 ASldw74jZRFllfsndLCMm9wL11+0n3glMQUIDxVUsWsw0Jy45j/nCNgTY/akYVcX8MBXi
+	 UommRhkdk0faE5wkiey16uHDseHVWcKh/wFqaitwXrM9r+PtRRRm2crYrw7RhcRZXrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UieSQCRl;
-	arc=none smtp.remote-ip=209.85.160.69
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NpXry5jt;
+	arc=none smtp.remote-ip=209.85.161.69
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92312606A338
-	for <llvm@lists.linux.dev>; Sat,  7 Nov 2026 04:41:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92312606A338
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF3F606A333
+	for <llvm@lists.linux.dev>; Sat,  7 Nov 2026 04:41:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFF3F606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UieSQCRl
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-4ad9bc6aa91so1596099fac.3
-        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 20:41:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NpXry5jt
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-70b8894d6c1so472172eaf.0
+        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 20:41:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794026469; x=1794631269; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1794026471; x=1794631271; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pVkLc8xSyhslD11C4DSvZnRo7dsv6FWhh8v0TPGw3qA=;
-        b=UieSQCRlWyMR5r8R9Demipl0wJHSODR3wrF/m31S/SQGphJO6Pp25Yfu8KPTM08abs
-         57vNLlO8qbX2pb8d90ksf0wEysuqQLPPXxVRSGC+Wr2DxPwElc+zqDUkETq4STad1LxG
-         J5w6XToXLJKmCygnRLJgxOA7neYG1oKj67AbWclQwW6m2A5U4l6F86XWnHvUwT9u9Nkq
-         G2GRGENYVf2T1lEV51ILNQP+AeUfVIf6Ej/uUO/fEeIZaNOZAcNVfg7/TC7hLOtw1LG+
-         MGs3eLKGNIb/RMyNkLVefl8pM3EsgFCeVyHdKQG9MmjSnfQ+Pf/N+t9um82qsFzTQBBK
-         U0xQ==
+        bh=agR2Maj+nLlCFUT8WqDaPicUpRJX2+6iDrjUBeggcFs=;
+        b=NpXry5jt4dwMTXSEzvtu/lcXzGYFysXjaainh9a+ovyQ4GnRHORrKxU+84spZ91kxq
+         IBII/MWCdR7j7fTRKKzfIvlFRlxPM68otOYnkN76rvQrIw+K8AaVFeXJiexFIdNvkn4T
+         Q4xgTNG3TnSqpebGBXyGefbEkGqqLWAcbNjSx4oPPATIUy47nnSQGP3LovY4jUr+VFA4
+         7hkraFZCkke51R2xh9cmIrNeWs+qREkFF1KW4C6nZXgl81ajoKvxbCXC1CXMYwQVSC2o
+         5E0cINF+rrnuZoufCKMsKoK3NrAjxzvNdi19wF0amDvTCZUjkn2PSY2o0duEYv4OpHUM
+         SBYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794026469; x=1794631269;
+        d=1e100.net; s=20260707; t=1794026471; x=1794631271;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pVkLc8xSyhslD11C4DSvZnRo7dsv6FWhh8v0TPGw3qA=;
-        b=n0Ugf6fcbhkLcZjkc/JXeq+p25rUcErwS55J0IU6qlnxTk4ZaQBGhtsrTETHORDz/6
-         h56xeT+XUrwvD8dWkzK7Ntd2qJWlxXUM4ChJe6ptp1HSm/03xbObH4I+INMDTyAn7idJ
-         ui6o2Y/KnpA8zg0Pu4OV+ytrcya4Jyw9paseQHny+0ZLjgAsjY+tkHV4eUM4IDpHjtWd
-         TsxfSO/TqKvzyYAYpTrYYqAu5+rk/QDDaxzGmK54x1CdGL4CVRmRsjdTZ9cndMStF0Qc
-         giRho+ifzyb0v8RFB2YSfxvykDCToDeMfh0L1mGBRXKRFUykx9d/pe++2IBlyUjPoVkJ
-         IQTg==
-X-Forwarded-Encrypted: i=1; AL+hErHds2WE8kBZMG3wBiOfQhvfwf/vGOVh1hMpA6eFgf5YMNPZFkVqrY7df5cYMRLezZHGAn0T@lists.linux.dev
-X-Gm-Message-State: APuU4Z/8nqm6e3TsDn+zzL3pqva4w+VBHXNnHBbOejyzp/EE6wGwElh9
-	7637wEzff+apGM/SheTA22AeiWeEGR4hyESmAKAVPQg5IiL1YT+/qFh4xrAcZEzbazY9qRMzi4N
-	Ce+Zs9Y/kEg==
-X-Received: from oaccr15.prod.google.com ([2002:a05:687c:260f:b0:49e:5a8:3cb6])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6871:e710:b0:49d:cc3f:a9e1
- with SMTP id 586e51a60fabf-4ad98c52c81mr2878448fac.45.1794026468092; Fri, 06
- Nov 2026 20:41:08 -0800 (PST)
-Date: Fri,  6 Nov 2026 20:40:42 -0800
+        bh=agR2Maj+nLlCFUT8WqDaPicUpRJX2+6iDrjUBeggcFs=;
+        b=hZf3nNVcu3hb1jyBUanNT6W+JG4uBx/Nb7xi0xEwJT3766KzXk9SPUEaTEOVf7cv78
+         +di0TtDrIvBKL/jIBNwSdUJ5zbAIDx847AcBKgadSln6N0WOStLbHXCIgB8bFGzRfb7k
+         psoe4u1Vnbz67H8bkhg8keRdbmNXrEwQbK6FKsIPltICImTZuXVJIRqivHZANwUj1Cu1
+         /HaIvTv4gjxvsPrHcKjkUv1M99SJdqBfjok+I0mytEIqnIqrpdzcE68z5gUqjmJp2Rmz
+         5PkJqL56kNCHme9gpifdIaqD5dUO/E/NvOx2WNVsoWWXzdSXWYF8rcvCkpFQ0d7U94R6
+         pfQA==
+X-Forwarded-Encrypted: i=1; AKwUvBxozz3myIc60lx6MiZHsmU7ldcxEgc/g+cv9myiTUweNnXnInql8tnu6bWWkW2Y7+anZLoa@lists.linux.dev
+X-Gm-Message-State: APuU4Z+aqpRVhDUt24L47iG6Qsz5Y43cgaoqXn/y5mk26ANMseLuzLK+
+	M0LqRsXIIVaJtgI+S6appTOrFHbgKtLzeDD1f43xIXyJYKFFB7m61po+2CMvht4U+4VveZaynaV
+	1P0oT+kHiUw==
+X-Received: from oobej14.prod.google.com ([2002:a05:6820:d0e:b0:70b:8ae3:8a12])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6820:2206:b0:6cd:3fdc:2668
+ with SMTP id 006d021491bc7-71700c6075fmr509773eaf.41.1794026470447; Fri, 06
+ Nov 2026 20:41:10 -0800 (PST)
+Date: Fri,  6 Nov 2026 20:40:43 -0800
 In-Reply-To: <20261107044102.1506626-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261107044102.1506626-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261107044102.1506626-2-irogers@google.com>
-Subject: [PATCH v11 01/20] compiler-context-analysis: Avoid unused parameter
- warning in _context_unsafe_alias()
+Message-ID: <20261107044102.1506626-3-irogers@google.com>
+Subject: [PATCH v11 02/20] tools headers compiler: Synchronize
+ compiler_types.h with the kernel sources
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
 Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com, 
@@ -93,31 +93,447 @@ Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com,
 	ndesaulniers@google.com, peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-_context_unsafe_alias() does not use its parameter 'p', which triggers
--Wunused-parameter when building code that enables -Wextra (such as
-tools/perf, tools/lib/perf, tools/lib/subcmd, and tools/lib/symbol).
-Explicitly cast 'p' to void to silence the warning, matching
-__assume_ctx_lock() and __assume_shared_ctx_lock().
+Synchronize the non-__KERNEL__ sections of
+tools/include/linux/compiler_types.h and
+tools/include/linux/compiler-gcc.h with the kernel sources (including
+___PASTE/__PASTE, BTF_TYPE_TAG, object-size helpers, asm_goto_output,
+ASM_INPUT_*, asm_inline, __typeof_unqual__/__unqual_scalar_typeof,
+__signed_scalar_typeof, __native_word, compiletime_assert, and the
+__diag pragma helpers required by compiler-context-analysis.h), and
+remove the duplicated definitions from tools/include/linux/compiler.h.
 
-Reviewed-by: Marco Elver <elver@google.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- include/linux/compiler-context-analysis.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/include/linux/compiler-gcc.h   |  72 +++++++++-
+ tools/include/linux/compiler.h       |  50 +------
+ tools/include/linux/compiler_types.h | 206 ++++++++++++++++++++++++++-
+ 3 files changed, 275 insertions(+), 53 deletions(-)
 
-diff --git a/include/linux/compiler-context-analysis.h b/include/linux/compiler-context-analysis.h
-index 8302ebc2ea8c..024e303188ad 100644
---- a/include/linux/compiler-context-analysis.h
-+++ b/include/linux/compiler-context-analysis.h
-@@ -243,7 +243,7 @@
-  * alias as a function argument).
-  */
- #define context_unsafe_alias(p) _context_unsafe_alias((void **)&(p))
--static inline void _context_unsafe_alias(void **p) { }
-+static inline void _context_unsafe_alias(void **p) { (void)p; }
+diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
+index e20f98e14e81..e005e8d5dfda 100644
+--- a/tools/include/linux/compiler-gcc.h
++++ b/tools/include/linux/compiler-gcc.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _TOOLS_LINUX_COMPILER_H_
++#ifndef __LINUX_COMPILER_TYPES_H
+ #error "Please do not include <linux/compiler-gcc.h> directly, include <linux/compiler.h> instead."
+-#endif
++#endif /* __LINUX_COMPILER_TYPES_H */
  
- /**
-  * token_context_lock() - declare an abstract global context lock instance
+ /*
+  * Common definitions for all gcc versions go here.
+@@ -33,10 +33,76 @@
+ #define __packed	__attribute__((packed))
+ #endif
+ #ifndef __noreturn
+-#define __noreturn	__attribute__((noreturn))
++#define __noreturn	__attribute__((__noreturn__))
+ #endif
+ #ifndef __aligned
+ #define __aligned(x)	__attribute__((aligned(x)))
+ #endif
+ #define __printf(a, b)	__attribute__((format(printf, a, b)))
+ #define __scanf(a, b)	__attribute__((format(scanf, a, b)))
++
++/*
++ * Turn individual warnings and errors on and off locally, depending
++ * on version.
++ */
++#define __diag_str1(s)		#s
++#define __diag_str(s)		__diag_str1(s)
++
++#ifdef __clang__
++#define __diag_clang(version, severity, s) \
++	__diag_clang_ ## version(__diag_clang_ ## severity s)
++
++/* Severity used in pragma directives */
++#define __diag_clang_ignore	ignored
++#define __diag_clang_warn	warning
++#define __diag_clang_error	error
++
++#define __diag(s)		_Pragma(__diag_str(clang diagnostic s))
++
++#if __clang_major__ >= 23
++#define __diag_clang_23(s)	__diag(s)
++#else
++#define __diag_clang_23(s)
++#endif
++
++#define __diag_clang_all(s)	__diag(s)
++
++#define __diag_ignore_all(option, comment) \
++	__diag_clang(all, ignore, option)
++
++/*
++ * clang has horrible behavior with "g" or "rm" constraints for asm
++ * inputs, turning them into something worse than "m". Avoid using
++ * constraints with multiple possible uses (but "ir" seems to be ok):
++ *
++ *	https://github.com/llvm/llvm-project/issues/20571
++ */
++#define ASM_INPUT_G "ir"
++#define ASM_INPUT_RM "r"
++#define ASM_OUTPUT_RM "=r"
++
++#define CC_HAS_TYPEOF_UNQUAL (__clang_major__ > 19 || (__clang_major__ == 19 && __clang_minor__ > 0))
++#else /* !__clang__ */
++#define __diag_GCC(version, severity, s) \
++	__diag_GCC_ ## version(__diag_GCC_ ## severity s)
++
++/* Severity used in pragma directives */
++#define __diag_GCC_ignore	ignored
++#define __diag_GCC_warn		warning
++#define __diag_GCC_error	error
++
++#define __diag(s)		_Pragma(__diag_str(GCC diagnostic s))
++
++#if GCC_VERSION >= 80000
++#define __diag_GCC_8(s)		__diag(s)
++#else
++#define __diag_GCC_8(s)
++#endif
++
++#define __diag_GCC_all(s)	__diag(s)
++
++#define __diag_ignore_all(option, comment) \
++	__diag(__diag_GCC_ignore option)
++
++#define CC_HAS_TYPEOF_UNQUAL (__GNUC__ >= 14)
++#endif /* __clang__ */
+diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
+index 03ecf9086643..505fbb0080d0 100644
+--- a/tools/include/linux/compiler.h
++++ b/tools/include/linux/compiler.h
+@@ -1,41 +1,11 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _TOOLS_LINUX_COMPILER_H_
+-#define _TOOLS_LINUX_COMPILER_H_
++#ifndef __LINUX_COMPILER_H
++#define __LINUX_COMPILER_H
+ 
+ #ifndef __ASSEMBLY__
+ 
+ #include <linux/compiler_types.h>
+ 
+-#ifndef __compiletime_error
+-# define __compiletime_error(message)
+-#endif
+-
+-#ifdef __OPTIMIZE__
+-# define __compiletime_assert(condition, msg, prefix, suffix)		\
+-	do {								\
+-		extern void prefix ## suffix(void) __compiletime_error(msg); \
+-		if (!(condition))					\
+-			prefix ## suffix();				\
+-	} while (0)
+-#else
+-# define __compiletime_assert(condition, msg, prefix, suffix) do { } while (0)
+-#endif
+-
+-#define _compiletime_assert(condition, msg, prefix, suffix) \
+-	__compiletime_assert(condition, msg, prefix, suffix)
+-
+-/**
+- * compiletime_assert - break build and emit msg if condition is false
+- * @condition: a compile-time constant condition to check
+- * @msg:       a message to emit if condition is false
+- *
+- * In tradition of POSIX assert, this macro will break the build if the
+- * supplied condition is *false*, emitting the supplied error message if the
+- * compiler has support to do so.
+- */
+-#define compiletime_assert(condition, msg) \
+-	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+-
+ /* Optimization barrier */
+ /* The "volatile" is due to gcc bugs */
+ #define barrier() __asm__ __volatile__("": : :"memory")
+@@ -48,10 +18,6 @@
+ #define __always_unused __attribute__((__unused__))
+ #endif
+ 
+-#ifndef __noreturn
+-#define __noreturn __attribute__((__noreturn__))
+-#endif
+-
+ #ifndef unreachable
+ #define unreachable() __builtin_unreachable()
+ #endif
+@@ -68,11 +34,6 @@
+ #define __naked __attribute__((__naked__))
+ #endif
+ 
+-/* Are two types/vars the same type (ignoring qualifiers)? */
+-#ifndef __same_type
+-# define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+-#endif
+-
+ /* Enforce static storage duration. */
+ #define ASSERT_STATIC_STORAGE(name) \
+ 	static typeof(name) * const __always_unused \
+@@ -242,11 +203,6 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
+ 	__u.__val;					\
+ })
+ 
+-
+-/* Indirect macros required for expanded argument pasting, eg. __LINE__. */
+-#define ___PASTE(a, b) a##b
+-#define __PASTE(a, b) ___PASTE(a, b)
+-
+ #ifndef OPTIMIZER_HIDE_VAR
+ /* Make the optimizer believe the variable can be manipulated arbitrarily. */
+ #define OPTIMIZER_HIDE_VAR(var)						\
+@@ -263,4 +219,4 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
+ 
+ #endif /* __ASSEMBLY__ */
+ 
+-#endif /* _TOOLS_LINUX_COMPILER_H */
++#endif /* __LINUX_COMPILER_H */
+diff --git a/tools/include/linux/compiler_types.h b/tools/include/linux/compiler_types.h
+index b3adbf5682f0..31e9f7d2a466 100644
+--- a/tools/include/linux/compiler_types.h
++++ b/tools/include/linux/compiler_types.h
+@@ -2,8 +2,6 @@
+ #ifndef __LINUX_COMPILER_TYPES_H
+ #define __LINUX_COMPILER_TYPES_H
+ 
+-/* Builtins */
+-
+ /*
+  * __has_builtin is supported on gcc >= 10, clang >= 3 and icc >= 21.
+  * In the meantime, to support gcc < 10, we implement __has_builtin
+@@ -13,6 +11,23 @@
+ #define __has_builtin(x) (0)
+ #endif
+ 
++/* Indirect macros required for expanded argument pasting, eg. __LINE__. */
++#define ___PASTE(a, b) a##b
++#define __PASTE(a, b) ___PASTE(a, b)
++
++#ifndef __ASSEMBLY__
++
++/*
++ * Skipped when running bindgen due to a libclang issue;
++ * see https://github.com/rust-lang/rust-bindgen/issues/2244.
++ */
++#if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
++	__has_attribute(btf_type_tag) && !defined(__BINDGEN__)
++# define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
++#else
++# define BTF_TYPE_TAG(value) /* nothing */
++#endif
++
+ #include <linux/compiler-context-analysis.h>
+ 
+ /* Compiler specific macros. */
+@@ -20,14 +35,101 @@
+ #include <linux/compiler-gcc.h>
+ #endif
+ 
++#ifndef __compiletime_error
++# define __compiletime_error(message)
++#endif
++
++#ifndef __noreturn
++# define __noreturn __attribute__((__noreturn__))
++#endif
++
++#endif /* __ASSEMBLY__ */
++
++/*
++ * When the size of an allocated object is needed, use the best available
++ * mechanism to find it. (For cases where sizeof() cannot be used.)
++ *
++ * Optional: only supported since gcc >= 12
++ *
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Object-Size-Checking.html
++ * clang: https://clang.llvm.org/docs/LanguageExtensions.html#evaluating-object-size
++ */
++#if __has_builtin(__builtin_dynamic_object_size)
++#define __struct_size(p)	__builtin_dynamic_object_size(p, 0)
++#define __member_size(p)	__builtin_dynamic_object_size(p, 1)
++#else
++#define __struct_size(p)	__builtin_object_size(p, 0)
++#define __member_size(p)	__builtin_object_size(p, 1)
++#endif
++
++/*
++ * Determine if an attribute has been applied to a variable.
++ * Using __annotated needs to check for __annotated being available,
++ * or negative tests may fail when annotation cannot be checked. For
++ * example, see the definition of __is_cstr().
++ */
++#if __has_builtin(__builtin_has_attribute)
++#define __annotated(var, attr)	__builtin_has_attribute(var, attr)
++#endif
++
++/*
++ * Optional: only supported since gcc >= 15, clang >= 19
++ *
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fcounted_005fby_005fref
++ * clang: https://clang.llvm.org/docs/LanguageExtensions.html#builtin-counted-by-ref
++ */
++#if __has_builtin(__builtin_counted_by_ref) && \
++    !defined(CONFIG_CC_HAS_BROKEN_COUNTED_BY_REF)
++#define __flex_counter(FAM)	__builtin_counted_by_ref(FAM)
++#else
++#define __flex_counter(FAM)	((void *)NULL)
++#endif
++
++/*
++ * Some versions of gcc do not mark 'asm goto' volatile:
++ *
++ *  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=103979
++ *
++ * We do it here by hand, because it doesn't hurt.
++ */
+ #ifndef asm_goto_output
+-#define asm_goto_output(x...) asm goto(x)
++#define asm_goto_output(x...) asm volatile goto(x)
++#endif
++
++/*
++ * Clang has trouble with constraints with multiple
++ * alternative behaviors ("g" , "rm" and "=rm").
++ */
++#ifndef ASM_INPUT_G
++  #define ASM_INPUT_G "g"
++  #define ASM_INPUT_RM "rm"
++  #define ASM_OUTPUT_RM "=rm"
++#endif
++
++#ifdef CONFIG_CC_HAS_ASM_INLINE
++#define asm_inline asm __inline
++#else
++#define asm_inline asm
++#endif
++
++#ifndef __ASSEMBLY__
++/*
++ * Use __typeof_unqual__() when available.
++ */
++#if (defined(CC_HAS_TYPEOF_UNQUAL) && CC_HAS_TYPEOF_UNQUAL) || defined(__CHECKER__)
++# define USE_TYPEOF_UNQUAL 1
++#endif
++
++/* Are two types/vars the same type (ignoring qualifiers)? */
++#ifndef __same_type
++# define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+ #endif
+ 
+ /*
+  * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, leaving
+  *			       non-scalar types unchanged.
+  */
++#ifndef USE_TYPEOF_UNQUAL
+ /*
+  * Prefer C11 _Generic for better compile-times and simpler code. Note: 'char'
+  * is not type-compatible with 'signed char', and we define a separate case.
+@@ -45,5 +147,103 @@
+ 			 __scalar_type_to_expr_cases(long),		\
+ 			 __scalar_type_to_expr_cases(long long),	\
+ 			 default: (x)))
++#else
++#define __unqual_scalar_typeof(x) __typeof_unqual__(x)
++#endif
++
++#endif /* !__ASSEMBLY__ */
++
++/*
++ * __signed_scalar_typeof(x) - Declare a signed scalar type, leaving
++ *			       non-scalar types unchanged.
++ */
++
++#define __scalar_type_to_signed_cases(type)				\
++		unsigned type:	(signed type)0,				\
++		signed type:	(signed type)0
++
++#define __signed_scalar_typeof(x) typeof(				\
++		_Generic((x),						\
++			 char:	(signed char)0,				\
++			 __scalar_type_to_signed_cases(char),		\
++			 __scalar_type_to_signed_cases(short),		\
++			 __scalar_type_to_signed_cases(int),		\
++			 __scalar_type_to_signed_cases(long),		\
++			 __scalar_type_to_signed_cases(long long),	\
++			 default: (x)))
++
++/* Is this type a native word size -- useful for atomic operations */
++#define __native_word(t) \
++	(sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
++	 sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
++
++#ifdef __OPTIMIZE__
++/*
++ * #ifdef __OPTIMIZE__ is only a good approximation; for instance "make
++ * CFLAGS_foo.o=-Og" defines __OPTIMIZE__, does not elide the conditional code
++ * and can break compilation with wrong error message(s). Combine with
++ * -U__OPTIMIZE__ when needed.
++ */
++# define __compiletime_assert(condition, msg, prefix, suffix)		\
++	do {								\
++		/*							\
++		 * __noreturn is needed to give the compiler enough	\
++		 * information to avoid certain possibly-uninitialized	\
++		 * warnings (regardless of the build failing).		\
++		 */							\
++		__noreturn extern void prefix ## suffix(void)		\
++			__compiletime_error(msg);			\
++		if (!(condition))					\
++			prefix ## suffix();				\
++	} while (0)
++#else
++# define __compiletime_assert(condition, msg, prefix, suffix) ((void)(condition))
++#endif
++
++#define _compiletime_assert(condition, msg, prefix, suffix) \
++	__compiletime_assert(condition, msg, prefix, suffix)
++
++/**
++ * compiletime_assert - break build and emit msg if condition is false
++ * @condition: a compile-time constant condition to check
++ * @msg:       a message to emit if condition is false
++ *
++ * In tradition of POSIX assert, this macro will break the build if the
++ * supplied condition is *false*, emitting the supplied error message if the
++ * compiler has support to do so.
++ */
++#define compiletime_assert(condition, msg) \
++	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
++
++#define compiletime_assert_atomic_type(t)				\
++	compiletime_assert(__native_word(t),				\
++		"Need native word sized stores/loads for atomicity.")
++
++/* Helpers for emitting diagnostics in pragmas. */
++#ifndef __diag
++#define __diag(string)
++#endif
++
++#ifndef __diag_GCC
++#define __diag_GCC(version, severity, string)
++#endif
++
++#ifndef __diag_clang
++#define __diag_clang(version, severity, string)
++#endif
++
++#define __diag_push()	__diag(push)
++#define __diag_pop()	__diag(pop)
++
++#define __diag_ignore(compiler, version, option, comment) \
++	__diag_ ## compiler(version, ignore, option)
++#define __diag_warn(compiler, version, option, comment) \
++	__diag_ ## compiler(version, warn, option)
++#define __diag_error(compiler, version, option, comment) \
++	__diag_ ## compiler(version, error, option)
++
++#ifndef __diag_ignore_all
++#define __diag_ignore_all(option, comment)
++#endif
+ 
+ #endif /* __LINUX_COMPILER_TYPES_H */
 -- 
 2.56.0.455.g6c5a503b38-goog
 
