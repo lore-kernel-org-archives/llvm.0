@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794026498;
-	b=V7UqsQxmHGK+mUCnRPmDQAInoq/VfdzK2B3lDSIhtd9SkDnDWlrigt5Fx6Z3FH+JY1JN
-	 4kRyW+jz805jR+W5GaWFVKwk/LNSvDyulVKB+oOWPQh0ad392boBrZNpVvdUfHTxFZhcT
-	 E29lyoAmwGl3moRi8rPivXejf6gxkpmTzrCSmINF4f5GORhB4SWm8hUEoEy+ce/Ps6A9V
-	 JZ5Pp5WBozFBk/5wWlwC7oqssrLDjRPhX1Md7TUtt07xRY0YGPE0tdbGM4rjTm/+zD2uy
-	 x/qgT6B52T4lC0ripunpAWTIV0pieZ2dqtSW4VEOa6np+k6AZYthvxKQ/X9t/XLdsKQ==
+	t=1794026506;
+	b=4vTVkKWISje2mZf8fhuzwGGH5HiWit2H4eS2XLI+17un8cT0gdu1Frh0o0B4kroENarM
+	 +QyGnytgZJnQIW08p31hwHhgSKCja42mvgp1YG5ys9+/6Ps4qFFXhtpZKVimVw9JI2XoR
+	 Iamr19Li5/I60f+6gC58Y3fpu+TJV5hC43W5ftSeHbke66wHU8VHWuVf0PRFUp0F8Env5
+	 G67/sUWYgex6Dd4/Ey2fsemohfHXWn9w40xMSTmdzfb7m4Fq92rb1Nrgsu74vKQcMn+EQ
+	 VgYdea+F9Gwki95phee5/e2Dl7eZcqgSzTgquJaIwyQeXmZrhlJDEm9gUAwEv93JfzA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794026498;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794026506;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=o7CTrAhrkmxdP5PCIw1MA98wNNK+lzvPv6pZbJYyzjo=;
-	b=vlaxeTcncAPd1i+Hyr7qG0O/HQc0DbiIFbdA2dYioeiDX2F0cx73P3bhd2un4jwfNIcH
-	 VaGyYdVBy0P98ktv7POhp0XAPCRepMsrYz/v3AgPT22ShrT3HgMn5s1pnr5gPpTgW/hEj
-	 CpBm/KddMYzHGh5EPKRlv1LpIr4JyGq9B7Ui5kkRxJMOhlB3x53rzrU0kmyeogGlyDT1p
-	 sWhGUfrBfDSSYoNKRYf0NF0khGENtsiMxdpsaiYR0d6l+RfQSwJRlKNC9cpvJCDtn+VG7
-	 2LMLhpSFho35Qv3FzlqNXyuIAer2Ca7OjlzjNxeEKfpzU8xBn0aqFwUzMMDcAfwlxlQ==
+	bh=utEKs64HogqSHT7MlF6NI0J2vc5vLHuILUplV9BarPc=;
+	b=KnMSRv4roxAhPcTeMNS5sDwMw/n2I6o/AKWP+LLUiqyaIfzN4lWbGUFB/20NhRKKp3NC
+	 NPZugEWl7/ynL6vq7FlKQS+5dimlW/wICx9eiY2dFTGbKzfq8JuvM2A3hIAwNRYe4cPyP
+	 KU4hj3BqaLahTUhb5fTUNaV4jVrHHbAwOii/jT9WpNKXbTQyXXRHmjEZif3Bx5BxhYyZI
+	 n7jPk8wG4NoB4LIvnmTxX0NCG5DYqqGy+b8lq8T5HbjhHvROr2D8dOd+LJYpEEnTyicDE
+	 47rrehVqPk4cE+HZGrLtHikk5T1/zpj32b/3oXzvUL0gIBGQSbRvbSm3VpqbnA0qu0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Buwl0FxA;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=o4Yx148K;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECC4606D807
-	for <llvm@lists.linux.dev>; Sat,  7 Nov 2026 04:41:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5ECC4606D807
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B3D606EEA1
+	for <llvm@lists.linux.dev>; Sat,  7 Nov 2026 04:41:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37B3D606EEA1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Buwl0FxA
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-36efb506f29so4002480eec.1
-        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 20:41:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=o4Yx148K
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-3700be873ebso382812eec.1
+        for <llvm@lists.linux.dev>; Fri, 06 Nov 2026 20:41:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794026498; x=1794631298; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1794026505; x=1794631305; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=o7CTrAhrkmxdP5PCIw1MA98wNNK+lzvPv6pZbJYyzjo=;
-        b=Buwl0FxAJmbehdj45olz68XdGBoQgVDNwQE3w1HhmOdKFUHglebGn8VZ101Y+7uGTN
-         H2JSYqDcXGJOthniVjC6aKy18d8qFFknLQiL9M7f0CybUHfh1JadrSuZ+nJ5+m4W163o
-         9YhWDwezbSujhyKi2N67Cb9jhgsvW363frb1aqrriovla7cGzYZKK2b9HWLZZ31NyNjy
-         9ZJA+Y/aYkeoLtZbp9Q7SOVuevsXygZhtGMGQZ0Vzt08qYu7YfquI7VNK7rlAL5wpcxj
-         s922nWHyZVieHfxc1LJvRUY2t4OMGQcJGiu6tASjyqwrgY1iZMoRJdPiGxB0SvmVfoSj
-         1l8w==
+        bh=utEKs64HogqSHT7MlF6NI0J2vc5vLHuILUplV9BarPc=;
+        b=o4Yx148KegBWJrXqzPK6hFiD8+TsUnvjwVJ98D/vldyky8EWJ3fHcKoTEE2DLEdall
+         Pw0QyBf+t24boW2Brecsk6HlfHqXrkZW7Dy9+7Vx+0n4kK2fLKraK4I0HxedmYdVeTEb
+         yOvgAwwOGgMlQsxcE1MIVvnwrnWHStTJVNudCVGuGSFwj0ICwwUx64J5tAMpipVR6+rY
+         ntb0bVvSXpYd7lfnr1ABdZZwGB7L64TigcWI3lfAcZW5IQgUkdzUA64ppse0E1naktKu
+         0xj5TAqv1cZnVIopadUtLQ2IWTruL10D4asSd96VIF74bNlo0D2xkncOAsIJc2XFg+Vn
+         L/0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794026498; x=1794631298;
+        d=1e100.net; s=20260707; t=1794026505; x=1794631305;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=o7CTrAhrkmxdP5PCIw1MA98wNNK+lzvPv6pZbJYyzjo=;
-        b=mBjemm8pCvA2RFO2th+0QCoUFMSdDE2JNtgHzlGUdiEBuaGPPJ4D+I+Vb2dX/m5Biz
-         Hq+LEYv/2xi4L2UV0Zf76L+cOztQbF1Cta2K6Ie9YvAx2z/l0Z9ReDrsuoo7XmcC3Rmq
-         V+4oWDv8vSOsleq6nnsF5XzLGtbV1F4Hw7jAVnADpD02y11dOU1h82+sKHJbhIuoCLlO
-         FKKvCM+aDQGZ9XfdyTHkzv6a2Qk2QfOMSoqp4CTjVO3xEs7bcJnNZtTsN3EvZT3mU47I
-         SC/a+hWeDflRO2rqhTbYv6c7ctls1jWiYdnUG/gAY4kovfYH26peZkObKzRbW2M+sQIE
-         m00g==
-X-Forwarded-Encrypted: i=1; AL+hErFJBWy43dX5VqZmpyjmgD7/6XBCzDYbSM6VKscVx/E8IDP9rsLFJTJEF2XP3TbzUu57B+f9@lists.linux.dev
-X-Gm-Message-State: APuU4Z+MODHYktM4dhxg4ReeQZqEsyWT6v0YTkhyQa1Jqbq7gXB3VSB4
-	xS+SE9rd+B7EA5csB9llx9FuBoead5CxLuRw+Vm1gJXUCZbbZojte9kOLhdUqjKctAHYXFL8ui+
-	MazEQeI/nzQ==
-X-Received: from dybmb9.prod.google.com ([2002:a05:7301:1909:b0:36f:7f0f:e2e1])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:ea0f:b0:36a:1f8:a5a4
- with SMTP id 5a478bee46e88-36f772fa36cmr6328613eec.38.1794026496928; Fri, 06
- Nov 2026 20:41:36 -0800 (PST)
-Date: Fri,  6 Nov 2026 20:40:55 -0800
+        bh=utEKs64HogqSHT7MlF6NI0J2vc5vLHuILUplV9BarPc=;
+        b=KRbKap6VTq9EGIAG+RW06DeEPWHFY/QU7oyRaUggr4M4Nnz6Jle/bMyHcRf7jI9rI6
+         LsNACXFxKwSSV76C5dmrS21xAfwJhTCbbkK17NLlN8e2hu75dBPZBTrdD4JoTCOVAIID
+         sGR/twStpvZLGKMlEb5titnrMJnH8130sjJrUoSwubdmcmYTNhTOi0AWchHj5x3pEwfG
+         wotHx3TOg6jz5ATQk6xfSsqdr//4/gizIgfiK5y0yIcxUmDI1dYAGJiVA4XioDLBoQBX
+         sG0XC/gV8tzMMWz3lgdxVJepkHYhiMNxU5BTwvnxuAtsEaZ3F1QaFh5sPW2GTQ0gh05H
+         ne0A==
+X-Forwarded-Encrypted: i=1; AL+hErEqAr/jF+FTOaWlxITHwbtEHfn8WUTys1o1uFqBUdkgpeNRaUMjPpM+qDJL6+NIBaxIIUDn@lists.linux.dev
+X-Gm-Message-State: APuU4Z/UfgdiO7YI7oUCZWxxLyiHW8b7+w8FNeWTDIyotGcQsziCksRg
+	dip/++31PF2Ttj286mnKR1PxifTVlb/8Cp2b8e/oy3nPcxqKZ0ybTuN3bvmgu2GiC603WhODPSZ
+	rnlU4b0Ru2w==
+X-Received: from dybse2.prod.google.com ([2002:a05:7301:4902:b0:35d:1771:4816])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:83da:10b0:36f:5822:4bb2
+ with SMTP id 5a478bee46e88-370f76a8a25mr1471146eec.19.1794026505162; Fri, 06
+ Nov 2026 20:41:45 -0800 (PST)
+Date: Fri,  6 Nov 2026 20:40:59 -0800
 In-Reply-To: <20261107044102.1506626-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261107044102.1506626-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261107044102.1506626-15-irogers@google.com>
-Subject: [PATCH v11 14/20] perf thread: Expand context analysis annotations to
- threads and namespaces_lock
+Message-ID: <20261107044102.1506626-19-irogers@google.com>
+Subject: [PATCH v11 18/20] perf maps: Fix lock inversion in maps__load_first()
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
 Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com, 
@@ -93,160 +92,39 @@ Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com,
 	ndesaulniers@google.com, peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Annotate shard and last_match in struct threads_table_entry with
-__guarded_by(&lock) and add __must_hold_shared()/__must_hold() to the
-last_match helpers in util/threads.c.
+In maps__load_first(), take a reference to the first map and drop
+maps__lock(maps) before calling map__load() to avoid a read-to-write
+self-deadlock when loading kernel maps inserts extra trampoline maps.
 
-In util/thread.h and util/thread.c, add __returns_ctx_lock() to
-thread__namespaces_lock() and thread__comm_lock(), annotate
-namespaces_list and comm_list with __guarded_by(), and add
-__must_hold_shared()/__must_hold() to the namespaces_list helpers.
-
+Fixes: e77b0236cd0c ("perf maps: Add maps__load_first()")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/thread.c  |  2 ++
- tools/perf/util/thread.h  | 28 +++++++++++++++++-----------
- tools/perf/util/threads.c |  4 ++++
- tools/perf/util/threads.h |  6 +++---
- 4 files changed, 26 insertions(+), 14 deletions(-)
+ tools/perf/util/maps.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
-index 616d5bf87baf..af761b1fc5d5 100644
---- a/tools/perf/util/thread.c
-+++ b/tools/perf/util/thread.c
-@@ -149,6 +149,7 @@ void thread__put(struct thread *thread)
+diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
+index f808df2fe77b..7ca33e5218e7 100644
+--- a/tools/perf/util/maps.c
++++ b/tools/perf/util/maps.c
+@@ -1459,10 +1459,15 @@ int maps__merge_in(struct maps *kmaps, struct map *new_map)
+ 
+ void maps__load_first(struct maps *maps)
+ {
+-	down_read(maps__lock(maps));
++	struct map *first = NULL;
+ 
++	down_read(maps__lock(maps));
+ 	if (maps__nr_maps(maps) > 0)
+-		map__load(maps__maps_by_address(maps)[0]);
+-
++		first = map__get(maps__maps_by_address(maps)[0]);
+ 	up_read(maps__lock(maps));
++
++	if (first) {
++		map__load(first);
++		map__put(first);
++	}
  }
- 
- static struct namespaces *__thread__namespaces(struct thread *thread)
-+	__must_hold_shared(thread__namespaces_lock(thread))
- {
- 	if (list_empty(thread__namespaces_list(thread)))
- 		return NULL;
-@@ -169,6 +170,7 @@ struct namespaces *thread__namespaces(struct thread *thread)
- 
- static int __thread__set_namespaces(struct thread *thread, u64 timestamp,
- 				    struct perf_record_namespaces *event)
-+	__must_hold(thread__namespaces_lock(thread))
- {
- 	struct namespaces *new, *curr = __thread__namespaces(thread);
- 
-diff --git a/tools/perf/util/thread.h b/tools/perf/util/thread.h
-index 9d0ce7742c06..a7850eebce4e 100644
---- a/tools/perf/util/thread.h
-+++ b/tools/perf/util/thread.h
-@@ -48,10 +48,10 @@ DECLARE_RC_STRUCT(thread) {
- 	bool			exited;
- 	bool			comm_set;
- 	int			comm_len;
--	struct list_head	namespaces_list;
- 	struct rw_semaphore	namespaces_lock;
--	struct list_head	comm_list;
-+	struct list_head	namespaces_list __guarded_by(&namespaces_lock);
- 	struct rw_semaphore	comm_lock;
-+	struct list_head	comm_list __guarded_by(&comm_lock);
- 	u64			db_id;
- 
- 	void			*priv;
-@@ -230,30 +230,36 @@ static inline void thread__set_comm_len(struct thread *thread, int len)
- 	RC_CHK_ACCESS(thread)->comm_len = len;
- }
- 
--static inline struct list_head *thread__namespaces_list(struct thread *thread)
-+static inline struct rw_semaphore *thread__namespaces_lock(const struct thread *thread)
-+	__returns_ctx_lock(&RC_CHK_ACCESS(thread)->namespaces_lock)
- {
--	return &RC_CHK_ACCESS(thread)->namespaces_list;
-+	return (struct rw_semaphore *)&RC_CHK_ACCESS(thread)->namespaces_lock;
- }
- 
--static inline int thread__namespaces_list_empty(const struct thread *thread)
-+static inline struct list_head *thread__namespaces_list(struct thread *thread)
-+	__must_hold_shared(thread__namespaces_lock(thread))
- {
--	return list_empty(&RC_CHK_ACCESS(thread)->namespaces_list);
-+	/* Readers hold the shared lock; writers hold the exclusive lock. */
-+	return context_unsafe(&RC_CHK_ACCESS(thread)->namespaces_list);
- }
- 
--static inline struct rw_semaphore *thread__namespaces_lock(struct thread *thread)
-+static inline int thread__namespaces_list_empty(const struct thread *thread)
-+	__must_hold_shared(thread__namespaces_lock(thread))
- {
--	return &RC_CHK_ACCESS(thread)->namespaces_lock;
-+	return list_empty(&RC_CHK_ACCESS(thread)->namespaces_list);
- }
- 
--static inline struct rw_semaphore *thread__comm_lock(struct thread *thread)
-+static inline struct rw_semaphore *thread__comm_lock(const struct thread *thread)
-+	__returns_ctx_lock(&RC_CHK_ACCESS(thread)->comm_lock)
- {
--	return &RC_CHK_ACCESS(thread)->comm_lock;
-+	return (struct rw_semaphore *)&RC_CHK_ACCESS(thread)->comm_lock;
- }
- 
- static inline struct list_head *thread__comm_list(struct thread *thread)
- 	__must_hold_shared(thread__comm_lock(thread))
- {
--	return &RC_CHK_ACCESS(thread)->comm_list;
-+	/* Readers hold the shared lock; writers hold the exclusive lock. */
-+	return context_unsafe(&RC_CHK_ACCESS(thread)->comm_list);
- }
- 
- static inline u64 thread__db_id(const struct thread *thread)
-diff --git a/tools/perf/util/threads.c b/tools/perf/util/threads.c
-index 6ca0b178fb6c..39b3c420635a 100644
---- a/tools/perf/util/threads.c
-+++ b/tools/perf/util/threads.c
-@@ -21,6 +21,7 @@ static bool key_equal(long key1, long key2, void *ctx __maybe_unused)
- }
- 
- void threads__init(struct threads *threads)
-+	__context_unsafe(/* initialization */)
- {
- 	for (int i = 0; i < THREADS__TABLE_SIZE; i++) {
- 		struct threads_table_entry *table = &threads->table[i];
-@@ -32,6 +33,7 @@ void threads__init(struct threads *threads)
- }
- 
- void threads__exit(struct threads *threads)
-+	__context_unsafe(/* teardown */)
- {
- 	threads__remove_all_threads(threads);
- 	for (int i = 0; i < THREADS__TABLE_SIZE; i++) {
-@@ -63,6 +65,7 @@ size_t threads__nr(struct threads *threads)
-  */
- static struct thread *__threads_table_entry__get_last_match(struct threads_table_entry *table,
- 							    pid_t tid)
-+	__must_hold_shared(&table->lock)
- {
- 	struct thread *th, *res = NULL;
- 
-@@ -76,6 +79,7 @@ static struct thread *__threads_table_entry__get_last_match(struct threads_table
- 
- static void __threads_table_entry__set_last_match(struct threads_table_entry *table,
- 						  struct thread *th)
-+	__must_hold(&table->lock)
- {
- 	thread__put(table->last_match);
- 	table->last_match = thread__get(th);
-diff --git a/tools/perf/util/threads.h b/tools/perf/util/threads.h
-index da68d2223f18..54fba16657db 100644
---- a/tools/perf/util/threads.h
-+++ b/tools/perf/util/threads.h
-@@ -11,10 +11,10 @@ struct thread;
- #define THREADS__TABLE_SIZE	(1 << THREADS__TABLE_BITS)
- 
- struct threads_table_entry {
--	/* Key is tid, value is struct thread. */
--	struct hashmap	       shard;
- 	struct rw_semaphore    lock;
--	struct thread	       *last_match;
-+	/* Key is tid, value is struct thread. */
-+	struct hashmap	       shard __guarded_by(&lock);
-+	struct thread	       *last_match __guarded_by(&lock);
- };
- 
- struct threads {
 -- 
 2.56.0.455.g6c5a503b38-goog
 
