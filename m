@@ -1,78 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794071105;
-	b=mNWcTYcjqJmb9hxprGypaezOhWLIY/mNWS+fw+dqQUZi6bC56891LyCLcc90OJvFmxgu
-	 ck3JBs05PC9d7ThwdZDKxnq62f2bTC0wovKOwlu/ovlb06WgOhU+NdtbTAO0Dxz1aUjYA
-	 rTXjxE2dvoN2JczrJopNvEXstlSitX4GB7kZLvE6sY+n/CK8EsjNCB2z2628TpSSNPBGe
-	 Pb4ib51XOqlzW2X/pIr0ekheLlN14FQbd55U4SH8R60rk0qeWbLQbZLq9W30OrCMRkRJW
-	 Cy09MToGCbYcG97gjECjpv0FyZVqewS+zRRe6rJJ3m4t0+8n81Z0tFCojoxauAf3M7g==
+	t=1794087863;
+	b=SM2K19SFjNxoxgaO84Eh1wlRjy4eE8jtFbkG/4VmSuBUwpJmBiwW0HBh9YhEFl5JRP0o
+	 fAoummVxD3oauSIUSaY17kTtyRq0yjXjrA38eTPHGr78wuhvJNK2HIchMERt09n4vekfz
+	 VIxfzKfCcd5BcRleFNTwwYgZTz3fFIayL8A7jo0mUJNdHGGFNRLNAeaRTLHJmqUm/JqZE
+	 16EBqHonJnkq2x5texm/sZkOqnRGOBUqv6vWN3PSyHmCwVk2hcTMX9NuRifC/RtbJEYWB
+	 zki+37DMXHV3B4Sa7jCefgaKoND0I9Nk8FzILmIjJ/650afavbYlYlhTjDNEBln+AQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794071105;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794087863;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=tuZXBvaXhxTtaSu3IjU8Dvke4HyGXfYy7awdmJVrM+Y=;
-	b=MFkfXroaMrbvK6NJdg2zW1LxgLEgSmYlTwErYZ56J38K5OsbGnoszgHCMIPIMti32sF/
-	 SiFEVdStp2jIy2XRcjtNt/SOLxNQk8KkPbnGOVQum77pyzmw1AolS8tW0Lu4crSpnX4gf
-	 cwrYmLa2AKJqAu7oUEWXbzESM3+mIF1z3ivAiyYPydRpBDEM5p6/LC8viMxjwzAKD4x/I
-	 pCcphc0PHILVe45fz6fwGfzU16kpzmqXy22JubNymQyhyWiDCU7mzpgYeKjpKy+Aui4Kb
-	 fj7VRlf9dae9egFMHOaujzDvhmCzACBN/0ji93h8vQFPBwQ2Uzy4jMT8DBU1LdlhbMw==
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=sB09WNJW3d+13A5arIFJlIiie4qXGyky7H+wWE0/lag=;
+	b=0pqFznMATQsJD92gfPg085tYEoo9i9Tef/q8TxAC47DhAb2fFaY82V+P91BCsIRytU7y
+	 o/xviQPEeFGCZTugvVjJmxKwsKiaWiTlL5WuBDhrbNtpxvJCS2Oh2TmrxbR3UGAZ9RN6G
+	 /0s+LOB2da26Y9L2e2iNMYkIjwg3szquU00ryVcrvXXmdkiVJJRIWzU2+ESClYE6SZhP1
+	 u+oH6agXt6GzyDm5G53Go06Oii+LPiOB1gOxCgjacgsCffGS5QF8j8ZuPxSdIQrAeVUGy
+	 BYa11HSKjH+VtaDwENHnW2vN9BVbQ4WwUiV4zzAYpXOlWesclpgGoRX24ZTXEncWOPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=JeFplFM+;
-	arc=none smtp.remote-ip=198.175.65.11
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VsNlCjdM;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73825606A32C;
-	Sat,  7 Nov 2026 17:05:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73825606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79934606A32C;
+	Sat,  7 Nov 2026 21:44:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79934606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=JeFplFM+
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VsNlCjdM
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794071102; x=1825607102;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3ldDp/F7niAr7c2d1iKtQlPq97mEON7EG9ro+Ts+D+0=;
-  b=JeFplFM+oVhGMyVV2P0snVZ2shAkIz8WKIU/qRfD+v1CkBcGs5/O1qcD
-   CM4KKyGnknyGtsgvTXqkkcekFVHpToTM+VPiC/h4DFrTYIkQ3S977elq2
-   mlJxejG54g7PhWRSgHXQxnjhf9yyZ9F1pburiJq+d9nbyMJZUTpSs50bw
-   2Gk4hh8yBuk8iVEY15yJUW/6wuV/tBwUCByFVF+BfX57KxJUvHisFcdnf
-   wqb2s/FbNSLmMrJNrCUrTvOuwIkFC4QYCPZUEDvDbMowgFmGd9c5XXCCb
-   Jo0WMmqGSzE6LwoGM2v2I6JYsL73ly/dUFz+PoQPewPBKIXSBO1eIzFQx
-   g==;
-X-CSE-ConnectionGUID: ORcHhlpyTFyb6XVmhHCTaQ==
-X-CSE-MsgGUID: yrpexgB7SvWmAf8IijKMbA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11959"; a="2750726"
+  t=1794087861; x=1825623861;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k/1rDklUHfMI9DthPG297ITL+KaRw6yRNRqwI1fACI4=;
+  b=VsNlCjdM1USFRNJcoE0fpcGRcolhQ7v5RL0jRb0mNc5bbP76h+Gh5AYw
+   9zdpv6iwNsAgl/vL0tbn2Qh3CdAYEHOTihSkkiTIGTQlgTFLJsy50fByY
+   uzCiLFTXqJwOGq5ZnTk2sP4nkVByQG//kpSHspNlWgfjm1+1lYtYDLmTV
+   4elHOyMvyNq1GuUvF+9CgsaDPgrBshXr7q5ExlYgGaGNN6u/Q0xtnCZIp
+   F8ivQ3B1G9r0MlfxRdHmLSjw8KJKT94B1Ka5zJNzjoJ1duMiI+HTZfzgI
+   46As3ZsH/GlDFQwDBE5f6p/AU4RFd4rAgAhVfIRnpH21FJqMLAdjrtAjS
+   A==;
+X-CSE-ConnectionGUID: tHdnXeKWTV2X9uMaK9ha1g==
+X-CSE-MsgGUID: pzL7JEKLTiO0l+YYZ+aaAQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11959"; a="2857735"
 X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
-   d="scan'208";a="2750726"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2026 09:05:01 -0800
-X-CSE-ConnectionGUID: K/UOg2l8Q6+kd/0RS4elCw==
-X-CSE-MsgGUID: jZeENGn8Q2eBzd7eswqb/A==
+   d="scan'208";a="2857735"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2026 13:44:19 -0800
+X-CSE-ConnectionGUID: VrhxRO5+Sn2Cwe90b4oEJg==
+X-CSE-MsgGUID: TdkUtEKjQyCGw/zQ3k6YSQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
-   d="scan'208";a="7652623"
+   d="scan'208";a="7727986"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 07 Nov 2026 09:04:59 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 07 Nov 2026 13:44:15 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xPjqb-00000000rFw-0M4o;
-	Sat, 07 Nov 2026 17:04:57 +0000
-Date: Sun, 08 Nov 2026 01:04:30 +0800
+	id 1xPoCq-00000000rbn-1NfD;
+	Sat, 07 Nov 2026 21:44:12 +0000
+Date: Sun, 8 Nov 2026 05:44:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/configfs-const 32/34]
- samples/configfs/configfs_sample.c:378:14: error: initializing 'const struct
- configfs_attribute *const *' with an expression of type 'struct
- configfs_attribute *[2]' discards qualifiers in nested pointer types
-Message-ID: <202611080030.LFp3K9aU-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+To: amit <amittibi123@gmail.com>, neil.armstrong@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	hanxu5@huaqin.corp-partner.google.com, jesszhan0024@gmail.com,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	icenowy@aosc.io, jagan@amarulasolutions.com, linusw@kernel.org,
+	robert.chiras@nxp.com, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, amit <amittibi123@gmail.com>
+Subject: Re: [PATCH] drm/panel: Replace deprecated DCS display-on calls
+Message-ID: <202611080509.DZUY4PHf-lkp@intel.com>
+References: <20261104073813.42429-1-amittibi123@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -83,52 +88,69 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104073813.42429-1-amittibi123@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/configfs-const
-head:   0e68ea5975531faee86ef390018b5d08916b17db
-commit: 4762ca57ffcb5fe7b2fddd96882daba9fe3ce303 [32/34] const ct_attrs
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261108/202611080030.LFp3K9aU-lkp@intel.com/config)
+Hi amit,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on v7.4-rc1]
+[also build test WARNING on linus/master next-20261105]
+[cannot apply to drm-misc/drm-misc-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/amit/drm-panel-Replace-deprecated-DCS-display-on-calls/20261104-093813
+base:   v7.4-rc1
+patch link:    https://lore.kernel.org/r/20261104073813.42429-1-amittibi123%40gmail.com
+patch subject: [PATCH] drm/panel: Replace deprecated DCS display-on calls
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261108/202611080509.DZUY4PHf-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
 rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261108/202611080030.LFp3K9aU-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261108/202611080509.DZUY4PHf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611080030.LFp3K9aU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611080509.DZUY4PHf-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   samples/configfs/configfs_sample.c:343:2: error: initializing 'struct configfs_attribute *' with an expression of type 'const struct configfs_attribute *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     343 |         &symlink_child_attr_nlinks,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> samples/configfs/configfs_sample.c:378:14: error: initializing 'const struct configfs_attribute *const *' with an expression of type 'struct configfs_attribute *[2]' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     378 |         .ct_attrs       = symlink_child_attrs,
-         |                           ^~~~~~~~~~~~~~~~~~~
-   samples/configfs/configfs_sample.c:411:2: error: initializing 'struct configfs_attribute *' with an expression of type 'const struct configfs_attribute *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     411 |         &symlink_children_attr_description,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   samples/configfs/configfs_sample.c:421:14: error: initializing 'const struct configfs_attribute *const *' with an expression of type 'struct configfs_attribute *[2]' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     421 |         .ct_attrs       = symlink_children_attrs,
-         |                           ^~~~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+>> drivers/gpu/drm/panel/panel-feixin-k101-im2ba02.c:356:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     356 |                 return ret;
+         |                        ^~~
+   drivers/gpu/drm/panel/panel-feixin-k101-im2ba02.c:350:9: note: initialize the variable 'ret' to silence this warning
+     350 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +378 samples/configfs/configfs_sample.c
+vim +/ret +356 drivers/gpu/drm/panel/panel-feixin-k101-im2ba02.c
 
-0a51cf54232ecd Breno Leitao 2026-08-26  375  
-0a51cf54232ecd Breno Leitao 2026-08-26  376  static const struct config_item_type symlink_child_type = {
-0a51cf54232ecd Breno Leitao 2026-08-26  377  	.ct_item_ops	= &symlink_child_item_ops,
-0a51cf54232ecd Breno Leitao 2026-08-26 @378  	.ct_attrs	= symlink_child_attrs,
-0a51cf54232ecd Breno Leitao 2026-08-26  379  	.ct_owner	= THIS_MODULE,
-0a51cf54232ecd Breno Leitao 2026-08-26  380  };
-0a51cf54232ecd Breno Leitao 2026-08-26  381  
-
-:::::: The code at line 378 was first introduced by commit
-:::::: 0a51cf54232ecdfb8172ad7943e04e67e401538a samples/configfs: add a subsystem that accepts symlinks
-
-:::::: TO: Breno Leitao <leitao@debian.org>
-:::::: CC: Breno Leitao <leitao@debian.org>
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  342  
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  343  static int k101_im2ba02_enable(struct drm_panel *panel)
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  344  {
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  345  	struct k101_im2ba02 *ctx = panel_to_k101_im2ba02(panel);
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  346  	const struct k101_im2ba02_init_cmd *cmd = &timed_cmds[1];
+7bb5e5e01ffc36b amit          2026-11-04  347  	struct mipi_dsi_multi_context dsi_ctx = {
+7bb5e5e01ffc36b amit          2026-11-04  348  		.dsi = ctx->dsi,
+7bb5e5e01ffc36b amit          2026-11-04  349  	};
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  350  	int ret;
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  351  
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  352  	msleep(150);
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  353  
+7bb5e5e01ffc36b amit          2026-11-04  354  	mipi_dsi_dcs_set_display_on_multi(&dsi_ctx);
+7bb5e5e01ffc36b amit          2026-11-04  355  	if (dsi_ctx.accum_err)
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16 @356  		return ret;
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  357  
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  358  	msleep(50);
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  359  
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  360  	return mipi_dsi_dcs_write_buffer(ctx->dsi, cmd->data, K101_IM2BA02_INIT_CMD_LEN);
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  361  }
+fac47b1ebeda3b5 Icenowy Zheng 2020-01-16  362  
 
 --
 0-DAY CI Kernel Test Service
