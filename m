@@ -1,83 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794017651;
-	b=N0w3Q7BasTuYbqgKl2nWK9GsyiBQYJuAcoeUDoAEbCsbRPL20R79LYAsnhR5kmZlroI4
-	 FlfNsjRQuWWVL5L4sqE0IaBQQvSXh6KKWRpYTuDSkkIyuDm6w9jSwNA2tUmjZ9TWDlg86
-	 CeMwCyVdNn9Jc9GdKFNOMcg2Hh6a0XezP1fNxFw1/8gTDX1/nbhEYVDUutkdCZhlTpWpd
-	 UwiyJs/SmhaM38nN7s4s4RL7fyM31ROrtr+N9fxbiWP/L8RFEG/DvGksOsZMa5uFxL2Gi
-	 YkqKK8h/SZW/AZoLfWn1VPgHWp18G5PzuRpbbgPyPU4K8w2ksFRR0Uo7uZE96mGDQ7g==
+	t=1794018308;
+	b=p+O6O+U7o2SypOXyt87EOpebT2hwCqHzwNGUFlO8a94pC1721aqVanFSvA3PQkfXGfM5
+	 DaNsuiQjVY9+czU2Kg4tEvDLcZttoKjpE7rluexj6EI22QS2YQ8q9WrVVtK6OBEplhjEa
+	 UQeHG61wgETyb3pnBWbolsZUaRKv0G1lSlHBWbBlEffZZITpeKBptGtxL93WPBV6e5t8V
+	 YV5dZq9JcX57kH1RELWYHZWIjp3yyhklwRSPjpl9Rm/MsfJ5Do8KWHLFmR+k+3NERs3jc
+	 1NpW/7JdCgd5NnWJwVq3paBIS5GF4sZHrDlLeenj/novjl00QRSfqA5cpnhDPVe9eWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794017651;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=BX7THsmosjCKccT+25A6DC5CxzkdJXQF4Pn0GPYFDes=;
-	b=V1I2zaOgRYl5CYE5PuaQhiGpbq3BGd+vDGh+eIfujlmgHxhbggYkyhMSKZuZxpHJ9vOL
-	 XpVXRxfNacz+msEDZ8AaVCSPh/Ymny5/+AgvSeUVywMKlPnfAwIH7vBUHyc/qQancwa6s
-	 Q63fPu+Jrgy+B7554vcy6e+OJMgueSNaND0G+2r/SmhBpV42ILxe/T2WpW40UiQS9RYDI
-	 dadh07CWC6NDtG/hdLjHkDTxpoY0rF913wjUjHC580gP1KTvpE+h8gd3oHsojCiU5xi1Y
-	 aZE6rmn0AIdAjS22oYXyoGA4TZBzFAYvaHh8Z2v/HpcCFu1r+PuBkbD3t3oMzzOZa4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794018308;
+	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
+	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=r7I0ZPKoyK57lrWRAjn8hzItvyN2aZVtTjY91KDbjSY=;
+	b=2EB1XbE4FO94QisirYu6L5bvpZFxBRvbrK2wrNXHWhFyFCz26jAadIPYpc/wLRyD4F2v
+	 bhPljS89CvHUg5EP83AzBgUwxprq8Jt14b4zTyJn5r+pYHFU1UySkFJgR1vsBayNc+VyU
+	 qO6XORC5v3rAQG1/4kPwC8aYdz8EQmKTFt618dSB/gRGKea31uKGmIkI8Ql5iwDS2xK0Q
+	 OEIxdzt+cG1EmUYih3SKgshcgoAQyqB1PXKe/6N/iUNYd/3LPw5SqrMVBpr3+e2DYY/hT
+	 MMe+Crgn7R3DIlLEygRccz1aphGE4FuVTFs0TSWWfLcIkkDDBsBsEHNchhubllGlytA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nhNXK4Hx;
-	arc=none smtp.remote-ip=192.198.163.19
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YUJS+hj5;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D226606A32F;
-	Sat,  7 Nov 2026 02:14:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D226606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B0B606A333;
+	Sat,  7 Nov 2026 02:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nhNXK4Hx
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794017651; x=1825553651;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k+Jp0wNiYpjW9kANomoHZViOrgIyHRcD6+ATfOSXlMA=;
-  b=nhNXK4HxuFaLRA2k/qiBSCRn9oevxP3fV6eG5E4gGm0i8Ut72IjsunDF
-   0arwvknisY6TXZGxmvjZ7aOrBgu8IOpOyKGqA/oTVPhVXyk09Xx7RhqVM
-   V987/DE+SBa22T0h+nJGKOoQQRVYZa0jCODNp5klYAWsl/ZY9Bv8HOnOz
-   cz+pgTCx/v2EYwkoAcDHx7Gr5M56GKr8S5YMu8MIC2CMC3q4H3Pj1ix6+
-   poOEiLoPw4ZmRTZlwI3etNKmwkHLzr7GCUXlaIzjrmHLErARiL/YnVdIQ
-   u9emlZEy0W7u4iouGSPt+zuxXU5FgaNTIem9HfvO1I7JlOWVNExR9xwYT
-   w==;
-X-CSE-ConnectionGUID: MwAXPgHJQiqgiaXjSlMoEQ==
-X-CSE-MsgGUID: dg5OvlGnRrGvgi+LTAR7LA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11958"; a="2936274"
-X-IronPort-AV: E=Sophos;i="6.27,199,1787036400"; 
-   d="scan'208";a="2936274"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2026 18:14:09 -0800
-X-CSE-ConnectionGUID: dtk/InDfQyyPzBIT86xgiA==
-X-CSE-MsgGUID: Jf4NbIBNQVKBFdjaqR2nNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,199,1787036400"; 
-   d="scan'208";a="7468960"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 06 Nov 2026 18:14:07 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xPVwS-00000000qEJ-1oEy;
-	Sat, 07 Nov 2026 02:14:04 +0000
-Date: Sat, 7 Nov 2026 10:13:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Victor Chernyakin <chernyakin.victor.j@outlook.com>,
-	Jonathan Cameron <jic23@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Victor Chernyakin <chernyakin.victor.j@outlook.com>
-Subject: Re: [PATCH v5 4/4] iio: cdc: add Texas Instruments FDC1004 driver
-Message-ID: <202611071039.px4NasIH-lkp@intel.com>
-References: <SN1PR12MB2528BA7C696815089DCAD02FA5762@SN1PR12MB2528.namprd12.prod.outlook.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YUJS+hj5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5101F008A1;
+	Sat,  7 Nov 2026 02:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794018308;
+	bh=r7I0ZPKoyK57lrWRAjn8hzItvyN2aZVtTjY91KDbjSY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=YUJS+hj5TFcL5/TKbQEA9NxrVYeNF6w/LGL5nrgq4JG8qBz02SdiQPf9zMPbNeOmD
+	 7mcaDsB6+HszsPcF1EmzZetLRryyGMD5SbJURSYOYeYq0Yy4kKOwJDiI4MkyynYnrq
+	 LXc/9k4GMW0oHb6i1TpodyJK2k4tFnDnU6Pmv3kxT05rHnL/WOHvkU63yYpDioZyCd
+	 lZD165z126DxcYFwu6uaxh3wLVaxG2ec4fWPVyavyAem++GRYJFRUTbeo7V/e02XBQ
+	 NJlV2nZTTC3CfZHxADusN+v89U6CgUfIYO1q/LB3+WO1qkqZekin7/xkpq3pArnV3M
+	 KgKpRx28S8gQg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>, Vineet Gupta <vineet.gupta@linux.dev>
+Cc: Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
+ Jakub Jelinek <jakub@redhat.com>, Julian Braha <julianbraha@gmail.com>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev
+In-Reply-To: <20261105175748.3057520-1-vineet.gupta@linux.dev>
+References: <20261105175748.3057520-1-vineet.gupta@linux.dev>
+Subject: Re: [PATCH v2] kbuild: move gcc's -Wconstant-logical-operand to
+ W=2
+Message-Id: <179401823380.3455564.6991992300630125115.b4-ty@b4>
+Date: Fri, 06 Nov 2026 19:23:53 -0700
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,60 +63,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN1PR12MB2528BA7C696815089DCAD02FA5762@SN1PR12MB2528.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=777; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=eu6pW09wQo8caXmBvKqCiifq927nBl7uH0wBtnSNVxA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFnvur8ntNjGbNQ9FVRbX7x56p4vhor150+Frl58zMrz9
+ n3JCM+ajlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRuSUM/5TuxfOrf3YybL4k
+ l6Igc+T6F713zGdUDoUL/N3Bx3ens4vhf5r+8gm9X3v6RHbdktPZpR2x12A2j2jOuqwbx/6wXbG
+ XYwAA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Victor,
+On Thu, 05 Nov 2026 09:57:45 -0800, Vineet Gupta wrote:
+> kbuild: move gcc's -Wconstant-logical-operand to W=2
 
-kernel test robot noticed the following build warnings:
+I added a 'Cc: stable' to help older trees.
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v7.4-rc1 next-20261105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Applied to
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Victor-Chernyakin/iio-prepare-iio_format_value-to-handle-higher-precision-IIO_VAL_DECIMAL64_-formats/20261106-094026
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/SN1PR12MB2528BA7C696815089DCAD02FA5762%40SN1PR12MB2528.namprd12.prod.outlook.com
-patch subject: [PATCH v5 4/4] iio: cdc: add Texas Instruments FDC1004 driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261107/202611071039.px4NasIH-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 812626a41399a1d464a0d69627ab45c83b8ebfb9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261107/202611071039.px4NasIH-lkp@intel.com/reproduce)
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-fixes-unstable
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611071039.px4NasIH-lkp@intel.com/
+Thanks!
 
-All warnings (new ones prefixed by >>):
+[1/1] kbuild: move gcc's -Wconstant-logical-operand to W=2
+      https://git.kernel.org/kbuild/c/4d8996081dd19
 
->> drivers/iio/cdc/fdc1004.c:69:10: warning: overflow in expression; result is 758'541'150 with type 'long' [-Winteger-overflow]
-      69 |         +0x7FFF * 488281250L, /* max */
-         |         ~~~~~~~~^~~~~~~~~~~~
-   drivers/iio/cdc/fdc1004.c:67:10: warning: overflow in expression; result is -1'246'822'400 with type 'long' [-Winteger-overflow]
-      67 |         -0x8000 * 488281250L, /* min */
-         |         ~~~~~~~~^~~~~~~~~~~~
-   2 warnings generated.
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped or
+reverted. Patches applied to an "unstable" branch are accepted pending
+wider testing in -next and any post-commit review; they will generally
+be moved to the main branch in a week if no issues are found.
+
+Best regards,
+-- 
+Cheers,
+Nathan
 
 
-vim +69 drivers/iio/cdc/fdc1004.c
-
-    59	
-    60	/*
-    61	 * OFFSET_CAL_CINn: 16 bits, signed. Format: IIO_VAL_DECIMAL64_FEMTO.
-    62	 * 1 step = 1/(2^11) pF = 1/(1000 * 2^11) nF = 0.000000488281250 nF.
-    63	 * Negative values are used to cancel out any parasitic capacitance
-    64	 * of the sensor's external circuitry.
-    65	 */
-    66	static const s64 fdc1004_calibbias[] = {
-    67		-0x8000 * 488281250L, /* min */
-    68		+0x0001 * 488281250L, /* step */
-  > 69		+0x7FFF * 488281250L, /* max */
-    70	};
-    71	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
