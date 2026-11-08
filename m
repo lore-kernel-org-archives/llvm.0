@@ -1,77 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.10
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794118753;
-	b=ZTJ5+CceRtiSVhHUzdr37L0ut7W5wt2GcyBykoRPb7XbNTxssfd5cdzqtd+tqdoWqMCb
-	 dN0G97XJSPcGfZG5cVEJ2I63vWpVBjYHwiJgUTzPebQBZTtYe6XdhrKH48fzIjKsd4JDx
-	 LdOBTN+RG9k+I8UnKidQSCor3wvJtZ+H9a0Jp780y0opgv9GRR0+tIrSAuSXmJ9g/iQk/
-	 0+mU1ShYnMvrN21kW5rV5z9bEAX+kwxBmBXfYj+UPfolQCj3lkqu0hDR8DpkiX0YGC5zV
-	 R3rUUPCKbfG9S8l4mhFX0ckkopWb1WwzqeN0vq3swKxDNFi1/fpZA+2QKIH/S4sBX6A==
+	t=1794118754;
+	b=uNho2WkZI8HBPQ9TFWQNy6eWaydc1GOpajZJXdb5Y0uMV7U3BNr58GH2goL0hUI56QNI
+	 wZJixfrHzEMnqfMJAEzwTxW8f7tcu96yhTyUUmCZwpVr6T55OCVNkujuU4byWhm8lInFJ
+	 flcf258bZgSJKy+1CoD0LinuhFXmp89ZrYZrAwGy7nTLxO0m27L4NSt81CJO3t0cODVVq
+	 L46J89hLTXHgFkbUUW+p796Bg91Xn02KYGw25nApOFSXEvB4xpy7TiqQ+jXpFdFdK7Inw
+	 Pbg+a0/63UyrvBEJMq3X9oM4tDWH+1Z2hyMW7Ykjc7QrAXOExp8X65cVYUXptmAE26g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794118753;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794118754;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=5AtrlrN+yda8tqODXCIvfCYFZUpv9juwSIA40fu9Ui0=;
-	b=4uUIw2oA1bzIrRb/Ba/8RrobdsEDHfmHoEz+vHKOFynvLMLhORDovlgwvexuScxLQ8T0
-	 YAvKS+L7ArBZPlj+8eB2X0t9vJdtSukjFJwlD2VjmkTCucfVgwpFgP5QxY9EO6wratw3T
-	 jgvA8rSiSQ1T1YIpFC6nxdQ7E22KNVWPqQNEl8e1MyYBsNOnlJ5QiDUBhZVX8wyctRgBs
-	 CWnQM0cR3/eJIeJZizGuqNKNkkVgaSWN+Ye9m+hEZbFoe2hCJR7VXEvPlWlrq5QHHNuR5
-	 HxGpBhpUdHl1NZgptmuH1zfOSmEmBdtVWlWdm8MaEimeiA/ZGrVX/re96ACcGv1mR2g==
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=bSKNeRhoYj51dd326u4b+S/qwJ1yJgRLl0Pp5aorhH0=;
+	b=id7RnRYwwE15HJfJ8gmMICsw1Pss78ip4nhp6SEmy3D1O6szx7/N7w4I0uUyW0EdmgIj
+	 ZXfJGcgBPdzdQmerHBkkrFbvCfq+VQ3XbBpcYQ3bgP61Ut3rX1G0ruhTa/dbSGBYD3AhH
+	 9PbAlYsoItTfDRtcqxafftq7hWMYdwsBkE2t9OrLmjLgwRy7JcZ/5PtHvh7JrmOUTNJg7
+	 9pzCHrhdXC+6wvZ/M0/kJiCKIJ/YNrdQrWwKgCM+GJV8r/HlwY/cMlouT1ukV0fSMwLb2
+	 tdCiML4KyeBqVvXHC227qc2jCXE7345OVNk/JPGbLh2Hj/EchJDaCqayJOEaRJITRdg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kumYXDZB;
-	arc=none smtp.remote-ip=192.198.163.8
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Mpjf5xeQ;
+	arc=none smtp.remote-ip=192.198.163.10
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB03D606A31C;
-	Sun,  8 Nov 2026 06:19:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB03D606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D0B606A320;
+	Sun,  8 Nov 2026 06:19:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01D0B606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kumYXDZB
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Mpjf5xeQ
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794118752; x=1825654752;
-  h=date:from:to:cc:subject:message-id;
-  bh=2kdw2iswn5VpOCLFBVV2+tOMUjMSYLfTUf1oxZrHC4s=;
-  b=kumYXDZBBNjg0HEWiaYMOrWbF9NEqZ/SrDhTPFIjcdUTDhQwL1cPVjiB
-   W6zAjbA0gs8cEZIdLlUMcuyxqGTpcpdE4lZIoZKZEACR/J8QLtUorsYI2
-   1UDU/LPOCTuA7psyCUIt2TJ0z3jBGiZBnOeuFxxqANlF7WDU6BZo7TVGd
-   jEzjwGy5YKpMWqPmfq+DRa5i7SxKnkLbyYKUa0rbqvaEMlGQThz7nJNza
-   WjtKFQ2k8kjh+bcipAz0piUif89QMVJOXE+3AtVWL4yXNiacvAIrHkKyV
-   NrMfxR4wDs13aw1OYITaAGHypfbZ5M0OeWAT2xYeD99YLsAuK1qFcXeMN
-   Q==;
-X-CSE-ConnectionGUID: rL26FVkQTJO14L+vEN0EYA==
-X-CSE-MsgGUID: tVRQQSBVQSK387lnK4AxuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11959"; a="2762309"
+  t=1794118754; x=1825654754;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pLWtdzulAJWXAefk0jF40+RB4tS7wf4qyhp071KtEyw=;
+  b=Mpjf5xeQmK8iyKTyMMBmhL8gj5cZ2dSEXHXwc8gptAuAvQSaGGy7YQux
+   ZjkUHfnVb93aUPs3CjdAFeccr/jzo5PtdMWZG6tm8i6PIGMVQveCbFCaV
+   AeLMET/49ORtmzyxBqxHd+5Cb3F3vcHDwyeo3U5n0ffKPwEwPWuWM34kg
+   06chDx1Lmt30MPON3jne9T5VYsWT2WirNDRouMgpon7vjFeMfU0xqn1aj
+   5+nOAWAlwtJnIq9DXiPjCxtmmeht5o7ZjO7IOfv9FD0fqa2CryFZadeb0
+   uC2qAhFp6f6EZy+4vT7W004lyKqbFPuLK1hl+wgiKxYU3lZg9LhnK1eYS
+   w==;
+X-CSE-ConnectionGUID: cQ6tmknESTO1PhxHaLv6ag==
+X-CSE-MsgGUID: B7a/cVBJS129YVH+PngtWg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11959"; a="2779943"
 X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
-   d="scan'208";a="2762309"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2026 22:19:12 -0800
-X-CSE-ConnectionGUID: r5zDTpDOQeG49OxzKWbwcQ==
-X-CSE-MsgGUID: qM4WG8cAQlilTBN+cB129w==
+   d="scan'208";a="2779943"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2026 22:19:13 -0800
+X-CSE-ConnectionGUID: f4exIxHnQQ2lp12beg0EPg==
+X-CSE-MsgGUID: 38M9y+PyQvqsqXa8cqYT4Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
-   d="scan'208";a="7786620"
+   d="scan'208";a="7738434"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 Nov 2026 22:19:09 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 07 Nov 2026 22:19:10 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xPwF9-00000000sHC-20u5;
+	id 1xPwF9-00000000sGZ-0Dno;
 	Sun, 08 Nov 2026 06:19:07 +0000
-Date: Sun, 08 Nov 2026 14:18:26 +0800
+Date: Sun, 8 Nov 2026 14:18:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Colin Braun <colinbrauncl@gmail.com>
+To: Tim Michals <tcmichals@gmail.com>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>
-Subject: [tiwai-sound:test/sound-rust-v7.3 37/56] error[E0433]:
- cannot find `module_usb_driver` in `kernel`
-Message-ID: <202611081435.FPB03bH2-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	linux-sunxi@lists.linux.dev, linux-remoteproc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Tim Michals <tcmichals@gmail.com>
+Subject: Re: [PATCH v3 7/7] remoteproc: sunxi: Add KUnit tests
+Message-ID: <202611081401.aakRznh0-lkp@intel.com>
+References: <20261101185735.762559-8-tcmichals@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,61 +91,143 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261101185735.762559-8-tcmichals@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git test/sound-rust-v7.3
-head:   070444a8abf14da700680a5331d0a95cd11e578b
-commit: 62a6ac49d75b79105edfb6f148ca23108899be6d [37/56] media: add gv-usb2 audio capture driver
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20261108/202611081435.FPB03bH2-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261108/202611081435.FPB03bH2-lkp@intel.com/reproduce)
+Hi Tim,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 7649ba73f9e7e1e04d0b46213e39c79ae09dd55c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tim-Michals/dt-bindings-mailbox-Add-Allwinner-A523-message-box/20261101-125729
+base:   7649ba73f9e7e1e04d0b46213e39c79ae09dd55c
+patch link:    https://lore.kernel.org/r/20261101185735.762559-8-tcmichals%40gmail.com
+patch subject: [PATCH v3 7/7] remoteproc: sunxi: Add KUnit tests
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261108/202611081401.aakRznh0-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project fc9576e3b179738d99c5babe5cd9d6c1f883e0db)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261108/202611081401.aakRznh0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611081435.FPB03bH2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611081401.aakRznh0-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> error[E0432]: unresolved import `kernel::usb`
-   --> drivers/media/usb/gv-usb2/driver.rs:17:5
-   |
-   17 |     usb,
-   |     ^^^ no `usb` in the root
-   |
-   note: found an item that was configured out
-   --> rust/kernel/lib.rs:148:9
-   |
-   147 | #[cfg(CONFIG_USB = "y")]
-   |       ---------------- the item is gated behind the `y` feature
-   148 | pub mod usb;
-   |         ^^^
---
->> error[E0433]: cannot find `module_usb_driver` in `kernel`
-   --> drivers/media/usb/gv-usb2/gv_usb2.rs:7:9
-   |
-   7 | kernel::module_usb_driver! {
-   |         ^^^^^^^^^^^^^^^^^ could not find `module_usb_driver` in `kernel`
---
->> error[E0433]: cannot find `usb_device_table` in `kernel`
-   --> drivers/media/usb/gv-usb2/driver.rs:152:9
-   |
-   152 | kernel::usb_device_table!(
-   |         ^^^^^^^^^^^^^^^^ could not find `usb_device_table` in `kernel`
---
->> error[E0425]: cannot find value `USB_TABLE` in this scope
-   --> drivers/media/usb/gv-usb2/driver.rs:162:51
-   |
-   162 |     const ID_TABLE: usb::IdTable<Self::IdInfo> = &USB_TABLE;
-   |                                                   ^^^^^^^^^ not found in this scope
---
->> warning: unused import: `crate::driver::GvUsb2Driver`
-   --> drivers/media/usb/gv-usb2/gv_usb2.rs:5:5
-   |
-   5 | use crate::driver::GvUsb2Driver;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+>> drivers/remoteproc/sunxi_rproc_kunit.c:962:58: error: no member named 'usage_count' in 'struct dev_pm_info'
+     962 |         KUNIT_EXPECT_EQ(test, atomic_read(&ctx->priv.dev->power.usage_count), 0);
+         |                                            ~~~~~~~~~~~~~~~~~~~~ ^
+   include/kunit/test.h:1034:28: note: expanded from macro 'KUNIT_EXPECT_EQ'
+    1034 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
+         |                                   ^~~~
+   include/kunit/test.h:1039:8: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+    1039 |                                    left, ==, right,                            \
+         |                                    ^~~~
+   include/kunit/test.h:874:9: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     874 |                                     left, op, right,                           \
+         |                                     ^~~~
+   include/kunit/test.h:840:15: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     840 |         const typeof(left) __left = (left);                                    \
+         |                      ^~~~
+>> drivers/remoteproc/sunxi_rproc_kunit.c:962:58: error: no member named 'usage_count' in 'struct dev_pm_info'
+     962 |         KUNIT_EXPECT_EQ(test, atomic_read(&ctx->priv.dev->power.usage_count), 0);
+         |                                            ~~~~~~~~~~~~~~~~~~~~ ^
+   include/kunit/test.h:1034:28: note: expanded from macro 'KUNIT_EXPECT_EQ'
+    1034 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
+         |                                   ^~~~
+   include/kunit/test.h:1039:8: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+    1039 |                                    left, ==, right,                            \
+         |                                    ^~~~
+   include/kunit/test.h:874:9: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     874 |                                     left, op, right,                           \
+         |                                     ^~~~
+   include/kunit/test.h:840:31: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     840 |         const typeof(left) __left = (left);                                    \
+         |                                      ^~~~
+   drivers/remoteproc/sunxi_rproc_kunit.c:977:58: error: no member named 'usage_count' in 'struct dev_pm_info'
+     977 |         KUNIT_EXPECT_EQ(test, atomic_read(&ctx->priv.dev->power.usage_count), 1);
+         |                                            ~~~~~~~~~~~~~~~~~~~~ ^
+   include/kunit/test.h:1034:28: note: expanded from macro 'KUNIT_EXPECT_EQ'
+    1034 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
+         |                                   ^~~~
+   include/kunit/test.h:1039:8: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+    1039 |                                    left, ==, right,                            \
+         |                                    ^~~~
+   include/kunit/test.h:874:9: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     874 |                                     left, op, right,                           \
+         |                                     ^~~~
+   include/kunit/test.h:840:15: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     840 |         const typeof(left) __left = (left);                                    \
+         |                      ^~~~
+   drivers/remoteproc/sunxi_rproc_kunit.c:977:58: error: no member named 'usage_count' in 'struct dev_pm_info'
+     977 |         KUNIT_EXPECT_EQ(test, atomic_read(&ctx->priv.dev->power.usage_count), 1);
+         |                                            ~~~~~~~~~~~~~~~~~~~~ ^
+   include/kunit/test.h:1034:28: note: expanded from macro 'KUNIT_EXPECT_EQ'
+    1034 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
+         |                                   ^~~~
+   include/kunit/test.h:1039:8: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+    1039 |                                    left, ==, right,                            \
+         |                                    ^~~~
+   include/kunit/test.h:874:9: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     874 |                                     left, op, right,                           \
+         |                                     ^~~~
+   include/kunit/test.h:840:31: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     840 |         const typeof(left) __left = (left);                                    \
+         |                                      ^~~~
+   drivers/remoteproc/sunxi_rproc_kunit.c:1107:48: error: no member named 'usage_count' in 'struct dev_pm_info'
+    1107 |         KUNIT_EXPECT_EQ(test, atomic_read(&dev->power.usage_count), 0);
+         |                                            ~~~~~~~~~~ ^
+   include/kunit/test.h:1034:28: note: expanded from macro 'KUNIT_EXPECT_EQ'
+    1034 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
+         |                                   ^~~~
+   include/kunit/test.h:1039:8: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+    1039 |                                    left, ==, right,                            \
+         |                                    ^~~~
+   include/kunit/test.h:874:9: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     874 |                                     left, op, right,                           \
+         |                                     ^~~~
+   include/kunit/test.h:840:15: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     840 |         const typeof(left) __left = (left);                                    \
+         |                      ^~~~
+   drivers/remoteproc/sunxi_rproc_kunit.c:1107:48: error: no member named 'usage_count' in 'struct dev_pm_info'
+    1107 |         KUNIT_EXPECT_EQ(test, atomic_read(&dev->power.usage_count), 0);
+         |                                            ~~~~~~~~~~ ^
+   include/kunit/test.h:1034:28: note: expanded from macro 'KUNIT_EXPECT_EQ'
+    1034 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
+         |                                   ^~~~
+   include/kunit/test.h:1039:8: note: expanded from macro 'KUNIT_EXPECT_EQ_MSG'
+    1039 |                                    left, ==, right,                            \
+         |                                    ^~~~
+   include/kunit/test.h:874:9: note: expanded from macro 'KUNIT_BINARY_INT_ASSERTION'
+     874 |                                     left, op, right,                           \
+         |                                     ^~~~
+   include/kunit/test.h:840:31: note: expanded from macro 'KUNIT_BASE_BINARY_ASSERTION'
+     840 |         const typeof(left) __left = (left);                                    \
+         |                                      ^~~~
+   6 errors generated.
+
+
+vim +962 drivers/remoteproc/sunxi_rproc_kunit.c
+
+   949	
+   950	/* Everything as before prepare(): resets asserted, clocks off, no PM reference */
+   951	static void expect_powered_off(struct kunit *test, struct test_context *ctx,
+   952				       struct mock_providers *mp, bool core_held)
+   953	{
+   954		int i;
+   955	
+   956		KUNIT_EXPECT_TRUE(test, mp->asserted[RST_CFG]);
+   957		KUNIT_EXPECT_TRUE(test, mp->asserted[RST_SRAM]);
+   958		KUNIT_EXPECT_TRUE(test, mp->asserted[RST_DEBUG]);
+   959		KUNIT_EXPECT_EQ(test, mp->asserted[RST_CORE], core_held);
+   960		for (i = 0; i < NR_CLK; i++)
+   961			KUNIT_EXPECT_FALSE_MSG(test, clk_hw_is_prepared(&mp->clk[i].hw), "clock %d", i);
+ > 962		KUNIT_EXPECT_EQ(test, atomic_read(&ctx->priv.dev->power.usage_count), 0);
+   963	}
+   964	
 
 --
 0-DAY CI Kernel Test Service
