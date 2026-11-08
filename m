@@ -1,79 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794165058;
-	b=NNAcv0pAb0TXbGqOB1TbPfXvXqcMQXQNBPEYnSrn3W2IHLocZMf4Vaqb7xts2wxdAPhJ
-	 n70GTCeoUcQAgg+/2++fWajNcB6+PLM3hQXwfjSc/W1a2XGo5AuCThjhLaIjpzbaELP16
-	 7UVztBSz03SdWWgwMuR/JrGEATvVNtL+LFh8QgOeITRmPKmPAGrO4IYXGlKVd2Aihoag3
-	 C9nDI97NEDNaDyp6tCOBBmB7Ap9P5XqQTO2Tsmp27dlzQpBVwdt5GmXJL1yDwlRIJ8SJS
-	 AXH9a3XcKRS4Wc6ixo/orMDak41cbW2UL6JEMP5aTUSxjlifSM78r5sJdipTTGxEn4Q==
+	t=1794173578;
+	b=Vwt1uKonKQVjZOq7qn1xNYJwvZ3qHFLRAAO7KhMxtt6ktLm6/15JM+hiaORAekJnxCzZ
+	 FUvIv4BRLDFXGQm342xV9qMmBJJR1A7wGOFSMlVYyibC7gI63nvEZTg5gZKkCAEsv8Osd
+	 7uvIec50f9ykrmbGxhm9atEMEqAlRazq/X6JVw0Q43Vlyp9eaC16Fx4XwinWq+XLMlapo
+	 9e2yFIJk7sHNCC6po7t8hYxuBINtWdbYkkgqabRM2p1GUB8QVGtomyWPKgNT+kY8ImBse
+	 IHoEDmmFtqPLZBmRWLpOQisQW3d07rt+VmrEKv9/HK4IO3oIRw02DmLHccFPJ5FblSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794165058;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=OBmOVOeuu0b1KfIQVTMKWXDAk0ymYuFhnsDI6xXEjCM=;
-	b=Hf2cqdOisf5Q+Vl+qbt7qe6cWBDnvWUT1/ejZTjd7uKfAaZit36rG6q8C3lGoTAEZEiR
-	 9Ju+SVKKKZEiHfG2zclr4eAVwLbiHXmxttQIeHCIwz+2WzeT6rlVYZmvOOkqvtDtwelEU
-	 7bBLqRDVldzydqagGFl/SRX4eqMXBRqiRbN0y/f3X17cm3FBI/PjsjUGxNa5G9sm62SgT
-	 QWa+IaB5MD1w1m/Dw4VrUVIHpGkhsP8Mc28yXReP7cIQbWQePPKluV6VW9escwirohBJE
-	 D2GIc1+2L9yXvqhTPY484h0eUZpaJLSXncs8aMVNVnrw71lQ45hxNqdlvDtOx+7kZ8A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794173578;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=2zV+j1o90j03z3/bSKQRAMr2OAwRnzRNXDWN23pKxKc=;
+	b=NV22kJcw1KQWjnnUU2ce+0AmcLMfTKp3mbg8vqagOu5CnuggL0T22nCbXoqasD/ZnFFj
+	 QddvvcE0RRasvHH3qrb1aGb28h0XA/0ZUMOXmQYa+mv2e41nKzfJBuoe9ClByBmIrTADg
+	 JFlUfjrNinhIk07PWJyjigZ/Baf84ZwhnLDQBuvrsPZBGqCSR1Ktt3zaD53vCmBt2BscB
+	 WBK5A+z/9xQrexLQc2Bw67pU4ksRp/xSNVORw6GzymM0jxgH1+7usULfWu8cAtXgYCK/6
+	 +RjWNkA7JUde1GnkQUyrwFKwoly7mbTh+GOpv8/tnSpSXK9XIP6fY6A5KlKXq1ofMMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MrDA07y1;
-	arc=none smtp.remote-ip=198.175.65.12
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ep1nHT11;
+	arc=none smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E317606A323;
-	Sun,  8 Nov 2026 19:10:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E317606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CCD606A322
+	for <llvm@lists.linux.dev>; Sun,  8 Nov 2026 21:32:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 15CCD606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MrDA07y1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794165058; x=1825701058;
-  h=date:from:to:cc:subject:message-id;
-  bh=Ja8SnQXiSvHF5W1Pur+70P8425HjTVDljPM4MgA2fF4=;
-  b=MrDA07y19Ni62W/fo/QL8CMSSRBNSbp7JHODetLdpI+R3o/zAXag82QJ
-   6AfG6o20agIPNviT8qRJ8wc6M3SslbWHOKOUnsLOPtePRjLKhMH+R7gMH
-   l0C0rkCJIae+UjF4Xayo/su/mWQJRzKkUScK6eYZgmFPUxGBFgtRU6SKs
-   DypsdwywOoHmwU0FJK9flQ5Jh/dmTQX54/tz4cGoaAGLlOprufZwN+tUX
-   sKF0UYnchrgjuyGs66+OE06M8WduJJ+gT/c/SxeshcwKiLCVdu9mTOyNF
-   LL+slTHDMelopzyeY4G/Ke4Xs/0Xy/3lS0WHKaKVoJLJZJgSm9jW+QK1W
-   A==;
-X-CSE-ConnectionGUID: Ir3gPvb+QtGecd/cSDgDPw==
-X-CSE-MsgGUID: i6e9dK4PTSq3lv4UPdYdOA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11960"; a="2779828"
-X-IronPort-AV: E=Sophos;i="6.27,202,1787036400"; 
-   d="scan'208";a="2779828"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 11:10:55 -0800
-X-CSE-ConnectionGUID: z/C3EhySQlykEvr5M4KwGg==
-X-CSE-MsgGUID: I4PnGzzwQUqG1U/BY0dKYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,202,1787036400"; 
-   d="scan'208";a="7578758"
-Received: from igk-lkp-server01.igk.intel.com (HELO 58ca8a381a5c) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 08 Nov 2026 11:10:53 -0800
-Received: from kbuild by 58ca8a381a5c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQ8Hz-00000000BfR-09HJ;
-	Sun, 08 Nov 2026 19:10:51 +0000
-Date: Sun, 08 Nov 2026 20:10:39 +0100
-From: kernel test robot <lkp@intel.com>
-To: Vikram Singh <vikram.singh3@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>,
- Rajnesh Kanwal <rajnesh.kanwal49@gmail.com>
-Subject: [avpatel:riscv_sbi_watchdog_v1 94/98]
- include/linux/perf/riscv_pmu.h:153:49: warning: declaration of 'struct
- cpu_hw_events' will not be visible outside of this function
-Message-ID: <202611082022.lg1UA0Rn-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ep1nHT11
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-490f38e9688so196974f8f.0
+        for <llvm@lists.linux.dev>; Sun, 08 Nov 2026 13:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794173576; x=1794778376; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2zV+j1o90j03z3/bSKQRAMr2OAwRnzRNXDWN23pKxKc=;
+        b=Ep1nHT11YAAkqWwqDvJFP51niyMToaYs66vHYsYCwafN/duQlURb13cDDzzg4Q88T7
+         wu3409sanxi7s8Z+PmVt+oWJQG1RJMHxuzpEMdo7+dQqE7IUGvPj9ikEiSagxsxcHNUh
+         3pLrO7Z+3qbn1YaY4b3oV0T37d3MhsguVJlerm1yLv87ay6FhHUPZomdg2cyQzXqUZzx
+         MswIgaDtlQSAM5oTTnWzq9I+wqLEsjJNFdw8MFwR8nNEImjF7wmFRtoAjJ35tLvUIsMY
+         X4TX3u3w+mYTDuKnXdoKRP6eLIt5K1FAxceHvxUO91JG0Yr1H3ulgh9Q9rytjN+CVrLb
+         56Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794173576; x=1794778376;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2zV+j1o90j03z3/bSKQRAMr2OAwRnzRNXDWN23pKxKc=;
+        b=0COCZ6vCc2CAjkJWgw1ryCGpvCPw/8O8cU/ZvtUu4oeGcEAN9Be0F8g7qP5SapLK6G
+         bSEwAxuc13pEeRtW+9HSv2RVxJWdzRKR1bN/udRiP9nLohlT98E/aGVOgxMHGGMUvIx4
+         nv75fkIQN3gFIFf0NQegByRTpb0ipLcVBJYjLtUF58QaM4CGzF+Uhbt/ufdni7N+fkb2
+         LZG5iwodOQU+LIbM7hMcilNbJdtfSu/BBTIeDjp5pNRGlM+TwlALuCWlFtlAZq/YiD3O
+         iBZdF5rI98XvSE2h4sUt0JT+WVYljjFl/720IrQ14PFITUY3PLInPFIq1m9rCDgBdboe
+         0G2Q==
+X-Forwarded-Encrypted: i=1; AL+hErHWIVQfLLoORUpSOJaeVQiFr3NRHZN5AosOnN0245DCnM44tym06Nw4x0x2nsZm0xt9hwfJ@lists.linux.dev
+X-Gm-Message-State: APuU4Z/Q2ZhCMIP0eKpgXuHBUWN+ctgWHx/7rTWixsiSVRxjgS1ObPoE
+	BBii8qaIhb+RFQr/GXYxFNkaSVHbEHRhJDfipVc0KWaVfG7bj52pFToa
+X-Gm-Gg: AYBFou21nSIWfprALR33ihi3OxSkdp7wxl5SApUWWee7Zct7vVu69veZYHYUDUVLYu0
+	q3TFS/QNfFdTozxFBfXYzBIjDkxlj18/NjPyViAHRYLdZ19tEZJ+euLSHf+8zVO91597f3EHzq7
+	RdhXxQpQNLwrykK3iJb1rsGBKSAuELw/6DIJhJoygZZxTbpfZpAGOhQb62BP2xXw7/+4w+Boa1C
+	isKGs7ps0k7yQvLI19a6KCC2hlDuumKgPEiTkbU+uZ0DMV+DmG7dTlmvy7XQIwTg1Mbz8ZXQxY7
+	YfclyjkKyWPKVUK7oKggf6lgh9EK1K5BF4JXSoE5czqaq6xmDoKhQGFx1Pqqq5lFHYeZMxzm5aK
+	Sfn/yIqcATkr/Xo/hQuaHAyhqLnrGa/Spchsdl14XRTrTXI+YvD9r0E0MqIQq+RZPcMDbVsdqjw
+	ihgnvbI4/UtO87qv72A/fmX0dUaDEn0BMmNZpJtkHVWyxfEBHpwWL3x5oouKqaU/rmLgpvTqxcA
+	tuczRqwxFGkt0tJFHo+uAgHam733I4+ymlS7UReISjn+Lqnp3LKF7uVQnb886mg77MTSKskzabf
+	kyRUUeFL9q4TwRoLJvS5D95/VLekuqJQtW7OIO2w9yyjDsbmpJW/NK8YLYuljRHr
+X-Received: by 2002:a05:6000:26c8:b0:48f:bbb5:61c2 with SMTP id ffacd0b85a97d-4958852d3b8mr5479500f8f.4.1794173576292;
+        Sun, 08 Nov 2026 13:32:56 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49597371cc4sm5861840f8f.36.2026.11.08.13.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Nov 2026 13:32:56 -0800 (PST)
+Date: Sun, 8 Nov 2026 21:32:54 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Yunhui Cui <cuiyunhui@bytedance.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ alex@ghiti.fr, dennis@kernel.org, tj@kernel.org, cl@gentwo.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, bjorn@kernel.org,
+ pulehui@huawei.com, puranjay@kernel.org, thuth@redhat.com,
+ ajones@ventanamicro.com, ben.dooks@codethink.co.uk,
+ rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com,
+ conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com,
+ seanwascoding@gmail.com, andybnac@gmail.com, menglong8.dong@gmail.com,
+ cyrilbur@tenstorrent.com, wangruikang@iscas.ac.cn, atishp@rivosinc.com,
+ apatel@ventanamicro.com, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+ arnd@arndb.de, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, qingfang.deng@siflower.com.cn,
+ linux-arch@vger.kernel.org, llvm@lists.linux.dev, dave@stgolabs.net,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, broonie@kernel.org
+Subject: Re: [PATCH v9 1/3] riscv: implement this_cpu operations
+Message-ID: <20261108213254.67805ef0@pumpkin>
+In-Reply-To: <20261108110406.97495-2-cuiyunhui@bytedance.com>
+References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
+	<20261108110406.97495-2-cuiyunhui@bytedance.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,86 +113,26 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_watchdog_v1
-head:   929bf13433e242a3f255f463b2fb44633e102e0d
-commit: b4cc5b9ca0cada8221e31b647640bbae515000a1 [94/98] riscv: pmu: Add driver for Control Transfer Records Ext
-config: riscv-randconfig-2002-20261108 (https://download.01.org/0day-ci/archive/20261108/202611082022.lg1UA0Rn-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 0fa861dbbf46e5a75f621406fd91cb015d8754bf)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261108/202611082022.lg1UA0Rn-lkp@intel.com/reproduce)
+On Sun,  8 Nov 2026 19:04:04 +0800
+Yunhui Cui <cuiyunhui@bytedance.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611082022.lg1UA0Rn-lkp@intel.com/
+> RISC-V has no asm/percpu.h, so this_cpu_*() read-modify-write
+> operations use generic implementations that disable local interrupts.
+> 
+> Implement RISC-V-specific this_cpu operations with preemption disabled
+> to keep accesses on the current CPU. 
 
-All warnings (new ones prefixed by >>):
+Have you looked at some of the schemes (I think arm64 has the latest,
+but also s390) that do most per-cpu ops without disabling preemption.
+In particular they save the pre-emption check when pre-emption
+is enabled.
 
-   In file included from arch/riscv/kernel/asm-offsets.c:13:
-   In file included from arch/riscv/include/asm/kvm_host.h:27:
-   In file included from arch/riscv/include/asm/kvm_vcpu_pmu.h:12:
->> include/linux/perf/riscv_pmu.h:153:49: warning: declaration of 'struct cpu_hw_events' will not be visible outside of this function [-Wvisibility]
-     153 | static inline void riscv_pmu_ctr_consume(struct cpu_hw_events *cpuc,
-         |                                                 ^
->> include/linux/perf/riscv_pmu.h:155:76: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     155 | static inline void riscv_pmu_ctr_sched_task(struct perf_event_pmu_context *,
-         |                                                                            ^
->> include/linux/perf/riscv_pmu.h:163:45: warning: declaration of 'struct riscv_pmu' will not be visible outside of this function [-Wvisibility]
-     163 | static inline int riscv_pmu_ctr_init(struct riscv_pmu *riscv_pmu) { return 0; }
-         |                                             ^
-   include/linux/perf/riscv_pmu.h:164:48: warning: declaration of 'struct riscv_pmu' will not be visible outside of this function [-Wvisibility]
-     164 | static inline void riscv_pmu_ctr_finish(struct riscv_pmu *riscv_pmu) { }
-         |                                                ^
-   include/linux/perf/riscv_pmu.h:157:13: warning: unused function 'riscv_pmu_ctr_add' [-Wunused-function]
-     157 | static void riscv_pmu_ctr_add(struct perf_event *event) { }
-         |             ^~~~~~~~~~~~~~~~~
-   include/linux/perf/riscv_pmu.h:158:13: warning: unused function 'riscv_pmu_ctr_del' [-Wunused-function]
-     158 | static void riscv_pmu_ctr_del(struct perf_event *event) { }
-         |             ^~~~~~~~~~~~~~~~~
-   6 warnings generated.
---
-   In file included from arch/riscv/kernel/asm-offsets.c:13:
-   In file included from arch/riscv/include/asm/kvm_host.h:27:
-   In file included from arch/riscv/include/asm/kvm_vcpu_pmu.h:12:
->> include/linux/perf/riscv_pmu.h:153:49: warning: declaration of 'struct cpu_hw_events' will not be visible outside of this function [-Wvisibility]
-     153 | static inline void riscv_pmu_ctr_consume(struct cpu_hw_events *cpuc,
-         |                                                 ^
->> include/linux/perf/riscv_pmu.h:155:76: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     155 | static inline void riscv_pmu_ctr_sched_task(struct perf_event_pmu_context *,
-         |                                                                            ^
->> include/linux/perf/riscv_pmu.h:163:45: warning: declaration of 'struct riscv_pmu' will not be visible outside of this function [-Wvisibility]
-     163 | static inline int riscv_pmu_ctr_init(struct riscv_pmu *riscv_pmu) { return 0; }
-         |                                             ^
-   include/linux/perf/riscv_pmu.h:164:48: warning: declaration of 'struct riscv_pmu' will not be visible outside of this function [-Wvisibility]
-     164 | static inline void riscv_pmu_ctr_finish(struct riscv_pmu *riscv_pmu) { }
-         |                                                ^
-   include/linux/perf/riscv_pmu.h:157:13: warning: unused function 'riscv_pmu_ctr_add' [-Wunused-function]
-     157 | static void riscv_pmu_ctr_add(struct perf_event *event) { }
-         |             ^~~~~~~~~~~~~~~~~
-   include/linux/perf/riscv_pmu.h:158:13: warning: unused function 'riscv_pmu_ctr_del' [-Wunused-function]
-     158 | static void riscv_pmu_ctr_del(struct perf_event *event) { }
-         |             ^~~~~~~~~~~~~~~~~
-   6 warnings generated.
+Basically the code tells the scheduler which register contains the
+per-cpu data so that it can be 'magically' flipped during a context
+switch.
 
-
-vim +153 include/linux/perf/riscv_pmu.h
-
-   151	
-   152	static inline bool riscv_pmu_ctr_valid(struct perf_event *event) { return false; }
- > 153	static inline void riscv_pmu_ctr_consume(struct cpu_hw_events *cpuc,
-   154						 struct perf_event *event) { }
- > 155	static inline void riscv_pmu_ctr_sched_task(struct perf_event_pmu_context *,
-   156						    struct task_struct *task, bool sched_in) { }
-   157	static void riscv_pmu_ctr_add(struct perf_event *event) { }
-   158	static void riscv_pmu_ctr_del(struct perf_event *event) { }
-   159	static inline void riscv_pmu_ctr_enable(struct perf_event *event) { }
-   160	static inline void riscv_pmu_ctr_disable(struct perf_event *event) { }
-   161	static inline void riscv_pmu_ctr_dying_cpu(void) { }
-   162	static inline void riscv_pmu_ctr_starting_cpu(void) { }
- > 163	static inline int riscv_pmu_ctr_init(struct riscv_pmu *riscv_pmu) { return 0; }
-   164	static inline void riscv_pmu_ctr_finish(struct riscv_pmu *riscv_pmu) { }
-   165	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+David
