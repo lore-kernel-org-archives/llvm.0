@@ -1,79 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794176385;
-	b=uRIBw+e/90IzLGRpiU9777LOLBW6vMWwCbhiK2cUeGEWDO6I7SvfXv1ILyhG1K1ILley
-	 I8ajklEsQrUNDccGRVHJD2Oce5kBdSEkzc7B1JMQIRyhhyvAJrKmhNeLEVdrIpZ0Lcl4d
-	 Ne3Y3Yc9xp9/kHp/0r8uRUnPC/kzKwFsxRjiMSjpBWBhbsTV+8JL4SukDYYJLY7VB3/yA
-	 XLMui8udBASzk9A/rBU/oIo5GhVJAwcIJGHyYSUZLTF8qAue75D1V+MSrtJxc8D54ZOzL
-	 jniMnzMPaStgYKdYEVl+316maa0TEXRTjmygpoLJ5CUYV9dhz1aKvjAl5pbP+fYLXHQ==
+	t=1794177582;
+	b=LiYvUNXBBYCkyqLlcJTZxVOfjElsnXHO/GaMA68r5QEVIASd1585cjvOiaTBNKiRayUu
+	 JGk7A9xRbplWkJwe1zqGsynj1xe/UInT+FBoIB5S0lG4nOzUlSVs4eQ03ZGVA5MKIDS/D
+	 pVNAugnTBkevmLtBAGOKNkgiWfGg+M9/euJlz/k731dhAYHbrTJc1yQ98KVRTLaou/h9l
+	 EHYr0O2YGhOce+54PALPBgiV20THFgB5WnLyCQIyf28MJfOWOcwQlEZbQjYhfZ4nrgQi+
+	 VlmbpoUDXr7h1X/S1idE5H8LB4Ddqo9qLNguDVtPvbzoqypf6ghU9KfUGsvaqp05FXA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794176385;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=De0VxvsZdiWZC8218q+0ibGhvvSWEZUbrYa4+qRq8LY=;
-	b=xdOn5FvfH6ejRQOTr1RmZjrQdCriuxg50r7TDbmn5e9x4nLV7tUci704b/eVQ7Hqu08j
-	 MpZ7FJBNF4YA6WJLrMrDHtVxbwbJHTvnbacyeV08eRqoohjBrfjlfE4WhM0/hBuEeXxjs
-	 1nBq/PmCEG5+NJky2v/dguB55eCROQkmPy5f1LKq66z4H070EGyJHtFoRhyoXnwi+njnk
-	 ea5ztB8OgoqEQecjUH9FZnohdSEO8oqujYa75/m5QNG18DHlDxpyq1n7eyS5dMPb18Dwq
-	 muzU4Cm7576M6xWAkEVuWo2k3FYLIBzmcrRa54iOZ/+myo1hLU061HuNM2tNoJIANtg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794177582;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=dh1tm53EjhTHyh6SV5ixAXTcy4PG9n9Z3Dkm6AKA6MM=;
+	b=DnAhkRiAO/XK5S9ke84FDw8xCWrrfTJDxgIA2+zeJLTGt9fvLMzkZOX73S+9O/tc4Ohs
+	 7Ud1asTzHq1U1mXjZEEJWN5BFwQrSWQXsS2gsFzVX8btzJ6/YQ2KeIiaHr3K3TgHvg6wL
+	 MljX6OiZbSQaahqTfla5S3+78Qd9ElUAWe0C2t/TRyHaH9YraVbmcsBRYjyKLP03EysIw
+	 /UREJNsLRltf+aEBBBFCi99qNVxo6O0EgPUumB8JRR8MxvZXhM/PHioDLwzBlrAMmKwH/
+	 oE6ibszqmNnCq8q0Cir72Vc1KE1xayzgWZvAq8BaXpidvdCDvhsxHPBDr7Td2a40yDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GQIYliJ8;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pL0fU09A;
+	arc=none smtp.remote-ip=74.125.82.197
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E24606A31C;
-	Sun,  8 Nov 2026 22:19:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5E24606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FB2606A32A
+	for <llvm@lists.linux.dev>; Sun,  8 Nov 2026 22:39:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49FB2606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GQIYliJ8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794176384; x=1825712384;
-  h=date:from:to:cc:subject:message-id;
-  bh=2dUp/gU9bEKSGpq7f79GNBm8qtt7Hyd4NFuYdfrPHsM=;
-  b=GQIYliJ89tn3AIdCQ6oSaA7zPArIbOwDnhTDdp+Uf7/STxxJ2h5zHmsU
-   ADzaPGYSvebMarYvxpoLDVHledtULcSTayKohDehu5Jfh76Ck4Yk+ws6W
-   NKOhTLfImIbGYlbR1Dl2qWeECsCByJfAetoOiC+vqx6FpTDmcAH0HxBnr
-   vUZsonIMm2rJ2yH67+9jb2+0G04GVekzyOYaiwAdey9bzJRBWbcQHjmM8
-   /Qfx052g3GpzUUrXQfvxKBv+yBvWH4pGtwsQ6RkFjxNlI+iS1lCiG9HHl
-   hsFXOCQLTEw6ZT/w2faMGUL3vERFnfnYogeqWWYr/GYT1nWsL+uVhF8Pc
-   g==;
-X-CSE-ConnectionGUID: BdU7nEk2Szmvp8oaxBRLCA==
-X-CSE-MsgGUID: UWYFjgzhTPCu/sqDLn7ZWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11960"; a="2900995"
-X-IronPort-AV: E=Sophos;i="6.27,202,1787036400"; 
-   d="scan'208";a="2900995"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 14:19:43 -0800
-X-CSE-ConnectionGUID: FSEREFM2S3Oor6ChyGZhMg==
-X-CSE-MsgGUID: A6J82uTRSh+/yQKPmqeNvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,202,1787036400"; 
-   d="scan'208";a="9595884"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa013.fm.intel.com with ESMTP; 08 Nov 2026 14:19:41 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQBEh-00000000tTr-0IFQ;
-	Sun, 08 Nov 2026 22:19:39 +0000
-Date: Mon, 09 Nov 2026 06:18:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prajwal N <prajwal.n@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_sbi_watchdog_v1 98/98]
- drivers/watchdog/riscv_sbi_wdt.c:327:16: error: assigning to 'struct
- imsic_global_config *' from 'const struct imsic_global_config *' discards
- qualifiers
-Message-ID: <202611090657.vj0OMmgn-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pL0fU09A
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-36fe0b57d91so352122eec.0
+        for <llvm@lists.linux.dev>; Sun, 08 Nov 2026 14:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794177580; x=1794782380; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dh1tm53EjhTHyh6SV5ixAXTcy4PG9n9Z3Dkm6AKA6MM=;
+        b=pL0fU09AmMdqGNdnV5t1l9jQBllyLoOHGr60LgkFETIXownm8592WlXNQl/o4qPlj2
+         dpUb7McaA6tRbkF7GWyn0HYKPwN5pBBwklsG9w+2tqNBToDap2zJYpb+bdwR2xzQE71b
+         LI5XZy46mr9PTEmFb3ZSkvYmH9wPlQnWeznQyMlhQt16+hJIQ0hQqTrs/HYSNvt4Vf58
+         dYqscBuQsk2M0bOgWf5Msckq7jvG6+klUw+pLhrp6L3j9wxAjouz6vjT2+2m1d93/Kh6
+         jwtC/TkDXS5A6kL3P5hmgpIZ8JGXIolBm3E/xEItjjuw7JD1smLTK3WxRXCZAYXcH9bS
+         H/bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794177580; x=1794782380;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dh1tm53EjhTHyh6SV5ixAXTcy4PG9n9Z3Dkm6AKA6MM=;
+        b=I80XyMghEhi+y0QmX13ntPDJqKRhz6BWoZGuTye3Ud3jiS9CoxJDxcXYOMMPlw+n+P
+         ilu6bBs+FzY3Y0oeXLOA9Wjf3tMUen/CriRHZzs3PGtfpJGxEnq5sdfQ1Sdqk99XinMB
+         N8j+PFpLZ8yOd3Ikyq0JFQFPT8QlflmpSYqsD07eDOVfPPetm6A9BPXwIqbyefB2zaAW
+         RSCv0JLVGcl539PDuy7FgaAcEe4qLFqWkre0ghOk2MUW2+Nz2TNLDfov3blu8f4wB1OH
+         ClupFpU4Z99rpny1O7EYO42sz6bZIYpVlMb7fmZmP95uyOeG3gOvPvzsDaZq1AILi5LO
+         MKFQ==
+X-Forwarded-Encrypted: i=1; AL+hErFYDerBjVfx4spY56RbGhBLFHS32rOL5g+eHZRuvzA1GGnh4DtfW97vvYja1QPPbDLyc1Xw@lists.linux.dev
+X-Gm-Message-State: APuU4Z96ZzC5O3HvWO4gxCNeukKv0NyKFwnGCy0pM7Qoxj7woCsZBm35
+	K696FE4ZNBdK15K50b/h2B9KNZ0shrn+T0gkf+SZc95asHiqdaMU321ubKurrbmwxFQkEceasMg
+	DpqlKqFd3Jg==
+X-Received: from dyba7.prod.google.com ([2002:a05:693c:63c7:b0:372:278c:c777])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:e5cb:b0:370:d6e4:e8aa
+ with SMTP id 5a478bee46e88-3725826f58cmr4715450eec.41.1794177579956; Sun, 08
+ Nov 2026 14:39:39 -0800 (PST)
+Date: Sun,  8 Nov 2026 14:39:04 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,108 +75,188 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
+Message-ID: <20261108223913.3624571-1-irogers@google.com>
+Subject: [PATCH v3 0/9] Add __must_init and require explicit kobj_type::release
+From: Ian Rogers <irogers@google.com>
+To: Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Kees Cook <kees@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <chleroy@kernel.org>, Nayna Jain <nayna@linux.ibm.com>, 
+	Srish Srinivasan <ssrish@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Juergen Gross <jgross@suse.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, 
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>, Alexander Aring <aahringo@redhat.com>, 
+	Felix Kuehling <felix.kuehling@amd.com>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Zhihao Cheng <chengzhihao1@huawei.com>, 
+	Sumanth Korikkar <sumanthk@linux.ibm.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-sh@vger.kernel.org, linux-s390@vger.kernel.org, gfs2@lists.linux.dev, 
+	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_watchdog_v1
-head:   929bf13433e242a3f255f463b2fb44633e102e0d
-commit: 929bf13433e242a3f255f463b2fb44633e102e0d [98/98] drivers/watchdog: Add RISC-V SBI watchdog driver
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20261109/202611090657.vj0OMmgn-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project fc9576e3b179738d99c5babe5cd9d6c1f883e0db)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261109/202611090657.vj0OMmgn-lkp@intel.com/reproduce)
+Clang supports the 'require_explicit_initialization' attribute on struct
+fields to enforce that the field is explicitly initialized when an
+aggregate object is constructed, emitting -Wuninitialized-explicit-init
+(enabled by default) if the field is omitted.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611090657.vj0OMmgn-lkp@intel.com/
+Following discussion at the Linux Plumbers Conference [1], patch 1 adds
+the attribute to include/linux/compiler_attributes.h as __must_init. In
+v1 it was called __require_explicit_initialization. Kees picked up that
+patch with a first seq_file user [2], and in that thread Greg suggested
+the shorter __must_init spelling, which Kees and Miguel agreed to. As
+the attribute did not land in the v7.4 merge window, Kees asked that
+this series carry the renamed attribute.
 
-All errors (new ones prefixed by >>):
+As Documentation/core-api/kobject.rst notes:
+  "One important point cannot be overstated: every kobject must have a
+  release() method, and the kobject must persist (in a consistent state)
+  until that method is called. If these constraints are not met, the
+  code is flawed."
 
->> drivers/watchdog/riscv_sbi_wdt.c:327:16: error: assigning to 'struct imsic_global_config *' from 'const struct imsic_global_config *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     327 |                 imsic_global = imsic_get_global_config();
-         |                              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+Annotating struct kobj_type::release caught struct kobj_type definitions
+across the tree that omitted .release:
+- Patches 2-8 fix struct kobj_type definitions where dynamically
+  allocated kobjects, ksets, or enclosing structures were either leaked
+  on kobject_put(), freed prematurely before kobject release, or missing
+  proper static initializers.
+- Patch 9 annotates struct kobj_type::release with __must_init and
+  explicitly sets .release = NULL (with explanatory comments prefixed
+  with "Pre-existing:") on the remaining legacy struct kobj_type
+  definitions whose kobjects are static, per-CPU, permanent firmware
+  structures, or embedded in devm- or parent-managed allocations.
+
+Danilo Krummrich offered to route the series as a whole through the
+driver-core tree [3]. Subsystem maintainer Acked-by tags are still
+needed (and would be much appreciated!) for the following three patches:
+- Patch 2: powerpc/secvar: Add missing kobject release callback to secvar_ktype
+- Patch 3: sh: sq: Add missing kobject release callback to ktype_percpu_entry
+- Patch 6: xen/sys-hypervisor: Add release callback to hyp_sysfs_kobj_type
+
+Note on tool use: An LLM coding assistant was used to help audit the
+compiler diagnostics across the tree, draft the fixes and changelog
+descriptions, and verify builds and review feedback.
+
+Changes in v3:
+- Rebased on v7.4-rc1.
+- Note in cover letter that patches 2 (powerpc/secvar), 3 (sh: sq), and
+  6 (xen/sys-hypervisor) are still awaiting subsystem Acked-by tags for
+  merging through the driver-core tree, and CC those maintainers on the
+  cover letter.
+- Patch 1: Add Reviewed-by from Kees Cook; clarify that LLVM issue
+  #232483 affects Clang versions prior to its upstream fix (pointed out
+  by Nathan Chancellor).
+- Patch 4 (cpufreq): Drop obsolete reference to cpufreq_governor_dbs in
+  the commit message per Zhongqiu Han; add Reviewed-by from Zhongqiu Han
+  and Acked-by from Rafael J. Wysocki and Viresh Kumar.
+- Patch 5 (dlm): Add Acked-by from Alexander Aring.
+- Patch 8 (drm/amdkfd): Add Reviewed-by from Felix Kuehling.
+- Patch 9 (kobject): Fix omapfb manager-sysfs.c and overlay-sysfs.c
+  comments to describe managers[] and overlays[] as dynamically
+  allocated rather than static and note the CONFIG_DEBUG_KOBJECT_RELEASE
+  hazard, fix a struct-vs-member wording nit in usnic_ib_sysfs.c, and
+  generalize the commit message note on CONFIG_DEBUG_KOBJECT_RELEASE
+  (reported by Sashiko).
+
+Changes in v2:
+- Rebased on v7.3-16928-g83f32c773255 (v7.4 merge window).
+- Patch 1: Rename __require_explicit_initialization to __must_init per
+  Greg Kroah-Hartman; document the Clang >= 20 requirement per Miguel
+  Ojeda; note the Clang gap for file-scope objects without an
+  initializer reported by Kees Cook; add tags from v1 and from Kees's
+  posting.
+- Move LLM assistance attribution from Assisted-by tags to this cover
+  letter per commit 1e035297ffda ("docs: remove Assisted-by
+  references").
+- Patch 4 (cpufreq): Use "cpufreq: governor:" prefix, drop Fixes tag,
+  fix typo, and remove the redundant runtime assignment in
+  cpufreq_dbs_governor_init() per Zhongqiu Han.
+- Dropped v1 patch 5 (ACPI: CPPC), already fixed upstream by
+  commit 27954e29d7de ("ACPI: CPPC: Release CPC descriptors through
+  kobject").
+- Patch 5 (dlm): Call kobject_del() before dlm_recoverd_stop() in
+  release_lockspace() and the new_lockspace() error path, and wait on a
+  new ls_kobj_done completion before freeing the lockspace or dropping
+  the module reference, avoiding races with delayed kobject release.
+- Dropped v1 patch 8 (s390/sclp_mem) per Sumanth Korikkar: the
+  /sys/firmware/memory/memoryX kobjects are permanent, so sclp_mem.c is
+  folded into patch 9 with .release = NULL.
+- Patch 7 (ubifs): Add Tested-by and Reviewed-by from Zhihao Cheng.
+- Patch 8 (drm/amdkfd): Check q->kobj.state_in_sysfs before
+  kobject_del() in kfd_procfs_del_queue().
+- Patch 9 (kobject): Cover sclp_mem.c and the new amdgpu_ualink.c
+  ualink_xcp_info_ktype, fix the overlay-sysfs.c comment, and prefix
+  legacy .release = NULL comments with "Pre-existing:".
+- Patch 9 (kobject): The ioat, kunpeng_hccs and omapfb display comments
+  now say that the existing teardown can use-after-free under
+  CONFIG_DEBUG_KOBJECT_RELEASE (reported by Sashiko). Fixing those
+  drivers is left to follow-up patches.
+
+v2: https://lore.kernel.org/all/20261027223847.652884-1-irogers@google.com/
+v1: https://lore.kernel.org/all/20261013223946.1836757-1-irogers@google.com/
+[1] https://lpc.events/event/20/contributions/2392/
+[2] https://lore.kernel.org/lkml/20261014225811.i.852-kees@kernel.org/
+[3] https://lore.kernel.org/all/DMLWX8NY1N1N.2OMQMQCIVRR18@kernel.org/
+
+Ian Rogers (9):
+  Compiler Attributes: Add __must_init macro
+  powerpc/secvar: Add missing kobject release callback to secvar_ktype
+  sh: sq: Add missing kobject release callback to ktype_percpu_entry
+  cpufreq: governor: Initialize kobj_type release callback statically
+  dlm: Free dlm_ls in kobject release callback
+  xen/sys-hypervisor: Add release callback to hyp_sysfs_kobj_type
+  ubifs: sysfs: Use kset_create_and_add() for ubifs_kset
+  drm/amdkfd: Free queue in procfs_queue_type kobject release callback
+  kobject: Require explicit initialization of struct kobj_type::release
+
+ Documentation/conf.py                         |  1 +
+ arch/arm64/kernel/cpuinfo.c                   |  5 ++++
+ arch/powerpc/kernel/secvar-sysfs.c            |  6 +++++
+ arch/sh/kernel/cpu/sh4/sq.c                   |  6 +++++
+ drivers/acpi/sysfs.c                          |  2 ++
+ drivers/cpufreq/cpufreq_conservative.c        |  5 +++-
+ drivers/cpufreq/cpufreq_governor.c            |  4 +--
+ drivers/cpufreq/cpufreq_governor.h            |  1 +
+ drivers/cpufreq/cpufreq_ondemand.c            |  5 +++-
+ drivers/dma/ioat/sysfs.c                      |  7 +++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ualink.c    |  5 ++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_xcp.c       | 10 +++++++
+ drivers/gpu/drm/amd/amdkfd/kfd_process.c      | 12 ++++++---
+ drivers/gpu/drm/amd/amdkfd/kfd_queue.c        |  5 +++-
+ drivers/infiniband/hw/hfi1/sysfs.c            |  5 ++++
+ drivers/infiniband/hw/usnic/usnic_ib_sysfs.c  |  5 ++++
+ drivers/parisc/pdc_stable.c                   |  5 ++++
+ drivers/power/supply/ab8500_fg.c              |  5 ++++
+ drivers/s390/char/sclp_mem.c                  |  2 ++
+ drivers/soc/hisilicon/kunpeng_hccs.c          | 21 +++++++++++++++
+ .../fbdev/omap2/omapfb/dss/display-sysfs.c    |  7 +++++
+ .../fbdev/omap2/omapfb/dss/manager-sysfs.c    |  8 ++++++
+ .../fbdev/omap2/omapfb/dss/overlay-sysfs.c    |  8 ++++++
+ drivers/xen/sys-hypervisor.c                  |  6 +++++
+ fs/dlm/dlm_internal.h                         |  1 +
+ fs/dlm/lockspace.c                            | 26 ++++++++++++++-----
+ fs/erofs/sysfs.c                              | 10 +++++++
+ fs/f2fs/sysfs.c                               | 15 +++++++++++
+ fs/ocfs2/cluster/masklog.c                    |  5 ++++
+ fs/ubifs/sysfs.c                              | 24 +++++------------
+ include/linux/compiler_attributes.h           | 12 +++++++++
+ include/linux/kobject.h                       |  2 +-
+ scripts/checkpatch.pl                         |  1 +
+ tools/lib/python/kdoc/xforms_lists.py         |  1 +
+ 34 files changed, 211 insertions(+), 32 deletions(-)
 
 
-vim +327 drivers/watchdog/riscv_sbi_wdt.c
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+-- 
+2.56.0.455.g6c5a503b38-goog
 
-   298	
-   299	static int sbiwdt_probe(struct platform_device *pdev)
-   300	{
-   301		struct sbiwdt *wdt;
-   302		struct imsic_global_config *imsic_global;
-   303		struct irq_domain *msi_domain;
-   304		struct device *dev = &pdev->dev;
-   305		int rc;
-   306	
-   307		/* Allocate memory for the global watchdog structure */
-   308		wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-   309		if (!wdt)
-   310			return -ENOMEM;
-   311	
-   312		platform_set_drvdata(pdev, wdt);
-   313		watchdog_set_drvdata(&wdt->wdd, wdt);
-   314	
-   315		/* Initialiaze watchdog attributes */
-   316		rc = sbiwdt_init_attributes(wdt);
-   317		if (rc) {
-   318			dev_err(dev, "Failed to read SBI watchdog attributes: %d\n", rc);
-   319			return rc;
-   320		}
-   321	
-   322		wdt->wdd.info = &sbiwdt_info;
-   323		wdt->wdd.ops = &sbiwdt_ops;
-   324	
-   325		/* Setup MSI if the capability is available */
-   326		if (wdt->attrs.wdt_capability & SBI_WDT_CAP_MSI_SUPPORT_MASK) {
- > 327			imsic_global = imsic_get_global_config();
-   328			if (!imsic_global) {
-   329				dev_err(dev, "IMSIC firmware node is unavailable\n");
-   330				return -ENODEV;
-   331			}
-   332	
-   333			msi_domain = irq_find_matching_fwnode(imsic_global->fwnode,
-   334								DOMAIN_BUS_PLATFORM_MSI);
-   335	
-   336			if (!msi_domain) {
-   337				dev_err(dev, "IMSIC platform MSI domain is unavailable\n");
-   338				return -ENODEV;
-   339			}
-   340	
-   341			dev_set_msi_domain(&pdev->dev, msi_domain);
-   342	
-   343			/* MSI setup*/
-   344			rc = platform_device_msi_init_and_alloc_irqs(dev, 1, sbiwdt_msi_write);
-   345			if (rc) {
-   346				dev_err(dev, "Failed to allocate MSIs\n");
-   347				return rc;
-   348			}
-   349	
-   350			wdt->virq = msi_get_virq(dev, 0);
-   351			if (!wdt->virq) {
-   352				dev_err(dev, "Failed to get MSI virtual IRQ: %d\n", wdt->virq);
-   353				return wdt->virq;
-   354			}
-   355	
-   356			rc = devm_request_irq(dev, wdt->virq,
-   357						sbiwdt_pretimeout_handler,
-   358						0, "sbiwdt-pretimeout", wdt);
-   359			if (rc) {
-   360				dev_err(dev, "Failed to request pretimeout IRQ: %d\n", rc);
-   361				return rc;
-   362			}
-   363		}
-   364	
-   365		rc = devm_watchdog_register_device(dev, &wdt->wdd);
-   366		if (rc) {
-   367			dev_err(dev, "Failed to register RISC-V SBI watchdog device\n");
-   368			return rc;
-   369		}
-   370	
-   371		dev_info(&pdev->dev, "RISC-V SBI Watchdog registered\n");
-   372	
-   373		return 0;
-   374	}
-   375	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
