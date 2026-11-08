@@ -1,100 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.50
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794126475;
-	b=gnVuQ5rqCmNlMUFQpGbsygTJQ60B4mmN/HUGX/EHO8LIRw5AmJ1u6QxKHo8hGzfgiLRo
-	 jk28PCzkfaKwp1ciN4KyYKPXVz7t1yHCOHsAI1Tzt2f9P7lEsYyVcla1hN4YHAC2LyyGd
-	 HL2ypLaL1Gh777dlvfgXYm4Yhc6U7Qkxs2L12sgcM+te4J9bpctmxBar+T+/5TvORNCNH
-	 SmmJkNHaLoZ+EfFPFpH5swHoU+1zzPGJ87PxvXZFzQ3epm+deM0X9WCy6/K3ZDEABE5PX
-	 ULDwrqJJ7/MT+T+n+zMhgxNTH/yOvoqbRSweKHj1H+K3TvmR47C+idS3yJsk5nIRZMw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794126475;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-	b=dtVK04NYYPjLRrJQBQp1o+MQVOHy8i/Jepvw4DWBAh0MOt2wK3mbs/IOi5bsrpFdVjjE
-	 394NAKG+0Si4/fIAoGvHkd8+GUMc2b0NBYiBJvG6a9fawuwQSovDfosdD0aWgPipdAGrT
-	 npdyOzApiDbQ6YaDLfgLR9Wib40lIpr3TZ+owTX0H9QQv/hZxUCEEUZLngBnEUCQR+IqC
-	 +uXLh2/HYVed4skbIswW1/5+AZIB44EsPp7YmXmUNRoTLoYb97Jl1Xo+cY9Elb8MSkg9e
-	 C/cwd33PyTeJIMxsGACgR9+6bQHhuazhqsozavNp5KVcpkS/7ANe6oES3Iz9kx9Wg/A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bytedance.com;
-	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=XF6hG47G;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.50
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.19
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794131077;
+	b=5SLkn3ve2z1H6jaH75Yv+sWxjZdcGQiZ3PCG2fjbAzYhQFPZP+3pPRGprpVDSsi38Dcc
+	 q9Ifi6XhEhWuEuZ5oh9KDWRwadnOF+eiQQWF8tvlU/WveqCnTsMC+V8kCFFMlCdKPFeuv
+	 3Bmt5686ZBSK+74tcxAih86e4JUEjSMEu4dj5DqtcfzkR4RUk8hh1bdcRHhy9ZTrCRDze
+	 ywuMEnBUOqYLngEo1wAQxbtOouy8EcRP11tP9MpbRSBo0srQK9fbO9J4mrbreHPfX7izc
+	 TMlAGjvX74T0gY9o5nV3e9EYnue9Z1hvvc3k1JOx5LyXUV0uby5OAwoMemrotNNkQBw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794131077;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=8xdc6oFhA3D6PNzPHjgEKoYSX6lIzir2R2AtjueD8oo=;
+	b=ixhdBzY3pO0oAWfH6mmqicN5r22pJbYJFtrel+W8tRkdeClkJB9aZwEnPgADOnIgySfn
+	 b02TE2qfVMJL3Z4KCx/hglC9MEvY1hSSE9d5ALzJDj9E3S1zxrcOux8CAWQqbMtHQDztd
+	 i3uVS3NCnWGcyalhkC6tVfAf17aBkW1saIehuEHSYw4e3pLkaZBDLWqR5w4T2dJ3M5H0y
+	 GHCb8EjmBkCJ5KA3A6I5beqLq4fxS8ttNryVOTqeNDY0yS5RyNpzsr5R/tCbFEVp3A1v9
+	 mJ/u5+RGc7SFlqbkQ3n/VDKqtIQZ/eMcC94nBGRIqN7W1gyvf2Er8JA4t9PaTMVwr+Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lFoBVL68;
+	arc=none smtp.remote-ip=192.198.163.19
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393FA606A31C
-	for <llvm@lists.linux.dev>; Sun,  8 Nov 2026 08:27:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 393FA606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89549606A320;
+	Sun,  8 Nov 2026 09:44:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89549606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=XF6hG47G
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-847ac7ccd85so138439a34.3
-        for <llvm@lists.linux.dev>; Sun, 08 Nov 2026 00:27:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794126473; cv=none;
-        d=google.com; s=arc-20260327;
-        b=YsIOmRPbHXSysm6RZ5hDUVsyuL65xK5iNnkwuy3mieJ2U76pQo3da+Q9eusLRv1NqU
-         jaW9JzZmyTLPeTeIVoY09VIFwWfnkvu2pMaqIYVaeBu5DJhwPJ3Z6flb5x0zJD8nnRFd
-         rwbkzWKsmM73wH7ck85jiwi7WZ5359fM54fqk/KDmzcPiz+LdqDxz/wW2KSh7tSxVHD+
-         umztWQzEudE9ACZhJ6nHN5jqiuTdWy+P+Dz6p+a+w6b5t8YTlRRNdposiypxufCDA1cq
-         Xz3B/tiPiILIDPSDAcKA4UrKkbSBjbKItRg5+Ay5kp/Q6vwmpe/kDUPedeNew+P450V5
-         13Xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-        fh=x5fYh93xXxuqjG2egIsEItxP6KX8VPtd2qNC1LFBbDI=;
-        b=LBNy3uHQ0y9bZgtlAZmvgs9dwUMp/YZ8ym9ixLFVpNqR8wf0LUK+v3FSjUAwZyhr/F
-         0WAWVtdYhcikZ7NeX1smeFThX97Ks16hfVb8m2nSmB+N9Ad+Ky19aNmPem/P3JHTaq4F
-         gv0GGnLR3e5e2yglKlrYS7777yU35RZXK5tueLKJmNC5XH0O+wT9E9ZidhVHAicgUhh+
-         ZRmuFG8Yintw7ja3mUUomeK2zDBJbkz7eRY5Y4Z7IMoaceIq3I/T527PzH9dUUIViP26
-         /PPE3QCXFro6wJGGAdj7zdIdSNvfpiG3KVwxB/PCZRbJXRY2ByeLuLDD52jPQGpS34Y4
-         XQkg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1794126473; x=1794731273; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-        b=XF6hG47GzoXOfvpl42rkMvQIccfulD4MRJFTTxFvxgS9+duM10fL+2V0UqCr5XSs0i
-         d8JF0FJ6x6Bd4QXN7DB+l8DzBoOo9tAseX4YWChiOPsykw5Vg0AANpS8kDuLY2rnwDhJ
-         Wx/4i4cCXy9JC0RB15oQ6sO+1hrrHnlu5RvtHtLh37+4PIwBYWyOlUE7RNe68Cnbdcmg
-         /4YDbuM10pTDoYwslO3Y8hPo4njyK/h5MNwiDIRGhdqyjzIlttPipBj93/9vpn08p8si
-         YB24dgiJUe9vOyy0gU7/kOE9IxCeoo/EZanA4a3MSkWXz/m+V6Xnd65qcrPwDI3Qu3aU
-         V9CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794126473; x=1794731273;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-        b=NM26Jy1Qal6/bFk6rF5/U42Z1ECC8T9c4AMJtVWRiHML+b9iHow4idgvgVMTO0Cet+
-         4IZCRgRklJstxR0kDM8QO+Mn1cveBvGeNNLRGBU4Kah6EhpvAuNu/v2p0NYW+QytDNeV
-         aK3PxN+v2jMB/VHPtGR9hrNPTI0Z9FFXEW/ZK6LGKMIkmRu6GzhUaMjmgBlI/OPlpTgY
-         zIwofmIdaWWKkByAV/bAmZrr+WNbIjEbW+S37YLxTuO/vR6hRvIyRgs0Mw3UJbBytUNR
-         qoT2qOj4vZYF1Dw0/siT0XE4pokLp96eHzoDUemoh7U3Rz2wcR/eL6Sn9opX9GnOG/6r
-         ziwQ==
-X-Forwarded-Encrypted: i=1; AKwUvByfZaM3D6tsRKaNyFAoWbdAuKIoDdtXzG0yX7wC4Rqq0o6Y7CdAqihdi/j00G1lowH33UBH@lists.linux.dev
-X-Gm-Message-State: APuU4Z/RrOlBUBGtczfS39KEftRc/UoTSJwINkgxHeBHaRBXxA8nwgOS
-	nikkm+H6YbpfPMGdV15ciqKVYzqcvA1YxDp2UyR79CcDkNxGMQ5SZbgIiX95HwI+Mpr5Nh559zc
-	ixmeDLDj8PvZgft+1DSFnQN0zzD2Nso8nQLMd70ElzQ==
-X-Gm-Gg: AYBFou2cAb4W0NDvByU7Jkw3uRJuxX2NMs5p2ubqOmEHqjD5knlwXfRMsK0aHRiKC/g
-	xHFKxcd+Pg9brL+lFpLWZjTcqkHUchBTBhTfFH/2/ZADkl7Aj4CgPJ0NOPiZwTAysa7j2/L9vAl
-	OONivxpinwp2C7363VyOM0XFiGtdFzGynJCQF7p4Jn6KqLiWRbmt9hK0HKsRLBqpOV+qJd9Fr7o
-	wZqp0yeVHURHOPG0riP3aHMRqK03RsSvrzjWcX5t+UaVk5XbvV6zLGJwIwIegD/74lGmtEOPnvV
-	TGkLgchKCnAcPeupOq7JWDIAKY/tAU7hhjhTnd0bqrXQmVhGgWMVlZuP8XSIuS9Ta9Y1iLCdDuR
-	oXJVOfpFbM2pBI/Y5EMvjc8wyuSFa7n+QVexr0NjUNnTl
-X-Received: by 2002:a05:6830:71a3:b0:80c:d34f:5f5a with SMTP id
- 46e09a7af769-85f5075a36fmr645255a34.19.1794126472981; Sun, 08 Nov 2026
- 00:27:52 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lFoBVL68
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794131077; x=1825667077;
+  h=date:from:to:cc:subject:message-id;
+  bh=sxnmt8PKm22ww+XbISLmzV+R9ssPricG1nEZcy/LEvw=;
+  b=lFoBVL68FaQh0qEYJZsLQW12bEGmtbyRX/mN2dFjJIobBYCWkg4/SrXg
+   0fWPVNoSflLCqK4H+yNYMnFVCU5Xbm2rCN1XEnCqxo1dOQxUG09KdV5LD
+   oPM7UU+KyqIxpvVJufmfMEcRDytzsJXlV4x8ihZqWwyvXgPMwMVn6pGSD
+   tiCzOCDQZxH5hOa4hhO4HtZapZgfHtUvWxYXWi1mF+RICOdhJTJ6HJ7cS
+   r1Zt9UpyU4RIWTt/Fbw+2uKtdUkbJeqoBzBi3cwAILAPS88B13bj/UDm+
+   Q0mWN03PaZsTEndvKdQlzj7CZEqhpUtN00OR7rlhvNjD/fRvIG2DsAVDW
+   Q==;
+X-CSE-ConnectionGUID: ipcJq1GpQUqtWOe4vyR6jQ==
+X-CSE-MsgGUID: VOwWBCRkQSiSEBzNYWwtxg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11959"; a="2986004"
+X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
+   d="scan'208";a="2986004"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 01:44:36 -0800
+X-CSE-ConnectionGUID: jwfsbA3/SlulxZnpxAEb8g==
+X-CSE-MsgGUID: 7qaTJAtmSn6hZdHSRu4eJQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
+   d="scan'208";a="8070937"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 08 Nov 2026 01:44:35 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xPzRv-00000000sj5-3xLT;
+	Sun, 08 Nov 2026 09:44:31 +0000
+Date: Sun, 08 Nov 2026 17:44:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <anup.patel@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
+Subject: [avpatel:riscv_trace_support_v6 68/80]
+ drivers/hwtracing/gtrace/gtrace-core.c:315:2: error: call to undeclared
+ function 'kfree'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202611081715.20y4yygC-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,66 +82,155 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
- <20260703122832.15984-4-cuiyunhui@bytedance.com> <87bjcnlrbv.ffs@fw13>
-In-Reply-To: <87bjcnlrbv.ffs@fw13>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Sun, 8 Nov 2026 16:27:42 +0800
-X-Gm-Features: AclHuK-No24RzFz5kz6KGOgepjfUU9hWv2-yH0FoZIN8FZ2Py9-_ynkukYR0a6s
-Message-ID: <CAEEQ3w=B4p-_4pg3ffrkSA_AXuz86FCd-w4FSB50HoijcSL74w@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v8 3/3] riscv: store percpu offset into thread_info
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org, 
-	thuth@redhat.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk, 
-	rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com, 
-	conor.dooley@microchip.com, debug@rivosinc.com, seanwascoding@gmail.com, 
-	andybnac@gmail.com, menglong8.dong@gmail.com, cyrilbur@tenstorrent.com, 
-	wangruikang@iscas.ac.cn, atishp@rivosinc.com, apatel@ventanamicro.com, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	qingfang.deng@siflower.com.cn, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas,
+tree:   https://github.com/avpatel/linux.git riscv_trace_support_v6
+head:   f98be19c4d4f657fa0ed2a17aa8ef5ece29fe8dc
+commit: 568f8d89f93a9f46e7bb83c0e41d30d46429df68 [68/80] hwtracing: gtrace: Initial implementation of gtrace framework
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20261108/202611081715.20y4yygC-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261108/202611081715.20y4yygC-lkp@intel.com/reproduce)
 
-On Sat, Jul 4, 2026 at 5:02=E2=80=AFAM Thomas Gleixner <tglx@kernel.org> wr=
-ote:
->
-> On Fri, Jul 03 2026 at 20:28, Yunhui Cui wrote:
-> > +
-> >  extern struct task_struct *__switch_to(struct task_struct *,
-> >                                      struct task_struct *);
-> >
-> > @@ -122,6 +129,7 @@ do {                                               =
-       \
-> >       if (switch_to_should_flush_icache(__next))      \
-> >               local_flush_icache_all();               \
-> >       __switch_to_envcfg(__next);                     \
-> > +     __switch_to_pcpu_offset(__next);                \
->
-> Why do you want to go through the indirection of current:
->
-> > +static inline void __switch_to_pcpu_offset(struct task_struct *next)
-> > +{
-> > +#ifdef CONFIG_SMP
-> > +     next->thread_info.pcpu_offset =3D __my_cpu_offset;
-> > +#endif
-> > +}
->
-> instead of using __prev->.....offset, which is right there available?
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611081715.20y4yygC-lkp@intel.com/
 
-Agreed. current is __prev at this point, and both forms compile to the
-same load/store sequence. Passing __prev explicitly is clearer, so I will
-copy its pcpu_offset directly to __next.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Yunhui
+   In file included from drivers/hwtracing/gtrace/gtrace-core.c:9:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/hwtracing/gtrace/gtrace-core.c:315:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     315 |         kfree(cpriv);
+         |         ^
+>> drivers/hwtracing/gtrace/gtrace-core.c:359:10: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     359 |         cpriv = kzalloc(sizeof(*cpriv), GFP_KERNEL);
+         |                 ^
+>> drivers/hwtracing/gtrace/gtrace-core.c:359:8: error: incompatible integer to pointer conversion assigning to 'struct gtrace_comp_priv *' from 'int' [-Wint-conversion]
+     359 |         cpriv = kzalloc(sizeof(*cpriv), GFP_KERNEL);
+         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwtracing/gtrace/gtrace-core.c:369:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     369 |                 kfree(cpriv);
+         |                 ^
+   1 warning and 4 errors generated.
+
+
+vim +/kfree +315 drivers/hwtracing/gtrace/gtrace-core.c
+
+   307	
+   308	static void gtrace_component_release(struct device *dev)
+   309	{
+   310		struct gtrace_component *comp = to_gtrace_component(dev);
+   311		struct gtrace_comp_priv *cpriv = to_gtrace_comp_priv(comp);
+   312	
+   313		fwnode_handle_put(comp->dev.fwnode);
+   314		gtrace_free_type_idx(comp);
+ > 315		kfree(cpriv);
+   316	}
+   317	
+   318	struct gtrace_component *gtrace_register_component(struct gtrace_component_id *id,
+   319							   const char *name,
+   320							   struct gtrace_platform_data *pdata)
+   321	{
+   322		struct gtrace_connection *conn;
+   323		struct gtrace_component *comp;
+   324		struct gtrace_comp_priv *cpriv;
+   325		int i, ret = 0;
+   326	
+   327		if (!id || id->type >= GTRACE_COMPONENT_TYPE_MAX) {
+   328			ret = -EINVAL;
+   329			goto err_out;
+   330		}
+   331	
+   332		if (!pdata || !pdata->dev) {
+   333			ret = -EINVAL;
+   334			goto err_out;
+   335		}
+   336	
+   337		for (i = 0; i < pdata->nr_inconns; i++) {
+   338			if (pdata->inconns[i]) {
+   339				ret = -EINVAL;
+   340				goto err_out;
+   341			}
+   342		}
+   343	
+   344		for (i = 0; i < pdata->nr_outconns; i++) {
+   345			conn = pdata->outconns[i];
+   346			if (!conn || conn->src_port < 0 || conn->src_comp ||
+   347			    !device_match_fwnode(pdata->dev, conn->src_fwnode) ||
+   348			    conn->dest_port < 0 || !conn->dest_fwnode || !conn->dest_comp) {
+   349				ret = -EINVAL;
+   350				goto err_out;
+   351			}
+   352		}
+   353	
+   354		if (pdata->bound_cpu >= 0 && !cpu_present(pdata->bound_cpu)) {
+   355			ret = -EINVAL;
+   356			goto err_out;
+   357		}
+   358	
+ > 359		cpriv = kzalloc(sizeof(*cpriv), GFP_KERNEL);
+   360		if (!cpriv) {
+   361			ret = -ENOMEM;
+   362			goto err_out;
+   363		}
+   364		comp = &cpriv->comp;
+   365		comp->pdata = pdata;
+   366		comp->id = *id;
+   367		ret = gtrace_alloc_type_idx(comp);
+   368		if (ret) {
+   369			kfree(cpriv);
+   370			goto err_out;
+   371		}
+   372	
+   373		comp->dev.parent = pdata->dev;
+   374		comp->dev.coherent_dma_mask = pdata->dev->coherent_dma_mask;
+   375		comp->dev.release = gtrace_component_release;
+   376		comp->dev.bus = &gtrace_bustype;
+   377		comp->dev.fwnode = fwnode_handle_get(dev_fwnode(pdata->dev));
+   378		dev_set_name(&comp->dev, "%s-%u", name ? name : "comp", cpriv->type_idx);
+   379	
+   380		mutex_lock(&gtrace_mutex);
+   381	
+   382		ret = device_register(&comp->dev);
+   383		if (ret) {
+   384			put_device(&comp->dev);
+   385			goto err_out_unlock;
+   386		}
+   387	
+   388		for (i = 0; i < pdata->nr_outconns; i++) {
+   389			conn = pdata->outconns[i];
+   390			conn->src_comp = comp;
+   391		}
+   392	
+   393		ret = gtrace_setup_inconns_from_outconns(comp);
+   394		if (ret < 0) {
+   395			device_unregister(&comp->dev);
+   396			goto err_out_unlock;
+   397		}
+   398	
+   399		if (comp->pdata->bound_cpu >= 0) {
+   400			gtrace_get_component(comp);
+   401			per_cpu(gtrace_cpu_source_comp, comp->pdata->bound_cpu) = comp;
+   402		}
+   403	
+   404		mutex_unlock(&gtrace_mutex);
+   405	
+   406		return comp;
+   407	
+   408	err_out_unlock:
+   409		mutex_unlock(&gtrace_mutex);
+   410	err_out:
+   411		return ERR_PTR(ret);
+   412	}
+   413	EXPORT_SYMBOL_GPL(gtrace_register_component);
+   414	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
