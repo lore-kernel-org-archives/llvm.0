@@ -1,79 +1,139 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794131077;
-	b=5SLkn3ve2z1H6jaH75Yv+sWxjZdcGQiZ3PCG2fjbAzYhQFPZP+3pPRGprpVDSsi38Dcc
-	 q9Ifi6XhEhWuEuZ5oh9KDWRwadnOF+eiQQWF8tvlU/WveqCnTsMC+V8kCFFMlCdKPFeuv
-	 3Bmt5686ZBSK+74tcxAih86e4JUEjSMEu4dj5DqtcfzkR4RUk8hh1bdcRHhy9ZTrCRDze
-	 ywuMEnBUOqYLngEo1wAQxbtOouy8EcRP11tP9MpbRSBo0srQK9fbO9J4mrbreHPfX7izc
-	 TMlAGjvX74T0gY9o5nV3e9EYnue9Z1hvvc3k1JOx5LyXUV0uby5OAwoMemrotNNkQBw==
+	t=1794135902;
+	b=riDp5O6qImd435trPud25s9rq+LZOfTBR3Vt/0WZNAI4KMGqp/MPlBEg9KaK+HqDhSlJ
+	 HcDu5SiMpXCsWrgkPHrKpbYe6iiIWGi+Xinmve5JewzfjBuoUra2u6EEydfmzACSg7+UT
+	 0oWWgcCDBSShFJfVeTCn38d6WVEveecs2OS7KLt2scM/YBjrywPKZ240SAiJz2KJxaQ0E
+	 j1eN2LD925/kDHugu9n4/Xdnh/esmjZq7Pt/UU/7LxBAgD9sAYPHgfdamQDhWOvmB9j1X
+	 9zXauOUhRj46AhZMLLdcFNXoNZn3JyiFsd12Hpvfl4R7b1LBcdofkhIcXKg/VW6QsJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794131077;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=8xdc6oFhA3D6PNzPHjgEKoYSX6lIzir2R2AtjueD8oo=;
-	b=ixhdBzY3pO0oAWfH6mmqicN5r22pJbYJFtrel+W8tRkdeClkJB9aZwEnPgADOnIgySfn
-	 b02TE2qfVMJL3Z4KCx/hglC9MEvY1hSSE9d5ALzJDj9E3S1zxrcOux8CAWQqbMtHQDztd
-	 i3uVS3NCnWGcyalhkC6tVfAf17aBkW1saIehuEHSYw4e3pLkaZBDLWqR5w4T2dJ3M5H0y
-	 GHCb8EjmBkCJ5KA3A6I5beqLq4fxS8ttNryVOTqeNDY0yS5RyNpzsr5R/tCbFEVp3A1v9
-	 mJ/u5+RGc7SFlqbkQ3n/VDKqtIQZ/eMcC94nBGRIqN7W1gyvf2Er8JA4t9PaTMVwr+Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794135902;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=KKnJ5ofY6xI7mGRCSoUHzG0stJCP5GNAGXYvslrLiuU=;
+	b=G5NWQHRpUsbcEtXXyBPiUeL32TBubfGACOnpo5KblmbEY47+yb5paGWWmU4ED7aTYNTR
+	 LnJjnCt6j98YP/C/9zuu8YvGMIKriRLDnns15hCSIJOFs7lzAynlHPiMv9ulD13VfX68D
+	 bGKJnQ5jA96yU4ZtCNrA1H1KOsgCnrCs2hepqPP1x76yuCNZGDt24d3+Akeo/BrqNMaZW
+	 qmfjHT4Y3tJ9TVmUEhnloMgr4Amx45+to3X+BCuYXSxYGPS4ScNb654zrFOqtyLcqkAcO
+	 Mw/anMiOliGeSUtPRTMoIbKCnJhruVJ4bEpFP465DWG2dFnZCWOrPmynb73lHd2M/CQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lFoBVL68;
-	arc=none smtp.remote-ip=192.198.163.19
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=bytedance.com;
+	spf=pass smtp.mailfrom=bytedance.com;
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=TPO8fE2b;
+	arc=none smtp.remote-ip=209.85.215.174
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89549606A320;
-	Sun,  8 Nov 2026 09:44:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89549606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B99606A31C
+	for <llvm@lists.linux.dev>; Sun,  8 Nov 2026 11:05:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76B99606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lFoBVL68
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794131077; x=1825667077;
-  h=date:from:to:cc:subject:message-id;
-  bh=sxnmt8PKm22ww+XbISLmzV+R9ssPricG1nEZcy/LEvw=;
-  b=lFoBVL68FaQh0qEYJZsLQW12bEGmtbyRX/mN2dFjJIobBYCWkg4/SrXg
-   0fWPVNoSflLCqK4H+yNYMnFVCU5Xbm2rCN1XEnCqxo1dOQxUG09KdV5LD
-   oPM7UU+KyqIxpvVJufmfMEcRDytzsJXlV4x8ihZqWwyvXgPMwMVn6pGSD
-   tiCzOCDQZxH5hOa4hhO4HtZapZgfHtUvWxYXWi1mF+RICOdhJTJ6HJ7cS
-   r1Zt9UpyU4RIWTt/Fbw+2uKtdUkbJeqoBzBi3cwAILAPS88B13bj/UDm+
-   Q0mWN03PaZsTEndvKdQlzj7CZEqhpUtN00OR7rlhvNjD/fRvIG2DsAVDW
-   Q==;
-X-CSE-ConnectionGUID: ipcJq1GpQUqtWOe4vyR6jQ==
-X-CSE-MsgGUID: VOwWBCRkQSiSEBzNYWwtxg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11959"; a="2986004"
-X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
-   d="scan'208";a="2986004"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 01:44:36 -0800
-X-CSE-ConnectionGUID: jwfsbA3/SlulxZnpxAEb8g==
-X-CSE-MsgGUID: 7qaTJAtmSn6hZdHSRu4eJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
-   d="scan'208";a="8070937"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 08 Nov 2026 01:44:35 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xPzRv-00000000sj5-3xLT;
-	Sun, 08 Nov 2026 09:44:31 +0000
-Date: Sun, 08 Nov 2026 17:44:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <anup.patel@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mayuresh Chitale <mayuresh.chitale@oss.qualcomm.com>
-Subject: [avpatel:riscv_trace_support_v6 68/80]
- drivers/hwtracing/gtrace/gtrace-core.c:315:2: error: call to undeclared
- function 'kfree'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202611081715.20y4yygC-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=TPO8fE2b
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc1bc88a20eso5459a12.3
+        for <llvm@lists.linux.dev>; Sun, 08 Nov 2026 03:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1794135901; x=1794740701; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KKnJ5ofY6xI7mGRCSoUHzG0stJCP5GNAGXYvslrLiuU=;
+        b=TPO8fE2bNkKE2D8gGpqgtxJ0XbLpaHePj4sUZRInavfrz4Tf/kx6dyaXlwBuyZ8dSB
+         mXJWnLw51HuTSfphjpk7rF9LCkecHauLkw0yG3l3kCUoHoKsy4mus40nqgKu5s7tCel3
+         Ju9mWSYQaYAuN3xgj7Mduz/n7T0ZChugPwJe9tKqL8WLkPlHLnmnM9EyKzZ3AckjY9A9
+         fouFhdb+7XzpdSyZSUT5QPqeMbAWR0FSRQ8okPs1qOy26R2Rx7Q3iru4J3nHxnpUkqNC
+         fGp3kivSPLr2xX5Erjfmxnqer9N4yevuENMVCyQkttWsY81quhCbgHyZQx5/QGJ5FjOl
+         QIxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794135901; x=1794740701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=KKnJ5ofY6xI7mGRCSoUHzG0stJCP5GNAGXYvslrLiuU=;
+        b=fc9JX2JpMrfPw/5ZZDlNiuktYyen0o+xV1cCUByQZh0GHfhJO4GIN1z9xlbBljOKij
+         flnWRW0/eUe3zqmW5R5cV5PaxXA28dnwht4MoXpF1jAx2GN+iwICMP3Qrxi1FsMggoyR
+         GGJVjE9vFmU84hYKpMYUO8rc6akQ6JfJ+6In5lDNaLTCCv5bZDU8O9Oeb0kJRKsCDTkK
+         837B7UG8qUwnOhEu82T/nsbUyu/xpwppdhXciokNCdbPf/pO1FybIxGlpC/upBxkMVdz
+         nty93PzwF3hj8RMVBzE6AbjeqPOkeQ5h5TWD36+OHrMrXijYFlr7J/Xb/EamDsDQkGcH
+         bgJw==
+X-Forwarded-Encrypted: i=1; AL+hErGoerpqZhbQvpeRvddVslFK6biw6zI+1y/Tn2cljG8R63YQ6ImZSEkbu8svsuzND82kiIVO@lists.linux.dev
+X-Gm-Message-State: APuU4Z+x+ap72vjLbqto/bzyOJPVmFK/4/WCJQwk3/tik1shxHE/Br3L
+	OVRro38gZvx3KmHmEmL1gt3zev4txJHavHwbIqwOfhQzAFLu3P53oF6WlP2ybVdEAOw=
+X-Gm-Gg: AYBFou0FIs2TVAGyOu5rpsneNLdhPW6r7fAZARWlKXQzcc0eOXgw3Ldr9a4SFrMH0se
+	TLWObdy66KuzMvahJ2cMXJpqZft6wdUMOpPkUrCQxhifruKsNoGp5iHSe6/a47wg/m0jjCoJluR
+	HvMjKSOZjZzU6JQbcoNuWXb7kX0+pz8U7sebz/VoMogtM3AxPMl/MTH/wKyBkM4A7PbQ2cHLrRr
+	PMUQSSfU+GgKLyGpcAdICzfyrAySmE9yWvr3nmDbbDykHvuFOm8qRgFW33BS/gMBQ1eRSml5YjF
+	XTJJLs1A6ruhOK2TLdzfZEyf/Nj+9jyo7iWhC2rMMRnot38XQfpTzyji1bj1XZKvqs5ql7EwiKd
+	irrMj//hE29//dxgf6lM4rWChGfVZ8KIIaaiOolu/O/h9Ls65gShhmhvXCsI85gdGXvhp9bZk96
+	d4CSzCu2yDvKLyk2H4MpwVwHm1hsEgyDCJicpL6eXUMTYG9l7Jogw1T3eBFmsyuq7jtG5fjhCOi
+	pT8feo5FJso0AzycIM0oixV+byySZPvmemwxQIuf3o/ld23dRrjnK2ZMXbbZ+X2WfMF4y513vEh
+	lHu4VV1xUQ1oJ9vFkdt+EMud5WY6kEPFhdZCnDTYEu6jlcomNcRv6JqjTrFYOrg=
+X-Received: by 2002:a17:90b:554f:b0:3a8:10e2:ad08 with SMTP id 98e67ed59e1d1-3b12d51f0b3mr872216a91.48.1794135900776;
+        Sun, 08 Nov 2026 03:05:00 -0800 (PST)
+Received: from localhost.localdomain ([139.177.225.233])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1278918f4sm2609818a91.6.2026.11.08.03.04.43
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 08 Nov 2026 03:04:59 -0800 (PST)
+From: Yunhui Cui <cuiyunhui@bytedance.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	dennis@kernel.org,
+	tj@kernel.org,
+	cl@gentwo.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	thuth@redhat.com,
+	ajones@ventanamicro.com,
+	ben.dooks@codethink.co.uk,
+	rkrcmar@ventanamicro.com,
+	samuel.holland@sifive.com,
+	zong.li@sifive.com,
+	conor.dooley@microchip.com,
+	tglx@kernel.org,
+	debug@rivosinc.com,
+	seanwascoding@gmail.com,
+	andybnac@gmail.com,
+	menglong8.dong@gmail.com,
+	cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn,
+	atishp@rivosinc.com,
+	apatel@ventanamicro.com,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	arnd@arndb.de,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev,
+	dave@stgolabs.net,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	broonie@kernel.org,
+	cuiyunhui@bytedance.com
+Subject: [PATCH v9 0/3] riscv: optimize percpu access
+Date: Sun,  8 Nov 2026 19:04:03 +0800
+Message-Id: <20261108110406.97495-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,155 +142,64 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/avpatel/linux.git riscv_trace_support_v6
-head:   f98be19c4d4f657fa0ed2a17aa8ef5ece29fe8dc
-commit: 568f8d89f93a9f46e7bb83c0e41d30d46429df68 [68/80] hwtracing: gtrace: Initial implementation of gtrace framework
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20261108/202611081715.20y4yygC-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261108/202611081715.20y4yygC-lkp@intel.com/reproduce)
+RISC-V has no asm/percpu.h, so this_cpu_*() read-modify-write
+operations use generic fallbacks that disable local interrupts. Per-CPU
+addressing also derives the current offset from the CPU number and
+__per_cpu_offset[].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611081715.20y4yygC-lkp@intel.com/
+Implement RISC-V-specific this_cpu operations using relaxed AMOs with
+preemption disabled. Native-width read-modify-write operations use AMOs,
+while 8-bit and 16-bit read-modify-write operations use Zabha when
+available or a local 32-bit LR/SC sequence otherwise. Cache the current
+per-CPU offset in thread_info, keep it valid across CPU bringup, hotplug
+and context switches, and select HAVE_CMPXCHG_LOCAL so vmstat and percpu
+counters can use the this_cpu_try_cmpxchg() fast path.
 
-All errors (new ones prefixed by >>):
+On a SiFive P550, Davidlohr Bueso measured about 15-20% lower
+this_cpu_inc() cost in an ad-hoc microbenchmark.
 
-   In file included from drivers/hwtracing/gtrace/gtrace-core.c:9:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/hwtracing/gtrace/gtrace-core.c:315:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     315 |         kfree(cpriv);
-         |         ^
->> drivers/hwtracing/gtrace/gtrace-core.c:359:10: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     359 |         cpriv = kzalloc(sizeof(*cpriv), GFP_KERNEL);
-         |                 ^
->> drivers/hwtracing/gtrace/gtrace-core.c:359:8: error: incompatible integer to pointer conversion assigning to 'struct gtrace_comp_priv *' from 'int' [-Wint-conversion]
-     359 |         cpriv = kzalloc(sizeof(*cpriv), GFP_KERNEL);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwtracing/gtrace/gtrace-core.c:369:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     369 |                 kfree(cpriv);
-         |                 ^
-   1 warning and 4 errors generated.
+Changes since v8:
+
+- Drop the PIO helper patch, which has already been merged.
+- Rename the first patch and update its changelog as suggested by
+  Davidlohr Bueso.
+- Use value-returning AMOs instead of rd=x0 for CPU-local operations.
+- Remove unnecessary memory clobbers from the new relaxed AMO and LR/SC
+  code.
+- Use .option arch,+zabha for the Zabha inline asm, matching the
+  existing RISC-V cmpxchg implementation.
+- Isolate arch_cmpxchg_relaxed() behind typed always-inline helpers to
+  avoid macro variable capture while preserving atomic instrumentation.
+- Make the cmpxchg128 fallback use the already resolved per-CPU pointer,
+  avoiding the same macro variable capture.
+- Copy the cached per-CPU offset from prev to next during context switch,
+  as suggested by Thomas Gleixner.
+- Initialize secondary idle tasks in the common startup path, covering
+  parallel bringup and CPU hotplug, and remove the duplicate initialization
+  from smp_callin(), as reported by Sashiko.
+- Select HAVE_CMPXCHG_LOCAL in a separate patch.
+
+Yunhui Cui (3):
+  riscv: implement this_cpu operations
+  riscv: store percpu offset into thread_info
+  riscv: select HAVE_CMPXCHG_LOCAL
+
+ arch/riscv/Kconfig                   |   1 +
+ arch/riscv/include/asm/asm.h         |   6 +-
+ arch/riscv/include/asm/percpu.h      | 574 +++++++++++++++++++++++++++
+ arch/riscv/include/asm/switch_to.h   |   9 +
+ arch/riscv/include/asm/thread_info.h |   3 +-
+ arch/riscv/kernel/asm-offsets.c      |   2 +-
+ arch/riscv/kernel/smpboot.c          |  10 +-
+ arch/riscv/net/bpf_jit_comp64.c      |   9 +-
+ 8 files changed, 598 insertions(+), 16 deletions(-)
+ create mode 100644 arch/riscv/include/asm/percpu.h
 
 
-vim +/kfree +315 drivers/hwtracing/gtrace/gtrace-core.c
+base-commit: ddfe51b0a0f5dc9e415cc2c8ad8db17532dd426b
+-- 
+2.39.5
 
-   307	
-   308	static void gtrace_component_release(struct device *dev)
-   309	{
-   310		struct gtrace_component *comp = to_gtrace_component(dev);
-   311		struct gtrace_comp_priv *cpriv = to_gtrace_comp_priv(comp);
-   312	
-   313		fwnode_handle_put(comp->dev.fwnode);
-   314		gtrace_free_type_idx(comp);
- > 315		kfree(cpriv);
-   316	}
-   317	
-   318	struct gtrace_component *gtrace_register_component(struct gtrace_component_id *id,
-   319							   const char *name,
-   320							   struct gtrace_platform_data *pdata)
-   321	{
-   322		struct gtrace_connection *conn;
-   323		struct gtrace_component *comp;
-   324		struct gtrace_comp_priv *cpriv;
-   325		int i, ret = 0;
-   326	
-   327		if (!id || id->type >= GTRACE_COMPONENT_TYPE_MAX) {
-   328			ret = -EINVAL;
-   329			goto err_out;
-   330		}
-   331	
-   332		if (!pdata || !pdata->dev) {
-   333			ret = -EINVAL;
-   334			goto err_out;
-   335		}
-   336	
-   337		for (i = 0; i < pdata->nr_inconns; i++) {
-   338			if (pdata->inconns[i]) {
-   339				ret = -EINVAL;
-   340				goto err_out;
-   341			}
-   342		}
-   343	
-   344		for (i = 0; i < pdata->nr_outconns; i++) {
-   345			conn = pdata->outconns[i];
-   346			if (!conn || conn->src_port < 0 || conn->src_comp ||
-   347			    !device_match_fwnode(pdata->dev, conn->src_fwnode) ||
-   348			    conn->dest_port < 0 || !conn->dest_fwnode || !conn->dest_comp) {
-   349				ret = -EINVAL;
-   350				goto err_out;
-   351			}
-   352		}
-   353	
-   354		if (pdata->bound_cpu >= 0 && !cpu_present(pdata->bound_cpu)) {
-   355			ret = -EINVAL;
-   356			goto err_out;
-   357		}
-   358	
- > 359		cpriv = kzalloc(sizeof(*cpriv), GFP_KERNEL);
-   360		if (!cpriv) {
-   361			ret = -ENOMEM;
-   362			goto err_out;
-   363		}
-   364		comp = &cpriv->comp;
-   365		comp->pdata = pdata;
-   366		comp->id = *id;
-   367		ret = gtrace_alloc_type_idx(comp);
-   368		if (ret) {
-   369			kfree(cpriv);
-   370			goto err_out;
-   371		}
-   372	
-   373		comp->dev.parent = pdata->dev;
-   374		comp->dev.coherent_dma_mask = pdata->dev->coherent_dma_mask;
-   375		comp->dev.release = gtrace_component_release;
-   376		comp->dev.bus = &gtrace_bustype;
-   377		comp->dev.fwnode = fwnode_handle_get(dev_fwnode(pdata->dev));
-   378		dev_set_name(&comp->dev, "%s-%u", name ? name : "comp", cpriv->type_idx);
-   379	
-   380		mutex_lock(&gtrace_mutex);
-   381	
-   382		ret = device_register(&comp->dev);
-   383		if (ret) {
-   384			put_device(&comp->dev);
-   385			goto err_out_unlock;
-   386		}
-   387	
-   388		for (i = 0; i < pdata->nr_outconns; i++) {
-   389			conn = pdata->outconns[i];
-   390			conn->src_comp = comp;
-   391		}
-   392	
-   393		ret = gtrace_setup_inconns_from_outconns(comp);
-   394		if (ret < 0) {
-   395			device_unregister(&comp->dev);
-   396			goto err_out_unlock;
-   397		}
-   398	
-   399		if (comp->pdata->bound_cpu >= 0) {
-   400			gtrace_get_component(comp);
-   401			per_cpu(gtrace_cpu_source_comp, comp->pdata->bound_cpu) = comp;
-   402		}
-   403	
-   404		mutex_unlock(&gtrace_mutex);
-   405	
-   406		return comp;
-   407	
-   408	err_out_unlock:
-   409		mutex_unlock(&gtrace_mutex);
-   410	err_out:
-   411		return ERR_PTR(ret);
-   412	}
-   413	EXPORT_SYMBOL_GPL(gtrace_register_component);
-   414	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
