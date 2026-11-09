@@ -1,79 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794243239;
-	b=rudYWtQlHJCBq3zzSCe0tPuZVJfatYD/n4J6rFAF9ocgfx1zW9CL9YSn8vzyyx1KutWh
-	 okfuoK07UzSe/YQJWYZYNHNMCInvxpH8Jux/G55ZI8PM85pQsJHQzxRmCgxpc1B6Z1YpH
-	 tvQZX7NzMAVhTizars2vJ6KXiwQSvPeF5azHrP5c9OrenzaUolYixfhfbnhGBRCDonkNf
-	 +pCxwoWH8gGGiXcuGv3yxGXOVJkKN29aJoVQ3vefKOrQVCSEzRpXSPEJcJb/nbmEotzyv
-	 rXDGfmc81Lo/5SLrUf0cYb3/cVyxJCJmqq524KErqxp6LNoocTBZraU3V1sWleJvTkw==
+	t=1794246719;
+	b=QYGAL8Pgfl9HNXkAFvF4jCxsCOXQKJuw1SClGQrtM7K1V5rqvKWg4O3deE9o831+9dPK
+	 7W0rAUqRgBoXOOZAjCwjTtksPyGIFPy2JqSGJLQZl5XBnEIKXZu4Ip76fyZ4uaJwu70P+
+	 A58bQu/yiOAtbxNypegW6VOmWPEFSEBcG0GaQ+komHFGf87AsB6PQp7WBAI4O6v4GNWuf
+	 MDZMs2qgiBzShOVGuxr5zHEZv7LQq2eWOW+RcYoi8O2HRNaD7ouAQi50aPKHTqvTKSb4x
+	 mRapJ0lImz9cxoEaCuivj5SkiDV1HFppLkD/0QwIkF7PHv7EMhvU2ZZM10zIfLpOwow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794243239;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=F4OsWvsOE965wAHjkF/7l2DBKBtn2FrxEEok76qtD2A=;
-	b=lFqZlzNouWqKHWQd1g0a3L8XS5Y4Kd8eJkkmqymZZfRjX4v/b4gkjeb2kjb3TRyXUeu4
-	 I2CR6CSwnTFJSKKDwsAwlV+1+WLaKjSii69Qp78dDTyKqP9ofk1S1d7tEnZHATwmp8RpY
-	 yPBt2lSx6itU2DcMU+8o2uJPPRX/pgTEO79fomEmoSZ6n+BDfjjWd/m6IZNn/cE7dxjAG
-	 n1FQbsq8dIE0tSlb5cnbE8F82cp8muMqSYOJj4O4dSJceIkbFgIwJ1TI+VbCkWNDyiDk2
-	 Feu2Zcy0exzHcEQyWdC9Sq+Ns+fDYNUXokJTVhSgHphkw1PdKgUQKD5NdYK5aAEv9iQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794246719;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=i9Nv6xGB8Ae4NNlgpZyPMXjBlowBRSDkMgoiPDc8DSo=;
+	b=k8Vo4ej4R/ZsFzQl2SnPEz4dOXAo3UXoXg1K8g1Co/co098JdtOcgS2lcMiCyBbJvgFh
+	 GI/aThaXgnhO0dKUJkYylUEKqwzZ/1zmhfVlUNKMDcKV7O+dVcN39ZOuJnSY7DtP4kH0O
+	 EYkhYaUZjHCESSrU6aBgo0Dtf1FLtYmB0aM3LGsB6MBmkpSW/I2jYVgm6MZ6b84Insgp+
+	 0VuYpX0ILyKmyhaHo61S6/irKIjAmiospA1BOWr4WwR6wLe2nF3dyHs2vFuOS9L+IAUEq
+	 BRP6AEBB4FmgNTQKSaUOGxn27/F+sBKM1G0R3NdB7RO5v+UQGrUsTqgJhzcRcXRnoTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=RKWSdG7u;
-	arc=none smtp.remote-ip=192.198.163.14
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYB6xKK7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5882F60A2622;
-	Mon,  9 Nov 2026 16:53:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5882F60A2622
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E745A606A33C;
+	Mon,  9 Nov 2026 17:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=RKWSdG7u
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794243239; x=1825779239;
-  h=date:from:to:cc:subject:message-id;
-  bh=pEYH3oMbEKk9oi0Ge9VhJ9xfpnu+GDZM9dOoKLqjC5w=;
-  b=RKWSdG7uRsO1o3MfZvFkx7pYxsaSFFSDCElN5DtRH/ugpjWDcluqhA4M
-   8WNThIMXkSpH5z3GnDedkFd4noYMosYdB69yT348ivzfaYGDE49qR50z7
-   qk9fgsgMv5Lo5eHjiXji+8SHeqBuJsJ7eBT65ZieSsQJW4BODlmO44IyH
-   WHLEy+t/nMiHyo4hn8iz+PxABnhop7Agd5uWI2BlsOeeDiLsQ3+UKCLFC
-   zSwOCQkKsWWd50NPFY45G3RhOnumscVc5z5mL/Vj4uFuDHK5EQDm+qJha
-   dPb+cUeLreNwU9x76cXfew4AB+ogHf6gdAyvbSFtEAu0Z4UrTpl4ZMAkh
-   w==;
-X-CSE-ConnectionGUID: /cka6lPYTG2W6qk3nLFcYw==
-X-CSE-MsgGUID: JUKEH8sGTWyzxbZzM7OHMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="3005666"
-X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="3005666"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 08:53:58 -0800
-X-CSE-ConnectionGUID: dv72q4y0R828zQiA5rpoUQ==
-X-CSE-MsgGUID: QQTfKDaDRZKE74g0PbVW1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="9653633"
-Received: from igk-lkp-server01.igk.intel.com (HELO 1db0d17a343c) ([10.211.93.152])
-  by fmviesa012.fm.intel.com with ESMTP; 09 Nov 2026 08:53:56 -0800
-Received: from kbuild by 1db0d17a343c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQScw-000000000Pd-0zqL;
-	Mon, 09 Nov 2026 16:53:50 +0000
-Date: Mon, 09 Nov 2026 17:52:50 +0100
-From: kernel test robot <lkp@intel.com>
-To: Sudeep Holla <sudeep.holla@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Yeoreum Yun <yeoreum.yun@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: [sudeep-holla:for-next/arm_fw/updates 2/2]
- drivers/firmware/arm/psci/psci.c:81:13: warning: variable
- 'psci_system_off2_hibernate_supported' set but not used
-Message-ID: <202611091729.V7epDaiS-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYB6xKK7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECD01F008A5;
+	Mon,  9 Nov 2026 17:51:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794246718;
+	bh=i9Nv6xGB8Ae4NNlgpZyPMXjBlowBRSDkMgoiPDc8DSo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZYB6xKK7ikHLcp12dpkvJj5Weru/Un6Bp2RAV9c3ZnLngBPdNf7jlFa/6pacFIadc
+	 d/pGjG87WyjjJobuh5kFUC1OQAoc9bRk4WC1pDEeCGQuKci+PF+Uw0eYMsHcnjtlLP
+	 s++NIZ8IZuJTW/rEM1mTa4fGTme1jNwWHMubKfSQJSK6DIM7cFtopEW3DmaocUcma+
+	 CZXeDcWWnJz/AQVG1Gi3dP+iUzHahrZq6fKhJALiuBAIAGyYp7ziI2PuiuN8h+dcYJ
+	 nZjhtm8jNVudg+OXggV+9PHXgsxCrRE+ebIE0fV+E434lKUuqdYNDEcCFPIw0naYPj
+	 J7wdNcnd9Gi2g==
+Date: Mon, 9 Nov 2026 14:51:55 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>,
+	Alan Maguire <almagui@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, ast@kernel.org, yonghong.song@linux.dev,
+	bpf@vger.kernel.org, kuba@kernel.org, tj@kernel.org
+Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
+ clang KCSAN
+Message-ID: <avIIO1JOVnK8y3a7@phoenix2>
+References: <au27Y9m78_3EH2v1@gmail.com>
+ <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
+ <au347UiVUe5oUuxM@gmail.com>
+ <au4kpSGVSH3tYiZm@google.com>
+ <avG9bk0kxRUvonhD@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,51 +63,45 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avG9bk0kxRUvonhD@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git for-next/arm_fw/updates
-head:   49c49ca0c4d02848a9576f72c4741c38c5ba09de
-commit: 49c49ca0c4d02848a9576f72c4741c38c5ba09de [2/2] firmware: arm: Group interface drivers under arm/
-config: arm64-randconfig-2002-20261109 (https://download.01.org/0day-ci/archive/20261109/202611091729.V7epDaiS-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 0d1bc7245734217f06f9bb7e09f9dfd09d31361b)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261109/202611091729.V7epDaiS-lkp@intel.com/reproduce)
+On Mon, Nov 09, 2026 at 04:33:40AM -0800, Breno Leitao wrote:
+> On Fri, Nov 06, 2026 at 07:05:25PM +0000, Kuniyuki Iwashima wrote:
+> > On Fri, 06 Nov 2026 07:58:01 -0800, Breno Leitao wrote:
+> > > On Fri, Nov 06, 2026 at 09:16:24PM +0800, Jiayuan Chen wrote:
+> > > > Thanks for the report !
+> > > > 
+> > > > 
+> > > > On 11/6/26 7:38 PM, Breno Leitao wrote:
+> > > > > My arm64 KCSAN builds of linux-next fail since next-20261015, because
+> > > > > bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
+> > > > >
+> > > > >   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+> > > > >   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+> > > > >   Failed to generate BTF for vmlinux
+> > > > >   Try to disable CONFIG_DEBUG_INFO_BTF
+> > > > >   make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+> > > > Has pahole fixed this issue?
+> > > 
+> > > I don't think so, see the line below:
+> > 
+> > Could you try this ?
+> 
+> Thanks, it fixes my build. I tested it on top of pahole master (9eb594d)
+> with next-20261105 and clang 22.1.3:
+> 
+>  - arm64 KCSAN, CONFIG_WERROR=y: vmlinux links again,
+>    bpf_tcp_ops_set_rcvlowat() is back in BTF, __bpf_tcp_ops_init()
+>    returns 0, and progs/tcp_autolowat.c from the selftests loads.
+> 
+>  - It also brings back scx_bpf_tid_to_task() that was work arounded by
+>    tejun.
+> 
+> Feel free to add my "Tested-by: Breno Leitao <leitao@debian.org>" tag.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611091729.V7epDaiS-lkp@intel.com/
+thanks, I'll check this later today,
 
-All warnings (new ones prefixed by >>):
-
->> drivers/firmware/arm/psci/psci.c:81:13: warning: variable 'psci_system_off2_hibernate_supported' set but not used [-Wunused-but-set-global]
-      81 | static bool psci_system_off2_hibernate_supported;
-         |             ^
-   1 warning generated.
-
-
-vim +/psci_system_off2_hibernate_supported +81 drivers/firmware/arm/psci/psci.c
-
-6df3e14436f6ee2 drivers/firmware/psci/psci.c David Brazdil     2020-12-02  69  
-068654c200cc329 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  70  #define PSCI_0_2_POWER_STATE_MASK		\
-068654c200cc329 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  71  				(PSCI_0_2_POWER_STATE_ID_MASK | \
-068654c200cc329 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  72  				PSCI_0_2_POWER_STATE_TYPE_MASK | \
-068654c200cc329 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  73  				PSCI_0_2_POWER_STATE_AFFL_MASK)
-068654c200cc329 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  74  
-a5c00bb28da0bb3 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  75  #define PSCI_1_0_EXT_POWER_STATE_MASK		\
-a5c00bb28da0bb3 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  76  				(PSCI_1_0_EXT_POWER_STATE_ID_MASK | \
-a5c00bb28da0bb3 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  77  				PSCI_1_0_EXT_POWER_STATE_TYPE_MASK)
-a5c00bb28da0bb3 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  78  
-a5c00bb28da0bb3 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  79  static u32 psci_cpu_suspend_feature;
-4302e381a870aaf drivers/firmware/psci/psci.c Sudeep Holla      2019-04-15  80  static bool psci_system_reset2_supported;
-3e251afaec9a671 drivers/firmware/psci/psci.c David Woodhouse   2024-10-19 @81  static bool psci_system_off2_hibernate_supported;
-a5c00bb28da0bb3 drivers/firmware/psci.c      Lorenzo Pieralisi 2015-05-26  82  
-
-:::::: The code at line 81 was first introduced by commit
-:::::: 3e251afaec9a671716c9cc4c184f4e4a09915ec4 arm64: Use SYSTEM_OFF2 PSCI call to power off for hibernate
-
-:::::: TO: David Woodhouse <dwmw@amazon.co.uk>
-:::::: CC: Oliver Upton <oliver.upton@linux.dev>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Arnaldo
