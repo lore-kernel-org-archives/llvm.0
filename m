@@ -1,93 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794258989;
-	b=1Kq/0I7rjIncZyNJ6wuLFQS1g8kEz5xPFE5IvkLq8FosIlLPatARcGmoqI3B2blHLnXz
-	 NvrwiUt0ILMMl8quqnAnb+mBpUl3Ic9kGrjNGsL+IZt3XZRIFbjZcPxcqQbadiYzaCnqB
-	 RJC45x6V6hLWVCNy/h3oXOfmHVEXZapxdWTNTmM3TigbRGy5x2L6zkxONJMjGqtPFTZRl
-	 wtJoxPa+bWhf6KY7/pDtt4s0jK2NCqw2BnwNBbWOL+hFj+rNJiHIl4RlrLjviV73rdcxf
-	 HQglFeuEKeKHPbh6/VMjui3IHZ7+YbQEjxKIT+0FbQ6pWMVrOi/u6I8cxcSBuitsUJA==
+	t=1794262701;
+	b=BSfjMLhDZwMsM8DdfV6M+XAthwIJ2PG6K9vhA1C1Rqcexr+Bvo4wGxNDEvtXRQZBbPCp
+	 aG6KQ5suPuKPai3s8l2X2oJGOTUlS1vaRtvvIOX+c8zDHELNHmPuJ8UPLxBoz2CmP3ilC
+	 czTe98q8l+H3s0X6u7Y9wE5DicIxvrFt9qmf5r7NlSQZgGRYWQKZ+feiOerSSKqhkzNi5
+	 Wt+eA3KVqCD8qq5j2UYs3I4JFl748X3trmlfQKVfugQ9QxBpQbm7iCvDA2kn+qBxHkj5Z
+	 2cAijVvLZKuHtcT7nV5/aH2FS7rxVJWkAQARzb6lSBMa50Wxq+THzKWzNSUX445IX4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794258989;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=vURM/ycOWtNcfROgQ72z0JMUPAmEvRYCw8hhtZdgFRk=;
-	b=DJue+PPXbXakaGlYApAGfI4YDnSB73u0CGsJh35mLMbNa5xu5AR5okt3VXtL/VX29fgA
-	 HG3v0r133hhx700ZFThTk0qMxlb+ueBPabYBy5gnjjUY9C6UylNNJGgEXwxnfV8mB+b9r
-	 dTsXPWtz6i89yHrPzrw2gLD+Pc47ahFrR5plLFKHXDI+mqxluJN8E4qCk9XAQGM2oi2jJ
-	 nVSE3dmXzpTcTcQO2MZmsurB62ciOs6tF3EVUJ7HC2te3x97QOKuB1/GEOzdNVPTcwuVt
-	 U+36s4eO/77nFMIwYoejqxjmnOHZgfO8XwnxVew9U2So9Bp9n/j3TGjJyYc2zsQHAww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794262701;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=c9eJFkB1A2V/YM9JwIyEGfv/PGOIESHseQrXfeJUqyE=;
+	b=NB+kE8LRftZtVo8d2eAG9xLvmJJ32uK8xwWx59tArp9rnXoCJqJVOmPNbSzAnu29Nh1w
+	 XxJ7OtHUnPcnTY2r3cHfG316tZa/FpGAo1W0+bvLmqS3KXkRPFHrt9y+VY855cKFZsDDt
+	 d4/C4wiy6+LLUG4u69Z+i1Dco1PRWiUxVV/vQOiyOR+f3Wd+LwZRJ/W5qCC0o2J+Dso1b
+	 BUg71ExMVb7GS+c4cMQO7vpflRuF0W+bgho5DBdD5dd1kSEJ3etHOB6I+3oa6LZnZALL2
+	 +edg4Jpnj5m1MPQ/qELznitq2EToFBbQylKyjAbJ5KDj44RE+XoeXJIDCUXCw4NWpqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XqZ3XyJk;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=fqs0Wigu;
+	arc=none smtp.remote-ip=198.175.65.14
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95568606A325
-	for <llvm@lists.linux.dev>; Mon,  9 Nov 2026 21:16:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95568606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9EF606A321;
+	Mon,  9 Nov 2026 22:18:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A9EF606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XqZ3XyJk
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a20a37703bso9879095e9.1
-        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 13:16:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794258988; x=1794863788; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vURM/ycOWtNcfROgQ72z0JMUPAmEvRYCw8hhtZdgFRk=;
-        b=XqZ3XyJkIVNmp6F0wF8C5qdLAS7BXdWLSYlW5s0gB08515daU9B0dppQfXcmpcBVqv
-         y1Sn7kRP7X8cGJ707vZpx67WUPLWbqfeX5nU+knv+oOYyp8NjHLqs9FsdiI/6FGJ2EeV
-         j1o78cklldrTEL+MJd0j0uu+wpY2pFAcURZPNweG4tiwQ/2pzRa3nPr1YRZWo9/oPKg8
-         miRHR/T31bHuk6bv+b5kNyOnmTXwnCHgLzDFRpv0SzSkagR2MtCl0go1j/CuSUtBo0bm
-         N8BgTvyocbSpZj2utUF8uqRUV3Ju/mC0W/1tx0z4apBeeBjWrQ6AjpIAfBHj4hGsEy22
-         7okA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794258988; x=1794863788;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=vURM/ycOWtNcfROgQ72z0JMUPAmEvRYCw8hhtZdgFRk=;
-        b=JT1eriHrD+uJL8EG0e8aW4KRF6rTFQQGM6UR6CqljjjAfOc5CHJnxR2tdIbJuDOfis
-         MwpTCU1N/7M43nzXoHv7CO9Dvyb/BeycPhjy55+YwsHy/jv9VJn9rejJvzG9nUMAKccu
-         emF5eDPd7wli9VtoLE0EfiSt57Y5o7b3QadphGR3BH+87zsPm0RsWP/zt68lm70Vv0J5
-         USoJ/UrVbmWO3RZt4Yp/xDy8PXrRcjXYOkzVbGc4hq6ZiVADSZv8BJ33ldafhiy432xp
-         +F2gfHQL6oPRUpq05ST1GpKoL2uXzMuMJf/K5KcoEf2Zi8x9wrecwSCXWfFx0mjvpveV
-         VA+Q==
-X-Forwarded-Encrypted: i=1; AL+hErEzRmCza5Az5dKZyeVYeBZjOds+T9FOA2B9AOZcJVf1sQ6qjKnoM9UE3TugIij/H0CL5FPP@lists.linux.dev
-X-Gm-Message-State: APuU4Z9s2lzIpmbKPHZlsgAKoBsfuouJkq6xWGTlGjYIEvSaeA6p0FKG
-	u/hN54oXcHY96w8e65FmlKuHIYPxChrajSNh7gsh9SsqLpTZqxpdUN6w
-X-Gm-Gg: AYBFou0UBDxNqXHzIjb/rpnam5kjwcpd8ddjTqhA/cpua8xvRQzIWruml0PQ8gHxfwC
-	d5LfWVboTwpAdqbbVaO+5fTy3UxaR0x6m38ZGYcUhLT3+oN9afd69s47y0e2WxaoxAIS6u1CbOt
-	jpo1N6ik8Wd6+cO0h9D3SDJAqCpCobwMaJkZ2vxzqRgLEARGNqcY2JC6STKvFuE4YOyOZKHfm7W
-	sO+PSizwAKR2YPPheXLLkdQIejI5STmMVTclAe8Clh6Q+n+XmL1PQ/eQpP5js5j4yApEsryW0Vs
-	PayQCRfGm10ZYF/Vh3Jqi183JOoMsxf5ljrxHJTZzWV1F6orymKUwhULGQ80Bit3D3qCUDZf5hk
-	oQwLcF848XIdGqTqpS0U2XjJOYCylPwwQEMGv8p4cACWm9I3nwVR5TFmnviwiwVsrHTIi5tO+nd
-	snjAlLJVNyNlKbG2cQmdpFmEIrkfVT29ArlQ4eSf+443Fz758g/H01b+Qco8k6FeSsKc5tNCYwX
-	nIRMsFjQMYxfYcsfEN+eAcPNTnDB7PDGKsIGjLMJKoVXZtaK74yibA5Dve13j8XvOXe30bM3wiv
-	N2LnVYXOmeyJLlRe4Yb9dJqfH0yNJiLku9plWRTMOUUi483La6k+G7LQ/SbT6I/fvDje4vS/KHw
-	NuWsnAvkVUw+Me9FPj5bHYxKRJ31K6ZQN4l+QRfz2IOll
-X-Received: by 2002:a05:600c:6291:b0:49e:7c8c:361d with SMTP id 5b1f17b1804b1-4ba0234ead8mr7663955e9.22.1794258987873;
-        Mon, 09 Nov 2026 13:16:27 -0800 (PST)
-Received: from PC-DE-MARCUS (host-149-154-244-77.dynamic.voo.be. [149.154.244.77])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fe2f09sm17550795e9.4.2026.11.09.13.16.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 13:16:27 -0800 (PST)
-From: Marcus <baronmarcus2005@gmail.com>
-To: nathan@kernel.org,
-	nsc@kernel.org
-Cc: linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] run-clang-tools: Resolve the compilation database before changing directory
-Date: Mon,  9 Nov 2026 22:16:18 +0100
-Message-ID: <20261109211618.1496-1-baronmarcus2005@gmail.com>
-X-Mailer: git-send-email 2.51.2.windows.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=fqs0Wigu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794262701; x=1825798701;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aK30euBbuDTMMaEp6ls7Vv/1SJLD5Mq+6g69iv5YITc=;
+  b=fqs0Wiguve1RNqiD28X1sK8POY3mt/rL89mAUGJTZk37AC6koc1xT4pb
+   +Hx7p1S1X5PrfrGe/bUjUGXCxXiILBHtP6JiCDZR8N6nL5Yjp7Ex1l6EH
+   27D5XCXWWCOO/kUKnC2TfklY8TA6HrScKX+C1bovXjvyYTu02wZSYh4zs
+   IJuFBFk+hIrBffrx/9muz7lYw1tscOR8+DsiYVYKbstODssVJp13zCIKA
+   7qLsKg6w7OLYzxetp25G1tKhXxP/D2NqhlTJDZZ/JtcDYHgB0eddInqTo
+   EheFYf3mGutaLw8WyVXAjOJ0BRA5SB864SCdbB0WJZYnvtw+QlSz5Np2f
+   g==;
+X-CSE-ConnectionGUID: LkpRpCEURmiZLZEbXr69Fw==
+X-CSE-MsgGUID: +aJvRF+IRZSKwO+a8ytvlQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2891785"
+X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
+   d="scan'208";a="2891785"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 14:18:20 -0800
+X-CSE-ConnectionGUID: uRWsm7i9QwiwhY7dhOj8yA==
+X-CSE-MsgGUID: sRE96BBBQGe1ftnOsgoHNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
+   d="scan'208";a="7851116"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 09 Nov 2026 14:18:18 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xQXgs-00000000vQl-3fQU;
+	Mon, 09 Nov 2026 22:18:14 +0000
+Date: Tue, 10 Nov 2026 06:17:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chenghai Huang <huangchenghai2@huawei.com>, herbert@gondor.apana.org.au,
+	davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	liulongfang@huawei.com, qianweili@huawei.com,
+	wangzhou1@hisilicon.com, linwenkai6@hisilicon.com
+Subject: Re: [PATCH 2/4] crypto: engine - add acomp support
+Message-ID: <202611100606.eXBh5Nlt-lkp@intel.com>
+References: <20261109073556.2517351-3-huangchenghai2@huawei.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -97,49 +85,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261109073556.2517351-3-huangchenghai2@huawei.com>
 
-The script reads the compilation database relative to its working
-directory, but passes the same path to clang-tidy after switching to each
-entry's directory. When the database is outside the build directory, a
-relative path can therefore point to a nonexistent location. clang-tidy
-then runs without the recorded compilation flags or finds an unrelated
-database in a parent directory.
+Hi Chenghai,
 
-For example, invoking the script with database/compile_commands.json from
-the parent of database/ and build/ fails to load the database when its
-entries use build/ as their directory.
+kernel test robot noticed the following build errors:
 
-After reading the JSON file, resolve its containing directory to an
-absolute path for clang-tidy's -p option. This preserves the caller's path
-resolution when the subprocess changes directory.
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on linus/master v7.4-rc2 next-20261109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The issue, fix, and reproducer were developed with OpenAI Codex assistance.
-Verified with Python 3.13 and clang-tidy 23.1.4 using a C file requiring a
-definition from the database, with relative and absolute database paths
-outside the build directory and a database in the working directory.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chenghai-Huang/crypto-engine-clear-busy-and-recheck-running-in-the-retry-pump-loop/20261109-153553
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/20261109073556.2517351-3-huangchenghai2%40huawei.com
+patch subject: [PATCH 2/4] crypto: engine - add acomp support
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20261110/202611100606.eXBh5Nlt-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project fc9576e3b179738d99c5babe5cd9d6c1f883e0db)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261110/202611100606.eXBh5Nlt-lkp@intel.com/reproduce)
 
-Fixes: 6ad7cbc01527 ("Makefile: Add clang-tidy and static analyzer support to makefile")
-Signed-off-by: Marcus <baronmarcus2005@gmail.com>
----
- scripts/clang-tools/run-clang-tools.py | 2 ++
- 1 file changed, 2 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611100606.eXBh5Nlt-lkp@intel.com/
 
-diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
-index 79d58b34..cc19f8bb 100755
---- a/scripts/clang-tools/run-clang-tools.py
-+++ b/scripts/clang-tools/run-clang-tools.py
-@@ -86,6 +86,8 @@ def main():
-     with open(args.path) as f:
-         datastore = json.load(f)
- 
-+    args.path = os.path.dirname(os.path.abspath(args.path))
-+
-     lock = multiprocessing.Lock()
-     try:
-         with multiprocessing.Pool(initializer=init, initargs=(lock, args)) as pool:
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
--- 
-2.51.2.windows.1
+>> ERROR: modpost: crypto/crypto_engine.ko: symbol 'crypto_register_acomp' undefined!
+>> ERROR: modpost: crypto/crypto_engine.ko: symbol 'crypto_unregister_acomp' undefined!
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
