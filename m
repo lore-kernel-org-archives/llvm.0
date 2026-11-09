@@ -1,86 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.61.82.184
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794194684;
-	b=jD0yKrV7F9wxVEgN/EEMOb9T0MWD3FU9uGUjfwjw9XtvbfHJ2mLT9oQJpLRwTlKEeq5G
-	 ZLlu0f0OrQJXwZ4v0LdTfEcbK4HvC5tJToDzrZnuVecXJKmfbJPaZdg1SyxPIf2W5LkM9
-	 MYglpFqD8c531+M5XJf+3l/bSlnXxZHZshYIRXWn2tmdZEMxrDUmiQE8auf2utuZ4y4A4
-	 yzb+v/CjDeBncz+HHKn5eoQzfeR3fosjhfWe/QqY73XWj8et+iTBCYCAp3Q/II3El+Bb1
-	 cmT5YIKyrMeWnyF/LqTgOXIbBefUTnbboIKNR9AbiaskHMp/0sYXF4x1foOgn2MAa3g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794194684;
-	h=DMARC-Filter:X-UUID:DKIM-Signature:X-CID-P-RULE:X-CID-O-INFO:
-	 X-CID-META:X-CID-BVR:X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:Received:
-	 Received:Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
-	 Content-Type:X-MTK;
-	bh=jFjDMeCOUfqx4tB4jN7qVpzUMoCyGqzAHhigGnXoPxQ=;
-	b=i7qXMuQmiHAn2e9F4d46GOTEhPNSrR53PBs2jHDA6Vzsu0KpnMMmxpiwNgu46vHIrnVh
-	 J2rPtSe/kKH9QBJg7ss80kjjf8J43MaUibkBS8/ByUqij01C3ldW8cxIVuCeaK0IUZGeo
-	 0iIXUjcJounrdgjMwdyf26lBxMzUhQ13Jgw8R2ssRsIHUfFvx/LREkwd5krVmqolgypdz
-	 KCu9R2McTllJDfEMrPHYFyu07tOmkHxHldp/eqapAFpiG+Hib8yqrmAEFJ19byyQ1+RvG
-	 n4qGJ0cehK7HzwHHT6STW4Ig74qvRs1Lur5ZzRBIUmdIb12rAaFr35YicrbuqzS1w7w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mediatek.com;
-	spf=pass smtp.mailfrom=mediatek.com;
-	dkim=pass header.d=mediatek.com header.i=@mediatek.com header.a=rsa-sha256 header.s=dk header.b=SuJDtysg;
-	arc=none smtp.remote-ip=210.61.82.184
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794196078;
+	b=I51e8eq+xoZ1coz1FkHRdHJLotURr9lFMekOO8LqBDsUH5hVnnBXDhWFvnhV+60FDLdZ
+	 dHLsjJyZB2+ikX2XqJF4kHVCbD4EEN2VeDpg3a9UlKUD/wbFnkWqa7X+GollhmgSYI+y+
+	 YvVqCpCKsN0Ppeyw1c1yFvLeQ3Xx8sQV52F1kySdJN/eQAMq29So8qVFOqKKvJkl7U9mn
+	 Ay/B00RovfJybBM12vNeRVoqmaRFq8UhMpNiLxezfTzIHkiiGL2HpYBKtnspi7oa8A1E9
+	 0ifzquJy+Ss+56LLy76gADJpzEPNTAA+w+hFyni2Fomzo6m1fxUZJ0m7t+yAgGl8ViQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794196078;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=02Xm4AXZtFCOeYUfXGvoHJuZWiU3qVVXajNv+02pe2I=;
+	b=J/QFTgb0oMu6jLh2kbp1zF49sQYULLrovsCRMv1hCOLTnsrtK88cnb2ubWV/9ho3vcor
+	 +CMWuoHqmilQnctms+IYEwHD+Lz254YN1xE3MQS55nbPTfiOYmIkXGXTdp7rEXfEMEV4P
+	 5R4kCnPASncAr7TpVwH4xZf6RqXtplPx/UN7GnxBq7sqdpJLewP23i1qRTRFu9bXgcPh6
+	 BNvZWQs4zip29AUxZweUMzpkKewlJJrbac75qUbs34dCvBbHRBv0D5YUozjpAu/kA8zXH
+	 xbV05eRusj9fOqc9EpbKNaJKc/s8TjmAl48dYdZOWi/x2y9pPdDbkRsC8HMZbDDZjbw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=bytedance.com;
+	spf=pass smtp.mailfrom=bytedance.com;
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b="IPhIMJ/1";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.41
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA13606A33B
-	for <llvm@lists.linux.dev>; Mon,  9 Nov 2026 03:24:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0BA13606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34723606A323
+	for <llvm@lists.linux.dev>; Mon,  9 Nov 2026 03:47:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34723606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.a=rsa-sha256 header.s=dk header.b=SuJDtysg
-X-UUID: 165f026cdbed11f18dc8c9802ae25ab1-20261109
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=jFjDMeCOUfqx4tB4jN7qVpzUMoCyGqzAHhigGnXoPxQ=;
-	b=SuJDtysgK3t4uXc5L/Co7akhTjokQkP0yZ9y7qumuX1JFentI4BoQnK1LH17CMGI7q0awAM38gBPlz4uBCW+QUCwJWD2q+KTW2/zMiYqAgghCoDPdX7/wie4zItAsy2d/9S2xSN0ai9OjS5IP0WntH6x52YMDRPubGgSpCPQZKk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.21,REQID:ef3cd6c4-314e-4ba2-879a-0f6e6e03732e,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:b0318ac,CLOUDID:fb28f2ce-02bc-447e-ab88-2baec399874a,B
-	ulkID:nil,BulkQuantity:0,SF:81|82|102|836|865|888|898,TC:-5,Content:0|15|5
-	0|99,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 165f026cdbed11f18dc8c9802ae25ab1-20261109
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-	(envelope-from <cyril.chao@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1272339578; Mon, 09 Nov 2026 11:24:35 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Mon, 9 Nov 2026 11:24:34 +0800
-Received: from gcnsap21.gcn.mediatek.inc (10.17.81.22) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Mon, 9 Nov 2026 11:24:33 +0800
-From: Cyril Chao <Cyril.Chao@mediatek.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Matthias
- Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-CC: <linux-sound@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<llvm@lists.linux.dev>, Cyril Chao <cyril.chao@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Cyril Chao
-	<Cyril.Chao@mediatek.com>
-Subject: [PATCH v1 1/1] ASoC: mediatek: mt8189: Use AVOUT for DP and HDMI jacks
-Date: Mon, 9 Nov 2026 11:24:09 +0800
-Message-ID: <20261109032424.625004-2-Cyril.Chao@mediatek.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261109032424.625004-1-Cyril.Chao@mediatek.com>
-References: <20261109032424.625004-1-Cyril.Chao@mediatek.com>
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=IPhIMJ/1
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-84e513874f8so288407a34.2
+        for <llvm@lists.linux.dev>; Sun, 08 Nov 2026 19:47:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794196076; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ifZoPeoKBVg7fvWSnKk1K1aeCazXUdpqz/1U9Jn7cQDALsbiW4VQUb5Gd3CnBtNf79
+         o110WXfuT9DnNHzGMFywoigcmBDYqbGfg7EFRlNJuNa/wc5T5PqGUyw744spf5O/gUPM
+         N7PY61zvKIrQVd/ZWYlCm3OVuf4QqKYbUKlu49X7onKuFxvYTZ1JiLkxdXbE0VZmq3eZ
+         0xE8GkMSQ27uunbUVAkRc7RbgahjHXX1reBzc6mX8xbqw3LmfphduEBoNnDEqQ2Pqlsx
+         jpPDxTIc4ba0shmx50oFRy6wYHBDv5D3aKYhcWBV0F9dwyHq+q/ITHe2vDR6HRlOyO7E
+         QdVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=02Xm4AXZtFCOeYUfXGvoHJuZWiU3qVVXajNv+02pe2I=;
+        fh=bl8QBDZDrVT/69T5o62hYFHzQdp9eJsb5rC+9Z2bde8=;
+        b=i1+ziDn4XQMYtpAPPmMf8WysFtPRttffD7n7pl85+sjwyYu97dfQuYp1JMcJYB6s9P
+         nyFDNI2xJXx14AhZc4+GUU79Vlfu+MYarPfcgSBWxSjYkHgM7m0VOjGR9yUfc26ywdMN
+         EwJQ5LHmi64BnOuZ1B1Y5LSMc2DKD8RlT+mPEf30i2zPTI9nJsvMVEW0NsY5QM+92toE
+         O9OSwNc0tQdaggghJVWsfqVbhabjST8HSqdaaMtZzf9WCBm3mHoK4qh1qvlkitdHZsGT
+         OYKMyo0DkSU87yXMFHe+nxd155bQd+Qyz/0FQjWFzrR2Yq/4JcvM0YyDrStFB1LTFiWR
+         MNNg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1794196076; x=1794800876; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=02Xm4AXZtFCOeYUfXGvoHJuZWiU3qVVXajNv+02pe2I=;
+        b=IPhIMJ/1hhgmVb4CwSS4G3a3HegSZsD8xgfcX22kpU0WfBDFsZFOWLy9vZDbqBucUA
+         tr44/zanUMPdfJRJEmAVLkV0JkYRQyKU7sQlg8+cEIscUA37lcn/9Khm+HNf2kz8WSyz
+         4icCYs3aEMY5NrOz+GeZQK6/KvjkFRwwWDJsgvjo2TG1UIm8kZ2eK2cdsFQOv+ff4hFs
+         CTKYFDgnM2tYgF7DRSPrRMRVk2Qd87Gf9HgjU0w3wlXGyv44pp718guJwQ1oqLdZGbgr
+         PinJA2XJfhqKCjzv1HCBGRT1SjESkz2ayJbDAVZl1oBhYjuGs7rzyigx5T5MGzZfutjS
+         5QBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794196076; x=1794800876;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=02Xm4AXZtFCOeYUfXGvoHJuZWiU3qVVXajNv+02pe2I=;
+        b=2etsvKSIqbj/PvwHJ1iiRpIpKm2fbGMLS7VeCV6FjwcbryA+n6NS9XNrVfBzqrQVWw
+         gR4q0+jgzzsZicEcz9uF3d6p5MC+LYE8cg6B1pX4m+ZCk71Ga1QfQKNK45vMtSODA02S
+         qvLmDxbqufbuZeFhJDYI8xiNlSZZatTHQWuT508pWwhmmk8PHOzhzkN0F6QidUEQxBv+
+         tHhFSQfmYR12EA/giYSChS9WdRaUYhEjmaYyxYJT2SGp3JS3EulJR+95YrBbdk4CvnJr
+         HeG+fu8Xh9go8CvZZwO1ZPsKCu2rjqFeyH7eCG2+VQgsbR84UB3KcP0oHz7b1MQuoJAx
+         lx8A==
+X-Forwarded-Encrypted: i=1; AL+hErFA3AgC+fd+gP4g9nLsmslbwfQHdgvGH7GQXUtSJHKNesvxXEWCi7y30+kmxykkOK4uBP2O@lists.linux.dev
+X-Gm-Message-State: APuU4Z/bRv8gjtaxXXbEvSS3cicRroMm08wnDnpoofEB7JYAQaVIN9Po
+	0zigmzfZOwvvVSkBzMVt7xSX9kISlStlXLccQyrgIBF3uBi5MFfqSsenfySft5id3xVgnF/6jvP
+	C/GDNfnbIm8Y7X1rKAX+OYBruAgS11lT9Ru31eN1bNQ==
+X-Gm-Gg: AYBFou3K2eRjUj7C9TQTnKKoD8ewFc2br7Mf/k8ceQ3RVKn/s05E/VIfWpHPsr0vCWD
+	pgVvpfSXBinY4vctrHN7DwOc87UrQuJ16d+MJ3EXCQyguf7BefI8XWsEEhDrmHxkof6+haS7CXT
+	yoHWc1BW51Cnw0sq6GC/1tav5Mc2b3cgrEYRJ7qxhyK2/lERTn9zVRDqKm+rMl0Y8LliaANVjus
+	B0cIho0vk3nnrMO/LczZcm7Pn+psnK6kIzhtl49l1g+kU7UEbay0aSm2qtxy40KeOR76YrMxEL8
+	/mRMx0kt/HFTGGMk9UJxuzs5s9KHGLGEEqprGa9SpUVXbocXBGwjLSrPHCpbfJtl4gwkMNIiz1x
+	c9qs4yQf037ggoG6S1cVASL7xNOijV84XbxPE5Ek/bRc=
+X-Received: by 2002:a05:6830:3115:b0:81e:abb6:7498 with SMTP id
+ 46e09a7af769-85f5082de7dmr2762199a34.23.1794196075840; Sun, 08 Nov 2026
+ 19:47:55 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -90,66 +104,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
+ <20261108110406.97495-2-cuiyunhui@bytedance.com> <20261108213254.67805ef0@pumpkin>
+In-Reply-To: <20261108213254.67805ef0@pumpkin>
+From: yunhui cui <cuiyunhui@bytedance.com>
+Date: Mon, 9 Nov 2026 11:47:43 +0800
+X-Gm-Features: AclHuK9B61ylAVcWnUjeFJuyJwDuHE_2RuMPKX9QRnbJ_mu0Y53s1C9cYNJl2lY
+Message-ID: <CAEEQ3w=5QwwvMJFJkpS51APoBjhed6oriCkvcieRdUFWrKtmSg@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v9 1/3] riscv: implement this_cpu operations
+To: David Laight <david.laight.linux@gmail.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
+	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org, 
+	thuth@redhat.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk, 
+	rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com, 
+	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com, 
+	seanwascoding@gmail.com, andybnac@gmail.com, menglong8.dong@gmail.com, 
+	cyrilbur@tenstorrent.com, wangruikang@iscas.ac.cn, atishp@rivosinc.com, 
+	apatel@ventanamicro.com, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	arnd@arndb.de, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	morbo@google.com, justinstitt@google.com, qingfang.deng@siflower.com.cn, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, dave@stgolabs.net, 
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, broonie@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The HDMI codec reports DP and HDMI connection status as SND_JACK_AVOUT,
-which combines SND_JACK_LINEOUT and SND_JACK_VIDEOOUT. The machine driver
-creates these jacks with SND_JACK_LINEOUT, omitting the video-output
-capability and its SW_VIDEOOUT_INSERT events when
-CONFIG_SND_JACK_INPUT_DEV is enabled.
+Hi David,
 
-Use SND_JACK_AVOUT for both jack creation and pin masks to match the
-codec's audio/video output reporting.
+On Mon, Nov 9, 2026 at 5:33=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> On Sun,  8 Nov 2026 19:04:04 +0800
+> Yunhui Cui <cuiyunhui@bytedance.com> wrote:
+>
+> > RISC-V has no asm/percpu.h, so this_cpu_*() read-modify-write
+> > operations use generic implementations that disable local interrupts.
+> >
+> > Implement RISC-V-specific this_cpu operations with preemption disabled
+> > to keep accesses on the current CPU.
+>
+> Have you looked at some of the schemes (I think arm64 has the latest,
+> but also s390) that do most per-cpu ops without disabling preemption.
+> In particular they save the pre-emption check when pre-emption
+> is enabled.
+>
+> Basically the code tells the scheduler which register contains the
+> per-cpu data so that it can be 'magically' flipped during a context
+> switch.
 
-Fixes: d218ea171430 ("ASoC: mediatek: mt8189: add machine driver with nau8825")
-Signed-off-by: Cyril Chao <Cyril.Chao@mediatek.com>
----
- sound/soc/mediatek/mt8189/mt8189-nau8825.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Many thanks for pointing this out and suggesting this optimization. This
+is a very useful suggestion. In the common case no preemption or migration
+occurs, so the preemption bookkeeping and reschedule check are unnecessary
+overhead.
 
-diff --git a/sound/soc/mediatek/mt8189/mt8189-nau8825.c b/sound/soc/mediatek/mt8189/mt8189-nau8825.c
-index 5d652d0cf01e..b551477cef51 100644
---- a/sound/soc/mediatek/mt8189/mt8189-nau8825.c
-+++ b/sound/soc/mediatek/mt8189/mt8189-nau8825.c
-@@ -74,14 +74,14 @@ enum mt8189_jacks {
- static struct snd_soc_jack_pin mt8189_dp_jack_pins[] = {
- 	{
- 		.pin = "DP",
--		.mask = SND_JACK_LINEOUT,
-+		.mask = SND_JACK_AVOUT,
- 	},
- };
- 
- static struct snd_soc_jack_pin mt8189_hdmi_jack_pins[] = {
- 	{
- 		.pin = "HDMI",
--		.mask = SND_JACK_LINEOUT,
-+		.mask = SND_JACK_AVOUT,
- 	},
- };
- 
-@@ -369,7 +369,7 @@ static int mt8189_dptx_codec_init(struct snd_soc_pcm_runtime *rtd)
- 	struct snd_soc_component *component = snd_soc_rtd_to_codec(rtd, 0)->component;
- 	int ret;
- 
--	ret = snd_soc_card_jack_new_pins(rtd->card, "DP Jack", SND_JACK_LINEOUT,
-+	ret = snd_soc_card_jack_new_pins(rtd->card, "DP Jack", SND_JACK_AVOUT,
- 					 jack, mt8189_dp_jack_pins,
- 					 ARRAY_SIZE(mt8189_dp_jack_pins));
- 	if (ret) {
-@@ -394,7 +394,7 @@ static int mt8189_hdmi_codec_init(struct snd_soc_pcm_runtime *rtd)
- 	struct snd_soc_component *component = snd_soc_rtd_to_codec(rtd, 0)->component;
- 	int ret;
- 
--	ret = snd_soc_card_jack_new_pins(rtd->card, "HDMI Jack", SND_JACK_LINEOUT,
-+	ret = snd_soc_card_jack_new_pins(rtd->card, "HDMI Jack", SND_JACK_AVOUT,
- 					 jack, mt8189_hdmi_jack_pins,
- 					 ARRAY_SIZE(mt8189_hdmi_jack_pins));
- 	if (ret) {
+Implementing this scheme for RISC-V will require additional changes beyond
+the current series. If this series is otherwise acceptable, I would like
+to land the current this_cpu_* support first and then prepare a follow-up
+series using this approach.
 
-base-commit: c937f492dd40a8398d955cf0f4f9e11d7268bcb5
--- 
-2.45.2
+Thanks,
+Yunhui
 
+>
+> David
