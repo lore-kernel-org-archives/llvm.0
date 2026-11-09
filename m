@@ -1,60 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794246719;
-	b=QYGAL8Pgfl9HNXkAFvF4jCxsCOXQKJuw1SClGQrtM7K1V5rqvKWg4O3deE9o831+9dPK
-	 7W0rAUqRgBoXOOZAjCwjTtksPyGIFPy2JqSGJLQZl5XBnEIKXZu4Ip76fyZ4uaJwu70P+
-	 A58bQu/yiOAtbxNypegW6VOmWPEFSEBcG0GaQ+komHFGf87AsB6PQp7WBAI4O6v4GNWuf
-	 MDZMs2qgiBzShOVGuxr5zHEZv7LQq2eWOW+RcYoi8O2HRNaD7ouAQi50aPKHTqvTKSb4x
-	 mRapJ0lImz9cxoEaCuivj5SkiDV1HFppLkD/0QwIkF7PHv7EMhvU2ZZM10zIfLpOwow==
+	t=1794258989;
+	b=1Kq/0I7rjIncZyNJ6wuLFQS1g8kEz5xPFE5IvkLq8FosIlLPatARcGmoqI3B2blHLnXz
+	 NvrwiUt0ILMMl8quqnAnb+mBpUl3Ic9kGrjNGsL+IZt3XZRIFbjZcPxcqQbadiYzaCnqB
+	 RJC45x6V6hLWVCNy/h3oXOfmHVEXZapxdWTNTmM3TigbRGy5x2L6zkxONJMjGqtPFTZRl
+	 wtJoxPa+bWhf6KY7/pDtt4s0jK2NCqw2BnwNBbWOL+hFj+rNJiHIl4RlrLjviV73rdcxf
+	 HQglFeuEKeKHPbh6/VMjui3IHZ7+YbQEjxKIT+0FbQ6pWMVrOi/u6I8cxcSBuitsUJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794246719;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=i9Nv6xGB8Ae4NNlgpZyPMXjBlowBRSDkMgoiPDc8DSo=;
-	b=k8Vo4ej4R/ZsFzQl2SnPEz4dOXAo3UXoXg1K8g1Co/co098JdtOcgS2lcMiCyBbJvgFh
-	 GI/aThaXgnhO0dKUJkYylUEKqwzZ/1zmhfVlUNKMDcKV7O+dVcN39ZOuJnSY7DtP4kH0O
-	 EYkhYaUZjHCESSrU6aBgo0Dtf1FLtYmB0aM3LGsB6MBmkpSW/I2jYVgm6MZ6b84Insgp+
-	 0VuYpX0ILyKmyhaHo61S6/irKIjAmiospA1BOWr4WwR6wLe2nF3dyHs2vFuOS9L+IAUEq
-	 BRP6AEBB4FmgNTQKSaUOGxn27/F+sBKM1G0R3NdB7RO5v+UQGrUsTqgJhzcRcXRnoTQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794258989;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=vURM/ycOWtNcfROgQ72z0JMUPAmEvRYCw8hhtZdgFRk=;
+	b=DJue+PPXbXakaGlYApAGfI4YDnSB73u0CGsJh35mLMbNa5xu5AR5okt3VXtL/VX29fgA
+	 HG3v0r133hhx700ZFThTk0qMxlb+ueBPabYBy5gnjjUY9C6UylNNJGgEXwxnfV8mB+b9r
+	 dTsXPWtz6i89yHrPzrw2gLD+Pc47ahFrR5plLFKHXDI+mqxluJN8E4qCk9XAQGM2oi2jJ
+	 nVSE3dmXzpTcTcQO2MZmsurB62ciOs6tF3EVUJ7HC2te3x97QOKuB1/GEOzdNVPTcwuVt
+	 U+36s4eO/77nFMIwYoejqxjmnOHZgfO8XwnxVew9U2So9Bp9n/j3TGjJyYc2zsQHAww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYB6xKK7;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XqZ3XyJk;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E745A606A33C;
-	Mon,  9 Nov 2026 17:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95568606A325
+	for <llvm@lists.linux.dev>; Mon,  9 Nov 2026 21:16:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95568606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYB6xKK7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECD01F008A5;
-	Mon,  9 Nov 2026 17:51:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794246718;
-	bh=i9Nv6xGB8Ae4NNlgpZyPMXjBlowBRSDkMgoiPDc8DSo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZYB6xKK7ikHLcp12dpkvJj5Weru/Un6Bp2RAV9c3ZnLngBPdNf7jlFa/6pacFIadc
-	 d/pGjG87WyjjJobuh5kFUC1OQAoc9bRk4WC1pDEeCGQuKci+PF+Uw0eYMsHcnjtlLP
-	 s++NIZ8IZuJTW/rEM1mTa4fGTme1jNwWHMubKfSQJSK6DIM7cFtopEW3DmaocUcma+
-	 CZXeDcWWnJz/AQVG1Gi3dP+iUzHahrZq6fKhJALiuBAIAGyYp7ziI2PuiuN8h+dcYJ
-	 nZjhtm8jNVudg+OXggV+9PHXgsxCrRE+ebIE0fV+E434lKUuqdYNDEcCFPIw0naYPj
-	 J7wdNcnd9Gi2g==
-Date: Mon, 9 Nov 2026 14:51:55 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
-	Alan Maguire <almagui@kernel.org>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
-	llvm@lists.linux.dev, ast@kernel.org, yonghong.song@linux.dev,
-	bpf@vger.kernel.org, kuba@kernel.org, tj@kernel.org
-Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-Message-ID: <avIIO1JOVnK8y3a7@phoenix2>
-References: <au27Y9m78_3EH2v1@gmail.com>
- <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
- <au347UiVUe5oUuxM@gmail.com>
- <au4kpSGVSH3tYiZm@google.com>
- <avG9bk0kxRUvonhD@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XqZ3XyJk
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a20a37703bso9879095e9.1
+        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 13:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794258988; x=1794863788; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vURM/ycOWtNcfROgQ72z0JMUPAmEvRYCw8hhtZdgFRk=;
+        b=XqZ3XyJkIVNmp6F0wF8C5qdLAS7BXdWLSYlW5s0gB08515daU9B0dppQfXcmpcBVqv
+         y1Sn7kRP7X8cGJ707vZpx67WUPLWbqfeX5nU+knv+oOYyp8NjHLqs9FsdiI/6FGJ2EeV
+         j1o78cklldrTEL+MJd0j0uu+wpY2pFAcURZPNweG4tiwQ/2pzRa3nPr1YRZWo9/oPKg8
+         miRHR/T31bHuk6bv+b5kNyOnmTXwnCHgLzDFRpv0SzSkagR2MtCl0go1j/CuSUtBo0bm
+         N8BgTvyocbSpZj2utUF8uqRUV3Ju/mC0W/1tx0z4apBeeBjWrQ6AjpIAfBHj4hGsEy22
+         7okA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794258988; x=1794863788;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vURM/ycOWtNcfROgQ72z0JMUPAmEvRYCw8hhtZdgFRk=;
+        b=JT1eriHrD+uJL8EG0e8aW4KRF6rTFQQGM6UR6CqljjjAfOc5CHJnxR2tdIbJuDOfis
+         MwpTCU1N/7M43nzXoHv7CO9Dvyb/BeycPhjy55+YwsHy/jv9VJn9rejJvzG9nUMAKccu
+         emF5eDPd7wli9VtoLE0EfiSt57Y5o7b3QadphGR3BH+87zsPm0RsWP/zt68lm70Vv0J5
+         USoJ/UrVbmWO3RZt4Yp/xDy8PXrRcjXYOkzVbGc4hq6ZiVADSZv8BJ33ldafhiy432xp
+         +F2gfHQL6oPRUpq05ST1GpKoL2uXzMuMJf/K5KcoEf2Zi8x9wrecwSCXWfFx0mjvpveV
+         VA+Q==
+X-Forwarded-Encrypted: i=1; AL+hErEzRmCza5Az5dKZyeVYeBZjOds+T9FOA2B9AOZcJVf1sQ6qjKnoM9UE3TugIij/H0CL5FPP@lists.linux.dev
+X-Gm-Message-State: APuU4Z9s2lzIpmbKPHZlsgAKoBsfuouJkq6xWGTlGjYIEvSaeA6p0FKG
+	u/hN54oXcHY96w8e65FmlKuHIYPxChrajSNh7gsh9SsqLpTZqxpdUN6w
+X-Gm-Gg: AYBFou0UBDxNqXHzIjb/rpnam5kjwcpd8ddjTqhA/cpua8xvRQzIWruml0PQ8gHxfwC
+	d5LfWVboTwpAdqbbVaO+5fTy3UxaR0x6m38ZGYcUhLT3+oN9afd69s47y0e2WxaoxAIS6u1CbOt
+	jpo1N6ik8Wd6+cO0h9D3SDJAqCpCobwMaJkZ2vxzqRgLEARGNqcY2JC6STKvFuE4YOyOZKHfm7W
+	sO+PSizwAKR2YPPheXLLkdQIejI5STmMVTclAe8Clh6Q+n+XmL1PQ/eQpP5js5j4yApEsryW0Vs
+	PayQCRfGm10ZYF/Vh3Jqi183JOoMsxf5ljrxHJTZzWV1F6orymKUwhULGQ80Bit3D3qCUDZf5hk
+	oQwLcF848XIdGqTqpS0U2XjJOYCylPwwQEMGv8p4cACWm9I3nwVR5TFmnviwiwVsrHTIi5tO+nd
+	snjAlLJVNyNlKbG2cQmdpFmEIrkfVT29ArlQ4eSf+443Fz758g/H01b+Qco8k6FeSsKc5tNCYwX
+	nIRMsFjQMYxfYcsfEN+eAcPNTnDB7PDGKsIGjLMJKoVXZtaK74yibA5Dve13j8XvOXe30bM3wiv
+	N2LnVYXOmeyJLlRe4Yb9dJqfH0yNJiLku9plWRTMOUUi483La6k+G7LQ/SbT6I/fvDje4vS/KHw
+	NuWsnAvkVUw+Me9FPj5bHYxKRJ31K6ZQN4l+QRfz2IOll
+X-Received: by 2002:a05:600c:6291:b0:49e:7c8c:361d with SMTP id 5b1f17b1804b1-4ba0234ead8mr7663955e9.22.1794258987873;
+        Mon, 09 Nov 2026 13:16:27 -0800 (PST)
+Received: from PC-DE-MARCUS (host-149-154-244-77.dynamic.voo.be. [149.154.244.77])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fe2f09sm17550795e9.4.2026.11.09.13.16.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 13:16:27 -0800 (PST)
+From: Marcus <baronmarcus2005@gmail.com>
+To: nathan@kernel.org,
+	nsc@kernel.org
+Cc: linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] run-clang-tools: Resolve the compilation database before changing directory
+Date: Mon,  9 Nov 2026 22:16:18 +0100
+Message-ID: <20261109211618.1496-1-baronmarcus2005@gmail.com>
+X-Mailer: git-send-email 2.51.2.windows.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,44 +97,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avG9bk0kxRUvonhD@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 09, 2026 at 04:33:40AM -0800, Breno Leitao wrote:
-> On Fri, Nov 06, 2026 at 07:05:25PM +0000, Kuniyuki Iwashima wrote:
-> > On Fri, 06 Nov 2026 07:58:01 -0800, Breno Leitao wrote:
-> > > On Fri, Nov 06, 2026 at 09:16:24PM +0800, Jiayuan Chen wrote:
-> > > > Thanks for the report !
-> > > > 
-> > > > 
-> > > > On 11/6/26 7:38 PM, Breno Leitao wrote:
-> > > > > My arm64 KCSAN builds of linux-next fail since next-20261015, because
-> > > > > bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
-> > > > >
-> > > > >   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
-> > > > >   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-> > > > >   Failed to generate BTF for vmlinux
-> > > > >   Try to disable CONFIG_DEBUG_INFO_BTF
-> > > > >   make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
-> > > > Has pahole fixed this issue?
-> > > 
-> > > I don't think so, see the line below:
-> > 
-> > Could you try this ?
-> 
-> Thanks, it fixes my build. I tested it on top of pahole master (9eb594d)
-> with next-20261105 and clang 22.1.3:
-> 
->  - arm64 KCSAN, CONFIG_WERROR=y: vmlinux links again,
->    bpf_tcp_ops_set_rcvlowat() is back in BTF, __bpf_tcp_ops_init()
->    returns 0, and progs/tcp_autolowat.c from the selftests loads.
-> 
->  - It also brings back scx_bpf_tid_to_task() that was work arounded by
->    tejun.
-> 
-> Feel free to add my "Tested-by: Breno Leitao <leitao@debian.org>" tag.
+The script reads the compilation database relative to its working
+directory, but passes the same path to clang-tidy after switching to each
+entry's directory. When the database is outside the build directory, a
+relative path can therefore point to a nonexistent location. clang-tidy
+then runs without the recorded compilation flags or finds an unrelated
+database in a parent directory.
 
-thanks, I'll check this later today,
+For example, invoking the script with database/compile_commands.json from
+the parent of database/ and build/ fails to load the database when its
+entries use build/ as their directory.
 
-- Arnaldo
+After reading the JSON file, resolve its containing directory to an
+absolute path for clang-tidy's -p option. This preserves the caller's path
+resolution when the subprocess changes directory.
+
+The issue, fix, and reproducer were developed with OpenAI Codex assistance.
+Verified with Python 3.13 and clang-tidy 23.1.4 using a C file requiring a
+definition from the database, with relative and absolute database paths
+outside the build directory and a database in the working directory.
+
+Fixes: 6ad7cbc01527 ("Makefile: Add clang-tidy and static analyzer support to makefile")
+Signed-off-by: Marcus <baronmarcus2005@gmail.com>
+---
+ scripts/clang-tools/run-clang-tools.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+index 79d58b34..cc19f8bb 100755
+--- a/scripts/clang-tools/run-clang-tools.py
++++ b/scripts/clang-tools/run-clang-tools.py
+@@ -86,6 +86,8 @@ def main():
+     with open(args.path) as f:
+         datastore = json.load(f)
+ 
++    args.path = os.path.dirname(os.path.abspath(args.path))
++
+     lock = multiprocessing.Lock()
+     try:
+         with multiprocessing.Pool(initializer=init, initargs=(lock, args)) as pool:
+
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+-- 
+2.51.2.windows.1
+
