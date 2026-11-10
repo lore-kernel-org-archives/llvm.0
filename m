@@ -1,83 +1,83 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794283088;
-	b=Xp+MazOBFVtmmrRn6OT32FZgs0Sdzemdwm0xGcMCp5gBqXtazcxSBj3zNefLbsY0hLiH
-	 msvKQbMddV198qW06mPu+Ty11wmKsmAYerOLmk1rwL+BxRRrh2S0igpQ+PPPX4FZwDDtt
-	 uPjh+6MxG/k0BdE0U96azKakO3B+oqUSzD7IXz3AfO9GDQllUl6eZh5UEer46Lqgi86DP
-	 ON2HpQ7Qkg4sHBVKKw0VjtKknu3Fl/Tgy6E1i83MnRftNMkVyHRuck6XJbSc16Qfm70EK
-	 ltPhALxpUWVgLgCN8NrT5FunQucTKbwh1LOVG905CmcafaA83LslthlR2GBfQzaH12A==
+	t=1794283091;
+	b=lVeQmn6nqZpv0zP7HkDNmMxmc0aUa61JuHuktDZ0vH8vN8pt5QpgL4PSwn2FTIgUKoDw
+	 JmBgEoiPZgvQvQz6NcE/FVR/w2P6/pdx6ACfPIoRsf0XvvJ4TpGKVRjC1JsQCcFjo7PcC
+	 Vtf82W+INC3PYCeaOLoONOA8jcVqK7JIJlOVi5YNIGvVIZiPfTNi6Vjtlc/hDE1ZwmmYj
+	 eZyz6LDbx2YbCRAGFS1K4y9a4pBSXC9ER/xwhe2wW6SYHBf6y5MrKsy8tFkVjG7rLaB71
+	 VXKGAC6I8q26Qa3wOc6PRFr8+h5qLJFV0/uuILAMYw/HPT9Q7xWjX8601a9kU972oJQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794283088;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794283091;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=PKtp2J/LvdqcfkW+9WIXUeirxII9N+NyVOA5Mc+RvFk=;
-	b=N2ScSipY0avloZ6UHITSFZeKg4qzfv1zOh1ytDF0UcWU6SKxGmKr7jSYW376ODSr/sou
-	 lyVCz5BdqeiZyHE7zMxP0IzsAxlwIrtvXaDwfeb0LA7HVEQDKr8VwfbJ8d/jWlIhAaUWw
-	 7bxMg02TuOK9+edZL+O9QhBWoJPFrhdxGJMQJZGEAKymx6VrEn/r5g8aKmKIJrRY3XlTR
-	 X/ThRySJ6N6ZccrA7pusC+T0gntAF1DPPKhlWc3BUMveLe7ijhwguLsLUgUrRlLRRlIjT
-	 juyPLWSE2fxDETsmz9whhgMMqOotSkqo5S+B0Eb23FxC9PIBhKR1M3BQwIG3ACHarng==
+	bh=MSk1Tsr4MwxHYw7iRh7y9cNVx4+IdLtKhJgZHhSE8Jo=;
+	b=sCI6Oja1qiHrA/a4CBn/z5IxVSN9k8QT8Bxly6m3ItbFXmiFRnZNwqeJKfmAKEUiySAz
+	 GAq5oyrEliCzHLvo0E8Kyb2o7bYyzNibheYnz5glg0LLLqAb4DtqwnCh57vOoa7BMQHrQ
+	 nJbTLTQ4Ssw2LgePwrl6EbIO22fCFipfyj14KSK/M2PwPiuH+sPDLQui9yOYTEw3MkTe0
+	 DRr0JeyH4WjJ0AcTJ6g6aQKEXXiS4fUVjXH/aXlz6x5TEsA6sM5v5N2Spolndxoinv4rE
+	 S1sYdSfPd2Ukkty3QCFDqIj+3tvFoIiBWzuVmhkjkeQdka8d36Q83tT9iaL+mWyfjyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=dBT7x93r;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=O1+QTaA1;
 	arc=none smtp.remote-ip=209.85.208.54
 Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36C760A3839
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 03:58:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F36C760A3839
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DCE660A5BDF
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 03:58:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DCE660A5BDF
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=dBT7x93r
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6b750e40ce2so958032a12.0
-        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 19:58:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=O1+QTaA1
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6afbc363efeso2327666a12.3
+        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 19:58:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794283086; x=1794887886; darn=lists.linux.dev;
+        d=cloudflare.com; s=google09082023; t=1794283090; x=1794887890; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=PKtp2J/LvdqcfkW+9WIXUeirxII9N+NyVOA5Mc+RvFk=;
-        b=dBT7x93rQGFTAVdGGUWVVpR9cIbshbEFE7P+8bfVpCHvyHNbIgO6M657DpbT2hMo+J
-         qJAVJB700GNsR0PKOB1hUO6lwN67CdeFM0zAnGSlAPDKyKFyvfaA9OWAzvvPwHrH6/fR
-         biyYBdRGFdtuTK3Wr450JiFY4eLbuBMGbuBs9mYb7RDBaa8sa3HK7vke+r1k9Zn314fU
-         CCo9crRTgDzyAv9PpX3nul5WxBU69wxlbKe99ZaX5XLXChPZDmikawvqz6b+pw4witdl
-         hSfbiIz5/Jnbdv4I3Cr3mMic9qBBurLMoRTIa20cSr/KeXGAcTsghHsqVk9Rf6FjwMoa
-         RIBQ==
+        bh=MSk1Tsr4MwxHYw7iRh7y9cNVx4+IdLtKhJgZHhSE8Jo=;
+        b=O1+QTaA1rH84WAYEUApBAWqciz0LII7WfgC4hQFiEuopYt16Dx0OLdeIqAbCequX3s
+         cvfwHDnjm6yN06WcUtkgDFvtHjsI3kW1qiIVNepPPjGqOsep+8LPmGvJKJ7rzxaZSTzV
+         vlQ+7u91iiCi6nNBTfBih8trRAbftNA18bO6t8KcoWFoj5hrRHTGdry4Azs6OB+byIK7
+         FAcprE0I8kJI6qV1zfyS8eq1mQQiqbyz7VAJLoTD39UrQR5SIYiE62NBAEhyNIqCTcC3
+         7Fyua3DvdgRASEG3a7FGVJsgmADaaKryiFKid+eEGHBDsgjItlJ5yn2MhkiL/SimGNmB
+         m85Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794283086; x=1794887886;
+        d=1e100.net; s=20260707; t=1794283090; x=1794887890;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PKtp2J/LvdqcfkW+9WIXUeirxII9N+NyVOA5Mc+RvFk=;
-        b=Ck4y59rlQYWL2xDwuHk1hN423zkeZwDD1MufncwCtCn81CNwymmzmJBvTIUymhhmHr
-         uFtlb5KwlG4MuDk5nRasxcbw4FTmUtndmfYLt6v8JeyIhbXUZqEGIA8WaNvIvLSPvmKx
-         UkRSfCZB88uQtxFsrwVYurjsAS07CB09zHyDO65fmrnIe/SdC0lyGbLXTkaePM7UtO5r
-         CrDmjFCSgiCGUqBabEa1lvbH6qyPfLsJjqpi/iS370TgFVNJ+FnLfOSWPpok/F6cQXVx
-         KcRNerZQsMQvc0uXp6OujEWbGKVQqh3+fCtYDQvyL4X5BxpM1HMQgr5Fn6BUYKJHwSqM
-         S2wg==
-X-Forwarded-Encrypted: i=1; AL+hErGGlnlf8tKl1JOTgpJqEyi92cC/bs5vqKMMtKGiBdPXMScAqkd0Q0c57NE7AavYzveE8iWp@lists.linux.dev
-X-Gm-Message-State: APuU4Z+rpNXdbwnIBA1f4QFUJsWuTjPkHvwRK7E4GBI6McozhKNSXuj+
-	ZhTeFzimU391C63rRniNM1MyKo/5M6n+mTN53PKwI4k3pDyQXdoPRVb/+q3PimQOhmQ=
-X-Gm-Gg: AYBFou2byzCi2K2j7cEAX+a5FbnfhzsbntPs1WVJPOsB+kgZldHpi9JTwbapnC6b/61
-	y7cyfd9AXep28FfsELQDvPswja64lnPXSGB1kD3TkjEil5A249vOvzeFocfiAijxTxVMS2Rd4zD
-	X0QH0IE7YSGw/H7OLfC1inv2GzpPIuQqzwrhDXifefm/hMFRN5zCj1D8cJgRZXSy1KVwnm7IIH3
-	JDYkMyycP6SkwWeUiqIaxZRDJkhMippzwid667UrrNEhKRKGUwtjCQP3p+owjUDkrF/zylOaxI6
-	0+Gqi0GFCK3IVuRHkHVo8ouCOIvIWwEF8dJHl6Rt8mIMZZa1Rdx0c6o2c11bDEbQYq2JlWuPv4o
-	NK8fkV7/Le4bYD4OdhB6ARXLsBsfhdnkW8PK1+uUYegxSqM/M7vA9HHCEfr3i51hEUpQ381mcAg
-	EOssYnWyngQmhqZM2MoYNr4gfp+lAakL/N4KuCaNbO60F03twShZJc9jZpEpUxokNOH3bOGJwV8
-	KpxxcoTvewY7u0b1hlyBH3hN7xQe1MWOikfrbh1sF0D3Z7X4jADn3CdvGppWzypArZYeMC7BY8s
-	6dqgc80JVqsl1JU+MyKk++aQZ3n+ePw25EFlDEsUW6+qdALDSWkEewxnOvxGBUY=
-X-Received: by 2002:a05:6402:22d0:b0:6b1:b97b:745 with SMTP id 4fb4d7f45d1cf-6b756af0889mr755303a12.29.1794283086393;
-        Mon, 09 Nov 2026 19:58:06 -0800 (PST)
+        bh=MSk1Tsr4MwxHYw7iRh7y9cNVx4+IdLtKhJgZHhSE8Jo=;
+        b=D+Y8qvGxKhu5gdoNs8bK7pWbpXmpp6sfNkIT2jU8vaTPZv1o7eGtigE0j0yXFYm4T+
+         YvQ0QnDEGdG6K8nGKy5fBbAXFE6U357hYOjGUgcHGVno4JIerD7wSIQSBsjmakuSTPgs
+         aE78baXanxpR5S2F7WACDIo4GsOC5XouoEHMnRSa14Dv09kXytEh+baHyDxXUtnuwKnv
+         THgtZKOUuPkgfiNEPKsxQJno0oORASOIMeByBUln2kW2qbhfuSlIaiz5BjxmR/ENpYAY
+         KQgpX4SkHsCVONba6z5o0CwR3nrkF9AcOFKVL9EkzdD7X5w3p7oUK02Ik1dJoGRc382/
+         uzrg==
+X-Forwarded-Encrypted: i=1; AL+hErEHBFpPOTYvvGyIhwyiPtgH8CgimrO6XjXLAJxhjICKnMS7F/xgUb4BgoTFrn3InZ+dPJLs@lists.linux.dev
+X-Gm-Message-State: APuU4Z/VgapkyNM+XPIvbHJ9KccVeMd2yXu0j4rMC2TFckGNeCxjVXGM
+	ZYVAQGGYTNyM4FB+7Hpowem3AQq6ica5GcefGJXfvR4YZ4th0Jv8hp+jLHxNSBSeqlU=
+X-Gm-Gg: AYBFou0D/oS5yzHAPzUyCJiGi7SNPCz6cKv1oRfsuLfoctBMX5LNHnYch4kBZWHXtG9
+	zptAvHUnw5USfbAYK+SEjRyHjY0b3jOnXZcu/Cpccd5dgLg/e3dlD85kV6rP0pRx8SQgHK2yiwC
+	T++mzy8YWnMnJowKce+7MqpBVRabmjI7Hd3JEhNtspUFBTsVNqy/R8wnf8mDHv/qcoAg5t3QtVn
+	LZfhnNoPl0P097htPUmN8yIOb84vErAIZAG5sZ2FhcASp2A2cTgwH6Dg7k4KjH8Eu4qklgLFU0N
+	B0rDJn+au6GcMw6uepT1b8VBmTrwCXhq5YBbx9MDDI6fkF6yTE/wRa4SyTMNsz1ltSJWOJWBc0P
+	Yj6b9448PEPL6tfX/ip2MOmluJO0gpGfSqbsaRbVK5DezAdohpD4q70uSb3bv6OVCYPb604R8qc
+	kBaFRMSSImhzQzfbuP/qsngwCD0vTpeXD5JLBVaZGzpLwxLqJVNfxzv1vUZPPkjDyt8uRlQpMbD
+	YEOy09zkud2fDwbmOb2XEPP9TgHkOs9vR/pMmpns2uStZRBvLnu7ZcELPd7edWLOB2RexdidX4C
+	VBq8mE4xpbbwXlPC6IZSSya61a4Uy/qGdDDX495nha5BrAkP/NJnBr7rTCPgnkwh
+X-Received: by 2002:a05:6402:5626:b0:6b6:efc4:9eb2 with SMTP id 4fb4d7f45d1cf-6b7556282afmr914079a12.0.1794283089889;
+        Mon, 09 Nov 2026 19:58:09 -0800 (PST)
 Received: from L9JK9NPFH9.lan ([104.28.20.56])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.58.03
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.58.06
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 09 Nov 2026 19:58:04 -0800 (PST)
+        Mon, 09 Nov 2026 19:58:08 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
@@ -130,9 +130,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	llvm@lists.linux.dev,
 	kernel-team@cloudflare.com,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH bpf-next 13/15] xdp: add kfuncs to load the stored RX metadata
-Date: Tue, 10 Nov 2026 03:57:11 +0000
-Message-ID: <1985183a511a2217fe0f42582cbd16f023d8991e.1794281983.git.tianyi@cloudflare.com>
+Subject: [PATCH bpf-next 14/15] selftests/bpf: Test the load kfuncs on cpumap and veth
+Date: Tue, 10 Nov 2026 03:57:12 +0000
+Message-ID: <87e20fe4ae289764205f33920e90f3283a478e8a.1794281983.git.tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <cover.1794281983.git.tianyi@cloudflare.com>
 References: <cover.1794281983.git.tianyi@cloudflare.com>
@@ -147,146 +147,250 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A program on cpumap or devmap cannot call the XDP RX metadata kfuncs,
-because they need a device-bound program. A program on veth can be
-bound to veth, but the veth callbacks return -ENODATA for an
-xdp_frame. So a program after the redirect cannot read the values
-that the program on the NIC stored.
+Add a test for the load kfuncs on each path of the xdp_skb_ext_to_skb
+test. On XDP_PASS, the program that stores the values reads them back.
+On cpumap and veth, the program after the redirect reads them. Each
+test case compares them with the stored values. A load that finds no
+entry, also after bpf_xdp_skb_ext_del(), must return -ENODATA.
 
-Add three kfuncs that read the skb core extension area:
-bpf_xdp_skb_ext_load_rx_hash(), bpf_xdp_skb_ext_load_rx_vlan() and
-bpf_xdp_skb_ext_load_rx_csum(). Each returns -ENODATA when its entry
-is not stored. They are in the same kfunc set as the store kfuncs, so
-they are not device-bound and need no driver callback. A program on
-the NIC can also read back the values that it stored.
-
-The RX metadata kfuncs could return the stored values instead. This
-patch does not do that. Relaxing bpf_dev_bound_kfunc_check() for
-cpumap is not trivial, and it changes these kfuncs for existing
-programs, which read the values from the RX descriptor of the bound
-device.
+With BPF_F_TEST_XDP_LIVE_FRAMES, a recycled page still holds the entries
+of the previous packet. The live_frames test checks that a load returns
+-ENODATA there.
 
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
- net/core/xdp.c | 91 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
+ .../selftests/bpf/prog_tests/xdp_skb_ext.c    | 47 +++++++++++------
+ .../selftests/bpf/progs/test_xdp_skb_ext.c    | 50 ++++++++++++++++++-
+ tools/testing/selftests/bpf/xdp_skb_ext.h     |  2 +-
+ 3 files changed, 81 insertions(+), 18 deletions(-)
 
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index fdda072a5858..4df3984479a7 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -1081,6 +1081,15 @@ static const void *xdp_skb_ext_get(const struct xdp_skb_ext *ext,
- 	return (const void *)ext + off * XDP_SKB_EXT_ALIGN;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c b/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c
+index 64c6f0268d60..0811c09b7747 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c
+@@ -7,7 +7,6 @@
+ #include "test_xdp_skb_ext.skel.h"
+ #include "xdp_skb_ext_success.skel.h"
+ #include "xdp_skb_ext_failure.skel.h"
+-#include "xdp_dummy.skel.h"
+ 
+ #define XDP_RSS_TYPE_L3_IPV4 BIT(0)
+ #define XDP_RSS_TYPE_L4 BIT(3)
+@@ -167,7 +166,9 @@ static void set_case(struct test_xdp_skb_ext *skel,
+ 	skel->bss->want = c->want;
+ 	skel->bss->del_hash = c->del_hash;
+ 	memset(&skel->bss->have, 0, sizeof(skel->bss->have));
++	memset(&skel->bss->loaded, 0, sizeof(skel->bss->loaded));
+ 	skel->bss->store_err = 0;
++	skel->bss->load_err = 0;
+ 	skel->bss->pkts_seen_tc = 0;
  }
  
-+static const void *xdp_skb_ext_load(const struct xdp_md *ctx,
-+				    enum xdp_skb_ext_id id)
-+{
-+	const struct xdp_buff *xdp = (const struct xdp_buff *)ctx;
-+	const struct xdp_skb_ext *ext = xdp_buff_skb_ext(xdp);
-+
-+	return ext ? xdp_skb_ext_get(ext, id) : NULL;
-+}
-+
- /**
-  * xdp_skb_ext_to_skb - Set the stored RX metadata on an skb.
-  * @skb: The skb that is built from the packet.
-@@ -1296,6 +1305,85 @@ __bpf_kfunc int bpf_xdp_skb_ext_del(struct xdp_md *ctx, enum xdp_skb_ext_id id)
- 	return 0;
+@@ -191,8 +192,6 @@ static void check_have(struct test_xdp_skb_ext *skel)
+ 	bool unnecessary = (want->fields & SKB_EXT_FIELD_CSUM) &&
+ 			   want->ip_summed == XDP_CHECKSUM_UNNECESSARY;
+ 
+-	if (!wait_pkt(skel))
+-		return;
+ 	ASSERT_EQ(skel->bss->store_err, 0, "store_err");
+ 	ASSERT_EQ(have->hash, want->rx_hash, "hash");
+ 	ASSERT_EQ(have->l4_hash, !!(want->rx_hash_type & XDP_RSS_TYPE_L4),
+@@ -208,6 +207,24 @@ static void check_have(struct test_xdp_skb_ext *skel)
+ 		  "csum_level");
  }
  
-+/**
-+ * bpf_xdp_skb_ext_load_rx_hash - Load the stored RX hash of this packet.
-+ * @ctx: XDP context pointer.
-+ * @hash: Return value pointer.
-+ * @rss_type: Return value pointer for RSS type, see &enum xdp_rss_hash_type.
-+ *
-+ * Return:
-+ * * Returns 0 on success or ``-errno`` on error.
-+ * * ``-ENODATA`` : the RX hash is not stored
-+ */
-+__bpf_kfunc int bpf_xdp_skb_ext_load_rx_hash(const struct xdp_md *ctx,
-+					     u32 *hash,
-+					     enum xdp_rss_hash_type *rss_type)
++static void check_loaded(struct test_xdp_skb_ext *skel)
 +{
-+	const struct xdp_skb_ext_hash *entry;
++	const struct xdp_skb_ext_vals *want = &skel->bss->want;
++	const struct xdp_skb_ext_vals *loaded = &skel->bss->loaded;
 +
-+	entry = xdp_skb_ext_load(ctx, XDP_SKB_EXT_HASH);
-+	if (!entry)
-+		return -ENODATA;
-+
-+	*hash = entry->val;
-+	*rss_type = entry->type;
-+
-+	return 0;
++	ASSERT_EQ(skel->bss->load_err, 0, "load_err");
++	ASSERT_EQ(loaded->fields, want->fields, "loaded_fields");
++	ASSERT_EQ(loaded->rx_hash, want->rx_hash, "loaded_rx_hash");
++	ASSERT_EQ(loaded->rx_hash_type, want->rx_hash_type,
++		  "loaded_rx_hash_type");
++	ASSERT_EQ(loaded->rx_vlan_proto, want->rx_vlan_proto,
++		  "loaded_rx_vlan_proto");
++	ASSERT_EQ(loaded->rx_vlan_tci, want->rx_vlan_tci,
++		  "loaded_rx_vlan_tci");
++	ASSERT_EQ(loaded->ip_summed, want->ip_summed, "loaded_ip_summed");
++	ASSERT_EQ(loaded->csum_level, want->csum_level, "loaded_csum_level");
 +}
 +
-+/**
-+ * bpf_xdp_skb_ext_load_rx_vlan - Load the stored VLAN tag of this packet.
-+ * @ctx: XDP context pointer.
-+ * @vlan_proto: Return value pointer for the TPID, in network byte order.
-+ * @vlan_tci: Return value pointer for the TCI, in host byte order.
-+ *
-+ * Return:
-+ * * Returns 0 on success or ``-errno`` on error.
-+ * * ``-ENODATA`` : the VLAN tag is not stored
-+ */
-+__bpf_kfunc int bpf_xdp_skb_ext_load_rx_vlan(const struct xdp_md *ctx,
-+					     __be16 *vlan_proto, u16 *vlan_tci)
-+{
-+	const struct xdp_skb_ext_vlan *entry;
-+
-+	entry = xdp_skb_ext_load(ctx, XDP_SKB_EXT_VLAN);
-+	if (!entry)
-+		return -ENODATA;
-+
-+	*vlan_proto = entry->proto;
-+	*vlan_tci = entry->tci;
-+
-+	return 0;
-+}
-+
-+/**
-+ * bpf_xdp_skb_ext_load_rx_csum - Load the stored RX checksum status of this
-+ *                                packet.
-+ * @ctx: XDP context pointer.
-+ * @ip_summed: Return value pointer, ``XDP_CHECKSUM_NONE`` or
-+ *             ``XDP_CHECKSUM_UNNECESSARY``.
-+ * @csum_level: Return value pointer for the checksum level.
-+ *
-+ * Return:
-+ * * Returns 0 on success or ``-errno`` on error.
-+ * * ``-ENODATA`` : the checksum status is not stored
-+ */
-+__bpf_kfunc int bpf_xdp_skb_ext_load_rx_csum(const struct xdp_md *ctx,
-+					     enum xdp_checksum *ip_summed,
-+					     u8 *csum_level)
-+{
-+	const struct xdp_skb_ext_csum *entry;
-+
-+	entry = xdp_skb_ext_load(ctx, XDP_SKB_EXT_CSUM);
-+	if (!entry)
-+		return -ENODATA;
-+
-+	*ip_summed = BIT(entry->ip_summed);
-+	*csum_level = entry->level;
-+
-+	return 0;
-+}
-+
- __bpf_kfunc_end_defs();
+ static void test_frames(struct test_xdp_skb_ext *skel, const char *path,
+ 			enum xdp_skb_ext_deliver deliver, int ifindex)
+ {
+@@ -232,9 +249,12 @@ static void test_frames(struct test_xdp_skb_ext *skel, const char *path,
+ 		if (!test__start_subtest(name))
+ 			continue;
+ 		set_case(skel, &skb_ext_cases[i]);
+-		if (ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &opts),
+-			      "test_run"))
+-			check_have(skel);
++		if (!ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &opts),
++			       "test_run") ||
++		    !wait_pkt(skel))
++			continue;
++		check_have(skel);
++		check_loaded(skel);
+ 	}
+ }
  
- BTF_KFUNCS_START(xdp_skb_ext_kfunc_ids)
-@@ -1303,6 +1391,9 @@ BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_hash)
- BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_vlan)
- BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_csum)
- BTF_ID_FLAGS(func, bpf_xdp_skb_ext_del)
-+BTF_ID_FLAGS(func, bpf_xdp_skb_ext_load_rx_hash)
-+BTF_ID_FLAGS(func, bpf_xdp_skb_ext_load_rx_vlan)
-+BTF_ID_FLAGS(func, bpf_xdp_skb_ext_load_rx_csum)
- BTF_KFUNCS_END(xdp_skb_ext_kfunc_ids)
+@@ -266,6 +286,7 @@ static void test_veth_skb(struct test_xdp_skb_ext *skel, struct bpf_link *link,
+ 		goto out;
+ 	if (deliver == DELIVER_CPUMAP) {
+ 		check_have(skel);
++		check_loaded(skel);
+ 		goto out;
+ 	}
+ 	ASSERT_EQ(skel->bss->store_err, 0, "store_err");
+@@ -275,6 +296,7 @@ static void test_veth_skb(struct test_xdp_skb_ext *skel, struct bpf_link *link,
+ 	ASSERT_EQ(have->vlan_tci, 0, "vlan_tci");
+ 	ASSERT_EQ(have->ip_summed, CHECKSUM_NONE, "ip_summed");
+ 	ASSERT_EQ(have->csum_level, 0, "csum_level");
++	check_loaded(skel);
+ out:
+ 	close(sock);
+ }
+@@ -292,7 +314,6 @@ void test_xdp_skb_ext_to_skb(void)
+ {
+ 	struct bpf_cpumap_val val = { .qsize = 192 };
+ 	int ifindex_src, ifindex_dst, tc_prog_fd;
+-	struct xdp_dummy *skel_dummy = NULL;
+ 	struct test_xdp_skb_ext *skel = NULL;
+ 	struct bpf_link *link = NULL;
+ 	struct netns_obj *ns = NULL;
+@@ -330,18 +351,13 @@ void test_xdp_skb_ext_to_skb(void)
+ 	    tc_prog_attach("veth_dst", tc_prog_fd, -1))
+ 		goto out;
  
- static const struct btf_kfunc_id_set xdp_skb_ext_kfunc_set = {
++	val.bpf_prog.fd = bpf_program__fd(skel->progs.cpumap_load);
+ 	if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.cpu_map),
+ 					   &key, &val, 0), "add cpumap entry"))
+ 		goto out;
+ 
+-	skel_dummy = xdp_dummy__open_and_load();
+-	if (!ASSERT_OK_PTR(skel_dummy, "xdp_dummy__open_and_load"))
+-		goto out;
+-
+-	/* veth_dst takes xdp_frames only with an XDP program */
+-	link = bpf_program__attach_xdp(skel_dummy->progs.xdp_dummy_prog,
+-				       ifindex_dst);
+-	if (!ASSERT_OK_PTR(link, "attach xdp_dummy"))
++	link = bpf_program__attach_xdp(skel->progs.veth_load, ifindex_dst);
++	if (!ASSERT_OK_PTR(link, "attach veth_load"))
+ 		goto out;
+ 
+ 	test_frames(skel, "pass", DELIVER_PASS, ifindex_src);
+@@ -354,7 +370,6 @@ void test_xdp_skb_ext_to_skb(void)
+ 
+ out:
+ 	bpf_link__destroy(link);
+-	xdp_dummy__destroy(skel_dummy);
+ 	test_xdp_skb_ext__destroy(skel);
+ 	netns_free(ns);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c b/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c
+index a63206ff993d..34db1a986f3b 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <vmlinux.h>
++#include <errno.h>
+ #include "xdp_skb_ext.h"
+ #include <bpf/bpf_endian.h>
+ #include <bpf/bpf_helpers.h>
+@@ -14,6 +15,8 @@ SEC("xdp")
+ int live_frames(struct xdp_md *ctx)
+ {
+ 	__u8 *mark = (void *)(long)ctx->data;
++	enum xdp_rss_hash_type rss_type;
++	__u32 hash;
+ 
+ 	if (mark + 1 > (__u8 *)(long)ctx->data_end)
+ 		return XDP_DROP;
+@@ -25,6 +28,9 @@ int live_frames(struct xdp_md *ctx)
+ 			reused_ok++;
+ 			bpf_xdp_adjust_meta(ctx, MAX_META_LEN);
+ 		}
++		if (bpf_xdp_skb_ext_load_rx_hash(ctx, &hash, &rss_type) !=
++		    -ENODATA)
++			reused_bad++;
+ 	}
+ 	if (bpf_xdp_skb_ext_store_rx_hash(ctx, 1, XDP_RSS_TYPE_L4_IPV4_TCP) ||
+ 	    bpf_xdp_skb_ext_store_rx_vlan(ctx, bpf_htons(ETH_P_8021Q), 1) ||
+@@ -51,7 +57,34 @@ enum xdp_skb_ext_deliver deliver;
+ struct xdp_skb_ext_vals want;
+ bool del_hash;
+ struct xdp_skb_ext_have have;
+-int pkts_seen_tc;
++struct xdp_skb_ext_vals loaded;
++int pkts_seen_tc, load_err;
++
++static void load_all(struct xdp_md *ctx)
++{
++	int err;
++
++	err = bpf_xdp_skb_ext_load_rx_hash(ctx, &loaded.rx_hash,
++					   &loaded.rx_hash_type);
++	if (!err)
++		loaded.fields |= SKB_EXT_FIELD_HASH;
++	else if (err != -ENODATA)
++		load_err++;
++
++	err = bpf_xdp_skb_ext_load_rx_vlan(ctx, &loaded.rx_vlan_proto,
++					   &loaded.rx_vlan_tci);
++	if (!err)
++		loaded.fields |= SKB_EXT_FIELD_VLAN;
++	else if (err != -ENODATA)
++		load_err++;
++
++	err = bpf_xdp_skb_ext_load_rx_csum(ctx, &loaded.ip_summed,
++					   &loaded.csum_level);
++	if (!err)
++		loaded.fields |= SKB_EXT_FIELD_CSUM;
++	else if (err != -ENODATA)
++		load_err++;
++}
+ 
+ SEC("xdp")
+ int xdp_store(struct xdp_md *ctx)
+@@ -99,6 +132,21 @@ int xdp_store(struct xdp_md *ctx)
+ 		return bpf_redirect_map(&cpu_map, 0, 0);
+ 	if (deliver == DELIVER_VETH)
+ 		return bpf_redirect(ifindex_out, 0);
++	load_all(ctx);
++	return XDP_PASS;
++}
++
++SEC("xdp/cpumap")
++int cpumap_load(struct xdp_md *ctx)
++{
++	load_all(ctx);
++	return XDP_PASS;
++}
++
++SEC("xdp")
++int veth_load(struct xdp_md *ctx)
++{
++	load_all(ctx);
+ 	return XDP_PASS;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/xdp_skb_ext.h b/tools/testing/selftests/bpf/xdp_skb_ext.h
+index 11feee2fa31c..64d4a0511d0a 100644
+--- a/tools/testing/selftests/bpf/xdp_skb_ext.h
++++ b/tools/testing/selftests/bpf/xdp_skb_ext.h
+@@ -30,7 +30,7 @@ enum xdp_skb_ext_deliver {
+ 	DELIVER_VETH,
+ };
+ 
+-/* The entries that the XDP program stores */
++/* The entries that the XDP programs store or load */
+ struct xdp_skb_ext_vals {
+ 	__u32 rx_hash;
+ 	__u32 rx_hash_type;
 -- 
 2.56.0
 
