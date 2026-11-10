@@ -1,111 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794289195;
-	b=OZg4eDesSD/BHKjqCb0qMghpMESSiN1f9lTR4MMEt5EDfovyP4wzuvV3x7Bp7X8GmxhP
-	 4+uWRza9bQSMRxlEZsQaPCy1TmQc0oEZU/ntZhf+P9IFs4h2XBvkZp/kevbGZ/3BNevqr
-	 rtTiv4f9w96ITR0ATZlyAo8C5ROzx7HQ/IhLACBVnt2Da/w940lDYjfyiIEhFiprPBvwF
-	 C23l93TBR+yh2BFJmGut0QIMAyo0Z7rF7X1GbAsfKfPFP2fJ2ALQspqNLWPw4Ff5GV/OV
-	 OwRiX8QuU+ADKU4X+vWCB7vdKeXkwg9mI7bcs58R52VAkfeGGUeOsncbNIQCJtJtyHw==
+	t=1794289229;
+	b=b/IatSOSuhix0JQ7qK5Ynlse1VP6us9TrkzYCIP+KbLSE9YCSAP+9dPc6qrI7eSAjleS
+	 LqGM13lG+vM+ICmBcdkwPSphQ8ecTkSkSQ91gY6LDVaFnDnpz3f5sixADADFqlI7lZP1N
+	 hLSgO94TH/whZFww8O45+D8xNku9x7t+SNnmXsdl+XDR/kHsP87jnhfATHIMiFemNKC8p
+	 AwxY61Qd2qoe1aYKgYp9GOUn4P7txKwBnHsKt8N1NI05XSoS6lvgVhhdRzzVdTUF/y3Nd
+	 LNBcSL65xVLpT9B1g0nrsuvmbfbMmE/j2IlOQiqn/NlejvOs7yeDkTucEi8nOj9kXjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794289195;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=Y4IpnFVFMm5fXSXAtzV8xsgRv9+hQP6OGl0+r2a9VT0=;
-	b=bnuFuEkv2LzuTWF19A5d6sXL0LV0/AgbNp4BWhZun7Yb3zvT6i9/ohMK3PUQZalYcCS1
-	 W7ImyTzO46XGrHd4SHJs41PsGNVRZVSr4T2/vCqi0rEdr+lGXJHcbTUCs7C8ylv+eP8wC
-	 F4D8JMzMvchvN+xBD6+sCK9/7taCcLF9aaKYbijhpww8QBBapSJYIVHN9pTxu6fm/JhN3
-	 fEzZw/oanohLCJBSCO+1T4d0rpL7WmGyyaPqfBGA67ngAs4bSBCOBlO7qJIInkPK1NUdM
-	 sEEih0iomJGmgJpHCwbN3I5c0LGfcUQcxZHGt2zI6ROkA3BcRkmdp1mWZy0lOc1g18A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794289229;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=9oHgoMNppljA1v1665oeA7qzNnjE6fLvD9MUAVdurBg=;
+	b=d3DvA8mVy2TRXxKnxmTSieRzlIZX9ZC3r+xrtVr6TvbyKoqYwbhL2Ij5EqWMKl3QDw5s
+	 bxbafAsuhBJ4FVtQHZDRGEIQ/Yop8MOBeMorJWXBVk5ZwUTqdSciRh71qdeN+VDoK9HWA
+	 GBlGHoBIqRwGbx5nBf+3Z4K/RqQ3PATOa04nvbqDbIFy9OHWqvzHCZxspUh6X6QH0nqYH
+	 kH4CLwjek+bX1mLFjsmsqE5zTCsSP5ejiiiaVZ9h6Z5cBPy821TrbBm3DYnRR4P/Fy3dA
+	 nc5tV3XENcIR5zzoEIFdXrS9zVY1aJmQCIYqri/cCsbVvarMGlH7A9U7I/Jb/Wt1d5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chromium.org;
-	spf=pass smtp.mailfrom=chromium.org;
-	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=cLVYVYuu;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ei+Z2eWF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEF8606A325
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 05:39:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDEF8606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDE4606A325;
+	Tue, 10 Nov 2026 05:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=cLVYVYuu
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3b12cb3c37bso846030a91.2
-        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 21:39:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1794289194; x=1794893994; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Y4IpnFVFMm5fXSXAtzV8xsgRv9+hQP6OGl0+r2a9VT0=;
-        b=cLVYVYuuBBXQ2a8BC/RZPap/VVuCBYxB+9+dmH4GcFa7rDdNwk2d+Tt7j067wZknjq
-         26ignaWiswoZ1s73g7SdsQtXPV9yGnxKCEzLZxX5wRJCcsE7ODUyLhJvk2K/PHMA3eSz
-         uUoBx69dNRYa2prsevBY7G5qpgndcPUZmTDaU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794289194; x=1794893994;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y4IpnFVFMm5fXSXAtzV8xsgRv9+hQP6OGl0+r2a9VT0=;
-        b=BTqwWmoN/iyQebvhdOZbo5apyNOnLQrRaYCYz4OB/ew1H/ehAeqPowALibp6AcyjGP
-         bj95uT/69Mq+FU4SGLLesJ8l4UTuShszgUZETntdbeqLSxwfx49p30Cqf2W3YqyAjFRr
-         5JOTfumt7PqaZUa+zXj8HuunXb4WzX+2yOpc8XXEzWV5pZuzuOdX7VxNw80s9uqWuTt1
-         0eIh1oNiYXUC+BLCeKyY730UK/WpqwK46pXI4bglG2wxTWJ3Vevb0+1X7868FLl97m+A
-         J9Cd0e7q3kn4EIi1xE0IGWmoOuVBb/HFkgxNEWMQsEQK0LhujZ7N0Tx9zGByjnXnpNfj
-         +5sQ==
-X-Forwarded-Encrypted: i=1; AL+hErFBeqU/b3NruIxq/M+T/1gUcgKKw3KqBk6SMx4lDIEAzxG5GRWRck/JeABqlMdfRLM1BH+O@lists.linux.dev
-X-Gm-Message-State: APuU4Z99nKAFINixNTbpF274MevpLgDWbevwx2CW3/kHjH7wC6jLC2o5
-	W5luYQPDfwHPVp0cLkNbl5+H45mEiFuv941ItWs/1U/xQyHK5gElxFXVHiQWEV/6fw==
-X-Gm-Gg: AYBFou0S5iFV/ZPX1++peDn7T6RCNNS7iRkhBBxWc8sIYl0bBj7NUt47Nnmijo/olJt
-	e5PJWwLYM8TEsooLa4/w01aiIE00WHZarMKWdQioWCZocAwsxS8epGAL09EMsLKO0WP+PjAunKD
-	YxqBOHO8Ndc3AGhVEJ2dz3FEYY30s7eATcwxW1ADWxMykm4nqMEzUcO76a1f+o6GtpPtQ3d+5Xm
-	UrmnijOArccsn/e0H+avAdyWdJ9kEImwA3uWsjmF+lSMEImJsyhzv3GNAQtn7YE9nV5pG/JBZbT
-	2RLjAn3W/6BuUXiq+kSbp/PqPs1x6gleyszQ3XbW2zU7dUrUekgTyyFlafoq6XL5meYbDmoX8l8
-	7QRK0jq3hk7a0iGTaO6Nd7Iq3QYWYGeDtgJmAFsdEvaSO9IfyeQn8Dg/GwnkZEd8EhN6crCU8MN
-	KYYmHjdNCp9tzYMxuO8dqGHggJ2CSKhI9m24CGG1Oq+W00PmNKTu+kQmSeOnZ242tPdUcG83KML
-	9I+zBtUpVaH0iEs/qq8sIFcjAJyKFcTlCN5S4nhOl/DBkWwRyjvtK+PV9dJh8IqkggVRZpNYYdm
-	rGEhW8C4AIc/+pIudhZwxwjLrefvC7XRnoUwxBzEFNyOImBUDb8d23sDsWaNW3S17oaJAnwg8KL
-	NAxckiumVm4KKxro=
-X-Received: by 2002:a17:90b:380f:b0:3ac:9599:a689 with SMTP id 98e67ed59e1d1-3b166d02addmr1882552a91.34.1794289194303;
-        Mon, 09 Nov 2026 21:39:54 -0800 (PST)
-Received: from google.com ([2a00:79e0:2031:6:e137:9384:7cd8:6e40])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b168ff86e7sm1041404a91.2.2026.11.09.21.39.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 21:39:53 -0800 (PST)
-Date: Tue, 10 Nov 2026 14:39:43 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Minchan Kim <minchan@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>, 
-	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, Eric Biggers <ebiggers@kernel.org>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Laight <david.laight.linux@gmail.com>, 
-	Sungguk <sungguk.na@samsung.com>, Jaehoon Chung <jh80.chung@samsung.com>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org, 
-	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 13/15] lib/lz4: switch the decompressor to the
- vendored sources
-Message-ID: <avKtyCOOmK3AH0xy@google.com>
-References: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
- <CGME20261106144310eucas1p1d60fe5c2e0170c49f38a3142bb1d8f94@eucas1p1.samsung.com>
- <20261106-lz4-vendor-upstream-v2-13-ee04c3f0d7dc@samsung.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ei+Z2eWF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25B9F1F0089F;
+	Tue, 10 Nov 2026 05:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794289228;
+	bh=9oHgoMNppljA1v1665oeA7qzNnjE6fLvD9MUAVdurBg=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ei+Z2eWFJ9CODTLEDShOv/Pf0yFH6HijCt386QN1f3mFSRC4tlPgZ0OEf518Gs3fQ
+	 6krIKjsElm6RnOZuHz7haXrSpR0oeUy7RoooTHrkViUYv9zcqyFFesgduijzfn7qym
+	 iDolM3/t1xQgcOV5HiURSFdwMfQO/yhz1yZ2xfb1x2p53UR366JmaUJyo8njAjZJnp
+	 QGQtx9OIXBbsSdTdlIr0MYMnDUyZiDrN4a97YyL0Nkcb+U3Zk+UU0mHBoExOM9xeUg
+	 PtVHclxBAGrKGZSgMODhiUrs8b6jlFWji+E7jrKkuNO4ui/xC8aK9kj4x5ejXZzhjY
+	 Sck12fmuO91Zw==
+Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
+ clang KCSAN
+From: netdev-bot+sashiko@kernel.org
+To: leitao@debian.org
+Cc: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev,
+ ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, kuba@kernel.org,
+ tj@kernel.org
+Date: Tue, 10 Nov 2026 05:40:27 +0000
+Message-ID: <179428922768.994134.14043808841864559669@kernel.org>
+In-Reply-To: <au27Y9m78_3EH2v1@gmail.com>
+References: <au27Y9m78_3EH2v1@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -115,39 +63,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261106-lz4-vendor-upstream-v2-13-ee04c3f0d7dc@samsung.com>
 
-On (26/11/06 15:42), Michal Wilczynski wrote:
-[..]
-> diff --git a/drivers/block/zram/backend_lz4.c b/drivers/block/zram/backend_lz4.c
-> index 50265e3ce256490994cb6dae32a45da376e408e0..b9b8a5f678c155442fa3fd2c1984e45182e6fc38 100644
-> --- a/drivers/block/zram/backend_lz4.c
-> +++ b/drivers/block/zram/backend_lz4.c
-> @@ -84,7 +84,7 @@ static int lz4_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
->  		if (!zctx->mem)
->  			goto error;
->  	} else {
-> -		zctx->dstrm = kzalloc_obj(*zctx->dstrm);
-> +		zctx->dstrm = kzalloc(LZ4_MEM_DECOMPRESS, GFP_KERNEL);
->  		if (!zctx->dstrm)
->  			goto error;
->  
-> diff --git a/drivers/block/zram/backend_lz4hc.c b/drivers/block/zram/backend_lz4hc.c
-> index e7ee3740219852f079d1e0866da6b213a3f3a583..1e09c93016264259c149e2913b2819571b56fab6 100644
-> --- a/drivers/block/zram/backend_lz4hc.c
-> +++ b/drivers/block/zram/backend_lz4hc.c
-> @@ -65,7 +65,7 @@ static int lz4hc_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
->  		if (!zctx->mem)
->  			goto error;
->  	} else {
-> -		zctx->dstrm = kzalloc_obj(*zctx->dstrm);
-> +		zctx->dstrm = kzalloc(LZ4_MEM_DECOMPRESS, GFP_KERNEL);
->  		if (!zctx->dstrm)
->  			goto error;
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Ditto, outdated zram code.
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-My ask would be to not squash zram changes with lz4 changes, when (iff)
-possible.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The commit message of "bpf: tcp: bpf_tcp_ops_set_rcvlowat()
+  missing from BTF with clang KCSAN" is cut off and missing required…
+- [Low] The patch fixes a regression from 5f549c1e49f3 ("bpf: tcp: Add
+  kfunc to adjust sk->sk_rcvlowat.") but has no Fixes: tag.
+
+--
+
+bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with clang KCSAN
+
+With clang and KCSAN, pahole drops bpf_tcp_ops_set_rcvlowat() from the
+vmlinux BTF. This breaks the build when CONFIG_WERROR is set. When it
+is not set, __bpf_tcp_ops_init() fails at boot. The patch works around
+this by passing the clamped value straight to __tcp_set_rcvlowat()
+instead of reassigning the rcvlowat parameter.
+
+> The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
+> sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
+> --fatal_warnings exit status") made the missing BTF fatal with
+> CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
+> is never registered:
+>
+>   initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
+
+[Severity: Low]
+Should this carry a Fixes: tag? 5f549c1e49f3 is only named in the prose.
+That commit added the "if (rcvlowat < 0) rcvlowat = INT_MAX;"
+reassignment in bpf_tcp_ops_set_rcvlowat(), which this patch rewrites.
+
+Users can see this regression. When the kfunc set fails to register,
+the chain in __bpf_tcp_ops_init() skips the struct_ops registration:
+
+net/ipv4/bpf_tcp_ops.c:__bpf_tcp_ops_init() {
+    ...
+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+					       &bpf_tcp_ops_set_rcvlowat_kfunc_id_set);
+	ret = ret ?: register_bpf_struct_ops(&bpf_tcp_ops, bpf_tcp_ops);
+    ...
+}
+
+The sched_ext workaround cited in this message, f2f095c87603, has a
+Fixes: tag too. Would something like this work?
+
+Fixes: 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.")
+
+[ ... ]
+
+> This seems similar to pahole behaviour sched_ext hit with a bool
+> argument, discussed in [2] and worked around in f2f095c87603
+> ("sched_ext: Work around pahole 1.32 dropping
+> scx_bpf_task_set_lazy_resched() from BTF").
+
+[ ... ]
+
+> Not reassigning the parameter is a workaround for me, with any pahole: clang
+> then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
+> and __bpf_tcp_ops_init() returns 0 (tested in virtme):
+
+[Severity: Medium]
+Was the commit message cut off here? It ends with a colon, and the
+virtme test output it introduces never appears.
+
+The message also says "discussed in [2]", but there is no [1], no
+reference list and no Link: trailer, so the pahole discussion can't be
+found from this commit.
+
+There is also no Signed-off-by: line from the author. The DCO in
+Documentation/process/submitting-patches.rst requires one, so the patch
+can't be applied as posted.
+
+The code change itself looks fine. Passing
+"rcvlowat < 0 ? INT_MAX : rcvlowat" behaves the same as the old
+reassignment.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/au27Y9m78_3EH2v1%40gmail.com
