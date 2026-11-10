@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794283060;
-	b=XJmLDetTtFuhG99DKNya36Om/u3RUZK0XaeXcKcvReIS7/Hden3bfeHTLb36IAK+9hDI
-	 jXAKKnZ9C94uwMg81g8qZtHWy1XowPAsaz8RGbP2sbalUvkhG7jKAHOGSL7/PTSPm4YOc
-	 x0wcKKzsw0qXWHqtmJ8jpn2HQmYXJoAWawVS/XabzK9iWmDO+aSNAJYjSrtu9W24Dp7Bs
-	 x/+cPmfsMZhfkwY/6L96L1G3skEy5oaftKdSxnjPvkA0kI9PaO/hf9i7dMln7itSVLgrL
-	 YLEWUuajnj3dJY+GczDa6Km0XuahzOHQBZ9bdUfUWI64c7Q4+V/7ABy/FsP+PZ/MDgA==
+	t=1794283067;
+	b=te2iQt1fOZpc2CJJzs0bzpfWSkADFT/zZmcMqm3BG46OuCUrfQ7l98rfRlm0Fg/GyNRp
+	 ydGvw7jeQX52HlOzIu3kdP3OxsbFhLx/+bwLkpmoEUVwuwnetmL/75Typ/0Qhm5Ws9Hli
+	 ycoj1IxlqJ1vSHnsXhWf8y4SpW5XI6Jx5V4nGvvYEA1MufgNljzIVVkT17gbUAVVM186e
+	 TjJsMt7TddZbU794U4MMzr6S1Ycz+jIilH1UDSCik3pJlbxTfBoCyEA4khlhzwMOA8S2e
+	 /Z8vZIllOUwOiqi8DMzQFul1DwdighB3LsbvRGnVmke5GOwVNTM3LPM+PhTRSBeREtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794283060;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794283067;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=IMIS7KfMcbwFH4EjhakKpSZPpu7Y+oEkSnNYuobCRt4=;
-	b=gepbgzUIeF6Nh+E+GXXJNkDnYTekDpe0v63dnA0O0jetsfqBnuQITgkgdePxiIyeyKA5
-	 47Udvcf+4MfEonOLQg40QlDRl31qEsuxwBZxE3yu6rLqr4bt8XQkiG1tw7F4Yma9yxhkQ
-	 nWxFhBYL7FTi3WA2j5WZbiehMNuVXJt5ul9HxUDGoSk9olLRHkfCxs4tisu+/bzGQRpPp
-	 8Q0ELAFj2xChKOZp9Hg/qGz3I/5hV5x2o/15wwREcPP5AHsXCtVXrjzzeoAQah2/0B6Cd
-	 Sdb0UuBgT/GwLq1sDvqs6QR1Wco7MTdOAuHCazvxZiUMRFN/yxZjMKN7xvrX2TQ6wHg==
+	bh=F9EfUz+UskV0rhf4cQXQsxZ2euYB/mU/YoxBROtxa6Y=;
+	b=ulMxEIyH9FMm6drOzeulC/xSy2zdK8xdFIHkwMJ3jVSTMdAamXA7m6z0gl4hHIMt6g1T
+	 MDvXYvJjApUlMM/YEz3G/kUGtf12sakgg/bIfWDU43MOCHqcVTmepcZAkt5MK6a2Ko1DG
+	 pGqCfA85DqLpWmXMEFOfslYPP3sLarbspkr+M12TsIyode4euxYgdryIfyIeGDyMEjf3k
+	 e3aATHXD/pcCq/zzzzgD0dXLq8QNF8eFv24gyGnNKOLhLsXCZMeXEuLaevcdeXGqlEbJV
+	 R5NWxXGNbmqyH949I33wBEEg6d3IhkILPTaDIe2PTF+VXIjJBfLaJO8s5/mi8pTNOaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Y5eB1QZv;
-	arc=none smtp.remote-ip=209.85.208.54
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RmL6DBpk;
+	arc=none smtp.remote-ip=209.85.208.52
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80CC606A321
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 03:57:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D80CC606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB4560A2615
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 03:57:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BB4560A2615
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Y5eB1QZv
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6b408f2d936so2381015a12.1
-        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 19:57:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RmL6DBpk
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b47c1a3c74so1927919a12.3
+        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 19:57:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794283058; x=1794887858; darn=lists.linux.dev;
+        d=cloudflare.com; s=google09082023; t=1794283065; x=1794887865; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IMIS7KfMcbwFH4EjhakKpSZPpu7Y+oEkSnNYuobCRt4=;
-        b=Y5eB1QZvm8t0lLYwGDa/cni8uLVh4+wwCYVEUfYMRY/UHFKLG37lrGFfu9Qz/JPHw4
-         ZacWk2XxmSaxApPlWhWXbyFd4CUPESrH/ptLFmPBhOO8wrIJE3oCsv+eNIzZRplS1Ahv
-         8q0YJduNiOPOUlh13h9omnD378KyCPwYQpwsUQOJmaEDk7XC5KPd6KOu9fmczDx9tJzj
-         /25/HsyZu0Ch5FEiB278j9Q8/9HpDFay989XCIBRvQsF0hRQl/Su3HJYM32MgHcY19qF
-         3zKNmgtV+B6H2yjjgXv+WGo3of9HPH1vZ1luI7vr9/uefzbw68xUdLrIHXxbzwUwjVMY
-         EK2g==
+        bh=F9EfUz+UskV0rhf4cQXQsxZ2euYB/mU/YoxBROtxa6Y=;
+        b=RmL6DBpk5Q9vjYyKA5bCkuipQQ69ebdTkwqBTz8YQPJDDZXfAPA/8HEX4nYWYR1LPR
+         bZLdAaAMsouLQVPPh792U9F4cbL4jzAnrNZWjjAvsM+yfkoIHvT4N7YWpIu1g7nm1wOj
+         YoZKsj1Wn/YIGWD2HrbuhHmqgOKYwqDIAGMgq+vFbPJXumExxyk0QLe72t9NxjF6CLi9
+         LAwabfz2EcER7yHOvH+lMGWCh9dOnljrcA+RlrmohhMF+K8+riHKiet25dZhF1JJL24n
+         0O06BChv5590tKsL9sTzv08Vq3WcCMcSI+MO+7zZHNUa489hME9to8Bljz2DicM2l+T9
+         oTww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794283058; x=1794887858;
+        d=1e100.net; s=20260707; t=1794283065; x=1794887865;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IMIS7KfMcbwFH4EjhakKpSZPpu7Y+oEkSnNYuobCRt4=;
-        b=T8D66xkU9Z1NB+TWArUO2L1JkuM/KM0vPHqEi15qcFfU3AKrRRE3Hh+aPvi+y1E4wG
-         2HHI+LDFqbOdBkbKNH88aTmfURKEEHHaHccePnQrxoG3QBJ8jaEgr1z9YPdUgzfsm1rA
-         hfqt663lVZu6bwX4lYBYuDwo650zJ5Zzi67+Z/HZV1VnzJTMcWcfB4w0XpvLLB3amUoQ
-         tcWs1KCptK6wAT92rMcinrahTY3fF9HJq0Xny2xRZ4J67xjZ4EbViy+V9b6hlFYrnl3T
-         lFrmGjWUMWnIKnKv9/a7bb6Bou6e9gAEsIrzzgNgqXLY2akTIyDBKJdjYfAr20Lcrt3Q
-         sQCA==
-X-Forwarded-Encrypted: i=1; AL+hErHgyczub2n+0nJqeRnC3jgHrdwzUU48oLOyzLFVC7sQPIHpF3jFvPAHuPKMgh/yuzM0PuiG@lists.linux.dev
-X-Gm-Message-State: APuU4Z98GCEu1fMDLT1VQ7HwXT8p5CMruWDcZ0mHJ7qyEbqFRkJ/NL91
-	yVl6CW37sap6e8TOfd2HSG41xKmDYd3Z/lBwJpQzclI0uBppmUyjKORg2b1akbB18b8=
-X-Gm-Gg: AYBFou3kwEDaWdtK7fiNhKKNIqkx//naT4gdgmxm3wI+M22l9K0tqmrJt4GYugyJdlW
-	gMAAv3XneBLt61u3/65jJSxsp2+ziscbH2vSUvhE5gE/iJ31PiB7jHfc7U3h2vHMEIp0YmhEaEv
-	jgYF1JaBO8OvmkErzhACQjZswWVfFvylKYYwEfx0AgZXbN7jZc1JC4qlpjdrWz9u2ffoUgciOEb
-	eS8U0tRGrLRr9YNrgBHaHmJ1/xzQI/NRQMFg9AbL5TQna+7g2V7knXGN9BUhwSKFtTa43Qo7/h3
-	Ysab29flmnN33B+/mR4RB+OLxHeuknVsYy47r2tq/tRpRzGZWcecEqZ/SlMtzKFH372Rt3RvXEF
-	mu5RkNEPKYHmV8071NvHEE/urkSVEc5vB1nva1/4PmIz4sECC2dx96IjMc7rA1w9oSJRpTjuJ/P
-	X1OALP01dI3CsD4KatUfZY4yU/zrACX1xfRTvcjdyWyZTxL0RR188dv3imSVnD110+UzyXpaFtP
-	XWcJRYzNlRbBE8ph0yY3NTWHcQnnPTcsVqDLW2dPv1A0eacCuanZX1CQ9/GwidZgSIy89YtKyv7
-	YfK/2Ykr1fsQkGa3xT+wPjevitGIM30IhhJLFVfC9PkfVk657USnfOtOogbkDJM=
-X-Received: by 2002:a05:6402:4007:b0:6b5:8695:f839 with SMTP id 4fb4d7f45d1cf-6b756b0bf4cmr1096174a12.45.1794283058320;
-        Mon, 09 Nov 2026 19:57:38 -0800 (PST)
+        bh=F9EfUz+UskV0rhf4cQXQsxZ2euYB/mU/YoxBROtxa6Y=;
+        b=06hXr+kn6tM240+a+OrdgmyNWHhOSXW68ehvcysS6Vu7cWRuYtR0Lj5ANxoEi1BE1t
+         +Y038AN2Ri869H67RlBgr70SL8uiiafF7CMEGL8vz62vwkFITnebWEcG8CO64STQDNIU
+         OnfR9n4Jy2tXrcrIld7v3fQ1NdjTSHiHAMZdQE6rrVKd8JOnoPGF+l2fD5Nyyu1c2KfF
+         aIGj3mS96+nKNewin9s4c5lT7tiaZoB6PvOq9Ge/T5bcMYCoDcLmfseONWdFSta4Ldvi
+         3HlvC6f0z1QzqbLY1e9cggSgO18yuQIknzZs/CEA1G/UPT8hbAozgG6XfEj3KjDqa9P7
+         u1/w==
+X-Forwarded-Encrypted: i=1; AL+hErGB1aSs22e7w2XSfbCiGQB2WG8tm5OKVYEk80+beKfuokgpzBwt6cJ6Z+xpUcUfZL+2YEy/@lists.linux.dev
+X-Gm-Message-State: APuU4Z9agUdUJZ1Si/vGisX0UgY/o+5x9o8Jsm2wiNySBuhGC9BclHdH
+	ptHXoL4MZFhSDsqD9RVEVdmaF9Pw7V1i3fsHJdSPp4QdlDLv34FtExW7O8xxk6cp5/A=
+X-Gm-Gg: AYBFou0jCLiTIOaMNVUKlCgm3EbKAdEfiLHPUVfqNVz0K+mL45/t+Yg2VIiTTs2FLjY
+	jYw+zSqZ4QaHqG6bNrshbcUuYvyDYro5meA6fyNPzTG6iTz1dGIR2BPXh8ll4zOj6g+Xbnx0nhr
+	NQL1SpZl/zPAF+Gq4aPDAgfP7qrIeBZRSBVANeYxHuSPFCrLdFodD/iMghz2DQ2YHsOUuRWgcF9
+	SEswBWSOve6CPLynEPC6NvrzrlxcH+EDgKHBmolrP1rvF8fqIzxFxCEauoVmK1tJMNg2fELakGU
+	fHamZo91RTJODVu0qj9UDqJg/JPdbd8quZWoBkr8Bfv7/YgL7DCGSgkGHy2VcdaX22WdHfGvbY2
+	yQ9cmvREHbbkRBsDJkoFuEpoMUaQJVQba4ZkvQxII6n17afgDCEOv5+MQUQLnTBKxvxNzlBJZUM
+	5/OGv0DaBXdZ9Wz2Rqnd9cVUswlltNXtCVQEqyfO+OXdn1a0z2AypScT34UG/x7KLuw1O4bpNiG
+	Zhgn0s+taIFkqJN8nvulno89e7apRhgcqEDmIM7ZTgQa5L00ig8YC+JSjqZ7LFtqs9avIo7PXmX
+	RT6Vt2xkBryaD+Ap5UDfX35+Z89PTs1lL/zPa/XNC9j56AZvc5d7fW3c4/RM0mA=
+X-Received: by 2002:a05:6402:2750:b0:6b3:b10c:40f9 with SMTP id 4fb4d7f45d1cf-6b756af5982mr1263386a12.31.1794283065131;
+        Mon, 09 Nov 2026 19:57:45 -0800 (PST)
 Received: from L9JK9NPFH9.lan ([104.28.20.56])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.57.34
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.57.41
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 09 Nov 2026 19:57:36 -0800 (PST)
+        Mon, 09 Nov 2026 19:57:43 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
@@ -130,9 +130,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	llvm@lists.linux.dev,
 	kernel-team@cloudflare.com,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH bpf-next 05/15] xdp: add a kfunc to store the RX checksum status
-Date: Tue, 10 Nov 2026 03:57:03 +0000
-Message-ID: <f17f2567802dde23ad1cf81b572e0834c6531fe7.1794281983.git.tianyi@cloudflare.com>
+Subject: [PATCH bpf-next 07/15] xdp: set skb RX metadata from the skb core extension area of xdp_frame
+Date: Tue, 10 Nov 2026 03:57:05 +0000
+Message-ID: <eca7d73b0881b59f0f7b3cf8d6e022e70c8ed800.1794281983.git.tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <cover.1794281983.git.tianyi@cloudflare.com>
 References: <cover.1794281983.git.tianyi@cloudflare.com>
@@ -147,146 +147,133 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add bpf_xdp_skb_ext_store_rx_csum(). It stores the RX checksum status in
-the skb core extension area. A later patch sets the stored status on the
-skb built from the xdp_frame. The program can read the status from the
-NIC with bpf_xdp_metadata_rx_checksum() from Lorenzo's RX checksum kfunc
-series [1].
+cpumap, veth and BPF_PROG_RUN build the skb from an xdp_frame with
+__xdp_build_skb_from_frame(). It now calls the new helper
+xdp_skb_ext_to_skb() if the xdp_frame has the XDP_FLAGS_HAS_SKB_EXT
+flag.
 
-The kfunc accepts XDP_CHECKSUM_NONE with csum_level 0, and
-XDP_CHECKSUM_UNNECESSARY with csum_level up to SKB_MAX_CSUM_LEVEL:
+Three drivers (atlantic, mana and netvsc) call the wrapper
+xdp_build_skb_from_frame() in their RX and TX routines, and then set the
+skb fields from the RX descriptor or transmit the skb. The stored values
+must be ignored there to keep their behaviour consistent. So the wrapper
+clears the flag. A driver that supports them calls xdp_skb_ext_to_skb()
+itself, as ice does in a later patch.
 
-- Storing XDP_CHECKSUM_UNNECESSARY asserts that the checksums are
-  correct, as in [2]. A program must store it only after it has verified
-  the checksums.
-- Storing XDP_CHECKSUM_NONE invalidates the checksum status, as
-  requested in [3][4].
-- After a decap, storing a lower csum_level updates the status, as
-  requested in [5].
-- CHECKSUM_COMPLETE is not passed to the stack for now, as suggested in
-  [5].
+xdp_skb_ext_to_skb() is based on [1].
 
-Link: https://lore.kernel.org/all/20260715-bpf-xdp-meta-rxcksum-v5-1-623d5c0d0ab7@kernel.org/ [1]
-Link: https://lore.kernel.org/all/20260630191510.81402-2-deliran@verdict.gg/ [2]
-Link: https://lore.kernel.org/all/20260227153231.78d16b69@kernel.org/ [3]
-Link: https://lore.kernel.org/all/amEojEGsIGkUjIWn@devvm7509.cco0.facebook.com/ [4]
-Link: https://lore.kernel.org/all/20260721183256.6f49d6e1@kernel.org/ [5]
+Link: https://lore.kernel.org/all/175146831960.1421237.9105904582430357235.stgit@firesoul/ [1]
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
-enum xdp_checksum has the same names and values as in [1], so this
-patch does not depend on that series. The series merged later drops its
-copy.
-
-Stanislav was not sure that any NIC reports a level of 2 or more [4]. A
-separate maximum for XDP would give the same skb field two limits, so
-the kfunc uses SKB_MAX_CSUM_LEVEL.
----
- include/net/xdp.h |  6 +++++
- net/core/xdp.c    | 57 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+)
+ include/net/xdp.h |  7 ++++++
+ net/core/xdp.c    | 54 +++++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 59 insertions(+), 2 deletions(-)
 
 diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 23c976e92898..d8b77d80bfbe 100644
+index d8b77d80bfbe..7c9a812b6e86 100644
 --- a/include/net/xdp.h
 +++ b/include/net/xdp.h
-@@ -701,6 +701,12 @@ enum xdp_rss_hash_type {
- 	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
- };
- 
-+enum xdp_checksum {
-+	XDP_CHECKSUM_NONE		= BIT(CHECKSUM_NONE),
-+	XDP_CHECKSUM_UNNECESSARY	= BIT(CHECKSUM_UNNECESSARY),
-+	XDP_CHECKSUM_COMPLETE		= BIT(CHECKSUM_COMPLETE),
-+};
-+
- struct xdp_metadata_ops {
- 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
- 	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 2c1d5ec3311b..eea04e7b7204 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -1004,9 +1004,15 @@ struct xdp_skb_ext_vlan {
- 	u16 tci;
- };
- 
-+struct xdp_skb_ext_csum {
-+	u8 ip_summed; /* CHECKSUM_* */
-+	u8 level;
-+};
-+
- static const u8 xdp_skb_ext_type_len[] = {
- 	[XDP_SKB_EXT_HASH] = XDP_SKB_EXT_CHUNKSIZEOF(struct xdp_skb_ext_hash),
- 	[XDP_SKB_EXT_VLAN] = XDP_SKB_EXT_CHUNKSIZEOF(struct xdp_skb_ext_vlan),
-+	[XDP_SKB_EXT_CSUM] = XDP_SKB_EXT_CHUNKSIZEOF(struct xdp_skb_ext_csum),
- };
- 
- /* Limit the header and all entries to 64 bytes, so that a new entry
-@@ -1120,6 +1126,56 @@ __bpf_kfunc int bpf_xdp_skb_ext_store_rx_vlan(struct xdp_md *ctx,
- 	return 0;
+@@ -329,6 +329,11 @@ static __always_inline bool xdp_frame_has_frags(const struct xdp_frame *frame)
+ 	return !!(frame->flags & XDP_FLAGS_HAS_FRAGS);
  }
  
-+/**
-+ * bpf_xdp_skb_ext_store_rx_csum - Store the RX checksum status of this packet.
-+ * @ctx: XDP context pointer.
-+ * @ip_summed: ``XDP_CHECKSUM_NONE`` or ``XDP_CHECKSUM_UNNECESSARY``.
-+ * @csum_level: Number of consecutive verified checksums minus one, up to
-+ *              ``SKB_MAX_CSUM_LEVEL``. Must be 0 with ``XDP_CHECKSUM_NONE``.
-+ *
-+ * Store ``XDP_CHECKSUM_UNNECESSARY`` only after the program has verified
-+ * the checksums.
-+ *
-+ * Return:
-+ * * Returns 0 on success or ``-errno`` on error.
-+ * * ``-EINVAL`` : @ip_summed is not supported, or @csum_level is not valid
-+ *   for it
-+ * * ``-ENOSPC`` : not enough headroom for the entry
-+ * * ``-EOPNOTSUPP`` : AF_XDP zero-copy buffer
-+ */
-+__bpf_kfunc int bpf_xdp_skb_ext_store_rx_csum(struct xdp_md *ctx,
-+					      enum xdp_checksum ip_summed,
-+					      u8 csum_level)
++static __always_inline bool xdp_frame_has_skb_ext(const struct xdp_frame *frame)
 +{
-+	struct xdp_buff *xdp = (struct xdp_buff *)ctx;
-+	struct xdp_skb_ext_csum *entry;
-+	u8 val;
-+
-+	switch (ip_summed) {
-+	case XDP_CHECKSUM_NONE:
-+		if (csum_level)
-+			return -EINVAL;
-+		val = CHECKSUM_NONE;
-+		break;
-+	case XDP_CHECKSUM_UNNECESSARY:
-+		if (csum_level > SKB_MAX_CSUM_LEVEL)
-+			return -EINVAL;
-+		val = CHECKSUM_UNNECESSARY;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	entry = xdp_skb_ext_add(xdp, XDP_SKB_EXT_CSUM);
-+	if (IS_ERR(entry))
-+		return PTR_ERR(entry);
-+
-+	entry->ip_summed = val;
-+	entry->level = csum_level;
-+
-+	return 0;
++	return !!(frame->flags & XDP_FLAGS_HAS_SKB_EXT);
 +}
 +
- /**
-  * bpf_xdp_skb_ext_del - Delete a stored entry of this packet.
-  * @ctx: XDP context pointer.
-@@ -1149,6 +1205,7 @@ __bpf_kfunc_end_defs();
- BTF_KFUNCS_START(xdp_skb_ext_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_hash)
- BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_vlan)
-+BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_csum)
- BTF_ID_FLAGS(func, bpf_xdp_skb_ext_del)
- BTF_KFUNCS_END(xdp_skb_ext_kfunc_ids)
+ static __always_inline u32
+ xdp_frame_get_skb_flags(const struct xdp_frame *frame)
+ {
+@@ -503,6 +508,8 @@ static __always_inline void *xdp_skb_ext_end(const struct xdp_buff *xdp)
+ 	return (void *)ext + ext->chunks * XDP_SKB_EXT_ALIGN;
+ }
  
++void xdp_skb_ext_to_skb(struct sk_buff *skb, const struct xdp_skb_ext *ext);
++
+ void __xdp_return(netmem_ref netmem, enum xdp_mem_type mem_type,
+ 		  bool napi_direct, struct xdp_buff *xdp);
+ void xdp_return_frame(struct xdp_frame *xdpf);
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index eea04e7b7204..9f311b3c0d2b 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -829,10 +829,10 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 
+ 	/* Essential SKB info: protocol and skb->dev */
+ 	skb->protocol = eth_type_trans(skb, dev);
++	if (xdp_frame_has_skb_ext(xdpf))
++		xdp_skb_ext_to_skb(skb, xdp_skb_ext(xdpf));
+ 
+ 	/* Optional SKB info, currently missing:
+-	 * - HW checksum info		(skb->ip_summed)
+-	 * - HW RX hash			(skb_set_hash)
+ 	 * - RX ring dev queue index	(skb_record_rx_queue)
+ 	 */
+ 
+@@ -857,6 +857,9 @@ struct sk_buff *xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 
+ 	memset(skb, 0, offsetof(struct sk_buff, tail));
+ 
++	/* The callers set the RX fields themselves or transmit the skb */
++	xdpf->flags &= ~XDP_FLAGS_HAS_SKB_EXT;
++
+ 	return __xdp_build_skb_from_frame(xdpf, skb, dev);
+ }
+ EXPORT_SYMBOL_GPL(xdp_build_skb_from_frame);
+@@ -1065,6 +1068,53 @@ static void *xdp_skb_ext_add(struct xdp_buff *xdp, enum xdp_skb_ext_id id)
+ 	return (void *)ext + newoff * XDP_SKB_EXT_ALIGN;
+ }
+ 
++static const void *xdp_skb_ext_get(const struct xdp_skb_ext *ext,
++				   enum xdp_skb_ext_id id)
++{
++	u8 off = ext->offset[id];
++
++	if (!(off & XDP_SKB_EXT_ENTRY_ACTIVE))
++		return NULL;
++	off &= ~XDP_SKB_EXT_ENTRY_ACTIVE;
++
++	return (const void *)ext + off * XDP_SKB_EXT_ALIGN;
++}
++
++/**
++ * xdp_skb_ext_to_skb - Set the stored RX metadata on an skb.
++ * @skb: The skb that is built from the packet.
++ * @ext: The skb core extension area of the packet.
++ *
++ * Call it only when the packet has the XDP_FLAGS_HAS_SKB_EXT flag.
++ */
++void xdp_skb_ext_to_skb(struct sk_buff *skb, const struct xdp_skb_ext *ext)
++{
++	const struct xdp_skb_ext_hash *hash;
++	const struct xdp_skb_ext_vlan *vlan;
++	const struct xdp_skb_ext_csum *csum;
++
++	hash = xdp_skb_ext_get(ext, XDP_SKB_EXT_HASH);
++	if (hash) {
++		enum pkt_hash_types type = PKT_HASH_TYPE_NONE;
++
++		if (hash->type & XDP_RSS_L4)
++			type = PKT_HASH_TYPE_L4;
++		else if (hash->type & (XDP_RSS_L3_IPV4 | XDP_RSS_L3_IPV6))
++			type = PKT_HASH_TYPE_L3;
++		skb_set_hash(skb, hash->val, type);
++	}
++
++	vlan = xdp_skb_ext_get(ext, XDP_SKB_EXT_VLAN);
++	if (vlan)
++		__vlan_hwaccel_put_tag(skb, vlan->proto, vlan->tci);
++
++	csum = xdp_skb_ext_get(ext, XDP_SKB_EXT_CSUM);
++	if (csum) {
++		skb->ip_summed = csum->ip_summed;
++		skb->csum_level = csum->level;
++	}
++}
++
+ __bpf_kfunc_start_defs();
+ 
+ /**
 -- 
 2.56.0
 
