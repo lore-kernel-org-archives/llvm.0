@@ -1,45 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794286391;
-	b=hPnsXt+yrw3jlTiJoyaHnCooCXlFjsMKCq47uKqpXTLE1rbNanyEnKiIGoKr9/Uq0oB6
-	 MrKWl7WiN3GJ94xtw0T9ZmVnq0J8+R99fMoXe0f6vsZoV11BxWyuAbtu7iBwuBYWVOoqC
-	 KiMz0g3FQC+ttruRU3lpPG5zJYDR0Mh/R9qQqdNRx8fT+aeU3Ke9o5EXHaxr+oaOiERsC
-	 U1w7HGIa195gLnVuH+9FtGH4qbJWtCQbiolvbm1zZKs/jKQ62Tahe+IBk2SP8IoN/xdLK
-	 BStNjdZPDjyIoLXVxhWs5i2CowS0dbd+AbQYmg1fE/oRAuF7laFxPpaOB/5NG5V6fvQ==
+	t=1794289020;
+	b=PqcKF9N+jAV6d9Uv6YUb25JmRm24TTL8xvtyol0FOcfF5eQzgynXb3u5DO7xVdp8POVI
+	 Mgn8PJmuNw74UgDo2jI1jwIDYGiope6Q6UYeK9RF2OenirRXUg8KEM9+HKmGCm9j67Egh
+	 aqGD/QNkVdrt6a1AFDFiItWyBB3HQY98WcL6YZZwUpxu14PqnFYGv5w+1ZIQq428jpbT+
+	 eI0b7HY6OunhTkPINizyYF+jz8adxZwgCHYdNdYGii9RJB2d//NZbXknzw8HeaVJpDggw
+	 myIetS0XsAqyraJKXamB2DwnlHS/X/cQI4hFkQIQdUCMqNaf7NEYndvTsYCLGSAz/Wg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794286391;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=USevh6myHxF9emjydPOskkqmK7kqM8+0knzfuWzYf2E=;
-	b=UdbQNvq+AhNQllKRfthI7cCVIN5kWaDmoIjPhYdr4zdr/6EViUlBv9OaBn+7y7KOl3/h
-	 HQprTnPL8lC5WIXb4Ogd7ZF2jSCn4JvHWBEr/Yj5fRuy3iF4a2KzP6wGb650mSRSclx3r
-	 lsaih7NgTxgzqfN06Ed/XsY/vX77Idhw6BdTOEyVYIMrdc7e494ZqwoM5luei8r4RmCul
-	 fwdmIx+4PLqAr3hOiHrMdU8dpaB+2YiHR9xWMlSMaKS0JJR5ff+qaQIRVY5NPPUxXQXeB
-	 qxzhD6BcHsqVG6AlV7HkYaGVFiESXmBjBFIJUHDDiWHzM10cejw0E0GsfAlOdZ45mYQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794289020;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=upBQHvhIXS9jA4rn/T2U6OyiZNi8Uwc76Ij6dQGz7TA=;
+	b=wKZVu9ZoFgezIIt58VFz0gEUd4Qnq8tTtqV+f4seq5C0aDHHQBXYjmrVRXYzphzfEwXl
+	 o7U4PglpWlSRSgqDvc8Ic6jOiKH0fow/pyOhzw5L+mtcY6Tm/uRSzw0fqyghD+oYLLq3o
+	 EoQZqm9sc6wcJhlQyYY7BQx/v/rNVa9UTQbDcyKQ0YBdNZYidi1z6Cb1H/6dqJf/07DDV
+	 rPMOPFtG320fcpHTyQtiXDFsq6f95F7q+Mo56d9x3R3pygvQcqG06Ql7mbcd+Mp/q5GTE
+	 J56uYtS/Lg9T+kZliXQECCmDnkhAZ50XkKLua4HL1yU14R5EbT/EkRg0l46RzLQw/vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bS8QK0uX;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=chromium.org;
+	spf=pass smtp.mailfrom=chromium.org;
+	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=PFtXr768;
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F06606A31C;
-	Tue, 10 Nov 2026 04:53:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDF760A2624
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 05:36:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EEDF760A2624
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bS8QK0uX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1361F008A5;
-	Tue, 10 Nov 2026 04:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794286390;
-	bh=USevh6myHxF9emjydPOskkqmK7kqM8+0knzfuWzYf2E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bS8QK0uXH4CiE/pecLjA47r/58HoMdCcVoCr2Aj5ZbqYX8FUfQZw+zR3zouV2mNmK
-	 P0Ggop74FtzZ/noDXpDOmBsU8LuIgDwsRcOwIQBKYfTvnSFlvYyQp6mhCsrJj19i4E
-	 8AtFDqwQo6XuCCnMThbj3A/mquKdc778AaGUdSGFxFPfR9Cu+cvr37erupKdTLZRUZ
-	 slkziQBQN18Ol9bonmpQusu/LLhK4gYdx+hgOYyYs6truDVcFXoA9KNDzIfFgeEexk
-	 mh+SsRfu9Yhsgls4oSul1YEhpSfuBnkutavrJtXalAsKNTjUPk5VxJ5Nr9VxAgQYoD
-	 qETaCtYdWvXGA==
-Content-Type: multipart/mixed; boundary="===============6368028081372406392=="
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=PFtXr768
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so684604b3a.2
+        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 21:36:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1794289019; x=1794893819; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=upBQHvhIXS9jA4rn/T2U6OyiZNi8Uwc76Ij6dQGz7TA=;
+        b=PFtXr7683OS6zZ1h8aSn1PCVSshc/4ZI8TO4bphhI3UcTT4h6cY7+8Wj0WwbeGzFVt
+         eSsWkkCF45Azml8bYCziK8XDiBk9ciBPYi/NRn4E9q/gaPM5XqWEL7jz77++fSOscFct
+         6N8lD3+J0bjsfA39GsiFPtRXsvIIMapvOO8qo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794289019; x=1794893819;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=upBQHvhIXS9jA4rn/T2U6OyiZNi8Uwc76Ij6dQGz7TA=;
+        b=hZ44ZNDWwvebbUqjNc08et3+k+NStbTaH9uF6f6ncyN2yz0w/DUzX0pFVL+Ub4Nkdh
+         YfwksD1TtBVF8qOoDqIH+x5Q8iI+pl/2PdzI92JWep9cnW/nxcLK3HBgDOtTdAQUVHrx
+         78yaZK6KMU5oEyywtU4Bzixp4vLEYqwzf8oMTb2KGVrDRTiLgo9xkj/7gsypSTPlFWMj
+         st7kHn5IzVVsMes1f8gZV35p7wWwv5wkd7NyYuwS7Lly8jZQasTOMMLkMxhBcnBVo08L
+         I4xtZBccH6p/GBZ7kjgL8IQmN4Z7blcXwY+/awDtmQ/gtfdiY2IR8dzGIukaOg5erMYE
+         uFAw==
+X-Forwarded-Encrypted: i=1; AL+hErFN3l4nurHcdEImYM+BAg3sS7kxY4JnMoqBYpXLKgaKkOJOGUPTfhh4sv4dgBsd/me18BXC@lists.linux.dev
+X-Gm-Message-State: APuU4Z9WKGDZTmwPkiXaaq56xWnWbmSV7HatRe/0NrFf6L7IOfHiOYr8
+	7i2BKfMac+jRZwVeAztm93wkS/B1CZgdIlWuN9yx2zmImy3wNZPUugAozJ99SFGebQ==
+X-Gm-Gg: AYBFou3PniGznSAaXQWjlrmRe5jjSHV3CC6zpMe/8fhwkUsYU59JBbWteAfTstNAkD2
+	IK8zPdlCLRzrbhqFxlwobYMh4TJzjWTLiozR/mCHnspLp34rJHVOcadhy2mJj77dHQsJTRLZbIi
+	2ytEfDwID3B0KI+Mwtr/4ROLRaB4BKUnDia5pq55ob1IsDADXAMrAejZ/UczEiruyMoPFgjxx6V
+	tGxaut4cZfJdo9Z/5QHIIuPCoqBMLRzqkpGCtS+4yb9Pe2XJLp4CoNfOu0flnfRPhv72WANbfte
+	2uckKTkm1xnwh7xDVm7qfGP/Pw3HCGd40UUVSKLFEgUWv0lW6mXO80ibhvlRQMAICrDhp29d82Q
+	BWbzti75UGMEb0l5675kW4LP98X3KKp7dsAep/bio1mUa+ckB9cZ8EI3g679O56L6OPgyxZQvIg
+	7ZLFz7/mEyrylbmB4VXdDr/Z5XD91ZLK9QuidnrVaVo54lLrhbaiSPBr+gm++r1deo+mNiUJOvv
+	V2+HgewyqRTdV+3LATKFO8Hy6NRs4OTnY6m3Cj1cV+Qmz2J1/+z1kKtZstrHcMIEoP4qEmw+Q7b
+	lsNysZ4YWhxFYoKy5e2u8jEicSron+s8ITJEHjrvFckANmBEq821UN14dV5RObAo6YYIOA==
+X-Received: by 2002:a05:6a00:1492:b0:89f:5c84:46ec with SMTP id d2e1a72fcca58-8ba89661da0mr1558178b3a.40.1794289019108;
+        Mon, 09 Nov 2026 21:36:59 -0800 (PST)
+Received: from google.com ([2a00:79e0:2031:6:e137:9384:7cd8:6e40])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab8dccc7sm405355b3a.52.2026.11.09.21.36.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 21:36:58 -0800 (PST)
+Date: Tue, 10 Nov 2026 14:36:48 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Minchan Kim <minchan@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>, 
+	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Jaegeuk Kim <jaegeuk@kernel.org>, Eric Biggers <ebiggers@kernel.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Laight <david.laight.linux@gmail.com>, 
+	Sungguk <sungguk.na@samsung.com>, Jaehoon Chung <jh80.chung@samsung.com>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org, 
+	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 10/15] lib/lz4: switch the compressor to the vendored
+ sources
+Message-ID: <avKs4_S7r6EiUVgC@google.com>
+References: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
+ <CGME20261106144305eucas1p17b3b27d403dc7d13b85cdd9a4bea83b9@eucas1p1.samsung.com>
+ <20261106-lz4-vendor-upstream-v2-10-ee04c3f0d7dc@samsung.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -49,79 +114,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <debeafe053a315dc6c0634d019ea48075d9f9f0c68b4395deed84a9630dc77ab@mail.kernel.org>
-In-Reply-To: <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-References: <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-Subject: Re: [PATCH bpf-next 10/15] xdp: warn on XDP_PASS with stored values when XDP runs on an skb
-From: bot+bpf-ci@kernel.org
-To: tianyi@cloudflare.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,kuba@kernel.org,hawk@kernel.org
-Cc: john.fastabend@gmail.com,sdf@fomichev.me,lorenzo@kernel.org,deliran@verdict.gg,davem@davemloft.net,edumazet@kernel.org,pabeni@redhat.com,horms@kernel.org,andrew+netdev@lunn.ch,donald.hunter@gmail.com,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,maciej.fijalkowski@intel.com,aleksander.lobakin@intel.com,magnus.karlsson@intel.com,tushar.vyavahare@intel.com,kerneljasonxing@gmail.com,razor@blackwall.org,madalin.bucur@nxp.com,ioana.ciornei@nxp.com,corbet@lwn.net,skhan@linuxfoundation.org,shuah@kernel.org,rdunlap@infradead.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,carges@cloudflare.com,jakub@cloudflare.com,linux-doc@vger.kernel.org,linux-kselftest@vger.kernel.org,intel-wired-lan@lists.osuosl.org,llvm@lists.linux.dev,kernel-team@cloudflare.com,tianyi@cloudflare.com,ast@kernel.org,andrii@kernel.org,d
- aniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 10 Nov 2026 04:53:09 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261106-lz4-vendor-upstream-v2-10-ee04c3f0d7dc@samsung.com>
 
---===============6368028081372406392==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> xdp: warn on XDP_PASS with stored values when XDP runs on an skb
-
-TL;DR: Comment nit in xdp_skb_ext_warn_pass(): the new
-generic-XDP/BPF_PROG_RUN comment is inaccurate for BPF_F_TEST_XDP_LIVE_FRAMES,
-which uses a separate rxq, and the next comment is now stale. Not a bug.
-
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-
-[ ... ]
-
-> @@ -1124,12 +1125,17 @@ void xdp_skb_ext_to_skb(struct sk_buff *skb, const struct xdp_skb_ext *ext)
->  void xdp_skb_ext_warn_pass(const struct bpf_prog *prog,
->  			   const struct xdp_buff *xdp)
->  {
-> -	const struct net_device *dev = xdp->rxq->dev;
-> +	const struct xdp_rxq_info *rxq = xdp->rxq;
-> +	const struct net_device *dev = rxq->dev;
+On (26/11/06 15:42), Michal Wilczynski wrote:
+[..]
+> diff --git a/drivers/block/zram/backend_lz4.c b/drivers/block/zram/backend_lz4.c
+> index 1e4ad31d39a63f45b3bddd3d8a467d8d7d095beb..50265e3ce256490994cb6dae32a45da376e408e0 100644
+> --- a/drivers/block/zram/backend_lz4.c
+> +++ b/drivers/block/zram/backend_lz4.c
+> @@ -42,7 +42,7 @@ static int lz4_setup_params(struct zcomp_params *params)
+>  	if (!params->dict || !params->dict_sz)
+>  		return 0;
 >  
->  	/* The skb is built later from the xdp_frame */
->  	if (prog->expected_attach_type == BPF_XDP_CPUMAP ||
->  	    prog->expected_attach_type == BPF_XDP_DEVMAP)
->  		return;
-> +	/* Generic XDP and BPF_PROG_RUN use the netdev_rx_queue xdp_rxq */
-> +	if (rxq->queue_index < dev->num_rx_queues &&
-> +	    rxq == &dev->_rx[rxq->queue_index].xdp_rxq)
-> +		return;
->  	/* No native XDP, so only generic XDP or BPF_PROG_RUN runs on dev */
->  	if (!(dev->xdp_features & NETDEV_XDP_ACT_BASIC))
->  		return;
+> -	dict_stream = kzalloc_obj(*dict_stream);
+> +	dict_stream = kzalloc(LZ4_MEM_COMPRESS, GFP_KERNEL);
+>  	if (!dict_stream)
+>  		return -ENOMEM;
+>  
+> @@ -88,7 +88,7 @@ static int lz4_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
+>  		if (!zctx->dstrm)
+>  			goto error;
+>  
+> -		zctx->cstrm = kzalloc_obj(*zctx->cstrm);
+> +		zctx->cstrm = kzalloc(LZ4_MEM_COMPRESS, GFP_KERNEL);
+>  		if (!zctx->cstrm)
+>  			goto error;
+>  	}
+> @@ -112,7 +112,7 @@ static int lz4_compress(struct zcomp_params *params, struct zcomp_ctx *ctx,
+>  					zctx->mem);
+>  	} else {
+>  		/* Cstrm needs to be reset */
+> -		memcpy(zctx->cstrm, params->drv_data, sizeof(*zctx->cstrm));
+> +		memcpy(zctx->cstrm, params->drv_data, LZ4_MEM_COMPRESS);
+>  		ret = LZ4_compress_fast_continue(zctx->cstrm, req->src,
+>  						 req->dst, req->src_len,
+>  						 req->dst_len, params->level);
 
-This isn't a bug, but is the new comment accurate for BPF_PROG_RUN?
-
-With BPF_F_TEST_XDP_LIVE_FRAMES, xdp_test_run_setup() registers a separate
-rxq embedded in struct xdp_test_data:
-
-    xdp_rxq_info_reg(&xdp->rxq, orig_ctx->rxq->dev, 0, 0)
-
-and xdp_test_run_init_page() then does:
-
-    xdp_init_buff(new_ctx, TEST_XDP_FRAME_SIZE, &xdp->rxq);
-
-so in live-frames mode rxq != &dev->_rx[rxq->queue_index].xdp_rxq and the
-early return is not taken.
-
-That also makes the following comment stale: generic XDP and non-live
-BPF_PROG_RUN now return at the new check, so only the live-frames
-BPF_PROG_RUN can reach the NETDEV_XDP_ACT_BASIC test.
-
-Would something like "Generic XDP and BPF_PROG_RUN without
-BPF_F_TEST_XDP_LIVE_FRAMES use the netdev_rx_queue xdp_rxq" match the code
-better?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42755842687
---===============6368028081372406392==--
+The zram code here is outdated, it has been reworked quite a bit
+(patches are in linux-next and Andrew's trees).
