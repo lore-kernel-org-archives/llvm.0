@@ -1,76 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794270950;
-	b=3vzUj51xOPSJe50MrUm4v0yYM+DuMTBGLznaaOxPiBvvhwwgdfC4fK2plTFxhGOJZzIW
-	 4hRzj5dN/kNyUAonX7Hb3x8xX4cE3PTblJM2DaUYCjL1RcZZgEz0YboHCB+okPGhC8IiW
-	 bISdigK543QujQAItlMRenxn1Ug5GrmvBYLnPHiJwEDpo2YuNzrMd3hAstGD4u9KPSDq4
-	 AvRV1Rl8ixAhQeSef8a2d3ZnP1tmmhxztY8n6Fh/glr56gnJoAdtAgGlBQZSZY2PHj7L6
-	 3EmxJG3UR+faKTYO4v+o119ayY9Ef4lenl/WtRfKZXcbGAI86p8AnxC0XaINPvAvb+A==
+	t=1794273776;
+	b=WNTHVSOBGlzY66Tc9OLBwybAQVcSPC1gLpxHqCSnLXgxA6J4BtOpMAXS3fzvAkdWDORm
+	 jZGmLQRXkAJmyIWxp9wmiQJ+8J+IirzPtvs1Y/lVLgK5AjzqWegeS6aMfJ0xVei0qDQsk
+	 kOHG6V/AR1MTX/3M2G5C0mLOZso+UgeLUx+pC2a2pWQub3zmViKRNx8p90Gz+dM4N5P6c
+	 aGYsrrnv9mgjxPaB+hBi04LTqAJGzYYAcP8O6kGwx/tX71lFbD5P25ri3Msofo4ZUUiSL
+	 pTkXz2c3WpU0RR2Bctuy3yNiUvcZj8J0y2sLP70NC3qe3/pklA7g7j0lLdQ4hYQrghQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794270950;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=RzaPKKTQ4GfN6XWXG4guu0bvp3Gq2v35OinNt0l3gdg=;
-	b=zt9h2U/eqIza3L3l6MiQXVKVkpMOBYzWfZuX0KI6UHAACKVkoMM1q9j8blGcNkO08xCa
-	 ueU/ryA8Mu+2ytShpL1IBw+D1wiY5P2M5UHG7NvUCmibXnifAR5WNHDUR+jsrViiPkbpp
-	 HKjarJenW5doAhojpKjsw+eMpYaAVzu7cMl7nMEZXSeZ0rO/oC0GKn+b/nTvYHyvMFIX2
-	 6cRBUiePgmaanZP780qjHVfcO0jE4/iqgm7bT5isjKPAFOJdqEuBb3j1LC3BxIr2VBhN/
-	 9CZBz7rF90j31klxWbg51LvdisPHHwptcrpVxxb1jVlT5f9oPd/YukhbnkPWfpberKw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794273776;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=yIKtvc1ZmRXWfGxWgiVO8Ns8HZpEqAzhWlHpQ46fpV8=;
+	b=0IN7mGBGrQWvikBxzK55SrcmS77Yam8MHRVprP85/hDuENBK34w8MTyNMl34Ul1oHerK
+	 LQLuvhugg5Cf5g+5j2BIcvlNCXFPoAfMC/jHB8NgvE4qOCiO+gkgfUvsljJIFpD/73qp7
+	 y4cEzDeCCHuqSrowmqajsYpp4QuW1JaQNCBRicFxrmZvU1ivnc8ZyqaOOUwu77Mhu6HRl
+	 KRsDtTI+W20gw+F8P4ZvH14Cb+aAyvhTLPOQuXl6whoTAWuyVqVvbzeU5M/N6jqpZ/SZb
+	 /Rjh1Dqo55QQc2waWIhF7Q8HPQSvNygx/10zlIwdDarPsY7oQtzobcGy7LpOLVykQBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=iGlTF+xt;
-	arc=none smtp.remote-ip=198.175.65.14
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OL68jl5e;
+	arc=none smtp.remote-ip=95.215.58.13
+Received: from mta1.migadu.com (out-13.mta1.migadu.com [95.215.58.13])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEB1606A32A;
-	Tue, 10 Nov 2026 00:35:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EEB1606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F59660A3811
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 01:22:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F59660A3811
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=iGlTF+xt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794270950; x=1825806950;
-  h=date:from:to:cc:subject:message-id;
-  bh=sviIG1Ms3Yp0ufXaWmm9Ai5bse44yHnD41WOiAfwvg0=;
-  b=iGlTF+xt+KgU64s+2MsLgrRaMcUW41HhhS91nJAAZaM08LcHG1nKl2zV
-   sWoescV07JipmxSorm0h5t5DV+cee/dNrnK9pv+n15NULq85FL5lkelV2
-   FnLVGh85BjG0XfuvBgaJJTJxq8ed2zIoAL8Jw5R3th47+rinYNY8Z0SvL
-   YvcvdoH851tladhnuluPbm/qM8vLA8r0POiWVZJ3jfQDxvxOojEM8dRdN
-   m4/UDVIfyA63xw2Hm3nsQdHt7HXEcVHbWUmv0Se/XQRB7hqw6Xn5UuWJ/
-   gVnCC6C1AkL37UXlt/kIcx3Xzt8hXdviGn1n0pZGIXBKofSV/t/uDz5W3
-   g==;
-X-CSE-ConnectionGUID: bSfY162jT3S665cSUYmVdA==
-X-CSE-MsgGUID: a1/kiVLzQY6g8zuRELSa4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2899938"
-X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="2899938"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 16:35:49 -0800
-X-CSE-ConnectionGUID: slwZEnQLTjyQ6+BE7UahWg==
-X-CSE-MsgGUID: /HZh+E9lSR6vEUWm+USvPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
-   d="scan'208";a="8140982"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 09 Nov 2026 16:35:48 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQZpy-00000000vdZ-0EwJ;
-	Tue, 10 Nov 2026 00:35:46 +0000
-Date: Tue, 10 Nov 2026 08:35:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [superm1:superm1/s4-at-s5 3/3] kernel/reboot.c:73:13:
- warning: variable 'shutdown_legacy' set but not used
-Message-ID: <202611100819.4dLGt0dr-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OL68jl5e
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=omlSFSzGf7aOUZjYbn/5+K5lXnf2XWvd5GZpuA4NvOM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794273773; v=1; x=1794878573;
+ b=OL68jl5eOqQZJ8A9g06Dd+WgTgxJL2Uk13W8O4uZ8gCgG7u7mC5vZa0rgv/TC/y59jdd0B4e
+ 98g5lAgc1CnXpqmBJ+TTw6PkiaVSTjM07JhLHtpkacUSfhiaHGLZQzg9Ag0u/I/X1uxhVACOSll
+ U/WNubHTjqr+do/A+UucvENs=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 0dd2321632bd0456;
+	Tue, 10 Nov 2026 01:22:53 +0000
+X-Mizu-Trace-ID: 0dd2321632bd0456
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: dennis@kernel.org,
+	tj@kernel.org,
+	cl@gentwo.org,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	will@kernel.org,
+	boqun@kernel.org
+Cc: longman@redhat.com,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	acme@kernel.org,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	llvm@lists.linux.dev,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [RFC PATCH 1/2] percpu: do not put btf_type_tag on per-cpu variable declarations
+Date: Mon,  9 Nov 2026 17:22:34 -0800
+Message-ID: <20261110012235.1024461-2-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,40 +86,120 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/s4-at-s5
-head:   8dd92ed84c02d78694d091fcc20a976f096bb27e
-commit: 8dd92ed84c02d78694d091fcc20a976f096bb27e [3/3] PM: Add shutdown=legacy command line option
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261110/202611100819.4dLGt0dr-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project fc9576e3b179738d99c5babe5cd9d6c1f883e0db)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261110/202611100819.4dLGt0dr-lkp@intel.com/reproduce)
+__percpu carries BTF_TYPE_TAG(percpu), which records that a pointer
+points to per-cpu memory. __PCPU_ATTRS() applies __percpu to the per-cpu
+variable itself, so DECLARE_PER_CPU() and DEFINE_PER_CPU() put the tag in
+declaration specifier position on the variable's own type.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611100819.4dLGt0dr-lkp@intel.com/
+arch/x86/include/asm/processor.h has
 
-All warnings (new ones prefixed by >>):
+	DECLARE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
 
->> kernel/reboot.c:73:13: warning: variable 'shutdown_legacy' set but not used [-Wunused-but-set-global]
-      73 | static bool shutdown_legacy;
-         |             ^
-   1 warning generated.
+which an x86 defconfig preprocesses to
 
+	extern __seg_gs __attribute__((btf_type_tag("percpu")))
+	__attribute__((section(".data..percpu" "..read_mostly")))
+	__typeof__(struct cpuinfo_x86) cpu_info;
 
-vim +/shutdown_legacy +73 kernel/reboot.c
+and GCC warns:
 
-    65	
-    66	/*
-    67	 * This variable is used to indicate if a halt was initiated instead of a
-    68	 * reboot when the reboot call was invoked with LINUX_REBOOT_CMD_POWER_OFF, but
-    69	 * the system cannot be powered off. This allowes kernel_halt() to notify users
-    70	 * of that.
-    71	 */
-    72	static bool poweroff_fallback_to_halt;
-  > 73	static bool shutdown_legacy;
-    74	
+	processor.h:232:36: warning: ignoring attributes applied to
+	'struct cpuinfo_x86' after definition [-Wattributes]
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+which -Werror turns into a build failure.
+
+The message is confusing: this is a declaration, not a definition. But
+the compiler is right to object to a type tag on the aggregate, and the
+issue is fundamental: every variant of an aggregate shares one DIE, so
+there is nowhere to put it. clang drops it silently and GCC warns.
+
+The tag is meant to record that a pointer points to per-cpu memory, and
+cpu_info is not a pointer.
+
+And this gets worse: for a pointer-typed per-cpu variable GCC attaches
+the tag to the pointee, so
+
+	static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+
+comes out as PTR -> TYPE_TAG 'percpu' -> struct bpf_hrtimer. The truth
+is the other way round: hrtimer_running lives in per-cpu memory and
+points at ordinary memory, while that record says it is an ordinary
+pointer to per-cpu memory. clang emits no tag there at all.
+
+Add __percpu_var, which skips the btf tag (__percpu under sparse) and
+use it in __PCPU_ATTRS(). The cpu_info declaration above becomes
+
+	extern __seg_gs
+	__attribute__((section(".data..percpu" "..read_mostly")))
+	__typeof__(struct cpuinfo_x86) cpu_info;
+
+The pointer spelling, T __percpu *p, is unchanged and keeps its tag.
+
+Before this patch the tag also qualified the variable's type, so &var
+had type "T __percpu *", and a pointer does have a DIE of its own:
+pahole emitted PTR -> TYPE_TAG 'percpu' -> T for each one.
+this_cpu_ptr(&var) is that shape, and that is where the records came
+from.
+
+Those are the records an x86 defconfig built with clang loses: 280 BTF
+types, 140 TYPE_TAG and the 140 pointers carrying them, with .BTF
+shrinking from 6831660 to 6828300 bytes. They are the derived pointers
+-- clang never recorded the declarations themselves. None of them were
+reachable: a record points at a type only if something is declared with
+it, and nothing is declared with these. The 794 places that do declare a
+"T __percpu *" keep theirs -- the tags reached by a STRUCT, UNION,
+ARRAY, FUNC_PROTO or another PTR number 117, 6, 3, 39 and 5 before and
+after. .text is byte-identical.
+
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
+ include/linux/compiler_types.h | 8 ++++++++
+ include/linux/percpu-defs.h    | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index c5921f139007..0a18b3f10675 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -50,6 +50,7 @@
+ # define __user		__attribute__((noderef, address_space(__user)))
+ # define __iomem	__attribute__((noderef, address_space(__iomem)))
+ # define __percpu	__attribute__((noderef, address_space(__percpu)))
++# define __percpu_var	__percpu
+ # define __rcu		__attribute__((noderef, address_space(__rcu)))
+ static inline void __chk_user_ptr(const volatile void __user *ptr) { }
+ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+@@ -68,7 +69,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ #  define __user	BTF_TYPE_TAG(user)
+ # endif
+ # define __iomem
++/*
++ * btf_type_tag records "points to per-cpu memory", so it belongs on the
++ * pointer spelling only. Declaring the per-cpu variable itself puts the tag
++ * in declaration specifier position, where clang drops it and GCC attaches it
++ * to the wrong type, so __percpu_var leaves it out.
++ */
+ # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
++# define __percpu_var	__percpu_qual
+ # define __rcu		BTF_TYPE_TAG(rcu)
+ 
+ # define __chk_user_ptr(x)	(void)0
+diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
+index dbe3267a0a13..f53fc430aaad 100644
+--- a/include/linux/percpu-defs.h
++++ b/include/linux/percpu-defs.h
+@@ -45,7 +45,7 @@
+  * that section.
+  */
+ #define __PCPU_ATTRS(sec)						\
+-	__percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
++	__percpu_var __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
+ 	PER_CPU_ATTRIBUTES
+ 
+ #define __PCPU_DUMMY_ATTRS						\
+-- 
+2.53.0-Meta
+
