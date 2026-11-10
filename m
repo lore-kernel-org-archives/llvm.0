@@ -1,102 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.171
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794342682;
-	b=sZlTFbevvMku0XxcClA5vASWFw2zFhgNR80G1QZS4ECm9vKL2q4HKGE1rT40DAgl1K5E
-	 TgmbsNnTj3dAnLvlvet06LagfyO/yOgB0F4mCeSnVcfVx84ghneII3sbVvAdCrveb/KTp
-	 MoFAO8r5BH1Kn0XnszhPioHOsNVG0TbFO1V7XZzuLbtQlyWS9xAjW9vr0/HndaasCIY6G
-	 4QsYfDzZZE+hbm97P3pPjeL5mNAebLOjVGTHXaT6gMaSzh5jntYzcro5g+YzxENX9ppSj
-	 jJoBAGpYnI6sXe5iF7E7500wfqSwKKoaCMnINoLX+tykcxlcsS9AR+98X0+n5pZXfzg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794342682;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
-	b=om88y7RA+XzFS0abkLnVUWcnBpdR6cqdZwirB45gfGjLcbTs5bwyEbm9/ExlDE4OH4RM
-	 u0jMIli9ng+s5T88qqYSe+grBfNUrvIqcmwtPn1R3mi7MaBoP92bVkryyVO/Vn3/aJNka
-	 Wx29+4DH0izC9m/XdYgW4E6iUNJGT9Zg+TitL2e/h3Mne2JIqVAiP0lTydsJcbwM2r80o
-	 ZTtu+OlVA44PH/gg06w57HenaO10WtDjF35GKkwJ8TbiXeCvY7vOPlq8JScgrEJOKmv8S
-	 p5EU4vp7FZ5ADwT1EWPw1dxxxkNaupdI/P5Tc8YHd6mYMEqPoJ8apGFYIk3Vda2KAkQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lnI++WHM;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.171
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794347648;
+	b=EU+2/UNd+BQI0XU2L+qoxUXSvY3estZfWQH7WJvYXWq5YWuWaTcD60A+dp0vnVpY5yHM
+	 W+n5/dCe+tbqEylX3MwtA5LVAYyY1dLsS9QbBagcDy7ns7O0O6jYJUMsV0o6xESOFc5XZ
+	 JO1BDhqUT50iF9mqvNoNj5/HbZYJbBPxCGTHOFG7+O6z3FENU8wATgFa/FuqQyG46BFzI
+	 uYunNuS4C0evY/PDXX4uVHOIhQCVtIKhBcmwlXV5wYZ7ZhnQ1zI3KX1D/NBIoLH7F6g9T
+	 Euj/tWsYFChcZtVG8JP70D5DWsNXZfP7z97Ixyc+N1NFmq+Pvo6DlgOeMlGyPTGu3wA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794347648;
+	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
+	 Received:Date:From:To:CC:Subject:User-Agent:In-Reply-To:References:
+	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=vx1nbI8H5SPVIs7K1QTdSx40kl0+EAzRn/9rTMIQZ3o=;
+	b=LWisQnuKyUj/w9f0qHbji9Rfh4nSn18aAalapKWZ9Nd4YdNalTKk8JEHFxKrO81uczMz
+	 OMp0EEmO8kBYJr9qQ3iGqHn6stuyP7Z9ijTgnVcatYfstF4Ov1BKqydPGphGs/zw5TLHA
+	 byCyjO7TElOyG4jjdyL9wGbEKoXsw9ZuJmI8FPA9U5vdeioi7LI5iTCeoD4zYJng/W9Aa
+	 cgGyXP5oxNP+1ao7onC3Dq6+ZnXgoInACUxCZOpiOvwN508YfefYnjfgzSL+FlnYTq2Vp
+	 iKFiFldzA9mC6QpfiyaQ3nZMLASbcmnTja7xH/ncm8L/BMiSNSX/iPaVLsC/uncjzBQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=alien8.de;
+	spf=pass smtp.mailfrom=alien8.de;
+	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=Ou2MxfjY;
+	arc=none smtp.remote-ip=65.109.113.108
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB483606C8E4
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 20:31:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB483606C8E4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6965606A321
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 21:54:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6965606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lnI++WHM
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cd69a8bf5e5so143581a12.2
-        for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 12:31:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794342681; cv=none;
-        d=google.com; s=arc-20260327;
-        b=L3Iq0BL8voX+wyAyrqouYHAi0jyvTQj2tLEqxImvQ/zrD4eN53JiRIsCxKJFZBM240
-         0zbC5DkU/AtrZNOf/uVPXu/rdRBOzQ1Ciq9zVC74fGrnwVWdzzRAY2hqPsUJkI6ZP3+0
-         OzM6BNW1E9m2HtNIljxRJGNid2/0EFGNPRZh1iqBTf5q7txJvhqo4BrMNGKxdegP8HAu
-         WpiEyTRHUqBIub9JzsrB1TgRiMHmZ58hD/GESHnThLIAzLaCW5D+1di8ncvH5HFCbae6
-         HuH7kqoalZRgdoYJcu5HzpDu5PctaAP4Ry75aA0vquv3VjJTEevK3oFZHaTiKvg3f1wq
-         bNLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
-        fh=K8J/a6cKEXy1QZhzgUeQmTElyjGpJdJhx2qJnrLrhl8=;
-        b=MA07b48aWFSaE1Qiwua5RbG/LH5Yf9bpT1cmEgZtr+mXFwkf2QmcrvtSgZUyYQaVIB
-         /9RhcTSQEgIiFSzUhxm9NHWORY8rvhYyzPhodb9EJcw1b5UECb+jdJfel4IKVLEdUJfA
-         3K9fsYZdO5TytXDUzTwp33762j+/ZRbTP6Bm/ODGgoLXRyz6h01N0P1WYohEvxnelKwf
-         Cdvb7FWFVXeNayDS6/pr6C2gYTW0PN4fxhjFbFqaNbVMWtSYIWM3f5UT3YsOMJgJRlLg
-         dg4OR0wX555GypDFDqxjU5zgGhB0MpLk8N99y1GqmrxaPPnxAUXMPlDo+R8GO3XxD43U
-         9wsQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794342681; x=1794947481; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
-        b=lnI++WHMRALZqtRBGDKGfpf3AiI8ovosY1Ppo56rB4+sr1DMnWVAleorDqRU4t6IVB
-         h+9Jsm1G4L/MFZeX+eiEjiq6LhANvNalS6Xt3A6zrQGR1ucuRL3Hnj1MCQanO4pQRH/6
-         co4/wg2eQ8cSJDmDOTdhxYBP1LjvU/Dv8t8NVzLQr//26OWlpJHaT1sZ56XOAmTpzihR
-         N4i63xQzK6pYJpcaZ4M1hLz2fOGktlUXrmKSlxE+Ene7fbGSgNRM2hbvkIFByqPssHDP
-         VLTfi+t/RCzBWTfV0TLb4UGQ4KExBlaX8UDrLub5AJyJIQvNFc60jZujJdutgoNbL0RH
-         WPGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794342681; x=1794947481;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
-        b=wcDldFpaTLLKqPvfFNR6zXq2Ao5uk0ohPMVKU3pg8nyq+w5Ct8pR131BPIJW3t8AjO
-         txS8/IXDScm3M4oJpFTThuR6tPX3NNl1RKE9jpzA2wm4C60J30hueXnzlGH6Q2XYTAac
-         KbXLLxfaHRKYENRfq3AmRLWoOBA1kCFfRX1xfBwmABUfqHhIp0QtbCycDurZmR/cwb54
-         xLh2QkIzPhyWi7cBUVxN48UoQsw569yB51rFNYZoedF3Q1iI2R94IP0k2gHO6cuyzUFD
-         fDlTGGQSB6sUMWN8bsF24nNiJ62DWixU0EvDwJWJa+TmbwiVG7Jwcm1QvW4fNH5W3Mk8
-         vj9w==
-X-Forwarded-Encrypted: i=1; AL+hErEQGUsc85fM5g4nqmHgOMmQY+bngeC8PTjXwCtR+0IJGZ+0aPLHQpWAHe42+m39T9V9NlZp@lists.linux.dev
-X-Gm-Message-State: APuU4Z/kHoVgZ+Xp9BPFxhSF6HxrEEdEvsqBfNuPD4xFvkjI/sW9/j8N
-	Y9GqphBfrSA2BpG7isEaC7drV7kPg7LjXgp0Zycq7L1+1TaaG17PaUtrf09OSBnFaQ4NXjWZfPB
-	t+WBc0RB+aqORmUfaVQwF6xQp7Wln8Hc=
-X-Gm-Gg: AYBFou2QXvvQ/cFn35PY+9BiexpVXHQq+lgnEfFMlkMcjyom1N3U5FEfEJJzi+vu+mF
-	0QhjEk/O4ncuASbSmJ5pogjR9u0NU7KmlxjPAh8kGQJvEqwqUjZs0/prPjFgiFGowWtuvTd/irU
-	1dGFOBzNW9mkoaUUAeFb4YntGwlBdMj/C2VwEHKCVde3Gw1Itz/W/NF1shpUwI9nyCgwB32VIsB
-	zE/c+cr1bpH/TqEAsvoASyHCLwWldcqzR+s3RZFJzoVia8yrg5ckGMmV5f/1Sf3n0/tqz7mOOed
-	HKSRObirxfPQYPYz1QHdXZ+9zaK8gtdC3d70PeascW2bLX+iPhQNWF4V6rxoUHzZL0bScIGNZfj
-	seBUimFiKGqqhE7Wt+Ak/RuieU/MJOF1vBILo/V88vqcTDeUUAjobqx1VegJcAnTkZ6wNanwGD9
-	IjW8iJnV2+ACCdfThMhmxqhYHv6YEeGg73piuxHi0/e/g87KxyWppnC4AhFs592i/cdaT8f0FS1
-	X+jr6aNM4SWTJXpdXbCZ5Caknme7HIsVO4Cztv+Fi9NfOI8ZMhv8N20LA==
-X-Received: by 2002:a17:90b:4b0e:b0:3ab:be66:ddc5 with SMTP id
- 98e67ed59e1d1-3b182f3642cmr189775a91.6.1794342681275; Tue, 10 Nov 2026
- 12:31:21 -0800 (PST)
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=Ou2MxfjY
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 68CD740E021B;
+	Tue, 10 Nov 2026 21:54:04 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id czhD7jfCKnPg; Tue, 10 Nov 2026 21:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1794347641; bh=vx1nbI8H5SPVIs7K1QTdSx40kl0+EAzRn/9rTMIQZ3o=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=Ou2MxfjYszDDOusFqyzE2NCwV2TIw0REH1b6qaYengEmZgqcgPNWoWfFH7zoanOT/
+	 YUnJjOuYkEX1DWVwsj1sd4dvUntoVdVIiebg+1jiS2GDqMb8n0dw1SyEzoM6gE8Rr6
+	 OuZ/GhgJks9kUF5X0AlIvZw83p29yR0DSyCBW7L9II1kebOFADENldwh0VPCDmd0Q8
+	 OJRM/ftgOdu6BiBSonKF654i3pMfANFIsBhpBYTF5XFZjwnZFyEkQW0Uwwmfi+Hxj8
+	 7ov4RY2OaEQHUKx+VhJFbSu/A7jr8geceLx5/zH8p9stIjc7UXjb468OzU1pth33Aq
+	 WoVoETOr1xCCEt1WmDTIE22EZX/JGmfKyh0oMAX1sn4C0zjE6R8vLszZtAEnl18BhR
+	 JNz0vpaI/w+8ass26npR8dhbSjuws4oHjKVyxtn1GjkqI3vTy47SAukQlHq2es5DtV
+	 RANFO3QtttLajggJo3IzzerHM2LOyV9qUBkqc3qE1CLHNv+ddkQvd8nAm+Lhzn34Du
+	 Ne6Fql5NOu9a0WvmXCjiCMVQk14nJcj0iWrqgM3bNvArnsMp39ohDEoY7hqzHLMzOb
+	 zsWNRF5RUOh5aK+yJZ3sPz9blFOqdpI8GHfVqflfx8g/85aobJPjh7B3iPyc9q3DC7
+	 WqIrVx2tx/t/3VZlOLxV6RcY=
+Received: from ehlo.thunderbird.net (mobile-166-137-178-020.mycingular.net [166.137.178.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E09540E0219;
+	Tue, 10 Nov 2026 21:53:28 +0000 (UTC)
+Date: Tue, 10 Nov 2026 21:53:21 +0000
+From: Borislav Petkov <bp@alien8.de>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>
+CC: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>,
+ =?ISO-8859-1?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Tamir Duberstein <tamird@kernel.org>,
+ Alexandre Courbot <acourbot@nvidia.com>,
+ =?ISO-8859-1?Q?Onur_=D6zkan?= <work@onurozkan.dev>,
+ rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ stable@vger.kernel.org, Kent Overstreet <kent.overstreet@linux.dev>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_x86/rust=3A_use_=60-Zindirect-?=
+ =?US-ASCII?Q?branch-cs-prefix=60_for_RETPOLINE_builds?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CANiq72npfiOC2ZCan-zAe-h79kba_5jtWFAeAoigCs_hnO8gJA@mail.gmail.com>
+References: <20261018175457.87803-1-ojeda@kernel.org> <CANiq72npfiOC2ZCan-zAe-h79kba_5jtWFAeAoigCs_hnO8gJA@mail.gmail.com>
+Message-ID: <E91BAC6B-9F08-4801-8866-2BB0ECAAB349@alien8.de>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,51 +100,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261018175457.87803-1-ojeda@kernel.org>
-In-Reply-To: <20261018175457.87803-1-ojeda@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 10 Nov 2026 21:31:08 +0100
-X-Gm-Features: AclHuK_uckGpnRQludUiuJa2Hr3E-2Svi5DrMdfVjm-Nu4czLx7g97kWJ04gZ0I
-Message-ID: <CANiq72npfiOC2ZCan-zAe-h79kba_5jtWFAeAoigCs_hnO8gJA@mail.gmail.com>
-Subject: Re: [PATCH] x86/rust: use `-Zindirect-branch-cs-prefix` for RETPOLINE builds
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	stable@vger.kernel.org, Kent Overstreet <kent.overstreet@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 18, 2026 at 7:55=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wro=
-te:
+On November 10, 2026 8:31:08 PM UTC, Miguel Ojeda <miguel=2Eojeda=2Esandoni=
+s@gmail=2Ecom> wrote:
+>On Sun, Oct 18, 2026 at 7:55=E2=80=AFPM Miguel Ojeda <ojeda@kernel=2Eorg>=
+ wrote:
+>>
+>> The C compiler is asked to add a `cs` prefix to the `call` and `jmp`
+>> instructions that go through the indirect thunks for the `r8`-`r15`
+>> registers, which makes them 6 bytes long instead of 5=2E That gives
+>> `patch_retpoline()` enough room to inline them, e=2Eg=2E as `lfence; ca=
+ll
+>> *%r11` for `spectre_v2=3Dretpoline,lfence`=2E
+>>
+>> However, Rust code does not get the prefix, e=2Eg=2E for a
+>> `CONFIG_MITIGATION_RETPOLINE=3Dy` build:
 >
-> The C compiler is asked to add a `cs` prefix to the `call` and `jmp`
-> instructions that go through the indirect thunks for the `r8`-`r15`
-> registers, which makes them 6 bytes long instead of 5. That gives
-> `patch_retpoline()` enough room to inline them, e.g. as `lfence; call
-> *%r11` for `spectre_v2=3Dretpoline,lfence`.
+>Any comments on this?
 >
-> However, Rust code does not get the prefix, e.g. for a
-> `CONFIG_MITIGATION_RETPOLINE=3Dy` build:
+>If it helps, then I am happy to take it via one of the Rust trees with
+>an Acked-by from x86=2E
+>
+>Thanks!
+>
+>Cheers,
+>Miguel
 
-Any comments on this?
+LGTM=2E
 
-If it helps, then I am happy to take it via one of the Rust trees with
-an Acked-by from x86.
-
-Thanks!
-
-Cheers,
-Miguel
+Acked-by: Borislav Petkov <bp@alien8=2Ede>
+--=20
+Small device=2E Typos and formatting crap
