@@ -1,76 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794342099;
-	b=nl/vbz16ScKFmQ3Il3Mv8aYhaRX+DFlpIw3VBUjT1JA6GXV7v6i2YyQdEcYDY7kgCsQX
-	 ve7V38Mps5STeqKZAeBeflNw9mV7fgY+eX07yfVkRkIpV2Z8mQessJ4CNQzEF43M5TCsU
-	 bCOkm54gsAJXLotwvbOvIpOXgb7TgrlgYLlaD95rnRDpeCAYUxM3BQHUpt1xrLzgbIY8P
-	 T7XI1cFK60RuWDqayS5Z/+VOxPUPHMlFsxxuO6tfoW2X9iEm0qUTXh+O0FTW31dIpBLLc
-	 UVd6n+qRwLIRS4k83xfrYBrKotVhgUAxosYfLVHRf2s9rVZIhuA1JcF6q3AwIHWaiyA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794342099;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=3iEvidvX7sr5Dd2S/chtWU3GYq0+RGTHzIElDe8E1o0=;
-	b=u3MHQQ4zE34RHXu0mr5icifMosVdbOE7pnY8xYqrhyni8xlxEYN8B66R+XmclSYZDj2D
-	 2Xs2JHtdgd3SZj/0VQkyYZEWgVQfYmSaCDChgAKAM0JPaYv033VqkgLIWKeJsan4o+ln+
-	 26cqwrXEsrwp6ySjZm92Pwk3lg/Udt2Fyswc0iLWsxcpskyHuiNe4g99uOGEBm1qVmUZn
-	 N8waVU/AHLN9U0GzVYEC5zGRImlAULVUwH4+2X4H5nL5lQbBgF/iW/lUxT8LfVJQHacWR
-	 ND8QzFq44dphQ4AK14dHys7NWJzEnuGlfA2DSxkzN6hzYqS1dLwdUMCpjF/5136y+TQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="QpM/r2qF";
-	arc=none smtp.remote-ip=198.175.65.17
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.171
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794342682;
+	b=sZlTFbevvMku0XxcClA5vASWFw2zFhgNR80G1QZS4ECm9vKL2q4HKGE1rT40DAgl1K5E
+	 TgmbsNnTj3dAnLvlvet06LagfyO/yOgB0F4mCeSnVcfVx84ghneII3sbVvAdCrveb/KTp
+	 MoFAO8r5BH1Kn0XnszhPioHOsNVG0TbFO1V7XZzuLbtQlyWS9xAjW9vr0/HndaasCIY6G
+	 4QsYfDzZZE+hbm97P3pPjeL5mNAebLOjVGTHXaT6gMaSzh5jntYzcro5g+YzxENX9ppSj
+	 jJoBAGpYnI6sXe5iF7E7500wfqSwKKoaCMnINoLX+tykcxlcsS9AR+98X0+n5pZXfzg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794342682;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
+	b=om88y7RA+XzFS0abkLnVUWcnBpdR6cqdZwirB45gfGjLcbTs5bwyEbm9/ExlDE4OH4RM
+	 u0jMIli9ng+s5T88qqYSe+grBfNUrvIqcmwtPn1R3mi7MaBoP92bVkryyVO/Vn3/aJNka
+	 Wx29+4DH0izC9m/XdYgW4E6iUNJGT9Zg+TitL2e/h3Mne2JIqVAiP0lTydsJcbwM2r80o
+	 ZTtu+OlVA44PH/gg06w57HenaO10WtDjF35GKkwJ8TbiXeCvY7vOPlq8JScgrEJOKmv8S
+	 p5EU4vp7FZ5ADwT1EWPw1dxxxkNaupdI/P5Tc8YHd6mYMEqPoJ8apGFYIk3Vda2KAkQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lnI++WHM;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.171
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F92660A5BDD;
-	Tue, 10 Nov 2026 20:21:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F92660A5BDD
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB483606C8E4
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 20:31:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB483606C8E4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QpM/r2qF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794342098; x=1825878098;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RI/PVi2awObhTaxl1U2D9fFkYXdk2MgcQCCQSaqIakQ=;
-  b=QpM/r2qFN1ZNIrr0NtRt8WRdeQdWGhzaTj0avqlopX6fNZlV1nCWtCug
-   cRxCfursm981pgt6Cpyk5ms4VeTzb/F+A27DBisiqMvc2lPuzsowbhHP+
-   LZ+2+6bPpOJYZ3ZTWza3tya/U/PVgci0RzxiXg+SdmBBqpS4lgs93xRF3
-   H8rV8PCW+gLlNNRcAzPMNEeCZ6c+JXiJXqvHKzHXQRql6/LTxcC562Sst
-   jdCpfqbT87i/Amf3telUA75xy3j9ek1NhONqJqFRv5JSbj9Lk9U5PPRjb
-   D9pXP4FmoD20C8MyW2SQZaNtyOWKjBwkGCnStj4atp0DVrGRSsZhW8QxZ
-   A==;
-X-CSE-ConnectionGUID: zCH7nIfUSq+vzkhhXrBucg==
-X-CSE-MsgGUID: /Zr6n0DbT/W6pcLeVCQLVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3130495"
-X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
-   d="scan'208";a="3130495"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 12:21:37 -0800
-X-CSE-ConnectionGUID: 2NqrS4TGToq7JF9TU95Www==
-X-CSE-MsgGUID: tshxfAeHQ/KyURwFJ5h1mw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
-   d="scan'208";a="8678107"
-Received: from igk-lkp-server01.igk.intel.com (HELO 1073a420ae3a) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Nov 2026 12:21:36 -0800
-Received: from kbuild by 1073a420ae3a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQsLV-000000000Lf-1dWv;
-	Tue, 10 Nov 2026 20:21:33 +0000
-Date: Tue, 10 Nov 2026 21:21:06 +0100
-From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/vdso-no-fallback 10/11]
- lib/vdso/gettimeofday.c:451:11: error: use of undeclared identifier 'EINVAL'
-Message-ID: <202611102127.IrGJFIGK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lnI++WHM
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cd69a8bf5e5so143581a12.2
+        for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 12:31:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794342681; cv=none;
+        d=google.com; s=arc-20260327;
+        b=L3Iq0BL8voX+wyAyrqouYHAi0jyvTQj2tLEqxImvQ/zrD4eN53JiRIsCxKJFZBM240
+         0zbC5DkU/AtrZNOf/uVPXu/rdRBOzQ1Ciq9zVC74fGrnwVWdzzRAY2hqPsUJkI6ZP3+0
+         OzM6BNW1E9m2HtNIljxRJGNid2/0EFGNPRZh1iqBTf5q7txJvhqo4BrMNGKxdegP8HAu
+         WpiEyTRHUqBIub9JzsrB1TgRiMHmZ58hD/GESHnThLIAzLaCW5D+1di8ncvH5HFCbae6
+         HuH7kqoalZRgdoYJcu5HzpDu5PctaAP4Ry75aA0vquv3VjJTEevK3oFZHaTiKvg3f1wq
+         bNLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
+        fh=K8J/a6cKEXy1QZhzgUeQmTElyjGpJdJhx2qJnrLrhl8=;
+        b=MA07b48aWFSaE1Qiwua5RbG/LH5Yf9bpT1cmEgZtr+mXFwkf2QmcrvtSgZUyYQaVIB
+         /9RhcTSQEgIiFSzUhxm9NHWORY8rvhYyzPhodb9EJcw1b5UECb+jdJfel4IKVLEdUJfA
+         3K9fsYZdO5TytXDUzTwp33762j+/ZRbTP6Bm/ODGgoLXRyz6h01N0P1WYohEvxnelKwf
+         Cdvb7FWFVXeNayDS6/pr6C2gYTW0PN4fxhjFbFqaNbVMWtSYIWM3f5UT3YsOMJgJRlLg
+         dg4OR0wX555GypDFDqxjU5zgGhB0MpLk8N99y1GqmrxaPPnxAUXMPlDo+R8GO3XxD43U
+         9wsQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794342681; x=1794947481; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
+        b=lnI++WHMRALZqtRBGDKGfpf3AiI8ovosY1Ppo56rB4+sr1DMnWVAleorDqRU4t6IVB
+         h+9Jsm1G4L/MFZeX+eiEjiq6LhANvNalS6Xt3A6zrQGR1ucuRL3Hnj1MCQanO4pQRH/6
+         co4/wg2eQ8cSJDmDOTdhxYBP1LjvU/Dv8t8NVzLQr//26OWlpJHaT1sZ56XOAmTpzihR
+         N4i63xQzK6pYJpcaZ4M1hLz2fOGktlUXrmKSlxE+Ene7fbGSgNRM2hbvkIFByqPssHDP
+         VLTfi+t/RCzBWTfV0TLb4UGQ4KExBlaX8UDrLub5AJyJIQvNFc60jZujJdutgoNbL0RH
+         WPGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794342681; x=1794947481;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=euMDcLXwVyFRBye3EMDIFi0Mnp2snBdaowuxW7mbjUU=;
+        b=wcDldFpaTLLKqPvfFNR6zXq2Ao5uk0ohPMVKU3pg8nyq+w5Ct8pR131BPIJW3t8AjO
+         txS8/IXDScm3M4oJpFTThuR6tPX3NNl1RKE9jpzA2wm4C60J30hueXnzlGH6Q2XYTAac
+         KbXLLxfaHRKYENRfq3AmRLWoOBA1kCFfRX1xfBwmABUfqHhIp0QtbCycDurZmR/cwb54
+         xLh2QkIzPhyWi7cBUVxN48UoQsw569yB51rFNYZoedF3Q1iI2R94IP0k2gHO6cuyzUFD
+         fDlTGGQSB6sUMWN8bsF24nNiJ62DWixU0EvDwJWJa+TmbwiVG7Jwcm1QvW4fNH5W3Mk8
+         vj9w==
+X-Forwarded-Encrypted: i=1; AL+hErEQGUsc85fM5g4nqmHgOMmQY+bngeC8PTjXwCtR+0IJGZ+0aPLHQpWAHe42+m39T9V9NlZp@lists.linux.dev
+X-Gm-Message-State: APuU4Z/kHoVgZ+Xp9BPFxhSF6HxrEEdEvsqBfNuPD4xFvkjI/sW9/j8N
+	Y9GqphBfrSA2BpG7isEaC7drV7kPg7LjXgp0Zycq7L1+1TaaG17PaUtrf09OSBnFaQ4NXjWZfPB
+	t+WBc0RB+aqORmUfaVQwF6xQp7Wln8Hc=
+X-Gm-Gg: AYBFou2QXvvQ/cFn35PY+9BiexpVXHQq+lgnEfFMlkMcjyom1N3U5FEfEJJzi+vu+mF
+	0QhjEk/O4ncuASbSmJ5pogjR9u0NU7KmlxjPAh8kGQJvEqwqUjZs0/prPjFgiFGowWtuvTd/irU
+	1dGFOBzNW9mkoaUUAeFb4YntGwlBdMj/C2VwEHKCVde3Gw1Itz/W/NF1shpUwI9nyCgwB32VIsB
+	zE/c+cr1bpH/TqEAsvoASyHCLwWldcqzR+s3RZFJzoVia8yrg5ckGMmV5f/1Sf3n0/tqz7mOOed
+	HKSRObirxfPQYPYz1QHdXZ+9zaK8gtdC3d70PeascW2bLX+iPhQNWF4V6rxoUHzZL0bScIGNZfj
+	seBUimFiKGqqhE7Wt+Ak/RuieU/MJOF1vBILo/V88vqcTDeUUAjobqx1VegJcAnTkZ6wNanwGD9
+	IjW8iJnV2+ACCdfThMhmxqhYHv6YEeGg73piuxHi0/e/g87KxyWppnC4AhFs592i/cdaT8f0FS1
+	X+jr6aNM4SWTJXpdXbCZ5Caknme7HIsVO4Cztv+Fi9NfOI8ZMhv8N20LA==
+X-Received: by 2002:a17:90b:4b0e:b0:3ab:be66:ddc5 with SMTP id
+ 98e67ed59e1d1-3b182f3642cmr189775a91.6.1794342681275; Tue, 10 Nov 2026
+ 12:31:21 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,87 +106,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+References: <20261018175457.87803-1-ojeda@kernel.org>
+In-Reply-To: <20261018175457.87803-1-ojeda@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 10 Nov 2026 21:31:08 +0100
+X-Gm-Features: AclHuK_uckGpnRQludUiuJa2Hr3E-2Svi5DrMdfVjm-Nu4czLx7g97kWJ04gZ0I
+Message-ID: <CANiq72npfiOC2ZCan-zAe-h79kba_5jtWFAeAoigCs_hnO8gJA@mail.gmail.com>
+Subject: Re: [PATCH] x86/rust: use `-Zindirect-branch-cs-prefix` for RETPOLINE builds
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	stable@vger.kernel.org, Kent Overstreet <kent.overstreet@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/vdso-no-fallback
-head:   3b966bf4e9676dd99abe071691e72e14fd05fe73
-commit: 090f60ded7da81c15e516570a3d5b89de9d00587 [10/11] getres: fallback
-config: powerpc-randconfig-2001-20261110 (https://download.01.org/0day-ci/archive/20261110/202611102127.IrGJFIGK-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 053b4a894ceaebc2eed76a7fa09f58cf7e313a69)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261110/202611102127.IrGJFIGK-lkp@intel.com/reproduce)
+On Sun, Oct 18, 2026 at 7:55=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wro=
+te:
+>
+> The C compiler is asked to add a `cs` prefix to the `call` and `jmp`
+> instructions that go through the indirect thunks for the `r8`-`r15`
+> registers, which makes them 6 bytes long instead of 5. That gives
+> `patch_retpoline()` enough room to inline them, e.g. as `lfence; call
+> *%r11` for `spectre_v2=3Dretpoline,lfence`.
+>
+> However, Rust code does not get the prefix, e.g. for a
+> `CONFIG_MITIGATION_RETPOLINE=3Dy` build:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611102127.IrGJFIGK-lkp@intel.com/
+Any comments on this?
 
-All errors (new ones prefixed by >>):
+If it helps, then I am happy to take it via one of the Rust trees with
+an Acked-by from x86.
 
-   In file included from <built-in>:4:
->> lib/vdso/gettimeofday.c:451:11: error: use of undeclared identifier 'EINVAL'
-     451 |                 return -EINVAL;
-         |                         ^~~~~~
-   lib/vdso/gettimeofday.c:476:11: error: use of undeclared identifier 'EINVAL'
-     476 |                 return -EINVAL;
-         |                         ^~~~~~
-   2 errors generated.
-   make[3]: *** [arch/powerpc/kernel/vdso/Makefile:96: arch/powerpc/kernel/vdso/vgettimeofday-32.o] Error 1 shuffle=3186034347
-   make[3]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[2]: *** [arch/powerpc/Makefile:395: vdso_prepare] Error 2 shuffle=3186034347
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3186034347
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3186034347
-   make: Target 'prepare' not remade because of errors.
+Thanks!
 
-
-vim +/EINVAL +451 lib/vdso/gettimeofday.c
-
-   442	
-   443	static __always_inline
-   444	int __cvdso_clock_getres_common(const struct vdso_time_data *vd, clockid_t clock,
-   445					struct __kernel_timespec *res)
-   446	{
-   447		u32 msk;
-   448		u64 ns;
-   449	
-   450		if (!vdso_clockid_valid(clock))
- > 451			return -EINVAL;
-   452	
-   453		if (vdso_is_timens_clock(&vd->hres_coarse))
-   454			vd = vdso_timens_data(vd);
-   455	
-   456		/*
-   457		 * Convert the clockid to a bitmask and use it to check which
-   458		 * clocks are handled in the VDSO directly.
-   459		 */
-   460		msk = 1U << clock;
-   461		if (msk & (VDSO_HRES | VDSO_RAW)) {
-   462			/*
-   463			 * Preserves the behaviour of posix_get_hrtimer_res().
-   464			 */
-   465			ns = READ_ONCE(vd->hrtimer_res);
-   466		} else if (msk & VDSO_COARSE) {
-   467			/*
-   468			 * Preserves the behaviour of posix_get_coarse_res().
-   469			 */
-   470			ns = LOW_RES_NSEC;
-   471		} else if (msk & VDSO_AUX) {
-   472			ns = aux_clock_resolution_ns();
-   473		} else if (msk & vdso_alarmclock_mask(vd)) {
-   474			ns = READ_ONCE(vd->hrtimer_res);
-   475		} else {
-   476			return -EINVAL;
-   477		}
-   478	
-   479		if (likely(res)) {
-   480			res->tv_sec = 0;
-   481			res->tv_nsec = ns;
-   482		}
-   483		return 0;
-   484	}
-   485	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
