@@ -1,110 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.142
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794327191;
-	b=tvR8z06yxTUjVtH3aFWKyu+f24yVgfqcOFe0F1qniHWkKmnls5q0xngrtnyYD10AlrqA
-	 VqjlqlIS/mPpHCJjWDcLFX95r9v8BhcPEIJa4Gb1nFurmO7BEcx+egEUh+B2QgUaftoBX
-	 u88gN8rm9OedCRFxdOI/eQ80MHIvCAx7jIGXj0z++wY0dgyQWlOQ8xZ1fgfhYBWbJrWQ8
-	 IABlHnmiTsVqlHJG3NICVVsq8cA4XIiHewYSVzEwRLNz4pflX7Eiya80uNdT/RfbHXyCF
-	 XAEDaS2slSvH3itJjnMlwsbptZY1/DCJuWI/8oGSYxfUpxDy3Y8LHZEWfrhiGHsgUFQ==
+	t=1794338255;
+	b=x0VHSMpGn/ZaCjx9PIeZ0fzuln2s5lMGdeJkyd1kEOpaiH2rG7SLzIzsfpOOYNRi+/qb
+	 a4aMsZyc4TGRSLNRdOjbFv4Eoe1WKXWr2t7qlGom8Gyl6oIw1CeWXFMTqVqT6E5oSgP5F
+	 CZlglv4GSmJGBDkfF6cLkENvkrcRW3/NlsxA9z2Cj5w4pvrJVP3fIwLU952t3qVBNSZHv
+	 GvOT09jyq6DpgpB2Vw87biEvesTlgdx2FtQvnEsEHbL8QSKhstpq7lGi5SK6rEsVdIYdF
+	 5g1J1wEW4gMld82LRuDhh46mUq+0f3uXxy7g7/7rJfgmR/PuNIKIRjco5k5EcVHeIBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794327191;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=4stWdQp7BpJLS0676322fsmeG4ymFjAT9IbMRkPmpp0=;
-	b=fd2kiF259+RrhswwayaXj31Lb13t8fmQ80l4KhUr7m+zEZ+5bUGaU+B2jAwUie2r1ZTT
-	 fyyIzip1NL7H06xpxFpUqEYmkmNj+XMNMsPmPvVin75A0/OjzPCwnUV3jSyJ5WS2IbQl7
-	 Jool9Rz9UDfMGsUPS9bxqQNXXi8mYiyYt/YTSCuZVqjCohNU68S3pg9qJlCMnvM1H/xPp
-	 dkwa1Pw6K0xd6GGgvYqNtIFxObdhXAPWx9LA2i8OWPVAv/lvuNRLmuf3pchdb3QBWvVpB
-	 286Z5JLUEGcBxq2pwWdyUL7DEALwVALGRl/DIig7I4cofCVAprbpLP5GUzqjZjz6Q6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794338255;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=CPfsNAnpmnrq3fX5zyMn0APrLv2YMf9rzKjRxaOzVS0=;
+	b=XvsKk+KUtsMTvbmMBhGUgoOS7W6vT0wi8NB7VwjcqE8FX5LqTav2Ha1pBDt6cUJKdZBc
+	 N3+PpaUPiSuNw4PgZqHUdB6Vgs+ciIazCI3FN7rUESsNQINW0AlJbO4zxd6Gub2l+waTB
+	 N9Kox0JDlC/fy1L58MDvQX/N298TVSJIIO/0l1h7x6UBkNV+MWahej74/reHVajpbpg01
+	 phpIcGsRhJM2IOrmpsb5wRePQxqIB7mIIng5lAbb7hUpxj38uzJmu06qHYvsz4q79Pn7F
+	 V7rkX4UuwDC/ngTy7BBY92ApITLXmU+jFMCPfX04ZaUjJ7TChzF950gEU1O+zrwS+GQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=asQC+qHD;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=pjDZKFBW;
-	arc=none smtp.remote-ip=103.168.172.142
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ZqQ1ptm8;
+	arc=none smtp.remote-ip=192.198.163.15
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B606606A321
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 16:13:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B606606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B60C606A323;
+	Tue, 10 Nov 2026 19:17:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B60C606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=asQC+qHD;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=pjDZKFBW
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.phl.internal (Postfix) with ESMTP id 752A7138136A
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 11:13:09 -0500 (EST)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Tue, 10 Nov 2026 11:13:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1794327177;
-	 x=1794334377; bh=4stWdQp7BpJLS0676322fsmeG4ymFjAT9IbMRkPmpp0=; b=
-	asQC+qHDAv/I83EYngLJ0bkBe+uuEnPcLg0jrc2OX9kVtaPYAd/md3quox9jqmy4
-	S/jELTpXjA2k1IxJWtdK3HZW4IriVAHis0xufJR256BBPAzbfZ5QsGw2eqYq1k/I
-	S4qzaUtb3Ob4GAV2mxThnKp0r/zG0TfcXAK+eUmyQOHhHqtyGONG7gkgzRBQG2d0
-	/gzJT11LHsGNvLKSZnn9JL3iytYjrT3V7KZt2FZsHfjjQeZHywjaesrjJhD0e7vN
-	Y6/iN3Jg7w8xS8OVdYMBSUZOfxDnVhVfPJGqKe/oSxsAZXPn7y2e4GOOItdMLZ2R
-	LLVckhHoSzC+MGE1iJu5eg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794327177; x=
-	1794334377; bh=4stWdQp7BpJLS0676322fsmeG4ymFjAT9IbMRkPmpp0=; b=p
-	jDZKFBWlX484yfO06iZThedU7MnSaqyMkXKHKaXomC5/xVavgZU65SsCjokZJWML
-	GjeTj8Lq4+LWeI1CWzzxuQj2m4isbVa0ssa9g7eZhXilCypVINe5kxTBiobUF6uZ
-	Gtle0jaTmJtlAyGlrtNmbTTDPt9uAjbADo1dgbyzsDA47ykOoKjYt1o87LKBSqHb
-	mP2YIbspjWDiF2EJOgZRHTKT7VhzsY0TtBEN2nWcPAnRSw5Q7HRlPmorpTONvfpP
-	auvP37j94bGeH1y2GQ4LwX12DjFEZi+3xGQave3kINRA2PBRPI5FXxcFzbhhhvXR
-	Tsc8Y3Jb1FgwsS6Y0dcjg==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794327177; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
-	s=fm2:rsa-sha256:N6dFvtZ46b5JVbiTzyldaoUN6VatvXi/1tqTqmoe+z3S/WP
-	KOzXM/OmogR4T8J+1NdNdqdJGxAfjp1U/1Vbsm8i8467l+hNaiXXYUyvU/SBZRa7
-	86wmuwPshxLGSsD5UpaMMFMQDBf4uVKW38vjyl4CsMJoHfZRsEVd/fFhfsPuyTQ0
-	0wBW/IFNO9UrF3DzBEqrqI3OqR80l7SF396MFcgZo2IVAl0bXFgqEkCvrpdCsGlF
-	HTZ176PT/PyqSUaKrH8QQ2nXhS/rSptkDrqt2qs2I4XKwqNtLsevVSl5XzBuihYM
-	U6rIMg8hIrKVuqRixPiS0dTUsHSEJGRhrDxGOtw==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:NY+qH6VFe1gb9eaYka4u3Pju9dQg6z2rB5jHAxzea+M=:YUoKa4y1cAE3r8AhMFawDzVW7orX9AEZ4cmB97mmTGA=;
-X-ME-Sender: <xms:gELzat-KhdG49YOXD28knxP-wmxhvouurLuqg65ijoK_1PztTiM67w>
-    <xme:gELzashOw3MORHNRaj5VZYoHPjgRatChT2__Hps4-a7QS4ExIju8qL8_9B3SiDtB2
-    sGKQug7JFF_lfIFqrxv09JzfzrzZWKrRlvdLjWPWqavJafwb6XI9q0tBA>
-X-ME-Proxy-Cause: dmFkZTEwJqmeu88i0D1P4NSr1o0RdeyL0ncQrpwlZpsRiyH4mGhKK76jqiY9/AURvmAyKQ
-    Xh2LjT8fovpOgpIQnvH5QYWZs5UCg8lDhPsbwXo4GfEZeWp/aOvfLOYPWjqnmAFI1BwG/q
-    XyZG43p0HoLIgnysLFo6MzsLlgysOWgB08DJdha5yxDuEjeXR7MU6VvvNb4tgDJLpz9WaL
-    DOmlUn0Mje4CQssJm+pxYVCWPCE7uxZNBjliBSIc14Pa1+Q+euFKNdLxxVitjY9vJ+1g1T
-    +rig9iVkFuoti3t+qEcHMM2vh4+G+ag1IzrG3We9+FcQnC6cOfB1bItA6vAPi6A+u1KULf
-    wxoJ36bIqa+kM9OWApvgKo4MId3H8RRe0FCkMwp8Cj2i2hPzQqFijO+zALFklT7XBp4yQ4
-    D0Bsmvzif3sMMCJY2OSk1bwCPIIRPEFuJI4Mi/vpw7sfUa+jfrhN159tiieQQE7aztSV43
-    DlSawBFw+hJYm5oAPkD2NlBoL/gRh3vgmwf+Y/GbihlHM/o3EcsWCertLTOcD6iStWXR7G
-    LAS2aVSdVtxoGSiZj2/kYUSfLhEBFCn05KpxcrFYCW/FmzT2YT72YPVx3p0wR8sMiJ3lAW
-    x+8+3z8XttowLJjfinG9ew4R0xJsilSkEkmhmN5AqofFDl0uTCDo7P0ixMQQ
-X-ME-Proxy: <xmx:hkLzak2BPEyGi10FxxkrY3byRVHSjq_0wLclV2jUuSmkyRE3xcj4fw>
-    <xmx:hkLzakkySXPgYGwh_r1Ql-VHDAdYXcQ3p0tjVOV29OCOWQo8MbFMmw>
-    <xmx:hkLzavloJp1yUj6WriMMnPneQ8pVgU9Ew-sH84r-kdZ-OdXPheHDYw>
-    <xmx:hkLzarPnZB-B1EOixQtLefzjQeDp3wnHNrTbJ3SPpTKyjOvpO-EsFA>
-    <xmx:iULzajThipr-UxTyuQQEJ7jWDCsE73KlfzXTf41eZRpd8Rpi4a2MNCT2>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id AC32432A0097; Tue, 10 Nov 2026 11:12:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ZqQ1ptm8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794338254; x=1825874254;
+  h=date:from:to:cc:subject:message-id;
+  bh=NoZ0W4IU+rGL65IYhg7H+fPMMmYA+l6uQcMEqhfYGxg=;
+  b=ZqQ1ptm8dL3ndfv6puLGj1Ldqkj2x7Hy9kF02Q0CUQIpzJrjdRsSQxqg
+   KTfC935D1erN25k9m2mS35l4hLqk3tSmWm+WNBnNR+B+aEMpI7+KcEyIg
+   Noy/1IUM6v5WZV2WmDevbm/zwPpV+Tc2BqFUl1ditZgF0C895hUx1ruQ7
+   0jvBN4/EFQCwD/Slo7t4hvuLIybXK8Vr/Z49jyl9h8jD6Xjxh+qjYZoMN
+   MhGz/SOYfcrnXJCuAkp5bvb5nf8moKk6EV+cK2Nq3uD7slDPvDBnhxtET
+   gk1O3Iw06IRyg3abdW0pKh7h8sBHq+9timHHF+lxzakBkqIZp7H9FSzOj
+   A==;
+X-CSE-ConnectionGUID: lFVlkXblR2CkU0o/In/yWg==
+X-CSE-MsgGUID: HU8qlRwuQtKjmiB1eVPimg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3099563"
+X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
+   d="scan'208";a="3099563"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 11:17:30 -0800
+X-CSE-ConnectionGUID: 9gBMjfLcR8ShSY5Q10MdnA==
+X-CSE-MsgGUID: 1J0pPiTVTJOBvsCiPbYU7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
+   d="scan'208";a="8231119"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 10 Nov 2026 11:17:28 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xQrLR-00000000xLn-1yDd;
+	Tue, 10 Nov 2026 19:17:25 +0000
+Date: Wed, 11 Nov 2026 03:17:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guangshuo Li <lgs201920130244@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Ulf Hansson <ulfh@kernel.org>
+Subject: [ulfh-pm:fixes 1/3] drivers/pmdomain/imx/gpc.c:554:1: error:
+ function definition is not allowed here
+Message-ID: <202611110330.2CY99RuH-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -113,98 +80,100 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-X-ThreadId: AK-jVwBtQCQR
-Date: Tue, 10 Nov 2026 17:12:28 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- "Jonathan Cameron" <jic23@kernel.org>
-Cc: "Svyatoslav Ryhel" <clamor95@gmail.com>,
- "Arnd Bergmann" <arnd@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Bartosz Golaszewski" <brgl@kernel.org>, "Mark Brown" <broonie@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Daniel Thompson" <danielt@kernel.org>,
- "Helge Deller" <deller@gmx.de>, devicetree@vger.kernel.org,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- dri-devel@lists.freedesktop.org, "Jingoo Han" <jingoohan1@gmail.com>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Lee Jones" <lee@kernel.org>,
- "Liam Girdwood" <lgirdwood@gmail.com>, "Linus Walleij" <linusw@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-fbdev@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
- "Guenter Roeck" <linux@roeck-us.net>, linuxppc-dev@lists.ozlabs.org,
- llvm@lists.linux.dev, "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- mfd@lists.linux.dev, "Michael Hennerich" <michael.hennerich@analog.com>,
- patches@opensource.cirrus.com, "Pavel Machek" <pavel@kernel.org>,
- "Rob Herring" <robh@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
- "Support Opensource" <support.opensource@diasemi.com>
-Message-Id: <991009b6-e62b-46bd-9a0b-43c3b7a6d10a@app.fastmail.com>
-In-Reply-To: <avM5EnC9yujUZcCO@nsa>
-References: 
- <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
- <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
- <20260912232047.19c4cb10@jic23-hlaptop> <avM5EnC9yujUZcCO@nsa>
-Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 10, 2026, at 16:39, Nuno S=C3=A1 wrote:
-> On Sat, Sep 12, 2026 at 11:20:47PM +0100, Jonathan Cameron wrote:
->> On Thu, 10 Sep 2026 20:14:15 +0200 "Arnd Bergmann" <arnd@arndb.de> wr=
-ote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git fixes
+head:   29030cd58b1e7e788728bc5bf4ae3c44881b7bbc
+commit: d7262971a2acc2a835d8727d6833a6f764f56124 [1/3] pmdomain: imx: gpc: remove all initialized power domains
+config: arm-randconfig-1003-20261110 (https://download.01.org/0day-ci/archive/20261111/202611110330.2CY99RuH-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611110330.2CY99RuH-lkp@intel.com/reproduce)
 
->> > drivers/iio/adc/ad7793.c
->> Maybe. Analog devices ack needed.
->>=20
->> Production part but this one indeed fails to probe.  Analog
->> folk, do you want to fix this one up?
->
-> Given it's production we should fix. Looking at platdata seems to nice=
-ly
-> fir in DT. Issue is that I don't have HW with me to test. So I'll maybe
-> just remove platdata and assume some defaults.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611110330.2CY99RuH-lkp@intel.com/
 
-Sounds good. I already dropped my removal patch for this one.
+All errors (new ones prefixed by >>):
 
->> > drivers/iio/frequency/ad9523.c
->> Maybe. Analog Devices ack needed.
->>=20
->
-> Hmm we definitely use this one and we have OF support out of tree with
-> likely some DT abuse of what can be in DT or not. Not sure if I have
-> some HW around but we'll need to fix it.
->
-> In general for ADI parts, I think we can drop the ones that are not
-> recommended for new designs. All the others I tempted to say we should
-> keep. Naturally we need to fix all the drivers that do not compile
-> without platdata. And for the ones with defaults we can also just remo=
-ve
-> platdata and use the plain defaults.
+>> drivers/pmdomain/imx/gpc.c:554:1: error: function definition is not allowed here
+     554 | builtin_platform_driver(imx_gpc_driver)
+         | ^
+   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
+     345 |         builtin_driver(__platform_driver, platform_driver_register)
+         |         ^
+   include/linux/device/driver.h:294:41: note: expanded from macro 'builtin_driver'
+     294 | static int __init __driver##_init(void) \
+         |                                         ^
+>> drivers/pmdomain/imx/gpc.c:554:1: error: use of undeclared identifier 'imx_gpc_driver_init'; did you mean 'imx_gpc_driver'?
+     554 | builtin_platform_driver(imx_gpc_driver)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
+     345 |         builtin_driver(__platform_driver, platform_driver_register)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/driver.h:298:17: note: expanded from macro 'builtin_driver'
+     298 | device_initcall(__driver##_init);
+         |                 ^~~~~~~~~~~~~~~
+   <scratch space>:189:1: note: expanded from here
+     189 | imx_gpc_driver_init
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/pmdomain/imx/gpc.c:546:31: note: 'imx_gpc_driver' declared here
+     546 | static struct platform_driver imx_gpc_driver = {
+         |                               ^
+>> drivers/pmdomain/imx/gpc.c:554:1: error: initializing 'initcall_t' (aka 'int (*)(void)') with an expression of incompatible type 'struct platform_driver'
+     554 | builtin_platform_driver(imx_gpc_driver)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
+     345 |         builtin_driver(__platform_driver, platform_driver_register)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/driver.h:297:3: note: expanded from macro 'builtin_driver'
+     297 | } \
+         |   ^
+     298 | device_initcall(__driver##_init);
+         |                 ~~~~~~~~~~~~~~~
+   include/linux/init.h:306:30: note: expanded from macro '\
+   device_initcall'
+     306 | #define device_initcall(fn)             __define_initcall(fn, 6)
+         |                                         ^                 ~~
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:4:1: note: expanded from here
+       4 | __initcall__kmod_gpc__483_554_imx_gpc_driver_init6
+         | ^
+   include/linux/init.h:264:20: note: expanded from macro '____define_initcall'
+     264 |         static initcall_t __name __used                         \
+         |                           ^
+     265 |                 __attribute__((__section__(__sec))) = fn;
+         |                                                       ~~
+>> drivers/pmdomain/imx/gpc.c:554:40: error: expected '}'
+     554 | builtin_platform_driver(imx_gpc_driver)
+         |                                        ^
+   drivers/pmdomain/imx/gpc.c:504:1: note: to match this '{'
+     504 | {
+         | ^
+   4 errors generated.
 
-Ok, I'll leave it alone as well now.
 
-I currently still have patches to remove adp8860/8870 (backlight), ad7877
-(touchscreen), ad714x (touch) and adxl34x (input, not the iio one), which
-are currently unusable with DT but are all listed as in production.
+vim +554 drivers/pmdomain/imx/gpc.c
 
-I assume you want to fix all of these and keep them in the kernel,
-but possibly still remove the adxl34x and only keep the IIO driver for
-that part?
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  545  
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17 @546  static struct platform_driver imx_gpc_driver = {
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  547  	.driver = {
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  548  		.name = "imx-gpc",
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  549  		.of_match_table = imx_gpc_dt_ids,
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  550  	},
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  551  	.probe = imx_gpc_probe,
+e70140ba0d2b1a drivers/pmdomain/imx/gpc.c Linus Torvalds 2024-12-01  552  	.remove = imx_gpc_remove,
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  553  };
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17 @554  builtin_platform_driver(imx_gpc_driver)
 
-I also have patches to remove platform_data probing from ad5761, adf4350,
-ad5791, ad5421 and ad5504, these all have DT support.
+:::::: The code at line 554 was first introduced by commit
+:::::: 721cabf6c6600dbe689ee2782bc087270e97e652 soc: imx: move PGC handling to a new GPC driver
 
-See=20
-https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/=
-?h=3Dboard-remove-7.4
-for the updated series. I hope to slowly get through that. Let
-me know if you want me to skip any more of those patches.
+:::::: TO: Lucas Stach <l.stach@pengutronix.de>
+:::::: CC: Shawn Guo <shawnguo@kernel.org>
 
-Thanks,
-
-    Arnd
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
