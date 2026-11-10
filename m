@@ -1,66 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.142
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794326006;
-	b=LY5vdb79riNuzWNxcesSIv8QSmUl9pBrLKQZg7eMeV8V7l82Rcrz0idsCnomvWbCulhi
-	 C4vJnhUmniCz/bUHAthwJJxj9iTSYQ33qJvKtqBkOBQx459j5+h8JMLVkjJflxYKVue8i
-	 mcAougWsiEjgW9nTZZ+G3mkwzaSVtjnjvWXZ7LqTjC01AvOFFjlzpnhX8+tzTYdXpzm93
-	 q82joWQYAq9RUDqPDLZ8kvUzrD0VYwXwJiSoluHEp0NgwR1109gpjUNCzyPFNFWcVDtQ1
-	 uxJE6n1zm5ePkztriBWSt+8BmjzfaKHI6SNgDDaLZ/508Ui8BASIPecN5/FPevznBSw==
+	t=1794327191;
+	b=tvR8z06yxTUjVtH3aFWKyu+f24yVgfqcOFe0F1qniHWkKmnls5q0xngrtnyYD10AlrqA
+	 VqjlqlIS/mPpHCJjWDcLFX95r9v8BhcPEIJa4Gb1nFurmO7BEcx+egEUh+B2QgUaftoBX
+	 u88gN8rm9OedCRFxdOI/eQ80MHIvCAx7jIGXj0z++wY0dgyQWlOQ8xZ1fgfhYBWbJrWQ8
+	 IABlHnmiTsVqlHJG3NICVVsq8cA4XIiHewYSVzEwRLNz4pflX7Eiya80uNdT/RfbHXyCF
+	 XAEDaS2slSvH3itJjnMlwsbptZY1/DCJuWI/8oGSYxfUpxDy3Y8LHZEWfrhiGHsgUFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794326006;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=VunR4rwDN/gIeXBQ2Oy6QtinbdO5KrqgjFQ2hMpQft0=;
-	b=RjJIkm6Svzr4OIK5wV59LvXuhHuW6ZjNnK0GfTCIwfgnr83NdjneEkvnqRITqz1/la/5
-	 EMzBvX/6r4N/Nug+IJ+csz5eNu1/Ol4KHHIfnzZDCh09lvXYQfIlyPbrDK0iyvT/KvefU
-	 chdgbeMUAjee8jqaXzv1KajYkcNb+iyKgHG1cvou0VpDNiLYBDsgdbZWC9oPAF8gIHBLb
-	 WoGAXDHWviJ0uOTokVDnr2loG1xvjVWVyOMQIZAYwdfHAzJzGYncGwzYCGudkRWpH37mX
-	 y1HgeEvRvL6zTpru56xhXwMxviW8Jze1C9zcWzSHHRNo7wyETykxRSd+Kl0ecUstvEA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794327191;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=4stWdQp7BpJLS0676322fsmeG4ymFjAT9IbMRkPmpp0=;
+	b=fd2kiF259+RrhswwayaXj31Lb13t8fmQ80l4KhUr7m+zEZ+5bUGaU+B2jAwUie2r1ZTT
+	 fyyIzip1NL7H06xpxFpUqEYmkmNj+XMNMsPmPvVin75A0/OjzPCwnUV3jSyJ5WS2IbQl7
+	 Jool9Rz9UDfMGsUPS9bxqQNXXi8mYiyYt/YTSCuZVqjCohNU68S3pg9qJlCMnvM1H/xPp
+	 dkwa1Pw6K0xd6GGgvYqNtIFxObdhXAPWx9LA2i8OWPVAv/lvuNRLmuf3pchdb3QBWvVpB
+	 286Z5JLUEGcBxq2pwWdyUL7DEALwVALGRl/DIig7I4cofCVAprbpLP5GUzqjZjz6Q6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GNHDFNOQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=asQC+qHD;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=pjDZKFBW;
+	arc=none smtp.remote-ip=103.168.172.142
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8142F606A321;
-	Tue, 10 Nov 2026 15:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B606606A321
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 16:13:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B606606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GNHDFNOQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E2511F0089F;
-	Tue, 10 Nov 2026 15:53:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794326005;
-	bh=VunR4rwDN/gIeXBQ2Oy6QtinbdO5KrqgjFQ2hMpQft0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=GNHDFNOQLnd8H7+Sei+BPTUIbPNM9HV/dWn1VLWeSXegYtJ1KPT2fb3AASJTMUpJz
-	 N1SqGKT5c5+W7nhJpP6fhsJ2ovk7UAXTRujp78FDDqe5c84o3NUzZvv8WjfnW36iAH
-	 cS50AkkFPY3KBJR6irEyOWu/ROFC6W150/CKvs/0jqKLzCcU57HbyKCscdB61vjWJ9
-	 bqw7kQreOUSdEl+908shZakYQSH3M/+UYpOl+IBDjEd87Ji4EWW2Mm14IPPwL2Hu7M
-	 NScOlIZwmpu+/qgutdBbDYJxdkNB1w6PQpY8pJt4cMcAPUE75DbP4D8e/YcC47ajWr
-	 r0z08YxSwDOHQ==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Daniel Latypov <dlatypov@google.com>,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1.y 1/2] overflow: Introduce overflows_type() and castable_to_type()
-Date: Tue, 10 Nov 2026 10:53:21 -0500
-Message-ID: <20261110155252.2304363-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261107054614-failed-6.1-1c8f6308e557@kernel.org>
-References: <20261107054614-failed-6.1-1c8f6308e557@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=asQC+qHD;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=pjDZKFBW
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.phl.internal (Postfix) with ESMTP id 752A7138136A
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 11:13:09 -0500 (EST)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 10 Nov 2026 11:13:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1794327177;
+	 x=1794334377; bh=4stWdQp7BpJLS0676322fsmeG4ymFjAT9IbMRkPmpp0=; b=
+	asQC+qHDAv/I83EYngLJ0bkBe+uuEnPcLg0jrc2OX9kVtaPYAd/md3quox9jqmy4
+	S/jELTpXjA2k1IxJWtdK3HZW4IriVAHis0xufJR256BBPAzbfZ5QsGw2eqYq1k/I
+	S4qzaUtb3Ob4GAV2mxThnKp0r/zG0TfcXAK+eUmyQOHhHqtyGONG7gkgzRBQG2d0
+	/gzJT11LHsGNvLKSZnn9JL3iytYjrT3V7KZt2FZsHfjjQeZHywjaesrjJhD0e7vN
+	Y6/iN3Jg7w8xS8OVdYMBSUZOfxDnVhVfPJGqKe/oSxsAZXPn7y2e4GOOItdMLZ2R
+	LLVckhHoSzC+MGE1iJu5eg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794327177; x=
+	1794334377; bh=4stWdQp7BpJLS0676322fsmeG4ymFjAT9IbMRkPmpp0=; b=p
+	jDZKFBWlX484yfO06iZThedU7MnSaqyMkXKHKaXomC5/xVavgZU65SsCjokZJWML
+	GjeTj8Lq4+LWeI1CWzzxuQj2m4isbVa0ssa9g7eZhXilCypVINe5kxTBiobUF6uZ
+	Gtle0jaTmJtlAyGlrtNmbTTDPt9uAjbADo1dgbyzsDA47ykOoKjYt1o87LKBSqHb
+	mP2YIbspjWDiF2EJOgZRHTKT7VhzsY0TtBEN2nWcPAnRSw5Q7HRlPmorpTONvfpP
+	auvP37j94bGeH1y2GQ4LwX12DjFEZi+3xGQave3kINRA2PBRPI5FXxcFzbhhhvXR
+	Tsc8Y3Jb1FgwsS6Y0dcjg==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1794327177; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm2:rsa-sha256:N6dFvtZ46b5JVbiTzyldaoUN6VatvXi/1tqTqmoe+z3S/WP
+	KOzXM/OmogR4T8J+1NdNdqdJGxAfjp1U/1Vbsm8i8467l+hNaiXXYUyvU/SBZRa7
+	86wmuwPshxLGSsD5UpaMMFMQDBf4uVKW38vjyl4CsMJoHfZRsEVd/fFhfsPuyTQ0
+	0wBW/IFNO9UrF3DzBEqrqI3OqR80l7SF396MFcgZo2IVAl0bXFgqEkCvrpdCsGlF
+	HTZ176PT/PyqSUaKrH8QQ2nXhS/rSptkDrqt2qs2I4XKwqNtLsevVSl5XzBuihYM
+	U6rIMg8hIrKVuqRixPiS0dTUsHSEJGRhrDxGOtw==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:NY+qH6VFe1gb9eaYka4u3Pju9dQg6z2rB5jHAxzea+M=:YUoKa4y1cAE3r8AhMFawDzVW7orX9AEZ4cmB97mmTGA=;
+X-ME-Sender: <xms:gELzat-KhdG49YOXD28knxP-wmxhvouurLuqg65ijoK_1PztTiM67w>
+    <xme:gELzashOw3MORHNRaj5VZYoHPjgRatChT2__Hps4-a7QS4ExIju8qL8_9B3SiDtB2
+    sGKQug7JFF_lfIFqrxv09JzfzrzZWKrRlvdLjWPWqavJafwb6XI9q0tBA>
+X-ME-Proxy-Cause: dmFkZTEwJqmeu88i0D1P4NSr1o0RdeyL0ncQrpwlZpsRiyH4mGhKK76jqiY9/AURvmAyKQ
+    Xh2LjT8fovpOgpIQnvH5QYWZs5UCg8lDhPsbwXo4GfEZeWp/aOvfLOYPWjqnmAFI1BwG/q
+    XyZG43p0HoLIgnysLFo6MzsLlgysOWgB08DJdha5yxDuEjeXR7MU6VvvNb4tgDJLpz9WaL
+    DOmlUn0Mje4CQssJm+pxYVCWPCE7uxZNBjliBSIc14Pa1+Q+euFKNdLxxVitjY9vJ+1g1T
+    +rig9iVkFuoti3t+qEcHMM2vh4+G+ag1IzrG3We9+FcQnC6cOfB1bItA6vAPi6A+u1KULf
+    wxoJ36bIqa+kM9OWApvgKo4MId3H8RRe0FCkMwp8Cj2i2hPzQqFijO+zALFklT7XBp4yQ4
+    D0Bsmvzif3sMMCJY2OSk1bwCPIIRPEFuJI4Mi/vpw7sfUa+jfrhN159tiieQQE7aztSV43
+    DlSawBFw+hJYm5oAPkD2NlBoL/gRh3vgmwf+Y/GbihlHM/o3EcsWCertLTOcD6iStWXR7G
+    LAS2aVSdVtxoGSiZj2/kYUSfLhEBFCn05KpxcrFYCW/FmzT2YT72YPVx3p0wR8sMiJ3lAW
+    x+8+3z8XttowLJjfinG9ew4R0xJsilSkEkmhmN5AqofFDl0uTCDo7P0ixMQQ
+X-ME-Proxy: <xmx:hkLzak2BPEyGi10FxxkrY3byRVHSjq_0wLclV2jUuSmkyRE3xcj4fw>
+    <xmx:hkLzakkySXPgYGwh_r1Ql-VHDAdYXcQ3p0tjVOV29OCOWQo8MbFMmw>
+    <xmx:hkLzavloJp1yUj6WriMMnPneQ8pVgU9Ew-sH84r-kdZ-OdXPheHDYw>
+    <xmx:hkLzarPnZB-B1EOixQtLefzjQeDp3wnHNrTbJ3SPpTKyjOvpO-EsFA>
+    <xmx:iULzajThipr-UxTyuQQEJ7jWDCsE73KlfzXTf41eZRpd8Rpi4a2MNCT2>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id AC32432A0097; Tue, 10 Nov 2026 11:12:48 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -70,576 +114,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AK-jVwBtQCQR
+Date: Tue, 10 Nov 2026 17:12:28 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ "Jonathan Cameron" <jic23@kernel.org>
+Cc: "Svyatoslav Ryhel" <clamor95@gmail.com>,
+ "Arnd Bergmann" <arnd@kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Bartosz Golaszewski" <brgl@kernel.org>, "Mark Brown" <broonie@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Daniel Thompson" <danielt@kernel.org>,
+ "Helge Deller" <deller@gmx.de>, devicetree@vger.kernel.org,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+ dri-devel@lists.freedesktop.org, "Jingoo Han" <jingoohan1@gmail.com>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Lee Jones" <lee@kernel.org>,
+ "Liam Girdwood" <lgirdwood@gmail.com>, "Linus Walleij" <linusw@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-fbdev@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ "Guenter Roeck" <linux@roeck-us.net>, linuxppc-dev@lists.ozlabs.org,
+ llvm@lists.linux.dev, "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+ mfd@lists.linux.dev, "Michael Hennerich" <michael.hennerich@analog.com>,
+ patches@opensource.cirrus.com, "Pavel Machek" <pavel@kernel.org>,
+ "Rob Herring" <robh@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
+ "Support Opensource" <support.opensource@diasemi.com>
+Message-Id: <991009b6-e62b-46bd-9a0b-43c3b7a6d10a@app.fastmail.com>
+In-Reply-To: <avM5EnC9yujUZcCO@nsa>
+References: 
+ <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
+ <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
+ <20260912232047.19c4cb10@jic23-hlaptop> <avM5EnC9yujUZcCO@nsa>
+Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Kees Cook <keescook@chromium.org>
+On Tue, Nov 10, 2026, at 16:39, Nuno S=C3=A1 wrote:
+> On Sat, Sep 12, 2026 at 11:20:47PM +0100, Jonathan Cameron wrote:
+>> On Thu, 10 Sep 2026 20:14:15 +0200 "Arnd Bergmann" <arnd@arndb.de> wr=
+ote:
 
-[ Upstream commit 4b21d25bf519c9487935a664886956bb18f04f6d ]
+>> > drivers/iio/adc/ad7793.c
+>> Maybe. Analog devices ack needed.
+>>=20
+>> Production part but this one indeed fails to probe.  Analog
+>> folk, do you want to fix this one up?
+>
+> Given it's production we should fix. Looking at platdata seems to nice=
+ly
+> fir in DT. Issue is that I don't have HW with me to test. So I'll maybe
+> just remove platdata and assume some defaults.
 
-Implement a robust overflows_type() macro to test if a variable or
-constant value would overflow another variable or type. This can be
-used as a constant expression for static_assert() (which requires a
-constant expression[1][2]) when used on constant values. This must be
-constructed manually, since __builtin_add_overflow() does not produce
-a constant expression[3].
+Sounds good. I already dropped my removal patch for this one.
 
-Additionally adds castable_to_type(), similar to __same_type(), but for
-checking if a constant value would overflow if cast to a given type.
+>> > drivers/iio/frequency/ad9523.c
+>> Maybe. Analog Devices ack needed.
+>>=20
+>
+> Hmm we definitely use this one and we have OF support out of tree with
+> likely some DT abuse of what can be in DT or not. Not sure if I have
+> some HW around but we'll need to fix it.
+>
+> In general for ADI parts, I think we can drop the ones that are not
+> recommended for new designs. All the others I tempted to say we should
+> keep. Naturally we need to fix all the drivers that do not compile
+> without platdata. And for the ones with defaults we can also just remo=
+ve
+> platdata and use the plain defaults.
 
-Add unit tests for overflows_type(), __same_type(), and castable_to_type()
-to the existing KUnit "overflow" test:
+Ok, I'll leave it alone as well now.
 
-[16:03:33] ================== overflow (21 subtests) ==================
-...
-[16:03:33] [PASSED] overflows_type_test
-[16:03:33] [PASSED] same_type_test
-[16:03:33] [PASSED] castable_to_type_test
-[16:03:33] ==================== [PASSED] overflow =====================
-[16:03:33] ============================================================
-[16:03:33] Testing complete. Ran 21 tests: passed: 21
-[16:03:33] Elapsed time: 24.022s total, 0.002s configuring, 22.598s building, 0.767s running
+I currently still have patches to remove adp8860/8870 (backlight), ad7877
+(touchscreen), ad714x (touch) and adxl34x (input, not the iio one), which
+are currently unusable with DT but are all listed as in production.
 
-[1] https://en.cppreference.com/w/c/language/_Static_assert
-[2] C11 standard (ISO/IEC 9899:2011): 6.7.10 Static assertions
-[3] https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
-    6.56 Built-in Functions to Perform Arithmetic with Overflow Checking
-    Built-in Function: bool __builtin_add_overflow (type1 a, type2 b,
+I assume you want to fix all of these and keep them in the kernel,
+but possibly still remove the adxl34x and only keep the IIO driver for
+that part?
 
-Cc: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Daniel Latypov <dlatypov@google.com>
-Cc: Vitor Massaru Iha <vitor@massaru.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-hardening@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Co-developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20221024201125.1416422-1-gwan-gyeong.mun@intel.com
-Stable-dep-of: 1c8f6308e557 ("iommu/dma: Catch scatterlist length overflows")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/i915/i915_user_extensions.c |   2 +-
- drivers/gpu/drm/i915/i915_utils.h           |   4 -
- include/linux/compiler.h                    |   1 +
- include/linux/overflow.h                    |  47 +++
- lib/Makefile                                |   1 +
- lib/overflow_kunit.c                        | 381 ++++++++++++++++++++
- 6 files changed, 431 insertions(+), 5 deletions(-)
+I also have patches to remove platform_data probing from ad5761, adf4350,
+ad5791, ad5421 and ad5504, these all have DT support.
 
-diff --git a/drivers/gpu/drm/i915/i915_user_extensions.c b/drivers/gpu/drm/i915/i915_user_extensions.c
-index c822d0aafd2dc..e3f808372c47b 100644
---- a/drivers/gpu/drm/i915/i915_user_extensions.c
-+++ b/drivers/gpu/drm/i915/i915_user_extensions.c
-@@ -51,7 +51,7 @@ int i915_user_extensions(struct i915_user_extension __user *ext,
- 			return err;
- 
- 		if (get_user(next, &ext->next_extension) ||
--		    overflows_type(next, ext))
-+		    overflows_type(next, uintptr_t))
- 			return -EFAULT;
- 
- 		ext = u64_to_user_ptr(next);
-diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
-index 6c14d13364bf7..67a66d4d5c70c 100644
---- a/drivers/gpu/drm/i915/i915_utils.h
-+++ b/drivers/gpu/drm/i915/i915_utils.h
-@@ -111,10 +111,6 @@ bool i915_error_injected(void);
- #define range_overflows_end_t(type, start, size, max) \
- 	range_overflows_end((type)(start), (type)(size), (type)(max))
- 
--/* Note we don't consider signbits :| */
--#define overflows_type(x, T) \
--	(sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
--
- #define ptr_mask_bits(ptr, n) ({					\
- 	unsigned long __v = (unsigned long)(ptr);			\
- 	(typeof(ptr))(__v & -BIT(n));					\
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index a6a7be83fae6d..2103c181d4088 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -243,6 +243,7 @@ static inline void *offset_to_ptr(const int *off)
-  * bool and also pointer types.
-  */
- #define is_signed_type(type) (((type)(-1)) < (__force type)1)
-+#define is_unsigned_type(type) (!is_signed_type(type))
- 
- /*
-  * Useful shorthand for "is this condition known at compile-time?"
-diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-index 8e58a9ec76e10..e1e1c29abb561 100644
---- a/include/linux/overflow.h
-+++ b/include/linux/overflow.h
-@@ -128,6 +128,53 @@ static inline bool __must_check __must_check_overflow(bool overflow)
- 	(*_d >> _to_shift) != _a);					\
- }))
- 
-+#define __overflows_type_constexpr(x, T) (			\
-+	is_unsigned_type(typeof(x)) ?				\
-+		(x) > type_max(typeof(T)) :			\
-+	is_unsigned_type(typeof(T)) ?				\
-+		(x) < 0 || (x) > type_max(typeof(T)) :		\
-+	(x) < type_min(typeof(T)) || (x) > type_max(typeof(T)))
-+
-+#define __overflows_type(x, T)		({	\
-+	typeof(T) v = 0;			\
-+	check_add_overflow((x), v, &v);		\
-+})
-+
-+/**
-+ * overflows_type - helper for checking the overflows between value, variables,
-+ *		    or data type
-+ *
-+ * @n: source constant value or variable to be checked
-+ * @T: destination variable or data type proposed to store @x
-+ *
-+ * Compares the @x expression for whether or not it can safely fit in
-+ * the storage of the type in @T. @x and @T can have different types.
-+ * If @x is a constant expression, this will also resolve to a constant
-+ * expression.
-+ *
-+ * Returns: true if overflow can occur, false otherwise.
-+ */
-+#define overflows_type(n, T)					\
-+	__builtin_choose_expr(__is_constexpr(n),		\
-+			      __overflows_type_constexpr(n, T),	\
-+			      __overflows_type(n, T))
-+
-+/**
-+ * castable_to_type - like __same_type(), but also allows for casted literals
-+ *
-+ * @n: variable or constant value
-+ * @T: variable or data type
-+ *
-+ * Unlike the __same_type() macro, this allows a constant value as the
-+ * first argument. If this value would not overflow into an assignment
-+ * of the second argument's type, it returns true. Otherwise, this falls
-+ * back to __same_type().
-+ */
-+#define castable_to_type(n, T)						\
-+	__builtin_choose_expr(__is_constexpr(n),			\
-+			      !__overflows_type_constexpr(n, T),	\
-+			      __same_type(n, T))
-+
- /**
-  * size_mul() - Calculate size_t multiplication with saturation at SIZE_MAX
-  * @factor1: first factor
-diff --git a/lib/Makefile b/lib/Makefile
-index 1081d0c161159..94da990a17b6f 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -385,6 +385,7 @@ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
- obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
- obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
- obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
-+CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
- obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
- CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
- obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
-diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-index e499e13856fb7..8c39823c0cbb0 100644
---- a/lib/overflow_kunit.c
-+++ b/lib/overflow_kunit.c
-@@ -735,6 +735,384 @@ static void overflow_size_helpers_test(struct kunit *test)
- #undef check_one_size_helper
- }
- 
-+static void overflows_type_test(struct kunit *test)
-+{
-+	int count = 0;
-+	unsigned int var;
-+
-+#define __TEST_OVERFLOWS_TYPE(func, arg1, arg2, of)	do {		\
-+	bool __of = func(arg1, arg2);					\
-+	KUNIT_EXPECT_EQ_MSG(test, __of, of,				\
-+		"expected " #func "(" #arg1 ", " #arg2 " to%s overflow\n",\
-+		of ? "" : " not");					\
-+	count++;							\
-+} while (0)
-+
-+/* Args are: first type, second type, value, overflow expected */
-+#define TEST_OVERFLOWS_TYPE(__t1, __t2, v, of) do {			\
-+	__t1 t1 = (v);							\
-+	__t2 t2;							\
-+	__TEST_OVERFLOWS_TYPE(__overflows_type, t1, t2, of);		\
-+	__TEST_OVERFLOWS_TYPE(__overflows_type, t1, __t2, of);		\
-+	__TEST_OVERFLOWS_TYPE(__overflows_type_constexpr, t1, t2, of);	\
-+	__TEST_OVERFLOWS_TYPE(__overflows_type_constexpr, t1, __t2, of);\
-+} while (0)
-+
-+	TEST_OVERFLOWS_TYPE(u8, u8, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u8, u16, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u8, s8, U8_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u8, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u8, s8, (u8)S8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u8, s16, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s8, u8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s8, u8, -1, true);
-+	TEST_OVERFLOWS_TYPE(s8, u8, S8_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s8, u16, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s8, u16, -1, true);
-+	TEST_OVERFLOWS_TYPE(s8, u16, S8_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s8, u32, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s8, u32, -1, true);
-+	TEST_OVERFLOWS_TYPE(s8, u32, S8_MIN, true);
-+#if BITS_PER_LONG == 64
-+	TEST_OVERFLOWS_TYPE(s8, u64, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s8, u64, -1, true);
-+	TEST_OVERFLOWS_TYPE(s8, u64, S8_MIN, true);
-+#endif
-+	TEST_OVERFLOWS_TYPE(s8, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s8, s8, S8_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s8, s16, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s8, s16, S8_MIN, false);
-+	TEST_OVERFLOWS_TYPE(u16, u8, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u16, u8, (u16)U8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u16, u8, U16_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u16, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u16, s8, (u16)S8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u16, s8, U16_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u16, s16, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u16, s16, (u16)S16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u16, s16, U16_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u16, u32, U16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u16, s32, U16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, u8, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, u8, (s16)U8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s16, u8, -1, true);
-+	TEST_OVERFLOWS_TYPE(s16, u8, S16_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s16, u16, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, u16, -1, true);
-+	TEST_OVERFLOWS_TYPE(s16, u16, S16_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s16, u32, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, u32, -1, true);
-+	TEST_OVERFLOWS_TYPE(s16, u32, S16_MIN, true);
-+#if BITS_PER_LONG == 64
-+	TEST_OVERFLOWS_TYPE(s16, u64, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, u64, -1, true);
-+	TEST_OVERFLOWS_TYPE(s16, u64, S16_MIN, true);
-+#endif
-+	TEST_OVERFLOWS_TYPE(s16, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, s8, S8_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s16, s8, (s16)S8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s16, s8, (s16)S8_MIN - 1, true);
-+	TEST_OVERFLOWS_TYPE(s16, s8, S16_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s16, s8, S16_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s16, s16, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, s16, S16_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s16, s32, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s16, s32, S16_MIN, false);
-+	TEST_OVERFLOWS_TYPE(u32, u8, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u32, u8, (u32)U8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u32, u8, U32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u32, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u32, s8, (u32)S8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u32, s8, U32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u32, u16, U16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u32, u16, U16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u32, u16, U32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u32, s16, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u32, s16, (u32)S16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u32, s16, U32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u32, u32, U32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u32, s32, S32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u32, s32, U32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u32, s32, (u32)S32_MAX + 1, true);
-+#if BITS_PER_LONG == 64
-+	TEST_OVERFLOWS_TYPE(u32, u64, U32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u32, s64, U32_MAX, false);
-+#endif
-+	TEST_OVERFLOWS_TYPE(s32, u8, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, u8, (s32)U8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s32, u16, S32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s32, u8, -1, true);
-+	TEST_OVERFLOWS_TYPE(s32, u8, S32_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s32, u16, U16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, u16, (s32)U16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s32, u16, S32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s32, u16, -1, true);
-+	TEST_OVERFLOWS_TYPE(s32, u16, S32_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s32, u32, S32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, u32, -1, true);
-+	TEST_OVERFLOWS_TYPE(s32, u32, S32_MIN, true);
-+#if BITS_PER_LONG == 64
-+	TEST_OVERFLOWS_TYPE(s32, u64, S32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, u64, -1, true);
-+	TEST_OVERFLOWS_TYPE(s32, u64, S32_MIN, true);
-+#endif
-+	TEST_OVERFLOWS_TYPE(s32, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, s8, S8_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s32, s8, (s32)S8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s32, s8, (s32)S8_MIN - 1, true);
-+	TEST_OVERFLOWS_TYPE(s32, s8, S32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s32, s8, S32_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s32, s16, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, s16, S16_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s32, s16, (s32)S16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s32, s16, (s32)S16_MIN - 1, true);
-+	TEST_OVERFLOWS_TYPE(s32, s16, S32_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s32, s16, S32_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s32, s32, S32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, s32, S32_MIN, false);
-+#if BITS_PER_LONG == 64
-+	TEST_OVERFLOWS_TYPE(s32, s64, S32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s32, s64, S32_MIN, false);
-+	TEST_OVERFLOWS_TYPE(u64, u8, U64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u64, u8, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, u8, (u64)U8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u64, u16, U64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u64, u16, U16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, u16, (u64)U16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u64, u32, U64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u64, u32, U32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, u32, (u64)U32_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u64, u64, U64_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, s8, (u64)S8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u64, s8, U64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u64, s16, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, s16, (u64)S16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u64, s16, U64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u64, s32, S32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, s32, (u64)S32_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(u64, s32, U64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u64, s64, S64_MAX, false);
-+	TEST_OVERFLOWS_TYPE(u64, s64, U64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(u64, s64, (u64)S64_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, u8, S64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s64, u8, S64_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s64, u8, -1, true);
-+	TEST_OVERFLOWS_TYPE(s64, u8, U8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, u8, (s64)U8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, u16, S64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s64, u16, S64_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s64, u16, -1, true);
-+	TEST_OVERFLOWS_TYPE(s64, u16, U16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, u16, (s64)U16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, u32, S64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s64, u32, S64_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s64, u32, -1, true);
-+	TEST_OVERFLOWS_TYPE(s64, u32, U32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, u32, (s64)U32_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, u64, S64_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, u64, S64_MIN, true);
-+	TEST_OVERFLOWS_TYPE(s64, u64, -1, true);
-+	TEST_OVERFLOWS_TYPE(s64, s8, S8_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, s8, S8_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s64, s8, (s64)S8_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, s8, (s64)S8_MIN - 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, s8, S64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s64, s16, S16_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, s16, S16_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s64, s16, (s64)S16_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, s16, (s64)S16_MIN - 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, s16, S64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s64, s32, S32_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, s32, S32_MIN, false);
-+	TEST_OVERFLOWS_TYPE(s64, s32, (s64)S32_MAX + 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, s32, (s64)S32_MIN - 1, true);
-+	TEST_OVERFLOWS_TYPE(s64, s32, S64_MAX, true);
-+	TEST_OVERFLOWS_TYPE(s64, s64, S64_MAX, false);
-+	TEST_OVERFLOWS_TYPE(s64, s64, S64_MIN, false);
-+#endif
-+
-+	/* Check for macro side-effects. */
-+	var = INT_MAX - 1;
-+	__TEST_OVERFLOWS_TYPE(__overflows_type, var++, int, false);
-+	__TEST_OVERFLOWS_TYPE(__overflows_type, var++, int, false);
-+	__TEST_OVERFLOWS_TYPE(__overflows_type, var++, int, true);
-+	var = INT_MAX - 1;
-+	__TEST_OVERFLOWS_TYPE(overflows_type, var++, int, false);
-+	__TEST_OVERFLOWS_TYPE(overflows_type, var++, int, false);
-+	__TEST_OVERFLOWS_TYPE(overflows_type, var++, int, true);
-+
-+	kunit_info(test, "%d overflows_type() tests finished\n", count);
-+#undef TEST_OVERFLOWS_TYPE
-+#undef __TEST_OVERFLOWS_TYPE
-+}
-+
-+static void same_type_test(struct kunit *test)
-+{
-+	int count = 0;
-+	int var;
-+
-+#define TEST_SAME_TYPE(t1, t2, same)			do {	\
-+	typeof(t1) __t1h = type_max(t1);			\
-+	typeof(t1) __t1l = type_min(t1);			\
-+	typeof(t2) __t2h = type_max(t2);			\
-+	typeof(t2) __t2l = type_min(t2);			\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(t1, __t1h));	\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(t1, __t1l));	\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(__t1h, t1));	\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(__t1l, t1));	\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(t2, __t2h));	\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(t2, __t2l));	\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(__t2h, t2));	\
-+	KUNIT_EXPECT_EQ(test, true, __same_type(__t2l, t2));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(t1, t2));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(t2, __t1h));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(t2, __t1l));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(__t1h, t2));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(__t1l, t2));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(t1, __t2h));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(t1, __t2l));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(__t2h, t1));	\
-+	KUNIT_EXPECT_EQ(test, same, __same_type(__t2l, t1));	\
-+} while (0)
-+
-+#if BITS_PER_LONG == 64
-+# define TEST_SAME_TYPE64(base, t, m)	TEST_SAME_TYPE(base, t, m)
-+#else
-+# define TEST_SAME_TYPE64(base, t, m)	do { } while (0)
-+#endif
-+
-+#define TEST_TYPE_SETS(base, mu8, mu16, mu32, ms8, ms16, ms32, mu64, ms64) \
-+do {									\
-+	TEST_SAME_TYPE(base,  u8,  mu8);				\
-+	TEST_SAME_TYPE(base, u16, mu16);				\
-+	TEST_SAME_TYPE(base, u32, mu32);				\
-+	TEST_SAME_TYPE(base,  s8,  ms8);				\
-+	TEST_SAME_TYPE(base, s16, ms16);				\
-+	TEST_SAME_TYPE(base, s32, ms32);				\
-+	TEST_SAME_TYPE64(base, u64, mu64);				\
-+	TEST_SAME_TYPE64(base, s64, ms64);				\
-+} while (0)
-+
-+	TEST_TYPE_SETS(u8,   true, false, false, false, false, false, false, false);
-+	TEST_TYPE_SETS(u16, false,  true, false, false, false, false, false, false);
-+	TEST_TYPE_SETS(u32, false, false,  true, false, false, false, false, false);
-+	TEST_TYPE_SETS(s8,  false, false, false,  true, false, false, false, false);
-+	TEST_TYPE_SETS(s16, false, false, false, false,  true, false, false, false);
-+	TEST_TYPE_SETS(s32, false, false, false, false, false,  true, false, false);
-+#if BITS_PER_LONG == 64
-+	TEST_TYPE_SETS(u64, false, false, false, false, false, false,  true, false);
-+	TEST_TYPE_SETS(s64, false, false, false, false, false, false, false,  true);
-+#endif
-+
-+	/* Check for macro side-effects. */
-+	var = 4;
-+	KUNIT_EXPECT_EQ(test, var, 4);
-+	KUNIT_EXPECT_TRUE(test, __same_type(var++, int));
-+	KUNIT_EXPECT_EQ(test, var, 4);
-+	KUNIT_EXPECT_TRUE(test, __same_type(int, var++));
-+	KUNIT_EXPECT_EQ(test, var, 4);
-+	KUNIT_EXPECT_TRUE(test, __same_type(var++, var++));
-+	KUNIT_EXPECT_EQ(test, var, 4);
-+
-+	kunit_info(test, "%d __same_type() tests finished\n", count);
-+
-+#undef TEST_TYPE_SETS
-+#undef TEST_SAME_TYPE64
-+#undef TEST_SAME_TYPE
-+}
-+
-+static void castable_to_type_test(struct kunit *test)
-+{
-+	int count = 0;
-+
-+#define TEST_CASTABLE_TO_TYPE(arg1, arg2, pass)	do {	\
-+	bool __pass = castable_to_type(arg1, arg2);		\
-+	KUNIT_EXPECT_EQ_MSG(test, __pass, pass,			\
-+		"expected castable_to_type(" #arg1 ", " #arg2 ") to%s pass\n",\
-+		pass ? "" : " not");				\
-+	count++;						\
-+} while (0)
-+
-+	TEST_CASTABLE_TO_TYPE(16, u8, true);
-+	TEST_CASTABLE_TO_TYPE(16, u16, true);
-+	TEST_CASTABLE_TO_TYPE(16, u32, true);
-+	TEST_CASTABLE_TO_TYPE(16, s8, true);
-+	TEST_CASTABLE_TO_TYPE(16, s16, true);
-+	TEST_CASTABLE_TO_TYPE(16, s32, true);
-+	TEST_CASTABLE_TO_TYPE(-16, s8, true);
-+	TEST_CASTABLE_TO_TYPE(-16, s16, true);
-+	TEST_CASTABLE_TO_TYPE(-16, s32, true);
-+#if BITS_PER_LONG == 64
-+	TEST_CASTABLE_TO_TYPE(16, u64, true);
-+	TEST_CASTABLE_TO_TYPE(-16, s64, true);
-+#endif
-+
-+#define TEST_CASTABLE_TO_TYPE_VAR(width)	do {				\
-+	u ## width u ## width ## var = 0;					\
-+	s ## width s ## width ## var = 0;					\
-+										\
-+	/* Constant expressions that fit types. */				\
-+	TEST_CASTABLE_TO_TYPE(type_max(u ## width), u ## width, true);		\
-+	TEST_CASTABLE_TO_TYPE(type_min(u ## width), u ## width, true);		\
-+	TEST_CASTABLE_TO_TYPE(type_max(u ## width), u ## width ## var, true);	\
-+	TEST_CASTABLE_TO_TYPE(type_min(u ## width), u ## width ## var, true);	\
-+	TEST_CASTABLE_TO_TYPE(type_max(s ## width), s ## width, true);		\
-+	TEST_CASTABLE_TO_TYPE(type_min(s ## width), s ## width, true);		\
-+	TEST_CASTABLE_TO_TYPE(type_max(s ## width), s ## width ## var, true);	\
-+	TEST_CASTABLE_TO_TYPE(type_min(u ## width), s ## width ## var, true);	\
-+	/* Constant expressions that do not fit types. */			\
-+	TEST_CASTABLE_TO_TYPE(type_max(u ## width), s ## width, false);		\
-+	TEST_CASTABLE_TO_TYPE(type_max(u ## width), s ## width ## var, false);	\
-+	TEST_CASTABLE_TO_TYPE(type_min(s ## width), u ## width, false);		\
-+	TEST_CASTABLE_TO_TYPE(type_min(s ## width), u ## width ## var, false);	\
-+	/* Non-constant expression with mismatched type. */			\
-+	TEST_CASTABLE_TO_TYPE(s ## width ## var, u ## width, false);		\
-+	TEST_CASTABLE_TO_TYPE(u ## width ## var, s ## width, false);		\
-+} while (0)
-+
-+#define TEST_CASTABLE_TO_TYPE_RANGE(width)	do {				\
-+	unsigned long big = U ## width ## _MAX;					\
-+	signed long small = S ## width ## _MIN;					\
-+	u ## width u ## width ## var = 0;					\
-+	s ## width s ## width ## var = 0;					\
-+										\
-+	/* Constant expression in range. */					\
-+	TEST_CASTABLE_TO_TYPE(U ## width ## _MAX, u ## width, true);		\
-+	TEST_CASTABLE_TO_TYPE(U ## width ## _MAX, u ## width ## var, true);	\
-+	TEST_CASTABLE_TO_TYPE(S ## width ## _MIN, s ## width, true);		\
-+	TEST_CASTABLE_TO_TYPE(S ## width ## _MIN, s ## width ## var, true);	\
-+	/* Constant expression out of range. */					\
-+	TEST_CASTABLE_TO_TYPE((unsigned long)U ## width ## _MAX + 1, u ## width, false); \
-+	TEST_CASTABLE_TO_TYPE((unsigned long)U ## width ## _MAX + 1, u ## width ## var, false); \
-+	TEST_CASTABLE_TO_TYPE((signed long)S ## width ## _MIN - 1, s ## width, false); \
-+	TEST_CASTABLE_TO_TYPE((signed long)S ## width ## _MIN - 1, s ## width ## var, false); \
-+	/* Non-constant expression with mismatched type. */			\
-+	TEST_CASTABLE_TO_TYPE(big, u ## width, false);				\
-+	TEST_CASTABLE_TO_TYPE(big, u ## width ## var, false);			\
-+	TEST_CASTABLE_TO_TYPE(small, s ## width, false);			\
-+	TEST_CASTABLE_TO_TYPE(small, s ## width ## var, false);			\
-+} while (0)
-+
-+	TEST_CASTABLE_TO_TYPE_VAR(8);
-+	TEST_CASTABLE_TO_TYPE_VAR(16);
-+	TEST_CASTABLE_TO_TYPE_VAR(32);
-+#if BITS_PER_LONG == 64
-+	TEST_CASTABLE_TO_TYPE_VAR(64);
-+#endif
-+
-+	TEST_CASTABLE_TO_TYPE_RANGE(8);
-+	TEST_CASTABLE_TO_TYPE_RANGE(16);
-+#if BITS_PER_LONG == 64
-+	TEST_CASTABLE_TO_TYPE_RANGE(32);
-+#endif
-+	kunit_info(test, "%d castable_to_type() tests finished\n", count);
-+
-+#undef TEST_CASTABLE_TO_TYPE_RANGE
-+#undef TEST_CASTABLE_TO_TYPE_VAR
-+#undef TEST_CASTABLE_TO_TYPE
-+}
-+
- static struct kunit_case overflow_test_cases[] = {
- 	KUNIT_CASE(u8_u8__u8_overflow_test),
- 	KUNIT_CASE(s8_s8__s8_overflow_test),
-@@ -754,6 +1132,9 @@ static struct kunit_case overflow_test_cases[] = {
- 	KUNIT_CASE(shift_nonsense_test),
- 	KUNIT_CASE(overflow_allocation_test),
- 	KUNIT_CASE(overflow_size_helpers_test),
-+	KUNIT_CASE(overflows_type_test),
-+	KUNIT_CASE(same_type_test),
-+	KUNIT_CASE(castable_to_type_test),
- 	{}
- };
- 
--- 
-2.53.0
+See=20
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/=
+?h=3Dboard-remove-7.4
+for the updated series. I hope to slowly get through that. Let
+me know if you want me to skip any more of those patches.
 
+Thanks,
+
+    Arnd
