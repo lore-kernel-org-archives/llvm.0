@@ -1,87 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794311715;
-	b=1cGrRlcKkWyV/qcUYgxX3mm/G9MkvE2oCYsZcGgQlKccJfg202C+ssf/XE1jPGmlarl3
-	 8fYzGcsMOhXrWj1e8y7TRuFROI0PlSig7xPtEv6xirlt0xGeeENmyqQj5AXuhM0ShP+3o
-	 ZaXQkObRubSYDMlZxl8UhKRiLDPEx0Wzv53Nq8hCY28CZ5RgvYqyThiV9Gp6UbYXedJpS
-	 IvdPq/myOCg89tFxKOY4pjR1N5cim40sqcRDvCJ/4H0SG1IISz5qD3DEiAGqYLTexkiOH
-	 caP1XKl8G85UR+sPhzAIyzSz41yp69MvaTiLGqK/45INokDn58kePE0g7PfdCHibhUA==
+	t=1794313533;
+	b=myf9LpHz78mn06VUM9GfX++RTHklBJALeY+7/sTq/6p4lS3Q957p9hoLDycQUr9tc2m9
+	 LbVFytoxvhVvSfKTEdui8X7bjSh/TrEAqXzGeve6OB4L5R8SAGi8ghyYZJfFuL/PxuT0F
+	 5gv3+LgPKA2zibZ4ckqt4Ehjv9diNc4Uxm+UhMMidZHibgP5ilTOIPQESCtdW6+27q3kE
+	 7VEpRQBeA7+DzZj/ThtSgpJZhWv2TR0Gj7fH3I9NLBchdi/W1yin8YUmrRMqOSWnb9Xc4
+	 RWedDtYIf/NzkwtLwaFoNk6+u5bgvstQOQuk7qg1oAl4Y9ZP5faZ3ByoiW7OJjcsKBQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794311715;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=Kt1SdcCjffIWXMIQm5IGLvK7jU+eDRRMBhPemFkwyIk=;
-	b=DlOWxnbbdHID4k1PszyQxl+Zy04rNAEgZ81DUQenM2XuuV4erhLFWpf7fg1NOAXd0FET
-	 Nh5IB1+V+k3ovQkH49VQGstEplRqgUNyCOFOBcW7vWq+lacefLOHvRN0+YHEaTscLnXAC
-	 NRpuqv2k7xnmiAfcC7tPbFqbMPv71c7C1UZ54iCk7bXVghuK91GpufKMKPnwzFzjt8yxh
-	 URRXS5iMSP2keewE8MFgECDQZ+g8aVE9Y431vsOgDZQT+LqUm1smfOCytbDCFjDuTDMB6
-	 8XeVIbc90Vy7ZqghVx6qij3uyXVdvkKpppZBRWYTJ2x/hFhGjpRqOTLBQm61W+u3Y0g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794313533;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:From:
+	 Subject:To:Cc:References:Content-Language:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=o8vOqPjQp+qIgT4SjBM1vuuP9NkLzsqzq4almCwh0ns=;
+	b=oFQ1RvRXS406PJsCj+QZ3nmxN4FQMJSwNxDmPp6y0MI4P1A5rNsJpOXT7zMx1yhYn1aW
+	 Ci3fTwyfSCCcjN+Ib0ST0u4abDM9kFBhWClJP9SipalzSk5A4awWWuN7lSY3tKe0M7lR0
+	 lCmQCCHc1ZiijrSbRRx8ph3E/tCsQd9NTnKuIuqMZ/rJifKpCus2ssalM55pkKz2k5pfZ
+	 uZFaEt4ZE3VcWZP/K76qrRY1b5QDNC90wsSWaMCo4F5Tr5q+ymQQ+aI6waPkb+wOeHxaJ
+	 Hte7eSR3a3y/++xAGCiYdTr2mYxDhyRQh6JRw8xK3vw6YIGSfCDJG2cCI2AJVW/+29A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=FPXLlmoZ;
-	arc=none smtp.remote-ip=192.198.163.18
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gr5nohgX;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2057606A333;
-	Tue, 10 Nov 2026 11:55:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2057606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9AC606A32A;
+	Tue, 10 Nov 2026 12:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=FPXLlmoZ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794311716; x=1825847716;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xLC+Kp82pZhBULyTbznvfCirX6FuTOGlXW/eTvQqYlc=;
-  b=FPXLlmoZg1fUtEojG67DrtzTt6y+3mypTRzg/83RHvzqgavR4XakOfIy
-   cnS1P3a03xAR5Z5VJ5Il+YLxmM28Sn6dsh5lbfcHRatDn1mX0y7ISl8Y8
-   zreuTnx9o5euu4q0a3remktPVjek2rKNH5Fgcx3UB4GOuroRnh0eZbh7R
-   BJGnnnz27xUQD0KtloUimwvki6xivfwgyjzglXO6nYY2WWIRhvViU7FHp
-   XalfyGtwaSi7ggiEMewrdpPVWxx+Fmn0gR6gazkBeufeSq4xiD3CjlroC
-   SywjycO/wJdR4ibyJbPT1CS3spPc7/owTq3OeqXm5pSJi/QqkxJ0+Zjdz
-   Q==;
-X-CSE-ConnectionGUID: cKIMFYZbQIyddWGu91bA1g==
-X-CSE-MsgGUID: 1LZRPtWhTaGea/AMiGbfyQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="3089588"
-X-IronPort-AV: E=Sophos;i="6.27,205,1787036400"; 
-   d="scan'208";a="3089588"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 03:54:58 -0800
-X-CSE-ConnectionGUID: 5YMhyP92TbKKx+LivObr5w==
-X-CSE-MsgGUID: soXjYcdHSc6iOzg9sreG/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,205,1787036400"; 
-   d="scan'208";a="10000802"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa013.fm.intel.com with ESMTP; 10 Nov 2026 03:54:54 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQkR9-00000000wlT-0yc6;
-	Tue, 10 Nov 2026 11:54:51 +0000
-Date: Tue, 10 Nov 2026 19:54:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Devin Wittmayer <lucid_duck@justthetip.ca>,
-	Felix Fietkau <nbd@nbd.name>, Lorenzo Bianconi <lorenzo@kernel.org>,
-	Ryder Lee <ryder.lee@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Deren Wu <deren.wu@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Shayne Chen <shayne.chen@mediatek.com>,
-	Quan Zhou <quan.zhou@mediatek.com>,
-	Michael Lo <michael.lo@mediatek.com>,
-	James-LY Huang <james-ly.huang@mediatek.com>,
-	linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] wifi: mt76: mt792x: tell mac80211 when a disconnect
- cancels its ROC
-Message-ID: <202611101937.hzmTxgbR-lkp@intel.com>
-References: <20261110005846.38432-1-lucid_duck@justthetip.ca>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gr5nohgX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A651F008A2;
+	Tue, 10 Nov 2026 12:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794313532;
+	bh=o8vOqPjQp+qIgT4SjBM1vuuP9NkLzsqzq4almCwh0ns=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To;
+	b=Gr5nohgXHm1YYyj6tvLEZ2lSM8AwTngl7Y9YhcAEKBH+Qk95txebAZ9NtKzrDhbMu
+	 /kcVhI4wBuCa61a001FzAROnBPqNtiO/ytzlzOWo7XJ5chQlrrTZ0jAur7hkGa2Dea
+	 9e8VcncC+5ovHWHZPm9Udas/YhDeQJz+/Hw/DgiFOKQphYC3tCbIwtuUfnQDwnkr0A
+	 NlkNf0d03csKo9TcHJmIS39u4zkv/CzH2xeQIMrUlC8N+o3OuHRReJJo3cYKVKlsnW
+	 Ok7Bxat5Tx0PnCcbiQSm1rkYigOOsx53IhuLC4CVONUmhMnelBCuvRRROviPHPq5B4
+	 hzmGl2iyPjB0A==
+Message-ID: <69a3552e-1fca-49e9-a9c0-66963319d2a9@kernel.org>
+Date: Tue, 10 Nov 2026 13:25:23 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -91,85 +51,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110005846.38432-1-lucid_duck@justthetip.ca>
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH 03/14] mfd: remove unused si476x driver
+To: Arnd Bergmann <arnd@kernel.org>, Lee Jones <lee@kernel.org>,
+ mfd@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Arnd Bergmann <arnd@arndb.de>, Daniel Thompson <danielt@kernel.org>,
+ Jingoo Han <jingoohan1@gmail.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek
+ <pavel@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>,
+ Support Opensource <support.opensource@diasemi.com>,
+ Sebastian Reichel <sre@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+ linux-doc@vger.kernel.org, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ patches@opensource.cirrus.com, linux-watchdog@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, linux-sound@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev
+References: <20260909132153.1596191-1-arnd@kernel.org>
+ <20260909132153.1596191-4-arnd@kernel.org>
+Content-Language: en-US, nl
+In-Reply-To: <20260909132153.1596191-4-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Devin,
+On 09/09/2026 15:21, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The si476x driver was added in linux-3.9 without devicetree
+> support, and has always failed the probe function in the
+> absence of a si476x_platform_data definition.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-kernel test robot noticed the following build errors:
+For drivers/media/radio, include/media/drv-intf/si476x.h,
+Documentation/admin-guide/media and include/uapi/linux/v4l2-controls.h:
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v7.4-rc2 next-20261109]
-[cannot apply to linux-review/Devin-Wittmayer/wifi-mt76-mt792x-tell-mac80211-when-a-disconnect-cancels-its-ROC/20261022-184827]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Acked-by: Hans Verkuil <hverkuil+cisco@kernel.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Devin-Wittmayer/wifi-mt76-mt792x-tell-mac80211-when-a-disconnect-cancels-its-ROC/20261109-175846
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20261110005846.38432-1-lucid_duck%40justthetip.ca
-patch subject: [PATCH v2] wifi: mt76: mt792x: tell mac80211 when a disconnect cancels its ROC
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261110/202611101937.hzmTxgbR-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project b3e2466a7ef2bbc97d31230c3bf39a6fa50a608a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261110/202611101937.hzmTxgbR-lkp@intel.com/reproduce)
+Regards,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611101937.hzmTxgbR-lkp@intel.com/
+	Hans
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/wireless/mediatek/mt76/mt7921/main.c:385:11: error: no member named 'roc_notify' in 'struct mt792x_phy'
-     385 |         if (phy->roc_notify)
-         |             ~~~  ^
-   drivers/net/wireless/mediatek/mt76/mt7921/main.c:423:22: error: no member named 'roc_notify' in 'struct mt792x_phy'
-     423 |         if (aborted && phy->roc_notify)
-         |                        ~~~  ^
-   drivers/net/wireless/mediatek/mt76/mt7921/main.c:441:7: error: no member named 'roc_notify' in 'struct mt792x_phy'
-     441 |         phy->roc_notify = type == MT7921_ROC_REQ_ROC;
-         |         ~~~  ^
-   drivers/net/wireless/mediatek/mt76/mt7921/main.c:484:7: error: no member named 'roc_notify' in 'struct mt792x_phy'
-     484 |         phy->roc_notify = false;
-         |         ~~~  ^
-   4 errors generated.
---
->> drivers/net/wireless/mediatek/mt76/mt7925/main.c:531:11: error: no member named 'roc_notify' in 'struct mt792x_phy'
-     531 |         if (phy->roc_notify)
-         |             ~~~  ^
-   drivers/net/wireless/mediatek/mt76/mt7925/main.c:569:22: error: no member named 'roc_notify' in 'struct mt792x_phy'
-     569 |         if (aborted && phy->roc_notify)
-         |                        ~~~  ^
-   drivers/net/wireless/mediatek/mt76/mt7925/main.c:657:7: error: no member named 'roc_notify' in 'struct mt792x_phy'
-     657 |         phy->roc_notify = false;
-         |         ~~~  ^
-   3 errors generated.
-
-
-vim +385 drivers/net/wireless/mediatek/mt76/mt7921/main.c
-
-   370	
-   371	void mt7921_roc_abort_sync(struct mt792x_dev *dev)
-   372	{
-   373		struct mt792x_phy *phy = &dev->phy;
-   374	
-   375		if (!test_and_clear_bit(MT76_STATE_ROC, &phy->mt76->state))
-   376			return;
-   377	
-   378		timer_delete_sync(&phy->roc_timer);
-   379		cancel_work(&phy->roc_work);
-   380	
-   381		ieee80211_iterate_interfaces(mt76_hw(dev),
-   382					     IEEE80211_IFACE_ITER_RESUME_ALL,
-   383					     mt7921_roc_iter, (void *)phy);
-   384	
- > 385		if (phy->roc_notify)
-   386			ieee80211_remain_on_channel_expired(mt76_hw(dev));
-   387	}
-   388	EXPORT_SYMBOL_GPL(mt7921_roc_abort_sync);
-   389	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  .../admin-guide/media/radio-cardlist.rst      |    1 -
+>  Documentation/admin-guide/media/si476x.rst    |  160 --
+>  .../admin-guide/media/v4l-drivers.rst         |    1 -
+>  drivers/media/radio/Kconfig                   |   17 -
+>  drivers/media/radio/Makefile                  |    1 -
+>  drivers/media/radio/radio-si476x.c            | 1523 ----------------
+>  drivers/mfd/Kconfig                           |   13 -
+>  drivers/mfd/Makefile                          |    3 -
+>  drivers/mfd/si476x-cmd.c                      | 1543 -----------------
+>  drivers/mfd/si476x-i2c.c                      |  861 ---------
+>  drivers/mfd/si476x-prop.c                     |  233 ---
+>  include/linux/mfd/si476x-core.h               |  532 ------
+>  include/linux/mfd/si476x-platform.h           |  256 ---
+>  include/linux/mfd/si476x-reports.h            |  154 --
+>  include/media/drv-intf/si476x.h               |   28 -
+>  include/uapi/linux/v4l2-controls.h            |    4 +-
+>  sound/soc/codecs/Kconfig                      |    5 -
+>  sound/soc/codecs/Makefile                     |    2 -
+>  sound/soc/codecs/si476x.c                     |  263 ---
+>  sound/soc/fsl/fsl-asoc-card.c                 |    8 -
+>  20 files changed, 2 insertions(+), 5606 deletions(-)
+>  delete mode 100644 Documentation/admin-guide/media/si476x.rst
+>  delete mode 100644 drivers/media/radio/radio-si476x.c
+>  delete mode 100644 drivers/mfd/si476x-cmd.c
+>  delete mode 100644 drivers/mfd/si476x-i2c.c
+>  delete mode 100644 drivers/mfd/si476x-prop.c
+>  delete mode 100644 include/linux/mfd/si476x-core.h
+>  delete mode 100644 include/linux/mfd/si476x-platform.h
+>  delete mode 100644 include/linux/mfd/si476x-reports.h
+>  delete mode 100644 include/media/drv-intf/si476x.h
+>  delete mode 100644 sound/soc/codecs/si476x.c
+> 
