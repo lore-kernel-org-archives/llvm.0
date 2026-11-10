@@ -1,83 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.23
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794273781;
-	b=LtCOrRflrTJXX8e2OVamjbmNuuGuozOjeN2jBUgKpEiN7kISeRRAQ6K2kGI9RU4KQo8i
-	 0WMfKCCFsxpR1bCyoR6t2vs9iJew+OdCURCABV3NcDt52xfT92YGNibfH/8DkuvD3q+O7
-	 POubqVBJpFR44V4v/VSATDEXyqVFo/L0ebUkMh+47rp+i0H2oO/geFBGrSkormNfbqIt8
-	 7qBS+Q7q3FOKMSneX5HJtPeay7Jms5N57DmYL5Yp9DyIFiPUcIZoOOcGhdPDcbZ4igKNy
-	 3q4NuoGP0Oq5TuSEz6ZT+acBQfaTIx8ho8j7dgQ73dTG921aBD4qpcGydSh3Mj6x6Xw==
+	t=1794276320;
+	b=4vLdz+GKZeoOgaTozLZKYauzTJo6yPzSxXhETOssSI1TOqRDK/+PE7tl5Yk/efwXyfYT
+	 LxMrfdUM9Mikw5IU19oQh6CpuYH2h373Rqhi27yWRNSuaJWmJDx7C8rHtz0LF9lCBTV2p
+	 tOmLB+qOM2MKvQVpn4nkTpOWpVlqOuuFJkRtzy1RNqdeHso7uyazyQ9MGIHtilV4lscxR
+	 vX8rbVlrmjs6aceZ7Yaf2MyZFJ2RD9b1mdycDjWgwKyTp+KtvLxBx4ELPSxlHeEXg7mn1
+	 8FW99o04fU6QEkdthYKo2UaOTqzKf41pCezYPsscBUktSrD3iInZGo1ZEj2BUJG+MFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794273781;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=zDcWjEiuTeWEvpP/9tc/MwWduB+JGfUQadQax8dMPQY=;
-	b=K7/RDddYNiGF4z+7Snj71zZhGorOh2VGMKPIi4wZ/lTpDefGDHQubepOY0yYPgI6brhw
-	 h32CkBgjOgY156mC/XZ45/h9uQAoS6DFJjiYwJUjsRygmItONxrd8MqRS6WHfYAqMwJts
-	 cKoUokhLVQukOkCQ1A/FsEhMczNJTNqsWOCoi4aT5ocPNqBHQl0LmBoe9cbAozBCrkxa3
-	 RpSckAne5rFYBiDBsL4cpG8lBlS8FiJu90h7LWUD8lnIbLWT6er/GS1Yw8j1Q8mJTVt1U
-	 /onzwxrDIp1gX0RJW9m4h8+VsfEDTnGMEgTM05Exlka+YwY7XfpC9pWgoLU72fpeqrQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794276320;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=PHi2s2f16mLfxcR4BhP+bBJMxU0LcZFpYGFigSfV9Kc=;
+	b=1go86l/q7omTIww7RnkF19TqrkGOa3wsT0f/dW1sRpOKhkMU96KqCRgHnvLpcN7mkCoN
+	 K+77LjDXIpgZE+Rft92PDgkSkFmwpShG+IubZ6qe8OMvU71BTgDBPKA+LZIKB/6bzuH/P
+	 kJE/8ZEaj82AJqnQ2Z1f3ugv/FmaUDR73wXcsidUxWe7gF/zFrOCj+KVtDz/+16lWdZWO
+	 xqM3N3OnmFV+doHz4KNPaFO8ee5a8S9Z4Z8aNBAhZs3XBwocrxt8zotVbfrg16QU1RvSp
+	 KNoMW0MGEzFeXBbKgZJlpsUr1txPX8FgqhKtmbWzLqfGQwRIoOUVG02uDH07d7tl6Xw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Cs29LN2V;
-	arc=none smtp.remote-ip=95.215.58.23
-Received: from mta1.migadu.com (out-23.mta1.migadu.com [95.215.58.23])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PNExLYqp;
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03AE360A6F54
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 01:23:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 03AE360A6F54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2747606A31C;
+	Tue, 10 Nov 2026 02:05:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2747606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Cs29LN2V
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=B8IHCXgmRdg1OYPmSUOl1x4rvW8jBb9fhzbRGWNLTsM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794273779; v=1; x=1794878579;
- b=Cs29LN2VHlAOEjnMd3Gru4jSkSiDLqmKvlECKk9+WEUqQTAxpk0Ydjl1qntxQHcq0ojBh7R/
- GdkG3PuyxOiBui1dNP3zOp26WWCyg9Jvd2KNk4s1kGbOfXKMeUU9O/2VQajlimu98U7glguSp/A
- QUL3lHHpNQ+dAWDBtCFWHSOw=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 492985442f232e3a;
-	Tue, 10 Nov 2026 01:22:58 +0000
-X-Mizu-Trace-ID: 492985442f232e3a
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: dennis@kernel.org,
-	tj@kernel.org,
-	cl@gentwo.org,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	will@kernel.org,
-	boqun@kernel.org
-Cc: longman@redhat.com,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	acme@kernel.org,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	llvm@lists.linux.dev,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock guard type
-Date: Mon,  9 Nov 2026 17:22:35 -0800
-Message-ID: <20261110012235.1024461-3-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261110012235.1024461-1-vineet.gupta@linux.dev>
-References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PNExLYqp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794276319; x=1825812319;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JH5OURTQMWE/CgnqxOwW+e2/FmEhQm7dl5QFh/wnna0=;
+  b=PNExLYqphRkAGY4JS7CQaWowBvdEenHF93a0U941BZlFEs2yaa8nTi/P
+   kRsVCbA5y3qMh030z5hY4clmALEdhVYBfWmLywnQbDg8O3RmqlcFqsA/C
+   r7B4jlWgg/Ro1bovqDCY/yBes9WOvG7cpsHmxdK8YUZDmo7+tBtI5SN8f
+   90dU3z9S8SMf+eZRja3aKWudIzZICjj/NWu8cPiaoADQwaVOtQXZkuYZ7
+   B2yvRAZC5niCpUuMNDVQHbda1gyrNHBpm5FOWIbDDD9zPtlU0RX31u79H
+   tvU3hHbRpNoYocvMmtDsofCneLJOeAxM1RMyhFYEljHOiy+fX6tcnLuTz
+   g==;
+X-CSE-ConnectionGUID: 1J6SLMDGRyGrocpK3mdVrg==
+X-CSE-MsgGUID: AHWkKlfKQe+sjpnuMUIXzg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="3049262"
+X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
+   d="scan'208";a="3049262"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 18:05:18 -0800
+X-CSE-ConnectionGUID: /OxRHji+Q2y9+mcZM02zYQ==
+X-CSE-MsgGUID: oGV6OJz6TbGQxzY2j+rwaw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,204,1787036400"; 
+   d="scan'208";a="8332004"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 09 Nov 2026 18:05:15 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xQbEW-00000000vkN-2Vje;
+	Tue, 10 Nov 2026 02:05:12 +0000
+Date: Tue, 10 Nov 2026 10:05:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chenghai Huang <huangchenghai2@huawei.com>, herbert@gondor.apana.org.au,
+	davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	liulongfang@huawei.com, qianweili@huawei.com,
+	wangzhou1@hisilicon.com, linwenkai6@hisilicon.com
+Subject: Re: [PATCH 2/4] crypto: engine - add acomp support
+Message-ID: <202611100938.hePDEbMz-lkp@intel.com>
+References: <20261109073556.2517351-3-huangchenghai2@huawei.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,91 +85,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261109073556.2517351-3-huangchenghai2@huawei.com>
 
-local_lock.h applies __percpu the same way the per-cpu declarations do,
-and hits the same problem as the previous patch:
+Hi Chenghai,
 
-	DEFINE_LOCK_GUARD_1(local_lock, local_lock_t __percpu,
-			    local_lock(_T->lock),
-			    local_unlock(_T->lock))
+kernel test robot noticed the following build errors:
 
-	local_lock.h:86:1: warning: ignoring attributes applied to
-	'struct local_lock' after definition [-Wattributes]
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on herbert-crypto-2.6/master linus/master v7.4-rc2 next-20261109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-which -Werror turns into a build failure, four times over: the same
-pattern is repeated for local_lock_irq, local_lock_irqsave and
-local_lock_nested_bh.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chenghai-Huang/crypto-engine-clear-busy-and-recheck-running-in-the-retry-pump-loop/20261109-153553
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/20261109073556.2517351-3-huangchenghai2%40huawei.com
+patch subject: [PATCH 2/4] crypto: engine - add acomp support
+config: arm-gemini_defconfig (https://download.01.org/0day-ci/archive/20261110/202611100938.hePDEbMz-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project b3e2466a7ef2bbc97d31230c3bf39a6fa50a608a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261110/202611100938.hePDEbMz-lkp@intel.com/reproduce)
 
-local_lock_t is a typedef of struct local_lock, and DEFINE_LOCK_GUARD_1()
-hands its second argument to cleanup.h, which forms a typedef of it and a
-guard struct holding a pointer to it. An x86 defconfig preprocesses the
-line above to
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611100938.hePDEbMz-lkp@intel.com/
 
-	typedef local_lock_t __seg_gs
-	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
+All errors (new ones prefixed by >>):
 
-	typedef struct { local_lock_t __seg_gs
-	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
+>> ld.lld: error: undefined symbol: crypto_register_acomp
+   >>> referenced by crypto_engine.c
+   >>>               crypto/crypto_engine.o:(crypto_engine_register_acomp) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: crypto_unregister_acomp
+   >>> referenced by crypto_engine.c
+   >>>               crypto/crypto_engine.o:(crypto_engine_unregister_acomp) in archive vmlinux.a
 
-Both put the tag on local_lock_t, an aggregate: the first on a typedef of
-it, the second on the pointee of the guard's member. Every variant of an
-aggregate shares one DIE, so there is nowhere to record it, exactly as for
-DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
-without complaint, but pahole does not translate it from that position,
-so with today's toolchains it reaches BTF from neither compiler.
-
-Use __percpu_var here too, which leaves
-
-	typedef local_lock_t __seg_gs lock_local_lock_t;
-	typedef struct { local_lock_t __seg_gs *lock; } class_local_lock_t;
-
-Sparse keeps the __percpu address space, and the __releases() casts to
-"local_lock_t __percpu **" further down are unchanged, so the pointer
-spelling the tag exists for keeps it.
-
-Unlike the per-cpu declarations this changes no BTF at all. A tag in that
-position was never recorded, so there is nothing to remove, and the one
-percpu TYPE_TAG that does reach a local_lock type comes from those casts,
-which keep it. An x86 defconfig built with clang is identical with and
-without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
-and .text is unchanged. The patch removes a GCC diagnostic and no more.
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- include/linux/local_lock.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/local_lock.h b/include/linux/local_lock.h
-index b8830148a859..9d3d62e46007 100644
---- a/include/linux/local_lock.h
-+++ b/include/linux/local_lock.h
-@@ -83,13 +83,13 @@
- #define local_trylock_irqsave(lock, flags)			\
- 	__local_trylock_irqsave(__this_cpu_local_lock(lock), flags)
- 
--DEFINE_LOCK_GUARD_1(local_lock, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock, local_lock_t __percpu_var,
- 		    local_lock(_T->lock),
- 		    local_unlock(_T->lock))
--DEFINE_LOCK_GUARD_1(local_lock_irq, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock_irq, local_lock_t __percpu_var,
- 		    local_lock_irq(_T->lock),
- 		    local_unlock_irq(_T->lock))
--DEFINE_LOCK_GUARD_1(local_lock_irqsave, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock_irqsave, local_lock_t __percpu_var,
- 		    local_lock_irqsave(_T->lock, _T->flags),
- 		    local_unlock_irqrestore(_T->lock, _T->flags),
- 		    unsigned long flags)
-@@ -100,7 +100,7 @@ DEFINE_LOCK_GUARD_1(local_lock_irqsave, local_lock_t __percpu,
- #define local_unlock_nested_bh(_lock)				\
- 	__local_unlock_nested_bh(__this_cpu_local_lock(_lock))
- 
--DEFINE_LOCK_GUARD_1(local_lock_nested_bh, local_lock_t __percpu,
-+DEFINE_LOCK_GUARD_1(local_lock_nested_bh, local_lock_t __percpu_var,
- 		    local_lock_nested_bh(_T->lock),
- 		    local_unlock_nested_bh(_T->lock))
- 
--- 
-2.53.0-Meta
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
