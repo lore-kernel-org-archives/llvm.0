@@ -1,83 +1,83 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794283067;
-	b=te2iQt1fOZpc2CJJzs0bzpfWSkADFT/zZmcMqm3BG46OuCUrfQ7l98rfRlm0Fg/GyNRp
-	 ydGvw7jeQX52HlOzIu3kdP3OxsbFhLx/+bwLkpmoEUVwuwnetmL/75Typ/0Qhm5Ws9Hli
-	 ycoj1IxlqJ1vSHnsXhWf8y4SpW5XI6Jx5V4nGvvYEA1MufgNljzIVVkT17gbUAVVM186e
-	 TjJsMt7TddZbU794U4MMzr6S1Ycz+jIilH1UDSCik3pJlbxTfBoCyEA4khlhzwMOA8S2e
-	 /Z8vZIllOUwOiqi8DMzQFul1DwdighB3LsbvRGnVmke5GOwVNTM3LPM+PhTRSBeREtw==
+	t=1794283071;
+	b=mRCtpBhCw8KWexmlnfTlBxEtgcy5zVqxTtZ3cCucD2pcVN2n3sN225LhA6flvpkSRkYe
+	 iM+ialG9bEfx6AQWnOLPQ0okXSMkEd8cy0MqQQi/JKQLIaot+wFDzALOTfFdHvvAi3Qwg
+	 EtWtZnTX5ccCBHR/pJc7qYCWEqenWaunndAj4bMYq4HqKFXzwoH7/m17iNgYkpULv2Yk2
+	 NNOWdj8EQXCQrBAygseqXcDBCpfxmIC95hegcR9tx+myf/R/SLFl4JGj2ohh0bHJBMkC8
+	 rgHInk07mSdBR3+SCujmZD/mwG+U3EvHAoUX7nE02w7P0CmWqcQ9Ei2jHkumMhHRpkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794283067;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794283071;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=F9EfUz+UskV0rhf4cQXQsxZ2euYB/mU/YoxBROtxa6Y=;
-	b=ulMxEIyH9FMm6drOzeulC/xSy2zdK8xdFIHkwMJ3jVSTMdAamXA7m6z0gl4hHIMt6g1T
-	 MDvXYvJjApUlMM/YEz3G/kUGtf12sakgg/bIfWDU43MOCHqcVTmepcZAkt5MK6a2Ko1DG
-	 pGqCfA85DqLpWmXMEFOfslYPP3sLarbspkr+M12TsIyode4euxYgdryIfyIeGDyMEjf3k
-	 e3aATHXD/pcCq/zzzzgD0dXLq8QNF8eFv24gyGnNKOLhLsXCZMeXEuLaevcdeXGqlEbJV
-	 R5NWxXGNbmqyH949I33wBEEg6d3IhkILPTaDIe2PTF+VXIjJBfLaJO8s5/mi8pTNOaA==
+	bh=1Z04FeiSvWnBqM5P+I5Ei7EPBYnip49IgApkYzkotUE=;
+	b=qp36PkYZ+lDrebbKoLzkCGx5JyUyFDGB5byX90XSXxeAtkV8g10uLKDG6QQJ05eMuXqs
+	 IfDkpn9a7Fnj1FlguAsS24uZ3+MdQMAggq2iQlufMiMFvJpHpPBsjPy6I39LskfT4F5LU
+	 k/KTGFJ3gfVKaESKzbQt3A2hRMTmQTiG/08m8tAPH8THZYFnylWXsIrA5Jdv/zN6Oygig
+	 QKy64ygsZMtDQSHagIuhHC788eo3NcpTbv5b2SWWeeQhbidyJbxQ4MiDxBQe4jZ/Tmsmu
+	 jHaqP1KKj7ubdUJFondLrJV0E/vSZrMlpIdsyI5YTk4yMOHVoQiVQBnRvApDLHuTrCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RmL6DBpk;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=aTH5ipm+;
 	arc=none smtp.remote-ip=209.85.208.52
 Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB4560A2615
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 03:57:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BB4560A2615
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C92B60A2623
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 03:57:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C92B60A2623
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RmL6DBpk
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b47c1a3c74so1927919a12.3
-        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 19:57:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=aTH5ipm+
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b70192ebceso2790125a12.0
+        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 19:57:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794283065; x=1794887865; darn=lists.linux.dev;
+        d=cloudflare.com; s=google09082023; t=1794283069; x=1794887869; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=F9EfUz+UskV0rhf4cQXQsxZ2euYB/mU/YoxBROtxa6Y=;
-        b=RmL6DBpk5Q9vjYyKA5bCkuipQQ69ebdTkwqBTz8YQPJDDZXfAPA/8HEX4nYWYR1LPR
-         bZLdAaAMsouLQVPPh792U9F4cbL4jzAnrNZWjjAvsM+yfkoIHvT4N7YWpIu1g7nm1wOj
-         YoZKsj1Wn/YIGWD2HrbuhHmqgOKYwqDIAGMgq+vFbPJXumExxyk0QLe72t9NxjF6CLi9
-         LAwabfz2EcER7yHOvH+lMGWCh9dOnljrcA+RlrmohhMF+K8+riHKiet25dZhF1JJL24n
-         0O06BChv5590tKsL9sTzv08Vq3WcCMcSI+MO+7zZHNUa489hME9to8Bljz2DicM2l+T9
-         oTww==
+        bh=1Z04FeiSvWnBqM5P+I5Ei7EPBYnip49IgApkYzkotUE=;
+        b=aTH5ipm+wMP55vWgF2I3vD++uXcTLyJG5K402VA5nN2YBbxq6Dl90oI6GFkewWd3vj
+         JENgvfV7InnUhcf3dJGhAhSKJRDkFJJp1/PvRsWsbyY3cJWqoRKfHDKYSnQOunGwk9UY
+         cznuH46mklNMbpKtwqj7nWzK6ExY6tvfyb028w44MP9mz5ruM19ki1k25/BhxzQnwnw9
+         IL9bVdls9oSzPlTWsgIx0b9lzbwMWSnQvb4OzXTUatwBmSSmT+hfcBs+evR9QwFmLUYb
+         JKu2ADtys1k5yvQmOyGVjLZYGaay05ft5D0egWL9eDy2tCa3zfVX1MLerjcuXvIQDtrN
+         9XTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794283065; x=1794887865;
+        d=1e100.net; s=20260707; t=1794283069; x=1794887869;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=F9EfUz+UskV0rhf4cQXQsxZ2euYB/mU/YoxBROtxa6Y=;
-        b=06hXr+kn6tM240+a+OrdgmyNWHhOSXW68ehvcysS6Vu7cWRuYtR0Lj5ANxoEi1BE1t
-         +Y038AN2Ri869H67RlBgr70SL8uiiafF7CMEGL8vz62vwkFITnebWEcG8CO64STQDNIU
-         OnfR9n4Jy2tXrcrIld7v3fQ1NdjTSHiHAMZdQE6rrVKd8JOnoPGF+l2fD5Nyyu1c2KfF
-         aIGj3mS96+nKNewin9s4c5lT7tiaZoB6PvOq9Ge/T5bcMYCoDcLmfseONWdFSta4Ldvi
-         3HlvC6f0z1QzqbLY1e9cggSgO18yuQIknzZs/CEA1G/UPT8hbAozgG6XfEj3KjDqa9P7
-         u1/w==
-X-Forwarded-Encrypted: i=1; AL+hErGB1aSs22e7w2XSfbCiGQB2WG8tm5OKVYEk80+beKfuokgpzBwt6cJ6Z+xpUcUfZL+2YEy/@lists.linux.dev
-X-Gm-Message-State: APuU4Z9agUdUJZ1Si/vGisX0UgY/o+5x9o8Jsm2wiNySBuhGC9BclHdH
-	ptHXoL4MZFhSDsqD9RVEVdmaF9Pw7V1i3fsHJdSPp4QdlDLv34FtExW7O8xxk6cp5/A=
-X-Gm-Gg: AYBFou0jCLiTIOaMNVUKlCgm3EbKAdEfiLHPUVfqNVz0K+mL45/t+Yg2VIiTTs2FLjY
-	jYw+zSqZ4QaHqG6bNrshbcUuYvyDYro5meA6fyNPzTG6iTz1dGIR2BPXh8ll4zOj6g+Xbnx0nhr
-	NQL1SpZl/zPAF+Gq4aPDAgfP7qrIeBZRSBVANeYxHuSPFCrLdFodD/iMghz2DQ2YHsOUuRWgcF9
-	SEswBWSOve6CPLynEPC6NvrzrlxcH+EDgKHBmolrP1rvF8fqIzxFxCEauoVmK1tJMNg2fELakGU
-	fHamZo91RTJODVu0qj9UDqJg/JPdbd8quZWoBkr8Bfv7/YgL7DCGSgkGHy2VcdaX22WdHfGvbY2
-	yQ9cmvREHbbkRBsDJkoFuEpoMUaQJVQba4ZkvQxII6n17afgDCEOv5+MQUQLnTBKxvxNzlBJZUM
-	5/OGv0DaBXdZ9Wz2Rqnd9cVUswlltNXtCVQEqyfO+OXdn1a0z2AypScT34UG/x7KLuw1O4bpNiG
-	Zhgn0s+taIFkqJN8nvulno89e7apRhgcqEDmIM7ZTgQa5L00ig8YC+JSjqZ7LFtqs9avIo7PXmX
-	RT6Vt2xkBryaD+Ap5UDfX35+Z89PTs1lL/zPa/XNC9j56AZvc5d7fW3c4/RM0mA=
-X-Received: by 2002:a05:6402:2750:b0:6b3:b10c:40f9 with SMTP id 4fb4d7f45d1cf-6b756af5982mr1263386a12.31.1794283065131;
-        Mon, 09 Nov 2026 19:57:45 -0800 (PST)
+        bh=1Z04FeiSvWnBqM5P+I5Ei7EPBYnip49IgApkYzkotUE=;
+        b=dLIEvupIblpWBXNEf3m79sXiqJnwbgw+6rFw7F+4OE0qJlKTEmKbEKBv06Yvd4jOiZ
+         qxm1sr5bfiUpekxjohA5Hg0MXIEN4dQTvBMyTyGn0oUgYkPk1HgfTTyq+UGzfq9eKcn0
+         c6D4pt6b2eD3BFnTrmnyiM2oQp99PVIExVgMLuSKf/9SiW83FNGL/dhPAOhizbDVVG/a
+         q1YjR+cl/CkoByzq3TM1VgLxKepqVRgX6YQlXowwF2aGwvDNBCAJWJNmpjvNTIdfdh43
+         QBPz7febUCH0Y7gxwA/ucdoZF70MIhxKMBBFlmiAAUFG9ohEBU4cXTTHlRAc4kQBvApP
+         eOwA==
+X-Forwarded-Encrypted: i=1; AL+hErExCHNSfFYvBQTo7R87X7T5tIkwok6NXpFhrz8k5Fjlmj+H5DxQt7wnKFgRslQRbPvCu3Yt@lists.linux.dev
+X-Gm-Message-State: APuU4Z81ATGmu8tijOeX1GNwBF1jWDbodDItHdqsk15IvD3B+bHA0doj
+	2LSIzqjt16dE1u/ZSbstZ9AniQ2yb9Ghs1iVVEdQR5OZ9KWIFIbUoEKt/c3OJd2wwpw=
+X-Gm-Gg: AYBFou1VQD44/MuvyAAqetWAjDhTDDvgGQPlRi1MHr8/xR4zAWBEN5C4OheEnxLMW4p
+	UOyuQ9YwT8QLAyd9+yeo6CrSwtn4UV/ASV1Wge0Q8UTjlhKQA2Z3/mhw7CmAKdFq2BRRLD9i0e3
+	eHcTFybxm3HtaVT8zXDANEbcjGDEF1mUoUIbGd1LlN5GgY+46phA7G/JtW+eTPYrxW3PVhsZkWv
+	xPkQNFo9l+ykWanZqKHCuXhvkG8plpM4S+7pWjmCcUYaaXFDAsTVIPY9KOKYLIy0HkHgiy46izs
+	F7IXSIkIPUdiH4u4fyFS8bYojQR5KYrnkekIdEp+UYZwFBrxGrSQUBzYN+MOm3ZKYRuXSgMhwHn
+	eAe63SWxCmt9hFfC8mG5ahQgYSJjDuekh03i4zJZLwii+8TC2PEPNr5XTsoFZ1PUQ/PEnr9hFbY
+	pYE4S+8/L6lzBPypri/+E7bVyVVvHIdKJ0avLBALz+OWWfJFFFjPHeHtuQ+Iy1IzQcbJo41JFPW
+	tQZ7KrZ8d0mgwrV48+TvMyLE43irHgGobpcYc9gLNBG98Xr327MOXz0Qdrl7sVNcT4O9KeNnu2W
+	Vz6ibVvPvrc85Q9qPmWgxCwvXfUOb3vedoo2y/Rfy8kk6p9ga12xLDe0T0pUl4M=
+X-Received: by 2002:a05:6402:460c:b0:6b4:7b32:eb48 with SMTP id 4fb4d7f45d1cf-6b7571d68cfmr857409a12.7.1794283068930;
+        Mon, 09 Nov 2026 19:57:48 -0800 (PST)
 Received: from L9JK9NPFH9.lan ([104.28.20.56])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.57.41
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.57.45
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 09 Nov 2026 19:57:43 -0800 (PST)
+        Mon, 09 Nov 2026 19:57:47 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
@@ -130,9 +130,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	llvm@lists.linux.dev,
 	kernel-team@cloudflare.com,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH bpf-next 07/15] xdp: set skb RX metadata from the skb core extension area of xdp_frame
-Date: Tue, 10 Nov 2026 03:57:05 +0000
-Message-ID: <eca7d73b0881b59f0f7b3cf8d6e022e70c8ed800.1794281983.git.tianyi@cloudflare.com>
+Subject: [PATCH bpf-next 08/15] selftests/bpf: Test RX metadata on skbs built from xdp_frames
+Date: Tue, 10 Nov 2026 03:57:06 +0000
+Message-ID: <dac7aac577495252a0c240629c708f2268417f9e.1794281983.git.tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <cover.1794281983.git.tianyi@cloudflare.com>
 References: <cover.1794281983.git.tianyi@cloudflare.com>
@@ -147,133 +147,519 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-cpumap, veth and BPF_PROG_RUN build the skb from an xdp_frame with
-__xdp_build_skb_from_frame(). It now calls the new helper
-xdp_skb_ext_to_skb() if the xdp_frame has the XDP_FLAGS_HAS_SKB_EXT
-flag.
+Add the xdp_skb_ext_to_skb test. An XDP program stores entries and
+passes the packet to the stack. A tc program on the receiving veth
+device then reads the skb fields. Three paths pass the packet to the
+stack: XDP_PASS in BPF_PROG_RUN with BPF_F_TEST_XDP_LIVE_FRAMES,
+XDP_REDIRECT into a cpumap, and XDP_REDIRECT into a veth device. Each
+path has ten test cases for the hash, VLAN and checksum entries.
 
-Three drivers (atlantic, mana and netvsc) call the wrapper
-xdp_build_skb_from_frame() in their RX and TX routines, and then set the
-skb fields from the RX descriptor or transmit the skb. The stored values
-must be ignored there to keep their behaviour consistent. So the wrapper
-clears the flag. A driver that supports them calls xdp_skb_ext_to_skb()
-itself, as ice does in a later patch.
+The veth_skb subtest runs the same XDP program on a veth device that
+receives an skb. The skb is not built from an xdp_frame, so its fields
+do not change. The veth_skb_cpumap subtest redirects that packet into
+the cpumap. veth turns it into an xdp_frame, so the cpumap sets the
+stored values on the new skb.
 
-xdp_skb_ext_to_skb() is based on [1].
+GRO is off on both veth devices. Otherwise GRO on cpumap verifies the
+UDP checksum of the packet and changes the checksum status.
 
-Link: https://lore.kernel.org/all/175146831960.1421237.9105904582430357235.stgit@firesoul/ [1]
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
- include/net/xdp.h |  7 ++++++
- net/core/xdp.c    | 54 +++++++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 59 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_skb_ext.c    | 319 ++++++++++++++++++
+ .../selftests/bpf/progs/test_xdp_skb_ext.c    |  84 +++++
+ tools/testing/selftests/bpf/xdp_skb_ext.h     |  38 +++
+ 3 files changed, 441 insertions(+)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index d8b77d80bfbe..7c9a812b6e86 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -329,6 +329,11 @@ static __always_inline bool xdp_frame_has_frags(const struct xdp_frame *frame)
- 	return !!(frame->flags & XDP_FLAGS_HAS_FRAGS);
- }
- 
-+static __always_inline bool xdp_frame_has_skb_ext(const struct xdp_frame *frame)
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c b/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c
+index bd36e22e22a6..64c6f0268d60 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_skb_ext.c
+@@ -1,9 +1,139 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include <network_helpers.h>
++#include <net/if.h>
++#include <linux/if_packet.h>
++#include "xdp_skb_ext.h"
+ #include "test_xdp_skb_ext.skel.h"
+ #include "xdp_skb_ext_success.skel.h"
+ #include "xdp_skb_ext_failure.skel.h"
++#include "xdp_dummy.skel.h"
++
++#define XDP_RSS_TYPE_L3_IPV4 BIT(0)
++#define XDP_RSS_TYPE_L4 BIT(3)
++#define XDP_RSS_TYPE_L4_IPV4_TCP (BIT(0) | BIT(3) | BIT(4))
++
++#define XDP_CHECKSUM_NONE BIT(0)
++#define XDP_CHECKSUM_UNNECESSARY BIT(1)
++
++#define CHECKSUM_NONE 0
++#define CHECKSUM_UNNECESSARY 1
++
++#define RX_HASH 0x5a3c91e2
++#define RX_VLAN_TCI 1
++
++#define UDP_PAYLOAD_LEN 22
++
++static __u8 pkt_skb_ext[ETH_HLEN + sizeof(struct iphdr) +
++			sizeof(struct udphdr) + UDP_PAYLOAD_LEN];
++
++/* Valid checksums, as in real traffic */
++static void build_pkt(void)
 +{
-+	return !!(frame->flags & XDP_FLAGS_HAS_SKB_EXT);
++	struct ethhdr *eth = (void *)pkt_skb_ext;
++	struct iphdr *iph = (void *)(eth + 1);
++	struct udphdr *udph = (void *)(iph + 1);
++
++	eth->h_proto = htons(ETH_P_IP);
++
++	iph->version = 4;
++	iph->ihl = 5;
++	iph->tot_len = htons(sizeof(pkt_skb_ext) - ETH_HLEN);
++	iph->ttl = 64;
++	iph->protocol = IPPROTO_UDP;
++	iph->saddr = htonl(0x0a000001);
++	iph->daddr = htonl(0x0a000002);
++	iph->check = build_ip_csum(iph);
++
++	udph->source = htons(4000);
++	udph->dest = htons(4001);
++	udph->len = htons(sizeof(*udph) + UDP_PAYLOAD_LEN);
++	udph->check = build_udp_v4_csum(iph, udph);
 +}
 +
- static __always_inline u32
- xdp_frame_get_skb_flags(const struct xdp_frame *frame)
++/* The case that test_veth_skb() uses */
++enum { CASE_ALL };
++
++static const struct skb_ext_case {
++	const char *name;
++	struct xdp_skb_ext_vals want;
++	bool del_hash;
++} skb_ext_cases[] = {
++	[CASE_ALL] = {
++		.name = "all",
++		.want = {
++			.rx_hash = RX_HASH,
++			.rx_hash_type = XDP_RSS_TYPE_L4_IPV4_TCP,
++			.rx_vlan_proto = __bpf_constant_htons(ETH_P_8021Q),
++			.rx_vlan_tci = RX_VLAN_TCI,
++			.ip_summed = XDP_CHECKSUM_UNNECESSARY,
++			.csum_level = 1,
++			.fields = SKB_EXT_FIELD_HASH | SKB_EXT_FIELD_VLAN |
++				  SKB_EXT_FIELD_CSUM,
++		},
++	},
++	{
++		.name = "none",
++	},
++	{
++		.name = "hash_l4",
++		.want = {
++			.rx_hash = RX_HASH,
++			.rx_hash_type = XDP_RSS_TYPE_L4_IPV4_TCP,
++			.fields = SKB_EXT_FIELD_HASH,
++		},
++	},
++	{
++		.name = "hash_l3",
++		.want = {
++			.rx_hash = RX_HASH,
++			.rx_hash_type = XDP_RSS_TYPE_L3_IPV4,
++			.fields = SKB_EXT_FIELD_HASH,
++		},
++	},
++	{
++		.name = "del_hash",
++		.del_hash = true,
++	},
++	{
++		.name = "vlan",
++		.want = {
++			.rx_vlan_proto = __bpf_constant_htons(ETH_P_8021Q),
++			.rx_vlan_tci = RX_VLAN_TCI,
++			.fields = SKB_EXT_FIELD_VLAN,
++		},
++	},
++	{
++		.name = "vlan_ad",
++		.want = {
++			.rx_vlan_proto = __bpf_constant_htons(ETH_P_8021AD),
++			.rx_vlan_tci = RX_VLAN_TCI,
++			.fields = SKB_EXT_FIELD_VLAN,
++		},
++	},
++	{
++		.name = "csum_none",
++		.want = {
++			.ip_summed = XDP_CHECKSUM_NONE,
++			.fields = SKB_EXT_FIELD_CSUM,
++		},
++	},
++	{
++		.name = "csum_level0",
++		.want = {
++			.ip_summed = XDP_CHECKSUM_UNNECESSARY,
++			.fields = SKB_EXT_FIELD_CSUM,
++		},
++	},
++	{
++		.name = "csum_level3",
++		.want = {
++			.ip_summed = XDP_CHECKSUM_UNNECESSARY,
++			.csum_level = 3,
++			.fields = SKB_EXT_FIELD_CSUM,
++		},
++	},
++};
+ 
+ /* The area of a reused page is not valid for the next packet */
+ static void test_live_frames(void)
+@@ -31,6 +161,124 @@ static void test_live_frames(void)
+ 	test_xdp_skb_ext__destroy(skel);
+ }
+ 
++static void set_case(struct test_xdp_skb_ext *skel,
++		     const struct skb_ext_case *c)
++{
++	skel->bss->want = c->want;
++	skel->bss->del_hash = c->del_hash;
++	memset(&skel->bss->have, 0, sizeof(skel->bss->have));
++	skel->bss->store_err = 0;
++	skel->bss->pkts_seen_tc = 0;
++}
++
++/* cpumap builds the skb in its kthread */
++static bool wait_pkt(struct test_xdp_skb_ext *skel)
++{
++	int i;
++
++	for (i = 0; i < 100; i++) {
++		if (__atomic_load_n(&skel->bss->pkts_seen_tc, __ATOMIC_ACQUIRE))
++			break;
++		usleep(10000);
++	}
++	return ASSERT_EQ(skel->bss->pkts_seen_tc, 1, "pkts_seen_tc");
++}
++
++static void check_have(struct test_xdp_skb_ext *skel)
++{
++	const struct xdp_skb_ext_vals *want = &skel->bss->want;
++	const struct xdp_skb_ext_have *have = &skel->bss->have;
++	bool unnecessary = (want->fields & SKB_EXT_FIELD_CSUM) &&
++			   want->ip_summed == XDP_CHECKSUM_UNNECESSARY;
++
++	if (!wait_pkt(skel))
++		return;
++	ASSERT_EQ(skel->bss->store_err, 0, "store_err");
++	ASSERT_EQ(have->hash, want->rx_hash, "hash");
++	ASSERT_EQ(have->l4_hash, !!(want->rx_hash_type & XDP_RSS_TYPE_L4),
++		  "l4_hash");
++	ASSERT_EQ(have->vlan_present, !!(want->fields & SKB_EXT_FIELD_VLAN),
++		  "vlan_present");
++	ASSERT_EQ(have->vlan_proto, want->rx_vlan_proto, "vlan_proto");
++	ASSERT_EQ(have->vlan_tci, want->rx_vlan_tci, "vlan_tci");
++	ASSERT_EQ(have->ip_summed,
++		  unnecessary ? CHECKSUM_UNNECESSARY : CHECKSUM_NONE,
++		  "ip_summed");
++	ASSERT_EQ(have->csum_level, unnecessary ? want->csum_level : 0,
++		  "csum_level");
++}
++
++static void test_frames(struct test_xdp_skb_ext *skel, const char *path,
++			enum xdp_skb_ext_deliver deliver, int ifindex)
++{
++	struct xdp_md ctx_in = { .data_end = sizeof(pkt_skb_ext),
++				 .ingress_ifindex = ifindex };
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		    .data_in = pkt_skb_ext,
++		    .data_size_in = sizeof(pkt_skb_ext),
++		    .ctx_in = &ctx_in,
++		    .ctx_size_in = sizeof(ctx_in),
++		    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
++		    .repeat = 1,
++	);
++	int prog_fd = bpf_program__fd(skel->progs.xdp_store);
++	char name[32];
++	int i;
++
++	skel->bss->deliver = deliver;
++	for (i = 0; i < ARRAY_SIZE(skb_ext_cases); i++) {
++		snprintf(name, sizeof(name), "%s_%s", path,
++			 skb_ext_cases[i].name);
++		if (!test__start_subtest(name))
++			continue;
++		set_case(skel, &skb_ext_cases[i]);
++		if (ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &opts),
++			      "test_run"))
++			check_have(skel);
++	}
++}
++
++/* The XDP program on the veth device gets an skb, not an xdp_frame */
++static void test_veth_skb(struct test_xdp_skb_ext *skel, struct bpf_link *link,
++			  int ifindex, enum xdp_skb_ext_deliver deliver)
++{
++	struct sockaddr_ll addr = {
++		.sll_family = PF_PACKET,
++		.sll_ifindex = ifindex,
++		.sll_halen = ETH_ALEN,
++	};
++	const struct xdp_skb_ext_have *have = &skel->bss->have;
++	int sock;
++
++	skel->bss->deliver = deliver;
++	if (!ASSERT_OK(bpf_link__update_program(link, skel->progs.xdp_store),
++		       "update xdp_store"))
++		return;
++
++	sock = socket(AF_PACKET, SOCK_RAW, IPPROTO_RAW);
++	if (!ASSERT_GE(sock, 0, "socket"))
++		return;
++	set_case(skel, &skb_ext_cases[CASE_ALL]);
++	if (!ASSERT_EQ(sendto(sock, pkt_skb_ext, sizeof(pkt_skb_ext), 0,
++			      (struct sockaddr *)&addr, sizeof(addr)),
++		       sizeof(pkt_skb_ext), "sendto") ||
++	    !wait_pkt(skel))
++		goto out;
++	if (deliver == DELIVER_CPUMAP) {
++		check_have(skel);
++		goto out;
++	}
++	ASSERT_EQ(skel->bss->store_err, 0, "store_err");
++	ASSERT_NEQ(have->hash, RX_HASH, "hash");
++	ASSERT_EQ(have->vlan_present, 0, "vlan_present");
++	ASSERT_EQ(have->vlan_proto, 0, "vlan_proto");
++	ASSERT_EQ(have->vlan_tci, 0, "vlan_tci");
++	ASSERT_EQ(have->ip_summed, CHECKSUM_NONE, "ip_summed");
++	ASSERT_EQ(have->csum_level, 0, "csum_level");
++out:
++	close(sock);
++}
++
+ void test_xdp_skb_ext(void)
  {
-@@ -503,6 +508,8 @@ static __always_inline void *xdp_skb_ext_end(const struct xdp_buff *xdp)
- 	return (void *)ext + ext->chunks * XDP_SKB_EXT_ALIGN;
+ 	RUN_TESTS(xdp_skb_ext_success);
+@@ -39,3 +287,74 @@ void test_xdp_skb_ext(void)
+ 	if (test__start_subtest("live_frames"))
+ 		test_live_frames();
  }
- 
-+void xdp_skb_ext_to_skb(struct sk_buff *skb, const struct xdp_skb_ext *ext);
 +
- void __xdp_return(netmem_ref netmem, enum xdp_mem_type mem_type,
- 		  bool napi_direct, struct xdp_buff *xdp);
- void xdp_return_frame(struct xdp_frame *xdpf);
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index eea04e7b7204..9f311b3c0d2b 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -829,10 +829,10 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
- 
- 	/* Essential SKB info: protocol and skb->dev */
- 	skb->protocol = eth_type_trans(skb, dev);
-+	if (xdp_frame_has_skb_ext(xdpf))
-+		xdp_skb_ext_to_skb(skb, xdp_skb_ext(xdpf));
- 
- 	/* Optional SKB info, currently missing:
--	 * - HW checksum info		(skb->ip_summed)
--	 * - HW RX hash			(skb_set_hash)
- 	 * - RX ring dev queue index	(skb_record_rx_queue)
- 	 */
- 
-@@ -857,6 +857,9 @@ struct sk_buff *xdp_build_skb_from_frame(struct xdp_frame *xdpf,
- 
- 	memset(skb, 0, offsetof(struct sk_buff, tail));
- 
-+	/* The callers set the RX fields themselves or transmit the skb */
-+	xdpf->flags &= ~XDP_FLAGS_HAS_SKB_EXT;
-+
- 	return __xdp_build_skb_from_frame(xdpf, skb, dev);
- }
- EXPORT_SYMBOL_GPL(xdp_build_skb_from_frame);
-@@ -1065,6 +1068,53 @@ static void *xdp_skb_ext_add(struct xdp_buff *xdp, enum xdp_skb_ext_id id)
- 	return (void *)ext + newoff * XDP_SKB_EXT_ALIGN;
- }
- 
-+static const void *xdp_skb_ext_get(const struct xdp_skb_ext *ext,
-+				   enum xdp_skb_ext_id id)
++void test_xdp_skb_ext_to_skb(void)
 +{
-+	u8 off = ext->offset[id];
++	struct bpf_cpumap_val val = { .qsize = 192 };
++	int ifindex_src, ifindex_dst, tc_prog_fd;
++	struct xdp_dummy *skel_dummy = NULL;
++	struct test_xdp_skb_ext *skel = NULL;
++	struct bpf_link *link = NULL;
++	struct netns_obj *ns = NULL;
++	__u32 key = 0;
 +
-+	if (!(off & XDP_SKB_EXT_ENTRY_ACTIVE))
-+		return NULL;
-+	off &= ~XDP_SKB_EXT_ENTRY_ACTIVE;
++	build_pkt();
 +
-+	return (const void *)ext + off * XDP_SKB_EXT_ALIGN;
++	ns = netns_new("xdp_skb_ext", true);
++	if (!ASSERT_OK_PTR(ns, "netns_new"))
++		return;
++
++	SYS(out, "ip link add veth_src type veth peer name veth_dst");
++	SYS(out, "ip link set dev veth_src up");
++	SYS(out, "ip link set dev veth_dst up");
++	/* GRO would verify the UDP checksum and change ip_summed */
++	SYS(out, "ethtool -K veth_src gro off");
++	SYS(out, "ethtool -K veth_dst gro off");
++
++	ifindex_src = if_nametoindex("veth_src");
++	ifindex_dst = if_nametoindex("veth_dst");
++	if (!ASSERT_NEQ(ifindex_src, 0, "ifindex_src") ||
++	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
++		goto out;
++
++	skel = test_xdp_skb_ext__open();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_skb_ext__open"))
++		goto out;
++	skel->rodata->ifindex_out = ifindex_src;
++	if (!ASSERT_OK(test_xdp_skb_ext__load(skel), "test_xdp_skb_ext__load"))
++		goto out;
++
++	/* pass and cpumap build the skb on veth_src, veth on veth_dst */
++	tc_prog_fd = bpf_program__fd(skel->progs.tc_read_skb);
++	if (tc_prog_attach("veth_src", tc_prog_fd, -1) ||
++	    tc_prog_attach("veth_dst", tc_prog_fd, -1))
++		goto out;
++
++	if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.cpu_map),
++					   &key, &val, 0), "add cpumap entry"))
++		goto out;
++
++	skel_dummy = xdp_dummy__open_and_load();
++	if (!ASSERT_OK_PTR(skel_dummy, "xdp_dummy__open_and_load"))
++		goto out;
++
++	/* veth_dst takes xdp_frames only with an XDP program */
++	link = bpf_program__attach_xdp(skel_dummy->progs.xdp_dummy_prog,
++				       ifindex_dst);
++	if (!ASSERT_OK_PTR(link, "attach xdp_dummy"))
++		goto out;
++
++	test_frames(skel, "pass", DELIVER_PASS, ifindex_src);
++	test_frames(skel, "cpumap", DELIVER_CPUMAP, ifindex_src);
++	test_frames(skel, "veth", DELIVER_VETH, ifindex_src);
++	if (test__start_subtest("veth_skb"))
++		test_veth_skb(skel, link, ifindex_src, DELIVER_PASS);
++	if (test__start_subtest("veth_skb_cpumap"))
++		test_veth_skb(skel, link, ifindex_src, DELIVER_CPUMAP);
++
++out:
++	bpf_link__destroy(link);
++	xdp_dummy__destroy(skel_dummy);
++	test_xdp_skb_ext__destroy(skel);
++	netns_free(ns);
 +}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c b/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c
+index e072e051af48..a63206ff993d 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_skb_ext.c
+@@ -3,6 +3,7 @@
+ #include "xdp_skb_ext.h"
+ #include <bpf/bpf_endian.h>
+ #include <bpf/bpf_helpers.h>
++#include "bpf_tracing_net.h"
+ 
+ /* Written to the first byte of the packet. A reused page keeps it. */
+ #define MARK_STORED 0xaa
+@@ -38,4 +39,87 @@ int live_frames(struct xdp_md *ctx)
+ 	return XDP_DROP;
+ }
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_CPUMAP);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(struct bpf_cpumap_val));
++	__uint(max_entries, 1);
++} cpu_map SEC(".maps");
 +
-+/**
-+ * xdp_skb_ext_to_skb - Set the stored RX metadata on an skb.
-+ * @skb: The skb that is built from the packet.
-+ * @ext: The skb core extension area of the packet.
-+ *
-+ * Call it only when the packet has the XDP_FLAGS_HAS_SKB_EXT flag.
-+ */
-+void xdp_skb_ext_to_skb(struct sk_buff *skb, const struct xdp_skb_ext *ext)
++const volatile int ifindex_out;
++enum xdp_skb_ext_deliver deliver;
++struct xdp_skb_ext_vals want;
++bool del_hash;
++struct xdp_skb_ext_have have;
++int pkts_seen_tc;
++
++SEC("xdp")
++int xdp_store(struct xdp_md *ctx)
 +{
-+	const struct xdp_skb_ext_hash *hash;
-+	const struct xdp_skb_ext_vlan *vlan;
-+	const struct xdp_skb_ext_csum *csum;
++	int err;
 +
-+	hash = xdp_skb_ext_get(ext, XDP_SKB_EXT_HASH);
-+	if (hash) {
-+		enum pkt_hash_types type = PKT_HASH_TYPE_NONE;
-+
-+		if (hash->type & XDP_RSS_L4)
-+			type = PKT_HASH_TYPE_L4;
-+		else if (hash->type & (XDP_RSS_L3_IPV4 | XDP_RSS_L3_IPV6))
-+			type = PKT_HASH_TYPE_L3;
-+		skb_set_hash(skb, hash->val, type);
++	if (want.fields & SKB_EXT_FIELD_HASH) {
++		err = bpf_xdp_skb_ext_store_rx_hash(ctx, want.rx_hash,
++						    want.rx_hash_type);
++		if (err)
++			store_err++;
++	}
++	/* A deleted entry must not reach the skb */
++	if (del_hash) {
++		err = bpf_xdp_skb_ext_store_rx_hash(ctx, 1,
++						    XDP_RSS_TYPE_L4_IPV4_TCP);
++		if (!err)
++			err = bpf_xdp_skb_ext_del(ctx, XDP_SKB_EXT_HASH);
++		if (err)
++			store_err++;
++	}
++	if (want.fields & SKB_EXT_FIELD_VLAN) {
++		err = bpf_xdp_skb_ext_store_rx_vlan(ctx, want.rx_vlan_proto,
++						    want.rx_vlan_tci);
++		if (err)
++			store_err++;
++	}
++	/* NONE must replace an earlier status */
++	if ((want.fields & SKB_EXT_FIELD_CSUM) &&
++	    want.ip_summed == XDP_CHECKSUM_NONE) {
++		err = bpf_xdp_skb_ext_store_rx_csum(ctx,
++						    XDP_CHECKSUM_UNNECESSARY,
++						    SKB_MAX_CSUM_LEVEL);
++		if (err)
++			store_err++;
++	}
++	if (want.fields & SKB_EXT_FIELD_CSUM) {
++		err = bpf_xdp_skb_ext_store_rx_csum(ctx, want.ip_summed,
++						    want.csum_level);
++		if (err)
++			store_err++;
 +	}
 +
-+	vlan = xdp_skb_ext_get(ext, XDP_SKB_EXT_VLAN);
-+	if (vlan)
-+		__vlan_hwaccel_put_tag(skb, vlan->proto, vlan->tci);
-+
-+	csum = xdp_skb_ext_get(ext, XDP_SKB_EXT_CSUM);
-+	if (csum) {
-+		skb->ip_summed = csum->ip_summed;
-+		skb->csum_level = csum->level;
-+	}
++	if (deliver == DELIVER_CPUMAP)
++		return bpf_redirect_map(&cpu_map, 0, 0);
++	if (deliver == DELIVER_VETH)
++		return bpf_redirect(ifindex_out, 0);
++	return XDP_PASS;
 +}
 +
- __bpf_kfunc_start_defs();
++SEC("tc")
++int tc_read_skb(struct __sk_buff *skb)
++{
++	struct sk_buff *kskb;
++
++	if (skb->protocol != bpf_htons(ETH_P_IP))
++		return TC_ACT_OK;
++
++	kskb = bpf_cast_to_kern_ctx(skb);
++	have.hash = skb->hash;
++	have.l4_hash = kskb->l4_hash;
++	have.vlan_present = skb->vlan_present;
++	have.vlan_proto = skb->vlan_proto;
++	have.vlan_tci = skb->vlan_tci;
++	have.ip_summed = kskb->ip_summed;
++	have.csum_level = kskb->csum_level;
++	__sync_fetch_and_add(&pkts_seen_tc, 1);
++	return TC_ACT_SHOT;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/xdp_skb_ext.h b/tools/testing/selftests/bpf/xdp_skb_ext.h
+index 540ba7c6aa1b..11feee2fa31c 100644
+--- a/tools/testing/selftests/bpf/xdp_skb_ext.h
++++ b/tools/testing/selftests/bpf/xdp_skb_ext.h
+@@ -13,3 +13,41 @@
+ #define MAX_META_LEN (XDP_PACKET_HEADROOM - (int)sizeof(struct xdp_frame))
  
- /**
+ #define SKB_MAX_CSUM_LEVEL 3
++
++#ifndef BIT
++#define BIT(nr)			(1 << (nr))
++#endif
++
++enum xdp_skb_ext_field {
++	SKB_EXT_FIELD_HASH = BIT(0),
++	SKB_EXT_FIELD_VLAN = BIT(1),
++	SKB_EXT_FIELD_CSUM = BIT(2),
++};
++
++enum xdp_skb_ext_deliver {
++	DELIVER_PASS,
++	DELIVER_CPUMAP,
++	DELIVER_VETH,
++};
++
++/* The entries that the XDP program stores */
++struct xdp_skb_ext_vals {
++	__u32 rx_hash;
++	__u32 rx_hash_type;
++	__be16 rx_vlan_proto;
++	__u16 rx_vlan_tci;
++	__u32 ip_summed;
++	__u8 csum_level;
++	enum xdp_skb_ext_field fields;
++};
++
++/* The skb fields that the tc program reads */
++struct xdp_skb_ext_have {
++	__u32 hash;
++	__u32 l4_hash;
++	__u32 vlan_present;
++	__u32 vlan_proto;
++	__u32 vlan_tci;
++	__u32 ip_summed;
++	__u32 csum_level;
++};
 -- 
 2.56.0
 
