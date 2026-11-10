@@ -1,82 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794309234;
-	b=Va0mVRKoFNR0DRW1O5r1cLCsFD7WwJwEN/k+8McgN5/fQeEj99fAnFrFzH7AS2/Ez49r
-	 TN4V4sitB2sMYJfeKttS+gQM3OzxjiOYcZtYwWK2zemH18UX9zcdC0YQ1bRb/4nosTpWr
-	 oIsqsHuJPC7X9G1Cbn2gk8aqK2T1XfZqsJRHiF6yW4jUVwya1C3lnlmW5beLl2X74WFCF
-	 vB4L+rhn4+G4+4FTPd4xqaQPhTh67cO5lof3EqnjQRBdHn3w0DFPMjpgkpoBGMQCMmtJd
-	 Y1wUk4A9lkNjNTyo/2VatP8O9VQFKmBw/gcDr8u9yx4igqY6vfqb8GlAYd8MCxupinw==
+	t=1794310691;
+	b=DBiVviEAvdQkNxw4qSTNwmFIC6YNeuYyQtrMqgJcxFu+2BqtBM33PukPlx1h3FUuZzr/
+	 p5wCWUnDKepbBcMn8/PDRWWOXOu1seL0uCzF99X8zxzyxWR3GpTy8IixCkrrR2k42sqCs
+	 RiwfJER0FbhEEBAD93wIhHhdHUtWaPA7HW1sm4cx1o4H48xBvlbNzE6aA6ZcKBxFuUDEy
+	 I9OZxdChgOPl7gij9PVD7NrGFbPEIx5IyEcJuI7qrDVE4OHBdHGRiqCjOektCTry+CtQR
+	 T9uPDk5soeaZkbnItlOkc0C125LCBIH2axIoOULzp93SgcPa9CdnFUQoI6Zt+bHyB2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794309234;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=1ddw33IRhP/2JwGXS8pr/OEmMOA3/AlgOlVfVT3jdAg=;
-	b=DKyynWGkQNcdZijWj/PoWE59FcoAXLAZPrsxZXnpw6mHvPHtzhHUDAbZhQyRX6sBFejM
-	 u9UJPzyCGZR5UmTNhj3CCziHDGzw79EjQ+9AIFxAcR1U18EOtPBpxXHjC+2g0Nt9zS/9g
-	 zte2XyJ5F0+XRJj/VF5uZyO5qBsV7qsOB5TNydLL1vXT4zs+OHp2KXHcG6gHl+PT+TeBF
-	 cV7ijCpS7wqnKw9LkEyqjC4XBUVHhV642CH8efXCYdH+/k4HehFO9nok4rIowJcyoz6Dd
-	 kShVTCFkQVIfxxKt0nWxOSSTPSVOyn9jLR6zEysGHXI/mJWm9b+83dDehMbNOKZq8vg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794310691;
+	h=Received:DKIM-Signature:Received:From:To:Cc:In-Reply-To:References:
+	 Subject:Message-Id:Date:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key;
+	bh=T2P/GAEk2otkWq/GcV9uWXOrUgzcWGATJfy8p7qWBJg=;
+	b=s9VfJOlmV0ve1IOB7V6wHDLQrsFsH8fxTN2nn4fT6eWL+MkwUAvk+llpG7+V1lMo9BVY
+	 IEP35bZdKnatkTg2aMhXsn+uRgX3P1dWyPg7r01ay8HHUEMwtqnMiOWRKFq8nFDfCxw7v
+	 fP3EeaJlQVhbOJfsGqRjr5i2F+mfWfwiz7dAk0p7crO/XkOTvfNqRncEza7FLMMMqF9uY
+	 2g9PgOiGo7Y0OW7VxA3G9jfkHQpKryPWFelugYAIRxxoVvANW6ydlkOHlFG1QzG03y2Ne
+	 1+SN8xI7iICZ78bl6w+YBVivSFO7kDAVlMSsnieow44QmJmi7FtDerA41Qys1SEzGUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ge8kgWs0;
-	arc=none smtp.remote-ip=198.175.65.13
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=birImCg0;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1F9606A326;
-	Tue, 10 Nov 2026 11:13:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C1F9606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F67C606A32E;
+	Tue, 10 Nov 2026 11:38:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ge8kgWs0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794309233; x=1825845233;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q151x58OOoxplNHV2tNqcg1F9gUopr/bQY46SxbANQE=;
-  b=Ge8kgWs03JlnGdcfz/d9HojFTQdUrse3JcB2FxS9aNoEr9UHfLc4EXHR
-   eV7YTz5TfKQNN5ldy2HdLXEqUyMfPiYUwk7nS607h4CUtPvaVz8PJDBcA
-   tbMBnwvhupP3gvTuXRg0xF59yl0t1u7B833HxTlI7LXbSsdwHTnzdoJEA
-   ZTex85wK8O9EA/alphufXQ8KVKJtpGpsH9H37kmgg9HscMdwHKWzRoilY
-   pHWA2NV1sArQzTOu4Nx1xPNbYjlpZ8h23SLCL19qR4hn52t42PjPMJ3Sg
-   OAiUqf4DRApmMIVJ2MPNgXRZA9Y19yDF50CvC67vWZL2CBVTC1jfqxWAQ
-   Q==;
-X-CSE-ConnectionGUID: 6SATrQ2nQo6u+TTawhBICQ==
-X-CSE-MsgGUID: QGbeeNonR8G1Xvg0uRvO4w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2929472"
-X-IronPort-AV: E=Sophos;i="6.27,205,1787036400"; 
-   d="scan'208";a="2929472"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 03:13:52 -0800
-X-CSE-ConnectionGUID: nQhW5sMRTXe0+WPQEFVfgw==
-X-CSE-MsgGUID: Jr4gJxw2Sk+1AP3yIDtnrA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,205,1787036400"; 
-   d="scan'208";a="9903373"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa011.fm.intel.com with ESMTP; 10 Nov 2026 03:13:49 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQjnO-00000000wh1-3pUd;
-	Tue, 10 Nov 2026 11:13:46 +0000
-Date: Tue, 10 Nov 2026 19:13:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Armin Wolf <W_Armin@gmx.de>, hansg@kernel.org,
-	ilpo.jarvinen@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bifangknt@qq.com, nicokessler@icloud.com, sre@kernel.org,
-	linux-pm@vger.kernel.org, wse@tuxedocomputers.com
-Subject: Re: [PATCH 5/9] platform/x86: uniwill-laptop: Expose raw battery
- capacity to userspace
-Message-ID: <202611101928.MbCyLNXk-lkp@intel.com>
-References: <20261110001725.851443-6-W_Armin@gmx.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=birImCg0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D351F008A1;
+	Tue, 10 Nov 2026 11:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794310691;
+	bh=T2P/GAEk2otkWq/GcV9uWXOrUgzcWGATJfy8p7qWBJg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=birImCg0ikfZlgymBPG1EQOVl8T4PvzPBJE3IkYSwyCAjX6vQwI65u9dOTVAFVIVt
+	 Jr4PKTv7nmKwXrj12EPxjnX54EDhza++N11jzeedzWLJV9phNHoC61SgwtI5RgdSk4
+	 IfpcIAJO3N+NPz4LziHzOcsznefoB07i+3jUEPXTN5G4V1f9MsFSrznT9QDgUE7DuQ
+	 3V+rvquAaKTbafZOKdinMDkCmmpo8zf65hLVbPMJFgHEVANzwn2/5aCC29En6T6hn7
+	 CMdn/xwxsklmImZWNlFx/SHbbnF8177DN3zJaSqolLxcAVpcgCeE2wzIZnqICN9XBt
+	 tR3aHyt/+QvvQ==
+Received: from traversing.sirena.org.uk (localhost [IPv6:::1])
+	by traversing.sirena.org.uk (Postfix) with ESMTP id 8F31C310B6B7;
+	Tue, 10 Nov 2026 11:38:08 +0000 (GMT)
+From: Mark Brown <broonie@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Cyril Chao <Cyril.Chao@mediatek.com>
+Cc: linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ llvm@lists.linux.dev, Cyril Chao <cyril.chao@mediatek.com>, 
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+In-Reply-To: <20261109032424.625004-1-Cyril.Chao@mediatek.com>
+References: <20261109032424.625004-1-Cyril.Chao@mediatek.com>
+Subject: Re: [PATCH v1 0/1] ASoC: mediatek: mt8189: Use AVOUT for DP and
+ HDMI jacks
+Message-Id: <179427281919.3711751.4669554819271995706.b4-ty@b4>
+Date: Tue, 10 Nov 2026 01:06:59 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -86,164 +71,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110001725.851443-6-W_Armin@gmx.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1493; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=xSnEnBaKwOzWyBQ2Svyhe7l3mZBvUNDHRGh0ZFk7WrQ=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLI+Mym8lqtfYThp6fRXYmfMzI33fDycuu0Jk+H0d9lhQ
+ XmlDznWd5SyMIhxMciKKbLEZXG/rC95vYbv4MI2mDmsTCBDGLg4BWAiJY0M/2sPbpk47aLHqofX
+ W4U25uY2l8zgm/+B5dSUBZefJKR5/xNg+KddJX8xILc3a89Rkedl/yJ3G1wVVzfiML2b9s9fYdN
+ CEX4A
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Hi Armin,
+On Mon, 09 Nov 2026 11:24:08 +0800, Cyril Chao wrote:
+> ASoC: mediatek: mt8189: Use AVOUT for DP and HDMI jacks
+> 
+> This single-patch series declares the MT8189 DP and HDMI jacks as AV
+> outputs, matching the status reported by the HDMI codec and exposing
+> the video-output input switch when jack input devices are enabled.
+> 
+> It is based on ASoC for-next at:
+>   c937f492dd40a8398d955cf0f4f9e11d7268bcb5
+> No additional patch dependencies are required.
+> 
+> [...]
 
-kernel test robot noticed the following build errors:
+Applied to
 
-[auto build test ERROR on sre-power-supply/for-next]
-[also build test ERROR on linus/master v7.4-rc2 next-20261109]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-7.5
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Armin-Wolf/power-supply-core-Add-power_supply_has_property_direct/20261110-010643
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20261110001725.851443-6-W_Armin%40gmx.de
-patch subject: [PATCH 5/9] platform/x86: uniwill-laptop: Expose raw battery capacity to userspace
-config: i386-randconfig-1009-20261110 (https://download.01.org/0day-ci/archive/20261110/202611101928.MbCyLNXk-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261110/202611101928.MbCyLNXk-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611101928.MbCyLNXk-lkp@intel.com/
+[1/1] ASoC: mediatek: mt8189: Use AVOUT for DP and HDMI jacks
+      https://git.kernel.org/broonie/sound/c/1ab0585e7609
 
-All errors (new ones prefixed by >>):
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
->> drivers/platform/x86/uniwill/uniwill-acpi.c:2148:3: error: cannot jump from this goto statement to its label
-    2148 |                 goto err_remove;
-         |                 ^
-   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2150 |         guard(mutex)(&data->battery_lock);
-         |         ^
-   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
-     416 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
-     299 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:19:1: note: expanded from here
-      19 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:25:1: note: expanded from here
-      25 | __UNIQUE_ID_unlock_362
-         | ^
-   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
-     416 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
-     165 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:13:1: note: expanded from here
-      13 | __UNIQUE_ID_guard_361
-         | ^
-   drivers/platform/x86/uniwill/uniwill-acpi.c:2139:3: error: cannot jump from this goto statement to its label
-    2139 |                 goto err_free;
-         |                 ^
-   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    2150 |         guard(mutex)(&data->battery_lock);
-         |         ^
-   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
-     416 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
-     299 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:19:1: note: expanded from here
-      19 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:25:1: note: expanded from here
-      25 | __UNIQUE_ID_unlock_362
-         | ^
-   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
-     416 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
-     165 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:13:1: note: expanded from here
-      13 | __UNIQUE_ID_guard_361
-         | ^
-   2 errors generated.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-vim +2148 drivers/platform/x86/uniwill/uniwill-acpi.c
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-  2125	
-  2126	static int uniwill_add_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
-  2127	{
-  2128		struct uniwill_data *data = container_of(hook, struct uniwill_data, hook);
-  2129		struct uniwill_battery_entry *entry;
-  2130		const struct power_supply_ext *ext;
-  2131		int ret;
-  2132	
-  2133		entry = kzalloc_obj(*entry);
-  2134		if (!entry)
-  2135			return -ENOMEM;
-  2136	
-  2137		ret = device_create_file(&battery->dev, &data->charge_full_raw_attr);
-  2138		if (ret < 0)
-  2139			goto err_free;
-  2140	
-  2141		if (power_supply_has_property_direct(battery, POWER_SUPPLY_PROP_CYCLE_COUNT))
-  2142			ext = &data->standard_extension;
-  2143		else
-  2144			ext = &data->cycle_count_extension;
-  2145	
-  2146		ret = power_supply_register_extension(battery, ext, data->dev, data);
-  2147		if (ret < 0)
-> 2148			goto err_remove;
-  2149	
-  2150		guard(mutex)(&data->battery_lock);
-  2151	
-  2152		entry->battery = battery;
-  2153		list_add(&entry->head, &data->batteries);
-  2154	
-  2155		return 0;
-  2156	
-  2157	err_remove:
-  2158		device_remove_file(&battery->dev, &data->charge_full_raw_attr);
-  2159	
-  2160	err_free:
-  2161		kfree(entry);
-  2162	
-  2163		return ret;
-  2164	}
-  2165	
+Thanks,
+Mark
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
