@@ -1,59 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794289229;
-	b=b/IatSOSuhix0JQ7qK5Ynlse1VP6us9TrkzYCIP+KbLSE9YCSAP+9dPc6qrI7eSAjleS
-	 LqGM13lG+vM+ICmBcdkwPSphQ8ecTkSkSQ91gY6LDVaFnDnpz3f5sixADADFqlI7lZP1N
-	 hLSgO94TH/whZFww8O45+D8xNku9x7t+SNnmXsdl+XDR/kHsP87jnhfATHIMiFemNKC8p
-	 AwxY61Qd2qoe1aYKgYp9GOUn4P7txKwBnHsKt8N1NI05XSoS6lvgVhhdRzzVdTUF/y3Nd
-	 LNBcSL65xVLpT9B1g0nrsuvmbfbMmE/j2IlOQiqn/NlejvOs7yeDkTucEi8nOj9kXjg==
+	t=1794309234;
+	b=Va0mVRKoFNR0DRW1O5r1cLCsFD7WwJwEN/k+8McgN5/fQeEj99fAnFrFzH7AS2/Ez49r
+	 TN4V4sitB2sMYJfeKttS+gQM3OzxjiOYcZtYwWK2zemH18UX9zcdC0YQ1bRb/4nosTpWr
+	 oIsqsHuJPC7X9G1Cbn2gk8aqK2T1XfZqsJRHiF6yW4jUVwya1C3lnlmW5beLl2X74WFCF
+	 vB4L+rhn4+G4+4FTPd4xqaQPhTh67cO5lof3EqnjQRBdHn3w0DFPMjpgkpoBGMQCMmtJd
+	 Y1wUk4A9lkNjNTyo/2VatP8O9VQFKmBw/gcDr8u9yx4igqY6vfqb8GlAYd8MCxupinw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794289229;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=9oHgoMNppljA1v1665oeA7qzNnjE6fLvD9MUAVdurBg=;
-	b=d3DvA8mVy2TRXxKnxmTSieRzlIZX9ZC3r+xrtVr6TvbyKoqYwbhL2Ij5EqWMKl3QDw5s
-	 bxbafAsuhBJ4FVtQHZDRGEIQ/Yop8MOBeMorJWXBVk5ZwUTqdSciRh71qdeN+VDoK9HWA
-	 GBlGHoBIqRwGbx5nBf+3Z4K/RqQ3PATOa04nvbqDbIFy9OHWqvzHCZxspUh6X6QH0nqYH
-	 kH4CLwjek+bX1mLFjsmsqE5zTCsSP5ejiiiaVZ9h6Z5cBPy821TrbBm3DYnRR4P/Fy3dA
-	 nc5tV3XENcIR5zzoEIFdXrS9zVY1aJmQCIYqri/cCsbVvarMGlH7A9U7I/Jb/Wt1d5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794309234;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=1ddw33IRhP/2JwGXS8pr/OEmMOA3/AlgOlVfVT3jdAg=;
+	b=DKyynWGkQNcdZijWj/PoWE59FcoAXLAZPrsxZXnpw6mHvPHtzhHUDAbZhQyRX6sBFejM
+	 u9UJPzyCGZR5UmTNhj3CCziHDGzw79EjQ+9AIFxAcR1U18EOtPBpxXHjC+2g0Nt9zS/9g
+	 zte2XyJ5F0+XRJj/VF5uZyO5qBsV7qsOB5TNydLL1vXT4zs+OHp2KXHcG6gHl+PT+TeBF
+	 cV7ijCpS7wqnKw9LkEyqjC4XBUVHhV642CH8efXCYdH+/k4HehFO9nok4rIowJcyoz6Dd
+	 kShVTCFkQVIfxxKt0nWxOSSTPSVOyn9jLR6zEysGHXI/mJWm9b+83dDehMbNOKZq8vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ei+Z2eWF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ge8kgWs0;
+	arc=none smtp.remote-ip=198.175.65.13
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDE4606A325;
-	Tue, 10 Nov 2026 05:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1F9606A326;
+	Tue, 10 Nov 2026 11:13:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C1F9606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ei+Z2eWF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25B9F1F0089F;
-	Tue, 10 Nov 2026 05:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794289228;
-	bh=9oHgoMNppljA1v1665oeA7qzNnjE6fLvD9MUAVdurBg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ei+Z2eWFJ9CODTLEDShOv/Pf0yFH6HijCt386QN1f3mFSRC4tlPgZ0OEf518Gs3fQ
-	 6krIKjsElm6RnOZuHz7haXrSpR0oeUy7RoooTHrkViUYv9zcqyFFesgduijzfn7qym
-	 iDolM3/t1xQgcOV5HiURSFdwMfQO/yhz1yZ2xfb1x2p53UR366JmaUJyo8njAjZJnp
-	 QGQtx9OIXBbsSdTdlIr0MYMnDUyZiDrN4a97YyL0Nkcb+U3Zk+UU0mHBoExOM9xeUg
-	 PtVHclxBAGrKGZSgMODhiUrs8b6jlFWji+E7jrKkuNO4ui/xC8aK9kj4x5ejXZzhjY
-	 Sck12fmuO91Zw==
-Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-From: netdev-bot+sashiko@kernel.org
-To: leitao@debian.org
-Cc: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev,
- ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, kuba@kernel.org,
- tj@kernel.org
-Date: Tue, 10 Nov 2026 05:40:27 +0000
-Message-ID: <179428922768.994134.14043808841864559669@kernel.org>
-In-Reply-To: <au27Y9m78_3EH2v1@gmail.com>
-References: <au27Y9m78_3EH2v1@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ge8kgWs0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794309233; x=1825845233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q151x58OOoxplNHV2tNqcg1F9gUopr/bQY46SxbANQE=;
+  b=Ge8kgWs03JlnGdcfz/d9HojFTQdUrse3JcB2FxS9aNoEr9UHfLc4EXHR
+   eV7YTz5TfKQNN5ldy2HdLXEqUyMfPiYUwk7nS607h4CUtPvaVz8PJDBcA
+   tbMBnwvhupP3gvTuXRg0xF59yl0t1u7B833HxTlI7LXbSsdwHTnzdoJEA
+   ZTex85wK8O9EA/alphufXQ8KVKJtpGpsH9H37kmgg9HscMdwHKWzRoilY
+   pHWA2NV1sArQzTOu4Nx1xPNbYjlpZ8h23SLCL19qR4hn52t42PjPMJ3Sg
+   OAiUqf4DRApmMIVJ2MPNgXRZA9Y19yDF50CvC67vWZL2CBVTC1jfqxWAQ
+   Q==;
+X-CSE-ConnectionGUID: 6SATrQ2nQo6u+TTawhBICQ==
+X-CSE-MsgGUID: QGbeeNonR8G1Xvg0uRvO4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11961"; a="2929472"
+X-IronPort-AV: E=Sophos;i="6.27,205,1787036400"; 
+   d="scan'208";a="2929472"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 03:13:52 -0800
+X-CSE-ConnectionGUID: nQhW5sMRTXe0+WPQEFVfgw==
+X-CSE-MsgGUID: Jr4gJxw2Sk+1AP3yIDtnrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,205,1787036400"; 
+   d="scan'208";a="9903373"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa011.fm.intel.com with ESMTP; 10 Nov 2026 03:13:49 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xQjnO-00000000wh1-3pUd;
+	Tue, 10 Nov 2026 11:13:46 +0000
+Date: Tue, 10 Nov 2026 19:13:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Armin Wolf <W_Armin@gmx.de>, hansg@kernel.org,
+	ilpo.jarvinen@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bifangknt@qq.com, nicokessler@icloud.com, sre@kernel.org,
+	linux-pm@vger.kernel.org, wse@tuxedocomputers.com
+Subject: Re: [PATCH 5/9] platform/x86: uniwill-laptop: Expose raw battery
+ capacity to userspace
+Message-ID: <202611101928.MbCyLNXk-lkp@intel.com>
+References: <20261110001725.851443-6-W_Armin@gmx.de>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -63,90 +86,164 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110001725.851443-6-W_Armin@gmx.de>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Hi Armin,
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+kernel test robot noticed the following build errors:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on linus/master v7.4-rc2 next-20261109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-- [Medium] The commit message of "bpf: tcp: bpf_tcp_ops_set_rcvlowat()
-  missing from BTF with clang KCSAN" is cut off and missing required…
-- [Low] The patch fixes a regression from 5f549c1e49f3 ("bpf: tcp: Add
-  kfunc to adjust sk->sk_rcvlowat.") but has no Fixes: tag.
+url:    https://github.com/intel-lab-lkp/linux/commits/Armin-Wolf/power-supply-core-Add-power_supply_has_property_direct/20261110-010643
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20261110001725.851443-6-W_Armin%40gmx.de
+patch subject: [PATCH 5/9] platform/x86: uniwill-laptop: Expose raw battery capacity to userspace
+config: i386-randconfig-1009-20261110 (https://download.01.org/0day-ci/archive/20261110/202611101928.MbCyLNXk-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261110/202611101928.MbCyLNXk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611101928.MbCyLNXk-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/platform/x86/uniwill/uniwill-acpi.c:2148:3: error: cannot jump from this goto statement to its label
+    2148 |                 goto err_remove;
+         |                 ^
+   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    2150 |         guard(mutex)(&data->battery_lock);
+         |         ^
+   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
+     299 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:19:1: note: expanded from here
+      19 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:25:1: note: expanded from here
+      25 | __UNIQUE_ID_unlock_362
+         | ^
+   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:13:1: note: expanded from here
+      13 | __UNIQUE_ID_guard_361
+         | ^
+   drivers/platform/x86/uniwill/uniwill-acpi.c:2139:3: error: cannot jump from this goto statement to its label
+    2139 |                 goto err_free;
+         |                 ^
+   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    2150 |         guard(mutex)(&data->battery_lock);
+         |         ^
+   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
+     299 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:19:1: note: expanded from here
+      19 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:25:1: note: expanded from here
+      25 | __UNIQUE_ID_unlock_362
+         | ^
+   drivers/platform/x86/uniwill/uniwill-acpi.c:2150:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:13:1: note: expanded from here
+      13 | __UNIQUE_ID_guard_361
+         | ^
+   2 errors generated.
+
+
+vim +2148 drivers/platform/x86/uniwill/uniwill-acpi.c
+
+  2125	
+  2126	static int uniwill_add_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
+  2127	{
+  2128		struct uniwill_data *data = container_of(hook, struct uniwill_data, hook);
+  2129		struct uniwill_battery_entry *entry;
+  2130		const struct power_supply_ext *ext;
+  2131		int ret;
+  2132	
+  2133		entry = kzalloc_obj(*entry);
+  2134		if (!entry)
+  2135			return -ENOMEM;
+  2136	
+  2137		ret = device_create_file(&battery->dev, &data->charge_full_raw_attr);
+  2138		if (ret < 0)
+  2139			goto err_free;
+  2140	
+  2141		if (power_supply_has_property_direct(battery, POWER_SUPPLY_PROP_CYCLE_COUNT))
+  2142			ext = &data->standard_extension;
+  2143		else
+  2144			ext = &data->cycle_count_extension;
+  2145	
+  2146		ret = power_supply_register_extension(battery, ext, data->dev, data);
+  2147		if (ret < 0)
+> 2148			goto err_remove;
+  2149	
+  2150		guard(mutex)(&data->battery_lock);
+  2151	
+  2152		entry->battery = battery;
+  2153		list_add(&entry->head, &data->batteries);
+  2154	
+  2155		return 0;
+  2156	
+  2157	err_remove:
+  2158		device_remove_file(&battery->dev, &data->charge_full_raw_attr);
+  2159	
+  2160	err_free:
+  2161		kfree(entry);
+  2162	
+  2163		return ret;
+  2164	}
+  2165	
 
 --
-
-bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with clang KCSAN
-
-With clang and KCSAN, pahole drops bpf_tcp_ops_set_rcvlowat() from the
-vmlinux BTF. This breaks the build when CONFIG_WERROR is set. When it
-is not set, __bpf_tcp_ops_init() fails at boot. The patch works around
-this by passing the clamped value straight to __tcp_set_rcvlowat()
-instead of reassigning the rcvlowat parameter.
-
-> The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
-> sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
-> --fatal_warnings exit status") made the missing BTF fatal with
-> CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
-> is never registered:
->
->   initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
-
-[Severity: Low]
-Should this carry a Fixes: tag? 5f549c1e49f3 is only named in the prose.
-That commit added the "if (rcvlowat < 0) rcvlowat = INT_MAX;"
-reassignment in bpf_tcp_ops_set_rcvlowat(), which this patch rewrites.
-
-Users can see this regression. When the kfunc set fails to register,
-the chain in __bpf_tcp_ops_init() skips the struct_ops registration:
-
-net/ipv4/bpf_tcp_ops.c:__bpf_tcp_ops_init() {
-    ...
-	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
-					       &bpf_tcp_ops_set_rcvlowat_kfunc_id_set);
-	ret = ret ?: register_bpf_struct_ops(&bpf_tcp_ops, bpf_tcp_ops);
-    ...
-}
-
-The sched_ext workaround cited in this message, f2f095c87603, has a
-Fixes: tag too. Would something like this work?
-
-Fixes: 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.")
-
-[ ... ]
-
-> This seems similar to pahole behaviour sched_ext hit with a bool
-> argument, discussed in [2] and worked around in f2f095c87603
-> ("sched_ext: Work around pahole 1.32 dropping
-> scx_bpf_task_set_lazy_resched() from BTF").
-
-[ ... ]
-
-> Not reassigning the parameter is a workaround for me, with any pahole: clang
-> then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
-> and __bpf_tcp_ops_init() returns 0 (tested in virtme):
-
-[Severity: Medium]
-Was the commit message cut off here? It ends with a colon, and the
-virtme test output it introduces never appears.
-
-The message also says "discussed in [2]", but there is no [1], no
-reference list and no Link: trailer, so the pahole discussion can't be
-found from this commit.
-
-There is also no Signed-off-by: line from the author. The DCO in
-Documentation/process/submitting-patches.rst requires one, so the patch
-can't be applied as posted.
-
-The code change itself looks fine. Passing
-"rcvlowat < 0 ? INT_MAX : rcvlowat" behaves the same as the old
-reassignment.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/au27Y9m78_3EH2v1%40gmail.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
