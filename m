@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794289020;
-	b=PqcKF9N+jAV6d9Uv6YUb25JmRm24TTL8xvtyol0FOcfF5eQzgynXb3u5DO7xVdp8POVI
-	 Mgn8PJmuNw74UgDo2jI1jwIDYGiope6Q6UYeK9RF2OenirRXUg8KEM9+HKmGCm9j67Egh
-	 aqGD/QNkVdrt6a1AFDFiItWyBB3HQY98WcL6YZZwUpxu14PqnFYGv5w+1ZIQq428jpbT+
-	 eI0b7HY6OunhTkPINizyYF+jz8adxZwgCHYdNdYGii9RJB2d//NZbXknzw8HeaVJpDggw
-	 myIetS0XsAqyraJKXamB2DwnlHS/X/cQI4hFkQIQdUCMqNaf7NEYndvTsYCLGSAz/Wg==
+	t=1794289195;
+	b=OZg4eDesSD/BHKjqCb0qMghpMESSiN1f9lTR4MMEt5EDfovyP4wzuvV3x7Bp7X8GmxhP
+	 4+uWRza9bQSMRxlEZsQaPCy1TmQc0oEZU/ntZhf+P9IFs4h2XBvkZp/kevbGZ/3BNevqr
+	 rtTiv4f9w96ITR0ATZlyAo8C5ROzx7HQ/IhLACBVnt2Da/w940lDYjfyiIEhFiprPBvwF
+	 C23l93TBR+yh2BFJmGut0QIMAyo0Z7rF7X1GbAsfKfPFP2fJ2ALQspqNLWPw4Ff5GV/OV
+	 OwRiX8QuU+ADKU4X+vWCB7vdKeXkwg9mI7bcs58R52VAkfeGGUeOsncbNIQCJtJtyHw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794289020;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794289195;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=upBQHvhIXS9jA4rn/T2U6OyiZNi8Uwc76Ij6dQGz7TA=;
-	b=wKZVu9ZoFgezIIt58VFz0gEUd4Qnq8tTtqV+f4seq5C0aDHHQBXYjmrVRXYzphzfEwXl
-	 o7U4PglpWlSRSgqDvc8Ic6jOiKH0fow/pyOhzw5L+mtcY6Tm/uRSzw0fqyghD+oYLLq3o
-	 EoQZqm9sc6wcJhlQyYY7BQx/v/rNVa9UTQbDcyKQ0YBdNZYidi1z6Cb1H/6dqJf/07DDV
-	 rPMOPFtG320fcpHTyQtiXDFsq6f95F7q+Mo56d9x3R3pygvQcqG06Ql7mbcd+Mp/q5GTE
-	 J56uYtS/Lg9T+kZliXQECCmDnkhAZ50XkKLua4HL1yU14R5EbT/EkRg0l46RzLQw/vg==
+	bh=Y4IpnFVFMm5fXSXAtzV8xsgRv9+hQP6OGl0+r2a9VT0=;
+	b=bnuFuEkv2LzuTWF19A5d6sXL0LV0/AgbNp4BWhZun7Yb3zvT6i9/ohMK3PUQZalYcCS1
+	 W7ImyTzO46XGrHd4SHJs41PsGNVRZVSr4T2/vCqi0rEdr+lGXJHcbTUCs7C8ylv+eP8wC
+	 F4D8JMzMvchvN+xBD6+sCK9/7taCcLF9aaKYbijhpww8QBBapSJYIVHN9pTxu6fm/JhN3
+	 fEzZw/oanohLCJBSCO+1T4d0rpL7WmGyyaPqfBGA67ngAs4bSBCOBlO7qJIInkPK1NUdM
+	 sEEih0iomJGmgJpHCwbN3I5c0LGfcUQcxZHGt2zI6ROkA3BcRkmdp1mWZy0lOc1g18A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=chromium.org;
 	spf=pass smtp.mailfrom=chromium.org;
-	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=PFtXr768;
-	arc=none smtp.remote-ip=209.85.210.174
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	dkim=pass header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=cLVYVYuu;
+	arc=none smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDF760A2624
-	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 05:36:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EEDF760A2624
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEF8606A325
+	for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 05:39:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDEF8606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=PFtXr768
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so684604b3a.2
-        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 21:36:59 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.a=rsa-sha256 header.s=google header.b=cLVYVYuu
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3b12cb3c37bso846030a91.2
+        for <llvm@lists.linux.dev>; Mon, 09 Nov 2026 21:39:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1794289019; x=1794893819; darn=lists.linux.dev;
+        d=chromium.org; s=google; t=1794289194; x=1794893994; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=upBQHvhIXS9jA4rn/T2U6OyiZNi8Uwc76Ij6dQGz7TA=;
-        b=PFtXr7683OS6zZ1h8aSn1PCVSshc/4ZI8TO4bphhI3UcTT4h6cY7+8Wj0WwbeGzFVt
-         eSsWkkCF45Azml8bYCziK8XDiBk9ciBPYi/NRn4E9q/gaPM5XqWEL7jz77++fSOscFct
-         6N8lD3+J0bjsfA39GsiFPtRXsvIIMapvOO8qo=
+        bh=Y4IpnFVFMm5fXSXAtzV8xsgRv9+hQP6OGl0+r2a9VT0=;
+        b=cLVYVYuuBBXQ2a8BC/RZPap/VVuCBYxB+9+dmH4GcFa7rDdNwk2d+Tt7j067wZknjq
+         26ignaWiswoZ1s73g7SdsQtXPV9yGnxKCEzLZxX5wRJCcsE7ODUyLhJvk2K/PHMA3eSz
+         uUoBx69dNRYa2prsevBY7G5qpgndcPUZmTDaU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794289019; x=1794893819;
+        d=1e100.net; s=20260707; t=1794289194; x=1794893994;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=upBQHvhIXS9jA4rn/T2U6OyiZNi8Uwc76Ij6dQGz7TA=;
-        b=hZ44ZNDWwvebbUqjNc08et3+k+NStbTaH9uF6f6ncyN2yz0w/DUzX0pFVL+Ub4Nkdh
-         YfwksD1TtBVF8qOoDqIH+x5Q8iI+pl/2PdzI92JWep9cnW/nxcLK3HBgDOtTdAQUVHrx
-         78yaZK6KMU5oEyywtU4Bzixp4vLEYqwzf8oMTb2KGVrDRTiLgo9xkj/7gsypSTPlFWMj
-         st7kHn5IzVVsMes1f8gZV35p7wWwv5wkd7NyYuwS7Lly8jZQasTOMMLkMxhBcnBVo08L
-         I4xtZBccH6p/GBZ7kjgL8IQmN4Z7blcXwY+/awDtmQ/gtfdiY2IR8dzGIukaOg5erMYE
-         uFAw==
-X-Forwarded-Encrypted: i=1; AL+hErFN3l4nurHcdEImYM+BAg3sS7kxY4JnMoqBYpXLKgaKkOJOGUPTfhh4sv4dgBsd/me18BXC@lists.linux.dev
-X-Gm-Message-State: APuU4Z9WKGDZTmwPkiXaaq56xWnWbmSV7HatRe/0NrFf6L7IOfHiOYr8
-	7i2BKfMac+jRZwVeAztm93wkS/B1CZgdIlWuN9yx2zmImy3wNZPUugAozJ99SFGebQ==
-X-Gm-Gg: AYBFou3PniGznSAaXQWjlrmRe5jjSHV3CC6zpMe/8fhwkUsYU59JBbWteAfTstNAkD2
-	IK8zPdlCLRzrbhqFxlwobYMh4TJzjWTLiozR/mCHnspLp34rJHVOcadhy2mJj77dHQsJTRLZbIi
-	2ytEfDwID3B0KI+Mwtr/4ROLRaB4BKUnDia5pq55ob1IsDADXAMrAejZ/UczEiruyMoPFgjxx6V
-	tGxaut4cZfJdo9Z/5QHIIuPCoqBMLRzqkpGCtS+4yb9Pe2XJLp4CoNfOu0flnfRPhv72WANbfte
-	2uckKTkm1xnwh7xDVm7qfGP/Pw3HCGd40UUVSKLFEgUWv0lW6mXO80ibhvlRQMAICrDhp29d82Q
-	BWbzti75UGMEb0l5675kW4LP98X3KKp7dsAep/bio1mUa+ckB9cZ8EI3g679O56L6OPgyxZQvIg
-	7ZLFz7/mEyrylbmB4VXdDr/Z5XD91ZLK9QuidnrVaVo54lLrhbaiSPBr+gm++r1deo+mNiUJOvv
-	V2+HgewyqRTdV+3LATKFO8Hy6NRs4OTnY6m3Cj1cV+Qmz2J1/+z1kKtZstrHcMIEoP4qEmw+Q7b
-	lsNysZ4YWhxFYoKy5e2u8jEicSron+s8ITJEHjrvFckANmBEq821UN14dV5RObAo6YYIOA==
-X-Received: by 2002:a05:6a00:1492:b0:89f:5c84:46ec with SMTP id d2e1a72fcca58-8ba89661da0mr1558178b3a.40.1794289019108;
-        Mon, 09 Nov 2026 21:36:59 -0800 (PST)
+        bh=Y4IpnFVFMm5fXSXAtzV8xsgRv9+hQP6OGl0+r2a9VT0=;
+        b=BTqwWmoN/iyQebvhdOZbo5apyNOnLQrRaYCYz4OB/ew1H/ehAeqPowALibp6AcyjGP
+         bj95uT/69Mq+FU4SGLLesJ8l4UTuShszgUZETntdbeqLSxwfx49p30Cqf2W3YqyAjFRr
+         5JOTfumt7PqaZUa+zXj8HuunXb4WzX+2yOpc8XXEzWV5pZuzuOdX7VxNw80s9uqWuTt1
+         0eIh1oNiYXUC+BLCeKyY730UK/WpqwK46pXI4bglG2wxTWJ3Vevb0+1X7868FLl97m+A
+         J9Cd0e7q3kn4EIi1xE0IGWmoOuVBb/HFkgxNEWMQsEQK0LhujZ7N0Tx9zGByjnXnpNfj
+         +5sQ==
+X-Forwarded-Encrypted: i=1; AL+hErFBeqU/b3NruIxq/M+T/1gUcgKKw3KqBk6SMx4lDIEAzxG5GRWRck/JeABqlMdfRLM1BH+O@lists.linux.dev
+X-Gm-Message-State: APuU4Z99nKAFINixNTbpF274MevpLgDWbevwx2CW3/kHjH7wC6jLC2o5
+	W5luYQPDfwHPVp0cLkNbl5+H45mEiFuv941ItWs/1U/xQyHK5gElxFXVHiQWEV/6fw==
+X-Gm-Gg: AYBFou0S5iFV/ZPX1++peDn7T6RCNNS7iRkhBBxWc8sIYl0bBj7NUt47Nnmijo/olJt
+	e5PJWwLYM8TEsooLa4/w01aiIE00WHZarMKWdQioWCZocAwsxS8epGAL09EMsLKO0WP+PjAunKD
+	YxqBOHO8Ndc3AGhVEJ2dz3FEYY30s7eATcwxW1ADWxMykm4nqMEzUcO76a1f+o6GtpPtQ3d+5Xm
+	UrmnijOArccsn/e0H+avAdyWdJ9kEImwA3uWsjmF+lSMEImJsyhzv3GNAQtn7YE9nV5pG/JBZbT
+	2RLjAn3W/6BuUXiq+kSbp/PqPs1x6gleyszQ3XbW2zU7dUrUekgTyyFlafoq6XL5meYbDmoX8l8
+	7QRK0jq3hk7a0iGTaO6Nd7Iq3QYWYGeDtgJmAFsdEvaSO9IfyeQn8Dg/GwnkZEd8EhN6crCU8MN
+	KYYmHjdNCp9tzYMxuO8dqGHggJ2CSKhI9m24CGG1Oq+W00PmNKTu+kQmSeOnZ242tPdUcG83KML
+	9I+zBtUpVaH0iEs/qq8sIFcjAJyKFcTlCN5S4nhOl/DBkWwRyjvtK+PV9dJh8IqkggVRZpNYYdm
+	rGEhW8C4AIc/+pIudhZwxwjLrefvC7XRnoUwxBzEFNyOImBUDb8d23sDsWaNW3S17oaJAnwg8KL
+	NAxckiumVm4KKxro=
+X-Received: by 2002:a17:90b:380f:b0:3ac:9599:a689 with SMTP id 98e67ed59e1d1-3b166d02addmr1882552a91.34.1794289194303;
+        Mon, 09 Nov 2026 21:39:54 -0800 (PST)
 Received: from google.com ([2a00:79e0:2031:6:e137:9384:7cd8:6e40])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab8dccc7sm405355b3a.52.2026.11.09.21.36.50
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b168ff86e7sm1041404a91.2.2026.11.09.21.39.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 21:36:58 -0800 (PST)
-Date: Tue, 10 Nov 2026 14:36:48 +0900
+        Mon, 09 Nov 2026 21:39:53 -0800 (PST)
+Date: Tue, 10 Nov 2026 14:39:43 +0900
 From: Sergey Senozhatsky <senozhatsky@chromium.org>
 To: Michal Wilczynski <m.wilczynski@samsung.com>
 Cc: Nathan Chancellor <nathan@kernel.org>, 
@@ -99,12 +100,12 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	Sungguk <sungguk.na@samsung.com>, Jaehoon Chung <jh80.chung@samsung.com>, 
 	Marek Szyprowski <m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org, 
 	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 10/15] lib/lz4: switch the compressor to the vendored
- sources
-Message-ID: <avKs4_S7r6EiUVgC@google.com>
+Subject: Re: [PATCH v2 13/15] lib/lz4: switch the decompressor to the
+ vendored sources
+Message-ID: <avKtyCOOmK3AH0xy@google.com>
 References: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
- <CGME20261106144305eucas1p17b3b27d403dc7d13b85cdd9a4bea83b9@eucas1p1.samsung.com>
- <20261106-lz4-vendor-upstream-v2-10-ee04c3f0d7dc@samsung.com>
+ <CGME20261106144310eucas1p1d60fe5c2e0170c49f38a3142bb1d8f94@eucas1p1.samsung.com>
+ <20261106-lz4-vendor-upstream-v2-13-ee04c3f0d7dc@samsung.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -116,41 +117,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261106-lz4-vendor-upstream-v2-10-ee04c3f0d7dc@samsung.com>
+In-Reply-To: <20261106-lz4-vendor-upstream-v2-13-ee04c3f0d7dc@samsung.com>
 
 On (26/11/06 15:42), Michal Wilczynski wrote:
 [..]
 > diff --git a/drivers/block/zram/backend_lz4.c b/drivers/block/zram/backend_lz4.c
-> index 1e4ad31d39a63f45b3bddd3d8a467d8d7d095beb..50265e3ce256490994cb6dae32a45da376e408e0 100644
+> index 50265e3ce256490994cb6dae32a45da376e408e0..b9b8a5f678c155442fa3fd2c1984e45182e6fc38 100644
 > --- a/drivers/block/zram/backend_lz4.c
 > +++ b/drivers/block/zram/backend_lz4.c
-> @@ -42,7 +42,7 @@ static int lz4_setup_params(struct zcomp_params *params)
->  	if (!params->dict || !params->dict_sz)
->  		return 0;
->  
-> -	dict_stream = kzalloc_obj(*dict_stream);
-> +	dict_stream = kzalloc(LZ4_MEM_COMPRESS, GFP_KERNEL);
->  	if (!dict_stream)
->  		return -ENOMEM;
->  
-> @@ -88,7 +88,7 @@ static int lz4_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
+> @@ -84,7 +84,7 @@ static int lz4_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
+>  		if (!zctx->mem)
+>  			goto error;
+>  	} else {
+> -		zctx->dstrm = kzalloc_obj(*zctx->dstrm);
+> +		zctx->dstrm = kzalloc(LZ4_MEM_DECOMPRESS, GFP_KERNEL);
 >  		if (!zctx->dstrm)
 >  			goto error;
 >  
-> -		zctx->cstrm = kzalloc_obj(*zctx->cstrm);
-> +		zctx->cstrm = kzalloc(LZ4_MEM_COMPRESS, GFP_KERNEL);
->  		if (!zctx->cstrm)
+> diff --git a/drivers/block/zram/backend_lz4hc.c b/drivers/block/zram/backend_lz4hc.c
+> index e7ee3740219852f079d1e0866da6b213a3f3a583..1e09c93016264259c149e2913b2819571b56fab6 100644
+> --- a/drivers/block/zram/backend_lz4hc.c
+> +++ b/drivers/block/zram/backend_lz4hc.c
+> @@ -65,7 +65,7 @@ static int lz4hc_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
+>  		if (!zctx->mem)
 >  			goto error;
->  	}
-> @@ -112,7 +112,7 @@ static int lz4_compress(struct zcomp_params *params, struct zcomp_ctx *ctx,
->  					zctx->mem);
 >  	} else {
->  		/* Cstrm needs to be reset */
-> -		memcpy(zctx->cstrm, params->drv_data, sizeof(*zctx->cstrm));
-> +		memcpy(zctx->cstrm, params->drv_data, LZ4_MEM_COMPRESS);
->  		ret = LZ4_compress_fast_continue(zctx->cstrm, req->src,
->  						 req->dst, req->src_len,
->  						 req->dst_len, params->level);
+> -		zctx->dstrm = kzalloc_obj(*zctx->dstrm);
+> +		zctx->dstrm = kzalloc(LZ4_MEM_DECOMPRESS, GFP_KERNEL);
+>  		if (!zctx->dstrm)
+>  			goto error;
 
-The zram code here is outdated, it has been reworked quite a bit
-(patches are in linux-next and Andrew's trees).
+Ditto, outdated zram code.
+
+My ask would be to not squash zram changes with lz4 changes, when (iff)
+possible.
