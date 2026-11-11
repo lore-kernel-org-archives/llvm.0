@@ -1,77 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794422983;
-	b=rB0hhMvHefWo0KtdNVzoz/FROKXVWw30DZc7+gvdUP7PdovgBLUhgokbfXlSx0JB32f3
-	 X2mmdLaq9CA8QPmclKN8eBxdRw150cKYcVggAsrOXnikGOr118GrvPZB8nsEVqEqOsbiS
-	 7cz5oRQOBKymRQibv43GWzmlxpN3teh5FQxuIrfg67F+ECA4yE/ZK8d/dsl38pAO+oROf
-	 9wUF8kiz13OyK590MDHSFI9gQ8B9i2zzmRUDHXWG879e4mktsIuD3JfsIU9PJDzr7VJk8
-	 JCNt7dAG63mY6R3In3NgpRrJBme/CayRF4+9ysLlNYpFQM+MGp07N+RnKAfGCsrt56A==
+	t=1794423684;
+	b=tm4kT5QjjTugzKCuZ1Pd5xPP8jzTl6PutijwM2wneCoViKlWFjQDyRakOOVj1sMIlstm
+	 q/565jaaf3ub62RBOsMtTncO3PXyeCxki0/gaM4CW5piVmMnyWvCliQjaiVGHCmBqio+l
+	 g08ElZLjFwapRDhxKHG7LeXluPdJDKzs0/9FF5ZbPEiQoCLHkvJCkYxYt9/ePjTwEn541
+	 /xzdN0fqGRg3fBzTEf7CSJlx4hEsYT8gl09TA529POCaPhk6Ad4ZEl1NXeKd89qbNlGE/
+	 R2D7LOINruuzx4zhpfUGOKkq7+ABkaMEKA3R5eQHQvcs/E3Op4XNAk8zv0FqadE1ipA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794422983;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=TgCrwBKFq42a525hu7rEDiY5DjHtPJaOdzFQRX+vxOs=;
-	b=Et1a8vtawd75sb3gvTOQ7yA3SFs2ErQ/H3iNaiZ6qZ/eVXbGG7RsaGjye4nF0U9/2AIa
-	 enJ5MirhweFy4gZzFvlse4/ftlPmD4UUQHyjJ2wffGqKd1V7KfJnEC978unp5vDCHC2jg
-	 Q3Ob/YAzMIfy7aN84ebz3mUm01al4pMBoMqWND3l8NukRAlxc9qxFej8KGMFLX47gzU8s
-	 GfvbC3XMBnHuPBooidzJJokTlMGdGxgxFCbANzgQYi08x+IjhMGZByMYT8Sbrwz3ZiaMh
-	 mSvDyBxRfB9d2K9r4GV7gjMDUaMiXMxkhlpp+tGIr/Db+yxA/ke/0HbOc86p0Gda28A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794423684;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Sender:Message-ID:Date:MIME-Version:User-Agent:From:Subject:To:Cc:
+	 References:Content-Language:In-Reply-To:Content-Type;
+	bh=ibbZxZ0AUA89ICzojImIUdj4mBfVP5cQ49POtiuj0Pg=;
+	b=1NEmw30qmvbWnuhDOVrdGq54NTlyxY0+bA0mT7Pv4chxt9tkHb58LqpVg961Ey96BgY6
+	 5Ih94xoY7UPp+UbbckNwW7amUpJZddkrj747XNP9LlMajTi5gpiV2meUrXPXuigcSrFJL
+	 LUWTviaTD5kUKsKnF+4PFHwSwF2UKjeP9z8sd3+zw0+fyK/hLwDtgCyLW35ZhJlfyJdR5
+	 7O9yLlYc0roPhQWXHAKCxrUMHxkRnoMYeCEFBI5zwXDeMQcHRXpfI3HMmTurJskBgSZLd
+	 O9d5GbfirXB+HavlqFnGnlfJhNuu+RpV4HuDdEocDk8XTawgOfyRgO6599Kypsj7DdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Hu/3eh2K";
-	arc=none smtp.remote-ip=198.175.65.13
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=av58eYxx;
+	arc=none smtp.remote-ip=209.85.221.47
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD65606A31C;
-	Wed, 11 Nov 2026 18:49:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FD65606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A9D606A321
+	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 19:01:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4A9D606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Hu/3eh2K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794422983; x=1825958983;
-  h=date:from:to:cc:subject:message-id;
-  bh=8Fi263fTWMQL5JZY4nx1gjLOjQoSKf07Ted47iwdVhQ=;
-  b=Hu/3eh2KeXNKkTXzHqQ95OoTOWs387uyjadt8loJrV1NctkCBu8z1B+x
-   90kqpCJ9SJQDxGVX2QC1V4cL/2kyvQvwMDBg5/YSptMdL/okKTN4GSz3w
-   dgnUrKxIlvc+esF7C7zBNc7P4POeI9CasZT5hKduM8ZPOgrunRc7/yrg3
-   571mOVd3f6xteDl/xTefuWfXIJ4Vgw/zfkRQBzz5M1wXbEZ2WdeesWUql
-   jfxa83qQ1CPQOSzAQFpINA4U8zho2eN7fD79GV3OfPRKoM4vtvbkH+cBp
-   /DPmCzSmZ89hS6YIiYn3uIanEZkRERf25dvP6Vc1QS7zLgenNPlD3AvDA
-   Q==;
-X-CSE-ConnectionGUID: 75oPVf+ZT62uDUBG7nDxpg==
-X-CSE-MsgGUID: LicbV5BIQHOw3Cp/eLkiQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11963"; a="3083446"
-X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
-   d="scan'208";a="3083446"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 10:49:42 -0800
-X-CSE-ConnectionGUID: 5I36G2dISbOVLtWWhtN2JQ==
-X-CSE-MsgGUID: X+XfVlYcRBun4YnGIWx8KQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
-   d="scan'208";a="8629678"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 11 Nov 2026 10:49:39 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRDO5-00000000zVb-2c31;
-	Wed, 11 Nov 2026 18:49:37 +0000
-Date: Thu, 12 Nov 2026 02:49:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 3665/6082] kernel/bpf/scev.c:3391:5:
- warning: stack frame size (1088) exceeds limit (1024) in
- 'bpf_compute_loop_iters'
-Message-ID: <202611120249.0rbvGayD-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=av58eYxx
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4918c2d727fso1963900f8f.3
+        for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 11:01:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794423682; x=1795028482; darn=lists.linux.dev;
+        h=content-type:in-reply-to:content-language:references:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:sender:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ibbZxZ0AUA89ICzojImIUdj4mBfVP5cQ49POtiuj0Pg=;
+        b=av58eYxxBqwWe8iaSp/xKGb84qCA4N9Wo3N3PCAuuh1Zcwgmy3i0DT7myZcswQ25KU
+         R7TNVWLOd3eFbm6aVc0rqZvvQ2Vp1WUBwfpR3SuE5JfPUpjJEtWGVcd8SGVsAevLvU8r
+         5R7LK4FOZa9NgiiGjT2+T4IjDYAUcjAkTzCwt53Z+NkoOEEyfmm+YaXkwelURNFO/tof
+         ULECvIdwcz1tkvyqbi75n/5wS88xX/n9KDys1gxQI5i8XaO5MqNQQoskD7L6wjNtFRvn
+         I/jTCRwKixzkvVOED2ycHlcQciYXeGqLA7iFM9bMqO5DYykTRlmES2yKY2Ps1HXYID0m
+         28Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794423682; x=1795028482;
+        h=content-type:in-reply-to:content-language:references:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:sender:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ibbZxZ0AUA89ICzojImIUdj4mBfVP5cQ49POtiuj0Pg=;
+        b=dylLt13pXYUa7LDB+RaJ9iQpMwBVjrUdF4ij49mO8qbV8cxKKAPQNBT5eHDzE2kVaY
+         tG+eDo19fOFPk90qeL6P7DmNG74eG2hyD9fCebIqWa3LgSq9q+sFjbIRsutocTgr0zuT
+         nbg/xto4FSBOdw4jFVCjFJ3U28+MEJPqnyHj5+4aryBtWTZ0f5Xmiw93zvskzyzR/rWd
+         myP+4iQP+w0z8q8/QzP4EHdhH2788InCO2OFHWeMk87NKtSccWlR3kFI2O1HPClNijS5
+         SbetrsfzJIAk4h5ojD3blC9I5BdNFAujvQvPnlW3KaF8MM0e6lWFGkUGzQ+z+kUuPTKl
+         41WQ==
+X-Forwarded-Encrypted: i=1; AL+hErFEUKKpNdYGN8mIq03lGvHBRueOPFxu4ZACff00snUS2PeYqEXnNDgbV7moIethAdHhxyX4@lists.linux.dev
+X-Gm-Message-State: APuU4Z+ZFtZqyBZe7jTjo2KmwIgRTOW6eM5qT88aTlse7S0FAdXzPmlM
+	TdKtsSuIWNDxQQViULvCTeEFq/Yllzu0R/37CP/loIbHQbcFzicgQRNodBvjvQnIZi4=
+X-Gm-Gg: AYBFou3gIlkehi+DKpJ3hxJuWALk6jCRA/mT3DZmFVvY1IgeuBzKpBrkg+fD3v0fy46
+	ZYDo7dhAnR88jClyv3jegSRFBBXlk9fKOUvKM1WLb+LJeRF+KoXPVXfd11XkiD8Nk24cwew0yqe
+	RS+UfSta6hqkuImnMpKUJZpQQyLSivNN931R6MIiqMmexRjUZzAwa0vOxNBBO6Yc1+TRvY/gMII
+	CvtthADwNbElbeCm47es35/0asVgcgNTlZmm/1nIsDdGrZEPI1kcIRgx/QcAQILlEVGIYkbYHnR
+	k1XBp0QDhR67B560qxF1vHYSU8FBt1Gn4wRDShuhu246nUq60PoLiRUlwsCbYllcSsAMmMKYZYW
+	SKT9F8KG+whPVoC9QvLI4TCboBe6D2tMlyH4g91C1zfddw05dBUM83cI6VK0z9GjhjRmlfIuu9W
+	1d6XIC7whXfK4oR/dnrITXOLci4aPlJQKdR9aNuTagdCMhCD/2Gv02ESiIO2U+tQ72aN/EMxFJG
+	1BnSXeUuyN67q2+XWDCMWpOMe+113NY72APgIsBUmoudMC9bV49F1flIimqiCKcG/WHJqH9EO9x
+	Ud0N68Ipv7xUvcKvDpIzAmHaUYpFGA6klq7TN7FoVH6PeblHtosyjnl4cZbEdcesM0Co0xQPruk
+	yC13g7afd466mZM8VyxnzZQ==
+X-Received: by 2002:a05:6000:2301:b0:48e:5071:420 with SMTP id ffacd0b85a97d-499c38baf65mr6310015f8f.2.1794423681839;
+        Wed, 11 Nov 2026 11:01:21 -0800 (PST)
+Received: from [10.128.10.232] (195-23-151-163.net.novis.pt. [195.23.151.163])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4988bdef64dsm11095632f8f.20.2026.11.11.11.01.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 11:01:21 -0800 (PST)
+Sender: Julian Braha <julian.braha@gmail.com>
+Message-ID: <6d7d25fa-69ef-42b0-b7f2-bb59ebf0eb2f@gmail.com>
+Date: Wed, 11 Nov 2026 19:01:19 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,289 +91,272 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Julian Braha <julianbraha@gmail.com>
+Subject: Re: [PATCH 4/4] scripts/Kconfig.toolchain: Document minimum supported
+ versions for dynamic checks
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20261110-kconfig-toolchain-updates-v1-0-6d4fb636290e@kernel.org>
+ <20261110-kconfig-toolchain-updates-v1-4-6d4fb636290e@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20261110-kconfig-toolchain-updates-v1-4-6d4fb636290e@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------OXKw02O0ZQVKPdopabmDPVkH"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   793807ca13bf3072fc6d16ce6d90e9ab9beff2a5
-commit: df9b13a441c9bc33e79f9dab0ff404b362fbc2a1 [3665/6082] bpf: Keep the first iteration of a counted loop apart
-config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20261112/202611120249.0rbvGayD-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261112/202611120249.0rbvGayD-lkp@intel.com/reproduce)
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------OXKw02O0ZQVKPdopabmDPVkH
+Content-Type: multipart/mixed; boundary="------------AiKmJ8XeW8CJXxcJsL6rEg05";
+ protected-headers="v1"; hp="clear"
+Message-ID: <6d7d25fa-69ef-42b0-b7f2-bb59ebf0eb2f@gmail.com>
+Date: Wed, 11 Nov 2026 19:01:19 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Julian Braha <julianbraha@gmail.com>
+Subject: Re: [PATCH 4/4] scripts/Kconfig.toolchain: Document minimum supported
+ versions for dynamic checks
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20261110-kconfig-toolchain-updates-v1-0-6d4fb636290e@kernel.org>
+ <20261110-kconfig-toolchain-updates-v1-4-6d4fb636290e@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20261110-kconfig-toolchain-updates-v1-4-6d4fb636290e@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611120249.0rbvGayD-lkp@intel.com/
+--------------AiKmJ8XeW8CJXxcJsL6rEg05
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-All warnings (new ones prefixed by >>):
+On 11/11/26 05:42, Nathan Chancellor wrote:
+> To make it easier to clean up unnecessary dynamic checks when the
+> minimum supported version of a toolchain component is updated, add
+> comments documenting when features were first supported. Request that
+> future additions document this as well.
 
->> kernel/bpf/scev.c:3391:5: warning: stack frame size (1088) exceeds limit (1024) in 'bpf_compute_loop_iters' [-Wframe-larger-than]
-    3391 | int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-         |     ^
-   1 warning generated.
+Love, love, love this!
+
+I tested the bounds and replicated nearly all of your results, but had a
+few notes:
+
+>=20
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  scripts/Kconfig.toolchain | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>=20
+> diff --git a/scripts/Kconfig.toolchain b/scripts/Kconfig.toolchain
+> index 26a62b15e9ab..3a9eb8317d59 100644
+> --- a/scripts/Kconfig.toolchain
+> +++ b/scripts/Kconfig.toolchain
+> @@ -1,4 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +# When adding a new dynamic check (such as {cc,ld}-option{,-str} or te=
+sting a
+> +# small program), please add a comment documenting the first version o=
+f the
+> +# tool that supported the feature being tested. For cc-option{,-str}, =
+note the
+> +# "beware" comment below.
+> +
+>  config CC_VERSION_TEXT
+>  	string
+>  	default "$(CC_VERSION_TEXT)"
+> @@ -118,6 +123,7 @@ config GCC_ASM_GOTO_OUTPUT_BROKEN
+>  config CC_HAS_ASM_GOTO_OUTPUT
+>  	def_bool y
+>  	depends on !GCC_ASM_GOTO_OUTPUT_BROKEN
+> +	# supported since clang-10 and gcc-11
+
+'asm goto' failed for me with clang 10. Seems it was added with
+clang 11 [1]
+
+>  	depends on $(success,echo 'int foo(int x) { asm goto ("": "=3Dr"(x) :=
+:: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
+> =20
+>  config CC_HAS_ASM_GOTO_TIED_OUTPUT
+> @@ -129,6 +135,7 @@ config TOOLS_SUPPORT_RELR
+>  	def_bool $(success,env "CC=3D$(CC)" "LD=3D$(LD)" "NM=3D$(NM)" "OBJCOP=
+Y=3D$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
+> =20
+>  config CC_HAS_ASM_INLINE
+> +	# supported since clang-11 and gcc-9
+>  	def_bool $(success,echo 'void foo(void) { asm inline (""); }' | $(CC)=
+ -x c - -c -o /dev/null)
+> =20
+>  config CC_HAS_ASSUME
+> @@ -161,6 +168,8 @@ config CC_HAS_ASSUME
+>  #    pitfall.
+> =20
+>  config CC_OPT_ZERO_INIT_PADDING_BITS
+> +	# supported since gcc-15. not needed for clang, as it does this by de=
+fault since clang-20
+> +	# https://github.com/llvm/llvm-project/
+> commit/7a086e1b2dc05f54afae3591614feede727601fa
+>  	def_string "$(cc-option-str,-fzero-init-padding-bits=3Dall)"
+> =20
+>  config CC_OPT_NO_ADDRSIG
+> @@ -168,12 +177,15 @@ config CC_OPT_NO_ADDRSIG
+>  	def_string "-fno-addrsig" if CC_IS_CLANG
+> =20
+>  config CC_OPT_DIAGNOSTICS_SHOW_CONTEXT
+> +	# supported since gcc-16, not supported by clang
+>  	def_string "$(cc-option-str,-fdiagnostics-show-context=3D2)"
+> =20
+>  config CC_OPT_DIAGNOSTICS_SHOW_INLINING_CHAIN
+> +	# supported since clang-23. not needed for gcc, as it does this by de=
+fault
+>  	def_string "$(cc-option-str,-fdiagnostics-show-inlining-chain)"
+> =20
+>  config CC_OPT_STRICT_FLEX_ARRAYS
+> +	# supported since clang-16 and gcc-13
+>  	def_string "$(cc-option-str,-fstrict-flex-arrays=3D3)"
+
+Clang 15 supports '-fstrict-flex-arrays' [1] so the check seemingly
+passed, but support for level 3 wasn't actually added until clang 16.
+
+I think this needs a:
+    'depends on !CC_IS_CLANG || CLANG_VERSION >=3D 160000'
+so the option evaluates as empty string when these deps are unmet.
+
+> =20
+>  config CC_OPT_NO_ALLOW_STORE_DATA_RACES
+> @@ -181,51 +193,67 @@ config CC_OPT_NO_ALLOW_STORE_DATA_RACES
+>  	def_string "$(cc-option-str,-fno-allow-store-data-races,--param=3Dall=
+ow-store-data-races=3D0)" if CC_IS_GCC
+> =20
+>  config CC_HAS_MNOP_MCOUNT
+> +	# supported since clang-10 and gcc-9 but option is architecture speci=
+fic
+>  	def_bool $(cc-option,-mnop-mcount)
+
+'-mnop-mcount' worked for me on x86 with gcc 5 [3], but it seems s390
+support came later in v9 [4]
+
+> =20
+>  config LD_OPT_FORCE_GROUP_ALLOCATION
+> +	# supported since ld.lld 19 and GNU ld 2.29
+>  	def_string "$(ld-option-str,--force-group-allocation)"
+> =20
+>  config LD_OPT_NO_WARN_RWX_SEGMENTS
+> +	# supported since GNU ld 2.39, not supported by ld.lld
+>  	def_string "$(ld-option-str,--no-warn-rwx-segments)"
+> =20
+>  config CC_OPT_WNO_ADDRESS_OF_PACKED_MEMBER
+> +	# supported since clang-4 and gcc-9
+>  	def_string "$(cc-option-str,-Wno-address-of-packed-member)"
+> =20
+>  config CC_OPT_WNO_FORMAT_OVERFLOW_NON_KPRINTF
+> +	# supported since clang-18, not needed for gcc
+>  	def_string "$(cc-option-str,-Wno-format-overflow-non-kprintf)"
+> =20
+>  config CC_OPT_WNO_FORMAT_TRUNCATION_NON_KPRINTF
+> +	# supported since clang-18, not needed for gcc
+>  	def_string "$(cc-option-str,-Wno-format-truncation-non-kprintf)"
+> =20
+>  config CC_OPT_WNO_DEFAULT_CONST_INIT_UNSAFE
+> +	# supported since clang-21, not needed for gcc
+>  	def_string "$(cc-option-str,-Wno-default-const-init-unsafe)"
+> =20
+>  config CC_OPT_WNO_DANGLING_POINTER
+> +	# supported since gcc-12, not needed for clang
+>  	def_string "$(cc-option-str,-Wno-dangling-pointer)"
+> =20
+>  config CC_OPT_WVLA_LARGER_THAN
+> +	# supported since gcc-7, not supported by clang
+>  	def_string "$(cc-option-str,-Wvla-larger-than=3D1)"
+> =20
+>  config CC_HAS_WSTRINGOP_OVERFLOW
+> +	# supported since gcc-7, not supported by clang
+>  	def_bool $(cc-option,-Wstringop-overflow)
+> =20
+>  config CC_OPT_WNO_UNTERMINATED_STRING_INITIALIZATION
+> +	# supported since gcc-15 and clang-21
+>  	def_string "$(cc-option-str,-Wno-unterminated-string-initialization)"=
+
+> =20
+>  config CC_OPT_WERROR_DESIGNATED_INIT
+> +	# supported since gcc-5, not supported by clang
+>  	def_string "$(cc-option-str,-Werror=3Ddesignated-init)"
+> =20
+>  config CC_OPT_WENUM_CONVERSION
+> +	# supported since clang-3.2 and gcc-10
+>  	def_string "$(cc-option-str,-Wenum-conversion)"
+> =20
+>  config CC_OPT_WNO_PACKED_NOT_ALIGNED
+> +	# supported since gcc-8, not supported by clang
+>  	def_string "$(cc-option-str,-Wno-packed-not-aligned)"
+> =20
+>  config CC_OPT_WNO_FORMAT_OVERFLOW
+> +	# supported since gcc-7 and clang-18
+>  	def_string "$(cc-option-str,-Wno-format-overflow)"
+> =20
+>  config CC_OPT_WNO_STRINGOP_TRUNCATION
+> +	# supported since gcc-8, not supported by clang
+>  	def_string "$(cc-option-str,-Wno-stringop-truncation)"
+> =20
+>  config CC_HAS_COUNTED_BY
+> @@ -252,14 +280,18 @@ config CC_HAS_BROKEN_COUNTED_BY_REF
+>  	default y if CC_IS_CLANG && CLANG_VERSION < 220100
+> =20
+>  config CC_HAS_ALLOC_TOKEN
+> +	# supported since clang-22, not supported by gcc
+>  	def_bool $(cc-option,-falloc-token-max=3D123)
+> =20
+>  config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+> +	# supported since gcc-15 and clang-21
+>  	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__))=
+ =3D { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
+> =20
+>  config CC_OPT_INLINE_MEMSET
+>  	string
+> +	# supported since gcc-14
+>  	default "-finline-stringops=3Dmemset" if $(cc-option,-finline-stringo=
+ps=3Dmemset)
+> +	# supported since clang-22
+>  	default "-mllvm -max-store-memset=3D4294967294" if $(cc-option,-mllvm=
+ -max-store-memset=3D4294967294)
+> =20
+>  config LD_CAN_USE_KEEP_IN_OVERLAY
+>=20
+> -- 2.56.0
+>=20
+
+[1]
+https://releases.llvm.org/11.0.0/tools/clang/docs/LanguageExtensions.html=
+
+[2]
+https://releases.llvm.org/15.0.0/tools/clang/docs/ReleaseNotes.html#major=
+-new-features
+[3] https://gcc.gnu.org/gcc-5/changes.html#x86
+[4] https://gcc.gnu.org/gcc-9/changes.html#s390
+
+- Julian Braha
 
 
-vim +/bpf_compute_loop_iters +3391 kernel/bpf/scev.c
 
-638524a5a88244 Alexei Starovoitov 2026-11-03  3390  
-638524a5a88244 Alexei Starovoitov 2026-11-03 @3391  int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
-638524a5a88244 Alexei Starovoitov 2026-11-03  3392  			   struct bpf_loop_iters *iters)
-638524a5a88244 Alexei Starovoitov 2026-11-03  3393  {
-638524a5a88244 Alexei Starovoitov 2026-11-03  3394  	struct bpf_func_state *cur_func = st->frame[st->curframe];
-638524a5a88244 Alexei Starovoitov 2026-11-03  3395  	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3396  	struct bpf_verifier_log *log = &env->log;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3397  	struct scev *scev = env->scev;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3398  	struct env *header_env;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3399  	struct linear_latch latch, first;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3400  	struct linear_coefs coefs;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3401  	struct bpf_loop_iters tmp;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3402  	struct bpf_loop *loop;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3403  	int insn_idx = st->insn_idx;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3404  	u64 until, false_until;
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3405  	bool same = true, walk = false;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3406  	int err, i;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3407  	u32 r;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3408  
-638524a5a88244 Alexei Starovoitov 2026-11-03  3409  	if (!env->allow_uninit_stack)
-638524a5a88244 Alexei Starovoitov 2026-11-03  3410  		return 0;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3411  
-638524a5a88244 Alexei Starovoitov 2026-11-03  3412  	/*
-638524a5a88244 Alexei Starovoitov 2026-11-03  3413  	 * If insn_idx is a loop header for a reducible loop.
-638524a5a88244 Alexei Starovoitov 2026-11-03  3414  	 * loop is NULL for secondary entries to irreducible loops.
-638524a5a88244 Alexei Starovoitov 2026-11-03  3415  	 */
-638524a5a88244 Alexei Starovoitov 2026-11-03  3416  	loop = aux[insn_idx].loop;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3417  	if (!loop || loop->irreducible || loop->backedges_overflow ||
-638524a5a88244 Alexei Starovoitov 2026-11-03  3418  	    loop->nested_exits_overflow) {
-638524a5a88244 Alexei Starovoitov 2026-11-03  3419  		if (log->level & BPF_LOG_LEVEL2)
-638524a5a88244 Alexei Starovoitov 2026-11-03  3420  			bpf_log(log, "loop header at %d, unsupported loop:%s%s%s\n", insn_idx,
-638524a5a88244 Alexei Starovoitov 2026-11-03  3421  				!loop || loop->irreducible ? " irreducible" : "",
-638524a5a88244 Alexei Starovoitov 2026-11-03  3422  				loop && loop->backedges_overflow ? " too many backedges" : "",
-638524a5a88244 Alexei Starovoitov 2026-11-03  3423  				loop && loop->nested_exits_overflow ?
-638524a5a88244 Alexei Starovoitov 2026-11-03  3424  				" too many exits of a nested loop" : "");
-638524a5a88244 Alexei Starovoitov 2026-11-03  3425  		return 0;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3426  	}
-638524a5a88244 Alexei Starovoitov 2026-11-03  3427  
-638524a5a88244 Alexei Starovoitov 2026-11-03  3428  	/*
-638524a5a88244 Alexei Starovoitov 2026-11-03  3429  	 * A register that is linear at the header is 'first value + slope * k' in iteration k
-638524a5a88244 Alexei Starovoitov 2026-11-03  3430  	 * whatever back edges were taken. So the jumps that dominate a back edge say in
-638524a5a88244 Alexei Starovoitov 2026-11-03  3431  	 * which iterations it can be taken. The loop ends, at the latest, in an iteration
-638524a5a88244 Alexei Starovoitov 2026-11-03  3432  	 * in which no back edge can be taken.
-638524a5a88244 Alexei Starovoitov 2026-11-03  3433  	 */
-638524a5a88244 Alexei Starovoitov 2026-11-03  3434  	for (i = 0; i < loop->backedges_cnt; i++) {
-638524a5a88244 Alexei Starovoitov 2026-11-03  3435  		err = count_backedge(env, cur_func, insn_idx, &loop->backedges[i],
-638524a5a88244 Alexei Starovoitov 2026-11-03  3436  				     i ? &tmp : iters, &latch, &until);
-638524a5a88244 Alexei Starovoitov 2026-11-03  3437  		if (err <= 0)
-638524a5a88244 Alexei Starovoitov 2026-11-03  3438  			return err;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3439  		if (!i) {
-638524a5a88244 Alexei Starovoitov 2026-11-03  3440  			false_until = until;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3441  			first = latch;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3442  			continue;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3443  		}
-638524a5a88244 Alexei Starovoitov 2026-11-03  3444  		same &= same_latch(&first, &latch);
-638524a5a88244 Alexei Starovoitov 2026-11-03  3445  		false_until = min(false_until, until);
-638524a5a88244 Alexei Starovoitov 2026-11-03  3446  		iters->max_header_count = max(iters->max_header_count, tmp.max_header_count);
-638524a5a88244 Alexei Starovoitov 2026-11-03  3447  		iters->min_header_count = min(iters->min_header_count, tmp.min_header_count);
-638524a5a88244 Alexei Starovoitov 2026-11-03  3448  		/* at the header the variable is what one of the latches lets through */
-638524a5a88244 Alexei Starovoitov 2026-11-03  3449  		if (iters->iv_reg >= 0 && iters->iv_reg == tmp.iv_reg)
-638524a5a88244 Alexei Starovoitov 2026-11-03  3450  			iters->iv_range = cnum64_union(iters->iv_range, tmp.iv_range);
-638524a5a88244 Alexei Starovoitov 2026-11-03  3451  		else
-638524a5a88244 Alexei Starovoitov 2026-11-03  3452  			iters->iv_reg = -1;
-638524a5a88244 Alexei Starovoitov 2026-11-03  3453  	}
-638524a5a88244 Alexei Starovoitov 2026-11-03  3454  	/*
-638524a5a88244 Alexei Starovoitov 2026-11-03  3455  	 * When the latches that were kept are the same test, the first iteration in which it's
-638524a5a88244 Alexei Starovoitov 2026-11-03  3456  	 * false is the last one. Otherwise take the largest count and make sure that the latches
-638524a5a88244 Alexei Starovoitov 2026-11-03  3457  	 * which became false earlier are false still.
-638524a5a88244 Alexei Starovoitov 2026-11-03  3458  	 */
-638524a5a88244 Alexei Starovoitov 2026-11-03  3459  	if (!same && iters->max_header_count - 1 > false_until) {
-638524a5a88244 Alexei Starovoitov 2026-11-03  3460  		if (log->level & BPF_LOG_LEVEL2)
-638524a5a88244 Alexei Starovoitov 2026-11-03  3461  			bpf_log(log,
-638524a5a88244 Alexei Starovoitov 2026-11-03  3462  				"loop header at %d, a latch may be true again in iteration %u\n",
-638524a5a88244 Alexei Starovoitov 2026-11-03  3463  				insn_idx, iters->max_header_count - 1);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3464  		return 0;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3465  	}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3466  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3467  	if (iters->max_header_count == 0) {
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3468  		if (log->level & BPF_LOG_LEVEL2)
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3469  			bpf_log(log, "loop header at %d, 0 iterations count\n", insn_idx);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3470  		return 0;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3471  	}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3472  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3473  	if (iters->max_header_count == U32_MAX) {
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3474  		if (log->level & BPF_LOG_LEVEL2)
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3475  			bpf_log(log, "loop header at %d, inf iterations count\n", insn_idx);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3476  		return 0;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3477  	}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3478  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3479  	if (log->level & BPF_LOG_LEVEL2) {
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3480  		bpf_log(log, "loop header at %d, header_count is ", insn_idx);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3481  		if (iters->min_header_count == iters->max_header_count)
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3482  			bpf_log(log, "%u ", iters->max_header_count);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3483  		else
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3484  			bpf_log(log, "[%u..%u] ", iters->min_header_count, iters->max_header_count);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3485  		bpf_log(log, "\n");
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3486  	}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3487  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3488  	err = bpf_live_stack_query_init(env, st);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3489  	if (err)
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3490  		return err;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3491  
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3492  	bitmap_zero(iters->forget_regs, REGS_NUM);
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3493  	bitmap_zero(iters->fresh_regs, REGS_NUM);
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3494  	bitmap_zero(iters->mask_regs, REGS_NUM);
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3495  	iters->spill_base = false;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3496  	header_env = find_header_env(scev, insn_idx);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3497  	for (r = 0; r < REGS_NUM; r++) {
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3498  		struct bpf_reg_state *reg = NULL;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3499  		u32 ra, r_scev, r_expr;
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3500  		bool spill_base = false;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3501  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3502  		if (!scev_reg_alive(env, st, r))
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3503  			continue;
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3504  
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3505  		r_scev = header_env->reg2scev[r];
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3506  		if (spill32_counter(scev, cur_func, r_scev, r, &coefs)) {
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3507  			/* There is no exact offset to lose if nothing is known about the number */
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3508  			if (test_bit(r, loop->store_base_regs) &&
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3509  			    is_known_partial_spill(cur_func, r)) {
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3510  				spill_base = true;
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3511  				goto cant_widen;
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3512  			}
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3513  			continue;
-e5872c5e13da91 Alexei Starovoitov 2026-11-03  3514  		}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3515  		/*
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3516  		 * A heuristic:
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3517  		 * Ignore SCEVs computed for unbound values and treat those as widened.
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3518  		 * This is poor man's modelling of e.g. bpf_probe_read_kernel() effect
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3519  		 * on stack, when called from a subprogram. Currently this would produce
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3520  		 * an unknown ('?') SCEV as a summary of a subprogram call effects.
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3521  		 * Ideally, this should be computed as an OPAQUE value.
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3522  		 * However, that would require tracking STACK_MISC writes in the
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3523  		 * liveness analysis. Not implemented yet.
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3524  		 */
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3525  		if (is_unbound_scev_reg(env, cur_func, r)) {
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3526  			/*
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3527  			 * Nothing widens the value that the state has for a partial spill. A
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3528  			 * value that is made from itself can be a new one in each iteration:
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3529  			 * treat it like a register that has no formula. It's in the half
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3530  			 * of the slot that is farther from fp.
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3531  			 */
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3532  			if (is_known_partial_spill(cur_func, r) &&
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3533  			    bpf_stack_slot_alive(env, st->curframe, (r - MAX_BPF_REG) * 2 + 1) &&
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3534  			    made_from_partial_spill(scev, cur_func, header_env,
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3535  						    header_env->reg2expr[r], r, 0))
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3536  				goto cant_widen;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3537  			continue;
-37f84dfb1659d6 Alexei Starovoitov 2026-11-03  3538  		}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3539  
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3540  		if (is_const_scev_reg(env, insn_idx, r))
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3541  			continue;
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3542  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3543  		reg = scev_reg_for_linear(cur_func, r);
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3544  		/*
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3545  		 * The offset of a pointer to arena is not tracked, so there is nothing to lose.
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3546  		 * If the loop makes something else of it the state that returns to the head
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3547  		 * is not covered by the state at the head.
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3548  		 */
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3549  		if (reg && reg->type == PTR_TO_ARENA) {
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3550  			__set_bit(r, iters->forget_regs);
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3551  			continue;
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3552  		}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3553  		/* If SCEV for r is (linear <reg> <slope>) */
-32e962577d2d8a Eduard Zingerman   2026-10-20  3554  		if (reg && is_simple_linear(scev, r_scev, &coefs) && is_widenable_reg_type(reg)) {
-c463b378eae7fa Eduard Zingerman   2026-10-26  3555  			/* 32-bit ALU operations on pointers convert them to scalars */
-c463b378eae7fa Eduard Zingerman   2026-10-26  3556  			if (coefs.zext32 && reg->type != SCALAR_VALUE)
-c463b378eae7fa Eduard Zingerman   2026-10-26  3557  				goto cant_widen;
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3558  			/* Spills at varying offsets lose precision */
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3559  			if (test_bit(r, loop->store_base_regs)) {
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3560  				spill_base = true;
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3561  				goto cant_widen;
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3562  			}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3563  			continue;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3564  		}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3565  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3566  		/* rA = rA, loop does not change this reg */
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3567  		if (is_reg(scev, r_scev, &ra) && r == ra)
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3568  			continue;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3569  
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3570  		/* (any 1 (any 2 (any 3 4))) */
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3571  		if (is_widenable_any(env, cur_func, header_env, r, r_scev)) {
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3572  			if (test_bit(r, loop->store_base_regs)) {
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3573  				spill_base = true;
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3574  				goto cant_widen;
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3575  			}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3576  			continue;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3577  		}
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3578  
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3579  		/*
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3580  		 * [0, max] that loses bits is in [0, max], a bit that is 0 stays 0: what enters
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3581  		 * the loop stands for all iterations as it is. 64 or [64, 127] does not: it
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3582  		 * can become 0.
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3583  		 */
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3584  		if (reg && reg->type == SCALAR_VALUE && !test_bit(r, loop->store_base_regs) &&
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3585  		    reg_is_zero_to_max(reg) &&
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3586  		    expr_loses_bits_only(scev, header_env->reg2expr[r], r, 0)) {
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3587  			__set_bit(r, iters->mask_regs);
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3588  			continue;
-09c5008302ed29 Alexei Starovoitov 2026-11-03  3589  		}
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3590  cant_widen:
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3591  		if (log->level & BPF_LOG_LEVEL2) {
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3592  			r_expr = header_env->reg2expr[r];
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3593  			bpf_log(log, "loop header at %d, can't widen ", insn_idx);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3594  			log_reg(env, r);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3595  			bpf_log(log, ", expr is ");
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3596  			log_expr(env, r_expr);
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3597  			if (spill_base)
-088a5477a9bdb4 Eduard Zingerman   2026-10-09  3598  				bpf_log(log, ", requires exact stack-offset tracking");
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3599  			bpf_log(log, "\n");
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3600  		}
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3601  		/* the count stands, it is this one that is not known in the loop */
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3602  		if (spill_base) {
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3603  			iters->spill_base = true;
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3604  			walk = true;
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3605  			continue;
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3606  		}
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3607  		/*
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3608  		 * What is loaded from memory in every iteration is the same kind of thing in all
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3609  		 * of them. One iteration tells what. There is nothing more to find out when
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3610  		 * iterations are looked at one by one.
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3611  		 */
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3612  		if (expr_is_fresh(env, header_env->reg2expr[r])) {
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3613  			__set_bit(r, iters->fresh_regs);
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3614  			continue;
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3615  		}
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3616  		__set_bit(r, iters->forget_regs);
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3617  		/*
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3618  		 *	for (i = 0; i < 40; i++) { if (i) sum += prev; prev = (x ^ i) * 3; }
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3619  		 * It's not set in the first iteration only. That counts if the loop is not walked:
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3620  		 * nothing looks at prev, or there are too many iterations.
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3621  		 */
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3622  		if (reg && reg->type == NOT_INIT)
-df9b13a441c9bc Alexei Starovoitov 2026-11-07  3623  			__set_bit(r, iters->fresh_regs);
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3624  		/*
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3625  		 * Only a walk through the iterations tells what it is in each of them. That is not
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3626  		 * worth it for a number that nothing looks at: a sum, a hash, what a call leaves in
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3627  		 * r1 - r5. What comes back to the head is joined with what entered then. A pointer,
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3628  		 * or a slot that holds something else than a register, has no such join.
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3629  		 */
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3630  		if (!reg || (reg->type != SCALAR_VALUE && reg->type != NOT_INIT) ||
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3631  		    bpf_flow_is_needed(env, insn_idx, r)) {
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3632  			walk = true;
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3633  			continue;
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3634  		}
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3635  		if (log->level & BPF_LOG_LEVEL2)
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3636  			bpf_log(log, "loop header at %d, nothing looks at it\n", insn_idx);
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3637  	}
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3638  
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3639  	/* 2: the count is known, what some of the live registers are is not and it matters */
-9b202a8c7722dd Alexei Starovoitov 2026-11-07  3640  	return walk ? 2 : 1;
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3641  }
-6ccf49f7932781 Eduard Zingerman   2026-10-09  3642  
 
-:::::: The code at line 3391 was first introduced by commit
-:::::: 638524a5a8824480874c3e431493c6f205b407f8 bpf: Count a loop with several back edges
+--------------AiKmJ8XeW8CJXxcJsL6rEg05--
 
-:::::: TO: Alexei Starovoitov <ast@kernel.org>
-:::::: CC: Alexei Starovoitov <ast@kernel.org>
+--------------OXKw02O0ZQVKPdopabmDPVkH
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+wnsEABYIACMWIQT6qjll++tIFxF8TUPElYPCBXNxIAUCavS7gAUDAAAAAAAKCRDElYPCBXNxIFXd
+AP97y3g2Ub97AFzCrczSMb4sT2GyzxZRrL1efJ7+kCebegD/VQABtAUuVtuD5BEo+mLgOmJTvZhP
+ejIUhi9yx/4VPgs=
+=Q2PJ
+-----END PGP SIGNATURE-----
+
+--------------OXKw02O0ZQVKPdopabmDPVkH--
