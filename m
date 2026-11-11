@@ -1,117 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.74
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794435917;
-	b=naP4oOKK+y+iaBZCW8k1t1nrTH/maLQvU87RPXiigkbPVZEBVnqRaE3KJOvghUPFgkgb
-	 mZSsNzX1UtI1tDbiobZSOfHGabM2yfGpZse943lG/WyEkgcQBofyJ7a1BIGzuhaKk5BsT
-	 fJc6mThMQ6fZ5KCQniohwtkqSv/v3yyO32aaDUjXX/JRdDHi8pYafG2SJwc+P80I1mZXK
-	 JGKdCvezyxBpf7ScR3Ke7Wolr4CPSzfxU5rmGGEhJnUVGf3JPuNeVNgJeGBz+aDSZ3rZO
-	 4YCPHqMh3haxe9BEFsLhwEZseLD/W6JafCjbM5qsoU79pe3jjrAnmMT3H3nszUWZ+OA==
+	t=1794436158;
+	b=zqIqVW9nB9b8IP/PU/g+gOdcEJqD9Vv4RUpR8qGqRW73ToSjf0LOm5Yma6DVPH8FIuLi
+	 K0TFc7vE0a7EYH0sg5Y7X8cw2KSzmUQanOso6vGePg8a1YxYN3HwhuRDSJki3FCE42NJB
+	 P9iav/Fo7miWk81SJqYyBrBJzGE4hLxfZsUfxWBhGqSW8ix5c6Uhh3qKSiXGh1bIdRv4w
+	 mBDW0rLmzOntKsTSm2/y9y18hqmfc/OhlXnoFi13d94sf0DofLVgxN3EUFKojMLYSmyGQ
+	 RLcqLPZfGBQRXMMX6WqAWSeSHrE/AAPzl2fTrT+T3F5N75jZovhWLSz3CSfZvBEZisQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794435917;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=LcIgSNREManU20T5ds32E1qosC1xbF0e9vbPmoZw/SM=;
-	b=Yg7DuqsOti9Fk3Zp/WNnJrR4+Y6sAZtvWMicma4HIZ6OH6n/CWrAa5CwXTQtreYoIquw
-	 pZWbTOUdetrYT5E4B0bjf3irUkR6LdatV1I9FLL29eUzkbuH8xNaY94YHEQs1DggNQ4Uv
-	 /mDLNP9HhZC7ytY7nX+zqvqXuWd2uZ0WNdLf+q91FJLPDFp0ZMTHeP0Ms45NO5DTzhng0
-	 kSU08fZ7zj/KZphF7teUZm7SBD4nqphYP3eSQcmnEXK/VQO66M9s7Ypmf3MvWUuv1seO3
-	 0hE19S+P1L78I+ORxTVVJfXuJDZUiCk0K5b1vrqnQIZCxZ4jyg+JEUmkKKI3F/sz4qQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794436158;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=swr3Ra0uYYHhVDT8SV7YWQm5snOjPZHE4+u1z3uEAP4=;
+	b=ATkL6wx5x/BgeSfx2XeDvX4qbKyeQQ0mW4nKC/buFyhtUAXI47Ww6/2Tf1UmDonC6nFt
+	 yj+3+R6v/AZXj4g7u1lfyViOPh103gt2Z4F46hzPiWZEaXMSJ678GCu48EiDg3IjTh/z6
+	 4JKmwDP9Gv8iftmfy/Di9J0nNHspMqXrpIpzD36W9v11/yTupjRUrND7HJdRM2UHjetWT
+	 dfi4RFACr4GNLEaiue+SDbe6E/Su32D2nyp7MXNngo25c4nNdcBy+VX9vS9rOitJNmQ2o
+	 hexpd+AfQnGtdjuoUz3J8AP56EvHYle4BT65nKjqoTUFXT6GRzBSnZBQM+sB5wgDgyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="nWgPs/vT";
-	arc=none smtp.remote-ip=74.125.229.135
-Received: from mail-dl2-f7.google.com (mail-dl2-f7.google.com [74.125.229.135])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FHFW1jQ8;
+	arc=none smtp.remote-ip=91.218.175.74
+Received: from mta0.migadu.com (out-74.mta0.migadu.com [91.218.175.74])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3AE606A32D
-	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 22:25:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE3AE606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FAF4606A33A
+	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 22:29:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0FAF4606A33A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nWgPs/vT
-Received: by mail-dl2-f7.google.com with SMTP id a92af1059eb24-13985f8229aso3309011c88.1
-        for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 14:25:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794435916; x=1795040716; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LcIgSNREManU20T5ds32E1qosC1xbF0e9vbPmoZw/SM=;
-        b=nWgPs/vTiv3nNs0P97T2lIBfbtDu6uwoGmdVo85c++sJTZx/Cufm0SQfyggd1HjXrZ
-         ofdGI+X8kv3ezs/9uAzo7lLEIbIqQp1raXrjROjV4HwiiauY2Ca/FXLOVtDz/F2xiHWK
-         0p/lHuRpWUeTYRA0Wh1kIoo3dhrwUVZCGVJCNbyFhRaRM//QjkcvSave+aPupu1g5K0r
-         7rC6ZAWLSeUSq5AeSsnwjYU07kNUxrcpqBae4uIrB+9Lu9aPNQWTUZ/4BL0X53VCOlq+
-         cdV894Bm3zbkg+GVuN6+jpITVIkle9npZdaa7qaBgkRaFB3PeS0o/2Dw+9M8U9veArEW
-         xSSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794435916; x=1795040716;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LcIgSNREManU20T5ds32E1qosC1xbF0e9vbPmoZw/SM=;
-        b=WETEwCLgBEv4eLpTX5Lkz7E9y2Y537ug/KxygbxlZU4jUQbQ7Fijcw+nryn/DRJtwY
-         aeVpZvRPguvIoyFfRmuFw+gQ5UMCH0UrH04+M7Oa+Mx6VF6Ph3Ll3Bor64udhEdHQym2
-         KvLF+kJ4nuccw4Kz9FGZZSnWxlH4Ps9HnSNFAYvH0w4ZulNeNXmkELt274oTQTOHeQmu
-         UAqKd6XfCKI3J9X/Bw8Jl9Ci9u3FDFKox91xrR4cVOranqZTqls6GPlQfrv/KLRiVgJV
-         s4wS64dNYLaPQjLf6uY+qIvtaROT+g70LdSMl4jai/kWwDbLZCZqhvOcYNm/I5LTWWVs
-         b1gg==
-X-Forwarded-Encrypted: i=1; AL+hErFYpONPivttHE9w/YrbvZEQj8nQGRLmrB6k7KW20W3nQj5Ofyz2SWFiQ2IrSrAy2Z8IYh5D@lists.linux.dev
-X-Gm-Message-State: APuU4Z8vRGzqSPPvYFkAR0NE17QueNzrKIOilQNFcVMvaJC4teuUjKSY
-	JAbdEKaptq2uSxdrBzgAEpJ5ehWOnv1lWcIrWEGhN18GNRdGzs+rY6p0
-X-Gm-Gg: AYBFou1e8sEWK1FlDXZyXitpcc7ijg+gCT8Wbn62uJg4Bx33WQ1lEb9ITKq+aMkjYvC
-	LjoJwYkG8+AwZIcn5SK0pggXPyCDglUsZ8NR4BiFF9tzFY0pY9t6MHDmNGMYqUGskctuOYSEpnd
-	/KcJnCy2JZPi7YTiMPdCg8Je42QnbcP37Yu6DZHGJl4gC3+jtuTCnYIaHY7yD5O2dMBc/32S4+n
-	cbWYQ2AuMfDiyn7qTOjT606c1dn5CD1fmxOUy6ZAvWhu1i/TB9Up3BXlHWPn3ANQUvzOjHUD8Kl
-	yqMG5igX+QdLz6yzn44FyqM+UJ3rmdg/vxOtAXrLG9QvQ4Mdd+1HQ9883OF1iXMr3YWNaeEcx5v
-	iTeZMz8J/B0x3WwlNywptDyGbb63wAH7h8x18kSyRh8SAarxysFC0wr9VOpvI1orsJzyBMrjEDb
-	35S4AqjGdLUyP+NFtnmky7cIzzgS+Ldir/sINrfybYkS69yL2eo16pxIp+N1NNzzSOzIAHBnDgW
-	De6zU9cdboPvnQVl/gQj6/hVhMagTzkwrkBVut6Qm3XReZ+MfdhcXk0Tc31Oz0IwzDMdYBPqZRH
-	dx+CPlYTWJfjljzYFael2zE=
-X-Received: by 2002:a05:7022:286:10b0:1b3:a23a:d1f3 with SMTP id a92af1059eb24-1b3c03037a9mr3351998c88.18.1794435915687;
-        Wed, 11 Nov 2026 14:25:15 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:43::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b3b5890584sm20682923c88.3.2026.11.11.14.25.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 14:25:15 -0800 (PST)
-Date: Wed, 11 Nov 2026 14:25:09 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin <deliran@verdict.gg>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
-	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev, kernel-team@cloudflare.com
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-Message-ID: <avTqb--WfUNBcEyN@devvm16445.scu0.facebook.com>
-References: <cover.1794281983.git.tianyi@cloudflare.com>
- <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
- <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FHFW1jQ8
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=WNeWuH485eW6BnGDu5zKsDsVjpVFn1cXQI2ek2Qhepw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794436154; v=1; x=1795040954;
+ b=FHFW1jQ8gZeq62AyqIat/bVk9+oZJPH+mKkgGwHYatFqvqUcb0jqme3Ckd8RXghvxmEFuymv
+ EXnKFgmZpzeJhVQnrdCTsXC8aJbNJvY38EQA7hJs/li1XdYxFrbyl6lBTQG5l25sJHs0Bzfkdgu
+ +aqETu4zmziTnVUrlolNq95Y=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id a971d7137a0d0f9f;
+	Wed, 11 Nov 2026 22:29:14 +0000
+X-Mizu-Trace-ID: a971d7137a0d0f9f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <9ccfc1f1-1214-4374-bac4-f4d91103d149@linux.dev>
+Date: Wed, 11 Nov 2026 14:29:11 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -121,44 +58,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
+ clang KCSAN
+To: Breno Leitao <leitao@debian.org>, kuniyu@google.com,
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+Cc: ast@kernel.org, bpf@vger.kernel.org, kuba@kernel.org, tj@kernel.org
+References: <au27Y9m78_3EH2v1@gmail.com>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <au27Y9m78_3EH2v1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 11/11, Tianyi Gao wrote:
-> Hi Stanislav,
-> 
-> On 11/10, Stanislav Fomichev wrote:
-> > Awhile ago we discussed the alternative of adding setters for xdp
-> > metadata. Then the veth (or whoever turns xdp frame into an skb) can
-> > apply whatever metadata it needs (and there is some magic behind the
-> > scenes that takes it into account when creating an skb). That keeps
-> > the layout and most of the code outside of kernel. Have we considered
-> > that here?
-> 
-> Thanks for the reminder. Yes, we considered [1] and [2], and took
-> parts of them.
-> 
-> The alternative setter model in [1] requires a program on veth or
-> cpumap to call the setters for the RX metadata. We want to avoid that:
-> 
-> - On veth, an XDP program removes software GSO from the peer, limits
->   its MTU, and can copy skbs from the peer.
-> - On cpumap, each entry would need a program only for this.
-> 
-> This series achieves the same with only the XDP program on the NIC,
-> which stores the values with kfuncs in the skb core extension area
-> after the xdp_frame. cpumap and veth take this area into account when
-> they create the skb, which is the "magic behind the scenes".
-> 
-> [1] https://lore.kernel.org/all/20250616145523.63bd2577@kernel.org/
-> [2] https://lore.kernel.org/all/aGvcb53APFXR8eJb@mini-arch/
 
-My main concern is that we are adding a lot of code and one more special
-way to plumb the metadata (and another metadata area), another set
-of kfuncs and slowly creeping more features into xdp making it more
-and more like skb.
 
-For containers in general, and for fast af_/xdp, we seem to have been
-moving into netkit with queue leasing. Maybe that's something that
-can help with your veth performance?
+On 11/6/26 3:38 AM, Breno Leitao wrote:
+> My arm64 KCSAN builds of linux-next fail since next-20261015, because
+> bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
+>
+>    WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+>    WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+>    Failed to generate BTF for vmlinux
+>    Try to disable CONFIG_DEBUG_INFO_BTF
+>    make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+>
+> This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
+> same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
+> v7.4-rc1 is affected as well. With pahole 1.31, the same config without
+> KCSAN builds fine.
+>
+> The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
+> sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
+> --fatal_warnings exit status") made the missing BTF fatal with
+> CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
+> is never registered:
+>
+>    initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
+>
+> This seems similar to pahole behaviour sched_ext hit with a bool
+> argument, discussed in [2] and worked around in f2f095c87603
+> ("sched_ext: Work around pahole 1.32 dropping
+> scx_bpf_task_set_lazy_resched() from BTF").
+>
+> Here the argument is an int that clang reassigns, its location list has
+> no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
+> pahole 1.31 does not help.
+>
+> Not reassigning the parameter is a workaround for me, with any pahole: clang
+> then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
+> and __bpf_tcp_ops_init() returns 0 (tested in virtme):
+>
+> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+> index 2ba73dd6c52cce..1afa6bd7f508ef 100644
+> --- a/net/ipv4/bpf_tcp_ops.c
+> +++ b/net/ipv4/bpf_tcp_ops.c
+> @@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
+>   	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
+>   		wakeup = true;
+>
+> -	if (rcvlowat < 0)
+> -		rcvlowat = INT_MAX;
+> -
+> -	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
+> +	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
+> +	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
+> +				  wakeup);
+>   }
+>
+>   __bpf_kfunc_end_defs();
+>
+> Would this be acceptable?
+
+I tried and this change should be okay. The below pahole patch
+    https://lore.kernel.org/bpf/20261111222447.322978-1-yonghong.song@linux.dev/
+is to ensure that all kfuncs will have their source BTF. So once
+the patch patch is merged, you can use pahole master branch to build.
+
+>
+> [1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
+> [2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
+
