@@ -1,87 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794363682;
-	b=bDf1Tu+QSG+AqP/NMfdPdU/Xj9Y8TTnzS9yIMUIMeS/oj9BPgmltsJy4JmpEElsPJpTE
-	 EyWwsMpTJ07Mp0rJj0tCu/BmQP17WyGZ93MknCzaUuyIZG1VYew9f5qtRWu2M5SWWxe1q
-	 NjBWuFC9RHP/ON9iAdCg7WAkGpwwswmGWHXY3O5s+rYyCXK2r6OPTxsx4j702wPCa1eo6
-	 vk+waxV1oE/sYVC5jA1lZ+7q3dWqzpB5T1HNE0lNA2/MOdHYNLdEDGwAUfqwfnluHJp7d
-	 OXdc20PQyvq9CpIMJ3ox2xL0SJAPDYoADAHs6crrWPdZQLzqDNKiO4r3EiR/OwHkmaQ==
+	t=1794364418;
+	b=atbP9hgoFrNroukkflazRyq5b41tfuUxQTbkPzg/7aCKsPY1nd379L9WKL6CiufGBEXp
+	 kvbe8Au2l88jIzMQzaxPF8SnPgoYvw/onWs7HfwDKrCAy/hKLUljZt0BeyguuH95HCpzs
+	 RNWUCQCCn2xbvqivBcxd5AH2o7JnzEgQri0esR3+oDjbn7jI00XDq2OYTjGaRquLuBLC5
+	 jxZrj1MiAtKa4ysqP1Q7xdsl4i6xoN83gj7neoCwxrYwxv4kRcZLV3kLi3BPXFTLeXZ8b
+	 6gq0AAHMnSvqit3DsoJETL/J6mD9HnOtdA7bf0kwOxFPnz8/QlT7NLq237BUVVCUDpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794363682;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=WJbesFIYlpH1gBWGhFnOLKrK8EWw7z9yvLVG93BvJhk=;
-	b=CM1rzXdXtkr4Z32q3hR/2MnmvjMEHSf54LsfW5QHaLG8rRzUkS4sXV3uW+xVoq+wxOMT
-	 u2NfiJa5VuskDI3EHCvsWGOD2hX3EXW3qRMrIm8Bt49ngKps/IOyy+J+xy0+5+GbEngeO
-	 soiK2HsiZ+9MEXe3bpvznm+nRjTIWlno+9UG42PA0pTLKzr4AXpWjV/40imflJL9ilY0f
-	 Ji8rMOTYCJyNf/eS7i91lIrxcmWymmCgPpoqNXS9q5jyamN3HHnGleM+67xLR9D1/jYhZ
-	 5SVIEo2IxszGCfHBzpjcUvjiZ894lryochMiHGMTaUCwGrHwthczbvEaNNZ50f9qWlg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794364418;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=s18d0QtUAH5SO1XlwoaKN258QqfdDcIgzB60hufTnb0=;
+	b=4428xKsbtH3F1J5pC8bFCuwfKePFcF9E0cnBUJvdSWrAQSluDaJAwmZlvB8YM5o+wUeB
+	 A2Si14UYmZ1z5kcHQqptiZsncQouO01lT8w08yPWEIEA9Uvqf2wzaQ73IFwl1uI/Psq/C
+	 8kxL/DyZOABPGRJ77DkFlw8mYFuFrCByq8ZsxMejXAcAlGM63EsrU/8GT3th9vXXEkVvm
+	 tpGgQHXQwJc/H0vzPNdkgnug2XwRn79QaIyOkvYujk0LtFjES7VrVvxUKLkNAS995ZGCR
+	 FbRYl57AkS/FZaH2RuQpvlxMo4+6eaJDq/Q9zSI3gXA575ViKRCW89w+cL7u7CLLRWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=H1BAPK3e;
-	arc=none smtp.remote-ip=198.175.65.17
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=poROOy9c;
+	arc=none smtp.remote-ip=209.85.167.173
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62667606A334;
-	Wed, 11 Nov 2026 02:21:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62667606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0885E606A31C
+	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 02:33:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0885E606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=H1BAPK3e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794363682; x=1825899682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w+Xr+QzMFDzwse/PNcCw0jqlWFmK5mh/TodzvCIlmX4=;
-  b=H1BAPK3ezf6vDifk0ZEN4Nv8DsUPZbBi4Hjs4SjKd6sI2Viaw4NKpFHy
-   4lquMYBTFn+GwCUHVoTz/5P61s2mISQxn3Aed0myBYkv304taYIoYNaFZ
-   hJDHJZMVXF20nxuq9VsPtND7E2TSCJ1hCFmGQRhs1NWgv7NOujQjr6lre
-   dGoE3vFN2Ar1VUe3k8Yh3vjPldxEaH3Z2xieXaB9EG0zFahndHG2z7DKs
-   7qBQvGo7USaPyMeSM3y9rBaUB7y0Mraw/mOX+efylOU5WpNcH3lpFTebp
-   zg2CljP0DbI6qKgokrazDEQ4Ng/Mlo3I6osLG/Dwd6MWyznvsowL3jZpA
-   A==;
-X-CSE-ConnectionGUID: zKLgqsw6ThOFAh/duITzjA==
-X-CSE-MsgGUID: y1IYLEB0RvGh3V9dC/k6kg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3153922"
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="3153922"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 18:21:22 -0800
-X-CSE-ConnectionGUID: /Psi1CagQMSAizsJ6rTKlA==
-X-CSE-MsgGUID: jhs4LrhCQpuiSFsIXmJsnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="8643043"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 10 Nov 2026 18:21:18 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQxxa-00000000xtr-2qFM;
-	Wed, 11 Nov 2026 02:21:14 +0000
-Date: Wed, 11 Nov 2026 10:20:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>,
-	x86@kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 13/13] samples/kprobes: Add batch probe example
-Message-ID: <202611110929.bmBlvfbY-lkp@intel.com>
-References: <20261109195827.1091410-1-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=poROOy9c
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4b190cdc9feso1576789b6e.0
+        for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 18:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794364417; x=1794969217; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=s18d0QtUAH5SO1XlwoaKN258QqfdDcIgzB60hufTnb0=;
+        b=poROOy9cJaDysw+ruRjFsu8afh/5wgqjFa+T20WFfl9YSNQ2t36tF747B5meKtJVoX
+         ZeKTyuBlc+fHttK9k2qkrZ9E6tzyzMXIDLCGY9FMFJtm373fS/p7rG5TAD9Z5ES0oSjS
+         3y3NApwNSl9OMNtyYAnss/OBVv6jVspaWfYMlSh/Z+qhIuBBFrv5CcW6evWsTtotjdDf
+         swUUWDveZrj2BkT0e/ju4P1tSuf/HvkmGORk+diR36prCXl3bmFswuH7Oo2bPTTcLvGN
+         oVj0+2kx4UdzrIyadFJ7tQigSiX6Eeb9I1use8mVHF4lAXuEe4Ot4NrChBcp+QgnXe7H
+         BmUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794364417; x=1794969217;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=s18d0QtUAH5SO1XlwoaKN258QqfdDcIgzB60hufTnb0=;
+        b=N+IeCdzQbzLwL4EQf6ztC6qNJeVqI6dWy07pTStKRcxXSgX2f3Mk8DoO5PtJNGWdqB
+         q29wtv5bssO81YW7ywe2bKKTO+VAwdtlDZEM0rT4QtEn4Wz+4umP4wcibR+xOVV1L5bb
+         OyRhzrth5UEHd+PJaGy5OMelD+i9C+Uz/fe6yNUU3hKnOJiARowdMBe3mU1Im43eyAhV
+         Wzfg6TUhhCLqHsQKq3fv2ZylfsrVMDgOmXmaG6pnxkDxLbOU3teBVXzsafmQakTFAVde
+         DFtTssex36RboXpD6aHNkxdKJmBj3iC+OKqmUXAWwxKQGMjsq0jHrtxgZqlSFPQDbgKU
+         13tQ==
+X-Forwarded-Encrypted: i=1; AL+hErE4d/QIfw7v6CQ1RZh81DfZQsXP4wrtJy5za9dVwzl0KTlkHY22QFTlPbHQADzRS0IqeHe6@lists.linux.dev
+X-Gm-Message-State: APuU4Z+wxzW0bS3Q1Ese3eNM9yP7eTqu+JTkP4txnMOVmpEpiYIHXR0x
+	HjBxsPbF+b8IcVfDi4ROKSJuRbBsbzAYQZ19k17yKJuxGphezuN9k3v4
+X-Gm-Gg: AYBFou09tNX4YwMyCmAxlR6pfuuSzlo9zhayOJOLE9zDs1v2o0wtjCROIaAqAGrp8Jd
+	D/KpM/g/HWTHUgHvuqv34574sqnwXB6hCXqPHAGruFDjm3dwV+nme9+9tsUde03MxEA4KUB8/pS
+	ripN25GTWcUefTI0UsqiMbdS8QBiCm8G1BdV54LPRabtqVQnyRkN/zZ6Vmx8hxw6gcDGPCk5DI2
+	L6WlzG1TbONB+uDRfG2P12jfM5iIuURLgHd+zkv+coO10HL1pbMeKx4rV2H1PAom6B7Lr/vXMgx
+	Mpl7vbegq9o/RVEC+I6YEhdYxhDHecSQouCQZHjq9uiPSjxAMWKFznKYZ/3SU4jRqhb43W11AYS
+	ubk/054WeRXb7UwS9S8Y63anQRUNtHJDuFGs6cdMk2KPorLmrh+6UeN+sINRyu/wRK3iTSRt2l6
+	p+a1u3sN4JURycD5+R0YK5+eL+T8WhK9NT28jbhFTa+uFtHdzWoUhk5CjEMM59ocZ7oXtdSr0AA
+	/KWc0vRixa7k0cyRjmMJdYCRz3uYhkDb4sCP303Eh5YN0UtKNXD0pEA4ob/vnsk84TQMIjEqCQl
+	RUVF3n89PAo9bA7aO1dx3hEciUDVZJU44LfksQv2f3LQ1Lhc8eD6hHGLq8VtOxGPLFNhbr/iA0k
+	TkZP3EGFkbXeVwLHb87asg6460N7TYoF0wjetLuCaL8DlJeN6G6DLZ9PA/Ao8qlOxSdURr7WZ+b
+	/djw==
+X-Received: by 2002:a05:6808:138a:b0:567:e9b5:37b6 with SMTP id 5614622812f47-56b97c1742dmr835978b6e.41.1794364416881;
+        Tue, 10 Nov 2026 18:33:36 -0800 (PST)
+Received: from ryzen.lan ([2601:644:8000:37f::e34])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-56906036028sm4103177b6e.11.2026.11.10.18.33.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 18:33:35 -0800 (PST)
+From: Rosen Penev <rosenp@gmail.com>
+To: Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] perf: arm_v7_pmu: suppress -Winitializer-overrides for perf maps
+Date: Tue, 10 Nov 2026 18:33:26 -0800
+Message-ID: <20261111023326.70922-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -91,39 +103,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261109195827.1091410-1-jolsa@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Jiri,
+The perf_map and cache_map arrays intentionally use a range initializer
+to fill all entries with HW_OP_UNSUPPORTED / CACHE_OP_UNSUPPORTED, then
+override specific entries with supported event codes. This is valid C99
+designated initializer behavior (last initializer wins), but Clang's
+-Winitializer-overrides warns about each overridden entry.
 
-kernel test robot noticed the following build warnings:
+Suppress the warning around these array definitions using the kernel's
+__diag infrastructure, since the pattern is intentional and widespread
+across all CPU-specific perf map variants in this file.
 
-[auto build test WARNING on trace/for-next]
-[also build test WARNING on linus/master v7.4-rc2 next-20261109]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/perf/arm_v7_pmu.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/static_call-Index-code-text-reservation-lookups/20261109-204904
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/20261109195827.1091410-1-jolsa%40kernel.org
-patch subject: [PATCH 13/13] samples/kprobes: Add batch probe example
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20261111/202611110929.bmBlvfbY-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611110929.bmBlvfbY-lkp@intel.com/reproduce)
+diff --git a/drivers/perf/arm_v7_pmu.c b/drivers/perf/arm_v7_pmu.c
+index a1e438101114..9ac28c8adf80 100644
+--- a/drivers/perf/arm_v7_pmu.c
++++ b/drivers/perf/arm_v7_pmu.c
+@@ -146,6 +146,15 @@
+ 
+ #define SCORPION_ITLB_MISS				0x12021
+ 
++/*
++ * The perf_map and cache_map arrays use range initializers to fill all
++ * entries with HW_OP_UNSUPPORTED / CACHE_OP_UNSUPPORTED, then override
++ * specific entries with supported event codes. This is valid C99 but
++ * triggers Clang's -Winitializer-overrides.
++ */
++__diag_push();
++__diag_ignore_all("-Winitializer-overrides", "");
++
+ /*
+  * Cortex-A8 HW events mapping
+  *
+@@ -530,6 +539,8 @@ static const unsigned scorpion_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+ 	[C(BPU)][C(OP_WRITE)][C(RESULT_MISS)] = ARMV7_PERFCTR_PC_BRANCH_MIS_PRED,
+ };
+ 
++__diag_pop();
++
+ PMU_FORMAT_ATTR(event, "config:0-7");
+ 
+ static struct attribute *armv7_pmu_format_attrs[] = {
+-- 
+2.56.0
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611110929.bmBlvfbY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> samples/kprobes/kprobe_many_example.o: warning: objtool: kprobe_many_call_function+0x1f: no-cfi indirect call!
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
