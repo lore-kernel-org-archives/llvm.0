@@ -1,49 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794375786;
-	b=u17yiPIIM/LbsCRCXgBlIqerBnRTVCyagIIVEpwGWIuHzKqIune1vICMlr6H9zp9WpSd
-	 TWxuh+WPHQz+hDLl1F1tK2SmQ7N9ZSxmg1A0UxK7BuFDQBFmxy4ogSNhGjZqzIMONg8TR
-	 qv7iAXw+mxCcqjvKxWJnX1WpW2AToTix7rxToO+By6nnICxrx5dMSQXsbmmGnWjlLl2aa
-	 VaS85Knpl0t/f90gYt2jLpEZPG1BzVdj+fBL4JJgTqYl5XQ910Q4Iiuz5YbGfrNt0FsMx
-	 37U1Z1orv81UbCINiz067I06rDxxG660ZJo+06KuiLZlEHk4xrlzxgbM6vO4Uh9Ivvw==
+	t=1794375866;
+	b=OeTbXTSPkuKrWRh540zzmfnAeFMJG2zot4D+K4qv27jD/rQVuGKSt52lMbm03foiju5f
+	 wxiB0SEwvUk81qsvQhmMdv6zKVcLWmVFaJXyfbQP6pdJQe7Iv+vWXK4o19NlcfJuc4s09
+	 z3sZHxrqQq8IQPfsRQOZUCo4H6kZkH0IJoQnTn5JgIj917MGG6quH+yyDldIBrNUw2I21
+	 3HynR270JuZPnPFnSDZCjs8G3wOsxPPIKewgOrXC/wj9xkkd1/mXN9tysGkX2JlZ8hZZc
+	 Mb8WMfjiqlqK27grqDooP6/P8TiPmz+GqgYqHbSUdXNt4MFO319IMFklidzsdor5ZVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794375786;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=xa/16d/jfQnbs0ojkbX/+AQz824buAN9ip8tfhcooko=;
-	b=gmqAMZuU0vxlNipI4jVqmE2a2r2qKonwedg9zciqQMmw2xe5EtwanBkBKalvmZswsTso
-	 w0DuvelR6/soCApjWKK3/JKS97OHSdtOkQykxTawMflCRtoaudAVIuCgINNyWqwlt62cs
-	 OWVhbzUXxZzBd4HCgpVd3TWyo3lnrAO1YgjBIMLF8XEYNpTBWCVuWfWys1Fov4SUuumyF
-	 EK2Rasf/EseZVYZEuri6uoi7AVx4jOKl0Go2KigT1hOn+gZiqgB2Kp850T93+vmhWx2Kx
-	 StxwvjEtZdJ1S088kYMOPwBtB4R8u2dBL+egvP5mifRdXUuqXvP0Uyc1PpzE3A4T/MQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794375866;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=WTRyMQ4Lc0T6kGlkAYG+t8u+v1HZ4rZFkpvq/UuTA4c=;
+	b=BrNO3sL1TIzFLqqLba9kUcwXsjzpq7yZOEFGM4URHwa9UTArzzpzgn7nS/Av/I/SDvTL
+	 G/vTA4hS68A6ILk/LkCjGpy769gkg8lXAe0tAtAQt6TlsC5oM0yAwCDiUviYKjxn1/9dm
+	 0aZG1itVKVkssmvpTdto+ZSSbxYo/qCsLuB0TMPx8tcQZec6KNd7WPwgX80fWgG0XQJ7o
+	 VgbqExWZYz6mbDH9qNxquzvsXu0Kcabu2PrW9Yoh0jSHu4hYj64LZpTMEYfjVFaaR5HE1
+	 hlHakdGCqClKUoH+OtfipPlrBrkJREA/mxWxsKnydf/G0ATg+BEhKjO88f9I2oISDEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ona0g6BI;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=m6KcVsVN;
+	arc=none smtp.remote-ip=198.175.65.13
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19995606A333;
-	Wed, 11 Nov 2026 05:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC585606A31C;
+	Wed, 11 Nov 2026 05:44:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC585606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ona0g6BI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DFE1F00A05;
-	Wed, 11 Nov 2026 05:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794375785;
-	bh=xa/16d/jfQnbs0ojkbX/+AQz824buAN9ip8tfhcooko=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Ona0g6BIoEUCV3c84vdebstigq7LP2nRANrzxlOJh4VfBWoOhGz9p8NT3FuiIwrny
-	 qfZ615pFDpkRZKjEI7X2PO/WQecC0iI3tcgDPwwdQ7wL68tW5h3Sc6K4FGKVJmHYl1
-	 YQUA2wPnaOkHkCm+s45ZW+cpRsUIUIwN9G9tPD9nUqjUExmtZBcD9nSWVK5Sc2HXtN
-	 ckdjACgZ9S0oxANMlE0lPO9PlU7mAfTQSnHaVi8Nk+C5lQ1cLHO0OkFtWn2/fscGDs
-	 yp9IiZSaPk7IDfTh/fmQC6MT9fW9jRiRm70301LxfkEL+zAUVBfjEB9LltclIsOdgk
-	 lt0HSWZxXMtUw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 10 Nov 2026 23:42:43 -0600
-Subject: [PATCH 4/4] scripts/Kconfig.toolchain: Document minimum supported
- versions for dynamic checks
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=m6KcVsVN
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794375866; x=1825911866;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N90weQI6DNfG9GLV/hBEqDcGtXwR/CCbY3cT0MFAMJk=;
+  b=m6KcVsVNCa24QEXjRmyhaS9Ce9+MyxOk1NWbM3YaIeQx+jvyYVcjBhOg
+   ypWmnOAM8owwXrFnqddyPy29leyX6LsPAwQVZ+YPyxLZ8ir6IHYUrlo/V
+   hQzjObSgXtLqTz2mo/2esfjQD3K0vQaowv+OmlpWO68S+mLT8mOdUPPgm
+   mbTNBmEU8oAOESzSA35JJd5Gg/bPebl+wIYTT5wCDjMirgADChCWzaV7a
+   9aHCo80T8pZor/J/0oFzbrkt/0VC7N1kE/sVVk6xEBiFXI8yn93Tebvxs
+   kkqaLsdoWpdhJjaIK1pVnlhzgyYLSgCq8CP+iDVta8iya44XfcPE69wOC
+   A==;
+X-CSE-ConnectionGUID: GvlpkJwZT6y6UAqNiuCMZg==
+X-CSE-MsgGUID: OBjEFjDeSp6lT6RmZc7ojQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3021388"
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="3021388"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 21:44:04 -0800
+X-CSE-ConnectionGUID: gxO1fCV/QI6o9nIVSOaVBA==
+X-CSE-MsgGUID: LRDd3qJKSxi/LqUBiyuDug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="10214917"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa013.fm.intel.com with ESMTP; 10 Nov 2026 21:44:01 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xR17l-00000000yDb-2Pp8;
+	Wed, 11 Nov 2026 05:43:57 +0000
+Date: Wed, 11 Nov 2026 13:43:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Karunika Choo <karunika.choo@arm.com>, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, nd@arm.com,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>, linux-kernel@vger.kernel.org,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Subject: Re: [PATCH v2 14/28] drm/panthor: Add AM_PARTITION_CONTROL support
+Message-ID: <202611111301.KUTVMgUg-lkp@intel.com>
+References: <20261110153907.3241978-15-karunika.choo@arm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,181 +88,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261110-kconfig-toolchain-updates-v1-4-6d4fb636290e@kernel.org>
-References: <20261110-kconfig-toolchain-updates-v1-0-6d4fb636290e@kernel.org>
-In-Reply-To: <20261110-kconfig-toolchain-updates-v1-0-6d4fb636290e@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
-Cc: Julian Braha <julianbraha@gmail.com>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6113; i=nathan@kernel.org;
- h=from:subject:message-id; bh=74itlIf6McGA4G94CM2+0kZdNffDAEDFTUcRSjw2i5k=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlfGCJeHJ12iM3f5VK2ygbPBwFyUT1XK9lkuLuOrJGeq
- XMugmVaRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiIqwcjw68D6YeVrlntXMr0
- UDlZNFWotPty/oqnAUfZ1GQDbrY9sGb471nL7/M5cXri6hg1jeBGQd+dxXpGFh9umlYWr/n1dXc
- ZGwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110153907.3241978-15-karunika.choo@arm.com>
 
-To make it easier to clean up unnecessary dynamic checks when the
-minimum supported version of a toolchain component is updated, add
-comments documenting when features were first supported. Request that
-future additions document this as well.
+Hi Karunika,
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- scripts/Kconfig.toolchain | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+kernel test robot noticed the following build errors:
 
-diff --git a/scripts/Kconfig.toolchain b/scripts/Kconfig.toolchain
-index 26a62b15e9ab..3a9eb8317d59 100644
---- a/scripts/Kconfig.toolchain
-+++ b/scripts/Kconfig.toolchain
-@@ -1,4 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+# When adding a new dynamic check (such as {cc,ld}-option{,-str} or testing a
-+# small program), please add a comment documenting the first version of the
-+# tool that supported the feature being tested. For cc-option{,-str}, note the
-+# "beware" comment below.
-+
- config CC_VERSION_TEXT
- 	string
- 	default "$(CC_VERSION_TEXT)"
-@@ -118,6 +123,7 @@ config GCC_ASM_GOTO_OUTPUT_BROKEN
- config CC_HAS_ASM_GOTO_OUTPUT
- 	def_bool y
- 	depends on !GCC_ASM_GOTO_OUTPUT_BROKEN
-+	# supported since clang-10 and gcc-11
- 	depends on $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
- 
- config CC_HAS_ASM_GOTO_TIED_OUTPUT
-@@ -129,6 +135,7 @@ config TOOLS_SUPPORT_RELR
- 	def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
- 
- config CC_HAS_ASM_INLINE
-+	# supported since clang-11 and gcc-9
- 	def_bool $(success,echo 'void foo(void) { asm inline (""); }' | $(CC) -x c - -c -o /dev/null)
- 
- config CC_HAS_ASSUME
-@@ -161,6 +168,8 @@ config CC_HAS_ASSUME
- #    pitfall.
- 
- config CC_OPT_ZERO_INIT_PADDING_BITS
-+	# supported since gcc-15. not needed for clang, as it does this by default since clang-20
-+	# https://github.com/llvm/llvm-project/commit/7a086e1b2dc05f54afae3591614feede727601fa
- 	def_string "$(cc-option-str,-fzero-init-padding-bits=all)"
- 
- config CC_OPT_NO_ADDRSIG
-@@ -168,12 +177,15 @@ config CC_OPT_NO_ADDRSIG
- 	def_string "-fno-addrsig" if CC_IS_CLANG
- 
- config CC_OPT_DIAGNOSTICS_SHOW_CONTEXT
-+	# supported since gcc-16, not supported by clang
- 	def_string "$(cc-option-str,-fdiagnostics-show-context=2)"
- 
- config CC_OPT_DIAGNOSTICS_SHOW_INLINING_CHAIN
-+	# supported since clang-23. not needed for gcc, as it does this by default
- 	def_string "$(cc-option-str,-fdiagnostics-show-inlining-chain)"
- 
- config CC_OPT_STRICT_FLEX_ARRAYS
-+	# supported since clang-16 and gcc-13
- 	def_string "$(cc-option-str,-fstrict-flex-arrays=3)"
- 
- config CC_OPT_NO_ALLOW_STORE_DATA_RACES
-@@ -181,51 +193,67 @@ config CC_OPT_NO_ALLOW_STORE_DATA_RACES
- 	def_string "$(cc-option-str,-fno-allow-store-data-races,--param=allow-store-data-races=0)" if CC_IS_GCC
- 
- config CC_HAS_MNOP_MCOUNT
-+	# supported since clang-10 and gcc-9 but option is architecture specific
- 	def_bool $(cc-option,-mnop-mcount)
- 
- config LD_OPT_FORCE_GROUP_ALLOCATION
-+	# supported since ld.lld 19 and GNU ld 2.29
- 	def_string "$(ld-option-str,--force-group-allocation)"
- 
- config LD_OPT_NO_WARN_RWX_SEGMENTS
-+	# supported since GNU ld 2.39, not supported by ld.lld
- 	def_string "$(ld-option-str,--no-warn-rwx-segments)"
- 
- config CC_OPT_WNO_ADDRESS_OF_PACKED_MEMBER
-+	# supported since clang-4 and gcc-9
- 	def_string "$(cc-option-str,-Wno-address-of-packed-member)"
- 
- config CC_OPT_WNO_FORMAT_OVERFLOW_NON_KPRINTF
-+	# supported since clang-18, not needed for gcc
- 	def_string "$(cc-option-str,-Wno-format-overflow-non-kprintf)"
- 
- config CC_OPT_WNO_FORMAT_TRUNCATION_NON_KPRINTF
-+	# supported since clang-18, not needed for gcc
- 	def_string "$(cc-option-str,-Wno-format-truncation-non-kprintf)"
- 
- config CC_OPT_WNO_DEFAULT_CONST_INIT_UNSAFE
-+	# supported since clang-21, not needed for gcc
- 	def_string "$(cc-option-str,-Wno-default-const-init-unsafe)"
- 
- config CC_OPT_WNO_DANGLING_POINTER
-+	# supported since gcc-12, not needed for clang
- 	def_string "$(cc-option-str,-Wno-dangling-pointer)"
- 
- config CC_OPT_WVLA_LARGER_THAN
-+	# supported since gcc-7, not supported by clang
- 	def_string "$(cc-option-str,-Wvla-larger-than=1)"
- 
- config CC_HAS_WSTRINGOP_OVERFLOW
-+	# supported since gcc-7, not supported by clang
- 	def_bool $(cc-option,-Wstringop-overflow)
- 
- config CC_OPT_WNO_UNTERMINATED_STRING_INITIALIZATION
-+	# supported since gcc-15 and clang-21
- 	def_string "$(cc-option-str,-Wno-unterminated-string-initialization)"
- 
- config CC_OPT_WERROR_DESIGNATED_INIT
-+	# supported since gcc-5, not supported by clang
- 	def_string "$(cc-option-str,-Werror=designated-init)"
- 
- config CC_OPT_WENUM_CONVERSION
-+	# supported since clang-3.2 and gcc-10
- 	def_string "$(cc-option-str,-Wenum-conversion)"
- 
- config CC_OPT_WNO_PACKED_NOT_ALIGNED
-+	# supported since gcc-8, not supported by clang
- 	def_string "$(cc-option-str,-Wno-packed-not-aligned)"
- 
- config CC_OPT_WNO_FORMAT_OVERFLOW
-+	# supported since gcc-7 and clang-18
- 	def_string "$(cc-option-str,-Wno-format-overflow)"
- 
- config CC_OPT_WNO_STRINGOP_TRUNCATION
-+	# supported since gcc-8, not supported by clang
- 	def_string "$(cc-option-str,-Wno-stringop-truncation)"
- 
- config CC_HAS_COUNTED_BY
-@@ -252,14 +280,18 @@ config CC_HAS_BROKEN_COUNTED_BY_REF
- 	default y if CC_IS_CLANG && CLANG_VERSION < 220100
- 
- config CC_HAS_ALLOC_TOKEN
-+	# supported since clang-22, not supported by gcc
- 	def_bool $(cc-option,-falloc-token-max=123)
- 
- config CC_HAS_MULTIDIMENSIONAL_NONSTRING
-+	# supported since gcc-15 and clang-21
- 	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) = { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
- 
- config CC_OPT_INLINE_MEMSET
- 	string
-+	# supported since gcc-14
- 	default "-finline-stringops=memset" if $(cc-option,-finline-stringops=memset)
-+	# supported since clang-22
- 	default "-mllvm -max-store-memset=4294967294" if $(cc-option,-mllvm -max-store-memset=4294967294)
- 
- config LD_CAN_USE_KEEP_IN_OVERLAY
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm/drm-next drm-tip/drm-tip next-20261110]
+[cannot apply to linux-review/Karunika-Choo/drm-panthor-Ignore-EOPNOTSUPP-for-shader-present-nvmem-lookup/20260922-214455 daeinki-drm-exynos/exynos-drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v7.4-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--- 
-2.56.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Karunika-Choo/drm-panthor-Ignore-EOPNOTSUPP-for-shader-present-nvmem-lookup/20261110-153822
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20261110153907.3241978-15-karunika.choo%40arm.com
+patch subject: [PATCH v2 14/28] drm/panthor: Add AM_PARTITION_CONTROL support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261111/202611111301.KUTVMgUg-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611111301.KUTVMgUg-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611111301.KUTVMgUg-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/panthor/arbitration/panthor_partition_control.c:328:12: error: call to undeclared function 'irq_get_irq_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     328 |         irqdata = irq_get_irq_data(irq);
+         |                   ^
+   drivers/gpu/drm/panthor/arbitration/panthor_partition_control.c:328:12: note: did you mean 'irq_set_irq_wake'?
+   include/linux/interrupt.h:486:12: note: 'irq_set_irq_wake' declared here
+     486 | extern int irq_set_irq_wake(unsigned int irq, unsigned int on);
+         |            ^
+>> drivers/gpu/drm/panthor/arbitration/panthor_partition_control.c:328:10: error: incompatible integer to pointer conversion assigning to 'struct irq_data *' from 'int' [-Wint-conversion]
+     328 |         irqdata = irq_get_irq_data(irq);
+         |                 ^ ~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/panthor/arbitration/panthor_partition_control.c:330:15: error: call to undeclared function 'irqd_get_trigger_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     330 |                 irq_flags = irqd_get_trigger_type(irqdata);
+         |                             ^
+   3 errors generated.
+
+
+vim +/irq_get_irq_data +328 drivers/gpu/drm/panthor/arbitration/panthor_partition_control.c
+
+   278	
+   279	static int partition_control_init(struct panthor_arbitration *adev, int i)
+   280	{
+   281		struct panthor_partition_control *pc;
+   282		struct device *dev = adev->dev;
+   283		struct irq_data *irqdata;
+   284		struct resource *res;
+   285		void __iomem *iomem;
+   286		u32 irq_flags = 0;
+   287		char *name;
+   288		int irq;
+   289		int ret;
+   290	
+   291		if (adev->pc[i])
+   292			return dev_warn_probe(dev, -ENODEV,
+   293					      "partition %u already present", i);
+   294	
+   295		pc = devm_kzalloc(dev, sizeof(*pc), GFP_KERNEL);
+   296		if (!pc)
+   297			return -ENOMEM;
+   298	
+   299		name = devm_kasprintf(dev, GFP_KERNEL, "pc%d", i);
+   300		if (!name)
+   301			return -ENOMEM;
+   302	
+   303		res = platform_get_resource_byname(to_platform_device(dev),
+   304						   IORESOURCE_MEM, name);
+   305		if (!res)
+   306			return -ENODEV;
+   307	
+   308		iomem = devm_ioremap_resource(dev, res);
+   309		if (IS_ERR(iomem))
+   310			return dev_err_probe(dev, PTR_ERR(iomem), "%s: Failed to ioremap", name);
+   311	
+   312		pc->name = name;
+   313		pc->dev = dev;
+   314		pc->iomem = iomem;
+   315	
+   316		spin_lock_init(&pc->irq_lock);
+   317		pc->irq_suspended = true;
+   318	
+   319		spin_lock_init(&pc->lock);
+   320		pc->current_aw = AW_UNASSIGNED;
+   321	
+   322		irq = platform_get_irq_byname(to_platform_device(dev), name);
+   323		if (irq < 0)
+   324			return irq;
+   325	
+   326		pc->irq = irq;
+   327	
+ > 328		irqdata = irq_get_irq_data(irq);
+   329		if (irqdata)
+ > 330			irq_flags = irqd_get_trigger_type(irqdata);
+   331	
+   332		ret = devm_request_irq(
+   333			dev, irq, partition_irq_raw_handler, irq_flags | IRQF_SHARED,
+   334			devm_kasprintf(dev, GFP_KERNEL, "panthor-%s-irq", name), pc);
+   335		if (ret)
+   336			return ret;
+   337	
+   338		adev->pc[i] = pc;
+   339	
+   340		partition_irq_resume(pc);
+   341	
+   342		return 0;
+   343	}
+   344	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
