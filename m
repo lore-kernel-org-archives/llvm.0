@@ -1,83 +1,123 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794432421;
-	b=TkubU7dwOut6peUnUCzs4U35rhut7IwNstoxK4pgQox4tMExv1eQr9glfoerQgiCiSnU
-	 EsiUW/K/2Z+EY2ltzzmqaPfuibrT3CZN11MMpzaObtbnT0U0mryapUPM4JZjEaFXXgw0T
-	 fG4K5uxfxQXrtdqf8Z5nGKUEEIMQSDiROZdeVIe31AmKobRBGbNIhF0FlFKRh53xalGKc
-	 Hy0V/N+PJsHDpaWc0CLrZ/pK+I7i+24ppbWiitZn+KNWH1mn26+koIp3vw4QZrB3KodZG
-	 tO2tbbkr6uOX4qljpCdoyQ8vmeFwBcv35GB0Y8+e7kCiDwfHOKOhTSqc1XPROLBIqmg==
+	t=1794434587;
+	b=m0rJNXonjjzzwcTDcwTO4H1ldWx2S483c/CamjyQxS7tHfthY19pXuJ5mWXKXZgrmn9/
+	 zCyem5ACf1s8qYMaBl+RTOvNQRX4E7Siq5VCwrj0N3aFsJA/+JtSpg8wBP4VxEJuFMyxc
+	 2daXbJMRdBow7664nIwUmXNtHWAfVyTBNDdgdgSYhkWsD7DrBuqjE1J/D6yNcQCrSREpw
+	 lFw0SXr/a6Fp//aNF1HX7Ucud6e/iJRWSemd4gTWmSZN+XweB4RLrS9ukaWzvzYJJfhGz
+	 9fml/LOt8SWAtlhWgRMMGL7YyzrP/LUpaRYumD1GgEI9v6okCbNVAXFASPd3LyeP5gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794432421;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794434587;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 Mail-Followup-To:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=u3+WvINjN2a5BUb9f0DV7gLMYKgjXRf58f/0Rul7fNs=;
-	b=bIW3bHYxABtjU33bhtV/aNTkMLB78y3pNuO5B8iO/vj4eTU0h/qMvtn2oacyy7dTPLWT
-	 jx6kQEeZWKA06CPxYr8hNUU+8W3dTSVQNAh52Fybb5u3OBuB6tGa/gQVbYl6ptE0yiKlD
-	 RaqRmmz2e2Ofuh04QdliOF4NoK/qN6YsplRkME7iU/LDYz0413zRU9aKnH5sVvTArS826
-	 tA+sdZUPAFWeXIuUVSZP1HvMfdU7/dETP8CSKfkgW19wjfUze9gxJmie5eFnSqajqGzSY
-	 pVBo0JgB6ehw6X6Swxw2o1yE/kwcPPjIq29ZhuJV7ZpLWIQj3MFAW8IkUrDPO3UcXmA==
+	bh=/29Fh1u2FOm5/5k1pmwlztbcmx561O6eu158ApMSsyU=;
+	b=oDLLqt2wZocMgWJg+j0Xz9D0Ncm7u4C7fyJizRS281dwA7RhjGR90esX195TmYd9taxq
+	 DwZw2WoEcxZ7dK7WtSk8N8ClxxsmuJ3j7XUuvlvGJwBx5d4i/pXO17rNfWNgL0UttUjSW
+	 el/a6J3GinaCMJgsmuQB1VZZEdgNn9AAygnKMp+QgKrYUO6dHN3hfprNfIfueoRJLQcD2
+	 jaY3J2mzyRMzUTIW8wp3L1caGOEiM8UOagT4m1PHCU/vt3aYVQk/xPGX69ABXpu1c275i
+	 +bIcDBqpTo/EVqtt8gknlNJkm9kqDQSJcPhVsTzS3Ftg5ndS1zVEsSlZyWJI7gt3dDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=eRMhAtog;
-	arc=none smtp.remote-ip=192.198.163.11
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2HTk8rO;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8E0606A32A;
-	Wed, 11 Nov 2026 21:26:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D8E0606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B77606A32D;
+	Wed, 11 Nov 2026 22:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=eRMhAtog
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794432421; x=1825968421;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=udo0vbSSWRcZX5jnygNE5yspGvO38rys8qMq0Qol2qQ=;
-  b=eRMhAtogkROicWvxg4GAxhDeskRrfcmsvYw0t7UqVSRDaiJt/cG4vfzu
-   mqzvLUPVP2bsI3oZTnJ6XT9AiDxKb2tD9/Z4ZBYQHm9okInsccbrFT5oK
-   SGK7uFY0pCaNqoC7toWq46YNNJi+1biFCWV95VABcZPw19LkQiLs50nua
-   dTLYtiF20hu1FsErPYmViIM+Ci5qBate816neyvpWtR6Ga4DehmspdJd9
-   Yc0Infj5ao5RLphemRU9ac1DGK8nIEc7/3z//+PlQR3ty3ry2J9TQ1NtW
-   Qs9QVgCcf3ZP2rgqM/ec8x7yyi9xzkQcTnMNQVutKjt0nW3KION4Rw4y1
-   g==;
-X-CSE-ConnectionGUID: 9sjooUI1R3qRMExkqJCBqg==
-X-CSE-MsgGUID: CkQpPTeiQ/ChpXMhGJjoKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11963"; a="3130234"
-X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
-   d="scan'208";a="3130234"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 13:27:00 -0800
-X-CSE-ConnectionGUID: F/bCdLjURl+jFqe5qLJuAg==
-X-CSE-MsgGUID: JmvdEdEoSDC7srVHgqdwww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
-   d="scan'208";a="8382267"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 11 Nov 2026 13:26:58 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRFqI-00000000zmN-3ZEF;
-	Wed, 11 Nov 2026 21:26:54 +0000
-Date: Thu, 12 Nov 2026 05:26:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Marshall <pm@petermarshall.ca>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Marshall <pm@petermarshall.ca>
-Subject: Re: [PATCH] platform/surface: platform_profile: handle fan standby
- state
-Message-ID: <202611120527.xw8ZORYY-lkp@intel.com>
-References: <20261111020916.3557508-2-pm@petermarshall.ca>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2HTk8rO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E751F00A05;
+	Wed, 11 Nov 2026 22:02:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794434586;
+	bh=/29Fh1u2FOm5/5k1pmwlztbcmx561O6eu158ApMSsyU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=H2HTk8rOLZgWw9Lm2uB8it44XJGQ1VP252zKM3Vsl27YeQT3fQC/oPf+9dR1GGuPe
+	 fTrdVHJg83sazuCLRwsK7FMBmZ65BjYmx/5l1Fr9V4zrWbVX2E4c/EGrAZHOJ23iP5
+	 K6oVJy3Ue6XdepxFi87RWoq3TdzVK9qDLL8BM8XMCz9n7H3pjJ8s2COHz+NjnFIDwg
+	 2eGJ+4dbOKk2dBpxqBDuRpXAU1slNtJxbA2Dkar3W/730CiqV+uxXwdTMmafxIRXoH
+	 hanK6KHxVmWrohkzaChiP47GtgTq+nQUar+jL+4xWJclsB1e8afff/e4uoWiQs4JB9
+	 jrQrJYXOzTbWA==
+Date: Wed, 11 Nov 2026 23:02:51 +0100
+From: Gao Xiang <xiang@kernel.org>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>,
+	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>,
+	Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Laight <david.laight.linux@gmail.com>,
+	Sungguk <sungguk.na@samsung.com>,
+	Jaehoon Chung <jh80.chung@samsung.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	linux-erofs@lists.ozlabs.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 12/15] lib/lz4: widen LZ4_DECOMPRESS_INPLACE_MARGIN
+ for the fast decode loop
+Message-ID: <avTmC_1I59FKA1FN@MacBookPro.fritz.box>
+Mail-Followup-To: Michal Wilczynski <m.wilczynski@samsung.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>,
+	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>,
+	Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Laight <david.laight.linux@gmail.com>,
+	Sungguk <sungguk.na@samsung.com>,
+	Jaehoon Chung <jh80.chung@samsung.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	linux-erofs@lists.ozlabs.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-crypto@vger.kernel.org
+References: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
+ <CGME20261106144309eucas1p2a9bfcc1cf81779d473fb073e7d9139b7@eucas1p2.samsung.com>
+ <20261106-lz4-vendor-upstream-v2-12-ee04c3f0d7dc@samsung.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,71 +127,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261111020916.3557508-2-pm@petermarshall.ca>
+In-Reply-To: <20261106-lz4-vendor-upstream-v2-12-ee04c3f0d7dc@samsung.com>
 
-Hi Peter,
+Hi Michal,
 
-kernel test robot noticed the following build warnings:
+On Fri, Nov 06, 2026 at 03:42:52PM +0100, Michal Wilczynski wrote:
+> erofs decompresses a pcluster in place when the slack after the output
+> is at least LZ4_DECOMPRESS_INPLACE_MARGIN(compressed size), upstream's
+> (compressedSize >> 8) + 32.
+> 
+> That holds for the fork, which overshoots its output by at most 8
+> bytes. Upstream's LZ4_FAST_DEC_LOOP, which the next patch brings in for
+> x86 and arm64, copies in 32-byte steps and can overwrite input it has
+> not read yet: of 172410 valid streams laid out as erofs does at exactly
+> that margin, 3660 fail to decode, none with the fork. The worst needs
+> (compressedSize >> 8) + 33. Images mkfs.erofs built did not hit this,
+> but nothing in the format rules it out.
+> 
+> Use (compressedSize >> 8) + (compressedSize >> 15) + 36, which takes a
+> 4K pcluster's margin from 48 to 52 bytes. Upstream's lz4.h defines the
+> macro too, so undefine it first.
+> 
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.4-rc2 next-20261110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+First, I really think kernel LZ4 should be updated for many years, so
+thanks for this!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Marshall/platform-surface-platform_profile-handle-fan-standby-state/20261110-210916
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20261111020916.3557508-2-pm%40petermarshall.ca
-patch subject: [PATCH] platform/surface: platform_profile: handle fan standby state
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261112/202611120527.xw8ZORYY-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261112/202611120527.xw8ZORYY-lkp@intel.com/reproduce)
+But my personal thought is that could you just fold this patch into
+the next one ("lib/lz4: switch the decompressor to the vendored sources")?
+Because this one should be part of the fast loop update.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611120527.xw8ZORYY-lkp@intel.com/
+Although the current patch order is also fine, but my potential concern
+is that people don't know the details maybe pick the random ones for
+backporting, which is what I'd like to avoid so I hope this patch could
+be just part of it, otherwise the inplace decompression could be broken.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/platform/surface/surface_platform_profile.c:267:6: warning: variable 'status' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     267 |         if (tpd->has_fan) {
-         |             ^~~~~~~~~~~~
-   drivers/platform/surface/surface_platform_profile.c:273:9: note: uninitialized use occurs here
-     273 |         return status;
-         |                ^~~~~~
-   drivers/platform/surface/surface_platform_profile.c:267:2: note: remove the 'if' if its condition is always true
-     267 |         if (tpd->has_fan) {
-         |         ^~~~~~~~~~~~~~~~~
-   drivers/platform/surface/surface_platform_profile.c:263:12: note: initialize the variable 'status' to silence this warning
-     263 |         int status;
-         |                   ^
-         |                    = 0
-   1 warning generated.
-
-
-vim +267 drivers/platform/surface/surface_platform_profile.c
-
-   259	
-   260	static int surface_platform_profile_pm_prepare(struct device *dev)
-   261	{
-   262		struct ssam_platform_profile_device *tpd;
-   263		int status;
-   264	
-   265		tpd = dev_get_drvdata(dev);
-   266	
- > 267		if (tpd->has_fan) {
-   268			status = ssam_fan_state_set(tpd->sdev, SSAM_FAN_STATE_STANDBY);
-   269			if (status)
-   270				dev_err(&tpd->sdev->dev, "pm: fan standby notification failed");
-   271		}
-   272	
-   273		return status;
-   274	}
-   275	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Gao Xiang
