@@ -1,65 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.97
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794439638;
-	b=QxwmjnJPRslJzP78fKRbr+p2nyPab8KnZRmxPyrh0WEvpyZakGW1D+f+yVaRjW0I2s4u
-	 k9P4ZxDMlTUE0UzCrp8c4xHEAoLK7fSLdEyNGr8gb+wQIOnuDTXFjOOgC4uSJECgtBEHF
-	 hqy9TAIaaJulTC8bFnPuBRdw/ON8MGtD+s6dcA7QiRjh7qW739CqtVte6y7SuqniA4v7o
-	 B8g/aLcjfcqgrdSH8cR494NKBs+SyIdOKkeFMtr4+qI+W0jaTf26FpFTdr/K8v36od+KK
-	 QiWqeKwjf8s+yXaSRZy5ZHT929icHPr9HnAu3xXTg5gZ98OwERyOmi7YfinLmeysFlA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794439638;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Subject:X-Change-ID:To:Cc:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Date:Message-Id;
-	bh=ibaTJ8TCP6OWunZ7wZlURPIe35dSzkZ2HZ9fJtO8n3g=;
-	b=z6wT+V2lndbqMlubXb3pX4wfDGsUktzz9U2idnAZFbu3f8AydYAN87EhXklnWWAIVgWF
-	 LcY9JRYk74cYkhKaGQ/zrLL0muwqwHG2j/jRuUz76JFndhPlsLKDi8a672OwJT/4vdegm
-	 qCxWnDlw7gDOqVBCEv3ogW/BNhkmoE3u77RiShen7R/O/0DF0hSgKgl7861b3kDmbJHtq
-	 4DltHiMKsPVCNImegUi8QYRyoL7GxibQA/DoGxgMNJAXqoWjGHSpJECXajafdOp17HdIy
-	 G9D5XCfpCNEc5gRieYcRhDLIz/+n0DOwZbfP+ky1GzIf77Tdeqp1sjZ+G83Iwl6/GYg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cressey.dev;
-	spf=pass smtp.mailfrom=cressey.dev;
-	dkim=pass header.d=cressey.dev header.i=@cressey.dev header.a=rsa-sha256 header.s=key1 header.b=YlEF5l7M;
-	arc=none smtp.remote-ip=95.215.58.97
-Received: from mta1.migadu.com (out-97.mta1.migadu.com [95.215.58.97])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794440811;
+	b=jYa4NcSK32xcfE/dLubqJ9782XTRxAWQNvbeTsUjNZ4cO2jSLxbzoHliWtCGErIpkCso
+	 yJaGdBzJs/PPEMkagWRU+votY/K0I4o/dFDOIVfKz5fA/WvyfNUqRG6oAvbIt/w1gls2R
+	 Rg/EmzhojmG5OQV0t1tTmL2noWJqwCQV0uSNkuoWQZPGG3OgZmOEmymrO8QJ4vLvI+KcK
+	 QuobNztnFoYtcsSz74Y8Tcji7fgYdyuB9ya/4DnU6zZX+5hPLodPZ0rhBW6SBoRN8Dvw0
+	 jLTN+13I/II9dP733PffMAaihm6Ao66f+P3f1RNJFPhtcah854DmOmNejLjLGrBYqwg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794440811;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
+	b=012nVDYASQE4lvveRodgP8Vmb99ru+U8cLxBSy7cHDrmp5yWqX3ZIDGjWoTWMTC6i3hP
+	 ZNs5rlyXZPOntRr+GSO6+jQK64Xmrspz1loLHES0fdCTWfzZS4vTSNzu3tkRJ3Zsr6hcl
+	 /FUQIXev46B0EWWoNZjeUTSpmFm0YlCmB+pUjG322Put/oXW5Axm0r3/sp/KGkrnw51nM
+	 bbEdNCvI6kaw7uV5dBf0KmHKuRvYYVf0EJspnbYvLRu2IILGCMeMs4ulXhla4lCdBGpV4
+	 oj91fZr2G4hR15/U87aRaAqY/384rt3Nk9Z6FbiNdK08ysFJJjuO0LtLRqSaxhmrAfg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=P8QxZVHk;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.51
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965C2606A896
-	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 23:27:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 965C2606A896
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cressey.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cressey.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44628606A88B
+	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 23:46:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44628606A88B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cressey.dev header.i=@cressey.dev header.a=rsa-sha256 header.s=key1 header.b=YlEF5l7M
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=CWD1v7MEPnp/d6fyb0l0aAU6Shc6s8sYA1kH4JoyyVM=;
- c=simple/simple; d=cressey.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794439635; v=1; x=1795044435;
- b=YlEF5l7MuoJB7IMWXmZD4EcQLWviYVcchvOXjgxzUAR3iBb//dWsEcUaWEjUR5dm+/BzewZg
- UbyYgtdiZ/qi2dswprlmlL+AkTfWdDK2Kd6Ulux/v9/XxK27YeWdOamQWnUAZQ+kBNxIIeOxQcr
- AQnjYZ/ll3KT1/2vp+uIP8DuwQVxcoLgkqp8ppOmYmapwxubCQcTI0Svy/GouWyfLR+/f1STx2t
- WN/DRf7yNqHkWx/9Zira+cjXCUMUiKU36XBXjKaKhzpqEYjqvB+YtKEFbAHlfIAbfeq+mVmhALd
- fFrfFXG3xFX1rFm2t1/6oN9mCC/jF6k7df75uXFa0B6cg==
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id c31d66e627087ea2;
-	Wed, 11 Nov 2026 23:27:15 +0000
-X-Mizu-Trace-ID: c31d66e627087ea2
-X-Migadu-Flow: FLOW_OUT
-From: Ben Cressey <ben@cressey.dev>
-Subject: [PATCH] x86/kexec: Type relocate_kernel() to drop __nocfi
-X-Change-ID: 20261111-x86-kexec-kcfi-5b2b437413d2
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- kexec@lists.infradead.org, David Woodhouse <dwmw2@infradead.org>
-X-Mailer: b4 0.15.2
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=P8QxZVHk
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-4a76f63b243so296987fac.0
+        for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 15:46:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794440810; cv=none;
+        d=google.com; s=arc-20260327;
+        b=h+JvRG5nAJjGpavDAN6RwJqjUdIKADZKncgRVZLdW2kLGBJL6XHM3FjqvG0X/8ml/k
+         ydfqfSbcNpDTdUs9yrjwBbdJuNaQJBLXc6POP2pVSQA/npMaRawFVocCdARUvH9/ULfO
+         BYcUqRuuC5oHQccuonIB0MMbOUoUTx6+9iyr9I3q142bAqCxVpB1Pkp6pl4jNXqIj/XT
+         nFzLCFphUf425FeLxbT2YhoZRk3o54GKbOofwA8XrBc0hlPknW7w3Zc7EwDBVvA5U+mh
+         GCqkG79/n3Lp2c1LyMMwkgDIy4KnBqTG/tcLSpjXPYq0OmPF3qBFjPfJ2bnuJWV/6i2U
+         go7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
+        fh=ltihvYOX5QTebVjR/AqrHzO927teOu8oEYsDDWZOYfI=;
+        b=mRl0KtpLQW7vCR0FwXSaiqhCQSZGh4ttNczx7RNfxwTouNGfqltK9RXBbDMXCgH/Sx
+         ZQNDX6jdF1aowoH0W6ilIE/TBI6zxHFFUeO30fCXY8yHXPx+/rDxjaX/5HGT6IGHFQIk
+         JAact0sDU4fZghsCso0HHnnZ02hH66P8VHPX7DxVAT4RctGG+WVuVBe5N5r+yayCtzgd
+         ylTUkQXhk19kUoVsi3SYuE/BP+Pa6MpwypB95wNbSIPTBRvXQmZTb0q9h9EsjMladC4a
+         SuNPbzGM1dvQVJGNAvC8nFJdW0iRLrlCO8vjb7brfVvk7q4Xyg2cVJHafCqmXqG8SSyg
+         zfjQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794440810; x=1795045610; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
+        b=P8QxZVHkTwg9l1fRPYenPhMzM1IKAK0K2f6XKipVq3AvnucHYKpnwRzhZcoyvM41Un
+         gqO7HKpjfb6raoEgvWPRgazR01gLg/LVU9jiZgZdRWdKHuRa8fSlKbBx1z6JHb5+GCRO
+         LptdsXpej78SRXHPPMXmVyjZDlPXgrK+8XLek+t/fHIUAmYRcq2axCwpE3ceQ6yVZmfA
+         RcUvYoYvNr4CHOz/AvxHTZuMQ18NtQspulSL1vX9erfLFwklbiPOK4cpUkPN8IP8WfnS
+         +Vx0yAFEJ2Aag3Z+O1q3n8Othztg8W0u58wLuVN0f7TveyP42f5OI2GRbwmN2kpV7jPc
+         DetA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794440810; x=1795045610;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
+        b=UQw8scAMJ+aYg4miMjt8z9mIzXo5d8dqnKt41LtJvoBTfFcPZQnoja4hV1nLDMRkua
+         axqXv0MrkZvLLwP7aLCdkrKKj/xL08YE7iCuZJGBQDLUIdNEOR5nltmFLS+O3mqMI93U
+         CYvocdmMCRRS9aSJDPkgibLHnBTwXAdYwZDf6DB/IQ/o6pjaFcDUJc77kaCc7Gpc4uOd
+         EWfqybKu9xbwb7ZbSbf2pyRvonEbjgjL29Xas7s9kFLNx7Bsa+U7vw2fgSGJi1rPCNOH
+         Mzmn2xhl5nwN6qex4Sh9iIZBEr8SNaEclAQb58FC77RXO/jDR/ctPiIR7EYjO0BElp08
+         2J0w==
+X-Forwarded-Encrypted: i=1; AL+hErG9YYLhIYEDgyNqRS2yqX+LGsRNkKAfIhvCWKg6rFUkw2/1S8WMRj7cpoFh43XAwBb2SiPn@lists.linux.dev
+X-Gm-Message-State: APuU4Z+nftKXgv4btJL2wGK9tMGQhC2cWjkMCXq++6ggQeCz7wX4V+VS
+	t36I8fnPec5YWEaIaxa7w577vGyAzqAjvCVNvi8V+L32WXvxreJ9hD+oNmistO2J8uP7iNqvq4P
+	iEpK8DtnBG5KXuH5ug2rpQ9NRCGkhd+0o2Dd2oqOr/A==
+X-Gm-Gg: AYBFou13FEfPlxCIah8ZvQ0YiGp6MDbJqOoH0QEPjGtKlP9y5wlVQVt+nzgmh14oNyV
+	k9i4jgr2HUWyYHnwP3ClRMpedRFWQqz7KIuYPFh6X3HuWiLbwmnVdOgLSo30PhATf85OgoRqe4J
+	/6/JhJOOtpTGrj8pIU9Ey8Gk1ZG51BDKlN66ebTYpPp3upCroh1zeXJJt8r+xbUuuL4fdnO5eGx
+	eeV5oVIL9Z+9XdmtKseOrqA31cuwq6BpLZejhH6lUu0UNOXQzBXbG0IgyJY6dDcdYSZ1l3WbERl
+	7H2ZjeaTxDfsKfNfPWIFDHkSbAMdBqgC1TAcdX7FdxrsAD1GSD8//LIP7MoGLkeXg2tW4CEEu6J
+	2HHydjrwU3anHRzvl/J3CRebYGyHUOT/G+vuzVPKk4lVOGbrsdonWLpmr97ExKfseyXdwgoxDys
+	ztAgwZcsbREA==
+X-Received: by 2002:a05:6820:f004:b0:719:1627:6c16 with SMTP id
+ 006d021491bc7-7196b62ab2dmr743911eaf.12.1794440810117; Wed, 11 Nov 2026
+ 15:46:50 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -69,139 +104,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Date: Wed, 11 Nov 2026 15:26:59 -0800
-Message-Id: <20261111-x86-kexec-kcfi-v1-1-b4d41ea14deb@cressey.dev>
+References: <cover.1794281983.git.tianyi@cloudflare.com> <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+ <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com> <avTqb--WfUNBcEyN@devvm16445.scu0.facebook.com>
+In-Reply-To: <avTqb--WfUNBcEyN@devvm16445.scu0.facebook.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Wed, 11 Nov 2026 23:46:39 +0000
+X-Gm-Features: AclHuK98I8l2CyqIug_hRhhYiDHFe7Xrim7_SwhM5rRiI9ms5coKAG0rV8Jl2JY
+Message-ID: <CAG4wq-dw8VqiVTbi-fSJTnwj+amkfE_56ndKCYk4v31z2ppcTA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin <deliran@verdict.gg>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
+	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+	llvm@lists.linux.dev, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
 
-machine_kexec() calls the control page's copy of relocate_kernel()
-indirectly. The routine has no kCFI type, so all of machine_kexec() is
-exempt since commit 2114796ca041 ("x86/kexec: Mark machine_kexec() with
-__nocfi"), and ANNOTATE_NOCFI_SYM() silences objtool.
+Hi Stanislav,
 
-No other call there loses its check today, but one added later would.
-Review of that mark on arm64 preferred a typed entry, and objected to
-covering a whole function, on x86 too [1].
+On 11/11, Stanislav Fomichev wrote:
+> My main concern is that we are adding a lot of code and one more
+> special way to plumb the metadata (and another metadata area), another
+> set of kfuncs
 
-Typing the routine was set aside in 2025 as not worth it [2]: a type
-from the caller cannot catch a prototype that drifts, and
-machine_kexec() seemed unlikely to follow a stray pointer.
+The RX metadata can be stale on XDP_PASS and lost on XDP_REDIRECT.
+There are already separate attempts to fix it:
 
-Type the routine with SYM_TYPED_START(), emit an ENDBR only under
-CONFIG_FINEIBT, whose boot-time rewrite skips a function without one,
-and drop both exemptions, along with kexec as a valid use in annotate.h.
+- the RX hash and the VLAN tag [1],
+- a checksum assertion [2],
+- the checksum invalidation that you suggested [3].
 
-The check guards only the pointer, and not reliably under plain FineIBT,
-which checks in the callee with IBT off. A failed check panics or hangs
-with no CFI report, since load_segments() has reset GS.
+For me, the question is not whether to plumb the metadata, but how.
+It is not great to have fragmented mechanisms. The skb core extension
+area aims to unify them.
 
-Link: https://lore.kernel.org/202609241804.BB23BF10@keescook # [1]
-Link: https://lore.kernel.org/9c41ab61efc573e3ab5a75b6e4031f81db84a846.camel@infradead.org # [2]
-Signed-off-by: Ben Cressey <ben@cressey.dev>
----
-This follows Kees Cook's review [1] of the arm64 kexec fix, which goes
-separately. It is not a security fix, and nothing faults here today.
-The copy gains a type hash and, with CONFIG_FINEIBT=y, an ENDBR, bare
-under cfi=kcfi or cfi=off. SYM_TYPED_FUNC_START() is not used, since it
-would put an ENDBR in every IBT build. Code built with CONFIG_CFI=n is
-unchanged. A failed check stops crash kexec too.
+That is my view. What do you think is the best way to solve these
+problems?
 
-An LLM wrote the patch and drafted the changelog. Tested on v7.4-rc1,
-defconfig plus CFI, under cfi=off, cfi=kcfi and cfi=fineibt, the last
-with and without paranoid and bhi. kexec_file_load(2), kexec_load(2),
-crash kexec and a preserve-context round trip pass under QEMU TCG, so
-functional only. They also pass in KVM guests on Ice Lake, which has no
-IBT, with small loaders in place of kexec-tools. The KHO selftest
-passes under TCG, not run with bhi. A pointer of another type is
-stopped in all but cfi=off, one to code with no preamble only under
-kcfi and paranoid. objtool is silent with clang, CFI on and off, and
-GCC 13.3. Bare-metal kexec, IBT hardware, GCC's kCFI and LTO are
-untested.
----
- arch/x86/kernel/machine_kexec_64.c   |  6 +-----
- arch/x86/kernel/relocate_kernel_64.S | 17 ++++++++++++++++-
- include/linux/annotate.h             |  5 ++---
- 3 files changed, 19 insertions(+), 9 deletions(-)
+> and slowly creeping more features into xdp making it
+> more and more like skb.
 
-diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-index c3f4a389992d..c15dfbd574cb 100644
---- a/arch/x86/kernel/machine_kexec_64.c
-+++ b/arch/x86/kernel/machine_kexec_64.c
-@@ -381,7 +381,7 @@ void machine_kexec_cleanup(struct kimage *image)
-  * Do not allocate memory (or fail in any way) in machine_kexec().
-  * We are past the point of no return, committed to rebooting now.
-  */
--void __nocfi machine_kexec(struct kimage *image)
-+void machine_kexec(struct kimage *image)
- {
- 	unsigned long reloc_start = (unsigned long)__relocate_kernel_start;
- 	relocate_kernel_fn *relocate_kernel_ptr;
-@@ -463,10 +463,6 @@ void __nocfi machine_kexec(struct kimage *image)
- 
- 	__ftrace_enabled_restore(save_ftrace_enabled);
- }
--/*
-- * Handover to the next kernel, no CFI concern.
-- */
--ANNOTATE_NOCFI_SYM(machine_kexec);
- 
- /* arch-dependent functionality related to kexec file-based syscall */
- 
-diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
-index eaeb77464c06..86e1b1c655d1 100644
---- a/arch/x86/kernel/relocate_kernel_64.S
-+++ b/arch/x86/kernel/relocate_kernel_64.S
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/linkage.h>
-+#include <linux/cfi_types.h>
- #include <linux/stringify.h>
- #include <asm/alternative.h>
- #include <asm/page_types.h>
-@@ -59,9 +60,23 @@ SYM_DATA_END(kexec_debug_idt)
- 
- 	.section .text..relocate_kernel,"ax";
- 	.code64
--SYM_CODE_START_NOALIGN(relocate_kernel)
-+/*
-+ * The kCFI preamble in front of this entry is copied to the control page
-+ * with the code, in the form boot-time patching left it, so it must stay
-+ * position independent. FineIBT+BHI adds a CALL to a preamble only if it
-+ * records arguments, and __CFI_TYPE() records none whatever the prototype.
-+ */
-+SYM_TYPED_START(relocate_kernel, SYM_L_GLOBAL, SYM_A_NONE)
- 	UNWIND_HINT_END_OF_STACK
-+#ifdef CONFIG_FINEIBT
-+	/*
-+	 * IBT is off by now, see cet_disable(), but FineIBT only rewrites the
-+	 * preamble of a function that starts with ENDBR.
-+	 */
-+	ENDBR
-+#else
- 	ANNOTATE_NOENDBR
-+#endif
- 	/*
- 	 * %rdi indirection_page
- 	 * %rsi pa_control_page
-diff --git a/include/linux/annotate.h b/include/linux/annotate.h
-index 2f1599c9e573..8e9a7e17e64a 100644
---- a/include/linux/annotate.h
-+++ b/include/linux/annotate.h
-@@ -96,9 +96,8 @@
-  */
- #define ANNOTATE_REACHABLE(label)	ASM_ANNOTATE_LABEL(label, ANNOTYPE_REACHABLE)
- /*
-- * This should not be used; it annotates away CFI violations. There are a few
-- * valid use cases like kexec handover to the next kernel image, and there is
-- * no security concern there.
-+ * This should not be used; it annotates away CFI violations. The valid use
-+ * case is a test that violates CFI on purpose, like LKDTM.
-  *
-  * There are also a few real issues annotated away, like EFI because we can't
-  * control the EFI code.
+I will leave this to Jesper.
 
----
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-change-id: 20261111-x86-kexec-kcfi-5b2b437413d2
+> For containers in general, and for fast af_/xdp, we seem to have been
+> moving into netkit with queue leasing. Maybe that's something that
+> can help with your veth performance?
 
+Thank you for the suggestion. Unfortunately, it does not fit our case.
+Our XDP program decides where each packet goes, from the inner
+headers after decap or even partial decryption [4]. Hardware queue
+steering cannot do this.
+
+This series also covers cases without containers: XDP_PASS on the NIC
+and cpumap load balancing.
+
+[1] https://lore.kernel.org/all/175146824674.1421237.18351246421763677468.stgit@firesoul/
+[2] https://lore.kernel.org/all/20260630191510.81402-1-deliran@verdict.gg/
+[3] https://lore.kernel.org/all/amEojEGsIGkUjIWn@devvm7509.cco0.facebook.com/
+[4] https://lore.kernel.org/all/ca38f2ed-999f-4ce1-8035-8ee9247f27f2@kernel.org/
+
+Cheers,
+Tianyi
