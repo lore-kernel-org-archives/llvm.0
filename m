@@ -1,115 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794355258;
-	b=kvbGU/lvV5SQQSipe+9q0JK3f9q8X+TExkrx11EaSIC5h3+ld8OI+nhiReQlBT6FeqO3
-	 hwPRiCvqXBL6ksQEj93akDf9/mDMNEQJJKcP2YTEELxSU9iVoqz2kSWzktglV9JjZiMIi
-	 G3AVX0qPkNp06Htfk3UluViRgh6bqU9HcSnsGuE4+qy/Bloa117AX2N2Zo+BUA3jkvKO8
-	 UIpdqC9zGG2LDNDo51/15/2NPTJjVECm+2up9/zlyPY79vvYYoc0lBsYTzGXQYcA8dgoz
-	 4kUZKbPpPcNq20IXjDNDaNipKr4/V+2101dnvk7aEpolLb1c7W7U6yskO3fzUDoQrGg==
+	t=1794357807;
+	b=Pi90NJRGPEinK2MSnC06OuJjE974B7EztQzzjLKPnxissbQmvTB11BjBakhC+ZlC919Y
+	 mzz3IzxNaDNVG1t9uVxvvdYf+dPulSbRSaMxM+xbem2InTTaFDuYv274F2SjZuUGjs/DK
+	 DYRUp8fE4sA5yDsGHUJMN+CVd+rsJI2yVA3kVSicHn8jrWWFjrlzKAmq0U7CNP3/GEjcy
+	 GPIYwyrxLC9TOP8/kKi5KgH1T/JGUXKUUpLbPhSgkcxls0rpI3WDEdzyzIfn12uKK6Z6m
+	 0Q+LYNjmaFZyxocdfxX3Znkniw6BmFi3/wYWx/QXnr53nAcFQ+dmNEwQ2ost5FSTvaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794355258;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=bYaErAxQk82jgbOAPhvOLDjqMW7sA/6+9+NevIx4alw=;
-	b=DrVW88sMD6OlA1JTshgJdLBXwOAjEKbYsTdZAmbs0lVJThspCrH7eOxJoxNecV8D6/lA
-	 IrrEbwh+e8PZd04e6SZZeQT7F0hbiar9eBvtypNecMJIpkEYy/3ocya3oPxL2Gexn5NYI
-	 xM5pgVytrNK92Bv4wwzMyJg5uiNxprc56qo8zPUJWEhD/KZ4wjPY+vHLnPn5dk6FijR4p
-	 W/EJ5QnxZJUBHXP8dvF4o/GZAoonRWWLkSMMf3V0I/R+IF3ldkS4RxuWdjk7N/djVtWEv
-	 iaeCZnn+s6jFVXM/N7u1ONfCrCheGb1geJvmdsTCvZxO4G5LlwEdgID1hmEiDXewo5A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794357807;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=wUptKBCqp2XfOKvpnxZs9FnpAL3hi9oAu9MgY2acTaY=;
+	b=Sac/tHQk26SHDV6hSZcxYeaMRJEZi2o5TwjmS0XS9NHJeS84mHdH37MAHUZvnmE1R/Q+
+	 Ymhq456K8Fco8Z5pcBdu0mqk7McOYcMlt88dwHuxhlbH3d389GWJx+ZG4kPu7AMFq1/L4
+	 PAoo+m4/40PcgWtYqYrR8EPCUi4fi1QcVVnEwOOe4p1pzziIOGZ2ctirekKMJDMFVupur
+	 mrh1UxP+7SKhsXW9DZCuxuj9rGVfbfaXPNuI5SjguBY7dKEzdeUzUo611oVbLS1rPwFGr
+	 Cf/pUvhPGeQ8EsNmfSxdvdeEoKG8WORboCc5ilHZqrCj03eakikia3rZBizSjVG32Hw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hn8Mehet;
-	arc=none smtp.remote-ip=74.125.229.8
-Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=d7V7ROZw;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3371B606A31C
-	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 00:00:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3371B606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668B860A3804;
+	Wed, 11 Nov 2026 00:43:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 668B860A3804
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hn8Mehet
-Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-36a6ce64b95so1669591eec.1
-        for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 16:00:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794355257; x=1794960057; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bYaErAxQk82jgbOAPhvOLDjqMW7sA/6+9+NevIx4alw=;
-        b=Hn8MehetF5q8AAEQqm3aWsWjcflBlCWqYmaKsNp84WilIq8o+F3dK3fKhs/pRc6gv7
-         8KIFC8xWGD9DlNPfka1Zc6ZyrMy9HEXzhUh05Fqh8b92tNHwKAih5sJmDfAi2CmvjSyr
-         FYebGwIgQcWmkmYWgMNh1ymQmV57OcpZ28u1eRwJ+fQt3HnmxUMhRfbrMGUTAt5napi/
-         /vjUJ3gtb0gnYW0bk8yQV2T7wtCoUPHR/mX7D+q7nweup6d0AwUb3csTk95/FaSNOsm/
-         tHobKZKTSTpCiKo42VMfSSRc0VGxKQSPBuUuhDS4BqlPt4VgNNTimRwZ7ykQZEfv79Ha
-         vetg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794355257; x=1794960057;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bYaErAxQk82jgbOAPhvOLDjqMW7sA/6+9+NevIx4alw=;
-        b=s8tvwnBnFwpsOmlnJ4A5Unq2J8ZTti+4pvrvF1Tz1OYPGOeoG//wpEYOX6Xm9vWt/x
-         XlAWDW2PyVZi+ia+uyufKOkEACVDeqSO1gt2laDQsMdlXRgA03IEIVfEukJXyjxxTAML
-         1nX+zPNAmrxyLcM5Z0DQSG2yNjGkUOiDomXoWzDqcxDR0TgQe5bVIZeJm5wgjkLEeIwT
-         gcLTfuVQhMw88qDYC4NIWji2B2pVejS3zRuIWK9qgffQQqvjimxMoRMDdDvLaC0HYzFk
-         Wc+pVNUr9Ewvu1b9sJ/TVqCSuGkmMmzCb0S0IUOYKczGBpH9IRo5udcMqkhM4uOjNOFz
-         pp8w==
-X-Forwarded-Encrypted: i=1; AL+hErGiJWwzZdETpJ/33QFq0FomALHlUGYDaxPiDE8jNMiYk+EenlNjS/AC5tl35RFded7oIYAr@lists.linux.dev
-X-Gm-Message-State: APuU4Z/Bqbf2khgj0zDdfpSSwKj6k/qR0TmWgNgbwgLzgRtH+uTYpvd2
-	18TvzOx0EWusz0LsCJTzEWLTr2gFEyMbnR1DkGscVOVOOXB9SULlWa7B
-X-Gm-Gg: AYBFou3tt+QvavrodlnOakw4N1VgIt/NGFs2cta/Qd4R0TpbzOdavfFereuiXg11YVL
-	mqpFdJgjXh64pJt1Na4uyt2oh8PpkL58LP7bLieJJXg5JLtsH+6cA6FUbNnqW6g+JEltNBiVHwQ
-	osIiBqtuP3EuEvxdaCR6etDBOhopuYxLXPvU3NgzdsqikRwSyjQQcyIzc41F1yfkQ3KjgkfWkd0
-	4/7GqFgsPTZBHGlNZe6UstiVsHRd8qJdD1s5yUBmyrj7SYBKF5drSv+lS8Fyz1RA+V1uwAUgMhM
-	5oMhvAgk/5qOglnR7fE34wSUC0p9PkW7+ETIvJXfFrPjbX+n8QtL0lingBn2xt/VFJ4ktFppkkM
-	eIr4uKQh6Jp+5wBOQj2mWZD1XcLjX2cQnSCJoYmELChd2xlu20rFaCUaZhyBJcuKSIvzWrdFWhN
-	mcqF/OJ6lcN8OQs7swo+/FZjatS+mST9ggkgCTSs0XUN68NRRHq8tz6j85FTZi8GOBMOrHhNMg1
-	HTOmSlFetuyqH21oRa46zJwJBIJDMy8+jML8OYXSr0+QaqNwh0NJKfKhkVOfa3S4YSJMWg4Y8jf
-	9xAymA4FM6HaJ0AUuf73R9eZ
-X-Received: by 2002:a05:7301:90b:b0:375:4366:a90c with SMTP id 5a478bee46e88-3768730e517mr1138142eec.41.1794355256884;
-        Tue, 10 Nov 2026 16:00:56 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:71::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-375218c7c50sm19090263eec.29.2026.11.10.16.00.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 16:00:55 -0800 (PST)
-Date: Tue, 10 Nov 2026 16:00:51 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin <deliran@verdict.gg>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
-	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev, kernel-team@cloudflare.com
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-Message-ID: <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
-References: <cover.1794281983.git.tianyi@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=d7V7ROZw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794357808; x=1825893808;
+  h=date:from:to:cc:subject:message-id;
+  bh=FBJ5xqbf3yp2gcxHHMf7tcn6sXPsMzZvrR0DhpZjFVY=;
+  b=d7V7ROZwFR0UknCbBuRZileV+ntq162ps3UhF6FY4X+0XopecpHbZAaY
+   3fVwyNYJbkvAHBmTjrmskZe04IF2SPj25r1SCjNHxO+Pa3eIJIc8v4Pb3
+   FmbKS9AJSb6ROALuu5MQ8Ob2zvbXkEC41hBM7rQeYmIH2SgFyCj5l+V4z
+   PiPq6ypfmwS8BqJxKcEO6jL+2Z83s54aCfneOoJb3rSqvMaxjntVTSZfz
+   nOkG+SKPNLqjw2odhsZ3bdDPeUSi6w3pnSWiH/4MAj8cRxUBj9ospShat
+   5IOjTQf+SvVKAEl7ZpOWA6nK0mkEc7aXbtKthhiw0I0lDE5ojmAQjuHYh
+   w==;
+X-CSE-ConnectionGUID: YGEt/YcvSDef1tJ1FyBGkg==
+X-CSE-MsgGUID: jN4KGYUORH26oeMVKboW0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3119550"
+X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
+   d="scan'208";a="3119550"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 16:43:27 -0800
+X-CSE-ConnectionGUID: SYJkyTOWSSaXtps+U6JhMQ==
+X-CSE-MsgGUID: gy6HOFPlR7aDHbUdHzH1uQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
+   d="scan'208";a="8713683"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 10 Nov 2026 16:43:25 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xQwQs-00000000xmR-19BV;
+	Wed, 11 Nov 2026 00:43:22 +0000
+Date: Wed, 11 Nov 2026 08:43:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joerg Roedel <joerg.roedel@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Woodhouse <dwmw@amazon.co.uk>
+Subject: [dwmw2:vsm2/vsm-min 14/123]
+ arch/riscv/kvm/vcpu_vector.c:102:19: error: incompatible pointer types
+ initializing 'struct kvm_vcpu *' with an expression of type 'typeof_unqual
+ (*(kvm_get_running_vcpus()))' (aka 'struct kvm_vcpu_common *')
+Message-ID: <202611110850.A1qi4Azm-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -118,42 +82,54 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1794281983.git.tianyi@cloudflare.com>
 
-On 11/10, Tianyi Gao wrote:
-> An skb gets its RX hash, VLAN tag and checksum status from the RX
-> descriptor, which describes the packet before the XDP program ran.
-> 
-> Without this series:
-> 
-> - On XDP_PASS, the values are stale. After the program strips a UDP
->   tunnel header, the stack applies the outer CHECKSUM_UNNECESSARY to the
->   inner packet [1]. If the outer UDP checksum is 0, a packet with a bad
->   inner checksum reaches the socket.
-> - On XDP_REDIRECT, the values are lost. The skb that cpumap or veth
->   builds from the xdp_frame has no RX hash and no VLAN tag, and its
->   checksum status is CHECKSUM_NONE.
-> 
-> In one use case, an XDP program redirects packets into a veth device.
-> The checksum status is lost, so GRO verifies every checksum in software.
-> With one TCP flow, this costs 34% of the receiving CPU.
-> 
-> Another use case [2] is load balancing IPsec tunnel traffic with cpumap.
-> Without the RX hash, GRO on cpumap puts all flows into the same bucket.
-> In a cpumap test with 16 TCP flows and no IPsec, the throughput is
-> 17.6 Gbit/s instead of 23.4.
-> 
-> This series introduces SKB core extensions for XDP. It reserves an skb
-> core extension area in the headroom, right after the space for struct
-> xdp_frame. An XDP program stores RX metadata in the area with kfuncs,
-> and the kernel sets the skb fields from it. This design was initially
-> proposed in [3].
+tree:   git://git.infradead.org/users/dwmw2/linux vsm2/vsm-min
+head:   73f14216b586db8fb3211410b88fbcdff5a96c0a
+commit: 75bb49aa924fb9151f7e1fe441ff0eafbc996dae [14/123] kvm: Make kvm_running_vcpus point to struct kvm_vcpu_common
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20261111/202611110850.A1qi4Azm-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611110850.A1qi4Azm-lkp@intel.com/reproduce)
 
-Awhile ago we discussed the alternative of adding setters for xdp metadata.
-Then the veth (or whoever turns xdp frame into an skb) can apply whatever
-metadata it needs (and there is some magic behind the scenes that takes
-it into account when creating an skb). That keeps the layout and most
-of the code outside of kernel. Have we considered that here?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611110850.A1qi4Azm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kvm/vcpu_vector.c:102:19: error: incompatible pointer types initializing 'struct kvm_vcpu *' with an expression of type 'typeof_unqual (*(kvm_get_running_vcpus()))' (aka 'struct kvm_vcpu_common *') [-Wincompatible-pointer-types]
+     102 |         struct kvm_vcpu *vcpu = *this_cpu_ptr(kvm_get_running_vcpus());
+         |                          ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +102 arch/riscv/kvm/vcpu_vector.c
+
+b5060a4aa33d7d Andy Chiu 2026-08-03   99  
+b5060a4aa33d7d Andy Chiu 2026-08-03  100  void kvm_riscv_vcpu_flush_vector(void)
+b5060a4aa33d7d Andy Chiu 2026-08-03  101  {
+b5060a4aa33d7d Andy Chiu 2026-08-03 @102  	struct kvm_vcpu *vcpu = *this_cpu_ptr(kvm_get_running_vcpus());
+b5060a4aa33d7d Andy Chiu 2026-08-03  103  
+b5060a4aa33d7d Andy Chiu 2026-08-03  104  	/*
+b5060a4aa33d7d Andy Chiu 2026-08-03  105  	 * Only reached from __riscv_flush_vector_context() when RISCV_V_VCPU_CTX is set, which
+b5060a4aa33d7d Andy Chiu 2026-08-03  106  	 * always have kvm_get_running_vcpus non-NULL.
+b5060a4aa33d7d Andy Chiu 2026-08-03  107  	 */
+b5060a4aa33d7d Andy Chiu 2026-08-03  108  	if (WARN_ON_ONCE(!vcpu))
+b5060a4aa33d7d Andy Chiu 2026-08-03  109  		return;
+b5060a4aa33d7d Andy Chiu 2026-08-03  110  
+b5060a4aa33d7d Andy Chiu 2026-08-03  111  	kvm_riscv_vcpu_guest_vector_save(&vcpu->arch.guest_context, vcpu->arch.isa);
+b5060a4aa33d7d Andy Chiu 2026-08-03  112  
+b5060a4aa33d7d Andy Chiu 2026-08-03  113  	if ((vcpu->arch.guest_context.sstatus & SR_VS) != SR_VS_OFF)
+b5060a4aa33d7d Andy Chiu 2026-08-03  114  		riscv_v_flags_set(riscv_v_flags() | RISCV_V_VCPU_NEED_RESTORE);
+b5060a4aa33d7d Andy Chiu 2026-08-03  115  }
+b5060a4aa33d7d Andy Chiu 2026-08-03  116  
+
+:::::: The code at line 102 was first introduced by commit
+:::::: b5060a4aa33d7d78a8c1837ab08ef0c81ea96650 RISC-V: KVM: fix vcpu vector context handling for kernel-mode vector
+
+:::::: TO: Andy Chiu <tchiu@tenstorrent.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
