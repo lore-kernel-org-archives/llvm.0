@@ -1,71 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794377993;
-	b=1QDsCZla8w+4j5hDuf62zdjgq4EClpz7fobB7sxYxZoENa8tioSydUO6pS+257IIPfxz
-	 0KwiTAEsTaG8/SDgi8z2/DRXUS0ushN/Zt3z3yKV4omy+x4oljgpuw8QYV0MxSmKEx+II
-	 iwbiOWrHej5Q+mbfxCjexMFbzpRedvcO2E3xpewCVNMJkCWUudIB70FLHR3R5Iq6TcpUY
-	 CJ3StKG/YNuLTHV4FqiFfY3LLudKORMOxGofHlbgeBLybfhvXAFBdC3Wza+I59gmu7Xne
-	 k+iXNiZHZD56GCAQD9ReTHGxjjvnSWPUz/LQPjbfYpkfsRX/BmTOqtnNM3NncHcu3yg==
+	t=1794382996;
+	b=FoT/neP1x6wfr71VMSh+5tji05OV7loUtYkNT9VWqzwU1qeywj72Fck01gpFT2XKuOba
+	 D7POhFvGaVlIlvE6EfCs+3WRUK4AHVr98z+jOTrsQ5rCqwfpgivhbwDWoeTCqnNX3NRrX
+	 SQBZBiwTyUbReIBjEPerV0eSyc6JRbDcsk37eSoW0zE7c9FqafLn3EI/sN0P+7dmRzQ4d
+	 OAmGZeJt7+oaFz8oVnv3UbJdHFr/78L2bK/CRTxfg4nAFgqAEF6tUCSH/xz5hY0wb4rpQ
+	 3hZTpVFEbjK+qjZQ3GEH83QwjTSbw1OBdKZi+tXKMeWuE5NIV9MV/XKj/leXUjjCKlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794377993;
-	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
-	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=lbTuAzuPKByX5dC0q3vuXiQlAi3AAATOhhibWeU5cGc=;
-	b=Pr/Cx6iO/nIbNJe62odvZuDsGZxp5DQF5nVnjCOlTybBxxdH+WBWRSZRdbLIi6S9+CK0
-	 kglkrHFod3n1T/dNjFA13OpO65hysD3+9la0LE9pW96TR9PuET7sippLSlENeCMptqmlP
-	 ptSc8y7cz6giSRpfk9yJ6tWmxjghBdsC1S94rk2bKX2+Z9kus3R0k5LRv0lqCi4gwez7M
-	 2gz6VzwS5vPY8vASTYJLqkNEjc0wGSELANtYWE3FGc14TJxaabSKbt2S3IzUndMdWUKsp
-	 UBniRhBO+DO0DImeCvvGoFt0o368k0aP5pKC/38rm7+mkPumGL5qovONKthha/1skkg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794382996;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=VZTMpSWIpIjImonIQn6KcE+nvjBN6poZUb+bi9vRUPo=;
+	b=YgrB12RG8RgjooxIdJxQXpNbgBzeCRvIWGR5nBVLDvP0kAcO8fQw9BPDQng/2yvu+5e5
+	 YHpvKBPg1TTWQ8mfEcmSslY0HfV8QHrVJnAIb8dPmnbvq70rPWhNAApjVaFbECmfhNw9T
+	 5MqdpQsggXjR08qxig7wRMuE3VGMx2q3up79pXWYkqiN2JASja0fGpSBC6rA/rOYmcJdZ
+	 7ArSNrSiUb6hM+9fJ5Pc6zp9Yfx4j3RBPHZv5wSzjbBzuhWCVY5lkN2v+klsPTkWoAHNw
+	 lm86/Qw7cZ8xnSdIKdK6CYPVttqOmGX8u/nT3U0eB15ctPvLZlk0lUVTHdya+bJVnYA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="m+qI10S/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cr3jMx5B;
+	arc=none smtp.remote-ip=192.198.163.8
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB3F606A320;
-	Wed, 11 Nov 2026 06:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4A0606A321;
+	Wed, 11 Nov 2026 07:43:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE4A0606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m+qI10S/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD1AF1F00A05;
-	Wed, 11 Nov 2026 06:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794377993;
-	bh=lbTuAzuPKByX5dC0q3vuXiQlAi3AAATOhhibWeU5cGc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=m+qI10S/4af8hO8ERcdUo86cHJO+aAGufuIbj3GtRZ5oZb363CpJx41beMeiYJwZd
-	 qyO60G2PW1YYDKC8RUTMLF67y9nTjGpfESiM0DhiTTVn3nCpb9mt25LNl2ImO5mJ3j
-	 jJVmCl2Ubohq2xbaJgo3E2JitJfR0ngy1176DPuGFs4Exkd8F2N6z+3k77aAZKeZXh
-	 KS9YO1BwGxe20TEFkZ2xCp7zji07TK9XQ5puK8oRnQfTmIBcjqIcwMoRa1lr0MTCr2
-	 ieK747rlbuXrLbSojzLzVvuMa34kFbZQw8XK6fvQ6kAHM/niCYX7SoG/2uU5OEpES7
-	 lgOgphURVt97A==
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
- Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
- Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
- Douglas Anderson <dianders@chromium.org>
-Cc: Yabin Cui <yabinc@google.com>, Han Wang <nesthanwang@google.com>, 
- Nilanjana Basu <nilanjana.basu87@gmail.com>, 
- Snehasish Kumar <snehasishk@google.com>, stable@vger.kernel.org, 
- Alexandre Courbot <acourbot@nvidia.com>, Alice Ryhl <aliceryhl@google.com>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Benno Lossin <lossin@kernel.org>, 
- Bill Wendling <morbo@google.com>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Boqun Feng <boqun@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>, 
- Justin Stitt <justinstitt@google.com>, 
- Masahiro Yamada <masahiroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Tamir Duberstein <tamird@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-In-Reply-To: <20261106113800.v2.1.I0b27923381ef34cc99cdf8b65fea2e1bafce6370@changeid>
-References: <20261106113800.v2.1.I0b27923381ef34cc99cdf8b65fea2e1bafce6370@changeid>
-Subject: Re: [PATCH v2] kbuild: AutoFDO: Disable Profi
- (-fno-sample-profile-use-profi)
-Message-Id: <179437796877.3770401.4019375927592079703.b4-ty@b4>
-Date: Wed, 11 Nov 2026 00:19:28 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cr3jMx5B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794382996; x=1825918996;
+  h=date:from:to:cc:subject:message-id;
+  bh=XX1N3E/ZWKdPHkSCl8L4xxtiklkcdAZMjY08QA93Rog=;
+  b=cr3jMx5BIQdzmQ6bTC2/GKjGY1FpXAi1sCgoaaWISmFSYLkwqzKcklJl
+   FTAeh+InhC3VSIbSpq5GiOeu8VPk8JUwuqOORSVreEA0qnGFTkj/PgCnc
+   FgvD1w38nmC4lIO9/QpJ+Z/GSUXp2OSR5HpDDeq7DHykzLHwbhganiBGP
+   xtMV1Jv2IFs1qUKjW/HP3DoRKzntAPaO5lEIwTgNTzAJXnfeGRPK+rWxo
+   lTS4neRl/vergV40GzD8UAWPa0RfMRJRIWX5tOHI7y8eEDHzaSAK7XjEH
+   QIjxzbQdEA6mu+WTVVQsai7lF0pkUa+Oe1DEeIGRdBmBFDjDLSHkvdABh
+   g==;
+X-CSE-ConnectionGUID: IA8sFacpS6CzmRwZ3h/Mdg==
+X-CSE-MsgGUID: luyaY7ERQ/WUj/j7WvBXow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3043619"
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="3043619"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 23:43:15 -0800
+X-CSE-ConnectionGUID: /8qNVijyQdyw44K6s57dhQ==
+X-CSE-MsgGUID: cK31BwuyTJeTl4z5zNcUbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="8924528"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1073a420ae3a) ([10.211.93.152])
+  by fmviesa010.fm.intel.com with ESMTP; 10 Nov 2026 23:43:14 -0800
+Received: from kbuild by 1073a420ae3a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xR2zA-000000000XL-047l;
+	Wed, 11 Nov 2026 07:43:12 +0000
+Date: Wed, 11 Nov 2026 08:43:00 +0100
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <kees@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Steven Rostedt <rostedt@goodmis.org>
+Subject: [kees:for-next/kspp 1/1] WARNING: modpost: vmlinux: section
+ mismatch in reference: seq_buf_terminate+0x1ac (section: .text) ->
+ bootup_event_seq (section: .init.data)
+Message-ID: <202611110802.zPIiPSnJ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -74,40 +81,23 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=754; i=nathan@kernel.org;
- h=from:subject:message-id; bh=8AeJkqx5Jw0PBwVRgQcq+5k3vNCrVemeTf4e0yDe/Jw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlfOP7//eRg7XDwzYwTgSku8h/8/xbluR/ps/r+SMs76
- QqfvK5ZRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjIH2+G32zu7d/S8pnMsmbV
- 9lnrJ4XPZJPJ1X2ZcZZn94OqdP97Bxn+l+w7JtC/iNva992mDG3BptLctovq6tuW256+vDzYsPg
- lCwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Fri, 06 Nov 2026 11:38:01 -0800, Douglas Anderson wrote:
-> kbuild: AutoFDO: Disable Profi (-fno-sample-profile-use-profi)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
+head:   7b8cd26b6aab8cf147165610d13964f79200a5a7
+commit: 7b8cd26b6aab8cf147165610d13964f79200a5a7 [1/1] seq_buf: Mark a seq_buf overflowed when terminating it loses a byte
+config: arm-randconfig-2001-20261111 (https://download.01.org/0day-ci/archive/20261111/202611110802.zPIiPSnJ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611110802.zPIiPSnJ-lkp@intel.com/reproduce)
 
-Applied to
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611110802.zPIiPSnJ-lkp@intel.com/
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-fixes-unstable
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Thanks!
+>> WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x1ac (section: .text) -> bootup_event_seq (section: .init.data)
 
-[1/1] kbuild: AutoFDO: Disable Profi (-fno-sample-profile-use-profi)
-      https://git.kernel.org/kbuild/c/3df238d7a9f5a
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
--- 
-Cheers,
-Nathan
-
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
