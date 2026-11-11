@@ -1,102 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794415879;
-	b=Ekg/odF+r9Z02Rltxs6LIfocAaQPRdPQbsaVz59oQCcWuaUQ4O1Zj0XBm67EAwtZg0Lx
-	 ZluPFvYMQR6lyR2IcUSAdG9YWk+Bchqpw+ZDL+zjNyR6IRaYD0dJ2BBAUkmWxltqt3yDT
-	 V9ydcU5RZpMoBZA3daxE3ZpI3pmVNx1arqvwSi5UxG88AXFD3+BesaV9eTkSt/fUA8Awl
-	 IIKjJDNb4lEcvuc8d6LPfGmpfrVR3mHqsa/VcG2iEyXcV0wRqufNQ+eKmMly4jWTLoJ6p
-	 mebw+9ZtLEd0+62fuMyaRCAGNF+OC6HdToYyPkk7aDNWZUSpsCL/aPFuFNXJYjWPBtA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794415879;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.71
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794418940;
+	b=LOMJTDqMV1u99vtAWLCHuURfyJv/casRVpEkaWpdCzy7vkNGwrqIm10wiSnEUnJ3Xt/2
+	 XE6UD+onjDmKqQMWG5FUMy92oc9FhERttjORyy0oeZpXiLn6k3Gz5CvUuO0XKto5tSXOB
+	 dMfOm/55VfR7bXjDvZA2CSNNyfPyer9iKb0k/t98NGTHDmkvTm6wee4SXTybO3PO8FZCV
+	 O7omt11y6FGg3owgg06hDFYxYgos1NE/jDUnDx//u35ao8fld4ndv581ycXuYOXiDtZHO
+	 QTJbITRBS+mf4y0cb1Oh5yamX7SDJ6KSUgIyv3kGyAu5me4dZfJyBN25NGt4+K5DZAw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794418940;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=JhP8DkU9ic6BIKk96lun3f4n8KqpEb7oFPMlil4MVPE=;
-	b=irbOGifWzRtWMT70cpId9w1cQd9m3E55J5jA2RxKljb2+qAelmisn3xrcKzLD+7B/GVH
-	 Isors3BGSZnSfx6NQQqAKzcKZrNk8A5z6omzuzlm9RUxFtS0gP6X45/dL6iDHogrpGUDv
-	 yPCy7zMSHLLrjMcEzkkQMqIAAgt0SKiLGWydchHjr7TnFEvGz1xMU4acR+ioxctj/30Y+
-	 /9Cqh94JpgqtPXlxPXfBakXXerkOL5q09OmmVMc+XYumzeG/WI7rQHRZarZg4TJJoXncx
-	 RmozTGu+g4LNf+8eVJpmYtvuQouZ6G0nEHNXpbLjT7asiLQiGW2m56F1k5vaOPtXMMg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=yh8nkpT4+CYfMHL+eFwrZnzXCycE6ehY6JiHLBYE62o=;
+	b=konZTvC/U3Gd501tmUcjVDKEILBQmb/xvZSpZK5hlBaPrG/XAiu+TtlQ5Ox537OCiZFb
+	 FV1qT2xvvWHlZStSfVnlHL35hcQbZtoH0YKUYqtQj0+KOkQShXko2ERCo+Ii2CKzrceFe
+	 lS1ROtZUJU2DWDZk6rrwlHAXVP5AKfC2oXmPjRWBR7c8ETtNZHx6JjsOqyNITpI1pv4uB
+	 efq2DqGB8ed2IgOvRIzbSjwiojw37WraJdUgyAWtYYrGRCiCpyLZPAw6nEojow8Y8Gmr6
+	 JQI0xn/uwev42KtFUs563oa2z0TIKUD8Wwr9hz94IYAhb4VvkEWToFZppWnvYGS7ZlQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=e5MyGnB2;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PeQ3xJT+;
+	arc=none smtp.remote-ip=209.85.160.71
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975FF606A321
-	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 16:51:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 975FF606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AEB606A331
+	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 17:42:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8AEB606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=e5MyGnB2
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-490d59c3edaso15654f8f.1
-        for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 08:51:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794415877; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JOpaLUWDUiOWP11UWYxJX319X3YnB/vfsig2X9ucXbneNlpqDK0lBH3rJdEU6zu/YA
-         bFWNj1yxx/+R9SoQ6TlFKhrUWsB7FbeN1JuD7XYnNRc1w4xabUyMF8LDEcaR+YL91Sct
-         IFLUYRMsbprGn4QYAbmO6y7YDCJSnFB8OZCwcx7pYxi//ZXDfre2aJhhmh4aSz4iTWnc
-         YsqQy25Tv8HJhxeqQLFQdksd1XYnYhag5zmNOHXgflisMIemhMg31rqkso58sMTAfoCw
-         V5kvwTI9soK68cTwx57I/wNRb54I4WBfLM3F60ybREISJrIaV2ZNV8cMnis4sMmwnEIu
-         HQHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JhP8DkU9ic6BIKk96lun3f4n8KqpEb7oFPMlil4MVPE=;
-        fh=SSxXPR2YNWNndMsgh6BAWAz1THZI9OD0ibOsvmQJgyk=;
-        b=DmFDxAZhppsZPhFkuSPV6rImlvJKatGuzv21ltBYABX5QyGcgjs+4fJ6qHOIPHBIPV
-         6kzEtWdsceDIcjC43Z9XZJUNA8ewSE8zeBlCMiWzPqQgtGxDmyBDmf5EyL4/PYXqU8Oc
-         7aLiSYGK+fIumeLVZ4OTkOLzQfdWCIRHuDOGYzSLEw/WOh5uYOUvSt5w6bOuTWkMohow
-         G8daEy1lGI108Du28o81EecNVLWvt2S8pXe6PdLiaT/w7x3hKxWtrawqmCY73UimozqE
-         YFOAqWX6uoD4XxGT9sGT3BQQ0i3u1VHW1TgGbYSx+caXf+h71VSsUr8bRJQL4BDJq4GQ
-         UFwg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PeQ3xJT+
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-45ecb9dd589so2440732fac.0
+        for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 09:42:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794415877; x=1795020677; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JhP8DkU9ic6BIKk96lun3f4n8KqpEb7oFPMlil4MVPE=;
-        b=e5MyGnB2b/tF4oNDHDslbmr+V9YjhjRaBP2HJPe5uvxkCXtmov9u8O6vxE9WLcQBgd
-         X5qKgJz7Ng5xVBwSLXuw4Zhnzndjt/xMbdo3ZOgOkHMEn9erWcxh4wV6NsNSUxEhhyur
-         alkq8giWy/M82VHhIL8HkKHnSfO1nBCWlaTZDvMspYkefhOTMRKb6eBRm0KscSEDBUEF
-         a2PyzN1rDOkewAD9IzScDiQvltC8385eQ6fQUhkEwsPQafwtGvSQ2w9jHw2y09EtszkY
-         TCDTj6ZLcb8hLAd7omb6tGTU2gezcVyhdd8ijNfbmZsrb3F25T2GHUegkywqN84Soein
-         sT5Q==
+        d=google.com; s=20260707; t=1794418938; x=1795023738; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=yh8nkpT4+CYfMHL+eFwrZnzXCycE6ehY6JiHLBYE62o=;
+        b=PeQ3xJT++PTLx0ATZ45O8prOCqxDqwN41ScqfWUzTaB+UG1XuEAEtMGO7Dhdl2B1NT
+         7qLcXY9r6L1A/OJPU1Gh4bmj8I6CLWl5i6hSPx8oThjFyPSbx6Zom6RVlC1UGw/5iaS+
+         i8H149VwnthDJqPrYO6T1XX0/wyt/lYaMQ35dT4oNs1TMcWQPOIUW6VAWUhIvtAq71ce
+         E1RbIHlTkzU1GY8fQYE/7AdN1kbuQ7+EP0vSe0prjgaep31enS96IVpmbjstFbZz7nTQ
+         VOZJynQbxZ7vlaHElhCVHkJuPGBzj6N3HedAttwnkZiHOvdPDPG1qxhH4nx2vp8tbHEl
+         38tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794415877; x=1795020677;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1794418938; x=1795023738;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JhP8DkU9ic6BIKk96lun3f4n8KqpEb7oFPMlil4MVPE=;
-        b=DKIg7ex0j9A0EMLw2LqiW5yzVEMND4jrgj/VK69p4I/gSvAjQy9NIOn2IOwoZ14M0S
-         /B4YWox2GVSLHVuhoSKH1ynjd6bYOaEYy1khl+b16NkPzESE7mdJhmBoukfBIEob8HTU
-         G1h+4C9EwbVlk0C6y5CPDvmizkku0Q86YMoQRZ9euPnyZ7VzMMHrIuWpbybVoV+iLDDD
-         o1QUnN02FDvq/qaiRFaa4SvUbWnCbmZ2Va6dN6PDRWDfyTp/Gca89i+vUHdQSYRDQRFM
-         S6CU5cnohdXQCgm1sQS8heHJbjrDfSedZR2kf91CieRRySj1r8jpneT3qZP/GszrfXMB
-         0M6g==
-X-Forwarded-Encrypted: i=1; AL+hErG3Gm8JkAy/Bi3qoymr9GrCUYRIFNd+ZF8FkzRVCPRBxGucuF8g3OkiQH9mbpUHbfa3wrEy@lists.linux.dev
-X-Gm-Message-State: APuU4Z80LS1NPvPcFnRKH/E2X+ZNBy7DHayRDzSY/T1PDg5bI/KXg3Yj
-	M23mr75ypmGmFnQR3Z7Dbabx2WqJBoIL5ixMDQn7zDGXK5n0su/jiOqcfRVybeq8L0TXLm6MXst
-	VTu/OngeoxSjD95uxq2uQ7BDU7outgR99YZgZBC2k
-X-Gm-Gg: AYBFou03bNv4s5KP7kPfmFTeOZptZw2agtLZ2s8VO+PMZpJNaYKTtPP9hBhGS+mzhMU
-	fI842O/GjeXpghQGc2o75WDPbv1ZjbGBgBFGo4h4EwMV9Zx1LPXu8epaHGPWPtX2C0thuyg0dkG
-	FKe1DKMldgf7ItwvcRfZbhCpfTm04xE/QjOA1TvuDEWBHOHfuLIZv8vlDAYbLeU/rN/UrzwxyLc
-	tgTDqi6f9kcCktyGTFh4pX5wgxucuHgCXCiSZskBrntq3/j+gKmlnhxl4TCy69KK5w6L9Uu0QCu
-	3fyKjVH0pQatbU+pq6WW6qrUhjL8WehGwC64ijb9xuO6Qxw2dKoDsAD1VJhqvXyWSEWkpJz7vmE
-	jGbZA1hCD6NB4TIwj/+n4GbgjNnkq+VMFOs8QTM9puW8dsfyupIm1DVljhD6K7WIGp8X9hIGDSu
-	7ar5cOxhRyng57VJIx+Odv5mQ7N3x8C4EOLqWkMlw4lxBaIQuPKaD3DdnavCwXdu+07N0zzJwRI
-	nHc8ExNM5FiIqJ6CtNNVvjlCQkMugSukT1LJA==
-X-Received: by 2002:a05:6000:27d3:b0:492:aff5:da60 with SMTP id
- ffacd0b85a97d-49b01cf341fmr22869f8f.13.1794415876621; Wed, 11 Nov 2026
- 08:51:16 -0800 (PST)
+        bh=yh8nkpT4+CYfMHL+eFwrZnzXCycE6ehY6JiHLBYE62o=;
+        b=wKByKrnj8vfC1g0SY/XXI40TrTDo3ED3fJyzZXHzqjoRlum3neLLXeKY6Tw37c4F8T
+         OPCj2JUA2vs86e/rZiuAu8BnFrsUymKTUKyq32P63K7DbIHXrOVl5M9SEMngD/QxXh2I
+         ozgwFImZSz/ormH6uxyG1LzHaGDjd344P9adm6wymqVIA64+B+j42d3SpSRd2jU2wgQj
+         zPEFq22Jempq8rixM1Ah7soiEA3jCVLWYSd5P74m7aAN9Gl721J6XyFnE0mC2WsoUBLo
+         bDh15d5ZYrKkQiaQMxUqx5TG54rar+3ohkdG75yZyhqxIeSZomoExn6yYn/mYH0E2ITN
+         v9GA==
+X-Forwarded-Encrypted: i=1; AL+hErEzm2FkISBHeQuWWZjMYNWR2uSmqMEoaZZe1w0MR9k4ukkXMh0PuBYBKSsim788GENc1E5v@lists.linux.dev
+X-Gm-Message-State: APuU4Z8m1ib3Uk4ViabuO3nrfUWyepFLR1LB2caUUCo9wPesAR3VPS75
+	nMOZ0amspqNGt4FkBkQxw7aC+N8I08BuSWw59zVOglX7kCgDm+CYbsOvDfsWYF1fJPjkROOj8Pd
+	6nwhKBAqU9w==
+X-Received: from oacbc4.prod.google.com ([2002:a05:6871:a184:b0:4a7:3874:712b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6870:148e:b0:49e:1c69:1f57
+ with SMTP id 586e51a60fabf-4ae46c43101mr2625466fac.41.1794418938199; Wed, 11
+ Nov 2026 09:42:18 -0800 (PST)
+Date: Wed, 11 Nov 2026 09:41:52 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -105,66 +75,246 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-References: <20261110-kconfig-toolchain-updates-v1-0-6d4fb636290e@kernel.org> <20261110-kconfig-toolchain-updates-v1-2-6d4fb636290e@kernel.org>
-In-Reply-To: <20261110-kconfig-toolchain-updates-v1-2-6d4fb636290e@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 11 Nov 2026 08:51:05 -0800
-X-Gm-Features: AclHuK8l5K2eY2r26mTBewSe8bSK1J1SDnVW3Q9OiGp7cZxgZU2dOMsZVOmiB-k
-Message-ID: <CAKwvOdnFG1ACEvGPXGW1XK_3QN+5UaR_9EumhmrsyKOs0aYCPQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] scripts/Kconfig.toolchain: Do not dynamically probe '-fno-addrsig'
-To: Nathan Chancellor <nathan@kernel.org>, Jordan Abrahams-Whitehead <ajordanr@google.com>
-Cc: Nicolas Schier <nsc@kernel.org>, Julian Braha <julianbraha@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.567.gdb80ae8cd5-goog
+Message-ID: <20261111174213.3526604-1-irogers@google.com>
+Subject: [PATCH v12 00/20] tools/perf: Adopt kernel compiler-context-analysis.h
+ annotations
+From: Ian Rogers <irogers@google.com>
+To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
+Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com, 
+	james.clark@linaro.org, jolsa@kernel.org, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev, mingo@redhat.com, morbo@google.com, nathan@kernel.org, 
+	ndesaulniers@google.com, peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 10, 2026 at 9:43=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> '-fno-addrsig' avoids generating the LLVM specific .llvm_addrsig
-> section. This flag is supported by all supported versions of clang, so
-> convert CONFIG_CC_OPT_NO_ADDRSIG into a simple string symbol that
-> depends on CC_IS_CLANG to clean up a dynamic probe that is unnecessary.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+The perf tool previously added Clang thread-safety annotations in
+tools/perf/util/mutex.h (GUARDED_BY, LOCKABLE, EXCLUSIVE_LOCK_FUNCTION,
+UNLOCK_FUNCTION, etc.). Since then, the Linux kernel has adopted a
+unified set of static context analysis macros and attributes in
+include/linux/compiler-context-analysis.h (context_lock_struct,
+__guarded_by, __acquires, __releases, __must_hold, etc.).
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+This series makes tools/include/linux/compiler-context-analysis.h
+functional by synchronizing it and the required compiler_types.h helpers
+with the kernel headers, converts tools/perf from its custom mutex.h
+macros to the kernel-style compiler-context-analysis.h annotations, and
+expands context analysis coverage across comm, dso/dsos, thread/threads,
+config, intel-tpebs, env, and maps. Along the way, separate preparatory
+patches fix an unlocked __dsos__add() call and TOCTOU race in
+__machine__addnew_vdso(), skip BPF and OOL DSOs in
+dsos__find_kernel_dso(), ensure DSOs created in auxtrace, machine, and
+symbol helpers belong to a dsos collection, avoid dropping
+_dso__data_open_lock in dso__list_del() under REFCNT_CHECKING, switch
+dso__data_open_lock and tpebs_mtx to DEFINE_MUTEX(), add a read-lock
+fast path to dsos__findnew_id(), fix an unlocked read of
+tpebs_reader_thread and double-close of tpebs_cmd.out in intel-tpebs,
+avoid a potential read-to-write deadlock in maps__load_first(), and fix
+map index lookup fallback and removal in maps.
 
-Jordan, I know you were playing with -Wl,--icf=3Dall recently.  Looks
-like the kernel does not use it; AFAIK, no one has ever tried.  Even
--Wl,--icf=3Dsafe.  Worth a shot to see if it boots.  If we did, we'd
-have to update this kconfig check (the linker flag is only supported
-by LLD).  Even if the result doesn't boot, it's perhaps worth doing
-builds with BOTH to see what kind of savings are possible at the
-limit.
+This series was developed and reviewed with assistance from an AI coding
+agent (Gemini 3.1 Pro) and reviewed with Sashiko.
 
-> ---
->  scripts/Kconfig.toolchain | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/Kconfig.toolchain b/scripts/Kconfig.toolchain
-> index 666d44cc6ba8..570c5a31016c 100644
-> --- a/scripts/Kconfig.toolchain
-> +++ b/scripts/Kconfig.toolchain
-> @@ -164,7 +164,8 @@ config CC_OPT_ZERO_INIT_PADDING_BITS
->         def_string "$(cc-option-str,-fzero-init-padding-bits=3Dall)"
->
->  config CC_OPT_NO_ADDRSIG
-> -       def_string "$(cc-option-str,-fno-addrsig)"
-> +       # supported in clang, not needed for gcc
-> +       def_string "-fno-addrsig" if CC_IS_CLANG
->
->  config CC_OPT_DIAGNOSTICS_SHOW_CONTEXT
->         def_string "$(cc-option-str,-fdiagnostics-show-context=3D2)"
->
-> --
-> 2.56.0
->
+v12:
+  - Rebase onto perf-tools-next.
+  - Newline-terminate control commands in tpebs_send_record_cmd() so
+    consecutive writes cannot coalesce in evlist__ctlfd_recv(), send
+    SIGTERM in tpebs_stop() if ENABLE had not completed (tpebs_enabled,
+    annotated __guarded_by(&tpebs_mtx) in patch 17) or sending STOP
+    fails, and ignore late samples in process_sample_event() once
+    tpebs_stopping is set.
+
+v11:
+  - Rebase onto perf-tools-next.
+  - Add Fixes tags to patches 7, 15, and 18.
+  - Serialize tpebs_send_record_cmd() with teardown via
+    tpebs_cmd_in_flight and tpebs_cmd_cond, check
+    check_if_command_finished(&tpebs_cmd) under tpebs_mtx only when not
+    stopping, guard evsel__tpebs_open() against a concurrent tpebs_stop()
+    with a generation counter (tpebs_gen) and tpebs_stopping across
+    closing the fds and finish_command(), and annotate tpebs_cmd,
+    control_fd, ack_fd, tpebs_stopping, tpebs_cmd_in_flight, and
+    tpebs_gen with __guarded_by(&tpebs_mtx) in patch 17.
+
+v10:
+  - Split the maps__load_first() lock inversion fix (patch 18) from the
+    maps index lookup and removal fixes (patch 19).
+  - Fall back to the linear pointer scan in maps__by_address_index() and
+    maps__by_name_index() when bsearch() returns NULL, check
+    map__start(prev) < map__start(new) in __maps__insert(), factor out
+    __maps__remove_at() so maps__remove_maps() removes at index i
+    directly without risking an infinite loop, guard against -1 index
+    wraparound in maps__find_next_entry(), refresh sort invariants in
+    maps__fixup_end() and machine__create_kernel_maps(), and add a unit
+    test in tests/maps.c.
+
+v9:
+  - Rebase onto perf-tools-next (resolving the conflict in
+    tools/include/linux/compiler.h with ASSERT_STATIC_STORAGE() and
+    converting the newly added dso__set_symsrc_filename() lock
+    annotation in tools/perf/util/dso.h).
+  - Move __must_hold_shared(&dsos->lock) on __dsos__find() from patch 13
+    into patch 7 where __dsos__find() is introduced so every commit in
+    the series builds cleanly with -Wthread-safety.
+
+v8:
+  - Set DSO_BINARY_TYPE__BPF_IMAGE for non-OOL ksymbol DSOs in
+    machine__process_ksymbol_register() and skip
+    DSO_BINARY_TYPE__BPF_PROG_INFO, DSO_BINARY_TYPE__BPF_IMAGE, and
+    DSO_BINARY_TYPE__OOL in dsos__find_kernel_dso_cb() so that
+    dsos__find_kernel_dso() does not match ksymbol DSOs in
+    machine->dsos (patch 8).
+  - Split the dsos__add() additions in auxtrace, machine, and symbol into
+    a standalone patch (patch 9) before "perf dso: Pass dso_data to
+    close_data_fd() and dso__list_del()" (patch 10).
+
+v7:
+  - Add newly created DSOs in machine__process_ksymbol_register() and
+    dso__split_kallsyms() to machine->dsos so assert(dso__dsos(dso)) in
+    dso__list_add() always holds.
+  - Add __guarded_by(&config_mutex) to function-local static parser
+    buffers in parse_value() and perf_parse_file().
+  - Remove from maps_by_name before calling
+    map__put(maps_by_address[address_idx]) in __maps__remove() so
+    callers such as maps__remove_maps() that pass maps_by_address[i] as
+    map do not use a freed handle in maps__by_name_index() under
+    REFCNT_CHECKING.
+
+v6:
+  - Rebase onto perf-tools-next.
+
+v5:
+  - Hold machine->dsos.lock in write mode across machine->vdso_info
+    initialization and temporary file creation in
+    machine__findnew_vdso() and __machine__findnew_compat(), and
+    annotate __machine__addnew_vdso() with
+    __must_hold(&machine->dsos.lock).
+  - Reset tpebs_cmd.pid = 0 and return early without setting
+    t->started = true if start_command() fails in
+    evsel__tpebs_start_perf_record().
+
+v4:
+  - Place the DSO loaded in addr_filter__resolve_syms() into a dsos
+    collection so dso__dsos(dso) is populated.
+  - Join tpebs_reader_thread on error in evsel__tpebs_open(), document
+    why tpebs_cmd.pid is cleared before pthread_join() in tpebs_stop(),
+    and include <pthread.h> and <signal.h> in util/intel-tpebs.c.
+  - Include <string.h> in util/maps.c.
+
+v3:
+  - Rebase onto perf-tools-next (converting the newly added
+    dso__find_binary_type() lock annotations in util/dso.c).
+  - Separate bug fixes, DEFINE_MUTEX() cleanups, and improvements (vdso,
+    dso_data, dso__data_open_lock, dsos__findnew_id, intel-tpebs,
+    tpebs_mtx, maps) from the annotation patches.
+  - Move AI coding assistant attribution to the cover letter and drop
+    per-commit Assisted-by tags per linux-next
+    Documentation/process/coding-assistants.rst.
+  - Add Marco Elver's Reviewed-by to patch 1.
+  - Define __diag_clang_23() and Clang ASM_INPUT_G/ASM_INPUT_RM/
+    ASM_OUTPUT_RM overrides in tools/include/linux/compiler-gcc.h.
+  - Probe for -Wthread-safety-pointer/-Wthread-safety-beta in
+    Makefile.config.
+  - Pass write_locked to __dsos__find().
+  - Pass struct dso_data * to close_data_fd() and dso__list_del() to
+    remove the REFCNT_CHECKING dso pointer from struct dso_data and
+    avoid dropping dso__data_open_lock in dso__list_del(), and include
+    <assert.h> in util/dso.c.
+  - Re-validate DSO lookup under the write lock in dsos__findnew_id()
+    via __dsos__findnew_id(), and handle NULL dso_id in
+    dso__needs_improve_id(), __dso__improve_id(), and dso_id__cmp().
+  - Reset tpebs_cmd.out = -1 if start_command() fails and include
+    <stdint.h>, <stdlib.h>, <string.h>, and <unistd.h> in
+    util/intel-tpebs.c.
+  - Bounds-check the index in __maps__remove() (freeing maps_by_name if
+    out of bounds).
+
+v2:
+  - Use -c rather than -E when probing for
+    -fexperimental-late-parse-attributes in Makefile.config to avoid
+    -Werror,-Wunused-command-line-argument.
+  - Acquire machine->dsos.lock in write mode across duplicate checking,
+    dso__set_long_name(), and __dsos__add() in __machine__addnew_vdso().
+  - Avoid dropping dso__data_open_lock in dso__list_del() under
+    REFCNT_CHECKING.
+  - Pass tpebs_cmd.out directly to __sample_reader() and set
+    tpebs_cmd.out = -1 in evsel__tpebs_open() to avoid a double-close in
+    tpebs_stop(), and clarify the config_set_mutex comment.
+  - Drop maps__lock before calling map__load() in maps__load_first() to
+    avoid a read-to-write self-deadlock when loading kernel maps inserts
+    additional trampoline maps.
+
+Ian Rogers (20):
+  compiler-context-analysis: Avoid unused parameter warning in
+    _context_unsafe_alias()
+  tools headers compiler: Synchronize compiler_types.h with the kernel
+    sources
+  tools headers: Synchronize linux/compiler-context-analysis.h with the
+    kernel sources
+  perf mutex: Use kernel style compiler-context-analysis.h annotations
+  perf build: Enable additional Clang thread-safety flags
+  perf comm: Add __guarded_by annotations to struct comm_strs
+  perf vdso: Fix unlocked __dsos__add() and race in
+    __machine__addnew_vdso()
+  perf dsos: Skip BPF and OOL DSOs in dsos__find_kernel_dso()
+  perf dsos: Ensure DSOs in auxtrace, machine, and symbol are in dsos
+  perf dso: Pass dso_data to close_data_fd() and dso__list_del()
+  perf dso: Use DEFINE_MUTEX for dso__data_open_lock
+  perf dsos: Use read lock fast path in dsos__findnew_id()
+  perf dso: Expand context analysis annotations
+  perf thread: Expand context analysis annotations to threads and
+    namespaces_lock
+  perf intel-tpebs: Fix race in tpebs_stop() and tpebs_cmd.out fd
+    handling
+  perf intel-tpebs: Use DEFINE_MUTEX for tpebs_mtx
+  perf config, intel-tpebs, env: Add __guarded_by and __must_hold
+    annotations
+  perf maps: Fix lock inversion in maps__load_first()
+  perf maps: Fix map index lookup fallback and removal
+  perf maps: Add context analysis annotations
+
+ include/linux/compiler-context-analysis.h     |   2 +-
+ .../include/linux/compiler-context-analysis.h | 518 ++++++++++++++++--
+ tools/include/linux/compiler-gcc.h            |  72 ++-
+ tools/include/linux/compiler.h                |  50 +-
+ tools/include/linux/compiler_types.h          | 206 ++++++-
+ tools/perf/Makefile.config                    |   8 +-
+ tools/perf/builtin-sched.c                    |  16 +-
+ tools/perf/builtin-top.c                      |   4 +-
+ tools/perf/check-headers.sh                   |   1 +
+ tools/perf/tests/dso-data.c                   |   4 +
+ tools/perf/tests/maps.c                       | 140 +++++
+ tools/perf/util/annotate.c                    |   4 +-
+ tools/perf/util/annotate.h                    |   8 +-
+ tools/perf/util/auxtrace.c                    |  16 +-
+ tools/perf/util/bpf-event.h                   |   5 +-
+ tools/perf/util/comm.c                        |  10 +-
+ tools/perf/util/config.c                      |  47 +-
+ tools/perf/util/dso.c                         | 140 +++--
+ tools/perf/util/dso.h                         |  17 +-
+ tools/perf/util/dsos.c                        |  34 +-
+ tools/perf/util/dsos.h                        |  12 +-
+ tools/perf/util/env.c                         |   1 +
+ tools/perf/util/env.h                         |  19 +-
+ tools/perf/util/intel-tpebs.c                 | 226 +++++---
+ tools/perf/util/libbfd.c                      |   4 +-
+ tools/perf/util/machine.c                     |  34 +-
+ tools/perf/util/maps.c                        | 216 +++++---
+ tools/perf/util/mutex.c                       |   4 +-
+ tools/perf/util/mutex.h                       |  90 +--
+ tools/perf/util/rwsem.c                       |   8 +-
+ tools/perf/util/rwsem.h                       |  10 +-
+ tools/perf/util/symbol.c                      |   4 +
+ tools/perf/util/thread.c                      |  10 +-
+ tools/perf/util/thread.h                      |  30 +-
+ tools/perf/util/threads.c                     |   4 +
+ tools/perf/util/threads.h                     |   6 +-
+ tools/perf/util/vdso.c                        |  53 +-
+ 37 files changed, 1492 insertions(+), 541 deletions(-)
 
 
---=20
-Thanks,
-~Nick Desaulniers
+base-commit: cc905a18a647a8e3ad42cd1596baa0e08fba26eb
+-- 
+2.56.0.542.g3ef89b7020-goog
+
