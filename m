@@ -1,123 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.10
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794434587;
-	b=m0rJNXonjjzzwcTDcwTO4H1ldWx2S483c/CamjyQxS7tHfthY19pXuJ5mWXKXZgrmn9/
-	 zCyem5ACf1s8qYMaBl+RTOvNQRX4E7Siq5VCwrj0N3aFsJA/+JtSpg8wBP4VxEJuFMyxc
-	 2daXbJMRdBow7664nIwUmXNtHWAfVyTBNDdgdgSYhkWsD7DrBuqjE1J/D6yNcQCrSREpw
-	 lFw0SXr/a6Fp//aNF1HX7Ucud6e/iJRWSemd4gTWmSZN+XweB4RLrS9ukaWzvzYJJfhGz
-	 9fml/LOt8SWAtlhWgRMMGL7YyzrP/LUpaRYumD1GgEI9v6okCbNVAXFASPd3LyeP5gg==
+	t=1794435070;
+	b=VEcLa9noLgjSThwBFIMrZlRQpCDT/3dKyJwD+YBjKVzLowQcCDp8FQob0yLfaUBaqQIt
+	 z37w3IzgR2BBb3nZAjYMiUVnSv3cGh+Jnv0EyFRCg7pmM2P63/WAvrxv3mmtr37YJ/x3Q
+	 EemEMy2/ujyLcxQPat5T+KgJmfmHWchOzcWCY2ZsvJeL2WLotnNX0pDJoD7qGsaVqo0lu
+	 61qHqg/ycri2/+yWeTC2XMyQpk42iAqpJtRnFFNG+WlSGAT4DPCPBuyBA0Jg7lq21pIvX
+	 Ja9vQVYXvwUxUh4sA55zTz4Uypn5U1fumgLXg14SuX4gPyIyd4+7a3jO4HgsZ0z7KLw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794434587;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 Mail-Followup-To:References:MIME-Version:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794435070;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=/29Fh1u2FOm5/5k1pmwlztbcmx561O6eu158ApMSsyU=;
-	b=oDLLqt2wZocMgWJg+j0Xz9D0Ncm7u4C7fyJizRS281dwA7RhjGR90esX195TmYd9taxq
-	 DwZw2WoEcxZ7dK7WtSk8N8ClxxsmuJ3j7XUuvlvGJwBx5d4i/pXO17rNfWNgL0UttUjSW
-	 el/a6J3GinaCMJgsmuQB1VZZEdgNn9AAygnKMp+QgKrYUO6dHN3hfprNfIfueoRJLQcD2
-	 jaY3J2mzyRMzUTIW8wp3L1caGOEiM8UOagT4m1PHCU/vt3aYVQk/xPGX69ABXpu1c275i
-	 +bIcDBqpTo/EVqtt8gknlNJkm9kqDQSJcPhVsTzS3Ftg5ndS1zVEsSlZyWJI7gt3dDg==
+	bh=B7bvA7Nju/BDOIqnk/HwpcSYfoLqp80hSTWFZMw6p4A=;
+	b=R3jfTd6x9Wa+6QZBu2z9yQilW/1a9F4XybP/tWE5BrVYONl0o384h6Xd+hyDEQ9oUHFI
+	 NOtkbY9FJTeEkMOZiEhaBohV/mcWZ/h2TXV2Qg4DVuxrOm5OtGvj7iFpOknBlQrEJxHB8
+	 qesDg/BNe6/uHA3egX44wA+BjCJotYY0F+tW5PS0Nhx+xmval2xdafSMP+sEhEvLZYDJo
+	 IV5gwq7uySjBiOcspw5GTxzCjdGledlakS7Y+5liUAafW319o50uDefR0QgJOW452d/h/
+	 4hfvqCWl85zolbVorKvtCTaJW0eUlkoJdnmpQidEjZTIMO0ZmwczXwcg2tA58DnWU5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2HTk8rO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=a4Mict27;
+	arc=none smtp.remote-ip=192.198.163.10
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B77606A32D;
-	Wed, 11 Nov 2026 22:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26B7606A321;
+	Wed, 11 Nov 2026 22:11:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F26B7606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2HTk8rO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E751F00A05;
-	Wed, 11 Nov 2026 22:02:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794434586;
-	bh=/29Fh1u2FOm5/5k1pmwlztbcmx561O6eu158ApMSsyU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=H2HTk8rOLZgWw9Lm2uB8it44XJGQ1VP252zKM3Vsl27YeQT3fQC/oPf+9dR1GGuPe
-	 fTrdVHJg83sazuCLRwsK7FMBmZ65BjYmx/5l1Fr9V4zrWbVX2E4c/EGrAZHOJ23iP5
-	 K6oVJy3Ue6XdepxFi87RWoq3TdzVK9qDLL8BM8XMCz9n7H3pjJ8s2COHz+NjnFIDwg
-	 2eGJ+4dbOKk2dBpxqBDuRpXAU1slNtJxbA2Dkar3W/730CiqV+uxXwdTMmafxIRXoH
-	 hanK6KHxVmWrohkzaChiP47GtgTq+nQUar+jL+4xWJclsB1e8afff/e4uoWiQs4JB9
-	 jrQrJYXOzTbWA==
-Date: Wed, 11 Nov 2026 23:02:51 +0100
-From: Gao Xiang <xiang@kernel.org>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>,
-	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>,
-	Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Laight <david.laight.linux@gmail.com>,
-	Sungguk <sungguk.na@samsung.com>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 12/15] lib/lz4: widen LZ4_DECOMPRESS_INPLACE_MARGIN
- for the fast decode loop
-Message-ID: <avTmC_1I59FKA1FN@MacBookPro.fritz.box>
-Mail-Followup-To: Michal Wilczynski <m.wilczynski@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>,
-	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>,
-	Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Laight <david.laight.linux@gmail.com>,
-	Sungguk <sungguk.na@samsung.com>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-crypto@vger.kernel.org
-References: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
- <CGME20261106144309eucas1p2a9bfcc1cf81779d473fb073e7d9139b7@eucas1p2.samsung.com>
- <20261106-lz4-vendor-upstream-v2-12-ee04c3f0d7dc@samsung.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=a4Mict27
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794435070; x=1825971070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eedleuqF5kugMdESWoTLW26GExhkbpI898Czm7AFt8w=;
+  b=a4Mict27tCl20JlFLDUpRoYbG8ktQW62NvXrZq45EYcNWsuH58+nXjNZ
+   I4NbkdIs8Qqor5cjv34syMtYtplILix0GlkzBfiyDJ2x/sj3F/a7P18u7
+   rcyIhmWvG/sI8TIec5d2D2sgJivZvkrE+/Sh0UcVklcZcRJ2spbvjLK5j
+   SzOMpAUJT5IlQYj2iRkORbvCjNxwkYpdaE+G5QY+a0Aa76bWFLjwTHr+U
+   SpIJd2snioj0G1imVlZcFEkv2RzYmBhv3A4er3bI8rO7cotQnX0CxcbZQ
+   3AGlKtePtghP7r9ldAn9tMD0g1SwSqBHXYQQLkzxa7NSuldG5P2pwxGs/
+   w==;
+X-CSE-ConnectionGUID: 1n/tiNmOTF+38iIQFOKXSA==
+X-CSE-MsgGUID: uWLavXDFS623bGpYXYnkbA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11963"; a="3112815"
+X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
+   d="scan'208";a="3112815"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 14:11:09 -0800
+X-CSE-ConnectionGUID: FWC1MddSSaaUikIEMciXUw==
+X-CSE-MsgGUID: //nFZiDgQZqlx0MDR+ZoNA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
+   d="scan'208";a="8500724"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 11 Nov 2026 14:11:07 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xRGX1-00000000ztr-2qYG;
+	Wed, 11 Nov 2026 22:11:03 +0000
+Date: Thu, 12 Nov 2026 06:10:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jun Yao <yaojun8558363@gmail.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, davem@davemloft.net,
+	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, steffen.klassert@secunet.com,
+	herbert@gondor.apana.org.au, dsahern@kernel.org, idosch@nvidia.com,
+	Jun Yao <yaojun8558363@gmail.com>
+Subject: Re: [PATCH] xfrm: avoid stale tunnel pointers in deferred input
+ callbacks
+Message-ID: <202611120624.jcKHEACy-lkp@intel.com>
+References: <20261111094629.230568-1-yaojun8558363@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -127,42 +87,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261106-lz4-vendor-upstream-v2-12-ee04c3f0d7dc@samsung.com>
+In-Reply-To: <20261111094629.230568-1-yaojun8558363@gmail.com>
 
-Hi Michal,
+Hi Jun,
 
-On Fri, Nov 06, 2026 at 03:42:52PM +0100, Michal Wilczynski wrote:
-> erofs decompresses a pcluster in place when the slack after the output
-> is at least LZ4_DECOMPRESS_INPLACE_MARGIN(compressed size), upstream's
-> (compressedSize >> 8) + 32.
-> 
-> That holds for the fork, which overshoots its output by at most 8
-> bytes. Upstream's LZ4_FAST_DEC_LOOP, which the next patch brings in for
-> x86 and arm64, copies in 32-byte steps and can overwrite input it has
-> not read yet: of 172410 valid streams laid out as erofs does at exactly
-> that margin, 3660 fail to decode, none with the fork. The worst needs
-> (compressedSize >> 8) + 33. Images mkfs.erofs built did not hit this,
-> but nothing in the format rules it out.
-> 
-> Use (compressedSize >> 8) + (compressedSize >> 15) + 36, which takes a
-> 4K pcluster's margin from 48 to 52 bytes. Upstream's lz4.h defines the
-> macro too, so undefine it first.
-> 
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+kernel test robot noticed the following build errors:
 
-First, I really think kernel LZ4 should be updated for many years, so
-thanks for this!
+[auto build test ERROR on klassert-ipsec-next/master]
+[also build test ERROR on klassert-ipsec/master net/main net-next/main linus/master v7.4-rc2 next-20261110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-But my personal thought is that could you just fold this patch into
-the next one ("lib/lz4: switch the decompressor to the vendored sources")?
-Because this one should be part of the fast loop update.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jun-Yao/xfrm-avoid-stale-tunnel-pointers-in-deferred-input-callbacks/20261111-174629
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec-next.git master
+patch link:    https://lore.kernel.org/r/20261111094629.230568-1-yaojun8558363%40gmail.com
+patch subject: [PATCH] xfrm: avoid stale tunnel pointers in deferred input callbacks
+config: mips-xway_defconfig (https://download.01.org/0day-ci/archive/20261112/202611120624.jcKHEACy-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261112/202611120624.jcKHEACy-lkp@intel.com/reproduce)
 
-Although the current patch order is also fine, but my potential concern
-is that people don't know the details maybe pick the random ones for
-backporting, which is what I'd like to avoid so I hope this patch could
-be just part of it, otherwise the inplace decompression could be broken.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611120624.jcKHEACy-lkp@intel.com/
 
-Thanks,
-Gao Xiang
+All errors (new ones prefixed by >>):
+
+   In file included from net/core/sock.c:134:
+   include/net/xfrm.h:777:9: error: call to undeclared function 'skb_ext_add'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     777 |         return skb_ext_add(skb, SKB_EXT_XFRM_TUNNEL);
+         |                ^
+   include/net/xfrm.h:777:26: error: use of undeclared identifier 'SKB_EXT_XFRM_TUNNEL'; did you mean 'SKB_GSO_UDP_TUNNEL'?
+     777 |         return skb_ext_add(skb, SKB_EXT_XFRM_TUNNEL);
+         |                                 ^~~~~~~~~~~~~~~~~~~
+         |                                 SKB_GSO_UDP_TUNNEL
+   include/linux/skbuff.h:697:2: note: 'SKB_GSO_UDP_TUNNEL' declared here
+     697 |         SKB_GSO_UDP_TUNNEL = 1 << 10,
+         |         ^
+   In file included from net/core/sock.c:134:
+>> include/net/xfrm.h:777:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct xfrm_tunnel_info *' [-Wint-conversion]
+     777 |         return skb_ext_add(skb, SKB_EXT_XFRM_TUNNEL);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/xfrm.h:783:9: error: call to undeclared function 'skb_ext_find'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     783 |         return skb_ext_find(skb, SKB_EXT_XFRM_TUNNEL);
+         |                ^
+   include/net/xfrm.h:783:27: error: use of undeclared identifier 'SKB_EXT_XFRM_TUNNEL'; did you mean 'SKB_GSO_UDP_TUNNEL'?
+     783 |         return skb_ext_find(skb, SKB_EXT_XFRM_TUNNEL);
+         |                                  ^~~~~~~~~~~~~~~~~~~
+         |                                  SKB_GSO_UDP_TUNNEL
+   include/linux/skbuff.h:697:2: note: 'SKB_GSO_UDP_TUNNEL' declared here
+     697 |         SKB_GSO_UDP_TUNNEL = 1 << 10,
+         |         ^
+   In file included from net/core/sock.c:134:
+>> include/net/xfrm.h:783:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'const struct xfrm_tunnel_info *' [-Wint-conversion]
+     783 |         return skb_ext_find(skb, SKB_EXT_XFRM_TUNNEL);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/xfrm.h:788:19: error: use of undeclared identifier 'SKB_EXT_XFRM_TUNNEL'; did you mean 'SKB_GSO_UDP_TUNNEL'?
+     788 |         skb_ext_del(skb, SKB_EXT_XFRM_TUNNEL);
+         |                          ^~~~~~~~~~~~~~~~~~~
+         |                          SKB_GSO_UDP_TUNNEL
+   include/linux/skbuff.h:697:2: note: 'SKB_GSO_UDP_TUNNEL' declared here
+     697 |         SKB_GSO_UDP_TUNNEL = 1 << 10,
+         |         ^
+   7 errors generated.
+
+
+vim +777 include/net/xfrm.h
+
+   773	
+   774	static inline struct xfrm_tunnel_info *
+   775	xfrm_tunnel_info_add(struct sk_buff *skb)
+   776	{
+ > 777		return skb_ext_add(skb, SKB_EXT_XFRM_TUNNEL);
+   778	}
+   779	
+   780	static inline const struct xfrm_tunnel_info *
+   781	xfrm_tunnel_info(const struct sk_buff *skb)
+   782	{
+ > 783		return skb_ext_find(skb, SKB_EXT_XFRM_TUNNEL);
+   784	}
+   785	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
