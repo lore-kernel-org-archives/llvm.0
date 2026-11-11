@@ -1,78 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794402701;
-	b=eJj19tL+ZiQo+ZNPyHtXwPYC9RPWlxqVwWuzmlFqqAVRbp17NGxYk4ZSFT0EnF7fL0kn
-	 bVAcUBlRkJvUsbC5eXrZZbAjskIea6cHpsmPvdW5013snC7yMPb27O35c48IJs9XkxWsj
-	 QTtNC/4hNngQzNNSD4SyGYKITuWzINrHOGhvRRM42GFI3U4fj6bYFgUmjQRlbB7K2cb22
-	 Mvb48y5lshX9BTDXNAnH3KKyZzcBumXTyvV1OMtfZIX7Fm4UL/ZneuDATNex1Vlqjo4nz
-	 75xaMjDgzlEln7KmqxL/BpRvDYf6oXQueIwZd5x2SSoXwNkMustBPvO2qIM871TZNSg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794402701;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=4DNSVni+TDFeu44AM3HKbYFCTamnPvyreoAGzoU3pik=;
-	b=hHE44IQNQcG1WeWynOzkG9ndx4a9K3w9Y79+BjpKuSt7qHdTxb49ck6QDK9pI+ZIf4IY
-	 AK8vuT9WBh/cXMAXlP67zxIOHf1mLvRQOJkyQXEPPN2caMfih7jWmQh45JUcGJ0lAuhSg
-	 +txStSoKq6vI4lpp1TCc9FUIu9xEFIfJ8VIusW+xxrpap4xEFGFG2ukBVbi4I6XzEEcUx
-	 Se31vHzbRJbrRPENeP2pouNSazaMNSoZkuDa4dFSzTn6xQvtQTO8KSkXNagpOS3V2p+E0
-	 53pj13zRIZ08D7YPkdC6XNcDVRyTkDtf+Hvp8poZqDyj+e7xXmjqfv40yRJq0hI/gmg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YC8vLdr2;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.195.111
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794413111;
+	b=nn06uV9NvvvVYJYvzizGPxrlgiA+ngPqI1xSvtwCvoRkoS9BeboeVAJ9tIP53bVmW5b6
+	 qkjkdazRA+sJgQ+03cUXU2FBMCizFuagRHN30a/eqBl3w0SenQlileco4ZBTrZ99rYS+I
+	 oPkforXrl7G6pO6OP0KiaF195vykVh5NOhUbKNuUHC83P7MQL8M3kcQg6G6GG3DJhk9o1
+	 HqTZ0jHluIfTwfuCruqE/CNeHfmmKlxztSmn7lutQiI9BtI6htfnOCQ6pGb2zY+Pf2DWS
+	 3tYatbKC9O8ys62M98WguB/eXNM57ZjmgagUS5OEJCyqDrVDZAPOotM0pgivtlcAAaA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794413111;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
+	 From:To:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:
+	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=K/jnftyZWVhm3wMkfTur+MENePlCTNYie6my4R998rk=;
+	b=ADAf+wVXYjvyw9o+Ku/mRmPBvBGet4R9jH0eZ7vtKcvvfiOVC7j3jtp4ppg4hWikdpGC
+	 PaiI5kacN7Ti31hWqdYA5q/WNzyUXYpOI5jYs7DPx7eWBS/IaXSrRqGgMJGVfnd1r0lzH
+	 c4CT1txrGel3XZ7TljfgkTlwXYGplwgzacwMJwwbGR5q1TiN8bhttjcR9PYaXQ0f0UJA9
+	 n4xEeatFPbNEMWzCeX6JDJb0YPFK45tJVLCxS5h0PbsKDRWrp1UDD92YOUY6tVFv9/1Lo
+	 b1un40bsho7itEI7g2uVE8ypdfLyj4jK+BHUPElKcifyJs0U011TFxrHy9YahCVGObg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=garyguo.net;
+	spf=pass smtp.mailfrom=garyguo.net;
+	dkim=pass header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=wDFvfUeJ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.195.111
+Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020111.outbound.protection.outlook.com [52.101.195.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE128606A331;
-	Wed, 11 Nov 2026 13:11:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE128606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438D8606A32D
+	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 16:05:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 438D8606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YC8vLdr2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794402701; x=1825938701;
-  h=date:from:to:cc:subject:message-id;
-  bh=gW2VlSUI3Hd1C7wm/LqyZm0fhN0CYsVs0huxiWQpaLU=;
-  b=YC8vLdr2CEUZXwSsdU9awSV5BZpHyyoFGczhBnzFBh4d1M+Z58wbk3qn
-   p1NITdvgEByj4AtzgkX+IKG2Qhrul282XIiOp0HA10zCTdxS23tiBX2RP
-   6rDReOs55rQ2jcnHHBfzrCkIAs/b7AZD0tupQaaKv3wQeDAlVKaOoyWKK
-   Zqk4zN9qTN57fReG3/HNR2msAziGotmNMmcnWTGVmRONPXnWKgjcnNF3g
-   04ZzXo2JJ8MJkO/fBqyanRF0HLPZvXg3cW9i84OhvqludqXJvUIo1XJ3D
-   2zIPjHFKAbfruwY+CmLWlJyORHgZr+VyVfIph1Gv+LJqmv7B9NA0K5b4e
-   g==;
-X-CSE-ConnectionGUID: eg6hP8MRTaqOOLCmnKuutg==
-X-CSE-MsgGUID: 9/bz8emNRPmYdKWoEXXDTg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3178829"
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="3178829"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 05:11:40 -0800
-X-CSE-ConnectionGUID: 14wdTuZ5Qa+MCZ6ndGp5GA==
-X-CSE-MsgGUID: 0DWFN5pPRdejsTf50jqJRw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="8279803"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 11 Nov 2026 05:11:38 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xR86x-00000000yuR-1jH5;
-	Wed, 11 Nov 2026 13:11:35 +0000
-Date: Wed, 11 Nov 2026 21:10:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "David Hildenbrand (Arm)" <david@kernel.org>, Jan Kara <jack@suse.cz>,
- Baolin Wang <baolin.wang@linux.alibaba.com>
-Subject: [linux-next:master 3495/6082] mm/shmem.c:1330:13: warning:
- stack frame size (1056) exceeds limit (1024) in 'shmem_undo_range'
-Message-ID: <202611112032.TMyPU6Rm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key, unprotected) header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=wDFvfUeJ
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eZASefBF4I8dBm5yXEn7yI9oPI4uYLozxwYxX7adg4VYRQBmKNHUtzy7gCkY2w1ZZgpaSHc+q64qUrNA55O0NKWKaKr0q4UYhY4JgHkNkB+u4e0lHV91aHbuqnOwJa3K8T3rvxfgCBA1A0/sbEx5Pkyy+GqMZA7Bhc5uHnMRlwrFU/ALvxJElbbuzsLZjE5Hss8nvKYbeHB9Xro3h0UuPQ50ABGpfR84ORdooP4rMHyPSptzbw5HNAB1IXfHjt1x7VkLJGcVRlvuFKIDkdNzva40XWomAUcb5CIlm7oKxYFhlODGirkWjO17lsKYgTq9X2LywHDzRYDHrfTJ4mfyrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K/jnftyZWVhm3wMkfTur+MENePlCTNYie6my4R998rk=;
+ b=jtYU+TVwyGjHpiqTe2h5ovtD38gcCpWdsyd2RvdnJZDQN7MvgMVTiYfk8zlNikpTd3MGSdGPT2WQgTwAVB4xu130saduFxnAQ0J46l2kba/uZb8vvmLUUpLIplbKpaEONB77qm4HrXWLxxGKcnnnqRyX86Bh6NXE2mBZz2GPTvRfdxdoq0FCfgBG+AtROu/VobdHgFBMp94UgzPGBxN/RKrhvvpHx+ziYfEzY/5fdZ9XxccKr7a5S9tDAHmdQWfo7XiQbhyoiyWw4f3o255AzuGMyJCiXHMTLp9yMalhaLRYfORnHq58JU/9GfZq8aXjHB6TYxD5iKUov4CH9z17ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K/jnftyZWVhm3wMkfTur+MENePlCTNYie6my4R998rk=;
+ b=wDFvfUeJmqaU+8mtMQ0W4Lo01AIHdnKmsG11kppn/sevsl74N3jm9e2JRQE5Yp+bJdcSjgoftqetokk9M74/OkBdC8x7aa4QDXaXaZHVgXAE3eTzkplqew3WkUIOs0bkhwzcQiO7mQ5Nd0icL+bmLns6PAlQ8zJe8XM6bQhXF8s=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1cb::9)
+ by LO0P265MB6727.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:30d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.9; Wed, 11 Nov
+ 2026 16:04:55 +0000
+Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::55f6:f98b:7fad:c6e3]) by CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::55f6:f98b:7fad:c6e3%2]) with mapi id 15.21.0615.008; Wed, 11 Nov 2026
+ 16:04:55 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Nov 2026 16:04:54 +0000
+Message-Id: <DMSICREJD2LU.TAXIO38WREMW@garyguo.net>
+Cc: <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <llvm@lists.linux.dev>, <linux-m68k@lists.linux-m68k.org>,
+ <linux-modules@vger.kernel.org>, <rust-for-linux@vger.kernel.org>, "Nicolas
+ Schier" <n.schier@fritz.com>
+Subject: Re: [PATCH v5 10/11] rust: make exports.o depend on the headers
+ generated for it
+From: "Gary Guo" <gary@garyguo.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, "Linus Torvalds"
+ <torvalds@linux-foundation.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nsc@kernel.org>, "Nick Desaulniers"
+ <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, "Justin
+ Stitt" <justinstitt@google.com>, "Geert Uytterhoeven"
+ <geert@linux-m68k.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
+ Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>, "Peter Zijlstra"
+ <peterz@infradead.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng"
+ <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Daniel Almeida"
+ <daniel.almeida@collabora.com>, "Tamir Duberstein" <tamird@kernel.org>,
+ "Alexandre Courbot" <acourbot@nvidia.com>, =?utf-8?q?Onur_=C3=96zkan?=
+ <work@onurozkan.dev>
+X-Mailer: aerc 0.22.0
+References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
+ <20261104-build-speedup-v5-10-0f6018be8dae@kernel.org>
+In-Reply-To: <20261104-build-speedup-v5-10-0f6018be8dae@kernel.org>
+X-ClientProxiedBy: LO4P265CA0224.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:315::8) To CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:400:1cb::9)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,212 +116,88 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP265MB6051:EE_|LO0P265MB6727:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a2d7f73-795f-4e3f-edb0-08df400d86f1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|10070799003|366016|921020|4143699003|261021121427099003|261021135927099003|10067099003|261102123227099003|261102130727099003|56012099006|261026121527099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	XNvEWAqN1RrwnYhGsroprpHeLrW5X7AfwMwtGlB9P45j2aPQbMGSsMrFOijaqh4p/6mhMt7sGFXMtslweIP9It/EaeKa7Nopo/Tu7P5Hp9oBmig/23Z6p5M7OVkLMX7bfsyDnHt0AIuZRtJGY4PfySRKfyUbvEqSEQGY3CcJhyYkG4QPxh7lV1qi1DAU5TozR9QPq7TNdmGIWFMm9ba/6QRBpMngEgkEx4+s+forX5lgGCYVEWLmzTWKkk2WNTu3nrX56b4NuzBQC4kNBoNQvNb856yLWI5SOmy5y7GdgVGygToCERnVVepRSeOmPqzzBktjKr4PV6AwHGGMt6sSAXwUvE0NgrtidlcewkAtLswwf8wKmEaQJpJn9oMIp8EK8CNe7ocKIpkxn3ZycbGFmftZjl57Dl51noPHmUbXQaylzw+cJT0mrkHvrCVykM3jMj252JgTiejCgsCC/xaNeYtANzIDv41KwHNq6Iuc+qQhn7VxBTHgonenzd75kUcll2qT+3Xm+AKUSXrNaEOvHnLJbjKE293iFLxED4XUM+jhXnzCWoWEi1BJiDq3EZxsFTU0YajioB92TG5nPGWLFrh0f/T8FsfoBphmGXVc54gKKO/oba4T7JlKwNAgkME2t/lpo2azthrJMeMxA3QqNI64jiyHgYRgfxQEeNgwbFlLsur64D5jtToEIrcTEjgOGYVtQNJVKa+qDP3S3TwSxQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(10070799003)(366016)(921020)(4143699003)(261021121427099003)(261021135927099003)(10067099003)(261102123227099003)(261102130727099003)(56012099006)(261026121527099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?V2ZuNzJNa3liMDdSR0VUNUpMK1J4Mkxrd3YweEFCdGFDMjNKSjFySWdqTW9m?=
+ =?utf-8?B?eW0zL3dKV2Y0WGFYNVA1SllVaXNiOTNQWkJyZmEzb0ZvbmJVLyt2Z0UzbDBv?=
+ =?utf-8?B?cldhQXRKUWVVRTRsSWE5c0gzanFGUzdiVTdSWHZoOVh5TDZMMVBlUEo1MmtD?=
+ =?utf-8?B?WUZFeHRCcjNjOVdRc000VWJ5cmxRT3k1QUdudlF1ZnVSOFdXdlY4anU3WC9w?=
+ =?utf-8?B?RVcwNFgySUJwbDYwcjlST0FEWWNhbEdOdFIwRHhNcFA5RjFEUFBmeHZEb0Nz?=
+ =?utf-8?B?dkxKT2ZYQUJUQ0J2MFNUbTZpUnF1b3hrRlBzaFRMMHRRMW5uSGJBVU1pRS9K?=
+ =?utf-8?B?MTJvelp3VFl0OVM2SmROclFjbk9ja1pMbFpJN0R1OUJYdFpLZnEzeTk3SVkz?=
+ =?utf-8?B?VVQxM2toOUtGTnZDMDlCak56T0VzZy9ubEdhc2x0UzFoSkFaMU9rYzdPMUVt?=
+ =?utf-8?B?ZDBHM1VpWE8rOHZrWFF6WktPSGIzZm1iZ1lwUmx3eFJmLzF4YmpMcFNsUnYv?=
+ =?utf-8?B?NHM3ekN0T0l6djN4SlVkN2YvV0YwL0JGaytHQ2xqOTRkQVpnejFZcFFCa2hV?=
+ =?utf-8?B?Q0syamh3U2RxbitGSHpOTy9xRkgwK0F2RGk4Sy81R1hHWmZVenFQbU1XZ2N2?=
+ =?utf-8?B?MG9qZHNkemJXMWM2RDJoanJzQkZtblRrTno1d28rU1RHUDBrMFNLc0FJME54?=
+ =?utf-8?B?R2ppMGtIRnZvU3ZPd2dZNnlNVk1ETzgyVlNzR1RmUGxZUHNpY0VOK3dheVcw?=
+ =?utf-8?B?cXMzMnJNZHN0bWNiZnJXNWpHdUNHY3JqclhyMUwvRzgrWXRYZmdkZHJCc3Zm?=
+ =?utf-8?B?NHlLZVhiVTQ2aTU3QTlGTXJHNTFUNDNVTnJhVHdOWVFIcVFhV2tjSnZibW9Y?=
+ =?utf-8?B?bzlIOUlKemZmTUd1b2F4YjFxa2haV21SZkc0QWFDS1ZGWXFWNlNjVjFYWWVR?=
+ =?utf-8?B?blJjRDRINFJTeFFNSVNkM0VuS2M0bytEMEhNTmpsUnZqMCtreWR1Rzdsc28z?=
+ =?utf-8?B?NWt0VWZnRDE0bi9xdjJaRlMzZzlSbXhaS2ZkWVduSzBIS2tMbFhjdmgybDZV?=
+ =?utf-8?B?WEowSEkrNEd4bC9GQ0t5YTFxVjFYQjFkbVRaSHUwNEFvNmRhYzVLcFBHZ2Fx?=
+ =?utf-8?B?TGc0aGJzb0NBb0paWDdpRHNMTEVaR1NMblVXZDlNM05jR3MrSjZBTzZNeFc4?=
+ =?utf-8?B?bnpvU1lWVUZ0NFNETjRhVE9GeDVJNEdnb2c3VTFEaldkTHdCbHhlZklaNWdS?=
+ =?utf-8?B?KzlCa2pDb0xBK2gxaENOK1FUbmRkVFNXa1dpMVdJRHl2cFZiMDREZTZNWlFZ?=
+ =?utf-8?B?QS9rVkplTGNKdTk5MVpYNjd1b3JIL20vcmdSeGVMYUR3SUxDb053MXAxK2NO?=
+ =?utf-8?B?TklTcGV3SkFEYjR1anVBa28vaFBlYVNnNWpORVBoaEFEVURXUjB2T1hBWkdL?=
+ =?utf-8?B?U01rVnllQzRrb1VRVmlIenFzRDZ0MjB4c29nMzRJZzRiSzRmbkpKVmtlQTRM?=
+ =?utf-8?B?SWxrakNLMU1WN1hJK0EyUktYdTUyVkhOWmpGOGJWcVZzSm1FOXhTY1QxdmJh?=
+ =?utf-8?B?bDcrQnJ0UzF3bWJIeVBkd3JvNXdaOXR2UXdEYStCVzc4Nk9MUm9tbnpDZGRV?=
+ =?utf-8?B?T3ZENVowWXIyK1hlcEpVZE1jVENLR3FkYlVVQzlvWklJcHRVODVFTGJWYWFG?=
+ =?utf-8?B?SS84Uy9ER1dBckZ2cHRTL1VWSnZ2T2VUWUpQUHRqRUtXRGQxcXNpNkJaQUgw?=
+ =?utf-8?B?b3Z4YXVhakNWSGFQWDVtTm5uc0Y0Z1NpMkNINzl6VncwVzVqTlZsVUMrYm9y?=
+ =?utf-8?B?SkFkU09vWjRRekhjM1Y0QzRXdnp0WWtJdkpGYXJteTVyTXJ1cHpKVXpKMDZE?=
+ =?utf-8?B?TXBaeDZOOTQ1L2lJOG5objNibFd1Y1NzcktoNzVYaWVpMjc4N0s0bUFnT2Uv?=
+ =?utf-8?B?Tm1kSEpDRnZMMmoxZUxIMEdMaVRtemVPRjZtaXpkS0RFK3JETkxpUUtsTmtt?=
+ =?utf-8?B?WmREV1hxN2h2MXRQanNNZ3Q1Y1NVZmo3Ny9JSmJkVjZTMmpSTjVQZlZmUHpU?=
+ =?utf-8?B?UHlQbEVCTkhFcVJ0WjBScTlqbHcrTEVTb0dzZTI4NSt0ekt6YkFBeWI2K0xx?=
+ =?utf-8?B?SUFsZmplRkpiQysvSk15bDRQci9lNk0vWURRK3piSjF2RTVJWVQ0R2NpOC8z?=
+ =?utf-8?B?cnMyMXd3Q2VsWEdjaU5BZERpTm5oZ1RFVmxSVnF0QnZ0K0NyK0h6ZzB6MDJM?=
+ =?utf-8?B?THZaVFM4enh3K0M3NFBQZFU4RkVCZHRNTmxnOUlKN3FvYTJTdWJUbkRYMHRI?=
+ =?utf-8?B?QU54Zm1BWmtWcXA4bElVenF3RVUwdnBpS0VucUMramFtakpoOGRoQT09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a2d7f73-795f-4e3f-edb0-08df400d86f1
+X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2026 16:04:55.4518
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3rhi2L14BQA7GdHUR2YcljAUOho0bacEx13TxrVZzA/YuwKyJyfoqvryn73yTgPVe1KMk9fSVLzQDLg5fjzROA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6727
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   793807ca13bf3072fc6d16ce6d90e9ab9beff2a5
-commit: b97fbd541ecba5d6640077618e9dfec6f5e71132 [3495/6082] mm/shmem: remove truncated folios from the page cache in batches
-config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20261111/202611112032.TMyPU6Rm-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611112032.TMyPU6Rm-lkp@intel.com/reproduce)
+On Wed Nov 4, 2026 at 6:20 PM GMT, Lorenzo Stoakes (ARM) wrote:
+> rust/exports.c includes the exports_*_generated.h listing the symbols of
+> the core, bindings, kernel and helpers objects, but this is not expressed
+> in its Makefile.
+>=20
+> This worked previously because the headers are always-y targets, and make
+> prepare built all of the rust crates first, which is an implicit
+> dependency.
+>=20
+> Fix this as it is a dependency of the subsequent commit.
+>=20
+> Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611112032.TMyPU6Rm-lkp@intel.com/
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-All warnings (new ones prefixed by >>):
+> ---
+>  rust/Makefile | 5 +++++
+>  1 file changed, 5 insertions(+)
 
->> mm/shmem.c:1330:13: warning: stack frame size (1056) exceeds limit (1024) in 'shmem_undo_range' [-Wframe-larger-than]
-    1330 | static void shmem_undo_range(struct inode *inode, loff_t lstart, uoff_t lend,
-         |             ^
-   1 warning generated.
-
-
-vim +/shmem_undo_range +1330 mm/shmem.c
-
-71725ed10c4069 Hugh Dickins            2020-04-06  1325  
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1326  /*
-7f4446eefe9fbb Matthew Wilcox          2017-12-04  1327   * Remove range of pages and swap entries from page cache, and free them.
-1635f6a74152f1 Hugh Dickins            2012-05-29  1328   * If !unfalloc, truncate or punch hole; if unfalloc, undo failed fallocate.
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1329   */
-37d369fa97cc07 Matthew Wilcox (Oracle  2025-11-23 @1330) static void shmem_undo_range(struct inode *inode, loff_t lstart, uoff_t lend,
-1635f6a74152f1 Hugh Dickins            2012-05-29  1331  								 bool unfalloc)
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1332  {
-285b2c4fdd69ea Hugh Dickins            2011-08-03  1333  	struct address_space *mapping = inode->i_mapping;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1334  	struct shmem_inode_info *info = SHMEM_I(inode);
-09cbfeaf1a5a67 Kiryl Shutsemau         2016-04-01  1335  	pgoff_t start = (lstart + PAGE_SIZE - 1) >> PAGE_SHIFT;
-09cbfeaf1a5a67 Kiryl Shutsemau         2016-04-01  1336  	pgoff_t end = (lend + 1) >> PAGE_SHIFT;
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1337) 	struct folio_batch fbatch;
-511f04aac469a3 Tal Zussman             2026-02-25  1338  	pgoff_t indices[FOLIO_BATCH_SIZE];
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1339) 	struct folio *folio;
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1340) 	bool same_folio;
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1341  	long nr_swaps_freed = 0;
-285b2c4fdd69ea Hugh Dickins            2011-08-03  1342  	pgoff_t index;
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1343  	int i;
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1344  
-83e4fa9c16e4af Hugh Dickins            2012-05-29  1345  	if (lend == -1)
-83e4fa9c16e4af Hugh Dickins            2012-05-29  1346  		end = -1;	/* unsigned, so actually very big */
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1347  
-d144bf6205342a Hugh Dickins            2021-09-02  1348  	if (info->fallocend > start && info->fallocend <= end && !unfalloc)
-d144bf6205342a Hugh Dickins            2021-09-02  1349  		info->fallocend = start;
-d144bf6205342a Hugh Dickins            2021-09-02  1350  
-51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1351) 	folio_batch_init(&fbatch);
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1352  	index = start;
-3392ca121872dd Vishal Moola (Oracle    2022-10-17  1353) 	while (index < end && find_lock_entries(mapping, &index, end - 1,
-51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1354) 			&fbatch, indices)) {
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1355  		struct folio_batch remove;
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1356  
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1357  		folio_batch_init(&remove);
-51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1358) 		for (i = 0; i < folio_batch_count(&fbatch); i++) {
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1359) 			folio = fbatch.folios[i];
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1360  
-7b774aab7941e1 Matthew Wilcox (Oracle  2021-12-03  1361) 			if (xa_is_value(folio)) {
-1635f6a74152f1 Hugh Dickins            2012-05-29  1362  				if (unfalloc)
-1635f6a74152f1 Hugh Dickins            2012-05-29  1363  					continue;
-8a1968bd997f45 Kairui Song             2026-01-20  1364  				nr_swaps_freed += shmem_free_swap(mapping, indices[i],
-8a1968bd997f45 Kairui Song             2026-01-20  1365  								  end - 1, folio);
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1366  				continue;
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1367  			}
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1368  
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1369  			if (!unfalloc || !folio_test_uptodate(folio)) {
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1370  				truncate_cleanup_folio(folio);
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1371  				folio_batch_add(&remove, folio);
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1372  			}
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1373  		}
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1374  		delete_from_page_cache_batch(mapping, &remove);
-51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1375) 		folio_batch_remove_exceptionals(&fbatch);
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1376  		for (i = 0; i < folio_batch_count(&fbatch); i++)
-b97fbd541ecba5 Qiliang Yuan            2026-11-05  1377  			folio_unlock(fbatch.folios[i]);
-51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1378) 		folio_batch_release(&fbatch);
-ebd1a08c192109 Breno Leitao            2026-09-18  1379  		cond_resched_tasks_rcu_qs();
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1380  	}
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1381  
-44bcabd70cf142 Hugh Dickins            2022-12-04  1382  	/*
-44bcabd70cf142 Hugh Dickins            2022-12-04  1383  	 * When undoing a failed fallocate, we want none of the partial folio
-44bcabd70cf142 Hugh Dickins            2022-12-04  1384  	 * zeroing and splitting below, but shall want to truncate the whole
-44bcabd70cf142 Hugh Dickins            2022-12-04  1385  	 * folio when !uptodate indicates that it was added by this fallocate,
-44bcabd70cf142 Hugh Dickins            2022-12-04  1386  	 * even when [lstart, lend] covers only a part of the folio.
-44bcabd70cf142 Hugh Dickins            2022-12-04  1387  	 */
-44bcabd70cf142 Hugh Dickins            2022-12-04  1388  	if (unfalloc)
-44bcabd70cf142 Hugh Dickins            2022-12-04  1389  		goto whole_folios;
-44bcabd70cf142 Hugh Dickins            2022-12-04  1390  
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1391) 	same_folio = (lstart >> PAGE_SHIFT) == (lend >> PAGE_SHIFT);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1392) 	folio = shmem_get_partial_folio(inode, lstart >> PAGE_SHIFT);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1393) 	if (folio) {
-60a70e61430b2d Matthew Wilcox (Oracle  2025-10-24  1394) 		same_folio = lend < folio_next_pos(folio);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1395) 		folio_mark_dirty(folio);
-ad274797936827 Zhang Yi                2026-09-28  1396  		truncate_inode_partial_folio(folio, lstart, lend, &start,
-ad274797936827 Zhang Yi                2026-09-28  1397  					     same_folio ? &end : NULL);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1398) 		folio_unlock(folio);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1399) 		folio_put(folio);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1400) 		folio = NULL;
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1401  	}
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1402) 
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1403) 	if (!same_folio)
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1404) 		folio = shmem_get_partial_folio(inode, lend >> PAGE_SHIFT);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1405) 	if (folio) {
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1406) 		folio_mark_dirty(folio);
-ad274797936827 Zhang Yi                2026-09-28  1407  		truncate_inode_partial_folio(folio, lstart, lend, NULL, &end);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1408) 		folio_unlock(folio);
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1409) 		folio_put(folio);
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1410  	}
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1411  
-44bcabd70cf142 Hugh Dickins            2022-12-04  1412  whole_folios:
-44bcabd70cf142 Hugh Dickins            2022-12-04  1413  
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1414  	index = start;
-b1a366500bd537 Hugh Dickins            2014-07-23  1415  	while (index < end) {
-ebd1a08c192109 Breno Leitao            2026-09-18  1416  		cond_resched_tasks_rcu_qs();
-0cd6144aadd2af Johannes Weiner         2014-04-03  1417  
-9fb6beea79c6e7 Vishal Moola (Oracle    2022-10-17  1418) 		if (!find_get_entries(mapping, &index, end - 1, &fbatch,
-cf2039af1a2eee Matthew Wilcox (Oracle  2021-02-25  1419) 				indices)) {
-b1a366500bd537 Hugh Dickins            2014-07-23  1420  			/* If all gone or hole-punch or unfalloc, we're done */
-b1a366500bd537 Hugh Dickins            2014-07-23  1421  			if (index == start || end != -1)
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1422  				break;
-b1a366500bd537 Hugh Dickins            2014-07-23  1423  			/* But if truncating, restart to make sure all gone */
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1424  			index = start;
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1425  			continue;
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1426  		}
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1427) 		for (i = 0; i < folio_batch_count(&fbatch); i++) {
-b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1428) 			folio = fbatch.folios[i];
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1429  
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1430) 			if (xa_is_value(folio)) {
-8a1968bd997f45 Kairui Song             2026-01-20  1431  				int order;
-6ea0d1ccb11038 Daniel Gomez            2024-08-12  1432  				long swaps_freed;
-6ea0d1ccb11038 Daniel Gomez            2024-08-12  1433  
-1635f6a74152f1 Hugh Dickins            2012-05-29  1434  				if (unfalloc)
-1635f6a74152f1 Hugh Dickins            2012-05-29  1435  					continue;
-8a1968bd997f45 Kairui Song             2026-01-20  1436  				swaps_freed = shmem_free_swap(mapping, indices[i],
-8a1968bd997f45 Kairui Song             2026-01-20  1437  							      end - 1, folio);
-6ea0d1ccb11038 Daniel Gomez            2024-08-12  1438  				if (!swaps_freed) {
-2030dddf95451b Kairui Song             2026-01-29  1439  					pgoff_t base = indices[i];
-2030dddf95451b Kairui Song             2026-01-29  1440  
-8a1968bd997f45 Kairui Song             2026-01-20  1441  					order = shmem_confirm_swap(mapping, indices[i],
-8a1968bd997f45 Kairui Song             2026-01-20  1442  								   radix_to_swp_entry(folio));
-2030dddf95451b Kairui Song             2026-01-29  1443  					/*
-2030dddf95451b Kairui Song             2026-01-29  1444  					 * If found a large swap entry cross the end or start
-2030dddf95451b Kairui Song             2026-01-29  1445  					 * border, skip it as the truncate_inode_partial_folio
-2030dddf95451b Kairui Song             2026-01-29  1446  					 * above should have at least zerod its content once.
-2030dddf95451b Kairui Song             2026-01-29  1447  					 */
-2030dddf95451b Kairui Song             2026-01-29  1448  					if (order > 0) {
-2030dddf95451b Kairui Song             2026-01-29  1449  						base = round_down(base, 1 << order);
-2030dddf95451b Kairui Song             2026-01-29  1450  						if (base < start || base + (1 << order) > end)
-8a1968bd997f45 Kairui Song             2026-01-20  1451  							continue;
-2030dddf95451b Kairui Song             2026-01-29  1452  					}
-2030dddf95451b Kairui Song             2026-01-29  1453  					/* Swap was replaced by page or extended, retry */
-2030dddf95451b Kairui Song             2026-01-29  1454  					index = base;
-b1a366500bd537 Hugh Dickins            2014-07-23  1455  					break;
-b1a366500bd537 Hugh Dickins            2014-07-23  1456  				}
-6ea0d1ccb11038 Daniel Gomez            2024-08-12  1457  				nr_swaps_freed += swaps_freed;
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1458  				continue;
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1459  			}
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1460  
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1461) 			folio_lock(folio);
-800d8c63b2e989 Kiryl Shutsemau         2016-07-26  1462  
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1463) 			if (!unfalloc || !folio_test_uptodate(folio)) {
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1464) 				if (folio_mapping(folio) != mapping) {
-b1a366500bd537 Hugh Dickins            2014-07-23  1465  					/* Page was replaced by swap: retry */
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1466) 					folio_unlock(folio);
-9fb6beea79c6e7 Vishal Moola (Oracle    2022-10-17  1467) 					index = indices[i];
-b1a366500bd537 Hugh Dickins            2014-07-23  1468  					break;
-7a5d0fbb29936f Hugh Dickins            2011-08-03  1469  				}
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1470) 				VM_BUG_ON_FOLIO(folio_test_writeback(folio),
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1471) 						folio);
-55ac8bbe358bdd David Stevens           2023-04-18  1472  
-55ac8bbe358bdd David Stevens           2023-04-18  1473  				if (!folio_test_large(folio)) {
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1474) 					truncate_inode_folio(mapping, folio);
-ad274797936827 Zhang Yi                2026-09-28  1475  				} else if (truncate_inode_partial_folio(folio,
-ad274797936827 Zhang Yi                2026-09-28  1476  						lstart, lend, NULL, NULL)) {
-55ac8bbe358bdd David Stevens           2023-04-18  1477  					/*
-55ac8bbe358bdd David Stevens           2023-04-18  1478  					 * If we split a page, reset the loop so
-55ac8bbe358bdd David Stevens           2023-04-18  1479  					 * that we pick up the new sub pages.
-55ac8bbe358bdd David Stevens           2023-04-18  1480  					 * Otherwise the THP was entirely
-55ac8bbe358bdd David Stevens           2023-04-18  1481  					 * dropped or the target range was
-55ac8bbe358bdd David Stevens           2023-04-18  1482  					 * zeroed, so just continue the loop as
-55ac8bbe358bdd David Stevens           2023-04-18  1483  					 * is.
-55ac8bbe358bdd David Stevens           2023-04-18  1484  					 */
-55ac8bbe358bdd David Stevens           2023-04-18  1485  					if (!folio_test_large(folio)) {
-55ac8bbe358bdd David Stevens           2023-04-18  1486  						folio_unlock(folio);
-55ac8bbe358bdd David Stevens           2023-04-18  1487  						index = start;
-55ac8bbe358bdd David Stevens           2023-04-18  1488  						break;
-55ac8bbe358bdd David Stevens           2023-04-18  1489  					}
-55ac8bbe358bdd David Stevens           2023-04-18  1490  				}
-1635f6a74152f1 Hugh Dickins            2012-05-29  1491  			}
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1492) 			folio_unlock(folio);
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1493  		}
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1494) 		folio_batch_remove_exceptionals(&fbatch);
-0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1495) 		folio_batch_release(&fbatch);
-bda97eab0cc9c6 Hugh Dickins            2011-08-03  1496  	}
-94c1e62df4494b Hugh Dickins            2011-06-27  1497  
-3c1b7528d8969a Hugh Dickins            2023-08-03  1498  	shmem_recalc_inode(inode, 0, -nr_swaps_freed);
-1635f6a74152f1 Hugh Dickins            2012-05-29  1499  }
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1500  
-
-:::::: The code at line 1330 was first introduced by commit
-:::::: 37d369fa97cc0774ea4eab726d16bcb5fbe3a104 fs: Add uoff_t
-
-:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
-:::::: CC: Christian Brauner <brauner@kernel.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
