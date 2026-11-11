@@ -1,147 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.139.77
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794393380;
-	b=3RVH9WYzzRVl0rpz5/oquuxmlFbk1hA2XtuEo18z34k1nodMU9K+8RtVUwb0P1a6ZcvL
-	 OXvojcr4ORkQv7VlAn7arJpjwbYXh2Nm2lScvnFV75K+ahkJ0KIJ3y3fRKHuHKPdlT4mF
-	 6KW2Pe5d9cp1X+RkrkuCZKjtqAAeeewBWRfWQ+ltDScXGG+XUKpPQb8MsKsNT/rFCXdcq
-	 m9dmHbh2avC5tETdTwF8KlJqPonPGhz/Q4d4ABm69nJJBz259r4rcpdoGqR31cf9eDsg+
-	 5wRZtkSnCxD8Cm3x9O+zdugY/apjG0UWs+2L1tHw//cvHy1i/G8Wp7VTE86A/0HlWYg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794393380;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
-	 Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
-	 X-OriginatorOrg:X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=ihQMTmjkyvTUyMrpW0BOFCJ1LHuEdZbM2Yi2/Xc5PxU=;
-	b=oTGoGQFE+oOiHIiNQYhyOirFOKxcpEf2NoQL3/52ElOIFzaQc2dUZ7qH7rhSKWD1BVzJ
-	 dlzNqj0xht7l3khI3agjdzM8kWujbfHojfQ+9DeWAzrxE5jwTY/I3WIqe+oFSXBd4yO0r
-	 Jte0KRvIHpEqmxliibDjSxMiCa/RBY1QT5OGBjTTfIPSnxVFu/L5rf5NSrAjzFo4JBZw6
-	 xHS3COkZ2JBf5X0GdRjFTraxMTJPHve2t7d+YqxkOub83tRaXIwkBJtKAxXMX6Uj85z+Q
-	 /NU//86uL2l1eyIt5k9/N42gobfXTjESDnlRfUpPPlEXOTJnRpdeqLsTF8eVEXSUoIw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=analog.com;
-	spf=pass smtp.mailfrom=analog.com;
-	dkim=pass header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=ST3uKl4t;
-	dkim=pass header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=hEm8u6O5;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.139.77
-Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794402701;
+	b=eJj19tL+ZiQo+ZNPyHtXwPYC9RPWlxqVwWuzmlFqqAVRbp17NGxYk4ZSFT0EnF7fL0kn
+	 bVAcUBlRkJvUsbC5eXrZZbAjskIea6cHpsmPvdW5013snC7yMPb27O35c48IJs9XkxWsj
+	 QTtNC/4hNngQzNNSD4SyGYKITuWzINrHOGhvRRM42GFI3U4fj6bYFgUmjQRlbB7K2cb22
+	 Mvb48y5lshX9BTDXNAnH3KKyZzcBumXTyvV1OMtfZIX7Fm4UL/ZneuDATNex1Vlqjo4nz
+	 75xaMjDgzlEln7KmqxL/BpRvDYf6oXQueIwZd5x2SSoXwNkMustBPvO2qIM871TZNSg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794402701;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=4DNSVni+TDFeu44AM3HKbYFCTamnPvyreoAGzoU3pik=;
+	b=hHE44IQNQcG1WeWynOzkG9ndx4a9K3w9Y79+BjpKuSt7qHdTxb49ck6QDK9pI+ZIf4IY
+	 AK8vuT9WBh/cXMAXlP67zxIOHf1mLvRQOJkyQXEPPN2caMfih7jWmQh45JUcGJ0lAuhSg
+	 +txStSoKq6vI4lpp1TCc9FUIu9xEFIfJ8VIusW+xxrpap4xEFGFG2ukBVbi4I6XzEEcUx
+	 Se31vHzbRJbrRPENeP2pouNSazaMNSoZkuDa4dFSzTn6xQvtQTO8KSkXNagpOS3V2p+E0
+	 53pj13zRIZ08D7YPkdC6XNcDVRyTkDtf+Hvp8poZqDyj+e7xXmjqfv40yRJq0hI/gmg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YC8vLdr2;
+	arc=none smtp.remote-ip=192.198.163.15
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F34D606A335;
-	Wed, 11 Nov 2026 10:36:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F34D606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE128606A331;
+	Wed, 11 Nov 2026 13:11:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE128606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=vtelectron.com header.i=@vtelectron.com header.a=rsa-sha256 header.s=DKIM header.b=ST3uKl4t;
-	dkim=pass (2048-bit key, unprotected) header.d=analog.com header.i=@analog.com header.a=rsa-sha256 header.s=DKIM header.b=hEm8u6O5
-Received: from pps.filterd (m0375854.ppops.net [127.0.0.1])
-	by mx0b-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AB94cca3040587;
-	Wed, 11 Nov 2026 05:35:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vtelectron.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	DKIM; bh=ihQMTmjkyvTUyMrpW0BOFCJ1LHuEdZbM2Yi2/Xc5PxU=; b=ST3uKl4
-	tPzrTD2g5BaK2U7Uw5mkllTPQ5cjLX9PGYK2/G9fKkk7fVF5yRDAKm/YBm8BtWXR
-	JpZCJ9WrfV5zymCSnEwwXo1JSJniJ/C5kV00wyAChs5d9bZMQ3fkO1Mey1ZIP4cQ
-	0KlA/DE0gQPr2el7kWBs++OgHBSaYThWSTpB0AzSOI0OkZMWP1Y1rHSbnw4Y+RvN
-	p4WojSDKNJtsqHtyH/usYvtGRQ9w4V82Ayjw5n0/qhBEk2klrn4LVMBa07KZIsjk
-	dEhuaarSWHjQZW6sjZY7/dnNCF0Zhk7MuxP6sz14kuiZi3AkXMuKSdAbmJqAaZzp
-	9XMuDrSauWCkQPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=ihQMT
-	mjkyvTUyMrpW0BOFCJ1LHuEdZbM2Yi2/Xc5PxU=; b=hEm8u6O5V5I2rKyUM8AAh
-	Y9p4FH4dXHdgXtyRbOliIBvPMX1hcdxpd0zQsOhSI0S/h6ftc6JPn8TpRSYI20xy
-	wUifPSqBp65ME9dLJ5oZhDiyBfbfR6neYGoE0aXifQfa8t/oTvTeoIDYutFMXOmI
-	yjG4ZrehNpVdQOsgWdvTSQihjO9+C5m8Nbk18Q5LhQi8wvJBDHUNV8wf+IUA+7YA
-	wqJtv7GJMbhU9keQ2K1KzvppfMO3Btk32NOjUJfwn8XCrWRDOXAF2//YhhknJq7K
-	fdpVU5knuareBLhdSNQ7dw8yX0ACABGPlthKT9yzmzJlO0/qB5sgNly/3BKK9RLF
-	Q==
-Received: from cy3pr05cu001.outbound.protection.outlook.com (mail-westcentralusazon11013020.outbound.protection.outlook.com [40.93.201.20])
-	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 4hvg58j2c9-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 11 Nov 2026 05:35:49 -0500 (EST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kvNJ+xWOC9ynfMVF+huvznmyxMzOpicIKMNtx7I6diGKZS1Ajs30nwB8qm9PzegnMPGF7Bv4Z0ueuSTy+/Uk9RfjH8pz2Fjj3IcfDZiL2taDbUv29MvoIb6axDpDRAFx5BY6HMSnLxUDD1Th07Ca7uCYyLmGyMaUV5XVwbjNkCU7waUK0NIXZRatYWlUIzDofBWh26H0SSvvPxKDJrEVkMW22rQjVLOxqKXB77E1JjsAy9rylLmDFUunfNbqA3wnIcIEnt9tuAhqQ//X227abSpALNTs+DRVNf2oYxCRxOBPH8hXgLiKqmjWrW5zVuLB6P/JI7/g3n/uzpKKiWkGfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ihQMTmjkyvTUyMrpW0BOFCJ1LHuEdZbM2Yi2/Xc5PxU=;
- b=RSP3u2M9V3Aflm3g4J8TUWZW3OKcn9nmBWO4/8E+dp6e09GFpnMOtfoJxBj6WeqOqLfYHqxzUny/3XDEpvNXvAU1GR5lLH8BTji+nxJl8MYkFqu4TQaq3f0u60ITH0N98hYmEOVWpqFIEPH6LnQ3J4TagJjXaz8yPwhhGvz8r+kqEaZaXunOdwdVfn307cl0wBERU7556h4rfsarxjloV/SVBJ8o7sCjUM+fSjgU0ir0ZFeksTOisAikg8x4rfbfKyzCLRMRA0hfcAEIvyEfRDAeMucH6Xdj26JonP+8N/KnthcU4dk5thnpkTd+uZpBrEinPY58XbMVesEfX2x9Tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analog.com;
-Received: from SJ0PR03MB5469.namprd03.prod.outlook.com (2603:10b6:a03:28a::17)
- by SA1PR03MB6339.namprd03.prod.outlook.com (2603:10b6:806:1b6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.9; Wed, 11 Nov
- 2026 10:35:46 +0000
-Received: from SJ0PR03MB5469.namprd03.prod.outlook.com
- ([fe80::2a19:76b2:e731:8c5a]) by SJ0PR03MB5469.namprd03.prod.outlook.com
- ([fe80::2a19:76b2:e731:8c5a%6]) with mapi id 15.21.0592.012; Wed, 11 Nov 2026
- 10:35:46 +0000
-Date: Wed, 11 Nov 2026 10:37:12 +0000
-From: Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Jonathan Cameron <jic23@kernel.org>, Svyatoslav Ryhel <clamor95@gmail.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bartosz Golaszewski <brgl@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Thompson <danielt@kernel.org>, Helge Deller <deller@gmx.de>,
-        devicetree@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org, Jingoo Han <jingoohan1@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linusw@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-fbdev@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        mfd@lists.linux.dev, Michael Hennerich <michael.hennerich@analog.com>,
-        patches@opensource.cirrus.com, Pavel Machek <pavel@kernel.org>,
-        Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-        Support Opensource <support.opensource@diasemi.com>
-Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
-Message-ID: <avRCbtfKg4WkSP1u@nsa>
-References: <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
- <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
- <20260912232047.19c4cb10@jic23-hlaptop>
- <avM5EnC9yujUZcCO@nsa>
- <991009b6-e62b-46bd-9a0b-43c3b7a6d10a@app.fastmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <991009b6-e62b-46bd-9a0b-43c3b7a6d10a@app.fastmail.com>
-X-ClientProxiedBy: MR1P264CA0118.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:50::25) To SJ0PR03MB5469.namprd03.prod.outlook.com
- (2603:10b6:a03:28a::17)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YC8vLdr2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794402701; x=1825938701;
+  h=date:from:to:cc:subject:message-id;
+  bh=gW2VlSUI3Hd1C7wm/LqyZm0fhN0CYsVs0huxiWQpaLU=;
+  b=YC8vLdr2CEUZXwSsdU9awSV5BZpHyyoFGczhBnzFBh4d1M+Z58wbk3qn
+   p1NITdvgEByj4AtzgkX+IKG2Qhrul282XIiOp0HA10zCTdxS23tiBX2RP
+   6rDReOs55rQ2jcnHHBfzrCkIAs/b7AZD0tupQaaKv3wQeDAlVKaOoyWKK
+   Zqk4zN9qTN57fReG3/HNR2msAziGotmNMmcnWTGVmRONPXnWKgjcnNF3g
+   04ZzXo2JJ8MJkO/fBqyanRF0HLPZvXg3cW9i84OhvqludqXJvUIo1XJ3D
+   2zIPjHFKAbfruwY+CmLWlJyORHgZr+VyVfIph1Gv+LJqmv7B9NA0K5b4e
+   g==;
+X-CSE-ConnectionGUID: eg6hP8MRTaqOOLCmnKuutg==
+X-CSE-MsgGUID: 9/bz8emNRPmYdKWoEXXDTg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3178829"
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="3178829"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 05:11:40 -0800
+X-CSE-ConnectionGUID: 14wdTuZ5Qa+MCZ6ndGp5GA==
+X-CSE-MsgGUID: 0DWFN5pPRdejsTf50jqJRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="8279803"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 11 Nov 2026 05:11:38 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xR86x-00000000yuR-1jH5;
+	Wed, 11 Nov 2026 13:11:35 +0000
+Date: Wed, 11 Nov 2026 21:10:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qiliang Yuan <odys.yuan@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "David Hildenbrand (Arm)" <david@kernel.org>, Jan Kara <jack@suse.cz>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>
+Subject: [linux-next:master 3495/6082] mm/shmem.c:1330:13: warning:
+ stack frame size (1056) exceeds limit (1024) in 'shmem_undo_range'
+Message-ID: <202611112032.TMyPU6Rm-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -150,159 +81,212 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR03MB5469:EE_|SA1PR03MB6339:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff02e511-b8fc-49ec-6f59-08df3fdf8b69
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|376014|7416014|261028144727099003|261026140227099003|261026121527099003|261021135927099003|261022105027099003|261022075727099003|11063799006|4143699003|56012099006|10067099003|22082099003|18002099003|261009223027099003;
-X-Microsoft-Antispam-Message-Info:
-	Ni986ctO6xiSDH3Tse7H/tfhVmcpySoYJQ3H79C2XabCPTdWQnt85qbb/EPtTU5I9mlKHg8Xjeqh76av3uUdOMGWIC7OrEdMHSYWQmCGvDZsuHwf66vb3bi9Q1e8bTxVy2pdnfyCjSadFsvoZgJkXJ6mNiz38Azwc1PmsxG2v0acEr50FAeNmbfnSAPSPvr0QM3GpHYBJVOCIXtpm++Xh/i3+KnUAZm6zPCVXDxdlczdc6o/LRaGq52oh9DDFp16C4YWNpjTaqdf2+Mir40DxaCI2RqOl/4gOdtl1tRHnWWFZKzBVUVcxQ+KwZ9bwWOpTHilZEwx1hhu0fwlClOvAavjIHh5PTDRXwxSecCXm4WEZQW4W261NHR1TEGbLG+172xf8MxK0SsTkZFtOAofN2xhckM4Lz02XzEuYoET6rCCk8ROfiqIgoqfEpfvdB+GPMFEiOKqe5JtJekOj51n/X5+ruY1Y8lzmxXd2qxAMLqOeI7yDbfGsC9By0FG3Fs0yp3VhbFqltYAoXyODBuw/7pzqkCH50ZNRuxDsWwyUeph5wiz+uyaiCla6B6Xg0EKZLuUh1Q2MN7au0z9MpyeZ3SHax91OJ1fuQ4s1ZjspsXckpZ85etRBUyQ7Zacv9qr7v8cwHH8Z2Itu2JNxiRHjqCQ4FpIbW4QvLughHszwnY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB5469.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(376014)(7416014)(261028144727099003)(261026140227099003)(261026121527099003)(261021135927099003)(261022105027099003)(261022075727099003)(11063799006)(4143699003)(56012099006)(10067099003)(22082099003)(18002099003)(261009223027099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?d1ViWFYyUm10SndZL2tmMk9qYUdBR3BiTUNMc2l4SzJyZzY1L2NhbHFxYkZp?=
- =?utf-8?B?cTlyZHFpdGNid2dDdHNUdm5oVllxWlNBNEl5S3cyTXZJclZoRlhGUEJqWTRl?=
- =?utf-8?B?a1lsQU05anNVVnNaOERJWVQzWXo0K2wxcXUzRE5QVVF1M2hLd21pWXdQMm9N?=
- =?utf-8?B?Q2NLbWlqWEpMYjU0MnRCNCttdjJoQkx6L1dMeitFR2wyUjlkV2tuQkRmLzZx?=
- =?utf-8?B?cmlicFVsZDV6bkFhMHRwNnN2VjZLNVplRkRiNWpxbXBDOG5JSUc1eExHV2Ju?=
- =?utf-8?B?aytIby83VDl1VUVwYWxNd2IzME9OSGJhb3RpR1J5WFIzSGRGZ3BjOE9yWWRJ?=
- =?utf-8?B?M1kzZUJmOW5RQU9SYi9xdVJ6a2IwWHVha1JqVlNBbHRJK3V1NHMyZFh4aHJE?=
- =?utf-8?B?R1N1UktHeWF0M253elJlR3Z6RjJPYndhUXJ6a1EwYS9CbllFS2JNL0hPV3dx?=
- =?utf-8?B?OS85MGJpVmFVN3h5VURQUC93d3pMZzRtN0R4NlE4dHNvRlBMUk5mZ3lSbTZ5?=
- =?utf-8?B?cmFRT3BrdFUyNTJLLzFVdi9DVzVSUGN2SmZxODI5RmlYMWwwVE1CVmRvSy9y?=
- =?utf-8?B?OVo0clhYMnBJL01rMytlOGFiY0VNbzBQcGZtbnc3d2cyVmF6bEY1M2duK3pj?=
- =?utf-8?B?REYwNENheHVIaFFUVFFWYUpJQUtJOEllNXViU3lGTVBhWEpFWDRyS0htNWgy?=
- =?utf-8?B?VjR0ajRKVmNOYTM1QzZjZW1aVTZoZEsyUzVGZmt4dTRDeFF6UVlBaHlreTR3?=
- =?utf-8?B?cFRxY1RFK3dRZ1d3TWE2cWVwTHE1bUQrNUxHeGFtcENXb0o2b1dsck5ZRUpV?=
- =?utf-8?B?Z0pwWGtNbUJZN1J0dHpTZlJBV09HWVVJNndyVjZUWFUzSzlER3FXMGsrNTJC?=
- =?utf-8?B?b2pETWxRdXl1S2NSZHFQS00vbHZpd3Q4U0t3UWszREUrU1RFM2Q5SGxaZFNM?=
- =?utf-8?B?MW5HQWRsYVRyeUVGREZxZHB1UktiTFdocWs3SXpmcVo1MmFzaWdIRTBmVHE0?=
- =?utf-8?B?cmwrY1plZUVuVFVZbmFCano5WkN5aG93SzZIMDB0QThOM1hJY2RIb2dMVkl2?=
- =?utf-8?B?bTlwMDgwTEVZeERpakRiTFUzZHNSZXN3SFVyWDNtZm1aWFd5VTg5KzBvanVF?=
- =?utf-8?B?cnNFUFh1S3dGYXAxUWFxblpZTm1VM01WZmQ1VlIyTllFOGFjYWVPblNHMHlV?=
- =?utf-8?B?VG5SZmVObk10aE5SUCt1ckJweHdFZzA3YldqYTlwUDJQVTM3L0V2N0NBeDhJ?=
- =?utf-8?B?UE5DbWRZUk10cTlMUXUyMjZhdmhLL2RKV3RHMzRLQTJ5amdhdmN3WE5BZ0Vs?=
- =?utf-8?B?K24vZjFDVHZRZmt5anErVTBIRWpsdHZ1WEtjU0YxTENHM0o4RmxOUzZYWTYv?=
- =?utf-8?B?R0JCZ3liUDNFRzdzVzVFRkdTdDJjazFjM2ZHN0ZxN3R1VHZBdytaYWJIRExr?=
- =?utf-8?B?aDNxNmFuSkR4ZVFkaGE4aExybVdUTWxya3hHYVFRZXc1T1Z5RW5hbWQ2dWFq?=
- =?utf-8?B?ODVPZC9tT1A3ZW5aVFpTTWZzWk1WcjcyMTY4R055czgxdVMrVFZpZWdhSGtD?=
- =?utf-8?B?UXhobjJVbU1RYVFreGtuZkF0SWNmcmV0QTIxTWE5TUpEaUV2TjdYYjFvb2du?=
- =?utf-8?B?ak1CWlBJV3Bqc09qZUhiV2FKQTdLU3R3Ym51RmZEeEN6NVdNQ0NZeVdJQk90?=
- =?utf-8?B?MWZ1NVAzQ1gxeVRrRFZZTkQ2VjF6K2pWMDBqWXk1a0dCNFp1bkJsT2UrUUxr?=
- =?utf-8?B?bDZlcWQveW9HLzQ1Q0FjWGNyUUxVcGFxN1NNTXgyYXZkRU1mbE03SitvTGdj?=
- =?utf-8?B?SVBXa0poZjVTY2Z2dVQyS0RHckZxcTdONGIwdFBjczU3NTBwTUh4aXFQYVpq?=
- =?utf-8?B?Qkd3Q1FNTnhmVGtFQUxtTU5qQ0g3VEJyMVRMdkhUV0lrY0krRURFOG5CZTQ3?=
- =?utf-8?B?UlIxaEdoZUt1Mk1IQWJjQWU0R0oyYWNMSTlBck12dFRnVm02R2F6NkdYU0kz?=
- =?utf-8?B?b2lZS0RiYkxYdFJHaDRxbnM4REtHUStmN3MySDNHdy9McUNkSEZUMlhRRkpi?=
- =?utf-8?B?VnZNdlFtZDNoZ0QxcTZ5N3RYTlBENk1kVTc5SDNPN3BkZTlNbjZaOU54Z08z?=
- =?utf-8?B?ZzFRdTBKUVpKRFk4QkVSVlBVbm1vK2xHbGl0QThua1Y1SGtVSm12cVF1WFZQ?=
- =?utf-8?B?em14S2FleXd1ZVF3U3FPbUx5QW1FOEN0WFVFSy9QZEdCaGtDTlh3Zk1KZDVS?=
- =?utf-8?B?TjFNNWkvQ3I1UHljcTc4ZUNSb0dsM0JEVVM1ZGNEV1I4S0hmMXZNOWFYTDVr?=
- =?utf-8?B?WXNkRVdJdVFNSE5uVXZlL0NvSzRJcGtwOHpUVkozeEg1UnM0blExZz09?=
-X-Exchange-RoutingPolicyChecked:
-	W+IllVXtlti+SuvFyHZSOC4dpe9oFwDwjqKLpDHixfMNwIH59ZyADSlF3Ar48BRayEfYXyUbcIqsnPSZuj+rR8S0JaOKhnL5ZXLLjYLXAu4uwCghUKa6IoWwvwqk2jRX1cxDowaMsdCDFw3UCILR29htCT9kumWy/rg69w5fZplWHR3H7S4aAUPkYq9Ybdo2aF2My1gPQ/NAYYk/tK4q88NQqLpykOiiP/h0IrzIlZKaKfP3x1JlFuHSQPPKnVvLFco0+s+Oxf/1fkPfuwOql48AhwXZG2DxTkMyb1LulQYUArv8DGnxlDp5UUH8k5/uRdz79aQ/xKT+Qj4JcFG+WQ==
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff02e511-b8fc-49ec-6f59-08df3fdf8b69
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB5469.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2026 10:35:46.2098
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lkZZ4GHOLwT0NDovxtJImfi5rremL5EZodQabi+HMvKcU7afzC37SoRQSaIlw9DWKN4MeSnnNGsjpEDsvDYUEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR03MB6339
-X-Proofpoint-ORIG-GUID: DdqhZe60zaGeSLLR4y0zqnA7uRg5oi5T
-X-Proofpoint-GUID: DdqhZe60zaGeSLLR4y0zqnA7uRg5oi5T
-X-Authority-Analysis: v=2.4 cv=Cooq4X4D c=1 sm=1 tr=0 ts=6af44505 cx=c_pps
- a=H6CWIJr9C+/oc5/J52O/6Q==:117 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M51BFTxLslgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=0sLvza09kfJOxVLZPwjg:22 a=iZSIUCweCk2Oy3QsdGPA:22
- a=VwQbUJbxAAAA:8 a=AIbcN7bpn11A85WRVH0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTExMDA0MSBTYWx0ZWRfXyKcWHrlxz6Ni
- CY5EY4ARhXPOXEflqD35Tiw2cQnVzCq2Q99DcK1Ahrof9UB/OpT5ERtN+NIGnX4+VFHtRXSegMv
- IRIaFfyu1jTbyk8hahBerknpsSLvfPH6xxMfnrWEjl57NZxFhFYY
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTExMDA0MSBTYWx0ZWRfX/rJlk7y9I93V
- O3iHuWnAl+rHD47/S/8OD3di5C22mbviWl01UzNEy4BO+V2rYJ9zHXqYORrK/2R0iBtoJHhs8sY
- kHJsYmy+ddVOvczABdFBC7cdg4jHJCRnC0eD2aHV6J1yIP7aC2uZYHFdJpx7+39gtcWUI+B+k96
- WDAeHQPNbRjOktS8l9TLhjzAsnuNs16bhgZTQ2QQ8LJ+0SOYzJlp2oReTf8AMeVqzThcT+Ka/Sc
- exdQbfz8pZNZDeKiVxVz83acIc4eROivgsgY7Te29s4SbC/H+vzlVci1TG/3xW438WcKWOmLgb9
- jTqO65a5QiDtosZ6HGfjz2C8hHENnc31hSqN1Mw7Jv9L1XWbPvfuRLSGnysT9hNdyseklfVbjnP
- mzjI6mAo5zCiuLu4NRIkMBMNOROiZzVDydbPC2ivRDAnRvd/F9/xnbgnADxbhlyMoLVxU6KnRrf
- X93BXPB+ODwcyToplaQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-11_02,2026-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 adultscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611110041
 
-On Tue, Nov 10, 2026 at 05:12:28PM +0100, Arnd Bergmann wrote:
-> On Tue, Nov 10, 2026, at 16:39, Nuno Sá wrote:
-> > On Sat, Sep 12, 2026 at 11:20:47PM +0100, Jonathan Cameron wrote:
-> >> On Thu, 10 Sep 2026 20:14:15 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
-> 
-> >> > drivers/iio/adc/ad7793.c
-> >> Maybe. Analog devices ack needed.
-> >> 
-> >> Production part but this one indeed fails to probe.  Analog
-> >> folk, do you want to fix this one up?
-> >
-> > Given it's production we should fix. Looking at platdata seems to nicely
-> > fir in DT. Issue is that I don't have HW with me to test. So I'll maybe
-> > just remove platdata and assume some defaults.
-> 
-> Sounds good. I already dropped my removal patch for this one.
-> 
-> >> > drivers/iio/frequency/ad9523.c
-> >> Maybe. Analog Devices ack needed.
-> >> 
-> >
-> > Hmm we definitely use this one and we have OF support out of tree with
-> > likely some DT abuse of what can be in DT or not. Not sure if I have
-> > some HW around but we'll need to fix it.
-> >
-> > In general for ADI parts, I think we can drop the ones that are not
-> > recommended for new designs. All the others I tempted to say we should
-> > keep. Naturally we need to fix all the drivers that do not compile
-> > without platdata. And for the ones with defaults we can also just remove
-> > platdata and use the plain defaults.
-> 
-> Ok, I'll leave it alone as well now.
-> 
-> I currently still have patches to remove adp8860/8870 (backlight), ad7877
-> (touchscreen), ad714x (touch) and adxl34x (input, not the iio one), which
-> are currently unusable with DT but are all listed as in production.
-> 
-> I assume you want to fix all of these and keep them in the kernel,
-> but possibly still remove the adxl34x and only keep the IIO driver for
-> that part?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   793807ca13bf3072fc6d16ce6d90e9ab9beff2a5
+commit: b97fbd541ecba5d6640077618e9dfec6f5e71132 [3495/6082] mm/shmem: remove truncated folios from the page cache in batches
+config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20261111/202611112032.TMyPU6Rm-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611112032.TMyPU6Rm-lkp@intel.com/reproduce)
 
-Yes. And yes, seems to me the input driver has not reason to be in tree.
-The IIO should be the one to use.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611112032.TMyPU6Rm-lkp@intel.com/
 
-> 
-> I also have patches to remove platform_data probing from ad5761, adf4350,
-> ad5791, ad5421 and ad5504, these all have DT support.
-> 
-> See 
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=board-remove-7.4
-> for the updated series. I hope to slowly get through that. Let
-> me know if you want me to skip any more of those patches.
+All warnings (new ones prefixed by >>):
 
-Thanks for taking care of this. Let me know if you need any help with
-ADI related parts.
+>> mm/shmem.c:1330:13: warning: stack frame size (1056) exceeds limit (1024) in 'shmem_undo_range' [-Wframe-larger-than]
+    1330 | static void shmem_undo_range(struct inode *inode, loff_t lstart, uoff_t lend,
+         |             ^
+   1 warning generated.
 
-- Nuno Sá
 
-> 
-> Thanks,
-> 
->     Arnd
+vim +/shmem_undo_range +1330 mm/shmem.c
+
+71725ed10c4069 Hugh Dickins            2020-04-06  1325  
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1326  /*
+7f4446eefe9fbb Matthew Wilcox          2017-12-04  1327   * Remove range of pages and swap entries from page cache, and free them.
+1635f6a74152f1 Hugh Dickins            2012-05-29  1328   * If !unfalloc, truncate or punch hole; if unfalloc, undo failed fallocate.
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1329   */
+37d369fa97cc07 Matthew Wilcox (Oracle  2025-11-23 @1330) static void shmem_undo_range(struct inode *inode, loff_t lstart, uoff_t lend,
+1635f6a74152f1 Hugh Dickins            2012-05-29  1331  								 bool unfalloc)
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1332  {
+285b2c4fdd69ea Hugh Dickins            2011-08-03  1333  	struct address_space *mapping = inode->i_mapping;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1334  	struct shmem_inode_info *info = SHMEM_I(inode);
+09cbfeaf1a5a67 Kiryl Shutsemau         2016-04-01  1335  	pgoff_t start = (lstart + PAGE_SIZE - 1) >> PAGE_SHIFT;
+09cbfeaf1a5a67 Kiryl Shutsemau         2016-04-01  1336  	pgoff_t end = (lend + 1) >> PAGE_SHIFT;
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1337) 	struct folio_batch fbatch;
+511f04aac469a3 Tal Zussman             2026-02-25  1338  	pgoff_t indices[FOLIO_BATCH_SIZE];
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1339) 	struct folio *folio;
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1340) 	bool same_folio;
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1341  	long nr_swaps_freed = 0;
+285b2c4fdd69ea Hugh Dickins            2011-08-03  1342  	pgoff_t index;
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1343  	int i;
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1344  
+83e4fa9c16e4af Hugh Dickins            2012-05-29  1345  	if (lend == -1)
+83e4fa9c16e4af Hugh Dickins            2012-05-29  1346  		end = -1;	/* unsigned, so actually very big */
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1347  
+d144bf6205342a Hugh Dickins            2021-09-02  1348  	if (info->fallocend > start && info->fallocend <= end && !unfalloc)
+d144bf6205342a Hugh Dickins            2021-09-02  1349  		info->fallocend = start;
+d144bf6205342a Hugh Dickins            2021-09-02  1350  
+51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1351) 	folio_batch_init(&fbatch);
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1352  	index = start;
+3392ca121872dd Vishal Moola (Oracle    2022-10-17  1353) 	while (index < end && find_lock_entries(mapping, &index, end - 1,
+51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1354) 			&fbatch, indices)) {
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1355  		struct folio_batch remove;
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1356  
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1357  		folio_batch_init(&remove);
+51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1358) 		for (i = 0; i < folio_batch_count(&fbatch); i++) {
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1359) 			folio = fbatch.folios[i];
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1360  
+7b774aab7941e1 Matthew Wilcox (Oracle  2021-12-03  1361) 			if (xa_is_value(folio)) {
+1635f6a74152f1 Hugh Dickins            2012-05-29  1362  				if (unfalloc)
+1635f6a74152f1 Hugh Dickins            2012-05-29  1363  					continue;
+8a1968bd997f45 Kairui Song             2026-01-20  1364  				nr_swaps_freed += shmem_free_swap(mapping, indices[i],
+8a1968bd997f45 Kairui Song             2026-01-20  1365  								  end - 1, folio);
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1366  				continue;
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1367  			}
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1368  
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1369  			if (!unfalloc || !folio_test_uptodate(folio)) {
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1370  				truncate_cleanup_folio(folio);
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1371  				folio_batch_add(&remove, folio);
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1372  			}
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1373  		}
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1374  		delete_from_page_cache_batch(mapping, &remove);
+51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1375) 		folio_batch_remove_exceptionals(&fbatch);
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1376  		for (i = 0; i < folio_batch_count(&fbatch); i++)
+b97fbd541ecba5 Qiliang Yuan            2026-11-05  1377  			folio_unlock(fbatch.folios[i]);
+51dcbdac28d4dd Matthew Wilcox (Oracle  2021-12-07  1378) 		folio_batch_release(&fbatch);
+ebd1a08c192109 Breno Leitao            2026-09-18  1379  		cond_resched_tasks_rcu_qs();
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1380  	}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1381  
+44bcabd70cf142 Hugh Dickins            2022-12-04  1382  	/*
+44bcabd70cf142 Hugh Dickins            2022-12-04  1383  	 * When undoing a failed fallocate, we want none of the partial folio
+44bcabd70cf142 Hugh Dickins            2022-12-04  1384  	 * zeroing and splitting below, but shall want to truncate the whole
+44bcabd70cf142 Hugh Dickins            2022-12-04  1385  	 * folio when !uptodate indicates that it was added by this fallocate,
+44bcabd70cf142 Hugh Dickins            2022-12-04  1386  	 * even when [lstart, lend] covers only a part of the folio.
+44bcabd70cf142 Hugh Dickins            2022-12-04  1387  	 */
+44bcabd70cf142 Hugh Dickins            2022-12-04  1388  	if (unfalloc)
+44bcabd70cf142 Hugh Dickins            2022-12-04  1389  		goto whole_folios;
+44bcabd70cf142 Hugh Dickins            2022-12-04  1390  
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1391) 	same_folio = (lstart >> PAGE_SHIFT) == (lend >> PAGE_SHIFT);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1392) 	folio = shmem_get_partial_folio(inode, lstart >> PAGE_SHIFT);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1393) 	if (folio) {
+60a70e61430b2d Matthew Wilcox (Oracle  2025-10-24  1394) 		same_folio = lend < folio_next_pos(folio);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1395) 		folio_mark_dirty(folio);
+ad274797936827 Zhang Yi                2026-09-28  1396  		truncate_inode_partial_folio(folio, lstart, lend, &start,
+ad274797936827 Zhang Yi                2026-09-28  1397  					     same_folio ? &end : NULL);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1398) 		folio_unlock(folio);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1399) 		folio_put(folio);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1400) 		folio = NULL;
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1401  	}
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1402) 
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1403) 	if (!same_folio)
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1404) 		folio = shmem_get_partial_folio(inode, lend >> PAGE_SHIFT);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1405) 	if (folio) {
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1406) 		folio_mark_dirty(folio);
+ad274797936827 Zhang Yi                2026-09-28  1407  		truncate_inode_partial_folio(folio, lstart, lend, NULL, &end);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1408) 		folio_unlock(folio);
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1409) 		folio_put(folio);
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1410  	}
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1411  
+44bcabd70cf142 Hugh Dickins            2022-12-04  1412  whole_folios:
+44bcabd70cf142 Hugh Dickins            2022-12-04  1413  
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1414  	index = start;
+b1a366500bd537 Hugh Dickins            2014-07-23  1415  	while (index < end) {
+ebd1a08c192109 Breno Leitao            2026-09-18  1416  		cond_resched_tasks_rcu_qs();
+0cd6144aadd2af Johannes Weiner         2014-04-03  1417  
+9fb6beea79c6e7 Vishal Moola (Oracle    2022-10-17  1418) 		if (!find_get_entries(mapping, &index, end - 1, &fbatch,
+cf2039af1a2eee Matthew Wilcox (Oracle  2021-02-25  1419) 				indices)) {
+b1a366500bd537 Hugh Dickins            2014-07-23  1420  			/* If all gone or hole-punch or unfalloc, we're done */
+b1a366500bd537 Hugh Dickins            2014-07-23  1421  			if (index == start || end != -1)
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1422  				break;
+b1a366500bd537 Hugh Dickins            2014-07-23  1423  			/* But if truncating, restart to make sure all gone */
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1424  			index = start;
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1425  			continue;
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1426  		}
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1427) 		for (i = 0; i < folio_batch_count(&fbatch); i++) {
+b9a8a4195c7d3a Matthew Wilcox (Oracle  2020-05-27  1428) 			folio = fbatch.folios[i];
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1429  
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1430) 			if (xa_is_value(folio)) {
+8a1968bd997f45 Kairui Song             2026-01-20  1431  				int order;
+6ea0d1ccb11038 Daniel Gomez            2024-08-12  1432  				long swaps_freed;
+6ea0d1ccb11038 Daniel Gomez            2024-08-12  1433  
+1635f6a74152f1 Hugh Dickins            2012-05-29  1434  				if (unfalloc)
+1635f6a74152f1 Hugh Dickins            2012-05-29  1435  					continue;
+8a1968bd997f45 Kairui Song             2026-01-20  1436  				swaps_freed = shmem_free_swap(mapping, indices[i],
+8a1968bd997f45 Kairui Song             2026-01-20  1437  							      end - 1, folio);
+6ea0d1ccb11038 Daniel Gomez            2024-08-12  1438  				if (!swaps_freed) {
+2030dddf95451b Kairui Song             2026-01-29  1439  					pgoff_t base = indices[i];
+2030dddf95451b Kairui Song             2026-01-29  1440  
+8a1968bd997f45 Kairui Song             2026-01-20  1441  					order = shmem_confirm_swap(mapping, indices[i],
+8a1968bd997f45 Kairui Song             2026-01-20  1442  								   radix_to_swp_entry(folio));
+2030dddf95451b Kairui Song             2026-01-29  1443  					/*
+2030dddf95451b Kairui Song             2026-01-29  1444  					 * If found a large swap entry cross the end or start
+2030dddf95451b Kairui Song             2026-01-29  1445  					 * border, skip it as the truncate_inode_partial_folio
+2030dddf95451b Kairui Song             2026-01-29  1446  					 * above should have at least zerod its content once.
+2030dddf95451b Kairui Song             2026-01-29  1447  					 */
+2030dddf95451b Kairui Song             2026-01-29  1448  					if (order > 0) {
+2030dddf95451b Kairui Song             2026-01-29  1449  						base = round_down(base, 1 << order);
+2030dddf95451b Kairui Song             2026-01-29  1450  						if (base < start || base + (1 << order) > end)
+8a1968bd997f45 Kairui Song             2026-01-20  1451  							continue;
+2030dddf95451b Kairui Song             2026-01-29  1452  					}
+2030dddf95451b Kairui Song             2026-01-29  1453  					/* Swap was replaced by page or extended, retry */
+2030dddf95451b Kairui Song             2026-01-29  1454  					index = base;
+b1a366500bd537 Hugh Dickins            2014-07-23  1455  					break;
+b1a366500bd537 Hugh Dickins            2014-07-23  1456  				}
+6ea0d1ccb11038 Daniel Gomez            2024-08-12  1457  				nr_swaps_freed += swaps_freed;
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1458  				continue;
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1459  			}
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1460  
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1461) 			folio_lock(folio);
+800d8c63b2e989 Kiryl Shutsemau         2016-07-26  1462  
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1463) 			if (!unfalloc || !folio_test_uptodate(folio)) {
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1464) 				if (folio_mapping(folio) != mapping) {
+b1a366500bd537 Hugh Dickins            2014-07-23  1465  					/* Page was replaced by swap: retry */
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1466) 					folio_unlock(folio);
+9fb6beea79c6e7 Vishal Moola (Oracle    2022-10-17  1467) 					index = indices[i];
+b1a366500bd537 Hugh Dickins            2014-07-23  1468  					break;
+7a5d0fbb29936f Hugh Dickins            2011-08-03  1469  				}
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1470) 				VM_BUG_ON_FOLIO(folio_test_writeback(folio),
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1471) 						folio);
+55ac8bbe358bdd David Stevens           2023-04-18  1472  
+55ac8bbe358bdd David Stevens           2023-04-18  1473  				if (!folio_test_large(folio)) {
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1474) 					truncate_inode_folio(mapping, folio);
+ad274797936827 Zhang Yi                2026-09-28  1475  				} else if (truncate_inode_partial_folio(folio,
+ad274797936827 Zhang Yi                2026-09-28  1476  						lstart, lend, NULL, NULL)) {
+55ac8bbe358bdd David Stevens           2023-04-18  1477  					/*
+55ac8bbe358bdd David Stevens           2023-04-18  1478  					 * If we split a page, reset the loop so
+55ac8bbe358bdd David Stevens           2023-04-18  1479  					 * that we pick up the new sub pages.
+55ac8bbe358bdd David Stevens           2023-04-18  1480  					 * Otherwise the THP was entirely
+55ac8bbe358bdd David Stevens           2023-04-18  1481  					 * dropped or the target range was
+55ac8bbe358bdd David Stevens           2023-04-18  1482  					 * zeroed, so just continue the loop as
+55ac8bbe358bdd David Stevens           2023-04-18  1483  					 * is.
+55ac8bbe358bdd David Stevens           2023-04-18  1484  					 */
+55ac8bbe358bdd David Stevens           2023-04-18  1485  					if (!folio_test_large(folio)) {
+55ac8bbe358bdd David Stevens           2023-04-18  1486  						folio_unlock(folio);
+55ac8bbe358bdd David Stevens           2023-04-18  1487  						index = start;
+55ac8bbe358bdd David Stevens           2023-04-18  1488  						break;
+55ac8bbe358bdd David Stevens           2023-04-18  1489  					}
+55ac8bbe358bdd David Stevens           2023-04-18  1490  				}
+1635f6a74152f1 Hugh Dickins            2012-05-29  1491  			}
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1492) 			folio_unlock(folio);
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1493  		}
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1494) 		folio_batch_remove_exceptionals(&fbatch);
+0e499ed3d7a216 Matthew Wilcox (Oracle  2020-09-01  1495) 		folio_batch_release(&fbatch);
+bda97eab0cc9c6 Hugh Dickins            2011-08-03  1496  	}
+94c1e62df4494b Hugh Dickins            2011-06-27  1497  
+3c1b7528d8969a Hugh Dickins            2023-08-03  1498  	shmem_recalc_inode(inode, 0, -nr_swaps_freed);
+1635f6a74152f1 Hugh Dickins            2012-05-29  1499  }
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1500  
+
+:::::: The code at line 1330 was first introduced by commit
+:::::: 37d369fa97cc0774ea4eab726d16bcb5fbe3a104 fs: Add uoff_t
+
+:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
+:::::: CC: Christian Brauner <brauner@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
