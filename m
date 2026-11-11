@@ -1,84 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794357809;
-	b=fxPR2QEb2t+d1h1V3T+/9n/EghrzUNGBGCXqOfCXg61Of0zIbfpB4AnYMKUIz0krRN4f
-	 iUga54PTfIztbSBwb1MG1Y17jStq2wEDgNWFc9LHflTi4m4dgvtJX8I11NDcysYpqsdwp
-	 6SnjXE/3Tpa4S9+v+5fx0wsmMrXWowBen21NBiBTcmoIWNrFYM482WkP6t20P3QmdUFj2
-	 ggVWQRstuvUbbig4cD+0GytVRVc9Ty2NCPX5GGB/PsANLyXxXAJACnfBKya9jzt8jAMJm
-	 BT5GTdqAq92RKzmdVujL+R90zSSkYDzviEOfId/HLM9lXqmgc4q+T9AERq+KGRSA+Ag==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794357809;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=SymUik+B4qS4RnbOnUpYhdJUY4u98PDY9Ed4+6i7Iz8=;
-	b=MoWOrnnZYUIdh4k2p6B7s+gB/KooH+5SRNdPKjnnZllcC7bIKlYUhoEXsOiHlISKiQuJ
-	 Az2e6SVONxW1WdELxGZpW+M2kAqtot9dsczAamQ1BdTfEr8SqL/NjpqNVau5xxmRP7+HE
-	 nnHk2QlB0T+r91Y52l9Y1PDbmwVrAK7ddhAbgMVW5QtfNtfibtrh6+dvcOLL02LRfgp2l
-	 tvGzZ4rAjkf73ry5JfE1ji4iCeYWfgE4jSAQ0juvcqgj+Wz63N2lYfhaQfBjCcP1zhI52
-	 Om2a+qraetfu+jKh9yftybC80suv9ZXpz22dnfk6XNHnYa9YssLaTcTxdwZEngAqw1Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=bX9+K1N3;
-	arc=none smtp.remote-ip=192.198.163.13
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794359279;
+	b=gpkNBb44LeY4Usx3MoM4B2aB9nFT7yQ9EUggMWQOkXYitmwBPCy/RF7zxaGDkGAv+/Tp
+	 vA4QE4JHZDZcowqd8/o1kx8b/DwV3KpoloLiSdvJ2ttjiMkzubybQ2UAxXvu30oATcYdH
+	 e9IeXMi9gemP5C+U2mtqX/yo5aZAN4336FobhZSJkcHq3s74OeNLP8VXBP0cN/4A0xp9H
+	 WLrkf2IfwaNHx200ZpQDZ1PBKGf4ma0vpCHtZ55LdfSIG20WnS/cmC6l3UxT/yuh9CUe4
+	 NtzWQ1UX8VZlmGY9VnkvLjzqocO7xSJJcLwKp2gq+snZD1GEUW91YyESSi0rmH+vZXw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794359279;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=8MFwGdApl0d4OiJqtJrDFLzpxo7TMPDirGuojCnnp6s=;
+	b=gT7RCra+ohzigkgmb6PFd2lWpp679TYyhplwC4Ef/sKW1vHLcqYKgaoveP8T19T71WWh
+	 34WxoLw7PkWpfAthatFXc9CvI7fV7oVzt8YVgUTZjUX0FWxs4YlGBo8AT4+OLyzAa7f99
+	 s7pOm5sCzbMr8Gzbcg9xj9e5PuJjcY4qt1UaQVYTtj8u4LvUIhcdHQ3JlnRmG2QUARqcH
+	 cHgTQjISGreuVw4xFMzQvfnUnyHN9SKesS1NXq3qqd+NjmaGutd0zDb1N3XVZiWcMM44A
+	 qGux6TQIyvq+emFggMF6PMsmVy4tKsLN7g2GMhL28O0evIcv8QrWr7eFKwZNeLf3Eqg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=fTRIyrqe;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B77A60A2610;
-	Wed, 11 Nov 2026 00:43:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B77A60A2610
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A997606A320
+	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 01:07:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A997606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=bX9+K1N3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794357809; x=1825893809;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/htquKCf1eyCChQB/2slLNIXBsrm37b2/miGYfgxbpQ=;
-  b=bX9+K1N3kj/wx7SaNkr5WLJ/oOwQutn49Lf+/AikW4LpuDVWgv3Ul4dS
-   SHO22R+nwZ5vgj5yE2M+nUnRkCz3AsP8gY8mbZysv6Xf+txVZrx5fYnRa
-   ayfgMunwlyQZOzk7oiUWvjsfJL/e28jXnlmfYDtl5lrtqUN+Nz+0147p/
-   DOCUemRB5u1vtxpdJkDgA9KQnTZs+GntiVorql1MYJ0eS2k1IK6uA8rEE
-   VwrXzuiUAX4wf/qOpFOxP1N8b/iQ5/JvsGR8VHO6Eq4ba+VRYtO5Fiz7G
-   mEIYczgUJlUG+ptXT4Ei2zKjz0NhfC1g6jKQDd4G4tRKbTxRXfjUK4kyh
-   g==;
-X-CSE-ConnectionGUID: OlTvmJvSSGq0Ce8z+urhpw==
-X-CSE-MsgGUID: JhHOgRyoRxSmx5YhWlZiqA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3119551"
-X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
-   d="scan'208";a="3119551"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 16:43:28 -0800
-X-CSE-ConnectionGUID: f5Zm+GB/RBWKyi+QigIv3g==
-X-CSE-MsgGUID: y/T3/qu8SuGzzmy/BBWgxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,206,1787036400"; 
-   d="scan'208";a="8713679"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Nov 2026 16:43:25 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xQwQs-00000000xmN-0x7I;
-	Wed, 11 Nov 2026 00:43:22 +0000
-Date: Wed, 11 Nov 2026 08:43:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Karunika Choo <karunika.choo@arm.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, nd@arm.com,
-	Boris Brezillon <bbrezillon@kernel.org>,
-	Steven Price <steven.price@arm.com>,
-	Liviu Dudau <liviu.dudau@arm.com>, linux-kernel@vger.kernel.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Subject: Re: [PATCH v2 17/28] drm/panthor: Add arbitration scheduler
-Message-ID: <202611110840.2W7v6LAR-lkp@intel.com>
-References: <20261110153907.3241978-18-karunika.choo@arm.com>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=fTRIyrqe
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6e560e00a86so1661721eaf.1
+        for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 17:07:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794359278; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TGFkx4kJlesQZFy2ab30BUI7dcttX9gMLMAyk9b8tpWS5k1MV5I68wD7k684HZAi0V
+         nmsIVr4EuVv7tC5ACYfzjqzVfouUYWBX5OzYScg/SPN0Hn+17ZkROi2YbZYFq1xhSJHB
+         2+eCBtuTHrUAXcKGGgC2TdykKoCBw+JepNdD0bFsDBPIF2FUIuhnI8c2Fa2lpBhClmVy
+         C9H3ZA/esoNlCHeBHPWYFMDGbTuPZFroHxFXVuMF7BFGo55aW8o55IbZ76gLdl0d+f21
+         SHoaoZDEa6hDZlECtOcxeNmuPP8P/FLvHj8vdjAwH8bpYF7klgMI73NVogBiLEgDQbdJ
+         3Yzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=8MFwGdApl0d4OiJqtJrDFLzpxo7TMPDirGuojCnnp6s=;
+        fh=i5J+w1BUKocr9jey1zIkj2KBR4lSE38SZNmC1L+j/lA=;
+        b=i8BC9MlMGw15uS2f2K2paWT4WseHrG4gb9iqcKzmhauI3T5vwWWG2YpmfgWGFl0JEP
+         oJSv1/5l/3eYpS3XZHrMTaQUPgKnrpqMdjjrWLu4CKMU8RczAWnxNARgtkZV/DXG8K5P
+         FS0tlk1VrIF980uCK5uS2/sIC8vmfUa+AIfJY4DUN0sqtd7pqlzJYu6+oHzQNyEQYH2c
+         wQDMJ1W9/Vq/mtjorxyGFrv6LwmIDLnOuE3YeVaodymY20XHNzgTa3f1x4PNVGa4UOJY
+         znQj6wGl9opJEeV/p+KNxuMAEJuYhDjGAwGQ+onB6O7utB6vJU+3N31wLa7D9PXJ7Lzl
+         9GoA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794359278; x=1794964078; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8MFwGdApl0d4OiJqtJrDFLzpxo7TMPDirGuojCnnp6s=;
+        b=fTRIyrqeCVxQod0OFU1ssYx1xq9Hz3Ib8R7R2x5OpB5Y/svYHPY2wLphh5A/EgEmNT
+         wi6SZn07qYb9Bu6LlNQz3B6BHaYvdPqvO93NSiGa7lUqVsg4fWVrxpd6I8knL1as0e0g
+         sVTcvFJ5uXzaAj6TifgF/QjfxNtuyRmCqf4sE/Pr7N5dV6JEDxQBqb+1v/31fDCx2Bdu
+         15zNMeAMB2qR89D8nfpFpnIZ22mLIwxduj52RtNi4ujOKlBGW5IQoOuoxepxUfC5PV4f
+         dmrdKBrkJiFGQrk4R22050eiQo2pIzb2d7434ePy5KrKQHbAQ/JCWlCPmnoblnrcApud
+         VhqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794359278; x=1794964078;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=8MFwGdApl0d4OiJqtJrDFLzpxo7TMPDirGuojCnnp6s=;
+        b=taMd1lNwB9cxARkNIniqJlsZpDueCqdyFjyK+6CboEAHUOv7duWGWS+iPdxft4nVRL
+         i/6e652ucpbPKsUHRKi67QATRez9L17vHe43v84nHEayTUcZpdp88zN4+VSEtbEky7MP
+         FpJyvMw7V5Clfn6kzcVqPyKh8P8BRKZVdHoyXgUKx2KKOCa66bp1tuMRg6tYDBPYccx1
+         rjBGnm3gd2/hJIoyFyIjDFPoOyqDL72NJf1rEPnRDPkGjQ93Oa0tmbFPJ0v7rflDtMjI
+         /hVetExvbg6QHbIxaE3pMJJRB6tVzRWb+eMNEFLoRZi+0cpKZB2CqvKAQlDtS9qCei7b
+         tKLw==
+X-Forwarded-Encrypted: i=1; AL+hErHL71LIEn+TXPao9qHWcDJ+XEzb3aREEbr7gKPYCOoddZkW7JAJ8/RxfDoe5kjD2QlW/SCz@lists.linux.dev
+X-Gm-Message-State: APuU4Z/qxhq0q2RjsSm8PTvgNfjujPyDFsKGLJbDYWfsBevWv92CBoOw
+	MOMbTYTaROCQ9iM2EDpUZUW6b2tWL2dCBVD15kg2npK4G+54adnslyxr5sYIwBMjVJyCyofmSOi
+	a7A2YSeljagZMBK0Ut7ZSA4tWxUJoSJMqjHmPyRIQAQ==
+X-Gm-Gg: AYBFou1kXQ/wZzf/9T7bfwcQtmqL7o5wDBMIQxBWuoSw1ZU9YdgNHFcY3KcVzatXsNM
+	RoAAN4QwoSGdG5DYeZ/BcW7wJsdg1pZetc1UMMvUjjRaNVYt6UKuoVixlbTxlksepM8eEwM5pNH
+	ovyOBAiiP68LULv8KZZbFHR+KzfSXjXDhfAXZDz8PRb3B0fCl+U5NVUe73NIqBWg22aBhxyBTr/
+	GQ9p1a1D046m+D+iEcFu2xGiBgLd1IWRjtcN+GKEOnFI5EQ2kE9Mq8TCtX/z4dKAfxDvKj/bLrD
+	WD+Orm41KVWFOOf/Fr01A3lGiEZQnFdm5Rhur1u+PjbzWFNYK54rvBFiQUsPTQJ84pMPhEsUhD6
+	pBwbYIHYNvpGJwpJ2oyr7uZJsYS3nDMAOuU4KoR2/oFcqKG+HkoV42UOQLfKumG8ydq7yxKYulI
+	YjxQvAiOhkUQ==
+X-Received: by 2002:a05:6820:16a9:b0:716:c04a:4771 with SMTP id
+ 006d021491bc7-71917858218mr598043eaf.24.1794359278033; Tue, 10 Nov 2026
+ 17:07:58 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -88,108 +104,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110153907.3241978-18-karunika.choo@arm.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com> <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+In-Reply-To: <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Wed, 11 Nov 2026 01:07:46 +0000
+X-Gm-Features: AclHuK9OIHzq1A_ViLb9jLKzo-flUIoCHThbTHbypb5m7BOmw6IeVMdp_ZFoAAw
+Message-ID: <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin <deliran@verdict.gg>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
+	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+	llvm@lists.linux.dev, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Karunika,
+Hi Stanislav,
 
-kernel test robot noticed the following build errors:
+On 11/10, Stanislav Fomichev wrote:
+> Awhile ago we discussed the alternative of adding setters for xdp
+> metadata. Then the veth (or whoever turns xdp frame into an skb) can
+> apply whatever metadata it needs (and there is some magic behind the
+> scenes that takes it into account when creating an skb). That keeps
+> the layout and most of the code outside of kernel. Have we considered
+> that here?
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm/drm-next drm-tip/drm-tip]
-[cannot apply to linux-review/Karunika-Choo/drm-panthor-Ignore-EOPNOTSUPP-for-shader-present-nvmem-lookup/20260922-214455 daeinki-drm-exynos/exynos-drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master v7.4-rc2 next-20261109]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the reminder. Yes, we considered [1] and [2], and took
+parts of them.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Karunika-Choo/drm-panthor-Ignore-EOPNOTSUPP-for-shader-present-nvmem-lookup/20261110-153822
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20261110153907.3241978-18-karunika.choo%40arm.com
-patch subject: [PATCH v2 17/28] drm/panthor: Add arbitration scheduler
-config: um-randconfig-1001-20261111 (https://download.01.org/0day-ci/archive/20261111/202611110840.2W7v6LAR-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261111/202611110840.2W7v6LAR-lkp@intel.com/reproduce)
+The alternative setter model in [1] requires a program on veth or
+cpumap to call the setters for the RX metadata. We want to avoid that:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611110840.2W7v6LAR-lkp@intel.com/
+- On veth, an XDP program removes software GSO from the peer, limits
+  its MTU, and can copy skbs from the peer.
+- On cpumap, each entry would need a program only for this.
 
-All errors (new ones prefixed by >>):
+This series achieves the same with only the XDP program on the NIC,
+which stores the values with kfuncs in the skb core extension area
+after the xdp_frame. cpumap and veth take this area into account when
+they create the skb, which is the "magic behind the scenes".
 
->> drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:223:3: error: call to undeclared function 'hrtimer_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     223 |                 hrtimer_start(&sched->stop_timer.timer,
-         |                 ^
->> drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:224:38: error: use of undeclared identifier 'HRTIMER_MODE_REL'
-     224 |                               ms_to_ktime(yield_timeout), HRTIMER_MODE_REL);
-         |                                                           ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:249:4: error: call to undeclared function 'hrtimer_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     249 |                         hrtimer_start(&sched->grant_timer.timer,
-         |                         ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:251:11: error: use of undeclared identifier 'HRTIMER_MODE_REL'
-     251 |                                       HRTIMER_MODE_REL);
-         |                                       ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:291:3: error: call to undeclared function 'hrtimer_start'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     291 |                 hrtimer_start(&sched->close_timer.timer,
-         |                 ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:292:38: error: use of undeclared identifier 'HRTIMER_MODE_REL'
-     292 |                               ms_to_ktime(yield_timeout), HRTIMER_MODE_REL);
-         |                                                           ^
->> drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:458:6: error: call to undeclared function 'hrtimer_is_queued'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     458 |         if (hrtimer_is_queued(timer))
-         |             ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:483:6: error: call to undeclared function 'hrtimer_is_queued'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     483 |         if (hrtimer_is_queued(timer))
-         |             ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:504:6: error: call to undeclared function 'hrtimer_is_queued'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     504 |         if (hrtimer_is_queued(timer))
-         |             ^
->> drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:621:2: error: call to undeclared function 'hrtimer_cancel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     621 |         hrtimer_cancel(&sched->grant_timer.timer);
-         |         ^
->> drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:666:2: error: call to undeclared function 'hrtimer_setup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     666 |         hrtimer_setup(&sched->grant_timer.timer,
-         |         ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:668:26: error: use of undeclared identifier 'HRTIMER_MODE_REL'
-     668 |                       CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-         |                                        ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:671:26: error: use of undeclared identifier 'HRTIMER_MODE_REL'
-     671 |                       CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-         |                                        ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:674:26: error: use of undeclared identifier 'HRTIMER_MODE_REL'
-     674 |                       CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-         |                                        ^
-   drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c:807:2: error: call to undeclared function 'hrtimer_cancel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     807 |         hrtimer_cancel(&sched->grant_timer.timer);
-         |         ^
-   15 errors generated.
+[1] https://lore.kernel.org/all/20250616145523.63bd2577@kernel.org/
+[2] https://lore.kernel.org/all/aGvcb53APFXR8eJb@mini-arch/
 
-
-vim +/hrtimer_start +223 drivers/gpu/drm/panthor/arbitration/panthor_arbitration_sched.c
-
-   207	
-   208	static void arb_sched_stop_locked(struct panthor_arbitration_sched *sched)
-   209	{
-   210		int ret;
-   211	
-   212		lockdep_assert_held(&sched->lock);
-   213	
-   214		ret = __arb_sched_stop_locked(sched);
-   215		if (!ret) {
-   216			if (sched->phase != ARB_SCHED_PHASE_STOPPING) {
-   217				dev_warn(sched->dev, "%s: Stop ACKED when not yielding",
-   218					 sched->name);
-   219				return;
-   220			}
-   221	
-   222			sched->stop_timer.epoch = sched->epoch;
- > 223			hrtimer_start(&sched->stop_timer.timer,
- > 224				      ms_to_ktime(yield_timeout), HRTIMER_MODE_REL);
-   225		}
-   226	}
-   227	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Tianyi
