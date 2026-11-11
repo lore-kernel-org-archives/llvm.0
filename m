@@ -1,99 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794364418;
-	b=atbP9hgoFrNroukkflazRyq5b41tfuUxQTbkPzg/7aCKsPY1nd379L9WKL6CiufGBEXp
-	 kvbe8Au2l88jIzMQzaxPF8SnPgoYvw/onWs7HfwDKrCAy/hKLUljZt0BeyguuH95HCpzs
-	 RNWUCQCCn2xbvqivBcxd5AH2o7JnzEgQri0esR3+oDjbn7jI00XDq2OYTjGaRquLuBLC5
-	 jxZrj1MiAtKa4ysqP1Q7xdsl4i6xoN83gj7neoCwxrYwxv4kRcZLV3kLi3BPXFTLeXZ8b
-	 6gq0AAHMnSvqit3DsoJETL/J6mD9HnOtdA7bf0kwOxFPnz8/QlT7NLq237BUVVCUDpQ==
+	t=1794375775;
+	b=nPTbIU7uvRrTE8M9ef7PBQsQSp/zs/BZrt0Pznx+T+Y62XyZ0QqNbhFC/6l2gvYQ2cnu
+	 wD/DI639BXLG/bw9W/OyDxccwKynm73ZkGwqhxIdcZCtL5ouDI9W78pyxkHyF5n04pHjS
+	 3SPb2ZWZ4kQY+Pyt86EUQS5TYnl9pZSJc6nLfra0Tupzb+Lw7f7+bDzx4r4AKKdTvfWFg
+	 wUcz5Wmpow/rp0Gq/C/RSY6++FXUda6H40C/pgwMyEhj6VB6QbvDf0JN9aYdgledIuWoS
+	 3Fhhu7WKTH8tFeL7OLyi/1NuXIkH9HjKoFmWI4rwVHInSUJRaUGhRC7duYKbtgBTu8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794364418;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=s18d0QtUAH5SO1XlwoaKN258QqfdDcIgzB60hufTnb0=;
-	b=4428xKsbtH3F1J5pC8bFCuwfKePFcF9E0cnBUJvdSWrAQSluDaJAwmZlvB8YM5o+wUeB
-	 A2Si14UYmZ1z5kcHQqptiZsncQouO01lT8w08yPWEIEA9Uvqf2wzaQ73IFwl1uI/Psq/C
-	 8kxL/DyZOABPGRJ77DkFlw8mYFuFrCByq8ZsxMejXAcAlGM63EsrU/8GT3th9vXXEkVvm
-	 tpGgQHXQwJc/H0vzPNdkgnug2XwRn79QaIyOkvYujk0LtFjES7VrVvxUKLkNAS995ZGCR
-	 FbRYl57AkS/FZaH2RuQpvlxMo4+6eaJDq/Q9zSI3gXA575ViKRCW89w+cL7u7CLLRWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794375775;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=nORocrAayItrBzyQnIC82VLVgHUTeYt27rYJZ4ki2bg=;
+	b=CmoIn6m8cGtFLfbTR/A93UhhSZtcrJTMKWwD5Oqvn9ybNN7re99fm/3znWlyOqjoZuwh
+	 DYlZe8WzuL+AmQjpR+PRHCuq/xwmCMG5bVtzCOeMZsZ3dh4u9hrSr3Gf7hvC8f04586ap
+	 38+kSKsbUDIXzYQ02XJ9NfWn5C9g9/eId2zahXXEsnpL3IQae6TN0qXhNy1KPXF+Vmcw0
+	 hal60OXARv+8iTjEs92wrZP+2KkrJHB6CyuHB0t6v6VmUzAe6/tZO062bp4S/pYi2Z+G2
+	 c09VmNjpm7vK2L3AKZosvJJMWBlfz8Cc7XX+wncwjvERH/Sdx0afBAaFPDmN+xNf28w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=poROOy9c;
-	arc=none smtp.remote-ip=209.85.167.173
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JDGfmDVJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0885E606A31C
-	for <llvm@lists.linux.dev>; Wed, 11 Nov 2026 02:33:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0885E606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8224D606A31C;
+	Wed, 11 Nov 2026 05:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=poROOy9c
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4b190cdc9feso1576789b6e.0
-        for <llvm@lists.linux.dev>; Tue, 10 Nov 2026 18:33:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794364417; x=1794969217; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=s18d0QtUAH5SO1XlwoaKN258QqfdDcIgzB60hufTnb0=;
-        b=poROOy9cJaDysw+ruRjFsu8afh/5wgqjFa+T20WFfl9YSNQ2t36tF747B5meKtJVoX
-         ZeKTyuBlc+fHttK9k2qkrZ9E6tzyzMXIDLCGY9FMFJtm373fS/p7rG5TAD9Z5ES0oSjS
-         3y3NApwNSl9OMNtyYAnss/OBVv6jVspaWfYMlSh/Z+qhIuBBFrv5CcW6evWsTtotjdDf
-         swUUWDveZrj2BkT0e/ju4P1tSuf/HvkmGORk+diR36prCXl3bmFswuH7Oo2bPTTcLvGN
-         oVj0+2kx4UdzrIyadFJ7tQigSiX6Eeb9I1use8mVHF4lAXuEe4Ot4NrChBcp+QgnXe7H
-         BmUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794364417; x=1794969217;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=s18d0QtUAH5SO1XlwoaKN258QqfdDcIgzB60hufTnb0=;
-        b=N+IeCdzQbzLwL4EQf6ztC6qNJeVqI6dWy07pTStKRcxXSgX2f3Mk8DoO5PtJNGWdqB
-         q29wtv5bssO81YW7ywe2bKKTO+VAwdtlDZEM0rT4QtEn4Wz+4umP4wcibR+xOVV1L5bb
-         OyRhzrth5UEHd+PJaGy5OMelD+i9C+Uz/fe6yNUU3hKnOJiARowdMBe3mU1Im43eyAhV
-         Wzfg6TUhhCLqHsQKq3fv2ZylfsrVMDgOmXmaG6pnxkDxLbOU3teBVXzsafmQakTFAVde
-         DFtTssex36RboXpD6aHNkxdKJmBj3iC+OKqmUXAWwxKQGMjsq0jHrtxgZqlSFPQDbgKU
-         13tQ==
-X-Forwarded-Encrypted: i=1; AL+hErE4d/QIfw7v6CQ1RZh81DfZQsXP4wrtJy5za9dVwzl0KTlkHY22QFTlPbHQADzRS0IqeHe6@lists.linux.dev
-X-Gm-Message-State: APuU4Z+wxzW0bS3Q1Ese3eNM9yP7eTqu+JTkP4txnMOVmpEpiYIHXR0x
-	HjBxsPbF+b8IcVfDi4ROKSJuRbBsbzAYQZ19k17yKJuxGphezuN9k3v4
-X-Gm-Gg: AYBFou09tNX4YwMyCmAxlR6pfuuSzlo9zhayOJOLE9zDs1v2o0wtjCROIaAqAGrp8Jd
-	D/KpM/g/HWTHUgHvuqv34574sqnwXB6hCXqPHAGruFDjm3dwV+nme9+9tsUde03MxEA4KUB8/pS
-	ripN25GTWcUefTI0UsqiMbdS8QBiCm8G1BdV54LPRabtqVQnyRkN/zZ6Vmx8hxw6gcDGPCk5DI2
-	L6WlzG1TbONB+uDRfG2P12jfM5iIuURLgHd+zkv+coO10HL1pbMeKx4rV2H1PAom6B7Lr/vXMgx
-	Mpl7vbegq9o/RVEC+I6YEhdYxhDHecSQouCQZHjq9uiPSjxAMWKFznKYZ/3SU4jRqhb43W11AYS
-	ubk/054WeRXb7UwS9S8Y63anQRUNtHJDuFGs6cdMk2KPorLmrh+6UeN+sINRyu/wRK3iTSRt2l6
-	p+a1u3sN4JURycD5+R0YK5+eL+T8WhK9NT28jbhFTa+uFtHdzWoUhk5CjEMM59ocZ7oXtdSr0AA
-	/KWc0vRixa7k0cyRjmMJdYCRz3uYhkDb4sCP303Eh5YN0UtKNXD0pEA4ob/vnsk84TQMIjEqCQl
-	RUVF3n89PAo9bA7aO1dx3hEciUDVZJU44LfksQv2f3LQ1Lhc8eD6hHGLq8VtOxGPLFNhbr/iA0k
-	TkZP3EGFkbXeVwLHb87asg6460N7TYoF0wjetLuCaL8DlJeN6G6DLZ9PA/Ao8qlOxSdURr7WZ+b
-	/djw==
-X-Received: by 2002:a05:6808:138a:b0:567:e9b5:37b6 with SMTP id 5614622812f47-56b97c1742dmr835978b6e.41.1794364416881;
-        Tue, 10 Nov 2026 18:33:36 -0800 (PST)
-Received: from ryzen.lan ([2601:644:8000:37f::e34])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-56906036028sm4103177b6e.11.2026.11.10.18.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 18:33:35 -0800 (PST)
-From: Rosen Penev <rosenp@gmail.com>
-To: Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] perf: arm_v7_pmu: suppress -Winitializer-overrides for perf maps
-Date: Tue, 10 Nov 2026 18:33:26 -0800
-Message-ID: <20261111023326.70922-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JDGfmDVJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD711F0089F;
+	Wed, 11 Nov 2026 05:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794375775;
+	bh=nORocrAayItrBzyQnIC82VLVgHUTeYt27rYJZ4ki2bg=;
+	h=From:Subject:Date:To:Cc;
+	b=JDGfmDVJ+hex/qOsctXp7GyByz7YHo7fs1BeF6Q9+rBnzTH9/zxobfEAYDngXnZCl
+	 hpc/ZHulZggoFozOnyby/57FnTzBYci6oYZta5NksFvZH6CmQeRKH7wAWG/YqSB2Ss
+	 +RDHECahClpspPZ5H6SaiF+mH7ZR92Zisi1WUQIIXj7WuH1q5XgJHJNkvYEq1rCAHB
+	 HnYfpPnGj2eXe7cGrkYeL8YVog8Uwv2zRinHrSJhEUDJMwox6gHrpnoDDuK66LvGV+
+	 Up0c6cpiDeBbpUM9PtWHELrAWs9cKetLnYsh6kE/vrxaaMcskpD5D1Zg2vfjhDy8QR
+	 34gRGCDzOtEeA==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/4] scripts/Kconfig.toolchain: Document minimum supported
+ versions for dynamic checks
+Date: Tue, 10 Nov 2026 23:42:39 -0600
+Message-Id: <20261110-kconfig-toolchain-updates-v1-0-6d4fb636290e@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,52 +54,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yXMQQrCMBCF4auUWTuQaakVryIu0mRSp0pSMmkRS
+ u9u1OUH7/07KGdhhWuzQ+ZNVFKsoFMD7mHjxCi+GlrTnonI4NOlGGTCktKrLiTiunhbWNFfxq6
+ nbjC2D1D/S+Yg71/7dv9b13FmV75BOI4P1EV+DH0AAAA=
+X-Change-ID: 20261110-kconfig-toolchain-updates-d8b351370a5f
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Julian Braha <julianbraha@gmail.com>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2057; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=xzuUcXk4zdCkNBnPsLRFjsTKL6wCPr7JTtKujp6wM9s=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFlfGMKdg4obC6/N022/dPDzFq0Pmx493ro6es2ChgVnd
+ 6vdOOi9taOUhUGMi0FWTJGl+rHqcUPDOWcZb5yaBDOHlQlkCAMXpwBMpHURI8P226kM+zvOvmLn
+ sGblvCMel/uCdcPi/PbjKm9KHtdJn9Zh+B9lO2nST9/29TfYvWemLNP6yZd+a3HCjQqhyNBJ0n7
+ PfvIAAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-The perf_map and cache_map arrays intentionally use a range initializer
-to fill all entries with HW_OP_UNSUPPORTED / CACHE_OP_UNSUPPORTED, then
-override specific entries with supported event codes. This is valid C99
-designated initializer behavior (last initializer wins), but Clang's
--Winitializer-overrides warns about each overridden entry.
+Hi all,
 
-Suppress the warning around these array definitions using the kernel's
-__diag infrastructure, since the pattern is intentional and widespread
-across all CPU-specific perf map variants in this file.
+Now that we have a fairly unified location for compiler and linker
+feature checks in scripts/Kconfig.toolchain, we should make it easy to
+clean up the checks as they become obsolete through minimum supported
+version bumps by documenting when they were first supported. I somewhat
+modeled this after the documentation in compiler_attributes.h but I did
+not want it to be as verbose.
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+In doing this archaeology, I developed a few prerequisite clean up
+patches. The first cleans up CONFIG_CC_HAS_NO_PROFILE_FN_ATTR since it
+is always 'y'. The second cleans up '-fno-addrsig' handling, as this is
+an always supported clang option for a clang specific feature. The third
+unifies the GCC specific "no allow store data races" flag.
+
+I tried to add some commentary when the option was unsupported by a
+particular implementation but I am on the fence about whether that is
+actually useful or not, especially since they might go stale if the
+other implementation starts supporting them. However, I included it
+anyways since compiler_attributes.h can have the same problem and folks
+can check before removing or adjusting the option. If people don't like
+it, I am fine with dropping them and only documenting the supported
+versions.
+
 ---
- drivers/perf/arm_v7_pmu.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Nathan Chancellor (4):
+      scripts/Kconfig.toolchain: Remove CONFIG_CC_HAS_NO_PROFILE_FN_ATTR
+      scripts/Kconfig.toolchain: Do not dynamically probe '-fno-addrsig'
+      scripts/Kconfig.toolchain: Clean up '-fno-allow-store-data-races' handling
+      scripts/Kconfig.toolchain: Document minimum supported versions for dynamic checks
 
-diff --git a/drivers/perf/arm_v7_pmu.c b/drivers/perf/arm_v7_pmu.c
-index a1e438101114..9ac28c8adf80 100644
---- a/drivers/perf/arm_v7_pmu.c
-+++ b/drivers/perf/arm_v7_pmu.c
-@@ -146,6 +146,15 @@
- 
- #define SCORPION_ITLB_MISS				0x12021
- 
-+/*
-+ * The perf_map and cache_map arrays use range initializers to fill all
-+ * entries with HW_OP_UNSUPPORTED / CACHE_OP_UNSUPPORTED, then override
-+ * specific entries with supported event codes. This is valid C99 but
-+ * triggers Clang's -Winitializer-overrides.
-+ */
-+__diag_push();
-+__diag_ignore_all("-Winitializer-overrides", "");
-+
- /*
-  * Cortex-A8 HW events mapping
-  *
-@@ -530,6 +539,8 @@ static const unsigned scorpion_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
- 	[C(BPU)][C(OP_WRITE)][C(RESULT_MISS)] = ARMV7_PERFCTR_PC_BRANCH_MIS_PRED,
- };
- 
-+__diag_pop();
-+
- PMU_FORMAT_ATTR(event, "config:0-7");
- 
- static struct attribute *armv7_pmu_format_attrs[] = {
--- 
-2.56.0
+ Makefile                  |  5 -----
+ kernel/gcov/Kconfig       |  1 -
+ scripts/Kconfig.toolchain | 45 ++++++++++++++++++++++++++++++++++++---------
+ 3 files changed, 36 insertions(+), 15 deletions(-)
+---
+base-commit: 7f705c0ad1c7cab3d8de99a3a67937bc82fc8481
+base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+change-id: 20261110-kconfig-toolchain-updates-d8b351370a5f
+
+Best regards,
+--  
+Cheers,
+Nathan
 
