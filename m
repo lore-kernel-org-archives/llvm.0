@@ -1,69 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.111
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794470458;
-	b=O34avB7c+ZNYol0uzNdNayX921dNyWH4bBBzpENaY0oFSu7PegefN9iCdZavklhJO+N3
-	 HQBepV0aBq+Uk9OfNurzYXmEjXXgVhAo3CzFrzenZZqzwrX9t3EJ9WDWCCCn+z1kbI+FD
-	 fGGdtdYUIdKmx5Tu5gJh1Fexl35my2Z/JmDTGTf+Kqli8QPf2Vn58LrCar9+cRAcSntLV
-	 JfrRLZE2E5LsoRN5JGJ49akxgpgpau/HW7DiAgDApvzXuQuQUBA9fKALHprVyRE/G0fqm
-	 EMOAntsXpu5rWrSb0LUvJFlrxhGIAaFwxHPdHc7AsyC7SrCgK/rahw/TNpkMBDwoFPA==
+	t=1794470714;
+	b=K3ai8Oep3Ayd7efQeVtPp4PVNruYSuULNnX5KFH0bltwOaP7JrCAm0ZtE76Dgys+8h4z
+	 kC48c3RW/V2LBFJgKzzRHG8ra10Ak4XpWhdchXnP6IAv4LsCj4k+/9RsV6OFNq/qPagrs
+	 56tSEIsNGEum/vMNRbIlIjpDr/PYNgF3odXbhfuTOk2PBIrxJT350MnFZ2L2rTPlHfxir
+	 u5xRCwMNMCo/TlgUb1GCUz23h5XoekOBnJWsBh9d8Faod/zgrdODkNTk/OQspcsUQlTFC
+	 AV9MeIklpLZRpn7f69Syjsd7VEIqV6k7WSJsriORtKIGYeTyj6UOTAiuF0PLmc++vPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794470458;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=Cm7AtxdM5CH1FUBVqHh5yaMh1nV0eZJjc/Ip3saInLw=;
-	b=Uvts6GUCnwQtlf5JCZMc3mvG4HEz+Jxz3W3wVxW/6aKKrjgU7XpgPclkYRBdPnr8c9UR
-	 jWoCkUzgUd0M599i1B4507Q6grouedSUB45m9FpR/gRrV641G/wtr24cirlap4q5HCGYo
-	 DnXDGOMG3jiN9Q4C9VcPc1Pwgxrycz1ILlATWYytOiJfL+vz1F1o3U8pTZDir2ez/o5Ws
-	 3ZZ11SdVCv8qVZ/EbnXl7DfOAYlZmyTx7O2rl9MLCxqkFOQ7J53IaN156+oCbc7eyLYSV
-	 vgBJr9+vLNpjtTFKQe0z0Ikq0opYyHPuALJ1rbv9sDWD/F2dw2L3AEqg6JT/C+b9B1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794470714;
+	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=wbKyXXPEsHUw7FHzXJao5FJ2QpebW01qg7WPK2+9SIg=;
+	b=eodBHXPNUGOZrYkrbZNCh7NEqVloZt0o/0wxi/QQyHTXt7d7D0BJSE61lIfT7MiY/mmF
+	 7b9WcPUmUI3/jlZ9CaAdsV983O+IUb9m/aRKJP6MJYaHxD9990qxOn4xFYX8wkbODMh+V
+	 koTUeLHQn0clodmXhZJXvrBQQkx9R3ypQbt2VDbuHTQkmjm9cxUutkdbRYGKRQeGeMU8R
+	 6m9fvD+V+SqUO3irCc3rL45P7SQbsUkDq0WympmXDzINJO827GCdkoxXDdmUzVm3ydFHA
+	 1b0fsgCk0ODbVUc9l491557i22WcCaiDCvK2jD53Lm+/ELS4xC5pmus3xN+CWzmCowA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=NB8DUBSN;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dmarc=pass header.from=linux.alibaba.com;
+	spf=pass smtp.mailfrom=linux.alibaba.com;
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b="fy/QdRra";
+	arc=none smtp.remote-ip=115.124.30.111
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA09606A321;
-	Thu, 12 Nov 2026 08:00:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAA09606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EF1606A31C
+	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 08:05:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B9EF1606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=NB8DUBSN
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Cm7AtxdM5CH1FUBVqHh5yaMh1nV0eZJjc/Ip3saInLw=; b=NB8DUBSNjgFxHyXncVqzp3mDq8
-	Bep8qNMh2Xthp+6jkWveq7/mcgyypw/bmfycCoczUI20lvNEve2Qcl0sVhf3pcFPYVXoP31bnpzBj
-	YYmsFQaRNEX50h+zYSqlxkhq+JyTBB5Ha8n+yb4ZpdlR2TQnH2DvONHkmfvUHYStUD9uUtczYCEug
-	br+gVQGOcwr1f9GxpBD7q3cLPqUfOW+zIiCAO+Cu3f6szwPjoDuEuaQnmUF+Ys0kBFctgXawFay97
-	XzUBdac1pA6lt07IJiQx7RbsvADFN6t/yjyDt8npZoPqBb4yi5Q0eoxXdsJ0hSrD67oZxQhMtgjO7
-	o0YmBSXA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xRPjn-00000004nAB-1Aql;
-	Thu, 12 Nov 2026 08:00:51 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2AA9130066A; Thu, 12 Nov 2026 09:00:50 +0100 (CET)
-Date: Thu, 12 Nov 2026 09:00:50 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Ben Cressey <ben@cressey.dev>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@kernel.org>,
-	kexec@lists.infradead.org, David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH] x86/kexec: Type relocate_kernel() to drop __nocfi
-Message-ID: <20261112080050.GZ2668804@noisy.programming.kicks-ass.net>
-References: <20261111-x86-kexec-kcfi-v1-1-b4d41ea14deb@cressey.dev>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=fy/QdRra
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1794470710; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=wbKyXXPEsHUw7FHzXJao5FJ2QpebW01qg7WPK2+9SIg=;
+	b=fy/QdRraoZ3DWUdUf+/rvpVeYGY1wBK6acx2MOesqC5rc+mj43RlvteAptK0ItqNl/lzvHOYt3Yt/j/lzZWyoIdce5pecTSO8IymmS1lIYZ/UkDGjsjMUiUHvzQZv+rzqM9dSpWgejBJqEkYD/ryDKmSS4oN2Zuj2G6SZk9QWxU=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0XEbNi01_1794470708;
+Received: from 30.74.144.134(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0XEbNi01_1794470708 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 12 Nov 2026 16:05:09 +0800
+Message-ID: <787a1ba3-df93-45f9-abe1-3fcdefbe41cc@linux.alibaba.com>
+Date: Thu, 12 Nov 2026 16:05:08 +0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -73,30 +53,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261111-x86-kexec-kcfi-v1-1-b4d41ea14deb@cressey.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/shmem: drop the second folio batch from
+ shmem_undo_range()
+To: Qiliang Yuan <qiliang.yuan@linux.dev>, Hugh Dickins <hughd@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
+ Qiliang Yuan <odys.yuan@gmail.com>,
+ "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ kernel test robot <lkp@intel.com>
+References: <20261111-bug-mm-shmem-undo-frame-v1-1-e50a95b8f9b2@linux.dev>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20261111-bug-mm-shmem-undo-frame-v1-1-e50a95b8f9b2@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 11, 2026 at 03:26:59PM -0800, Ben Cressey wrote:
-> machine_kexec() calls the control page's copy of relocate_kernel()
-> indirectly. The routine has no kCFI type, so all of machine_kexec() is
-> exempt since commit 2114796ca041 ("x86/kexec: Mark machine_kexec() with
-> __nocfi"), and ANNOTATE_NOCFI_SYM() silences objtool.
-> 
-> No other call there loses its check today, but one added later would.
-> Review of that mark on arm64 preferred a typed entry, and objected to
-> covering a whole function, on x86 too [1].
-> 
-> Typing the routine was set aside in 2025 as not worth it [2]: a type
-> from the caller cannot catch a prototype that drifts, and
-> machine_kexec() seemed unlikely to follow a stray pointer.
-> 
-> Type the routine with SYM_TYPED_START(), emit an ENDBR only under
-> CONFIG_FINEIBT, whose boot-time rewrite skips a function without one,
-> and drop both exemptions, along with kexec as a valid use in annotate.h.
-> 
-> The check guards only the pointer, and not reliably under plain FineIBT,
-> which checks in the callee with IBT off. A failed check panics or hangs
-> with no CFI report, since load_segments() has reset GS.
 
-I don't understand this; what?
+
+On 11/12/26 11:39 AM, Qiliang Yuan wrote:
+> shmem_undo_range() keeps a folio_batch and an array of FOLIO_BATCH_SIZE
+> indices on its stack. Removing truncated folios from the page cache in
+> batches added a second folio_batch to collect the folios to delete.
+> 
+> That grows the stack frame by about 200 bytes, past the 1024 byte limit
+> of mips eyeq6_defconfig built with clang.
+> 
+> Pass fbatch itself to delete_from_page_cache_batch() once the swap
+> entries are gone, as truncate_inode_pages_range() does. Undoing a failed
+> fallocate() only removes the folios that are not uptodate, so remove
+> those one at a time with truncate_inode_folio() as before.
+> 
+> Stack frame of shmem_undo_range() built with clang 18:
+> 
+>    config                before (bytes)  after (bytes)  change
+>    mips eyeq6_defconfig             928            720    -22%
+>    x86_64                           920            712    -23%
+> 
+> Fixes: b97fbd541ecba ("mm/shmem: remove truncated folios from the page cache in batches")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202611112032.TMyPU6Rm-lkp@intel.com/
+> Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
+> ---
+> David, this applies on top of b97fbd541ecba in shmem-7.5.misc; please
+> fold it in if you prefer.
+> ---
+
+I think you should send out a complete v2, and David could queue your 
+new version.
