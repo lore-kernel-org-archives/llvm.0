@@ -1,102 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.118
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794446961;
-	b=C10yUgUdBzP62Fm/QcdJZ46R7gEPM/KU/DS7F2bSTw+0vHLNSPGAfbf59+ht/oCLCyCx
-	 XHU0fLHqGHp7n1osM7JmuM/Eg8OkITGumMJz1YdrKaQMGkIGmPK7N4Qrri7wqPDYQ1tl3
-	 c0A5S48q0I77Tb5qCaTXy13s6GtfeqWNYzN1tFIHWUY6QzWACzY6bGLgjVjO6aD+i21n+
-	 8Bx8Yt1FPCTrOr/J7O6Ze1DQGLEtrHoo+1218C+yBy+JQhiFV+WXhKwdtCBjePjzMeCe5
-	 iLh+KvhZAjVPHsGodPhC9FQYpW64dyHOR7JkHXT4Jzb91luB8c/PPVCI3Vl2AnHY/NA==
+	t=1794454761;
+	b=ExZOfCNiJQySruCdsbOJ0PLL0AsVZqOfLruO2R+wfAVPlrptXPbnVURGJ//9WqGPC74i
+	 AHQdRO8lCekuaMFlOGKdLS97pdxeoVsFI/X0BzxBl1SjrR4vuV+n1yiIInmhpZIcjwY4n
+	 ItLu5oAgx2G9Rpr/ZpK3a+trREr1ZeVr/P0TPnN3T/ER6ZSzPqlX2g5s7mkLgrSNNn8c4
+	 5DCAYL2Gz3hsjH60s2cr03UutBABylm5wdy6o6dTcW1ajk+dQdcGCkUGHcp3OY0xmAtnW
+	 WjumrlWqwg6rmphpoyQ/pYXZAbWQbAVbOxgGbPn79TSbrkElDsru/6ja+GNeVnwlL6A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794446961;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=naeHT3lsD43WVFFXOIg9/UkqxmnGM41dLQc0bv16TWs=;
-	b=GiS0rdr7A5M4TaSyxYhS4wFqUpQZ3dT32BQUaLdL8LCalsfyrsP5ak6DXvODgDQFGa2f
-	 0RplkxuP+W57oOk9r/lU30L8ntvMywtCMI0NXgk2zA63gozUxAm8ASkvSY4zylv8xiLOQ
-	 koz4i+LT0NCcc7vdpBbSF9UylXMXfWlGW6wbMMDTodVkuGVt2G35Ofo2RB1YvhGQfc2LN
-	 zMLJOb5ke4D+fsuL7Uz9uH5r3/37C+nTxfTOPFTZnOAA4FzlztiL+mobsI71qEbNlqfFx
-	 JooGjz5angr9fP1DCeEhD5s13LvWAaJ1SS3w3UnV8kRntcgX9UGHtawVR9fiDvuZwFg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794454761;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:To:Cc:
+	 X-Mailer;
+	bh=lN/piXhtdPACOa13WtNqIwYIKwldh3lDc6Fab80206s=;
+	b=slakr1LZb2Rd0kTWZEu3/ztuPys/fLw9HH/NBGjFo0IplzhSMTwVLpE+48Bah1XrQyBf
+	 SpW8cnJV29OoZjzPWw6cFQZnPieOiI2VX+J2S9/5dJdHrfJCUqKiP+ktTzfXwH0xRMHgA
+	 2ZktrnR0HNg5VuhpFxlimgdxT9Mf+kDEMxScv3782eMzip4Wjt02QdzAXMUKtiaejnA6B
+	 XL9YPoz0ERW52Kc0kCU4hTkOq/nUsWb89xWZe4vb1zvVQvZcrZk2BEu9FSM7eJqW4YA/k
+	 fhYEmBSiRR8/jyLt20xbTvWbF3zU76G92BJYCA+soKscubwxiDQLgA6WL0qPrQIo7Uw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dR+4nUqB;
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dFuC2xlQ;
+	arc=none smtp.remote-ip=91.218.175.118
+Received: from mta0.migadu.com (out-118.mta0.migadu.com [91.218.175.118])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5896D60A2627;
-	Thu, 12 Nov 2026 01:29:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5896D60A2627
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097D0606A321
+	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 03:39:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 097D0606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dR+4nUqB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794446961; x=1825982961;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=drwpAsrOFw4B/qCkDMxl8Rzegtt/n6DW8SOYJld6ACA=;
-  b=dR+4nUqBg1xP5hLwWGCi48LPh3R4Z1e+9HVF2DiAxa7vIuqzFzs5+cEK
-   dANeswCa4jq/MwJLiRYwr/0HCp1iV3EQPYPalLgNQ3Iv2YEeCmQnvqq6F
-   SLoiLNo3H9LawT65jaCBZGLOUMPHJWgUMYN/17xSY7H3O2uldga4R2MRu
-   1MrHAn+n6djSYIwAEYYc6Y1jLHw6i/1oiBpDToboA7+lcAR3ejJPNMQME
-   XhjJQcDFxBsS5y3JOKfz532lZFemDySb0t4xxJa+7Oq8o4wJ2Msg0RrqW
-   aQcKL22n6RuXXJ8fEPgf4G+deuSx+LUJZt83aZ7gxWLJYXx7OXGGKqSyz
-   w==;
-X-CSE-ConnectionGUID: yDyFFMfOQ7qjs3Hzoi8k+w==
-X-CSE-MsgGUID: SOrm4ri1S+u3c8R48EJUBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11963"; a="3306722"
-X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
-   d="scan'208";a="3306722"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 17:29:20 -0800
-X-CSE-ConnectionGUID: wXIAkD9OSb+cGo57KrKyqA==
-X-CSE-MsgGUID: KnBwmaLHRL28S7SM9UOKBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,208,1787036400"; 
-   d="scan'208";a="10415943"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa013.fm.intel.com with ESMTP; 11 Nov 2026 17:29:14 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRJcl-000000010BX-15iQ;
-	Thu, 12 Nov 2026 01:29:11 +0000
-Date: Thu, 12 Nov 2026 09:28:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alejandro Colomar <alx@kernel.org>, linux-hardening@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alejandro Colomar <alx@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Andreas Schwab <schwab@linux-m68k.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Joe Perches <joe@perches.com>, Johan Hovold <johan@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Len Brown <lenb@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Saravana Kannan <saravanak@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tom Zanussi <zanussi@kernel.org>, linux-acpi@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 2/6] string: Warn if the prefix is the empty string
-Message-ID: <202611120922.GqXZB0lH-lkp@intel.com>
-References: <cd09427148a0c4718b46029c9e806f9dc1622f9b.1794425425.git.alx@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dFuC2xlQ
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=WagULwVSRwlFPNiHuU3y1792mcFYfBmerRUsHRfoDYc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794454758; v=1; x=1795059558;
+ b=dFuC2xlQS0kBW4rA/SkuuSMMjDzLesUOn3lOhPo3LqBgk+ewSOvk5zl+BH684JbONMg8J5CN
+ 4xRD7QC15enpDveMdaAKmTpkz2+oXbyUIkJa4ZzYbJZ0JQMH6LOyBxA4mXONTZPcf1i5xHKn+rz
+ ciEjwSM/JXXx9dRkBFtehcLw=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id da00386efe8865b5;
+	Thu, 12 Nov 2026 03:39:18 +0000
+X-Mizu-Trace-ID: da00386efe8865b5
+X-Migadu-Flow: FLOW_OUT
+From: Qiliang Yuan <qiliang.yuan@linux.dev>
+Date: Wed, 11 Nov 2026 22:39:01 -0500
+Subject: [PATCH] mm/shmem: drop the second folio batch from
+ shmem_undo_range()
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,80 +60,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd09427148a0c4718b46029c9e806f9dc1622f9b.1794425425.git.alx@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261111-bug-mm-shmem-undo-frame-v1-1-e50a95b8f9b2@linux.dev>
+X-B4-Tracking: v=1; b=H4sIANQ09WoC/x2MywqAIBAAfyX23EIK2eNXooPlantYC6UIon9Pm
+ tscZh7IlJgyjNUDiS7OvMciqq5g3WwMhOyKg260UQVczoAimDchwTO6HX2yQmhMr3tSQ2ddC6U
+ +Enm+//M0v+8HA8ESc2kAAAA=
+To: Hugh Dickins <hughd@google.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>, 
+ Qiliang Yuan <odys.yuan@gmail.com>, 
+ "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ kernel test robot <lkp@intel.com>, Qiliang Yuan <qiliang.yuan@linux.dev>
+X-Mailer: b4 0.13.0
 
-Hi Alejandro,
+shmem_undo_range() keeps a folio_batch and an array of FOLIO_BATCH_SIZE
+indices on its stack. Removing truncated folios from the page cache in
+batches added a second folio_batch to collect the folios to delete.
 
-kernel test robot noticed the following build errors:
+That grows the stack frame by about 200 bytes, past the 1024 byte limit
+of mips eyeq6_defconfig built with clang.
 
-[auto build test ERROR on kees/for-next/hardening]
-[also build test ERROR on driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus kees/for-next/pstore kees/for-next/kspp linus/master v7.4-rc2 next-20261110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Pass fbatch itself to delete_from_page_cache_batch() once the swap
+entries are gone, as truncate_inode_pages_range() does. Undoing a failed
+fallocate() only removes the folios that are not uptodate, so remove
+those one at a time with truncate_inode_folio() as before.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alejandro-Colomar/string-Add-strprefix-and-deprecate-str_has_prefix/20261111-205515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-patch link:    https://lore.kernel.org/r/cd09427148a0c4718b46029c9e806f9dc1622f9b.1794425425.git.alx%40kernel.org
-patch subject: [PATCH v4 2/6] string: Warn if the prefix is the empty string
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261112/202611120922.GqXZB0lH-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c628d639fc66f8e6d8ab1f0cc6b1df38f974e020)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261112/202611120922.GqXZB0lH-lkp@intel.com/reproduce)
+Stack frame of shmem_undo_range() built with clang 18:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611120922.GqXZB0lH-lkp@intel.com/
+  config                before (bytes)  after (bytes)  change
+  mips eyeq6_defconfig             928            720    -22%
+  x86_64                           920            712    -23%
 
-All errors (new ones prefixed by >>):
+Fixes: b97fbd541ecba ("mm/shmem: remove truncated folios from the page cache in batches")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202611112032.TMyPU6Rm-lkp@intel.com/
+Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
+---
+David, this applies on top of b97fbd541ecba in shmem-7.5.misc; please
+fold it in if you prefer.
+---
+ mm/shmem.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-   In file included from scripts/mod/devicetable-offsets.c:4:
-   In file included from include/linux/mod_devicetable.h:31:
-   In file included from include/linux/device-id/hv_vmbus.h:6:
-   In file included from include/linux/uuid.h:11:
->> include/linux/string.h:575:2: error: call to undeclared function 'WARN_ON_ONCE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     575 |         WARN_ON_ONCE(len == 0);
-         |         ^
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:185: scripts/mod/devicetable-offsets.s] Error 1
-   make[3]: Target 'scripts/mod/' not remade because of errors.
-   make[2]: *** [Makefile:1424: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 156469423a866..5bcbdd6078a73 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1352,9 +1352,6 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, uoff_t lend,
+ 	index = start;
+ 	while (index < end && find_lock_entries(mapping, &index, end - 1,
+ 			&fbatch, indices)) {
+-		struct folio_batch remove;
+-
+-		folio_batch_init(&remove);
+ 		for (i = 0; i < folio_batch_count(&fbatch); i++) {
+ 			folio = fbatch.folios[i];
+ 
+@@ -1366,13 +1363,14 @@ static void shmem_undo_range(struct inode *inode, loff_t lstart, uoff_t lend,
+ 				continue;
+ 			}
+ 
+-			if (!unfalloc || !folio_test_uptodate(folio)) {
++			if (!unfalloc)
+ 				truncate_cleanup_folio(folio);
+-				folio_batch_add(&remove, folio);
+-			}
++			else if (!folio_test_uptodate(folio))
++				truncate_inode_folio(mapping, folio);
+ 		}
+-		delete_from_page_cache_batch(mapping, &remove);
+ 		folio_batch_remove_exceptionals(&fbatch);
++		if (!unfalloc)
++			delete_from_page_cache_batch(mapping, &fbatch);
+ 		for (i = 0; i < folio_batch_count(&fbatch); i++)
+ 			folio_unlock(fbatch.folios[i]);
+ 		folio_batch_release(&fbatch);
 
+---
+base-commit: b97fbd541ecba5d6640077618e9dfec6f5e71132
+change-id: 20261111-bug-mm-shmem-undo-frame-66828e197ad5
 
-vim +/WARN_ON_ONCE +575 include/linux/string.h
+Best regards,
+-- 
+Qiliang Yuan <qiliang.yuan@linux.dev>
 
-   555	
-   556	/**
-   557	 * str_has_prefix - Test if a string has a given prefix
-   558	 * @str: The string to test
-   559	 * @prefix: The string to see if @str starts with
-   560	 *
-   561	 * This is similar to strprefix(), but returns an offset instead of
-   562	 * a pointer.
-   563	 *
-   564	 * Unlike for strprefix(), if the prefix is an empty string, the
-   565	 * behavior is undefined.  If you need to support arbitrary prefixes,
-   566	 * use strprefix().
-   567	 *
-   568	 * Returns:
-   569	 * * strlen(@prefix) if @str starts with @prefix
-   570	 * * 0 if @str does not start with @prefix
-   571	 */
-   572	static __always_inline size_t str_has_prefix(const char *str, const char *prefix)
-   573	{
-   574		size_t len = strlen(prefix);
- > 575		WARN_ON_ONCE(len == 0);
-   576		return strncmp(str, prefix, len) == 0 ? len : 0;
-   577	}
-   578	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
