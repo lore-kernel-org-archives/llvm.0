@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794480305;
-	b=LN7YsJIUsMIjE3yOlwAPt1tvRQq0a5tq2Drml7SW8Cx3EVzc12b2XPB937+qitouMUGM
-	 QjSPuDlG2oPT0BZLjkinHlhIhDyIrb1UsdKDLL/I2NfpWwextifX49BYCkyQyNpWo8n7d
-	 fxaiHRCW/zdVoyYdWNDC6N00X/HcKEGWyx8ReN7pS4yRmC8G4x2davsixLWcIyMTMSQNt
-	 ZgPyrZJynbMCm/BtWaStJKqTo+fP6IZk6JcoGUFjB29J8f6FcjvjJLvOGdlvyoI8DDWZ1
-	 AzG/o/O3zcgnlXstGhzAVkgDZYuVoZGQGNeSjlaWKaNFr+C2pZKGMoYqJuOb8PnPzGQ==
+	t=1794480324;
+	b=yiAxHUSC+1wOdE/MolYEUohGZ0aIRNOYaQwswdpMHydzFbhwl2/aQyaKdCGr2DeeZmoL
+	 ahRRSbRf5K06JNvqVbbEd/cb6KvaQuMtaHUrkUQz+79jJS6SlcZqC4ZeTWII2LCryA2MU
+	 Nh6cQKOYbbNMYm8GyPPO6UMtgOZa+6cQJ+HSjuR4OpncPkiM/whNIrDJ5uxjI4Yq+bog6
+	 hMQtXJokVts5ATlUwsJ+I7dKfIUg9A7BAnxrGP81I2AKtUoetnS718LwbGmOkyHuLrAsY
+	 6T8QlLB6Js25+UUd3t/Qnvtw2wz/AGD79C07fbH8VwL4d2TqCOSjoKrHmZ8gH+NaboA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794480305;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794480324;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=INpeTcchLLbS0psUlyWopVBCXTqH0HdLEcZJcLgnzp8=;
-	b=VJgm0hXN/pYZxIs1mSG3rFMlqIon+OpNqzl6UFrXnltT1J6FCZOI4ZAx1KcJlBdXDNY8
-	 iX8UaiA6BPgW4EX5lOltcEZV2LRasTFFRKE4iH2f5A8tNFv0wWz09l9xz02QcE6qubEEM
-	 Aqy+ZSbE//jIbSRZ80QLwEiBLjQfLp5vmf5/TTbqB5QT4Yua7OyhoVNRTwlgIxFPEFHOW
-	 nrXOx4N4EVZfRRMMSrNZBFrm3UNgJwNc4kZYAKIAbtBcXUhAc20QvkarqOOr44TiLz3R3
-	 XuwGkJ6m2dH8CN5iN6QM+8Fwd/tco0G7f8qb4YB1gqAI57jMm16xXUt0xiWjZo0JHJg==
+	bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
+	b=ryTjMC1GXMjuKnMCNF/WdYNLMzEPfYukdCzQ5B6Fkfq4SVTIFAW4awcpbka7DMOIOUdz
+	 DanHPLCI15Ew2RNvQtM0+sO1j8S+gLfl6B9fea+O/lj1Vug/2gCpY1PqeFZuGaT/VMkBG
+	 Y7TpDVFmAylGNwwC4LOOfU5D9gY1BGix27w8Ydr1MHz+2L+YXH5R5hKCWC1xnqNnH9mOn
+	 RdNzf3gYenHD+PUFcn+FBEuAetqpkyA6e9KM9R2X7EpLlRPQ4Yfo54pl/wuiT6TSI4x9N
+	 ZnmFGbB5bzXKjT/kHZSot/AfbSxF3qzw1N5o51lOyjnNt96qw1vmlhm855C5S17SU5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bytedance.com;
 	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b="MEDI/eKq";
-	arc=none smtp.remote-ip=74.125.82.42
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=P4cPgsRU;
+	arc=none smtp.remote-ip=74.125.82.172
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E59606A321
-	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 10:45:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8E59606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BB8606A32D
+	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 10:45:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14BB8606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=MEDI/eKq
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1a3c08d6928so6810574c88.0
-        for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 02:45:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=P4cPgsRU
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-3720addb068so7337895eec.1
+        for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 02:45:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1794480304; x=1795085104; darn=lists.linux.dev;
+        d=bytedance.com; s=google; t=1794480323; x=1795085123; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=INpeTcchLLbS0psUlyWopVBCXTqH0HdLEcZJcLgnzp8=;
-        b=MEDI/eKqQLMtNEbg8EaFI6La0VCasGnkYnypfPABgQR3lTbF+wYkXlbB+LxHXlT7/j
-         F3PfzORJjBz/Wku87qFzrYnMT35T+Ue/3W4dY8+BRociKm1sYPLuVQDzZ7BsqOfZX5Mg
-         /NnmbPD3Ap2LoXpaA3K3iAXIwTMxkBFGINiCE6pwRI/6kO/qW+MYKpFPW7nP+cUiY+mb
-         SNPRifgq3rdggif/iaetoFmi6BNTsH1pPYjPN/H3K7BNvj7aj5RLTdF7ZPI07E7DicTM
-         Rg1JPRrbCJfX4Vple2tz/dtsJLMTR3+NN2Zc8JixRGcNvBi/dKrQL4oMZBzMe4uyhR6z
-         QrmQ==
+        bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
+        b=P4cPgsRUA0z9rjuQJZWmjl/JbuIY0yIn4830h1YPw4TJgqwLlkjEuUhhw3Bjtkxj44
+         Z8GVveDA5t9Axyh5eqnY5zOPo2oiz4ShEIUYXaxHDW7GvFfAhv+cdac2xby4GWXMhEfB
+         XSD9TCmdLjBPWypuDIbnpvRzyUvE8HX/vp/U8dSCsp/ouJmCMY4qd5MVthBpmeAco9Dq
+         3jNbi/u9wXpVtXQpHoQHAxRYLIsOR7aQkSSoppDY/IviHcSDNk2QS9bK3n2vog8WRqaV
+         hM2Cu9M7LkGLX24IafifrjrtbNSEhEwHFiiUZiQh0YTSasYzlEOzrKp43jFNPCKGTVoY
+         dvrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794480304; x=1795085104;
+        d=1e100.net; s=20260707; t=1794480323; x=1795085123;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=INpeTcchLLbS0psUlyWopVBCXTqH0HdLEcZJcLgnzp8=;
-        b=1UyUe5f2AU92oB+Xv+tgd4K4CJWwLJEIW0L8mHNzSfupxtsfQ+Om08nVdJeILjc3uP
-         CmvvPIqpvQllkfjyFzT5tBJUSQh9PT66mEhKOrl8ANpSNd1m83txZwt650ZZor6D+3TX
-         aDjagp79d8yEz4vtC2X249DmbwP6HgLlJKPGhhq5EWQLFTa+zEwGTAguvxA9UIGMm6N2
-         NDL/lHUD5McVuYgqZ1RfgMfbUQ5md7V9iAjyZsDojabIdsyMWvMqPTBJPNo52jUXTbrL
-         8/OO9xPZE+cGv/OwGEfKXkQwUo2MaoZbAYFU03PH1gCEaY128LSM7H6IUHmQJk2xmWZQ
-         ziiw==
-X-Forwarded-Encrypted: i=1; AL+hErGfAdTGpFQvCKdKeoYQ4/Xa+AVnUi90eEyaxoPfrzUd6rBCfZqcsiHXsMQdse3sYtkngAya@lists.linux.dev
-X-Gm-Message-State: APuU4Z+81hkGaBbAlNWbeUyWtOqvMJ8nFKGYpDhREyJHHUFGLFQTN2CD
-	lQ73vUGtGlY7UJ3tcGE/GHDICCvKmhYBBH7z+VZMl4ai370dKmy35QNtO5sF/rehSTg=
-X-Gm-Gg: AYBFou0AsTZxTn+dS4cFT7cVt4foBwg6mddrznKXCpNhRSvntKjmnlK3YzcV/1F/yEz
-	girL6TxwVNE/q6xShQ8mIqtuzX9rOQpaYxNqIN5eHPD7b0iM00c4PeJ7YxNgJHlKsI+rEdUZjVr
-	nM7zx/xAe9oefF7b+UItIn97nbYoedsauzqkhsjN0Wd4vBn8Ps7xEqyj58OufUEgYSfbWUWG4/E
-	BBPk3rEhMqc96N4q87EozDO3mU1i8IYGlqKJgDQWUvfOHusKz/qEDtX4IaqL4gEYaG0BkkgCPQl
-	KfTBla3hfXdUkeoqXAG+R+/qwq7wCdAImB6Z5Kj82Eh6Szhsg1WtSTPOxVfbINi5b4rAzYj1gRU
-	AFX9zEuoZxeMz+Y9Pd77YF1W6lqhswrJr14aZWQWHyjQ1Dd4OMm7FoOqSqiQaJjUM1Y7XZtWhhd
-	7ivKmsEfdbnKII3YYFmXTdTS4ReDRi5Z2rRliaFGADpdaHkJjXAuC67Ug7l7TIq3RielPjyb66l
-	JBWIqh97BGOfbOZmvZ/9C//qQV9vxLrB//WoD/fnYQtVFJdpnUK3lz3sPl7/OhlxXHCDVBRhM7W
-	uJLBIO5f0hSaF+DuXGB/DKU/FewcT9j1gvsO+bJCuQBBZ7KZkLMloqgqV5yZuye5Qac=
-X-Received: by 2002:a05:701a:ca05:b0:166:5552:780a with SMTP id a92af1059eb24-1b3c02f379amr4916378c88.8.1794480303681;
-        Thu, 12 Nov 2026 02:45:03 -0800 (PST)
+        bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
+        b=bdSmUq4IJgyj0TLAU1wlGuiwvuKVAk9rmGZipI1TWSgKU3Bn6LCtzpAgmDZ8K7N2dz
+         C8DvDUm42FCz7uVa93+BjJLuDonm7nXVz+rGg5MKlvaU1XjLcmMxI+U0qMCY1E//9u82
+         ag5o95q/6Yk5KnHXPhBN1YegCq3Kk1yzBIVrCPBg6lr82SC0hyOSRcVlKdNPUncU+SCQ
+         3hrZq8ZbfgKOOQyVIHBINY4LmeQSKAPDXcXxrbtJbD+SrhFPyIKDq6039o4ukuFSUv0F
+         s75Pw9EgXhx8STqGXodL9jT0mTjoy8PCjVvGwHwV20t440oE4oF/xRm7nZQ8cT6atPXO
+         M7vw==
+X-Forwarded-Encrypted: i=1; AL+hErH1f+prz6X0ix4ymIAfN78IVvYKtEjPbwQrouUi6EEgtCOZ68q3TvXM/bObf4sWF/fIzdxe@lists.linux.dev
+X-Gm-Message-State: APuU4Z8C3LwweZ3CUhiItCst4XrQkR8C9bOLKEECCcybKBCRu6PasRYM
+	kMPwq2xgMokC19kGrvWoV91myP8NL6WM8ZHFPoBdvFwVHAAnOjfhianmUjyjh6TqjZk=
+X-Gm-Gg: AYBFou1PxTPOC4qxLRUfJPV2f0yCZeGZzTDk0BVft7ZPhlPAIz/LQCdX+rhYHshoEr5
+	8PDbYNNnUHXthNSEUeeTERCphLyGj3p5hZQbGAV9HE5h6D7uuRJ4OtDO+VQmKNsAX7htpgK4zLQ
+	2g2fXC+6xVEtOWjAVzEqETeRLeA9iSkzLfCmMZiqHBuL9ACLf1ydZjOzxlhLelcMGFvQsT10wz7
+	wRnXEyN7iYoACwBO/s/A36FUjw/PutUShPQQB0/5SCUXaLPyVzHG2QdW+epxB/Rtg/L8DzbKjJT
+	P6yh3xlmPwTvfZDe7BpisUozN7EYQeJseUnElx3pi8rnIbvumMjSDh0vcLiDZ1T7gTp9IjR4c6s
+	D4+fC5XoghmRASLpB1YWghH5oX+aDMK/jclL5QogFg5/uvPZI7tU2ljl6kNYQVTB6vvQSZZyPX4
+	rabj6f32alHB2ZWUbK86mggn6j/laAeFIiIu5azvUfYnb2H3onNQG2ea5H2Di8kcuJE4hVQEpkW
+	XL+SIWgQ8Ok9BAp6EK0eBY+1RHVRIcL29VPORT7EvmGh0jbR3Utm/sSS1epco7tu99kbo/KaIQg
+	pE7WDXbds4nNedG6EyC6Mf+BBVNl1zy2g0uO+auKr5FifzFZSGDNT9l7jWeE2zgnck8=
+X-Received: by 2002:a05:693c:69c8:b0:369:fe81:a575 with SMTP id 5a478bee46e88-37686756684mr5116143eec.35.1794480322588;
+        Thu, 12 Nov 2026 02:45:22 -0800 (PST)
 Received: from FR9WL0RHKY.bytedance.net ([139.177.225.242])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3772121e654sm13228694eec.2.2026.11.12.02.44.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3772121e654sm13228694eec.2.2026.11.12.02.45.04
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 12 Nov 2026 02:45:02 -0800 (PST)
+        Thu, 12 Nov 2026 02:45:22 -0800 (PST)
 From: Yunhui Cui <cuiyunhui@bytedance.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -134,9 +134,9 @@ To: pjw@kernel.org,
 	bpf@vger.kernel.org,
 	linux-arch@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v10 8/9] riscv: implement preemptible this_cpu cmpxchg128
-Date: Thu, 12 Nov 2026 18:41:48 +0800
-Message-Id: <20261112104149.38589-9-cuiyunhui@bytedance.com>
+Subject: [PATCH v10 9/9] riscv: select HAVE_CMPXCHG_LOCAL
+Date: Thu, 12 Nov 2026 18:41:49 +0800
+Message-Id: <20261112104149.38589-10-cuiyunhui@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 In-Reply-To: <20261112104149.38589-1-cuiyunhui@bytedance.com>
 References: <20261112104149.38589-1-cuiyunhui@bytedance.com>
@@ -151,113 +151,30 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend the preemptible compare-and-exchange support to 128-bit values on
-systems with native AMOCAS.Q support.
+Now that RISC-V provides this_cpu_cmpxchg(), select
+HAVE_CMPXCHG_LOCAL so mm/vmstat.c and lib/percpu_counter.c can use
+this_cpu_try_cmpxchg() instead of serializing per-CPU counter updates
+with local_irq_save() and local_irq_restore().
 
-AMOCAS.Q implicitly consumes register pairs, so keep both halves of the new
-value in fixed registers even when either half is zero. Retain the
-local-IRQ-protected fallback when native cmpxchg128 is unavailable.
-
+Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
+Link: https://lore.kernel.org/r/20260826010748.zphu3wh2hlm4t4o2@offworld
 Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
 ---
- arch/riscv/include/asm/percpu.h | 66 +++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ arch/riscv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
-index 4d2fc10cbdab1..1d35fc89eeeb2 100644
---- a/arch/riscv/include/asm/percpu.h
-+++ b/arch/riscv/include/asm/percpu.h
-@@ -9,10 +9,12 @@
- #include <linux/thread_info.h>
- 
- #include <asm/asm.h>
-+#include <asm/cmpxchg.h>
- #include <asm/cpufeature-macros.h>
- #include <asm/current.h>
- #include <asm/gpr-num.h>
- #include <asm/hwcap.h>
-+#include <asm/irqflags.h>
- 
- #define __my_cpu_offset (((struct thread_info *)current)->pcpu_offset)
- 
-@@ -518,6 +520,65 @@ __percpu_cmpxchg_case_##sz(void __percpu *pcp, unsigned long old,	\
- 
- __PERCPU_8_16_CMPXCHG_CASE(8, .b)
- __PERCPU_8_16_CMPXCHG_CASE(16, .h)
-+
-+#ifdef system_has_cmpxchg128
-+static __always_inline u128
-+__percpu_cmpxchg128_case(void __percpu *pcp, u128 old, u128 new)
-+{
-+	__PCPU_OP_CONTEXT();
-+	union __u128_halves old_halves = { .full = old };
-+	union __u128_halves new_halves = { .full = new };
-+
-+	register unsigned long new_lo asm("t1") = new_halves.low;
-+	register unsigned long new_hi asm("t2") = new_halves.high;
-+	register unsigned long old_lo asm("t3") = old_halves.low;
-+	register unsigned long old_hi asm("t4") = old_halves.high;
-+
-+	asm volatile (__PCPU_GPRS_BEGIN
-+		".option push\n"
-+		".option arch, +zacas\n"
-+		"amocas.q %[old_lo], %[new_lo], 0(%[addr])\n"
-+		".option pop\n"
-+		__PCPU_GPRS_END
-+		: [gprs] "=m" (__ti->pcpu_gprs),
-+		  [off] "=&r" (__off), [addr] "=&r" (__addr),
-+		  [old_lo] "+&r" (old_lo), [old_hi] "+&r" (old_hi)
-+		: [pcpu_offset] "m" (__ti->pcpu_offset),
-+		  [pcp] "r" (pcp), [new_lo] "r" (new_lo),
-+		  [new_hi] "r" (new_hi)
-+		: "memory");
-+
-+	return ((u128)old_hi << 64) | old_lo;
-+}
-+
-+static __always_inline u128
-+__percpu_generic_cmpxchg128(void __percpu *pcp, u128 old, u128 new)
-+{
-+	unsigned long flags;
-+	u128 *ptr;
-+	u128 ret;
-+
-+	flags = arch_local_irq_save();
-+	ptr = (u128 *)((__force unsigned long)pcp +
-+			 __my_cpu_offset);
-+	ret = *ptr;
-+	if (ret == old)
-+		*ptr = new;
-+	arch_local_irq_restore(flags);
-+
-+	return ret;
-+}
-+
-+static __always_inline u128
-+__percpu_cmpxchg128(void __percpu *pcp, u128 old, u128 new)
-+{
-+	if (system_has_cmpxchg128())
-+		return __percpu_cmpxchg128_case(pcp, old, new);
-+
-+	return __percpu_generic_cmpxchg128(pcp, old, new);
-+}
-+#endif
-+
- #define _pcp_wrap(op, pcp, ...)						\
- ({									\
- 	op(&(pcp), __VA_ARGS__);					\
-@@ -618,6 +679,11 @@ __PERCPU_8_16_CMPXCHG_CASE(16, .h)
- #define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
- #endif
- 
-+#ifdef system_has_cmpxchg128
-+#define this_cpu_cmpxchg128(pcp, o, n)					\
-+	_pcp_wrap_return(__percpu_cmpxchg128, pcp, (u128)(o), (u128)(n))
-+#endif
-+
- #undef PERCPU_RW_OPS
- #undef __PERCPU_AMO_OP_CASE
- #undef __PERCPU_8_16_OP_CASE
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index bde1f1885038f..458ef01e926a4 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -155,6 +155,7 @@ config RISCV
+ 	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
+ 	select HAVE_ASM_MODVERSIONS
+ 	select HAVE_BUILDTIME_MCOUNT_SORT
++	select HAVE_CMPXCHG_LOCAL
+ 	select HAVE_CONTEXT_TRACKING_USER
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DMA_CONTIGUOUS if MMU
 -- 
 2.39.5
 
