@@ -1,60 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794487245;
-	b=MVllXgbV6DKnJ3ks4dbpkQlOSM1M0P1cG6up3KczhBoDsKL1K5HNsZBDYXrFojcmv+o6
-	 W8nwFKU6Ujor63LPUC4fyJlF4gMTsu5mgBaZkabjO00iaFbKAoXWDyCL68ayQ4C92aBIY
-	 scOPOPcaUdwfsqtca/eiCzwGrn1ejR6hHdzf6cMfdeUh2XTxDKLQ4ptrFoS/oIsZra+8P
-	 rMihYXiseAaITB9oXc19drUlbAmoAI4yV+K97kuhwuzOVQPVp2UVk2wHAycDXeh48cQTO
-	 Ic/RQ54vQnAk7AWnfPCNklLwbGM6UJXtJhfC8+YFuL2b8JcnS6zJnUNUTM/kuhu+O0g==
+	t=1794488949;
+	b=puvgStWLAuK44BEXOP/UBibIcM8O1nnu225QNMwRtlwrGRq67seCNcRo05WbHGWHoBjk
+	 q13o7TwE71a8eJsDwu7H2NpyEKuKKAqyxWTUH1DfW9STvLCEFsSpdWFf8eXLEkm7rEAXq
+	 RV/kp+kpNXIG46qhzewaRItiamgXlsGfW2Y7FaictpucZ0wQXHpJfsJ7R3Y6MNOd4B1xq
+	 b1khT6lM8PacYDifoxkVFwoEAKAgiTmC9hIMYjJCTT2+WU32b64smG5Y3JFx9hFX/o2NS
+	 z0B66gdsdr5RtCfwN/OWE44Ad2nVSDDFf4CEjHz80NzNEP0YP3quIgWv/9Ojyk17AfA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794487245;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Content-Language:
-	 From:In-Reply-To:Content-Transfer-Encoding:X-CMS-MailID:
-	 X-Msg-Generator:Content-Type:X-RootMTR:X-EPHeader:X-CMS-RootMailID:
-	 References;
-	bh=I9X4XD5ud4JHTzb58pE9cFq0Gp7fU1CTG2I9JiABR6U=;
-	b=5K/xOjxV1VhCXXzdb0K50vy5wj8bb4Q5M8abq8OoJLuBT4/bg0JZonfT/GPTOcgf+csV
-	 yUnf5sJQ96c4lfkhrTmkpnYUw52QeDbrMftvm6muhgX4+62EGZyfPiNGu0Dmn81dZc9ey
-	 lJTuwMHN25c18PW/1RcC5InbAqFFe4/PwnDnn+dpKTB7ewQFLQfYkMynRE6yzME2Joo7S
-	 1unB9l2qEZ4H3UhFFCxqGRTyc5t4afkDIOYo+caXSkXePhFE6VtDiDcJxYwmiZzhFUlT/
-	 +pR6kKoWiu63WiSiMtR7qzT+4+XncXgtp9Kw70sVemAfCP7jSCTkU30clu3WYaJ/duA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794488949;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=K4jgDnJE+0ITzQkMog3h9looU3w2g3YOfBihzI0+7yE=;
+	b=zxZiC6LKYhasZscIAA3mT6+Oqk7l9e2J5KgB4I8+pDQgAalAB096N1ehYeBw/O50mq47
+	 AmQaGMYoi3V7F7n03KhP2Q5idmIFXke93LJQd9X2hGhBylC6NY71qUWUXSJrD7cfM+JPw
+	 m1DvXs3x8TksIk7jy4pONxhGNUk+3Df6Ds4IzDkCG4ipGRq4VvGZW68y+rS0ZA7qZhDyZ
+	 LUhPpVxqVkbu/V+h7pSwf40POqiu9uTObsuHzaggIqBjcD/e59uVohOeYAgOwpCePblQH
+	 PLe2CCZRiVHOil7oxPf5UBv2ZgBjvKlO34m0e5AKhZ1XlsMWQcDIeNnv7JKlUmmEqzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=samsung.com;
-	spf=pass smtp.mailfrom=samsung.com;
-	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b="res/twsR";
-	arc=none smtp.remote-ip=210.118.77.11
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="a3/UEZbg";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18ABD606A32A
-	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 12:40:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18ABD606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603EA606A31C;
+	Thu, 12 Nov 2026 13:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=res/twsR
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20261112124042euoutp01e70ce1178d26db6b7c248a8e4494b386~nTKOYIdlg2545925459euoutp01N;
-	Thu, 12 Nov 2026 12:40:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20261112124042euoutp01e70ce1178d26db6b7c248a8e4494b386~nTKOYIdlg2545925459euoutp01N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1794487242;
-	bh=I9X4XD5ud4JHTzb58pE9cFq0Gp7fU1CTG2I9JiABR6U=;
-	h=Date:Subject:To:From:In-Reply-To:References:From;
-	b=res/twsRekcb00rl0hpigdDQU49wJT9sewqF9AZUfNVtehuVCXJxiXNmMChvBTE4G
-	 eET/M3Ndk/cN+pz1L0w+/FpjnaGKptZRpIyBuWJJY/P+4a8RF1Bcj0RGmLHmGYIVpi
-	 4s1s/PiyRviToazDh7OQfOe5aoNIe42v3Wv4p1io=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20261112124041eucas1p2e0fefb8eb4e504a6bbf86fc3bbd57b3b~nTKOBqqaA1051410514eucas1p21;
-	Thu, 12 Nov 2026 12:40:41 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20261112124039eusmtip15ffbafa2efefdb32bf4f0155ad33cff7~nTKMZv7ec1174711747eusmtip1g;
-	Thu, 12 Nov 2026 12:40:39 +0000 (GMT)
-Message-ID: <52c54fdf-0879-4dda-9eac-822180f811bc@samsung.com>
-Date: Thu, 12 Nov 2026 13:40:39 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a3/UEZbg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E891F00A05;
+	Thu, 12 Nov 2026 13:09:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794488949;
+	bh=K4jgDnJE+0ITzQkMog3h9looU3w2g3YOfBihzI0+7yE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=a3/UEZbgvrlO+xHBvKe2mnGLHfcgD9kWm3slX1CdhsCcOpafsmF4b4S1J5QWqbozL
+	 R4CP+X7RhQhEcJ1+z90RqfFsWooSL9yCTNnS/b/Hu+g3vq2P/v7+WY8H1IuOIh2luS
+	 /Fw6mNMPRIjhVZyZpm/CNPhsoSY1SYLA2ORW/BgxsA4ljeqMXF5WdP4LnHHhuXT+yX
+	 S3/6pgsFE4soXlBWL9qDRq8HWj6JizPnGMpbHK2JZNX9VRVoHp323mkOYBUeMAetDI
+	 4JpvO0Um+Jme4S336EOTrwhn2ExjzGIGrOqbCOOis7KmpaR2uTZiidYDWJIhiD/TTB
+	 yQSP7EoaMuGzA==
+From: Sasha Levin <sashal@kernel.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Bill Wendling <morbo@google.com>,
+	Chuck Wolber <chuck@wolber.net>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	Marco Elver <elver@google.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>
+Subject: Re: [PATCH v2 11/20] objtool: Detect code coverage instrumentation in noinstr code
+Date: Thu, 12 Nov 2026 08:09:06 -0500
+Message-ID: <20261112130906.1316655-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <avVaaxKUA2ArB6RG@jpoimboe>
+References: <20261103015238.3780910-1-sashal@kernel.org> <20261103015238.3780910-12-sashal@kernel.org> <avVaaxKUA2ArB6RG@jpoimboe>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,89 +67,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 12/15] lib/lz4: widen LZ4_DECOMPRESS_INPLACE_MARGIN
- for the fast decode loop
-To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
-	<justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, Thomas
-	Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, Heiko
-	Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
-	Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
-	<borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
-	Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>, Sergey
-	Senozhatsky <senozhatsky@chromium.org>, Jens Axboe <axboe@kernel.dk>, Andrew
-	Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-block@vger.kernel.org, Yann Collet
-	<yann.collet.73@gmail.com>, Nick Terrell <terrelln@meta.com>, Gao Xiang
-	<xiang@kernel.org>, Chao Yu <chao@kernel.org>, Jaegeuk Kim
-	<jaegeuk@kernel.org>, Eric Biggers <ebiggers@kernel.org>, Herbert Xu
-	<herbert@gondor.apana.org.au>, David Laight <david.laight.linux@gmail.com>,
-	Sungguk <sungguk.na@samsung.com>, Jaehoon Chung <jh80.chung@samsung.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <avTmC_1I59FKA1FN@MacBookPro.fritz.box>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20261112124041eucas1p2e0fefb8eb4e504a6bbf86fc3bbd57b3b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20261106144309eucas1p2a9bfcc1cf81779d473fb073e7d9139b7
-X-EPHeader: CA
-X-CMS-RootMailID: 20261106144309eucas1p2a9bfcc1cf81779d473fb073e7d9139b7
-References: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
-	<CGME20261106144309eucas1p2a9bfcc1cf81779d473fb073e7d9139b7@eucas1p2.samsung.com>
-	<20261106-lz4-vendor-upstream-v2-12-ee04c3f0d7dc@samsung.com>
-	<avTmC_1I59FKA1FN@MacBookPro.fritz.box>
+Content-Transfer-Encoding: 8bit
 
+On Wed, Nov 11, 2026 at 10:23:41PM -0800, Josh Poimboeuf wrote:
+>What exactly is the problem with noinstr code incrementing counters
+>inline?
 
+The counter is a memory write, and a memory write can trap. In noinstr
+code that can happen before we're ready to take another exception.
 
-On 11/11/26 23:02, Gao Xiang wrote:
-> Hi Michal,
-> 
-> On Fri, Nov 06, 2026 at 03:42:52PM +0100, Michal Wilczynski wrote:
->> erofs decompresses a pcluster in place when the slack after the output
->> is at least LZ4_DECOMPRESS_INPLACE_MARGIN(compressed size), upstream's
->> (compressedSize >> 8) + 32.
->>
->> That holds for the fork, which overshoots its output by at most 8
->> bytes. Upstream's LZ4_FAST_DEC_LOOP, which the next patch brings in for
->> x86 and arm64, copies in 32-byte steps and can overwrite input it has
->> not read yet: of 172410 valid streams laid out as erofs does at exactly
->> that margin, 3660 fail to decode, none with the fork. The worst needs
->> (compressedSize >> 8) + 33. Images mkfs.erofs built did not hit this,
->> but nothing in the format rules it out.
->>
->> Use (compressedSize >> 8) + (compressedSize >> 15) + 36, which takes a
->> 4K pcluster's margin from 48 to 52 bytes. Upstream's lz4.h defines the
->> macro too, so undefine it first.
->>
->> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> 
-> First, I really think kernel LZ4 should be updated for many years, so
-> thanks for this!
-> 
-> But my personal thought is that could you just fold this patch into
-> the next one ("lib/lz4: switch the decompressor to the vendored sources")?
-> Because this one should be part of the fast loop update.
-> 
-> Although the current patch order is also fine, but my potential concern
-> is that people don't know the details maybe pick the random ones for
-> backporting, which is what I'd like to avoid so I hope this patch could
-> be just part of it, otherwise the inplace decompression could be broken.
-> 
+With GCOV_PROFILE_ALL today, exc_debug_kernel() bumps a counter before
+it clears DR7. Set a watchpoint on that counter and the next kernel #DB
+never returns, it just keeps re-entering the handler. I tried it on
+v7.4-rc1 in a VM and it hangs.
 
-Make sense I'll fold it into the decompressor switch in v3 so the
-wider margin and the fast loop can't be picked up separately.
+noinstr is already supposed to keep these out, it has had __no_profile
+for years. But that doesn't cover what gets inlined into it, and nothing
+checks. This patch adds the check.
 
-Thanks for the review and the kind words
-
-Best regards,
 -- 
-Michal Wilczynski <m.wilczynski@samsung.com>
+Thanks,
+Sasha
