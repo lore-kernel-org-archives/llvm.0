@@ -1,113 +1,113 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794472416;
-	b=wHQbcHaXVGduJDZ2ifLnNB1OYYHBhDkouM7Tr7j7MXFdNW2S1TidVIbsqOSj4VdbDtjG
-	 po2LrMHAgBAikNaGZ3qPxf8BG8aQ8X8k+f5xM3MBPYHniiMIegJIqZUSUXhmoNAMP81xR
-	 fOEjqLgVdcCPVbR533vr8IskmDwbrnlNb5JX9i/p/tjV6VHkMSNM85kJxfWt6m/5Zl34L
-	 fHB3e/S8Aa5z9fe9QuK7vHZTVpE0WtoVugrpSNxP01TPXKsbVUX3gUDXDFm6teQZprfJP
-	 dgO2ZmiStuVmvxajxZd5fc7LGN9tNHSVPc3iUD683tXLRMINDZ0eBBs/P+wGZIfurcw==
+	t=1794472421;
+	b=DnavmdhX+UzmEcdU16HjNDfcEIiNWagZhXjerNgWtj4N7nwtvEfEj/fhpDrFLhztxE1u
+	 eX4b8+zuq5MJ3FAaM6C52TLDWRIsx2G1cp/j9eG9IBkjlCC786gJtYOCPqT462TpxjJ3p
+	 /cKPVpJXIHbV8L5dIR1hHQOVybdeoNV90M1piMbQj0CsOtYCW1SpxU7L4tpj/vjPM598p
+	 /MjQjvhAmRUVWunu9a68duxU/EdR/AAp4m7Ni+cLE9ARovmBD6bHmWiko6di3o+uZQPgV
+	 lTyS87IgcZeQpWHvnWmcggI0ZZV51mC9oDZ1iSBDicERPnsieeDOGYl34QP68Ak549w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794472416;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794472421;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=gx/W6tXP2KdrCc0CO/VXLdzUUudIbq1I1EKN4P81bA4=;
-	b=X0Hf3tcB9EH+AZG/RnDsZKHIRNj9APgdhTHTA6KHD67tVqR0dSOBt3WhHHBi8CpOqQHp
-	 WgXaftyff5T43EOhjin6WKhoQO3bbVdyWs5oJVfGA0VDxxKf1bp8vVGUyUKJfZgq+O4HO
-	 4RqgJmg9qxi9yz07HVMQMdktEsbu/KPcl38qI7+27S3UpydCz9LqitfuylQe7wAtW23q9
-	 UY6bA9TN8x8vLwwLA4giL8tWwp35sSI16nhMnvgh4TIA73kYHdQIXGGd3pEopJ2UzOSrT
-	 rdCAzK1w/gCqGhzrd7t6ZBgRqs9iGW+r/VY0cCxYOWUkQ+LciOUXqVgX58E0HzeZGfQ==
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=CKagoEKwzFpEtXBpwWpll6XqoO1Wg1TyP09dixsoz1k=;
+	b=BT8GirYIGq8tJx14RTBAbvn/M3amPURH/ePZS1Tqdxww905+oui7nDy7dqPV47u2I4Yt
+	 0s0slBmvM5LZzVKm16LyLU0CeHfP8w+H0OWSgMTMZjL0f/U3aZ3RyBhC+XbqSe/YnHdlL
+	 05UzlDpmGy6kxRSnJTiCt/ex9RNk+IFvWGz0c2NMQylsPd/k9hX6001g3+osP8168B9TD
+	 k8SKFNskg6XYPtK7X6qZ9rLOhsOpDYaBtxggxKOC4p9+U6hc03yJiLLUvYRE0sFtNP2oU
+	 d2gcOtemsehhhPRgCnrzJWiAULJd8AfMYlLNb9QXMOawAeY2M6QrLfnx/9arDGAzaeg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=SWriODnm;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=SIQVL8f9;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=UdjY9OuS;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=gDTtaBM4;
 	arc=none smtp.remote-ip=205.220.168.131
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF6D606A8B8
-	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 08:33:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CF6D606A8B8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B54606E9B6
+	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 08:33:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57B54606E9B6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=SWriODnm;
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=SIQVL8f9
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AC53tEY3477246
-	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 08:33:35 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=UdjY9OuS;
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=gDTtaBM4
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AC2ZOrI4092370
+	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 08:33:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	gx/W6tXP2KdrCc0CO/VXLdzUUudIbq1I1EKN4P81bA4=; b=SWriODnmPpc/SBBi
-	0q6R/aCwq/KQ2bAtKHOgUHD4F81ZtbBCe/1K8PSBm6gtQoOebum03cNuH0DXtNX4
-	f5/ATLZ+MmMCYJZgtUn2FWwQ3enjBvucPWgQq4c/eqjNoec0QHrclkcx98GrmCIb
-	jtpDFLfKC8CmkalpgileOhawn9axF+crHcwcRwOOSJTfuMHeeG2gMS4ooj/KnErM
-	TtSxsxgIAQY0q8J2dFQBDdYMZCjjgMLdIjhScdAoU9FxUeZzaRnPt9qlXEnMH/PU
-	7eVa7a5EaFthpT14BwLQoQoWU4A5B9WICjbl4S4HG65n7Kp3OVOthMNZTSujrh78
-	10LFnw==
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hw6yugpwv-1
+	CKagoEKwzFpEtXBpwWpll6XqoO1Wg1TyP09dixsoz1k=; b=UdjY9OuSvQm3A81k
+	05cL+rGaENhnUBUtacA+EpTYh3vzW4TRXM48Dp0DqmBrTMot8rWrepuLxNoN+6gm
+	eJGJM8puKjezRz1IHTUtQw1MSxxfh3bGh/fLtHVXRWoHBaWP2gc8X+3I+ZNboNoY
+	aWVMErVNDLoJGlrqrR3GAsRgEjyk0g6CQW/PiAJOrOxtYTBWNDH2cqWHLTgs781g
+	5B8iXQyRq6KjiQRhOxqSbbGZEx5I6qmTj49tReKwaY0FVKdIbmiocT1JOL205GSj
+	686TSYXBms/+3a+aLY0j9YJA9VWVtnMhJhLnVvJQcsGtMomtEWLzJ81BKJFZTOpB
+	Lk7tPA==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hw0m8hy8d-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 08:33:35 +0000 (GMT)
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cd66551e02cso4414168a12.2
-        for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 00:33:35 -0800 (PST)
+	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 08:33:40 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3ad704d4760so4670567a91.3
+        for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 00:33:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1794472415; x=1795077215; darn=lists.linux.dev;
+        d=oss.qualcomm.com; s=google; t=1794472420; x=1795077220; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gx/W6tXP2KdrCc0CO/VXLdzUUudIbq1I1EKN4P81bA4=;
-        b=SIQVL8f90VLQNa477vBjgQwV40DFeps75fw4IyVxYs9UknS7hajMqoxVZvLPqaRiW0
-         aGnx3dy70OIKHr+BubwZAv2RILN/KZcYH/unhXyUudOxc1GjyuxtZEa/kqTDi1YNN64U
-         ybVLoEdua2lebNVtsK9c30cdZsM2qAgAh4qIZUu6xtIFSNxEIsgCb/lwiHTgWvDWdbPC
-         CdFf0p7Zema7YmmDsG+h5KZR8J5fyx2utVPu0+ti/o25shcrKmJupVq1ODZIze/kZ1zq
-         BVdiOybdTMU7rRfcaQXi4D+3YdNODyFrtnwb2TXwtjKiq8zwETm8Ufwtz8+WU2qoaIXi
-         K75Q==
+        bh=CKagoEKwzFpEtXBpwWpll6XqoO1Wg1TyP09dixsoz1k=;
+        b=gDTtaBM4ZpxxvVnRwG9e4AQzqAKAqwtvPcpEGvzKuftUhtTo5IUbogFz/4gq5vLdBi
+         tr8MCWGO5BXiiyztGIwPHe/11w+TyKQXQDHkDLQP4Cn4e9QBFyjOHuH3SBn3GmXkGme3
+         p1/AzHZim87VwuYrV9YHZFjOMD0oOZDeAsR6AXxvcWvH3kjlxQFd4pBSvDG6DH7JdIwC
+         o+Fv1Gwlpvrx6sz+RS227XxyEsjRyOU4IQWFLIIQbqSEFvZ6wtFJ2GfRD06F7gs0512p
+         XM4gKDE8gkWzkqrIJ8ED3qfKlj2wegXpzwX7UmrAyv+3CTP742hhWMvApS09K2cQk3VT
+         cGow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794472415; x=1795077215;
+        d=1e100.net; s=20260707; t=1794472420; x=1795077220;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gx/W6tXP2KdrCc0CO/VXLdzUUudIbq1I1EKN4P81bA4=;
-        b=V/oxkzmRr3KjM8QA589x9fqopAU1OGL3gN3jDeqekUwdbmHuc4Q2/zChMNd+n7Pqzd
-         YybumWnZzqwQ2/sOxIxbWGV7WACzMhskriCNGoQ5CDFDy5Jyqv0m6WjmlS+BehkTjJ4v
-         mvi/Z3CAklye3eR1e3bF9rqz9iwB1Pt6cmDR8kcxBZhzz24xL3z2ez1DeaEh3x9o5t3h
-         gJR7JlfnSUxmqkt6lda04T1AUZQb26DZAc+76WgPq4MoRYBXpveJZXzbLzViHyDTx64Q
-         RrNnpIMngd7h2n0oq1UpLwAY3BsanSJ0gJcoPdAQtHRZGxAu4wtBPxbURv3htobkOysp
-         EalQ==
-X-Forwarded-Encrypted: i=1; AL+hErE9Kg0TARleQjO9pULxSpp8P3e3XIlXPxDS2Q9YmJLS2LRF1x4y+iJFdYDD54uQuDOJx+t6@lists.linux.dev
-X-Gm-Message-State: APuU4Z9MI3xMp2Jm/nQ1lAJPHUVLSNeOPlb0r9uqqBdVkTeNzFyxJyO3
-	IbXcjvpmJXjtX1KPzba94Yh8hRjhuzuwldTCCTBn6lQT8/fqCr5vwu3T+kuno1oRHY6EvjsaZh8
-	dNWny7csaWafQL0TqSEFi4J7FDewic+YaFKJMy4Twf08h8Bf6boddLWdR
-X-Gm-Gg: AYBFou2wxxYjoWCx8CLdmb4etFv8dMXfitnH22wwY4OkdZHQWFJwDzb/wYaok+H6pju
-	NpoA0fKxKiWbyXU1iDWC9Gl+aa8cf7tPxYy6TjkjHoiaToqghoHXuXlD4mTegkCHqXjyuHAF/bf
-	r14Mpr79EmaTGFAH+dZzq6exVdkRB7YR3GPSYNdni+DS2qxmwenBt0disfE7VpeBPnQ09g80RGa
-	m961ea4orwKxO4Doh0twdOXk5Ub61RXSgoP0Ws1s78JVb+fDe5rBs2AMFCqCHjJKXRB2r/YEjRi
-	h+uJ/2WKTDsq79vpl80+DnSisZPNEO9jSrTpcUkQ/hEtzuCpavXXbCa1t14HEjTls63mLhXJ/ag
-	hcTE2rg93JNo4NVfis9bU+07xXhj3bbSC1gudZsJWec3lCPIip+IvpQg1Z0JP1l2F0s3i4NPdcK
-	r3WUoZ+alDgTvjSUaOY71hB/Twc2DgS8QQp1yAUstngVLFL0eUB0HX94lh9euB7AsMHWSJ+2zt2
-	w==
-X-Received: by 2002:a17:90b:2f04:b0:3ad:c4e9:7beb with SMTP id 98e67ed59e1d1-3b182ee3b45mr4554121a91.43.1794472414875;
-        Thu, 12 Nov 2026 00:33:34 -0800 (PST)
-X-Received: by 2002:a17:90b:2f04:b0:3ad:c4e9:7beb with SMTP id 98e67ed59e1d1-3b182ee3b45mr4554086a91.43.1794472414096;
-        Thu, 12 Nov 2026 00:33:34 -0800 (PST)
+        bh=CKagoEKwzFpEtXBpwWpll6XqoO1Wg1TyP09dixsoz1k=;
+        b=ZkOI8Z50mhLdtUnpAjCzvXdYgJT/DaSvRCYO6IS2ismuj/7O7GuhNBEmSscTv1aYAI
+         G87jRe8ZLMZ9MpJI9ZnODJuK0pxKlSMvxVshdwXQAVLfBiM6LQt+A10TZoQhnrZE0iUT
+         vaKmESclTHuRqP6mL+6LOYpFDeLvA0xf1Glxb9SnfmxKFaoxzN4Ohbz7PDkzO6ZoQY2W
+         GSXeDef3I7VgyKfbVeXe3KWUUjrrA1ZcSnfeZp2CatylTX5PkOmKEuYKeUldzcxLUV+f
+         W598UmDo/aFtwUbJzgewMmuaqGIPH6WvUtWd8HCsEdmlXghsG25k6VeW7SIwu6vaZVYD
+         isOw==
+X-Forwarded-Encrypted: i=1; AL+hErFsXgh5EFFutN4Nuc8WWFAPWraGYCglVBVRHlXgb85NPsvq60Jf+CBlnZU+4tb+1eoRlLlv@lists.linux.dev
+X-Gm-Message-State: APuU4Z8P6qclbQEqy+mLkvX+9bzypzuFclPK6wZlbOoS+tgD+82RVbnS
+	Qijn1DjrvUFtj1Gw50Z7gVoP+W07sDmUdNg49Tlm3LnirJFyT/t2u7v4C+lDMWEvY9RPfRXXLim
+	Tx+LSH0MeT2N1FPbS38oGVLPCJKjxLyYXLjNTUHNmX88bVkcUeAtqajda
+X-Gm-Gg: AYBFou2c1wopx7xq4BdrEOEmNJNZNNbXdHKaG1tlgYYnex5i48vWNy/QpNejoKHLqO+
+	1gLzVqJn/cPBM6gphdDtvyOgYuyOf4XLULvk40fp/sX4Oe3/gapGWSr309MS2s0zEtYfrguJhV2
+	I6IHLji1FGkHmC5/soZGKcc7bsVBn80WyRM8EMTYovaDYvu7yMYNlaIehWkVtyWo8Kr7iKc5Ogj
+	EUl/vklCwd3zQ2tDIwrv3aB8Xv7KGAQIQ0fRdH8cssfXzD7P4zkJQzdF9ycOawLaGMOi2hzI6Al
+	TI4zZK743bkg3eUdJ109skW40rlFHH9UO7DdZA/GZi9vMKu1ZZFRRKVW0bE7jaVjbdCA3Y1NIZ+
+	jDjskoh/a8mEhfHZAHWBlsQmDBV/33EFGWONtbjz6zNsQBqaO3GXC9//0PtALj2CFkiE/thJAnq
+	Kj8f5ARHX0LWzEksqUzhbzH4Q2SYhNoF409rM1wfXV1HxFIocoxZcmrf4Ec+yDpUol8J/FMymDE
+	Q==
+X-Received: by 2002:a17:90b:5487:b0:3a0:516d:9f88 with SMTP id 98e67ed59e1d1-3b182eac822mr4525577a91.26.1794472419913;
+        Thu, 12 Nov 2026 00:33:39 -0800 (PST)
+X-Received: by 2002:a17:90b:5487:b0:3a0:516d:9f88 with SMTP id 98e67ed59e1d1-3b182eac822mr4525548a91.26.1794472419328;
+        Thu, 12 Nov 2026 00:33:39 -0800 (PST)
 Received: from hu-madhgane-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197ce55c1sm3518029a91.3.2026.11.12.00.33.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197ce55c1sm3518029a91.3.2026.11.12.00.33.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 00:33:33 -0800 (PST)
+        Thu, 12 Nov 2026 00:33:39 -0800 (PST)
 From: Madhavan Ganesan <madhavan.ganesan@oss.qualcomm.com>
-Date: Thu, 12 Nov 2026 14:02:27 +0530
-Subject: [PATCH ath-next 13/15] wifi: ath12k: add Wi-Fi 8 hw ops for
- QCN9575
+Date: Thu, 12 Nov 2026 14:02:28 +0530
+Subject: [PATCH ath-next 14/15] wifi: ath12k: add and hook Wi-Fi 8 mac80211
+ ops skeleton for QCN9575
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -119,7 +119,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261112-wifi8_qcn9575_bringup-v1-13-3f30fbc2bb69@oss.qualcomm.com>
+Message-Id: <20261112-wifi8_qcn9575_bringup-v1-14-3f30fbc2bb69@oss.qualcomm.com>
 References: <20261112-wifi8_qcn9575_bringup-v1-0-3f30fbc2bb69@oss.qualcomm.com>
 In-Reply-To: <20261112-wifi8_qcn9575_bringup-v1-0-3f30fbc2bb69@oss.qualcomm.com>
 To: Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>,
@@ -134,105 +134,149 @@ Cc: linux-wireless@vger.kernel.org, devicetree@vger.kernel.org,
         llvm@lists.linux.dev,
         Madhavan Ganesan <madhavan.ganesan@oss.qualcomm.com>
 X-Mailer: b4 0.15.2
-X-Proofpoint-GUID: 7SyaUM9C9rKTrNNLIDfKHfXIXWyK2Xmy
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEyMDAzMyBTYWx0ZWRfXy4Fj2Xx6YAD6
- OtcbpR0iG76zybf8X27iLpO4B7xEfq+AeV1JeIwO2/NHWpJCM/MA3b6won5q4oNhnuWp/l1/Cch
- fSt+CQAQ/At7eEbqO/YPQ/dczM4K/IA=
-X-Proofpoint-ORIG-GUID: 7SyaUM9C9rKTrNNLIDfKHfXIXWyK2Xmy
-X-Authority-Analysis: v=2.4 cv=d49gWhjE c=1 sm=1 tr=0 ts=6af579df cx=c_pps
- a=oF/VQ+ItUULfLr/lQ2/icg==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEyMDAzMyBTYWx0ZWRfX27zu8Nrubwo9
+ FoPqmwBnH0c4RoQfiNivefKypkuS8J2mIx+OwIo24/U/GNkmURCLxdy0l/+n6xSN8aoyxQx2y1D
+ uQms8XNsKSj7NRifbqmMzC2UR8xATHg=
+X-Proofpoint-GUID: 9lEvEFTMu-MOLgmH8GDkXmZyBNcZ4oo7
+X-Proofpoint-ORIG-GUID: 9lEvEFTMu-MOLgmH8GDkXmZyBNcZ4oo7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEyMDAzMyBTYWx0ZWRfX4FkRMNBHsJSC
+ xrXuQ5uPQpVvmVggWxyA0vY5b1QTVQ5B3BPoKg1Dj7lMi9zbOBXwvRunO8uUTHHqs64hn/UrSVh
+ S6tKyPxQfadLab3/n6TMzy26Jo0SfE8i37wFcXZ4QLHiiHkGKazxxUCw9UL/geALcD4lMKux+KP
+ ncrp1TSLgDw6JdGrExOugpHVLMCL5fzC2Pxj+/CiLVKxcLk4GFbK9V2AZVVd5YdxCgRF1VF6UMy
+ /Drl+RFqsiBvTFTYeSWLn2fOwlc0D0kApd9xaIB++aHvJTXgGH4pu5lmgWC4xLPAA4hAAXv3eYy
+ t25E0bcNegR8O0ZAwYggJvRUVFag+nI5V3hTAHPUiZrB+0OrIkBDIlH4wWKsYSPWKO8M/AU/bAK
+ ppM/C7DaXUhWwmJ8/NZca7pcqz8SBNwUo1d/ZVCNMwl/7MkdIjdHUNrN3mpmza+yW1ee4IYQOiz
+ U3SOrSV9MFuGSsxPnHA==
+X-Authority-Analysis: v=2.4 cv=Q9dHcI2a c=1 sm=1 tr=0 ts=6af579e4 cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22
- a=EUspDBNiAAAA:8 a=L9wxWISAF5v3VASzmuUA:9 a=QEXdDO2ut3YA:10
- a=3WC7DwWrALyhR5TkjVHa:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEyMDAzMyBTYWx0ZWRfX5rdcF/tDUvDh
- Baa8sZhBHxkkNLcoABxsuQcTQi2PqwP21H4+eEi2Nmi0Dq0UGbsRKYLVozRCoON1OdB5WOlFsSM
- frA37DsO1RdZCGbyNGr7+bcbLpYELxB3N98hJtnEH4+Ulw4X1IhbIYSyO2hH/7aQiqbAerNUwxC
- CltGZsli49BH00pb4VQAXayFB4qG93Gr+++EmaraLrjtqs8DLG10I/WeZYG+nOFR4wHVb350B9h
- voYSHK3wlUXdaVYKgSCWXqe+wNIToqcb1fJDbhSpZcnOOwSvCAUDntk1oYp4xmZKbb6yEMc1rPI
- v0WQUy3DvW3vkUwcFP0kSpNlpLPcs9VuDq5KM1fdlK/6FmaY+zafSJRaHknTXoI208rvpvvRny7
- wEkKIp7jRjRlwX2ys6isKdaRaaztGlUSrGjXizLgula/51sHqMhvTjkOQ+VZYhpKFmmHCtC23x0
- rQjdEqFivkADMdvGPuQ==
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22
+ a=EUspDBNiAAAA:8 a=qlncVs5R31ZIVvcfge8A:9 a=QEXdDO2ut3YA:10
+ a=rl5im9kqc5Lf4LNbBjHf:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-12_01,2026-11-11_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 spamscore=0 malwarescore=0 clxscore=1015 suspectscore=0
- adultscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ malwarescore=0 phishscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
  definitions=main-2611120033
 
-Implement hw_ops for QCN9575.
+Implement an ieee80211_ops skeleton for QCN9575.
 
-Add QCN9575 hw_ops (qcn9575_ops) in wifi8/hw.c implementing pdev/mac ID
-mapping, srng ID lookup, and TX ring selector callbacks. Update the
-QCN9575 hw params entry to use qcn9575_ops.
+Add ath12k_ops_wifi8 in wifi8/hw.c as a dedicated Wi-Fi 8 ieee80211_ops
+table. Introduce a stub Wi-Fi 8 TX callback (ath12k_wifi8_mac_op_tx) and
+reuse existing common ath12k_mac_op_* callbacks for all remaining mac80211
+operations. Hook ath12k_ops_wifi8 in ath12k_wifi8_hw_init() so Wi-Fi 8
+devices use the dedicated ops instance. The stub TX callback is a
+placeholder; a follow-up patch implements the QCN9575-specific TX path.
 
 Tested-on: QCN9274 hw2.0 PCI WLAN.WBE.1.6-01243-QCAHKSWPL_SILICONZ-1
 Tested-on: WCN7850 hw2.0 PCI WLAN.HMT.1.1.c7-00108-QCAHMTSWPL_V1.0_V2.0_SILICONZ_UPSTREAM-3
 
 Signed-off-by: Madhavan Ganesan <madhavan.ganesan@oss.qualcomm.com>
 ---
- drivers/net/wireless/ath/ath12k/wifi8/hw.c | 38 +++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath12k/wifi8/hw.c | 70 ++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
 diff --git a/drivers/net/wireless/ath/ath12k/wifi8/hw.c b/drivers/net/wireless/ath/ath12k/wifi8/hw.c
-index 74873fc5f3f3..92c897de16f4 100644
+index 92c897de16f4..30188f4fae02 100644
 --- a/drivers/net/wireless/ath/ath12k/wifi8/hw.c
 +++ b/drivers/net/wireless/ath/ath12k/wifi8/hw.c
-@@ -18,6 +18,42 @@
- #include "mhi.h"
- #include "wmi.h"
+@@ -10,8 +10,11 @@
+ #include "../core.h"
+ #include "../ce.h"
+ #include "../debug.h"
++#include "../debugfs.h"
++#include "../debugfs_sta.h"
+ #include "../hw.h"
+ #include "../mhi.h"
++#include "../testmode.h"
+ #include "ce.h"
+ #include "hal.h"
+ #include "hw.h"
+@@ -152,6 +155,72 @@ static const struct ath12k_hw_params ath12k_wifi8_hw_params[] = {
+ 	},
+ };
  
-+static u8 ath12k_wifi8_hw_qcn9575_mac_from_pdev_id(int pdev_idx)
++static void ath12k_wifi8_mac_op_tx(struct ieee80211_hw *hw,
++				   struct ieee80211_tx_control *control,
++				   struct sk_buff *skb)
 +{
-+	return pdev_idx;
++	struct ath12k_hw *ah = ath12k_hw_to_ah(hw);
++
++	__ath12k_warn(ah->dev, "wifi8: tx stub is a placeholder, dropping frame\n");
++	ieee80211_free_txskb(hw, skb);
 +}
 +
-+static int
-+ath12k_wifi8_hw_mac_id_to_pdev_id_qcn9575(const struct ath12k_hw_params *hw,
-+					  int mac_id)
-+{
-+	return mac_id;
-+}
-+
-+static int
-+ath12k_wifi8_hw_mac_id_to_srng_id_qcn9575(const struct ath12k_hw_params *hw,
-+					  int mac_id)
-+{
-+	/*
-+	 * TODO: QCN9575 supports 2 radios (max_radios = 2). This currently
-+	 * maps both radios to srng 0; per-radio srng mapping will be wired
-+	 * in by an upcoming DP patch.
-+	 */
-+	return 0;
-+}
-+
-+static u8 ath12k_wifi8_hw_get_ring_selector_qcn9575(struct sk_buff *skb)
-+{
-+	return smp_processor_id();
-+}
-+
-+static const struct ath12k_hw_ops qcn9575_ops = {
-+	.get_hw_mac_from_pdev_id = ath12k_wifi8_hw_qcn9575_mac_from_pdev_id,
-+	.mac_id_to_pdev_id = ath12k_wifi8_hw_mac_id_to_pdev_id_qcn9575,
-+	.mac_id_to_srng_id = ath12k_wifi8_hw_mac_id_to_srng_id_qcn9575,
-+	.get_ring_selector = ath12k_wifi8_hw_get_ring_selector_qcn9575,
++static const struct ieee80211_ops ath12k_ops_wifi8 = {
++	.tx				= ath12k_wifi8_mac_op_tx,
++	.wake_tx_queue			= ieee80211_handle_wake_tx_queue,
++	.start				= ath12k_mac_op_start,
++	.stop				= ath12k_mac_op_stop,
++	.reconfig_complete		= ath12k_mac_op_reconfig_complete,
++	.add_interface			= ath12k_mac_op_add_interface,
++	.remove_interface		= ath12k_mac_op_remove_interface,
++	.update_vif_offload		= ath12k_mac_op_update_vif_offload,
++	.link_info_changed		= ath12k_mac_op_link_info_changed,
++	.vif_cfg_changed		= ath12k_mac_op_vif_cfg_changed,
++	.change_vif_links		= ath12k_mac_op_change_vif_links,
++	.configure_filter		= ath12k_mac_op_configure_filter,
++	.hw_scan			= ath12k_mac_op_hw_scan,
++	.cancel_hw_scan			= ath12k_mac_op_cancel_hw_scan,
++	.set_key			= ath12k_mac_op_set_key,
++	.set_rekey_data			= ath12k_mac_op_set_rekey_data,
++	.sta_state			= ath12k_mac_op_sta_state,
++	.sta_set_txpwr			= ath12k_mac_op_sta_set_txpwr,
++	.link_sta_rc_update		= ath12k_mac_op_link_sta_rc_update,
++	.conf_tx			= ath12k_mac_op_conf_tx,
++	.set_antenna			= ath12k_mac_op_set_antenna,
++	.get_antenna			= ath12k_mac_op_get_antenna,
++	.ampdu_action			= ath12k_mac_op_ampdu_action,
++	.add_chanctx			= ath12k_mac_op_add_chanctx,
++	.remove_chanctx			= ath12k_mac_op_remove_chanctx,
++	.change_chanctx			= ath12k_mac_op_change_chanctx,
++	.assign_vif_chanctx		= ath12k_mac_op_assign_vif_chanctx,
++	.unassign_vif_chanctx		= ath12k_mac_op_unassign_vif_chanctx,
++	.switch_vif_chanctx		= ath12k_mac_op_switch_vif_chanctx,
++	.get_txpower			= ath12k_mac_op_get_txpower,
++	.set_rts_threshold		= ath12k_mac_op_set_rts_threshold,
++	.set_frag_threshold		= ath12k_mac_op_set_frag_threshold,
++	.set_bitrate_mask		= ath12k_mac_op_set_bitrate_mask,
++	.get_survey			= ath12k_mac_op_get_survey,
++	.flush				= ath12k_mac_op_flush,
++	.sta_statistics			= ath12k_mac_op_sta_statistics,
++	.link_sta_statistics		= ath12k_mac_op_link_sta_statistics,
++	.remain_on_channel		= ath12k_mac_op_remain_on_channel,
++	.cancel_remain_on_channel	= ath12k_mac_op_cancel_remain_on_channel,
++	.change_sta_links		= ath12k_mac_op_change_sta_links,
++	.can_activate_links		= ath12k_mac_op_can_activate_links,
++#ifdef CONFIG_PM
++	.suspend			= ath12k_wow_op_suspend,
++	.resume				= ath12k_wow_op_resume,
++	.set_wakeup			= ath12k_wow_op_set_wakeup,
++#endif
++#ifdef CONFIG_ATH12K_DEBUGFS
++	.vif_add_debugfs		= ath12k_debugfs_op_vif_add,
++#endif
++	CFG80211_TESTMODE_CMD(ath12k_tm_cmd)
++#ifdef CONFIG_ATH12K_DEBUGFS
++	.link_sta_add_debugfs		= ath12k_debugfs_link_sta_op_add,
++#endif
 +};
 +
- static const struct ath12k_hw_params ath12k_wifi8_hw_params[] = {
- 	{
- 		.name = "qcn9575 hw2.0",
-@@ -37,7 +73,7 @@ static const struct ath12k_hw_params ath12k_wifi8_hw_params[] = {
- 		.qmi_max_chunk_size = SZ_2M,
- 		.internal_sleep_clock = false,
+ int ath12k_wifi8_hw_init(struct ath12k_base *ab)
+ {
+ 	const struct ath12k_hw_params *hw_params = NULL;
+@@ -171,6 +240,7 @@ int ath12k_wifi8_hw_init(struct ath12k_base *ab)
+ 	}
  
--		.hw_ops = NULL,
-+		.hw_ops = &qcn9575_ops,
- 		.ring_mask = NULL,
+ 	ab->hw_params = hw_params;
++	ab->ath12k_ops = &ath12k_ops_wifi8;
  
- 		.host_ce_config = ath12k_wifi8_host_ce_config_qcn9575,
+ 	ath12k_wifi8_hal_init(ab);
+ 
 
 -- 
 2.34.1
