@@ -1,78 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794496093;
-	b=DY/30kbqnPLYN5D6lhl8gX1rI9xBbD9JZR17c4NopRDvZlROZGxVyulZ4nF/sKsjL77s
-	 SNamFgBoegruIbV+fwV5vKgUU9xG5Ly2O6F3hmpkGCHdSw3QoHk3ShhNExBsnPcvgnrOM
-	 epOkKiO/PtFFucNsOSH3gXPC8eSJMoOPRIxZxR49mtVqH3bHyze8oD/h0KMWMEY0rpn+C
-	 ahozStTRvs+LXBoHspPjB9yBVsW1phYjneAhoJiGZxo3OL/oYbTAT7UD5xZFpiXQAbs0e
-	 GG+Oyy/dL55VgYtbUF+GyVTjQyIynIOaf8x6MDiLuAI+HE7Cl0nuQqL5Bqf1QK/wvkg==
+	t=1794496356;
+	b=WBWT8WckCB0jtNQqET/7S3m+429mr0HoBbliRsdjjX0hFUS9WpwNt/DUP3uYAvPhZmKp
+	 m4ODp1SxWyS73d5olcigRm3aT3z79KBenU9Ibut7jw+SqW6kITxUy3aCbjTF8h2m71zre
+	 Wn9StbhnJWkrTtcGd9c6a5Kxjl9oF+jCsTT/dJGc1Wk2diwubynD5gfpZNwxZATitbi1i
+	 /H/wdJD3ym6lj6gvyn2qK1rRaJckFhJlTiYF48qhW94kCh1xnxyq2tW0RJUgGrYs3K6IZ
+	 wo6myz6eHwT1qOBFCQWS0qtlRLRSVX8XsEwj23wluQ6/S5yaMi8n83p/PI6lv6yFZMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794496093;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=0MtVD/2CYndxQ/V5h95yvnWDNSnQLfbStpMT5xcinaE=;
-	b=5qXjBm+osKQn+IqNXmofp6qeUL2ZgfwCggJhhsqsP681LRZHKUZZjNNCbzfkstCbKYZn
-	 IGvwSeaMnQYuL5LnqkLmAMexk/KUzwg5sbLjuC+WK3odg22TulIzUYe/S3YG+wZl+QdQb
-	 KVw0+ys+b8Y4NPPGKo2Tv0cTgDg+QdWEpgKf0m+bJewHA7QiuPtK1lDeZPMvAQY71cBNl
-	 98NBcqBXLP+NPXgGg8D9w2tjQGmff7T2yqOgxuuGsAXepFwCk5AI7/3kbjZ3oVCr2tC3a
-	 O87e6VthO+geW7EpEQdbJ08GR9RIeXYFXslMUQ+Lm75IERjS54cRYCgAXIKdY6tKsdw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794496356;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=gtVkBlvFQktBxgCq3bojJxltgCL/Hti9FLaVI1V2PsA=;
+	b=tzW51VnrOWEtWOFkrvXIFpMwN5vue8w9nr2ToKpPbuj55IghIWBDDur8dC4n/YHeeyH9
+	 dNWY3U/0d1QDq4WlfYCjd8bTn+YemIa5NftgDopYRGlbZJqQaDEoPCtlxeqCNZ52VcAf0
+	 iIhGkFd8XZTR3SKvtcWCP1EqyROGNvmu4D2UQV+njKN7jw6x/Lfj3qhpqMd1NjeMRSr2L
+	 pQ4Y5I5G1NfuGIHF7yhYJmKjWxfDY5OH6DTYKKCv5g2HaiaeoJtfH91HbEAseh/8IY3Gx
+	 IIIut+sQJNnKgQUb5/gA6n2K0sohWfmjrpV/W1Ae1lRTs5ArizFR5q7f48KQlIlZEdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IMmhAuvc;
-	arc=none smtp.remote-ip=192.198.163.8
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=gdEZytJc;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D4C606A31C;
-	Thu, 12 Nov 2026 15:08:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78D4C606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B78606A31C;
+	Thu, 12 Nov 2026 15:12:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34B78606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=IMmhAuvc
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794496094; x=1826032094;
-  h=date:from:to:cc:subject:message-id;
-  bh=2grJq6ch3SWlVA90HbL4U9dkC72n/tE8xXLosCwE7rk=;
-  b=IMmhAuvc4iTXv/HQ28USJC/yqkQABuyHwaaW8heIZO3oGuZWxELK8yXv
-   mZ9aAA2mRVXJBaslepCg8HyU9KRQF1H3rsApbUxzgxC+SYWnTJj+qtVq7
-   +sxD0hJbReZkRDF617R7L1kIhjmpPR++Y37+jki+uVqHBAxY8JdqUPk3N
-   EoBw13OQAqKrFp/Dn4bSmCkX+1QgRUSnU+uXJyxJ9pzxauN9E7GWr1V4S
-   Q+8pQsweIV+Uz/ponxyBLKH7Ne+mjky1Be1kzr51HaHIimwJjXLvFONFT
-   I3GQbK6T+B+7mBJ11ERqhuPINg8R9wRZhakn+hKAAU34HG7KYq7K0uXK3
-   Q==;
-X-CSE-ConnectionGUID: twLgOHnmTSST2BSdPlHn+A==
-X-CSE-MsgGUID: 8OE6q+TeTO+AkbnM5EU8Qw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3178877"
-X-IronPort-AV: E=Sophos;i="6.27,209,1787036400"; 
-   d="scan'208";a="3178877"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 07:08:13 -0800
-X-CSE-ConnectionGUID: 7Ox7SkDfSFipX5yVuL3/CA==
-X-CSE-MsgGUID: mAlUkWGuRoiJy8D6ViP84w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,209,1787036400"; 
-   d="scan'208";a="8774520"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 12 Nov 2026 07:08:12 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRWPJ-000000011bL-0cAS;
-	Thu, 12 Nov 2026 15:08:09 +0000
-Date: Thu, 12 Nov 2026 23:07:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Steven Rostedt <rostedt@goodmis.org>
-Subject: [linux-next:master 5784/6673] WARNING: modpost: vmlinux:
- section mismatch in reference: seq_buf_terminate+0x2c (section: .text) ->
- bootup_event_buf (section: .init.data)
-Message-ID: <202611122323.IvGv8FYK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=gdEZytJc
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gtVkBlvFQktBxgCq3bojJxltgCL/Hti9FLaVI1V2PsA=; b=gdEZytJc8EP4NEsBqnHhn81oHe
+	EI9WEbQoa4/R7nxVJzDMk4V6pekwiTxzpn5b41CY7eqCQ3GwmXXfLT3DcXNTU8JiBJ25IOwOD+Z3x
+	7YkUlPVUn9xvvfzqBYrqI2mBol/70/AXg5Rmp4mLSxjcgUQQ/sQyRwbEW8i+hvm/h46YpRgL82mty
+	xgvRg2ZGA+RXfvWH+Fjh8SANOYKrrKi7BkSQgnwiIChCjBH5+k1uf1wVNNU99cQxTTsJvY/AqINZw
+	DQ3D+fxuc4dwxSxSrbES7rPGA2jw2dYLNd8lWouElJNCdKFEhqjJQnLT/+EbNfHWCbkD/k4SPp/uR
+	EZjaZlDQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRWTZ-0000000AU0k-3NgD;
+	Thu, 12 Nov 2026 15:12:34 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id BEFA130057E; Thu, 12 Nov 2026 16:12:32 +0100 (CET)
+Date: Thu, 12 Nov 2026 16:12:32 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
+	Bill Wendling <morbo@google.com>, Chuck Wolber <chuck@wolber.net>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	Marco Elver <elver@google.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Gleixner <tglx@kernel.org>
+Subject: Re: [PATCH v2 11/20] objtool: Detect code coverage instrumentation
+ in noinstr code
+Message-ID: <20261112151232.GC1813469@noisy.programming.kicks-ass.net>
+References: <20261103015238.3780910-1-sashal@kernel.org>
+ <20261103015238.3780910-12-sashal@kernel.org>
+ <avVaaxKUA2ArB6RG@jpoimboe>
+ <20261112130906.1316655-1-sashal@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,32 +75,27 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261112130906.1316655-1-sashal@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   aaa2f954c21b205a0bcd0961e5b2be4e82e58455
-commit: 7b8cd26b6aab8cf147165610d13964f79200a5a7 [5784/6673] seq_buf: Mark a seq_buf overflowed when terminating it loses a byte
-config: arm64-randconfig-1000-20261112 (https://download.01.org/0day-ci/archive/20261112/202611122323.IvGv8FYK-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261112/202611122323.IvGv8FYK-lkp@intel.com/reproduce)
+On Thu, Nov 12, 2026 at 08:09:06AM -0500, Sasha Levin wrote:
+> On Wed, Nov 11, 2026 at 10:23:41PM -0800, Josh Poimboeuf wrote:
+> >What exactly is the problem with noinstr code incrementing counters
+> >inline?
+> 
+> The counter is a memory write, and a memory write can trap. In noinstr
+> code that can happen before we're ready to take another exception.
+> 
+> With GCOV_PROFILE_ALL today, exc_debug_kernel() bumps a counter before
+> it clears DR7. Set a watchpoint on that counter and the next kernel #DB
+> never returns, it just keeps re-entering the handler. I tried it on
+> v7.4-rc1 in a VM and it hangs.
+> 
+> noinstr is already supposed to keep these out, it has had __no_profile
+> for years. But that doesn't cover what gets inlined into it, and nothing
+> checks. This patch adds the check.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611122323.IvGv8FYK-lkp@intel.com/
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x20 (section: .text) -> bootup_event_seq (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x24 (section: .text) -> bootup_event_seq (section: .init.data)
->> WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x2c (section: .text) -> bootup_event_buf (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x40 (section: .text) -> bootup_event_seq (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x44 (section: .text) -> bootup_event_buf (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x94 (section: .text) -> bootup_event_seq (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0xc8 (section: .text) -> bootup_event_seq (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x124 (section: .text) -> bootup_event_seq (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x178 (section: .text) -> bootup_event_buf (section: .init.data)
-WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_terminate+0x17c (section: .text) -> bootup_event_seq (section: .init.data)
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Right, strictly speaking this is a toolchain bug, but since we need to
+build with existing tools we need to bodge it somewhat :/
