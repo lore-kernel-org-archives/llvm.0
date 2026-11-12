@@ -1,67 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794462331;
-	b=ZnS32MApxrXdATOTJSG/4Tx5et20qSclQCmycMSwt06NpjuLzSvt8JSYI0rL6Sboebgj
-	 I6gInseUsgO0aWmpS1G4KHZ1ZREoqyNaUJdhJd62IdC6T++MXGMesgkCAYgqfiLsvZ06V
-	 tLYTp0007tETRmyESFuqLMbxMaJ6hiK7iF3pGV2m4FFLXWJsmfGLYymXqoCL2D1vhoOV2
-	 YuXup+sPrNRFOw8efx5QR2cGl503vCc+WM0texzwSSDCaqcmua1AUSn/3rJkm9cFHxPk+
-	 x3jrKPjJYSv4y+v7XOCszSkCU0hd4U33udIsEp24rjFiJ+4U6LMR1Jn9pzBmdX/fOQQ==
+	t=1794463166;
+	b=j3WunM889kQ4cRLbennMPnOqD7Q69EIBKSRm8w6HjrFvYMsHkSoXj+kknMFhfVh16vnu
+	 W/7M5gaqqfIGHFVLB8ia7mfuGB9bYoWCjyPZ9b4Ti3FWAU9G7KJHmgvDnDveqn7uAMCNW
+	 R2bhDwqccvspfozWtLKz+fwWjxCk8YrXvkRNdsasKrQwWiA+Dox1UwJJCLjg2Uv1ty3/q
+	 PfdzJLf6rlQI0Ec5cmAKH8+x6Uwtruq/3CBFF5LwMQp6iGJ8g4PDV7Q80wlxfWcXZtBkc
+	 /7dgzTtXN4oiZrxjjxGNllfYFOBrMNaKT3COJ5qwmNoPNHWjNXCB4q8O+X7fSpSGmBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794462331;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794463166;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=SZNz0UyQ3ihy+PQQPTQhzyeFWffiYmml7CaqnrvLuWo=;
-	b=WYG35rInMMimhU2KMMXD01okR1vRvOmQ5bD9MytjBZDgsw3EhDg8zMJEjxhG8nIil6FR
-	 x+QIJQujauew86EJ/mkjCR7fp9BeJ1iVA/ObAqrkZ86HhDVqUbmGHBWVtVVTldqm4pd0d
-	 0TMTsi7jkbskLECy3QqcMlLDAdmvSW4DlIARpVqF3PMXa/Lx3rPtbrzo+d+RPnWYCCDGk
-	 c81kDLJX8Iv1s3g1T9SUpIkNXciow9Co5x/pSFvH93KuTVp++4HwiAgO9GAZOCHVZ5Nz1
-	 bbzR0LfQcXbieg+7WRnSLEJDbGKxCRRx0LsJSd3/VxuydWzKz9O8wQY05+MqJ7C9yPA==
+	bh=b/D0zsBG3kAacs0MLKSIQPr52pQwnIYsnGcp9zQ980E=;
+	b=i/fKS6/gOoBvXAnfo5e3y/srATOOSRdXQtSFpUZtDhTpfo1A5wEneJKHspczV3sX1+A2
+	 d+Kg+M2MDRKBnuP9DLbc1ws4fK78BtInB2JvV3psiWjLf0IQxb5dsSVCI8AUk31mNLmR2
+	 DltKhJc7VabWZ9atqYnhZksAAsXjSZNwCaOWUCgz2FjMozL+f9tE3jyUfU8sFzPLMxhaV
+	 1w1uk3IHTzv92LiqLinfyuOr+WZZUId7VbekBib1XcU1pUYr7pF5GiAe0v992WHLDuZCp
+	 LiieJObftv9gkcm8nx7kUhLJsEJsxEN5qWM1+I4v4bDIhhO/+icpi8Xh3uehJ9BnZLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Esf+UV1k;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ONvgcakO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9166F606A321;
-	Thu, 12 Nov 2026 05:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B093606A324;
+	Thu, 12 Nov 2026 05:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Esf+UV1k
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3661F00A05;
-	Thu, 12 Nov 2026 05:45:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ONvgcakO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390B91F00A05;
+	Thu, 12 Nov 2026 05:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794462331;
-	bh=SZNz0UyQ3ihy+PQQPTQhzyeFWffiYmml7CaqnrvLuWo=;
+	s=k20260515; t=1794463166;
+	bh=b/D0zsBG3kAacs0MLKSIQPr52pQwnIYsnGcp9zQ980E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Esf+UV1kZR+NqxR4zt2CwZSmWn3WosEozeU3MFw/C1f3n7bpdadj1DDDf0azhcUGU
-	 omSH9FzhGQlB0p8CWyCCCZDocD16UItvzrp1Aszr8ewFg/cZ4vIyfpSjvvKALHczp0
-	 6YcMGAgtQeF8O6v3eGKqqMXYNRGeLu9Zdm1OKlhoMgFT8GhBHWM5Bg0TdypeFUBTnj
-	 2Qv6zomPuamOlm4a7PVKjxcDbCu6/7BSPbqczCHLagPdD4eUGG08206E/xtqdInMlJ
-	 YQKPI2cWNE/9QuubQhHZD262PEoOcPKX/5c8hh54D06A8TA2JzOpy7BczE3kVoqium
-	 p0xfTg0+IoY+g==
-Date: Wed, 11 Nov 2026 21:45:28 -0800
+	b=ONvgcakO68YiyNkoeqwhUmFwhdjMLaLuDY9EACrjI0EIFNKVfr21hfsPGRZS+jJMM
+	 NpXGoZ+n2iUSmrN1x6AFw7JZLXx4c3bBrr41G8IduJVSc80OptIMNtlUrwNvoi7EkH
+	 k4jPNsDDpn/qquzUiQbpLscvhVq53u578vDCreLJZJWWIh/9OXD4IAdUJB6gahqe5B
+	 QRbyIZh6Hx1u12MiZKkcP7kZqn6gbTIdh8CuCzhFo4nP3YbVGS4H9bdhTDmQVp0mnj
+	 1Coup66T5tkN2kWTAsJxMeMatIFOF/suutt7dX7zllow6MUXxG1vrbi+wOlgIFp35T
+	 g+YM1lcCIm6gA==
+Date: Wed, 11 Nov 2026 21:59:23 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v5 07/11] objtool: cache relocations, do less work,
- eliminate relocation hash
-Message-ID: <avVQy5UBOlu7IeQu@jpoimboe>
-References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
- <20261104-build-speedup-v5-7-0f6018be8dae@kernel.org>
+To: Ben Cressey <ben@cressey.dev>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org, linux-kernel@vger.kernel.org, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>, 
+	kexec@lists.infradead.org, David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH] x86/kexec: Type relocate_kernel() to drop __nocfi
+Message-ID: <avVUv4_eeOOr7ZX_@jpoimboe>
+References: <20261111-x86-kexec-kcfi-v1-1-b4d41ea14deb@cressey.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -73,70 +62,46 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261104-build-speedup-v5-7-0f6018be8dae@kernel.org>
+In-Reply-To: <20261111-x86-kexec-kcfi-v1-1-b4d41ea14deb@cressey.dev>
 
-On Wed, Nov 04, 2026 at 06:20:25PM +0000, Lorenzo Stoakes (ARM) wrote:
-> Instruction relocations are looked up by destination in objtool via a hash
-> which is keyed on a 16-byte (OFFSET_STRIDE) window within the section being
-> walked.
+On Wed, Nov 11, 2026 at 03:26:59PM -0800, Ben Cressey wrote:
+> machine_kexec() calls the control page's copy of relocate_kernel()
+> indirectly. The routine has no kCFI type, so all of machine_kexec() is
+> exempt since commit 2114796ca041 ("x86/kexec: Mark machine_kexec() with
+> __nocfi"), and ANNOTATE_NOCFI_SYM() silences objtool.
 > 
-> It iterates through each 16-byte window, looking up relocations over
-> several passes, before moving on to the next 16-byte window, caching only
-> when a relocation is not found saving further lookups in this case.
+> No other call there loses its check today, but one added later would.
+> Review of that mark on arm64 preferred a typed entry, and objected to
+> covering a whole function, on x86 too [1].
 > 
-> Improve upon this by introducing a per-section relocation cache storing the
-> first relocation at or after each 64-byte window of data (an empirically
-> determined index range), indexed by chunk.
+> Typing the routine was set aside in 2025 as not worth it [2]: a type
+> from the caller cannot catch a prototype that drifts, and
+> machine_kexec() seemed unlikely to follow a stray pointer.
 > 
-> The lookup is implemented an array lookup and touches no shared state, so
-> can be used from multiple threads.
+> Type the routine with SYM_TYPED_START(), emit an ENDBR only under
+> CONFIG_FINEIBT, whose boot-time rewrite skips a function without one,
+> and drop both exemptions, along with kexec as a valid use in annotate.h.
 > 
-> The index runs over the relocations in offset order. Usually this is how
-> they are input, however if not, each section is sorted once, storing
-> their offsets in reloc_order[].
+> The check guards only the pointer, and not reliably under plain FineIBT,
+> which checks in the callee with IBT off. A failed check panics or hangs
+> with no CFI report, since load_segments() has reset GS.
 > 
-> This is done lazily on lookup, so nothing pays the cost that doesn't have
-> to, and if everything is sorted nothing does.
-> 
-> The output of objtool before and after this change was confirmed to be
-> byte-for-byte identical both for x86_64 defconfig and allmodconfig with
-> gcc and clang.
-> 
-> objtool on the gcc allmodconfig vmlinux.o goes from 10.5s to 9.0s, clang
-> from 9.8s to 8.3s and gcc defconfig from 2.08s to 1.79s, with peak memory
-> down ~90 MiB on allmodconfig.
-> 
-> Similar performance was also noted on a worst case scenario for unsorted
-> input (gcc but lld for linking), which confirms that the sorting mechanism
-> works correctly with little overhead.
-> 
-> objtool on vmlinux.o is on the serial tail of every build that links
-> vmlinux, no-op builds are unchanged.
-> 
-> Whole build, 128-thread Threadripper 9980X, best of N runs:
-> 
->                                          before   after     delta
->                                          -------------------------------
->   x86 defconfig, touch mm/vma.c, gcc        8.3s     8.2s    -0.14s (-2%)
->   x86 defconfig, touch mm/vma.c, clang      7.6s     7.3s    -0.25s (-3%)
->   x86 defconfig, clean, gcc                28.9s    28.6s    -0.22s (-1%)
->   x86 defconfig, clean, clang              29.4s    29.1s    -0.28s (-1%)
->   x86 allmodconfig, touch mm/vma.c, gcc    29.4s    28.0s     -1.4s (-5%)
->   x86 allmodconfig, touch mm/vma.c, clang  27.9s    26.2s     -1.7s (-6%)
-> 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Link: https://lore.kernel.org/202609241804.BB23BF10@keescook # [1]
+> Link: https://lore.kernel.org/9c41ab61efc573e3ab5a75b6e4031f81db84a846.camel@infradead.org # [2]
+> Signed-off-by: Ben Cressey <ben@cressey.dev>
 > ---
->  tools/objtool/elf.c                 | 280 ++++++++++++++++++++++++++++--------
->  tools/objtool/include/objtool/elf.h |  10 +-
->  2 files changed, 221 insertions(+), 69 deletions(-)
+> This follows Kees Cook's review [1] of the arm64 kexec fix, which goes
+> separately. It is not a security fix, and nothing faults here today.
+> The copy gains a type hash and, with CONFIG_FINEIBT=y, an ENDBR, bare
+> under cfi=kcfi or cfi=off. SYM_TYPED_FUNC_START() is not used, since it
+> would put an ENDBR in every IBT build. Code built with CONFIG_CFI=n is
+> unchanged. A failed check stops crash kexec too.
+> 
+> An LLM wrote the patch and drafted the changelog.
 
-Urgh... so the closer I looked, the more this patch revealed itself to
-be an AI slop mess.  So I ended up completely rewriting it.
-
-You can go ahead and drop all the objtool patches from this series, I
-will repost them after some more cleanups.
-
-And I'm dropping patch 9 altogether, it's just not worth the pain...
+No objection to the change itself, but PLEASE no LLM-written changelogs
+or comments, they tend to read like Rube Goldberg machines and these are
+no exception...
 
 -- 
 Josh
