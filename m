@@ -1,45 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794456854;
-	b=fqWgR/H3XASs4wrRePqh2MFQSXaqeENj0boMPh3Z+hkwgvFm2gtDUjsEApUGYQosA2Uh
-	 QKvOVfOXb8lSCIMiQFZapyQGvFAjIGX2PBwz5MpoRcJslGs3wDhQILOj8NdrADtLsIMlx
-	 Rmwb7Ju6RvI6ungOFW5P9YmxR+AZ0owF03BJvHi8OxYkny45Hku7eNF7zp4gPn18c6Ca/
-	 35n9/isYsqyb1zIE3fBLck+Ff3yamvVI0ZmqNr4GEsBCKth7RIoLmLUQsFq+8j5WLpRLW
-	 ci/vRrRFnE1dpunrUzvU6mk35xEGKIMi/6bvJFSe3E2Q38z1krtKEfsIVZWBUdji7Ag==
+	t=1794460418;
+	b=oJt2ootcN3OeYbSyG7pJnMEdHToAX8Zb9/cxXGzoubsq+vyMimUs1ofoahfHHMVQxMWS
+	 YXWzZKtLQgV3A3JsF5ctw2pvKjivaAkswJws80567ajZT/kIH/Y4zSdp5BcF7FHT+qafO
+	 yxrlf6GiO5Kz3aROox5RecSRaLD/Hb2QsCb4glDMaxxCs3HjPYTcIZT5IxjYMOEEEpcws
+	 ndJ/a8bDfapgRJX8GyA2YI+iT1XHCae3Z03kz7SsbI+Z+PhYTebVJxRNW5AuqnEp5xHps
+	 MGAhxZdlNgGYg6FnylM1jg0HkRpjEV7f2TXj6X5LHGB13ZLJR03pefwq3fSqmR5CoyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794456854;
-	h=Received:DKIM-Signature:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=L+Il5N3BH/2acwoOZB4pI0vrBC4sMNLVBHAemIgrgNA=;
-	b=b76f3by9n0ls2YT1Vsy+uyvgLuK/3vfzo4Zbbqe1YvUfTCa9e6H0O14NVp4un5GrjTPJ
-	 ViBarD90fvhCcLuqxgn4ECFGsE52G7h/azgX3xqzzq1pTrA3VOb/eO7IGz7BTtCf443uC
-	 oEiU/1eHzIR3Hj9jy6GuafDtIBpvj6XZsGQmFDC9EMFZSvM5JuFYGmo5eybzSGqdwcNVi
-	 rTzZULDkodyW0cpgVoFo2z0D8or+VqOfbQWPamku5tFhYiqChuumH9a8hyda5Q5seJTym
-	 lneQ6+/yS1IsTviWeEWVNUwHV93ck/Pgz/uNqf6XsHgtyoQh2+A4vEk7uqfCF52WfBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794460418;
+	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
+	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=cRUDGnLfO0bI/ZKYLMo/IPOSFBGiK0gdMvTEjCrwYl8=;
+	b=VawNoU9ogTZt/9xn/+Pk+J5Hqi/T0oLWAKwlXA/5uFTgOvzSR6BWyUNdA9v2oSpbCChm
+	 guEoJt+KUgJNMNeDcIGIfhD5mfLrHu8zur5tNBVWLsAw2K0Pa884sBCZTS8fc7Aw3jkid
+	 LYMjKwP/JAj4RD5lOQCkujcK03e/nYizhR/BEo+qcNBq22owvxOx3W2leTqFMMaHUqgdG
+	 gYZmQPKo6F6hsLvPNFpifxxPKj0FvCntnouBg9TFaloFJvftuoYDhtjKb6deOMsh/mKn5
+	 NGEGA5aLegWvlKmv43bBjxmRSssyxLe9KXkkzVqMy9R1cCPJvXcj0VCMNNNijjs0fgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=krZcBCxO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=kylinos.cn;
+	arc=none smtp.remote-ip=124.126.103.232
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E60C606A324;
-	Thu, 12 Nov 2026 04:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=krZcBCxO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3638C1F00A06;
-	Thu, 12 Nov 2026 04:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794456853;
-	bh=L+Il5N3BH/2acwoOZB4pI0vrBC4sMNLVBHAemIgrgNA=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=krZcBCxOPZ5U4C+Ww9jKZi3gSHM2Nc8MQoC/LsQIUqBhaB6ybm7iigFB8B+UgvZ/1
-	 8gNUmeqD4E00lq3mdw01rRWOuZ7r6kmv5egXjt99BebgX/5VnrINwZPZWBMRc9bIWa
-	 Meg88x7rT4lP2l5d6TFSP+HQ5cH2Y5+judMmwE0Pmvr9yLKEpTPbBaJHCBWxFJWmVV
-	 4BJ4nNHEjGwgbS/aLTSpWRTqmLVTFRwFYpLurCiF38PQMD7Qs00svrUOwbsmJ+Ougv
-	 LprdSqZyoZ2DyXZgoSxY+pKz7cvckmmW7XzWdIZWZJ+4lqeE5ekSzlR6anXuCJRvwB
-	 QB7FY9wwPn+fQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56C8606A323;
+	Thu, 12 Nov 2026 05:13:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A56C8606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: ca2f8160de5711f19a56ed5b684f684d-20261112
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:5fdecb04-0666-42c4-9ebb-c02f989342c4,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:7db8b62,CLOUDID:68529bbf875d0f11b69a9fa443e77b28,BulkI
+	D:nil,BulkQuantity:0,SF:80|81|82|83|102|136|865|898,TC:nil,Content:0|15|52
+	|99,EDM:-3|-100,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,CO
+	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: ca2f8160de5711f19a56ed5b684f684d-20261112
+X-User: luoxueqin@kylinos.cn
+Received: from [10.42.13.56] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <luoxueqin@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 766716511; Thu, 12 Nov 2026 13:13:26 +0800
+Message-ID: <c6227bc2-beff-40f0-a76f-f2e296de5081@kylinos.cn>
+Date: Thu, 12 Nov 2026 13:11:43 +0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -49,64 +62,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v5 05/11] kbuild: batch module finalisation
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Geert Uytterhoeven <geert@linux-m68k.org>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
- linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- Kees Cook <kees@kernel.org>
-In-Reply-To: <20261104-build-speedup-v5-5-0f6018be8dae@kernel.org>
-References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
- <20261104-build-speedup-v5-5-0f6018be8dae@kernel.org>
-Date: Wed, 11 Nov 2026 21:13:34 -0700
-Message-Id: <179445681472.2545603.12656481753245333767.b4-review@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=630; i=nathan@kernel.org;
- h=from:subject:message-id; bh=y8LsBm6D0xpdjJg/+gkm8Yq0pgu97nlBXctDVx4Veks=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlfbT7dc7z2bk6YXLK3l4bmK/f1N464rWxuP/xh7i/Zh
- 6+Ze6/pdpSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJ9FUw/K/ak3hN83KpWGll
- iJnEKn1XNuF3Rge1LJJ6y5NtX/q9DmNkWCj3ii9BQy8wqFLZT3XHXIZM4bKN6zsT2+Ytj/BX6Uz
- jBQA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/3] arch_topology: Add topology_update_cpu_capacity()
+ for runtime updates
+To: kernel test robot <lkp@intel.com>, rafael@kernel.org,
+ viresh.kumar@linaro.org, sudeep.holla@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ zhanjie9@hisilicon.com, christian.loehle@arm.com, zhenglifeng1@huawei.com,
+ sumitg@nvidia.com, lenb@kernel.org, maciej.wieczor-retman@intel.com,
+ pawel.chmielewski@intel.com, gregkh@linuxfoundation.org, dakr@kernel.org,
+ johan@kernel.org, ionela.voinescu@arm.com, pierre.gondois@arm.com,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev,
+ driver-core@lists.linux.dev
+References: <20261111085022.1229866-4-luoxueqin@kylinos.cn>
+ <202611120358.5eM3xOiA-lkp@intel.com>
+Content-Language: en-US
+From: luoxueqin <luoxueqin@kylinos.cn>
+In-Reply-To: <202611120358.5eM3xOiA-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, 04 Nov 2026 18:20:23 +0000, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> With the .mod.S change in place, module finalisation on allmodconfig builds
-> consists of a large number of very short-lived jobs.
-> 
-> For allmodconfig x86-64 this can be on the order of ~22,000 jobs of a few
-> milliseconds in duration each.
-> 
-> Each job entails processing ~22k .cmd files, so the combination of heavy
-> overhead and small individual job results in a lot of unnecessary and
-> repeated work even with all cores being utilised.
-> 
-> [...]
+Thanks for the report. Fixed: the mutex is now defined inside the
+CONFIG_ACPI_CPPC_LIB block, next to its only user, so ACPI-less
+configs no longer warn. It will be folded into the next revision of
+the series.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
--- 
-Cheers,
-Nathan
+在 2026/11/12 03:30, kernel test robot 写道:
+> Hi Xueqin,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on driver-core/driver-core-testing]
+> [also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v7.4-rc2]
+> [cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge next-20261110]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Xueqin-Luo/cpufreq-cppc-Add-update_limits-support-for-Highest-Performance-changes/20261111-165020
+> base:   driver-core/driver-core-testing
+> patch link:    https://lore.kernel.org/r/20261111085022.1229866-4-luoxueqin%40kylinos.cn
+> patch subject: [PATCH v6 3/3] arch_topology: Add topology_update_cpu_capacity() for runtime updates
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20261112/202611120358.5eM3xOiA-lkp@intel.com/config)
+> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261112/202611120358.5eM3xOiA-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202611120358.5eM3xOiA-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/base/arch_topology.c:232:21: warning: unused variable 'raw_capacity_lock' [-Wunused-variable]
+>       232 | static DEFINE_MUTEX(raw_capacity_lock);
+>           |                     ^~~~~~~~~~~~~~~~~
+>     1 warning generated.
+> 
+> 
+> vim +/raw_capacity_lock +232 drivers/base/arch_topology.c
+> 
+>     230	
+>     231	static u32 *raw_capacity;
+>   > 232	static DEFINE_MUTEX(raw_capacity_lock);
+>     233	
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
