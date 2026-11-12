@@ -1,58 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794460418;
-	b=oJt2ootcN3OeYbSyG7pJnMEdHToAX8Zb9/cxXGzoubsq+vyMimUs1ofoahfHHMVQxMWS
-	 YXWzZKtLQgV3A3JsF5ctw2pvKjivaAkswJws80567ajZT/kIH/Y4zSdp5BcF7FHT+qafO
-	 yxrlf6GiO5Kz3aROox5RecSRaLD/Hb2QsCb4glDMaxxCs3HjPYTcIZT5IxjYMOEEEpcws
-	 ndJ/a8bDfapgRJX8GyA2YI+iT1XHCae3Z03kz7SsbI+Z+PhYTebVJxRNW5AuqnEp5xHps
-	 MGAhxZdlNgGYg6FnylM1jg0HkRpjEV7f2TXj6X5LHGB13ZLJR03pefwq3fSqmR5CoyA==
+	t=1794462331;
+	b=ZnS32MApxrXdATOTJSG/4Tx5et20qSclQCmycMSwt06NpjuLzSvt8JSYI0rL6Sboebgj
+	 I6gInseUsgO0aWmpS1G4KHZ1ZREoqyNaUJdhJd62IdC6T++MXGMesgkCAYgqfiLsvZ06V
+	 tLYTp0007tETRmyESFuqLMbxMaJ6hiK7iF3pGV2m4FFLXWJsmfGLYymXqoCL2D1vhoOV2
+	 YuXup+sPrNRFOw8efx5QR2cGl503vCc+WM0texzwSSDCaqcmua1AUSn/3rJkm9cFHxPk+
+	 x3jrKPjJYSv4y+v7XOCszSkCU0hd4U33udIsEp24rjFiJ+4U6LMR1Jn9pzBmdX/fOQQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794460418;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=cRUDGnLfO0bI/ZKYLMo/IPOSFBGiK0gdMvTEjCrwYl8=;
-	b=VawNoU9ogTZt/9xn/+Pk+J5Hqi/T0oLWAKwlXA/5uFTgOvzSR6BWyUNdA9v2oSpbCChm
-	 guEoJt+KUgJNMNeDcIGIfhD5mfLrHu8zur5tNBVWLsAw2K0Pa884sBCZTS8fc7Aw3jkid
-	 LYMjKwP/JAj4RD5lOQCkujcK03e/nYizhR/BEo+qcNBq22owvxOx3W2leTqFMMaHUqgdG
-	 gYZmQPKo6F6hsLvPNFpifxxPKj0FvCntnouBg9TFaloFJvftuoYDhtjKb6deOMsh/mKn5
-	 NGEGA5aLegWvlKmv43bBjxmRSssyxLe9KXkkzVqMy9R1cCPJvXcj0VCMNNNijjs0fgg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794462331;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=SZNz0UyQ3ihy+PQQPTQhzyeFWffiYmml7CaqnrvLuWo=;
+	b=WYG35rInMMimhU2KMMXD01okR1vRvOmQ5bD9MytjBZDgsw3EhDg8zMJEjxhG8nIil6FR
+	 x+QIJQujauew86EJ/mkjCR7fp9BeJ1iVA/ObAqrkZ86HhDVqUbmGHBWVtVVTldqm4pd0d
+	 0TMTsi7jkbskLECy3QqcMlLDAdmvSW4DlIARpVqF3PMXa/Lx3rPtbrzo+d+RPnWYCCDGk
+	 c81kDLJX8Iv1s3g1T9SUpIkNXciow9Co5x/pSFvH93KuTVp++4HwiAgO9GAZOCHVZ5Nz1
+	 bbzR0LfQcXbieg+7WRnSLEJDbGKxCRRx0LsJSd3/VxuydWzKz9O8wQY05+MqJ7C9yPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Esf+UV1k;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56C8606A323;
-	Thu, 12 Nov 2026 05:13:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A56C8606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ca2f8160de5711f19a56ed5b684f684d-20261112
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:5fdecb04-0666-42c4-9ebb-c02f989342c4,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:7db8b62,CLOUDID:68529bbf875d0f11b69a9fa443e77b28,BulkI
-	D:nil,BulkQuantity:0,SF:80|81|82|83|102|136|865|898,TC:nil,Content:0|15|52
-	|99,EDM:-3|-100,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,CO
-	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: ca2f8160de5711f19a56ed5b684f684d-20261112
-X-User: luoxueqin@kylinos.cn
-Received: from [10.42.13.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <luoxueqin@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 766716511; Thu, 12 Nov 2026 13:13:26 +0800
-Message-ID: <c6227bc2-beff-40f0-a76f-f2e296de5081@kylinos.cn>
-Date: Thu, 12 Nov 2026 13:11:43 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9166F606A321;
+	Thu, 12 Nov 2026 05:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Esf+UV1k
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3661F00A05;
+	Thu, 12 Nov 2026 05:45:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794462331;
+	bh=SZNz0UyQ3ihy+PQQPTQhzyeFWffiYmml7CaqnrvLuWo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Esf+UV1kZR+NqxR4zt2CwZSmWn3WosEozeU3MFw/C1f3n7bpdadj1DDDf0azhcUGU
+	 omSH9FzhGQlB0p8CWyCCCZDocD16UItvzrp1Aszr8ewFg/cZ4vIyfpSjvvKALHczp0
+	 6YcMGAgtQeF8O6v3eGKqqMXYNRGeLu9Zdm1OKlhoMgFT8GhBHWM5Bg0TdypeFUBTnj
+	 2Qv6zomPuamOlm4a7PVKjxcDbCu6/7BSPbqczCHLagPdD4eUGG08206E/xtqdInMlJ
+	 YQKPI2cWNE/9QuubQhHZD262PEoOcPKX/5c8hh54D06A8TA2JzOpy7BczE3kVoqium
+	 p0xfTg0+IoY+g==
+Date: Wed, 11 Nov 2026 21:45:28 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v5 07/11] objtool: cache relocations, do less work,
+ eliminate relocation hash
+Message-ID: <avVQy5UBOlu7IeQu@jpoimboe>
+References: <20261104-build-speedup-v5-0-0f6018be8dae@kernel.org>
+ <20261104-build-speedup-v5-7-0f6018be8dae@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -62,73 +71,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/3] arch_topology: Add topology_update_cpu_capacity()
- for runtime updates
-To: kernel test robot <lkp@intel.com>, rafael@kernel.org,
- viresh.kumar@linaro.org, sudeep.holla@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- zhanjie9@hisilicon.com, christian.loehle@arm.com, zhenglifeng1@huawei.com,
- sumitg@nvidia.com, lenb@kernel.org, maciej.wieczor-retman@intel.com,
- pawel.chmielewski@intel.com, gregkh@linuxfoundation.org, dakr@kernel.org,
- johan@kernel.org, ionela.voinescu@arm.com, pierre.gondois@arm.com,
- linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev,
- driver-core@lists.linux.dev
-References: <20261111085022.1229866-4-luoxueqin@kylinos.cn>
- <202611120358.5eM3xOiA-lkp@intel.com>
-Content-Language: en-US
-From: luoxueqin <luoxueqin@kylinos.cn>
-In-Reply-To: <202611120358.5eM3xOiA-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261104-build-speedup-v5-7-0f6018be8dae@kernel.org>
 
-Thanks for the report. Fixed: the mutex is now defined inside the
-CONFIG_ACPI_CPPC_LIB block, next to its only user, so ACPI-less
-configs no longer warn. It will be folded into the next revision of
-the series.
+On Wed, Nov 04, 2026 at 06:20:25PM +0000, Lorenzo Stoakes (ARM) wrote:
+> Instruction relocations are looked up by destination in objtool via a hash
+> which is keyed on a 16-byte (OFFSET_STRIDE) window within the section being
+> walked.
+> 
+> It iterates through each 16-byte window, looking up relocations over
+> several passes, before moving on to the next 16-byte window, caching only
+> when a relocation is not found saving further lookups in this case.
+> 
+> Improve upon this by introducing a per-section relocation cache storing the
+> first relocation at or after each 64-byte window of data (an empirically
+> determined index range), indexed by chunk.
+> 
+> The lookup is implemented an array lookup and touches no shared state, so
+> can be used from multiple threads.
+> 
+> The index runs over the relocations in offset order. Usually this is how
+> they are input, however if not, each section is sorted once, storing
+> their offsets in reloc_order[].
+> 
+> This is done lazily on lookup, so nothing pays the cost that doesn't have
+> to, and if everything is sorted nothing does.
+> 
+> The output of objtool before and after this change was confirmed to be
+> byte-for-byte identical both for x86_64 defconfig and allmodconfig with
+> gcc and clang.
+> 
+> objtool on the gcc allmodconfig vmlinux.o goes from 10.5s to 9.0s, clang
+> from 9.8s to 8.3s and gcc defconfig from 2.08s to 1.79s, with peak memory
+> down ~90 MiB on allmodconfig.
+> 
+> Similar performance was also noted on a worst case scenario for unsorted
+> input (gcc but lld for linking), which confirms that the sorting mechanism
+> works correctly with little overhead.
+> 
+> objtool on vmlinux.o is on the serial tail of every build that links
+> vmlinux, no-op builds are unchanged.
+> 
+> Whole build, 128-thread Threadripper 9980X, best of N runs:
+> 
+>                                          before   after     delta
+>                                          -------------------------------
+>   x86 defconfig, touch mm/vma.c, gcc        8.3s     8.2s    -0.14s (-2%)
+>   x86 defconfig, touch mm/vma.c, clang      7.6s     7.3s    -0.25s (-3%)
+>   x86 defconfig, clean, gcc                28.9s    28.6s    -0.22s (-1%)
+>   x86 defconfig, clean, clang              29.4s    29.1s    -0.28s (-1%)
+>   x86 allmodconfig, touch mm/vma.c, gcc    29.4s    28.0s     -1.4s (-5%)
+>   x86 allmodconfig, touch mm/vma.c, clang  27.9s    26.2s     -1.7s (-6%)
+> 
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
+>  tools/objtool/elf.c                 | 280 ++++++++++++++++++++++++++++--------
+>  tools/objtool/include/objtool/elf.h |  10 +-
+>  2 files changed, 221 insertions(+), 69 deletions(-)
 
-在 2026/11/12 03:30, kernel test robot 写道:
-> Hi Xueqin,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on driver-core/driver-core-testing]
-> [also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus amd-pstate/linux-next amd-pstate/bleeding-edge linus/master v7.4-rc2]
-> [cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge next-20261110]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Xueqin-Luo/cpufreq-cppc-Add-update_limits-support-for-Highest-Performance-changes/20261111-165020
-> base:   driver-core/driver-core-testing
-> patch link:    https://lore.kernel.org/r/20261111085022.1229866-4-luoxueqin%40kylinos.cn
-> patch subject: [PATCH v6 3/3] arch_topology: Add topology_update_cpu_capacity() for runtime updates
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20261112/202611120358.5eM3xOiA-lkp@intel.com/config)
-> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project e73e336290028f26553b46c9fba844c13da38c9c)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261112/202611120358.5eM3xOiA-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202611120358.5eM3xOiA-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/base/arch_topology.c:232:21: warning: unused variable 'raw_capacity_lock' [-Wunused-variable]
->       232 | static DEFINE_MUTEX(raw_capacity_lock);
->           |                     ^~~~~~~~~~~~~~~~~
->     1 warning generated.
-> 
-> 
-> vim +/raw_capacity_lock +232 drivers/base/arch_topology.c
-> 
->     230	
->     231	static u32 *raw_capacity;
->   > 232	static DEFINE_MUTEX(raw_capacity_lock);
->     233	
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Urgh... so the closer I looked, the more this patch revealed itself to
+be an AI slop mess.  So I ended up completely rewriting it.
 
+You can go ahead and drop all the objtool patches from this series, I
+will repost them after some more cleanups.
+
+And I'm dropping patch 9 altogether, it's just not worth the pain...
+
+-- 
+Josh
