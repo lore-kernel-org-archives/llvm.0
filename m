@@ -1,66 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794505680;
-	b=2Xjy8Fog0UNcWjkLzZ8gClBRysymPT3BKtB5h6M0cDXdESUFrjMzegYBpqnik9ii6wGk
-	 xUPivDwGn0x+s0FWECn4JO5hrQxJiWpFLOj2si29aaXv6BEZr8AOvRykx3YjTJFgVXNIc
-	 E8Upgk9aXqqzhloKM1T+Nu/YBK0PgMpKLJ/ZSJlr3nDd/ugeMT4k83jWKEkh8p7LDOJP7
-	 o5R5XMNY8DKzb36ZWTQh53plAat/6oEg8fmQAiUE4q0v5AyPqwMRpJiNps07LlW+zvDnC
-	 Km/3rdzlyn7eVUkLq0GmXgUUeDWRkxHmvVuZAoQEHCO+IGSdBSOkKeTrkDfgjfDORyQ==
+	t=1794508907;
+	b=K1PcW2VTMf8kDNq+9A20b/esdSDk0B8xNvJSX2KbgvceYXQyvPrqmTv19407dZtqKGa6
+	 x6hpSiObmi0PaT6EZhPhLZlTCIZ+ymxPBILroBJL6rx4bsukQAMOhKAD31F/K/++ROc9S
+	 8wn9lbdtwm8GQzS6dTgFIHyhLDgQIrQlJJavVxEx72viGapT4L8i3x6ytcZQeVaNDjgzX
+	 GDUO2IIeCvtvVY4yxd7q1iH9PU2prGWaxRd/P9PQF4IcICn5QyQSoYYvVvptFyw/JzMfx
+	 pdEKM2/yWnU8a/CQSH+wZCzOQjuS7SFkZEO/pPz+2x7hBYTNyOvixg/9iq6FkoPXEPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794505680;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794508907;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=zaOiQXaj6cqdaLfvFVkz/GzQHYgpVXTXcmV319+t8cI=;
-	b=1C8iDAOxxPboA4Q7M6/hRXL6XQwbtGkueLSSv7IdDj+Tz0fx3ERR7D2xPea6LGmym8Jp
-	 PT81y2JD60p2qUyj7oMOL23GxboHQFK5Gt0Hz9k6dwUHBNtBxpjR27GM2VaX8xAxd2k0E
-	 HVRyYTmiC3r/lMBiePvc06vgjZgSW9vyW65v47VbwkUnKqAYxBsrCrNXMELGpeBP8QldL
-	 caGrX4bV8ZSbepkE3VBdYjwFdCCbgPmV7vPoZMrRx9jeQiHPfIvs3N5mh9hsuiRECDBcH
-	 0DC3WRi8uOWhnp9b49cDuwPBndBeZx9VXttAbhyjXbdhPZr0XikR5We63e2gDy5zhcg==
+	bh=uKte4CtByEWrwTYULhwBK4b7aFl3/6Hqc7HDqY8kXtw=;
+	b=luGwckQ9LydSDgU6BmCmtEFryxjBrWCEa2bHKcqMplre/beW//j7AwgZ/QpQ9ccjtqYo
+	 ho61w/wThdulQ9L5PT1uXoCxgQbCBImBcar8/PLlIQQPDGlce58dZmKS+hOPpVHZoAL/v
+	 Gy3kbyj+l+Ot7o2Um+apMZIGdX8vQDGrkMHMEGE1M7gK3JHyxyubsPswyLgnewUdQdUKw
+	 yAdH+0tlGLkLazkROX7MgvK1piDsrMv+VkLOX+gnOf9AQpP1NuWXwZsDwK4zL5dBhfRuQ
+	 9JZKyJT2pmJ9P0B1EGqNdCTSMlckUMPuzP2VCPIbmKT5E4588a5WqOFkWM5TvSsIkHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAXT8BCQ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lj6z2FNF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8780E606A321;
-	Thu, 12 Nov 2026 17:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BF8606A321;
+	Thu, 12 Nov 2026 18:41:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dAXT8BCQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E631F000C4;
-	Thu, 12 Nov 2026 17:47:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lj6z2FNF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BF51F000C4;
+	Thu, 12 Nov 2026 18:41:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794505680;
-	bh=zaOiQXaj6cqdaLfvFVkz/GzQHYgpVXTXcmV319+t8cI=;
+	s=k20260515; t=1794508906;
+	bh=uKte4CtByEWrwTYULhwBK4b7aFl3/6Hqc7HDqY8kXtw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dAXT8BCQGA0v1Y1k8ymmF1rs8DPDUlmUSugJ0yuskL5i+CZXcn3Slwf0Lukko3L1v
-	 cHr5vmYmUszoaX3cexipeI91nWId6S4XC2HROr+kQibp128sYRTtNpCpwRpvySo+TP
-	 TAYWL2VLQyUmSBGjBQ01qn9TPkni/n+smsz3H6E/Vww7bopXYJFnxpmc8SZ1T91sWr
-	 +zLZ0r76GW8HJmqAEnFf3EJU8s0zykr6Iim6AlveagpPipZ44ndU9Zxb9kHqata28N
-	 yGMghD6Bj/2nOthHKbco/k49feZEDgLDBdKADDboN7SXjmXb96pnCXdAMNUBRwb3lM
-	 s6xeiboXrSSMg==
-Date: Thu, 12 Nov 2026 10:47:53 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>
-Cc: Julian Braha <julianbraha@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, Linus Torvalds <torvalds@linuxfoundation.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Charlie Jenkins <thecharlesjenkins@gmail.com>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 5/6] Eliminate CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT
-Message-ID: <20261112174753.GC4107043@ax162>
-References: <20261111-kconfig-toolchain-updates-v2-0-b2d9415c1757@kernel.org>
- <20261111-kconfig-toolchain-updates-v2-5-b2d9415c1757@kernel.org>
- <avWkWm1N5rv52GG4@levanger>
+	b=lj6z2FNFWZJkDlPa2WxqtQHTtCW0k/kBJZc7p0xl9dR91p14rENz46YoEiprrsUCZ
+	 A8iMoCaM8199AKGQArddP0fkuU5kgNKx3J1RLHm+kDZb0Chi4sE7lVPxFAqp4nhbQ+
+	 A0BchT8X6J84Kx75avf3Mud5fw7YCUYbW9vwfknZkUafj4akJzl7Wv3jmsGuQ5rSoV
+	 4u5OpUbvtxwBpe0g/yCI4WVj8xznHQvZojKfefM9hpiTd+vjnhMixaAfh7zI3WpAdW
+	 UvmesHs8lwAn6qOp87rc6I+lJ4Jb5S7PQQUtoiONwlxJi2Vwzot80sPJepr9P/PHg8
+	 m5NkzA5Weawqw==
+Date: Thu, 12 Nov 2026 10:41:44 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org, 
+	Bill Wendling <morbo@google.com>, Chuck Wolber <chuck@wolber.net>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, Marco Elver <elver@google.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Thomas Gleixner <tglx@kernel.org>
+Subject: Re: [PATCH v2 11/20] objtool: Detect code coverage instrumentation
+ in noinstr code
+Message-ID: <avX80WkCFuGyS1y0@jpoimboe>
+References: <20261103015238.3780910-1-sashal@kernel.org>
+ <20261103015238.3780910-12-sashal@kernel.org>
+ <avVaaxKUA2ArB6RG@jpoimboe>
+ <20261112130906.1316655-1-sashal@kernel.org>
+ <20261112151232.GC1813469@noisy.programming.kicks-ass.net>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -70,49 +64,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <avWkWm1N5rv52GG4@levanger>
+In-Reply-To: <20261112151232.GC1813469@noisy.programming.kicks-ass.net>
 
-On Thu, Nov 12, 2026 at 12:34:50PM +0100, Nicolas Schier wrote:
-> On Wed, Nov 11, 2026 at 05:52:07PM -0700, Nathan Chancellor wrote:
-> > -config CC_HAS_ASM_GOTO_TIED_OUTPUT
-> > -	depends on CC_HAS_ASM_GOTO_OUTPUT
-> > -	# Detect buggy gcc and clang, fixed in gcc-11 clang-14.
-> > -	def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c -o /dev/null)
+On Thu, Nov 12, 2026 at 04:12:32PM +0100, Peter Zijlstra wrote:
+> On Thu, Nov 12, 2026 at 08:09:06AM -0500, Sasha Levin wrote:
+> > On Wed, Nov 11, 2026 at 10:23:41PM -0800, Josh Poimboeuf wrote:
+> > >What exactly is the problem with noinstr code incrementing counters
+> > >inline?
+> > 
+> > The counter is a memory write, and a memory write can trap. In noinstr
+> > code that can happen before we're ready to take another exception.
+> > 
+> > With GCOV_PROFILE_ALL today, exc_debug_kernel() bumps a counter before
+> > it clears DR7. Set a watchpoint on that counter and the next kernel #DB
+> > never returns, it just keeps re-entering the handler. I tried it on
+> > v7.4-rc1 in a VM and it hangs.
+> > 
+> > noinstr is already supposed to keep these out, it has had __no_profile
+> > for years. But that doesn't cover what gets inlined into it, and nothing
+> > checks. This patch adds the check.
 > 
-> The comments reads as if gcc 8 to 10 are affected.  Is the comment
-> somehow misleading, or should we still keep this until gcc-10 is the
-> minimum gcc version?
+> Right, strictly speaking this is a toolchain bug, but since we need to
+> build with existing tools we need to bodge it somewhat :/
 
-It is a little misleading. GCC 11 was the first version that supported
-asm goto with outputs, so this program will not compile with GCC 8 to 10
-as a result:
+I must be missing something, if somebody sets a watchpoint in
+exc_debug_kernel(), don't they get to keep the pieces?
 
-  <stdin>: In function 'foo':
-  <stdin>:1:51: error: expected ':' before string constant
+It's also not clear why --hack-noinstr can't be extended to either NOP
+out the affected instructions, or change the address relocation to point
+to a dummy variable that won't trap.
 
-The bug that it is trying to trigger was fixed during the GCC 11
-development cycle between the initial asm goto with outputs commit and
-the final release. As a result, for GCC, if it supports asm goto with
-outputs, it supports tied outputs in the expected manner.
-
-This test was mostly to catch buggy versions of clang, as asm goto with
-outputs was first shipped in clang-11 but using tied outputs breaks the
-build until they were fixed to be compatible with GCC in clang-14:
-
-  <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
-  int foo(int *x) { asm goto (".long (%l[bar]) - .": "+m"(*x) ::: bar); return *x; bar: return 0; }
-                              ^
-  <stdin>:1:29: error: unknown token in expression in '.long' directive
-  <inline asm>:1:9: note: instantiated into assembly here
-          .long () - .
-                 ^
-  2 errors generated.
-
-So if the compiler results in CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y, we know
-that CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y will be present as well.
+And the changelog needs all that background, as the justification is not
+clear at all (to me).
 
 -- 
-Cheers,
-Nathan
+Josh
