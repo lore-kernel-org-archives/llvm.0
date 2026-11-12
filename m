@@ -1,60 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794482753;
-	b=AzJ48LQj0XCSqkAk3TGBFZZJ2luT5q7idboKcCUhxjyZstUCxDNmHJ/fkHIrmAXEfEOS
-	 6OtALrglpUPZnoqZpeRXVm+PYcKXihzE+yiZvjz7qpkLwzQyi0Hb7bw7p45KQDp43Pj5j
-	 hJ4JecO/7tmeCbYrMe9LDm3x0fKgFI11bcuZXzmi5Nsady59IyjkSQV50miZogyT05BAU
-	 y4ZriuSiee8xtcKYsNyeBrG2Tgl/Hf/Gv6F54+NvD5gujhWLi7J2B8y9+Lm5Ygtox7xZJ
-	 M/6qbOwCPFtteju1X0YxreyIj3N8q+fEmRUGdaZjgRQKpuT4ycvTSR+3Y8NcC/nBhWQ==
+	t=1794483043;
+	b=l5ORRA9zvZFMp6R7xpelOEBDyvWzngU05B73LcJoFevhEqVsBLEn4jaJpG7NDOkYAlVw
+	 8Auc2Cr86Nz1QOiuTRyA2KPt8ugKwyxzz2mnOUhSMSWNj2n67Hcx6I7bMf+HXTr1xI0UI
+	 c2+uAx/7e3KfJ1HTWRSh3ucTYuqi6QFZl+KNBtN+kByYYSO5d2J9sjYr3erBgBJglStn/
+	 SNvHC2tGA9rfNBaGLzlAivdQDN/xTf6GpTfNePvx39AS72QVPc//U1QcuTA4dWgFAQ2m8
+	 b1vz0GkUSYfT7me7/UV9sox1Zw8pE0VZd3d79z09uT85ylYMseMX3S5I6tLnj4Vj+yg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794482753;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 Content-Language:From:In-Reply-To:Content-Transfer-Encoding:
-	 X-CMS-MailID:X-Msg-Generator:Content-Type:X-RootMTR:X-EPHeader:
-	 X-CMS-RootMailID:References;
-	bh=ipHsKGzdySUFK43kUSa1EUse/xjwdqGzCAkyYU+4IsQ=;
-	b=CCAcBqG9LqtBRCl8Nj2noc3A4qoPdi6YHh/qNS++rDKssCYmfcSQyHvBqLnyeEBybxQp
-	 b8rrGeyvjNKy1hniwQBL6jjBKVpS4za2bQN5nf0JfEj/rWX+V8f9wmQHOJ/HNA2cG+jvw
-	 x12ZmNcwElDcbNUnlMUqkLmqhqDi6yEgQsI768a46URx5vESJqNGb27FuwfFwm28TnW0B
-	 neLee5XMRUTdkCnN9syrvp88yCfGQ2tE2rUfolhu7Z0TqL52DRDdPpoY7I6ILQyLRb3mo
-	 TGtGZEPefgJl9jq9iRphxQLt1SfVuC3zT5tcxpOUNgUuqpIyKS7UqG2uQ1hoZF2NMFQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794483043;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=TH0+wCv5ifM8REH9nQg/3agFqlZ5DUFIscm/3LxWRo0=;
+	b=NM0qb5E9BPgAnRDZP9mrUpCJ0i58yMbyiPg94ryHcdsQ9DP4A2pPopl70Uji3frLHLbk
+	 DaqQOZhaA7/lgb5A4V1AWyxPKtdBY7+A2f4aeSgltM+LZvLzPMSwlkoK8uqtZa+2AEjKJ
+	 qTr7jwvxEkxdXDyON0V1/1Wljd8jkptz59nxjZB30X0iyKbfrcvNCWRpPQ1nEj8QUbFoD
+	 fEbi/3RxEsWP1yLxGFN5YtNapSvwjd33RLRj2Fvtva/6jRuwaSzXrGgkm9fhf8RN0Y2b/
+	 AVaIMClqeuYScdN2n6pB/OxQRSc/9Xh/QFB5oL9X/eUlIB+aqKUt9DKL5Q46xuxxi3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=samsung.com;
-	spf=pass smtp.mailfrom=samsung.com;
-	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=AvhYjNqW;
-	arc=none smtp.remote-ip=210.118.77.11
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="dHY9/lJM";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCEF606A881
-	for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 11:25:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ABCEF606A881
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A39A606A8BF;
+	Thu, 12 Nov 2026 11:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=AvhYjNqW
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20261112112543euoutp010f016eb7fa47ed13835ab3afff799d5d~nSIxA7B940644806448euoutp01J;
-	Thu, 12 Nov 2026 11:25:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20261112112543euoutp010f016eb7fa47ed13835ab3afff799d5d~nSIxA7B940644806448euoutp01J
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1794482743;
-	bh=ipHsKGzdySUFK43kUSa1EUse/xjwdqGzCAkyYU+4IsQ=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=AvhYjNqWqGDSDWciDHfOXU3HOJjD8I0PqyiBFvEino+CXJ/Ts8YCaLP0CTP7r83SV
-	 D0u2NoLv9bExEfdz3CuNTS48kAhibm5QmC2eYY3NRLEJ1vo1+7ksYjGgKf8B93b7Ln
-	 eIdw+0vhCIWca8FGDq/+owQFBplfxnoB2Ht47E5M=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20261112112543eucas1p2f3aa7565474df56edb967cbecfd1858d~nSIwwzSqJ0570005700eucas1p2G;
-	Thu, 12 Nov 2026 11:25:43 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20261112112540eusmtip2793b80df566384250842db8b2aa8054b~nSIuZrphA1705017050eusmtip2o;
-	Thu, 12 Nov 2026 11:25:40 +0000 (GMT)
-Message-ID: <feca1837-fb17-4d96-b6d9-7e5d413ef222@samsung.com>
-Date: Thu, 12 Nov 2026 12:25:40 +0100
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dHY9/lJM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 797931F00A0B;
+	Thu, 12 Nov 2026 11:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794483042;
+	bh=TH0+wCv5ifM8REH9nQg/3agFqlZ5DUFIscm/3LxWRo0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=dHY9/lJMFRTkdoK0UtBygoZvi0viJvrQDXFX2s5FvKi786pb0Fxhon1g90q0LAJNn
+	 PENqDFIZIbjRAr6env65rzcSprlxQbjXkDe0p4+7/+w1cPdM9UvcoaclCxkmEnvx/L
+	 oE9DKvkZ2ClL78AeiJ7MU1YcU2e6+Dliu2fKS7trzQcaY8LOeI391uTkm+viM/MxVy
+	 WDMDLV/0R+iz9jXmxmDqgcXL1XCSVSjY8aMO+Og+0+8IwKBzCv70WgbblclOZGVhak
+	 6d/l5yZ3gEYyAKuzNgCi7t9AcEuUPoxh/sg66l5EHUZ40X4td6nIxtPKl+gGBVsMFH
+	 3yeE/40xoNEGw==
+Content-Type: multipart/mixed; boundary="===============1184916852212940912=="
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,61 +49,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/15] lib/lz4: stop forking upstream LZ4, vendor it
- instead
-To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
-	<justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, Thomas
-	Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, Heiko
-	Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
-	Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
-	<borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
-	Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>, Sergey
-	Senozhatsky <senozhatsky@chromium.org>, Jens Axboe <axboe@kernel.dk>, Andrew
-	Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>, Nick
-	Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>, Chao Yu
-	<chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>, Eric Biggers
-	<ebiggers@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, David
-	Laight <david.laight.linux@gmail.com>, Sungguk <sungguk.na@samsung.com>,
-	Jaehoon Chung <jh80.chung@samsung.com>, Marek Szyprowski
-	<m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
+Message-Id: <a0cf14f466cffe1ae1e1138e7ea4466152c96c1b89ba8268a5923a0d13534f28@mail.kernel.org>
+In-Reply-To: <20261112104149.38589-6-cuiyunhui@bytedance.com>
+References: <20261112104149.38589-6-cuiyunhui@bytedance.com>
+Subject: Re: [PATCH v10 5/9] riscv: implement preemptible this_cpu add_return operations
+From: bot+bpf-ci@kernel.org
+To: cuiyunhui@bytedance.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,dennis@kernel.org,tj@kernel.org,cl@gentwo.org,oleg@redhat.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,broonie@kernel.org,cuiyunhui@bytedance.com,dave@stgolabs.net,david.laight.linux@gmail.com,jszhang@kernel.org,tglx@kernel.org,conor.dooley@microchip.com,thuth@redhat.com,ajones@ventanamicro.com,ben.dooks@codethink.co.uk,rkrcmar@ventanamicro.com,samuel.holland@sifive.com,zong.li@sifive.com,debug@rivosinc.com,seanwascoding@gmail.com,andybnac@gmail.com,menglong8.dong@gmail.com,cyrilbur@tenstorrent.com,wangruikang@iscas.ac.cn,atishp@rivosinc.com,apatel@ventanamicro.com,arnd@arndb.de,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.c
+ om,qingfang.deng@siflower.com.cn,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,linux-arch@vger.kernel.org,llvm@lists.linux.dev
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 12 Nov 2026 11:30:37 +0000 (UTC)
+
+--===============1184916852212940912==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20261112112543eucas1p2f3aa7565474df56edb967cbecfd1858d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3
-X-EPHeader: CA
-X-CMS-RootMailID: 20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3
-References: <CGME20261106144247eucas1p15bdd0704f32d1cb3b19f9d2296a0cbc3@eucas1p1.samsung.com>
-	<20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
 
-Hi everyone,
+> riscv: implement preemptible this_cpu add_return operations
 
-On 11/6/26 15:42, Michal Wilczynski wrote:
-> 
-> The import is the v1.10.0 release tag.
+TL;DR: Nit only: the riscv this_cpu add_return helpers duplicate the 32/64 and
+8/16 code and the field mask; could they use the existing macro-generated
+pattern like neighbouring ops? Not a bug.
 
-It appears v1.11.0, followed by v1.11.1 were released in the
-meantime. The next revision of this patchset will import from the
-v1.11.1 release tag to take advantage of the newest code. It already
-contains the backported commits so I will drop the backports.
+> diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
+> --- a/arch/riscv/include/asm/percpu.h
+> +++ b/arch/riscv/include/asm/percpu.h
 
-I will redo all the measurements with the newr version for the v3.
+[ ... ]
 
-> 
+> +static __always_inline u32
+> +__percpu_add_return_amo_case_32(void __percpu *pcp, unsigned long val)
+> +{
+[ ... ]
+> +	return ret + (u32)val;
+> +}
+> +
+> +#ifdef CONFIG_64BIT
+> +static __always_inline u64
+> +__percpu_add_return_amo_case_64(void __percpu *pcp, unsigned long val)
+> +{
+[ ... ]
+> +static __always_inline unsigned long
+> +__percpu_add_return_8_16(void __percpu *pcp, unsigned long val,
+> +			 unsigned int bits)
+> +{
+> +	__PCPU_OP_CONTEXT();
+> +	const u32 field_mask = GENMASK(bits - 1, 0);
 
-Best regards,
--- 
-Michal Wilczynski <m.wilczynski@samsung.com>
+This isn't a bug, but the add_return helpers repeat code that the rest of
+this header generates with macros.
+
+__percpu_add_return_amo_case_32() and __percpu_add_return_amo_case_64() are
+identical apart from the width and the .w/.d suffix.  Inside
+__percpu_add_return_8_16(), the amoadd.b and amoadd.h asm blocks are
+identical apart from the suffix and the (u8)/(u16) casts.  The field mask is
+rebuilt with GENMASK(bits - 1, 0) even though PERCPU_8_16_GET_MASK(sz)
+already exists.
+
+The neighbouring __PERCPU_AMO_OP_CASE and __PERCPU_8_16_OP_CASE helpers take
+the width and suffix as macro parameters.
+
+Could the add_return variants be generated the same way (taking sz/sfx, and
+using PERCPU_8_16_GET_MASK), so the 32/64 and 8/16 copies don't need to be
+kept in sync by hand?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43205409812
+--===============1184916852212940912==--
