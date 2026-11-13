@@ -1,45 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794530745;
-	b=cVMmYSx8edoBrYDdC/19/7w1dNGDzfTwg2xs80d5DaUgLXb5qcNKvH47CaI+fSiZ67+R
-	 VD0EV5qsY/ZMn+ZVJg6pAclwm+gW9ijaIttk8qso3gmzzJQVc6xhVtAmsE+jdhyQBKxUT
-	 bywV9BdcihIikkGYTS4am+Fg/lQp7owCa8cJE1BHTl9upFqe2eDqcr333/uwYakW9ulfF
-	 rwDeDlszfGitWHK+OABqZi5NbakOx6ADLynhIohNarZ8aQKc8NGI3o4jqhdeF7+LW1M71
-	 t7T6UDIYLGIL2n85OOeLd7MS2QoJb0600zh+MjyHqzWs/6DSDpL1o5+4y+DtagqQCdQ==
+	t=1794534384;
+	b=18HXRJX4HPtoYXWG8L4C9N8yhQ8dycE1SUrPZ5wknywPoqmyiHoN64FbUfpMp9XvnL+G
+	 sEy7CHy7wKzTpxizTiLvPuOXSX7bTvMKxJVvzo3Ay2dPUL4Hi3hsLBi2ClHxofQOEN4py
+	 fmNPhj6B4w89IXqM0WKEysuozltWqkO4M28yXmjbYnps13ihOPu7B2M5HOZgk30/dCYrB
+	 7vf0QFNifbY0FTdrTLv3aozWfX4XbaEoefpoMTy1BzgNGFHNlLuJTO/RcPoc00m/DSYI7
+	 mzisAGbTV2CihXqn/t5w/thbztW9JbB+DktlAAvjDqaiA4JzZBuGJjByM9fGunT47iw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794530745;
-	h=Received:DKIM-Signature:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=KY5kDp14poeFBGtqNIrB31vAeISG/NjBxcQdpcZh9x0=;
-	b=OoEJzH1DFJNrUA8WSB8jnANjVouG60Do5yWX2pBd9z/GW/aeL46IBSP/OiKV57Lr85Fi
-	 HDu2dOZnDHZmZ27HmRrdN52MGRptJHYd2opDLfZFEfmyO5iuhu5HLNatZES8PNrZjBsnF
-	 HJy32LsMJKpC3kdBDPD9+Dy0hlIN513d/rSzDUPD9euMc7qkPpPqf8g/oAXPdZ510qG+q
-	 2I6B/YERx7bzom3XgJIrxX+jBZqC3g2270kJEIRhapAOceXGMgylYfPJ1aZbkasqwgCwG
-	 TsLIsZjlyHg/W5uQK0PXXj/xmzb+nFoGoifdG8OCa2u75XiT6ahcPg/dAuKsm/LSXzA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794534384;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=gISKFZgrPgYjpdXhdgkjZ88SIU6lDLBMB+wC3wrVwpg=;
+	b=QDt1OosJLArpQaXFbqmQvYQALKrnJL9kZUZTd4mebuDCFhN1bxpgPAZ5EmcbEv1OJdSJ
+	 UPbkyalRKhIvNaC1clXnmWUtVaGVgD2iGaMPaa+4xVv7yM7gVFiy50QKP8L1YCDsIbI86
+	 FxFHauSbudCU4tRnoA9xnJxZ4/VK2KGheObWOeZs2t1pyAVRPIs7LMwICw7OpzoRpDTy3
+	 4aNoTbClXgtugN8DDhILLsROqSjI5sUKdr8fMSR+dVtryDo4hsr94zb08o2ceOu9YfR94
+	 SyDFplU/ZPBPPbNhcaGgk+jupUhJgYxMjqzIShSsLMfauN8Dcvi3lcmG+gWUDbJEkYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f8QF2j8p;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VPWhDbDN;
+	arc=none smtp.remote-ip=192.198.163.18
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0961C606A32D;
-	Fri, 13 Nov 2026 00:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93E3606A323;
+	Fri, 13 Nov 2026 01:46:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B93E3606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f8QF2j8p
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066F61F000C5;
-	Fri, 13 Nov 2026 00:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794530744;
-	bh=KY5kDp14poeFBGtqNIrB31vAeISG/NjBxcQdpcZh9x0=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=f8QF2j8ptBripY6sRS8V+ZDSMpZao5SU6Jd1+fgbGc9Wb/1tDDW9ZvcE5k2X1zMb0
-	 Ohvvw+RyHlu4hGxcU/ssY1JrjBKZ/kEUcWgxHd/iV5R7oHStWbnbZotAB3qXugl9ru
-	 k5fXe9YcYGa5eEGnWsGOFEVzyQA9yxsGdDPxNrGsuR5HTsgkcHzzWruzza320RGfUH
-	 pLMB51eWD2z96wQ6gBONlBLkKa1IJv2vSgkrS5NotyrOsBz3mHK54Mx9UyKZQKHbwW
-	 3vpkMbvULwjSdbm/HbFT3VQ10YyDVsRHE55lnRunS/Lsjyv1ahe/WeTZH7BP7E+pQd
-	 IZJv1OaJ+/GnQ==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VPWhDbDN
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794534384; x=1826070384;
+  h=date:from:to:cc:subject:message-id;
+  bh=RUk3zXnJjj8KQt+Gx7cF1Jsyg851xFUNTW1+wCe00So=;
+  b=VPWhDbDN25qiEP7g2CzWfk3mWOL/Qe67mSU/Zr2IkwH6FZNFdB4O++A6
+   MhjOfw6aqpYX7CZap5DG9CWCyqWQ92X9OaT5xmsqHBQRRfEnfjDwiYXDn
+   fA/rT8NguppDv2jErrDfJYOXD+P6U/dja0QxA1pXGrjRXisihZPeMrhnU
+   b2FEAWzPiLOH9dUeLUQBVz8hgIjyjpXD8SIKu8Gwly6KyZaj2JSONK5e2
+   x/I4hQYM+hvB8DZn1e3Twa1ESaM+mOXAHFBSzwQsSAwlpmoxJLXjbo/cD
+   S3VBgV2qnAOwZtzf7k+hffhz0jAgM2K2TbJRC60yeosP86NdylVs2Lelh
+   w==;
+X-CSE-ConnectionGUID: 3sQQyZxIT9CbmPvkfpraVw==
+X-CSE-MsgGUID: 7TKFeiQ9RCeMaC17ZU5YTw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3361732"
+X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
+   d="scan'208";a="3361732"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 17:46:24 -0800
+X-CSE-ConnectionGUID: tmg4FqBeQBSi9NERwJN8Ag==
+X-CSE-MsgGUID: uqGqxfbXREqrRwJwzytz2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
+   d="scan'208";a="8694046"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1073a420ae3a) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 12 Nov 2026 17:46:21 -0800
+Received: from kbuild by 1073a420ae3a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xRgMt-0000000014d-3Pwi;
+	Fri, 13 Nov 2026 01:46:19 +0000
+Date: Fri, 13 Nov 2026 02:45:28 +0100
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sudeep-holla:b4/acpi_ffh_ffa 4/4]
+ include/linux/arm_ffa.h:189:30: warning: declaration of 'struct
+ arm_smccc_1_2_regs' will not be visible outside of this function
+Message-ID: <202611130207.5etShYWM-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -48,73 +80,43 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 16/20] coverage: add MC/DC measurement
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Wentao Zhang <wentaoz5@illinois.edu>, 
- Alexander Potapenko <glider@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, 
- Chuck Wolber <chuck@wolber.net>, Dmitry Vyukov <dvyukov@google.com>, 
- Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
- Marco Elver <elver@google.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nsc@kernel.org>, 
- Peter Oberparleiter <oberpar@linux.ibm.com>, 
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>
-In-Reply-To: <20261103015238.3780910-17-sashal@kernel.org>
-References: <20261103015238.3780910-1-sashal@kernel.org>
- <20261103015238.3780910-17-sashal@kernel.org>
-Date: Thu, 12 Nov 2026 17:45:18 -0700
-Message-Id: <179453071828.814257.2587871795236228245.b4-review@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1391; i=nathan@kernel.org;
- h=from:subject:message-id; bh=75CuO+xG+V9JVao6G3ZBK2tMjQkp1WF0lq+KgCZ1jhg=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFnfYpdqxAUecH/Nf5j5QMji0kylx1Xz9B5ff3Y8Y1JdN
- Q/n9u99HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiizkY/llEabAu2y9ukqtr
- k/Ox4Pd2e6E3jdeXFMhtLZmulbhknS7DPwOWPOH6FxZNha/cTRaqzfp2Xf9kDofkQ53skMA/bkc
- uMQMA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-> [ ... 63 lines skipped ... ]
-> +config COVERAGE_MCDC
-> +	bool "Measure modified condition/decision coverage (MC/DC)"
-> +	depends on LLVM_COV_KERNEL
-> +	depends on CLANG_VERSION >= 220000 || !WERROR
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git b4/acpi_ffh_ffa
+head:   97703bfac03a9e3c2f351b14974457f8bd9f8775
+commit: 97703bfac03a9e3c2f351b14974457f8bd9f8775 [4/4] firmware: arm_ffa: Share FF-A version negotiation
+config: arm-randconfig-2002-20261112 (https://download.01.org/0day-ci/archive/20261113/202611130207.5etShYWM-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 8621950157210c1fa68f20f0614cb51310ec9dff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261113/202611130207.5etShYWM-lkp@intel.com/reproduce)
 
-I don't have a super strong opinion here but I think I would rather see
-this just hard depend on Clang >= 22.1.0 rather than let these warnings
-pollute the build without -Werror. Maybe something for the future if we
-get too many reports.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611130207.5etShYWM-lkp@intel.com/
 
-> [ ... 49 lines skipped ... ]
-> +ifdef CONFIG_COVERAGE_MCDC
-> +CFLAGS_COVERAGE	+= -fcoverage-mcdc \
-> +		   -Xclang -fmcdc-max-conditions=$(CONFIG_LLVM_COV_MCDC_MAX_CONDITIONS)
-> +# Decisions that MC/DC leaves out are nothing to fix in the code. Disable the
-> +# warnings here rather than in CFLAGS_COVERAGE, so that KCFLAGS=-Wpgo-coverage
-> +# can list them. Clang only allows this since version 22.
-> +KBUILD_CFLAGS	+= $(call cc-disable-warning, pgo-coverage)
+All warnings (new ones prefixed by >>):
 
-Please make this:
+   In file included from drivers/tee/optee/ffa_abi.c:8:
+>> include/linux/arm_ffa.h:189:30: warning: declaration of 'struct arm_smccc_1_2_regs' will not be visible outside of this function [-Wvisibility]
+     189 |         void (*invoke)(const struct arm_smccc_1_2_regs *args,
+         |                                     ^
+   1 warning generated.
 
-  KBUILD_CFLAGS += $(call cc-option,-Wno-pgo-coverage)
 
-This might even want to be in scripts/Kconfig.toolchain as
+vim +189 include/linux/arm_ffa.h
 
-  config CC_OPT_WNO_PGO_COVERAGE
-    # clang-22: https://github.com/llvm/llvm-project/commit/80887c7de9d82c809555f52948af1a5d7484e28
-    # gcc: not supported
-    def_string "$(cc-option-str,-Wno-pgo-coverage)"
+   182	
+   183	#if IS_BUILTIN(CONFIG_ARM_FFA_VERSION_NEGOTIATION)
+   184	int arm_ffa_version_get(void (*invoke)(const struct arm_smccc_1_2_regs *args,
+   185					       struct arm_smccc_1_2_regs *res),
+   186				u32 input_version, u32 *version);
+   187	#else
+   188	static inline int arm_ffa_version_get(
+ > 189		void (*invoke)(const struct arm_smccc_1_2_regs *args,
+   190			       struct arm_smccc_1_2_regs *res),
+   191		u32 input_version, u32 *version) { return -EOPNOTSUPP; }
+   192	#endif /* CONFIG_ARM_FFA_VERSION_NEGOTIATION */
+   193	
 
-so that it will be easy to clean this up when we use clang-22 as a
-minimum version.
-
--- 
-Cheers,
-Nathan
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
