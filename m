@@ -1,45 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794610554;
-	b=fEqlrFhyMmReRur5+2plCN4woxzBSXgLRH/7LA+6AU/253DTWsVsrBgADUXCT1Yj/TO4
-	 cvC/DZsYsezERDGhwtCdNLAC8Vp6qMHtIu+kmOPDEkEiSA6EDZ+g5Hn/V4UW7btTTi6mG
-	 D0LJi9DIzwgBnl8yhFhCRktYI72NBsPp3OIcHxBwExILLsOrvd6Mt3deB34ojQXdowiZP
-	 dpIg2EULUSs+3KwvbcH01ZQxsshPrv6rOM9J4r8vlRlHRA0gm9rEguVX39G+puo0mCyr0
-	 sws7ZN7WIouQSAxnbG+C4IbVawE7jkmPxJK8msBBz3oCJ4z5rAPBA9xh3EVz8eHYlnw==
+	t=1794611017;
+	b=SD3ilcDsVt7oRM4TDiVsZ++OGgaCAdeqsVp7YlGnMKq6Aaq18vtEbHMe/dsELgNHrJI+
+	 0EvsCepCNSrkubv0L9tl8Y5sPAupfDex6DqYE36vsLeu0sjid8bcclmFmaRc+DbWVwaJz
+	 3sqCC7k0wVt4vAKmAN2hxyhu91bp9DdaJe98qhqj+GXC0N5/SEKxZR94kyufuWT4HuBdu
+	 hCwY+1PjgTikIsj2OrAgv60rbq7HlLfioEmmAnSsGwd3PgmIRbzaCzenr5kb3mOqxGNyi
+	 EGaAuGNFHtD3VkwyXNVniDyDck7zJdGbhkHmTfIx9a5Gy8rArRGV6H4aNl66wDFfbhg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794610554;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=KN3BAQQz6V4aWs3TRbBIzGlNzQXPAP/3NN2RobaOAEE=;
-	b=zxCeSbP0hzMqacB75PoePZi38buWIDrC8WVxO99/B0g44g6sY+qEQ4yg/5ft9T/W2jtV
-	 X9/zjYchkYvFsTHaG5NwuOz6nu4i7vLFjX3O5yxH/+kyypiMf2xCRxjEbwcFVXhR9lA+f
-	 6B7NsTEhuFIAvlUBYkxQojbTN5V8RVzbx/8726pAhJGJpQzyceBG/pW6tHVZjebN6Hu9L
-	 6BxW5JGBZY5QwcEnelekz/5WATTvqLaK09szve7YsR/GoWpUAE/qkGiBJfslhwa4sRzgY
-	 T/IprHqfxCg9dm6+TLjDgbfFD6Yvx8/Pr0sMAUYhbQvUvX33+h+YnfeKHcpisTfnPaQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794611017;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=Yym3QEjt3jxkWofEvUChQGupgKslrAhXvv28AePR+sk=;
+	b=Chxiu/ZK2ufX81qd56Jqml6aHHrkVVq9RV8TYF04GgX+SktNJXt5wmt77yyvGOKmHtWm
+	 AOJO/+BSIHZlEgvwAcGq7b3NMQft2lMH0nXNP1Ztq8r3EHJeqCg0yjXJZQcCisoimQezg
+	 8BTNs1j56QRb5puieMT8MP2/PMbQRp4YRrloK5aCJ9c9vRi27GGMuDjdVIVtlT0Y5TFZN
+	 28RvSTRHhacwonbfWHwoSeEdSVmP0kgr8XfxiBEM3nKKG2kaX9Cp20nDFwe33V290+JMF
+	 y0JVAdhOF3gU3r26VWCnvIprVv23uM63Z9PXShmmTshla4XgDDW3tHiE2BxlkZKVE2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zr/r1yff";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GyjaEwlA;
+	arc=none smtp.remote-ip=198.175.65.16
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA19606A890;
-	Fri, 13 Nov 2026 22:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947D1606A334;
+	Fri, 13 Nov 2026 23:03:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 947D1606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zr/r1yff
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4053A1F000C4;
-	Fri, 13 Nov 2026 22:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794610554;
-	bh=KN3BAQQz6V4aWs3TRbBIzGlNzQXPAP/3NN2RobaOAEE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Zr/r1yffsWfgcq3GiAScelw76p+OkyQYD2uH4hI/pcXZT/7E7x2Do+HBZm7e8OFNx
-	 c1oIKY+cvZEYv2sTZiX8+jnO5YqRpoKeiMbazqRw1aa4yUaQNbK7Mb95zvfQKKK1ig
-	 mxTFsa/RQhH/hCyvaswWfMYIpbiYkjjf2EiN/QQuWlfHGZB+EWhPT+tIC3Q4Mu5j8o
-	 t3lv1MPLpzLCUm09+TGX/ieOrJzoVKxT/z452fFm5NUzwDYL01fzfKWTbIMccvSMuj
-	 9FGL0SOXawyhCSF1WGLngab9+y6SU5rYrE3XlyC8yaZy7Xut3XdxIC/7rV4CX8ZWVe
-	 haNQtCPugcyAw==
-Content-Type: multipart/mixed; boundary="===============8280819268335858825=="
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GyjaEwlA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794611014; x=1826147014;
+  h=date:from:to:cc:subject:message-id;
+  bh=BlaYcxCvpBKwv0ouakc25tqfmVbPl2M3VrYa5qekbdw=;
+  b=GyjaEwlAERhEwSr8isBo9j8CAMhO3eg5qeOieIxOqbCEqhoAORbhpk1N
+   /00nxivekuC2LVAnkvo1rEmdlB6FkKs99aCPyHJkeI/BePMYN9+W7rT3/
+   4lwnuzbEzCENJ8sJSUm4e0YVRfmMw2FehjpoGzWev9bgGsRpF7dvhTNzP
+   wrLQgiC1Tyw7wT9ks6kTNyjzFMIJgLYV36nm6CAJuWWE7kkSa0g4cqmcq
+   y1A/2hdyqu9hBk5wjOUgwdD5DI1VKI0IFvXhEek2qOYRkMLcasjS3uqGy
+   74rNdf5AgkC5xwu/t/1q9Z3d1c6o27UOrLk+bz9fqIwACOHUmNMeiCATl
+   A==;
+X-CSE-ConnectionGUID: ljumcpWaRYi5TwIzG5eg8Q==
+X-CSE-MsgGUID: +KKit3agSKSpwy7stSEuMw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11965"; a="3417501"
+X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
+   d="scan'208";a="3417501"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 15:03:34 -0800
+X-CSE-ConnectionGUID: uiFc+IjPQx+bOoRgjbcdvw==
+X-CSE-MsgGUID: eob9fvbwRHaW7wWDNZmpxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
+   d="scan'208";a="9569731"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 13 Nov 2026 15:03:32 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xS0Ir-000000014KU-18v7;
+	Fri, 13 Nov 2026 23:03:29 +0000
+Date: Sat, 14 Nov 2026 07:03:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bvanassche:thread-safety 416/438]
+ arch/arm/mach-mvebu/cpu-reset.c:101:1: error: expected ';' after top level
+ declarator
+Message-ID: <202611140612.OYIpyuMW-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -48,140 +80,57 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <2f27a1ffca14cd87a744c447c5fded67459c1497ebafe05350f4721ef994c3f0@mail.kernel.org>
-In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
-References: <20261113221248.3535369-14-wusamuel@google.com>
-Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME ioctl to /proc/kallsyms
-From: bot+bpf-ci@kernel.org
-To: wusamuel@google.com,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,atomlin@atomlin.com,viro@zeniv.linux.org.uk,brauner@kernel.org,jack@suse.cz,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
-Cc: akpm@linux-foundation.org,pmladek@suse.com,david.laight.linux@gmail.com,wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,linux-doc@vger.kernel.org,linux-modules@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 13 Nov 2026 22:55:50 +0000 (UTC)
 
---===============8280819268335858825==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+tree:   https://github.com/bvanassche/linux thread-safety
+head:   8ea0e62cf4d68a895e3152c92a5f6ead6d5c9554
+commit: 0efee98d1b3338e5fb967e0805d802cdb7953d42 [416/438] fs: Annotate kill_sb() callbacks with __releases(&sb->s_umount)
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20261114/202611140612.OYIpyuMW-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1b1fed44d3dcca649a9877915d57c3357a98124e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261114/202611140612.OYIpyuMW-lkp@intel.com/reproduce)
 
-> kallsyms: Add KALLSYMS_QUERY_BY_NAME ioctl to /proc/kallsyms
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611140612.OYIpyuMW-lkp@intel.com/
 
-TL;DR:
-- KALLSYMS_QUERY_BY_NAME may scan BPF ksyms quadratically in one syscall with
-  no cond_resched(), possibly cancelling the speedup
-- module_filter may return -ENOENT for init symbols that the unfiltered query
-  finds via the ftrace section
+All errors (new ones prefixed by >>):
 
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-
-[ ... ]
-
-> +static int kallsyms_find_name_other(unsigned int sec, unsigned int *idx,
-> +				    const struct kallsyms_name_query *q,
-> +				    struct kallsyms_sym_match *m)
-> +{
-
-[ ... ]
-
-> +	do {
-> +		if (sec == KSYM_SEC_BPF)
-> +			err = bpf_get_kallsym(*idx, &m->addr, &type, m->name);
-> +		else if (sec == KSYM_SEC_KPROBE)
-> +			err = kprobe_get_kallsym(*idx, &m->addr, &type, m->name);
-> +		else
-> +			err = ftrace_mod_get_kallsym(*idx, &m->addr, &type,
-> +						     m->name, m->modname,
-> +						     &exported);
-> +		if (!err && !strncmp(m->name, q->name, q->cmp_len))
-> +			return 0;
-> +		(*idx)++;
-> +	} while (!err);
-
-Is this loop quadratic in the number of BPF ksyms, with no reschedule point?
-
-bpf_get_kallsym() restarts from the list head on every call and walks
-forward to the index:
-
-    list_for_each_entry_rcu(ksym, &bpf_kallsyms, lnode) {
-        if (it++ != symnum)
-            continue;
-
-So one ioctl that scans the BPF section without a match does n(n+1)/2 list
-steps inside a single syscall.  Every exhaustive query gets there, since
-even a query whose matches are all in vmlinux or modules still scans the
-ftrace, BPF and kprobe sections on the call that returns -ENOENT.
-
-The uapi comment tells users to keep calling with pos + 1 until -ENOENT,
-and the libbpf user later in this series (822e9da9a9b7 "libbpf: Resolve
-typeless ksyms via KALLSYMS_QUERY_BY_NAME ioctl") does this twice per
-typeless extern, once for the exact name and once for the "<name>.llvm."
-prefix.
-
-With read() of /proc/kallsyms the same getter cost is spread across
-syscalls, because seq_read fills at most one seq_file buffer per call.  Here
-all of it lands in each call that reaches the BPF section.  On hosts with
-thousands of BPF programs and trampolines, does this cancel the speedup the
-commit message describes?
-
-On kernels without ARCH_HAS_PREEMPT_LAZY, or with ARCH_NO_PREEMPT, it is
-also a long run with no reschedule, whereas kallsyms_on_each_symbol() and
-kallsyms_on_each_match_symbol() in this file call cond_resched().
-
-Would a helper that walks bpf_kallsyms once from a start index be better,
-or at least a cond_resched() in this loop?  ftrace_mod_get_kallsym() has the
-same restart-from-the-beginning pattern, although its lists are usually
-small.
-
-[ ... ]
-
-> +	if (karg.module_filter) {
-> +		len = kallsyms_copy_str_from_user(bufs->module_filter,
-> +						  sizeof(bufs->module_filter),
-> +						  karg.module_filter);
-> +		if (len < 0)
-> +			return len;
-> +		if (!strcmp(bufs->module_filter, "vmlinux")) {
-> +			end_sec = KSYM_SEC_VMLINUX + 1;
-> +		} else {
-> +			first_sec = KSYM_SEC_MODULE;
-> +			end_sec = KSYM_SEC_MODULE + 1;
-> +			q.modname = bufs->module_filter;
-> +		}
-
-Can module_filter return -ENOENT for a symbol that the unfiltered query
-finds in the same module?
-
-When a module name is given, only KSYM_SEC_MODULE is searched.  But
-/proc/kallsyms also lists entries for a loaded module from the ftrace
-section.  ftrace_free_mem(), called from do_init_module() for the module's
-init text, runs allocate_ftrace_mod_map() when any ftrace_ops is registered,
-and ftrace_mod_get_kallsym() returns those entries with
-strscpy(module_name, mod_map->mod->name, ...).  They appear as, for example:
-
-    ffffffffc0a01000 T foo_init [foo]
-
-and remain until the module is unloaded, because ftrace_release_mod() frees
-the map then.  After init, mod->kallsyms has switched to core_kallsyms, so
-these init symbols are no longer in the module section.  That gives:
-
-    BY_NAME("foo_init", module_filter = NULL)  -> match, sym_module = "foo"
-    BY_NAME("foo_init", module_filter = "foo") -> -ENOENT
-
-The uapi comment says the ioctl finds a symbol "in the entries of
-/proc/kallsyms", so the filtered result does not look like the unfiltered
-result limited to [foo].  kallsyms_find_name_other() does not check
-q->modname for the ftrace section, so extending end_sec alone would not be
-enough.
-
-Should the filtered case also search KSYM_SEC_FTRACE and skip entries whose
-m->modname differs from q->modname, or should the uapi comment document that
-module_filter only covers the module's own symbol table?
+>> arch/arm/mach-mvebu/cpu-reset.c:101:1: error: expected ';' after top level declarator
+     101 | early_initcall(mvebu_cpu_reset_init);
+         | ^
+   include/linux/init.h:284:29: note: expanded from macro 'early_initcall'
+     284 | #define early_initcall(fn)              __define_initcall(fn, early)
+         |                                         ^
+   include/linux/init.h:277:35: note: expanded from macro '__define_initcall'
+     277 | #define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
+         |                                   ^
+   include/linux/init.h:275:35: note: expanded from macro '___define_initcall'
+     275 |         __unique_initcall(fn, id, __sec, __initcall_id(fn))
+         |                                          ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   <command line>:8:26: note: expanded from macro '__KBUILD_MODNAME'
+       8 | #define __KBUILD_MODNAME cpu_reset
+         |                          ^
+   arch/arm/include/asm/proc-fns.h:137:21: note: expanded from macro 'cpu_reset'
+     137 | #define cpu_reset                       PROC_VTABLE(reset)
+         |                                         ^
+   arch/arm/include/asm/proc-fns.h:126:35: note: expanded from macro 'PROC_VTABLE'
+     126 | #define PROC_VTABLE(f)                  processor.f
+         |                                                  ^
+   1 error generated.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+vim +101 arch/arm/mach-mvebu/cpu-reset.c
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43520044354
---===============8280819268335858825==--
+3f20fb1153b374 Thomas Petazzoni 2014-04-14  100  
+3f20fb1153b374 Thomas Petazzoni 2014-04-14 @101  early_initcall(mvebu_cpu_reset_init);
+
+:::::: The code at line 101 was first introduced by commit
+:::::: 3f20fb1153b374737acd40d42cb3cab2ae5dae35 ARM: mvebu: introduce CPU reset code
+
+:::::: TO: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+:::::: CC: Jason Cooper <jason@lakedaemon.net>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
