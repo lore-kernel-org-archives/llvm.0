@@ -1,84 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794538303;
-	b=DvfhLjoXz+RhWYK491zmw0b7Ttuz+LUlg4gTL0oYMvzz0kwxWohicKdQW8HjFKk70UwO
-	 LiW5Yetxs9eC3qp1KTP5V5VWMr4DX08yMl0KH49lW04sFJX+U1Vfhju9c0YwvHFibXjBW
-	 E3w1ixuXZA5dBk7MrSc5wunJrrgxWQ5yRYxB/ozkDOQ6WSMUOqIIi3cl4xu+Qc/eC9cQ2
-	 t6Ul6smA4IrWI2jMjSzmdiVj9hnr5TxeqqKx0Yoa4cv41dUn6yVw+64gErTVJf+QgpwtZ
-	 xDW203PnRYdUnT79FkbCeOdHBg+r+qq+Nolw21icsolbT7yMG0692qMV1p3E+wgauvQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794538303;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=9q3WecW58AVzVN8/3AXX3WSFjtoBFejU4UH87CoM6+E=;
-	b=ZBkPGihG7IwCzemVxQVc5vTB39YnoQkY7x9HI+cp2RYvmOgsmWhJ9d+eAsGpdlRlAeFH
-	 /94jHBnSu+KJWstVMnQmWVd8TiTH9w375BedED1id+9oXUjpDaN67NLGPmm6YxiEnAyJL
-	 RLnnJQlfykHdye4yZFSOZvH+zeOeLSQX0R6fCZamMuMNYzIAhga7uiYKf/3us6N/mguhw
-	 C2AW4rjJJmTNXLYzoNjZJPZs1Ko/e+27+l6Q7R4R4IZDql7ZiMe1Oy1c3rh5NQjbyOZ8a
-	 5SnZyyAoDcMbQzJC3pNK1K+HprjwcxoQFdPuIcjT81HsgSwm4tbpVyG4dgBXBZksZmg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hmsndqWY;
-	arc=none smtp.remote-ip=198.175.65.14
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794540355;
+	b=k6kZb9qwPruFN7CEHzfxjl7RglIy+dGYAIM3aGmrvxwjPIm+po7Iu+7BuIPVlnswDl6A
+	 hdo6tWsrsa9d9rKKE8iF6rplK35aIZsVB3Qgg8hzAVi4BhLmUXKZ9nUJnY/qDnRV7tJs/
+	 cn6Ca0m7zHeep+ihcaJ5t5tsHNGTrR+DCuAYzDNcAoPM/t/ZVniR5vKrJXbra5yUl3lpB
+	 gBNxojazf8+xRRWrqoMmJd/Vy1Gs8xB3b1+2KYAVl3ue/k3FVJUPccoeOdOu97s9UuOMb
+	 uxZiTmAb9hr44YJlKLT0R7HKFHL7JGlq3dOFsVdE7wAow2r3XY9WgN8Jhv+B40aShNA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794540355;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
+	b=ccQVK4OQCFdagyRf1Ax0jjukDtzuF3OwB4BRmS20KrZuLzqo7tAOnpXxLSXU2a+kh99C
+	 H6M6aMf6Yg0BINdCWJa2ijsGGCi1A/Pyh27w1/IosuXqEnlEr96Ae93m30vp50qAEfEBZ
+	 QoJ7dUmsaGMbZMgI4+eZ92lI1DM0PRD/d9xqvfNRfGRUENTPyZkyRb3eBvMo31o8pYcIT
+	 Ia7zN+P2ODNaY0ySWNh3RzF34sNUf7Fq0NPYP0OtVPGItnGbzNGw6ToeGhEfz1FoullFo
+	 GHcYj81jWFI/YWn0hwKo6bL71Lx+O5eplJdsqKEidBbc01iV6Bu59OBfIWpyFRXPpog==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DIBQAmHO;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.51
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E2460A3816;
-	Fri, 13 Nov 2026 02:51:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97E2460A3816
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01552606A31C
+	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 03:25:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01552606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hmsndqWY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794538303; x=1826074303;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fxqpdnvOspyiKnPiU9wfiXKu4XCKOXuYAgetxr629AM=;
-  b=hmsndqWYvkivvkd5QAKKNdThBIEvxKZTBSj7IyB9f8MoQh47ZsDHIbuE
-   ZmMRjxDvbZbjmcuFm1pTtnHgD/Oicb742zMezAu4lz180Wr4ZxErgPnrT
-   QHL1NaUR+CCl5PPJK96dLKr3ZZrzKaFMHLyRO/WL4ixXg+oqB0rzwylf0
-   g5IG7E/JVELM5Xkh+kPfBqygWfwOJb2cxA7aBguCJYdnRuzuNab+bzWUn
-   QsM4nVb2rei1W9TOULScQrEIfEc0rnxh6mtzeyKlRHkv5c0iTQ79ARWkM
-   xVE7rrWaXbWB0WMPS8ec+93aqfUDUmdS04rXcxqHBQkH+O86WIQBfnYbO
-   A==;
-X-CSE-ConnectionGUID: vOonq1ErQyGMZlKpAkG8Pg==
-X-CSE-MsgGUID: mvmv6G4WSOujop1o3LB6ow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3232620"
-X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
-   d="scan'208";a="3232620"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 18:51:43 -0800
-X-CSE-ConnectionGUID: yPq+HySaSR+ZKVdZDROT3g==
-X-CSE-MsgGUID: ajzsGcyWSYijWq20X5aymw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
-   d="scan'208";a="8831933"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 12 Nov 2026 18:51:39 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRhO5-000000012L5-1qoW;
-	Fri, 13 Nov 2026 02:51:37 +0000
-Date: Fri, 13 Nov 2026 10:50:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sudeep Holla <sudeep.holla@kernel.org>, linux-acpi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sudeep Holla <sudeep.holla@kernel.org>,
-	Jamie Nguyen <jamien@nvidia.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Hanjun Guo <guohanjun@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Dat Mach <dmach@nvidia.com>
-Subject: Re: [PATCH v2 3/3] firmware: arm_ffa: Share FF-A version negotiation
-Message-ID: <202611131010.OMo0VbqM-lkp@intel.com>
-References: <20261112-acpi_ffh_ffa-v2-3-575a9dbed22b@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DIBQAmHO
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-67bef25eb92so651869d50.0
+        for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 19:25:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794540354; cv=none;
+        d=google.com; s=arc-20260327;
+        b=s5PC/j1zmnF4GHizqmZW1d07ccJLNNlx6Tip/BxM2IwUpu02QBmlIbhxcQ1yz54T0q
+         7zTwgXLgjUZJRQOGD+R7J9jll/MzvKXCZY9woMOGuHd6x51a20daJIeAEi15ntNPXwpB
+         rxtNDFnIkMBxex3Ip22Qa1Zn9gC4MsWFDROj10zZfBxubcDNFdb2S7BMxSWNwdS1jvP2
+         F8qPhcB9gh4zYDLvhW6e6y+JzWyA0ScOFA9oqRzhMZiL/BPVFR3G98geVD8ftyKy9guE
+         /OE+lbNT6mrjZ/SAUAkEEBpQ8aS9szi7zXjhdGMRpiHpNW9ri6wqRUYb/zm0fJjQbDeR
+         qP2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
+        fh=wPyQ9d0Gkyg1En9MY5JDcmfR58fxGJHjAGWNgWQ54Ck=;
+        b=lIvTgTm4XJhBcZzVrBW+BbsCcJifPbGDgT0KZ6M1tMymd/e3YYMbBvXK71/5dIewjP
+         yBji7QRdxBkHcrBvF2PCXK32uA/gNXjgsJ/cDymNQAk0WqVGR5Ib8C0X8EkQlJh9otzK
+         6qbRsyEqdwsBfUkkKPyjMeD/WQCVT0jFmYJgnSXSQRp8md/yjEc00vde0xf9Il7aSF14
+         o87ER1Hd8bEFE35Wl30q9tTFbxgdRzaZYG2qPxwYOH0HU7bZaLeT3VTXf4JlnmtzI5/K
+         9G/TRXmNwW7sqBM39VR2uTjmPBYBD1gN1/n+qqsVyGRdYu7wvWuU74PL8gesv4IVR2dQ
+         TMxQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794540354; x=1795145154; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
+        b=DIBQAmHOyDKpdSl4m7RX1MgzhHRFPJMYhZy6c2ftUv3ObuMOvoWnFuVmUMWU3On2xr
+         tYoXQMHrQWVx1ZdjIa04iLI//cnjhDTIC99ikHSIoGjxDgPbrLgjEwsWWbCCae6/FVzP
+         xpXtgl3/Wo5cfFEo9Y0t4QxhF35fjsleL8NvrxGUlV5PgwBg+bKYeI7/EnVbUKEDLfPP
+         2syRiEwR4NFvFoMSWC/AzXmS0bt3NuburjAcAU7Cr2/LKWAt58PT4cNsbnDlonlFzzar
+         WDKdbO764pEWVnFY4FXCvfyEB7cpnuwfMjnhi02jP0/fCM6hiVInYfeq5ObQVBmuZLVw
+         e8yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794540354; x=1795145154;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
+        b=2bAlPCqkyJE/rClylYxBJ+un1lSwOBxIgd2wogCykHHnPzyMfa7fwsSV5hAaN4cw7w
+         zQqYoFfWsUE2ZJTo5MdMkccSn3ToxeWJaoyxm+2cxx4FZX5trxRiamZOx5lI4D6Kmeez
+         X4wyWWlTGCRLL1IhCSdXZsBY9G40Kpxtt8o5XVQC04kl07VzyALziPtBnvVnREnOhG7c
+         JS2ZGQrBXeyjg7DrbMvgaCDpou++SqrykS5HV9EH3lzzK7bwRvLTYGSx9pGU5uMXzUj7
+         uTjpRJAeyZ1TvxTOh7C3ti96XRjBtXwrgc1vGfEc8K5M4AzKuph5JLf7vboiQl2cQhEp
+         4vLA==
+X-Forwarded-Encrypted: i=1; AL+hErEYefU9yjpsxIGxEYpjzvgvj4tGFbL2XS/v8TprS5R4wZEzEVJf7a8HIhO8StAMlZjXsHGO@lists.linux.dev
+X-Gm-Message-State: APuU4Z+mlvqkbRqTlSJSI0ghfotXPOsiqsylhGm8Z/8IROisNkTtX7Y4
+	OlL0BBkIM459gvF4e5t4S8eoRDNSYtr2SoiWkUE8pVuD9zo9vM6IFypmTxpNQXHs6PmND4zPahj
+	bfhg6gFrOPGCGHNFTeK9j99zeDTvqUf4=
+X-Gm-Gg: AYBFou1acwAKJyBl/OW1Q/HvpB/3J69wYr4+dpbhaV84sc7U4Ql2EEn5JeT9jCgg1Ia
+	zbg8Xu4ziTe9dd7fpavTUwZqg7ND54aqulqFyo5Z6Xm+gSP9/HEKJd6T4cbUsN2TPktE6p4J17l
+	dFikR8SrXNGRxJfibO61gfFTo5QArlMfqwV+ZnUmA9OyQWcPUGCOrVkDT6JIPGXRf04+k3AGg5z
+	J4YygXaZTo8J+gcAvl/ITm4f+Jr2cF428rKuAA6vI3NC/l4UvEYbg9WYXEzKRBJ3Xw3XkMVUVRD
+	KkcxRjnGJzBHYEkBzAp294faAhh4/BeKyrb0nGSbDR979H4+HRFNw4/jeRQqiKwIPJiIuSs9fkH
+	4DmtbUoi//gGbaAfKz9qA2Pb0YAgUyBA0e4k1izM0iNAOvgezgoRnLYDHjdU=
+X-Received: by 2002:a05:690e:1697:b0:67a:6b2b:b851 with SMTP id
+ 956f58d0204a3-67c7907e144mr2968859d50.40.1794540354022; Thu, 12 Nov 2026
+ 19:25:54 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -88,53 +103,26 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261112-acpi_ffh_ffa-v2-3-575a9dbed22b@kernel.org>
+References: <20261104133158.3187525-1-luolongjuna@gmail.com> <avZ20mdxRnzTPY4c@jpoimboe>
+In-Reply-To: <avZ20mdxRnzTPY4c@jpoimboe>
+From: Longjun Luo <luolongjuna@gmail.com>
+Date: Fri, 13 Nov 2026 11:25:42 +0800
+X-Gm-Features: AclHuK__CJ53_9mRKoHEMyp5nR9AtpphyE9a9Wbd0i2YCf9S8k8HQ6zn3MAuAnQ
+Message-ID: <CAKL4jwXwgsjrA2d64bh1iUD6nZAwy5NoCyL2i+EEmBB=dKu2jw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/11] objtool/klp: DWARF-based cross-build symbol correlation
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, 
+	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, live-patching@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Sudeep,
+Understood, I'll follow up inline on those threads directly.
 
-kernel test robot noticed the following build warnings:
+I sent v2 out as a new series mainly because it covers the next layer of
+the design: v1 introduced the (source, scope, name) identity, and v2
+builds on that to do the actual symbol matching using checksums and
+reference context.
 
-[auto build test WARNING on 7475ea8b58616b33c04afb976cf0fbaad9dd63fb]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sudeep-Holla/firmware-arm_ffa-Share-FF-A-register-field-definitions/20261112-111406
-base:   7475ea8b58616b33c04afb976cf0fbaad9dd63fb
-patch link:    https://lore.kernel.org/r/20261112-acpi_ffh_ffa-v2-3-575a9dbed22b%40kernel.org
-patch subject: [PATCH v2 3/3] firmware: arm_ffa: Share FF-A version negotiation
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20261113/202611131010.OMo0VbqM-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1b1fed44d3dcca649a9877915d57c3357a98124e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261113/202611131010.OMo0VbqM-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611131010.OMo0VbqM-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/tee/optee/ffa_abi.c:8:
->> include/linux/arm_ffa.h:189:30: warning: declaration of 'struct arm_smccc_1_2_regs' will not be visible outside of this function [-Wvisibility]
-     189 |         void (*invoke)(const struct arm_smccc_1_2_regs *args,
-         |                                     ^
-   1 warning generated.
-
-
-vim +189 include/linux/arm_ffa.h
-
-   182	
-   183	#if IS_BUILTIN(CONFIG_ARM_FFA_VERSION_NEGOTIATION)
-   184	int arm_ffa_version_get(void (*invoke)(const struct arm_smccc_1_2_regs *args,
-   185					       struct arm_smccc_1_2_regs *res),
-   186				u32 input_version, u32 *version);
-   187	#else
-   188	static inline int arm_ffa_version_get(
- > 189		void (*invoke)(const struct arm_smccc_1_2_regs *args,
-   190			       struct arm_smccc_1_2_regs *res),
-   191		u32 input_version, u32 *version) { return -EOPNOTSUPP; }
-   192	#endif /* CONFIG_ARM_FFA_VERSION_NEGOTIATION */
-   193	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Longjun
