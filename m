@@ -1,100 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794557484;
-	b=MF1fzHTbbGjm/jyJF0vYOVoLM812nzJOySosl4U25HI7IQk9VANMCjoPmLkZVpBflbJ4
-	 BOwQOSRRCEO+VUlmr8Yc+sWBGomEDhj3qNNK6n64Bbj8a7IZS+TbebaQCYbIDB4HBv9Xg
-	 rR+BP88F31mP9RDVtRmiSSoR/ML185aC6FPaIgI+ZE3g3BrJRGIlCVZRh/oAt1IWBzg1s
-	 1qBOWTKnxiVn/OfH+gEjjNOuq66kP1gB1JLvwfYOlrsYUWZSnjXE07U4RcQj4slTNKoAw
-	 WM2OXK8eIL3FChhmf8MQh8Jz4fTd8+KBmJPBSCSzLL/kcODCftWBwD/dHvbFk9vP0RA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794557484;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794558521;
+	b=cGtHQ618B9txObvKHZILvwLra8UsAuKc5eepXDv2lzb70NeINSzKOotL+962zZrJCZpY
+	 DLbxGnvdEqFzXnuydHorPjcT4qWvWRBaGipDrzfKxUytpcWm+kS0ZHbHfxVp/AqYwcAUc
+	 VSdjmx3UsMMd/i/DxYf8rHSqKcFnmr5SrHc4xbW2k5/EWyY3JjRpohGOaj2BQuco+8TDC
+	 eFmhHT9JGf+3T/9OIoR99+Hx4cdLd5WaWTTgfqDjVEyBRvKXwkJ7Lda5VvMwOtKsvrE3H
+	 nVr2C+19KWT5myKBH0Gym3GXXzMo1/NbTcO12o3ZTMmo9q+Z8oiKnIJG7+u5yr41fkQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794558521;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ky1fNcYST3cXVSIleurQJpPQOjWYx5UwkSzn2L6E/3w=;
-	b=T6EZF9izz2IkBOjm/MU3nxw2KbPCwepMTrS0aBkpwBeRwSSelbVgEVSwOfztLXlujTr3
-	 QsNdCpd1MH0HRcpdJKLXlDWyUFuwcb9T+c0jKVz22qb2/2b4Hv9JVSaADYHhHLhKvJA1S
-	 +ZR1L+z/M+iF19CtWf5LQ8z3rKmW+9C+IYUJ2Ys+adk1i+JyNJhGUX6v5/qOlaIEWQtOU
-	 24QQM2hpWD0AcJdCXZg+1gmiC4S/izXq1uGzc8UvpvvlfB8btz1vcQhgFNq3HLwccGBUe
-	 hQaPShQO7d1dURB6eI2ULRX2TKBerVajQMJwbyNUlsmTUKtXdzpcsPf2hHtzzrq0RoA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloud.ionos.com;
-	spf=pass smtp.mailfrom=ionos.com;
-	dkim=pass header.d=cloud.ionos.com header.i=@cloud.ionos.com header.a=rsa-sha256 header.s=google header.b=J2FIxeiQ;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=nrmFebnjevEyXDZoOWfiZZaPcF3U9vlhmYY98rYqI7g=;
+	b=CE9hKcQ+lCXSH2ZzquDgisaZLEwDO7R1Nnuf5MRTe8QnE87vYqrFzOgvWl/IbcqTet9x
+	 jBQHdTjd7T3+nsSxz4rLqfgLyVa3qb4JkxB1FtwZStoneGXgP6RKTittPy6ko3UdX9L1J
+	 PHGx1yxWnVvFj8Ibz6gq2dkq7vfaKH1e6WMgXXAPfpN52TqzQEDZaJ1qlNkHueRUd04qz
+	 /R0djTI5/xf5M5yqd53Rh66+aYsy18znGoUJ+TYk1JQeWahyDrOz+9Jib0GEwGtoVkSnQ
+	 rTburo6odt/8tIfAf61F1gZLpJAsUCBQ6yMPqFMuaheHUp16q01OjBoJKUw12I7gD0g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DY4ltKq9;
+	arc=none smtp.remote-ip=209.85.216.70
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9EB606A330
-	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 08:11:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A9EB606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cloud.ionos.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF3B606C995
+	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 08:28:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0FF3B606C995
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloud.ionos.com header.i=@cloud.ionos.com header.a=rsa-sha256 header.s=google header.b=J2FIxeiQ
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c50737c64c8so11002166b.1
-        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 00:11:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794557482; cv=none;
-        d=google.com; s=arc-20260327;
-        b=n1V4qtLex6AwnMTxwP9JiX32EOD3TuA00MEdijkfA3rWkoSO5/UEo+TU2sZ+DUNyw9
-         btikUVWfJ5ZLjqxPNc0cvGcrcW5p5vddae4cUtCkd6XTqrkFvIjFGYEVdIef68I4eAq4
-         fzQO+gVi9/oQtGyl1MdfXT+OXx/oiOm1qLPPz6hJbB4eQUUzKGbu+MDId2P4dclVtovj
-         38URY56aTiKS5UlsFBOfYZve4ScvSownLsTuvLhql5MJWIyNXaZSE3C11KBX3MnlcJmm
-         Uz+sKvq1AUeBU7gmHoGYYnU+Tqj0x1lBM2djAgAP3llex3Ya8BZMxCh3xxS8chq8Ggmw
-         09Rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ky1fNcYST3cXVSIleurQJpPQOjWYx5UwkSzn2L6E/3w=;
-        fh=w9VhlM4cz2W/Sfn+8ZrH2oXJOW/C8A8v+N/GtxoA+vY=;
-        b=VhU0pYwBux7d346P/Z6Xn7gzKIa5bnvBfUGVuh3HfgRXl8yCRJEk7jigYL0g+UE8+n
-         sV8ULrXt51bBh5EFVrg6uCvRt8BeCw7Hxem/YRiRSSNb8XUCbe7i15Ze4+Q9QKiy7TTE
-         mgedDN8AZNXNjTHJ+L0/KNKTiTsZCpfbTPbuDjJFqcPTxyMfAF7QUoz6JDsL8IXa8NKU
-         5j/nAIlJillgdlNQcu/EObYiB8JDnNjb96DWaiPufNSFqYkpoK8AwsemQOUkjiY+gz8U
-         1WIPY5UeWb4x3+MXRvbAk7MMizPs8dn7vaN27Rcrs3KQ3/UuimM8cZ0zHNJJVrWdcVZY
-         YKXg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DY4ltKq9
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3b18165dc53so1034278a91.3
+        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 00:28:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloud.ionos.com; s=google; t=1794557482; x=1795162282; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ky1fNcYST3cXVSIleurQJpPQOjWYx5UwkSzn2L6E/3w=;
-        b=J2FIxeiQOVoY1mUnkbQsJzd5VX+sWHHTlUL/HtH+fwxDOW+MXpZCP3aNjrJdq2zQGM
-         E999O08vhoaWHk/e0uEwXJc8MscNWi3zca19F7L8FwgtPRHX3CX/3FZXLepQM/sVU39u
-         a1eI3mK4gVEwscEJloxh83YeCgSRwPNeqUTgkkMV+2g16dg7Gg0s4YBdq55O9wdrlLKj
-         Y2xOIavYfHLIh+jYhBKx4b0XaRVBhHFNCLue+uXJV8eoGTZoIkV9qoa7B9KKIW+RNgtA
-         ZBTs1u7eiEC1SZ0RAr6AVGAJGne7A+7rgW1Uvy9GbAghdlWBxyGhlTUn8IrMMJTL+JIe
-         nvuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794557482; x=1795162282;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1794558520; x=1795163320; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ky1fNcYST3cXVSIleurQJpPQOjWYx5UwkSzn2L6E/3w=;
-        b=Or4GuGGRWjrOfS/YXmqrztdoqVKZr0hVoazKCuhqdPbZENcQbiiRZfTTbD+xdL5jtT
-         oiVQi0DdVUIy+5sYZmpuMcXzgqHXtDxLL0nfPxuBAqGmxo8u83W8/5trb1EfZd7WL5oA
-         VwFKxnfLnPbuC2xe2bX189AFmXVu8bMJfbIY6cbO87wwkFGQjsYhHjCNXkOewQeOPEuv
-         aaByz0tsUiNoX8bjWJi+OrDVXzv+HxzeLBXBLnC9hb1fQwbqMNE61QBwJLBwzTjWTjzH
-         gdzmXokg4fG5Tu9AuRqHrlNhY1oRweSFB/L9ZEv43woC07+3Kc0lVkGkfdPTAhwq7Nln
-         2Wzw==
-X-Forwarded-Encrypted: i=1; AL+hErGdHIbyniqdwRYPRCXVb7eIZ8Jb/+iJJWjLyyNFyVy0TarOIFCh8FiptQ6Xqwv4r+yS5HuN@lists.linux.dev
-X-Gm-Message-State: APuU4Z8BP+YJSTIlF7xYq+l6wk0I/1ECVAJ2jeH88y6kEfUZIWfqWxC2
-	E/m7PuKTjUceSXbeORpMWudf2W1bA3mLqdy60x6SNn/G/UqsOK0PnVkPLIu3d3uzZ8gvm7dqjhH
-	fZumyyn4I5uiDic4wy9uJtnE4dwgVMBc+NtOAqKtgWA==
-X-Gm-Gg: AYBFou2KTPgli1L/KPXNQKq47js55OAh42DqsNjRjfjMV+LwzlkqzpYRIQhhpvWFHwr
-	xXqbc4DTjPwzLj4HY4EFa/VKwWOBPWwU8czM5W3qSQRKNv6GaeVqc45I66Qcc0sqMW64tfmgtqv
-	8WNCJxNmnBkrLr3v9NLMSQH1kN7p8LPSjdqU6zANl7OxB+u/rVu8IFsxzJDY/Ru9EEIgx90i2oy
-	xNpmWDyhQqDcfii5ll9ba7dStX3MoPcgoYoxtPd1ZHxoCFwGPE+ye6JaO2fAoY4+w18unv0tEfb
-	VLI5WyaYE3yARjEc5AGYhcDIKudv+0dFo1x1ThplwfaRObMkmZcUYc7qPtvsIQzw5CR+MqQ38RG
-	gyniq59Ni71fAr1MZ7D/tgGvEWGrNLcWriaLYUZxNRONLZlrHfw6qZwrnHvOJfl5heO6OZA==
-X-Received: by 2002:a17:906:f183:b0:c2e:3698:dbba with SMTP id
- a640c23a62f3a-c509642ceeamr126451666b.4.1794557481497; Fri, 13 Nov 2026
- 00:11:21 -0800 (PST)
+        bh=nrmFebnjevEyXDZoOWfiZZaPcF3U9vlhmYY98rYqI7g=;
+        b=DY4ltKq9vo54Fp7uGmu8TzwhHzw6SmAyBl4T31MxY1zaTotUvte03n+7bqFubG4QsT
+         VJPFADyE6rKOWMm7lYnblxxQGQ5o2F3+O1HgZIJGsJaGT1cFf9KzMcfzuL6nX+oXu142
+         XdumpR2+QvXNthcKTscigwQ6fwKS172s0CxcJXjNi46CyD+SMf9JMLqw/mktW4/IsC/t
+         DkjVJDoBRfQ0Z8WoWu/A6Cd8xqsnYMJW2oSulo98mBVr0oDufgVFnkgZogC/3PIKpOZi
+         9Q18KJgO5DR6A/N6UiRwHm+AiHcYlswYqXaI9rPOc/C6/IdtAjrDMUZb9H0QXPdN2kiH
+         Fduw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794558520; x=1795163320;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nrmFebnjevEyXDZoOWfiZZaPcF3U9vlhmYY98rYqI7g=;
+        b=Xia1h7jRsPkCBGDU+HA+dzrODH4qaKeKyMX95+bkI3VR2e7Z2p0bOYV2Dyy45ZxgBU
+         g/4Vxh6DQ3mhi7QLFOxKP4F/5+/uY1rAnuTwB/V3Rb3IynVhiwLAdMLiNDgX090kMYjc
+         S41VoBH65pF2vHqyqS3KEV5lsITIBOkX0nyO9gHRlxJqm/aYuw7lekzXI3MSSSwR7rAP
+         4sY+7mGDKZXrjHYC0zlPh4/0kWB5dAf2hizkIWVJqNQr0qPJe3xMdeywirawkrXYs++2
+         JgFs2+Ge9pbt1f2J541YgriDskSFt5Ffjng4GUVB4j6x8rxHIZQ3Ed9GLeFq5Qmj6Jt4
+         h9UQ==
+X-Forwarded-Encrypted: i=1; AL+hErGvZunHqQqD3uDTNk66ylsEAMGy28RHles1h5OCsow0lEa5WwAPWY/7laqjlFjSkPr5BFxk@lists.linux.dev
+X-Gm-Message-State: APuU4Z/WGwYQgqPoLy/pON4X8q4J9klS/sRtnh9kOvj8L/3nk9ey+Ggx
+	0oCWa7T0CWq99w3zI9PZBafhDLG4xH6hvwj5RKdYQrcBGUKk0+WDFQjQHZhRHOAn8jVx0NkrzeB
+	8vqr7Zw5cJlwdKqM0EU3G2Q==
+X-Received: from pjvd14.prod.google.com ([2002:a17:90a:d98e:b0:3b0:9569:4e9a])
+ (user=jenhaochen job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:3d87:b0:3ab:2737:3395 with SMTP id 98e67ed59e1d1-3b1b0a3a2f9mr1460229a91.42.1794558520120;
+ Fri, 13 Nov 2026 00:28:40 -0800 (PST)
+Date: Fri, 13 Nov 2026 08:28:37 +0000
+In-Reply-To: <CANiq72=zg8WeupV5TPTr2tUxAt7imSZXacw=CBf75MdfcAv-rA@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,112 +78,95 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-References: <20261112134700.372702-2-jinpu.wang@cloud.ionos.com> <202611130354.oOiDWpa1-lkp@intel.com>
-In-Reply-To: <202611130354.oOiDWpa1-lkp@intel.com>
-From: Jinpu Wang <jinpu.wang@cloud.ionos.com>
-Date: Fri, 13 Nov 2026 09:11:10 +0100
-X-Gm-Features: AclHuK_ijeVtZl53-Nr24xIboJn-g0mWRkSzGcLkYkpL9J_f9DfqfuDTwKSOTUg
-Message-ID: <CAMGffE=bCVxcuDzUdGk=btfu-bdHhwofHQ6qkgx7UmQTpvSyhQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] block: suspend bio based disks around queue limits updates
-To: kernel test robot <lkp@intel.com>, sashiko-reviews@lists.linux.dev
-Cc: Yu Kuai <yukuai@fygo.io>, Song Liu <song@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	Christoph Hellwig <hch@lst.de>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Li Nan <magiclinan@didiglobal.com>, Xiao Ni <xiao@kernel.org>, linux-raid@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Mime-Version: 1.0
+References: <20261031030807.4101384-1-jenhaochen@google.com> <CANiq72=zg8WeupV5TPTr2tUxAt7imSZXacw=CBf75MdfcAv-rA@mail.gmail.com>
+X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
+Message-ID: <20261113082837.4011638-1-jenhaochen@google.com>
+Subject: Re: [PATCH] kbuild: rust: pass AutoFDO flags to Clang with inline helpers
+From: Jenhao Chen <jenhaochen@google.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Rong Xu <xur@google.com>, 
+	Han Shen <shenhan@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Matthew Maurer <mmaurer@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Qais Yousef <qyousef@google.com>, Ben Wei <benwei@google.com>, 
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Jenhao Chen <jenhaochen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, all
+On Wed, Nov 11, 2026 at 7:48 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> This sounds reasonable, but my LLM spotted that Clang will run
+> `AddDiscriminatorsPass`  again, i.e. on the optimized bitcode that
+> `rustc` produced. So the profile ends up indexed by Clang's renumbered
+> discriminators, and then the build that uses the profile will not find
+> a match for some code (depending on inlining decisions), i.e. that
+> part of the profile is silently dropped.
+>
+> It proposes `-mllvm -no-discriminators` in
+> `CC_FLAGS_RUST_INLINE_HELPERS` so that Clang doesn't add them, i.e.
+> using the `rustc` ones.
+>
+> Rong, Han: is that expected?
 
-I will fix the __releases(&disk->queue->limits_lock) annotation in
-next version, will wait a bit if any other comments.
+Hi Miguel,
 
-Thanks!
+Nice catch -- I tested this on drivers/android/binder/rust_binder_main.o
+(arm64, Clang 22 + rustc 1.91) and confirmed that the duplicate
+AddDiscriminatorsPass run is real and that passing
+`-mllvm -no-discriminators` to the post-llvm-link $(CC) step improves
+profile matching in both stages:
 
+1. Why the second AddDiscriminatorsPass renumbers discriminators:
+   In Stage 1, rustc runs AddDiscriminatorsPass on pre-inlining IR and
+   then runs its optimization/inlining pipeline before emitting .bc.
+   When post-llvm-link $(CC) runs AddDiscriminatorsPass again on the
+   already-inlined .m.bc, llvm/lib/Transforms/Utils/AddDiscriminators.cpp
+   keys blocks by (filename, line) without checking inlinedAt and
+   overwrites existing base discriminators via
+   cloneWithBaseDiscriminator(). On rust_binder_main.o, that second pass
+   increases non-zero DWARF .debug_line discriminator rows from 6,245 to
+   9,313 (+3,068 rows, +49%).
 
-On Thu, Nov 12, 2026 at 8:18=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Jack,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jack-Wang/block-su=
-spend-bio-based-disks-around-queue-limits-updates/20261112-144659
-> base:   6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-> patch link:    https://lore.kernel.org/r/20261112134700.372702-2-jinpu.wa=
-ng%40cloud.ionos.com
-> patch subject: [PATCH v4 1/2] block: suspend bio based disks around queue=
- limits updates
-> config: arm-randconfig-1002-20261112 (https://download.01.org/0day-ci/arc=
-hive/20261113/202611130354.oOiDWpa1-lkp@intel.com/config)
-> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1=
-b1fed44d3dcca649a9877915d57c3357a98124e)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20261113/202611130354.oOiDWpa1-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202611130354.oOiDWpa1-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from block/blk-map.c:12:
-> >> block/blk.h:680:10: warning: releasing mutex 'disk->queue->limits_lock=
-' that was not held [-Wthread-safety-analysis]
->      680 |                 return queue_limits_commit_update(disk->queue,=
- lim);
->          |                        ^
->    block/blk.h:681:9: warning: releasing mutex 'disk->queue->limits_lock'=
- that was not held [-Wthread-safety-analysis]
->      681 |         return queue_limits_commit_update_frozen(disk->queue, =
-lim);
->          |                ^
->    2 warnings generated.
-> --
->    In file included from block/blk-sysfs.c:14:
-> >> block/blk.h:680:10: warning: releasing mutex 'disk->queue->limits_lock=
-' that was not held [-Wthread-safety-analysis]
->      680 |                 return queue_limits_commit_update(disk->queue,=
- lim);
->          |                        ^
->    block/blk.h:681:9: warning: releasing mutex 'disk->queue->limits_lock'=
- that was not held [-Wthread-safety-analysis]
->      681 |         return queue_limits_commit_update_frozen(disk->queue, =
-lim);
->          |                ^
-> >> block/blk-sysfs.c:909:3: warning: mutex '(kobj - #undefined)->queue->l=
-imits_lock' is not held on every path through here [-Wthread-safety-analysi=
-s]
->      909 |                 blk_disk_resume(disk);
->          |                 ^
->    block/blk-sysfs.c:897:9: note: mutex acquired here
->      897 |                 lim =3D queue_limits_start_update(q);
->          |                       ^
->    3 warnings generated.
->
->
-> vim +680 block/blk.h
->
->    675
->    676  static inline int blk_disk_commit_limits(struct gendisk *disk,
->    677                                           struct queue_limits *lim=
-)
->    678  {
->    679          if (disk->fops->suspend)
->  > 680                  return queue_limits_commit_update(disk->queue, li=
-m);
->    681          return queue_limits_commit_update_frozen(disk->queue, lim=
-);
->    682  }
->    683
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+   In the profile-use build, rustc's SampleProfileLoaderPass runs before
+   rustc's inliner (against pre-inlining discriminators), while Stage 3
+   sees a different post-inlining CFG once Stage 1 has applied the
+   profile.
+
+2. Measured round-trip impact (42 sampled functions in
+   rust_binder_main.o):
+   - Stage 1 (rustc -Zprofile-sample-use): annotated branch_weights
+     increase from 454 to 490 (+7.9%) when the profile is generated and
+     used with `-mllvm -no-discriminators` in Stage 3.
+   - Stage 3 ($(CC) -fprofile-sample-use): SampleProfileLoader record
+     coverage increases from 39.3% (2,832 / 7,205) to 54.0%
+     (3,707 / 6,860, +14.7 percentage points), and sample coverage
+     increases from 42.9% (757.8K / 1,767.6K) to 56.4%
+     (989.6K / 1,753.4K, +13.6 percentage points; 969 -> 1,035
+     branch_weights). Against a hardware ETM profile, Stage 3 matched
+     function entry counts also increase by +33.9%.
+
+3. Side-effect checks:
+   - C helpers: rust/helpers/helpers*.bc is compiled separately via
+     cmd_rust_helper (without CC_FLAGS_RUST_INLINE_HELPERS), so C
+     helpers still get their pre-inlining base discriminators before
+     llvm-link.
+   - Flow-sensitive discriminators: MIRAddFSDiscriminators in
+     llvm/lib/CodeGen/MIRFSDiscriminator.cpp checks
+     EnableFSDiscriminator and shouldEmitDebugInfoForProfiling() rather
+     than NoDiscriminators, so post-link FS discriminators remain
+     enabled.
+
+Rong, Han, Miguel, Nathan: would you prefer adding
+`-mllvm -no-discriminators` directly to `CC_FLAGS_RUST_INLINE_HELPERS`
+in the top-level Makefile, or appending it in scripts/Makefile.autofdo
+under `ifdef CONFIG_RUST_INLINE_HELPERS`? Happy to send v2 once we align
+on the preferred spot.
+
+Thanks,
+Jenhao
