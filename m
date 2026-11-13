@@ -1,90 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794599012;
-	b=l+rdufP4999jQeHqD/ikb2DaMj0YtlPXbqIHQh79ucno8d8bK4HTXw3adi3KDmkO2vqx
-	 ZiD9eswg8rZrBSRYDFeXHXEMxAPtlNQFNerdEOI6ct8NfapqJ29EUVS54q4OU50R9yqQr
-	 kRn7Js8+RReLkSfGGgeyI6h5kcAo2Irpm/ilHgoSBN/VXEep6pWfDqQ0M4i/uAS+bp7US
-	 sXXdl7xyMkUYgNGvHv8xYZaEewIWyTFPQnYW4ji756e6qZecq8i9sbkx+ENS0KZGnegM8
-	 VxF83BHUJXbTWZsDSLZc8KkpHugl7zC9D9T8Et+4QMYvha1E1AE82SKnphnUgjB/t/A==
+	t=1794599895;
+	b=HpHsD+EsrHL7Ep2hW3XkX8boSJh5G25X0q0aCQ5d4NFCJXj3Fyu9HQpQ2X9Fkc0ILsKm
+	 zvnXnl0AQy8v3bINk4YwM3fELOQXrWRFEFD4cBbUParsUDXMZLbh4S7G3F2i4DTeai29p
+	 O8922qqXoCqUyhCiZ8ngbryv5BweBDDtwoo6fOFWAH/zTUCGIUva643o4jFBRjpPQdQ81
+	 gA/YBx41x+l4bSLY4JsJPhV5+HdSCRZWQXUSUfyu8xsYmXznGZNt6Lj/bfUnSCbNYuWWt
+	 AbM/Mgv4FLTcGkqX5Y1dHZeMNHRKR0kiygMv1g+y1ooHst4lLphvpyndcTSwI9+DTEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794599012;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=N4P8j+QMSewuz+uKE5PNg/893eiJ2vhGXM01N1veea0=;
-	b=NmCAP9N6TguGFpveIQ4dOPaAt/nJAUnERHYsOhgHykxq/t9xWnCpfQVkblCDcqMJYBS1
-	 5Zsse9iKYyyLlD8DPZew0dSaSrfNQq12R/e0tlg/B3UeFMg0Fpbko3ojWX/NBGAKJITv4
-	 TtyUfa4W48ECyBbv5vzYCDA2SzLniU2HzB5b0DXJ+dIc4vtlNT/qDw6mb3CdIhQn4TrA2
-	 Pm0H4FN7LtDju0CnQRURJ+XoOWC0P0JyOrQHNoEoprPFvI5c86tvldLSrCOKF6DG+crBM
-	 LNvRZZuz8zIvNZyAaNnIPbrpysUmFp822uywd9aEAgRc4V0ShqqJIokpnIyAzOvsm6Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794599895;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Disposition:Message-ID:User-Agent;
+	bh=SA/I1XcNdOqWCHpHPoabvJbPaHjQpV93aW+4lUY75XM=;
+	b=hC8VSAfX71BvGPPq4Efn5f7Tz7B2eXOPDQKzMpDYahzgEaPCBP4YrAHJ4m9DqojraMxC
+	 eviWCkrlOv+1zUUzvSt/SBtTunzUioNRHCwaLUi+sRU4cTL1Vwxheg7CcuG/dqukO6w+G
+	 wzGJCH2O38C76uFwHEgmt4FjYmx+2fPqC9KDYbPxenXdCFIr8TB5ck71Sv6VlSAOqF2JH
+	 fwSnbnP4yB8nR4GFx8/mQ50wk3a7it0BBaqu2dGixyhlfKD+regAHedBHsrKTMqj7yKQ5
+	 mOrFDevXdhz7CypNUt7zIizo75xPkjQ7VTfy1qVlcIhlvh0Cl6JA7BJGB6j6B1OY+SA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Mh/kL15m";
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=chrisdown.name;
+	spf=pass smtp.mailfrom=chrisdown.name;
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=X+n2NrFp;
+	arc=none smtp.remote-ip=74.125.227.130
+Received: from mail-pj2-f2.google.com (mail-pj2-f2.google.com [74.125.227.130])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A8D606A32D;
-	Fri, 13 Nov 2026 19:43:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9A8D606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA555606C940
+	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 19:58:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA555606C940
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Mh/kL15m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794599012; x=1826135012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cua/uwgNa005FQjs9yZ0Cq6T2u8yr5c8hJMGRbdb5yM=;
-  b=Mh/kL15mxEoSkpoYSFdmsj/WfT/hFJYX9kjr7z/pU6NohcIXkR4JCKfE
-   h6/2gDYF5sf4feyEBohfU8Xb5bQLDJrW/rjqDPc/Dv7JY4SU3daKhr4H/
-   aIAOw0Tg5Kd4/QQ59eI/P+5ZFbS8A55km1mFGVJ0iF3Zv/OKlcKROBqj5
-   M4y28LcGQph7tmxVKZ0BE4DaThf3oSugV500g/7QB2kCLuoKIbXWg/6aV
-   LplEUVmg5QjaggDpROKAXeoZ4pNCjBCVffW6SmhlIAK2e+723D1aEtQtu
-   rNT4RZhOEEucg5WVOEcW5iPwD9jEvDdR/A45jI3QF/UYVg3FUlHv/cJ92
-   A==;
-X-CSE-ConnectionGUID: ZI6rUoHLS3GokQrz6Novgw==
-X-CSE-MsgGUID: 7uabpCmETN6QXb44ryxsJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11965"; a="3405933"
-X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="3405933"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 11:43:31 -0800
-X-CSE-ConnectionGUID: pS34q/LXTGORiKyYo7IdWA==
-X-CSE-MsgGUID: RUTstUSRRweYGmOOPK6vdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="8841713"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 13 Nov 2026 11:43:27 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRxBE-000000013pP-0yI7;
-	Fri, 13 Nov 2026 19:43:24 +0000
-Date: Sat, 14 Nov 2026 03:42:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Down <chris@chrisdown.name>, Vlastimil Babka <vbabka@kernel.org>,
-	Harry Yoo <harry@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Hao Li <hao.li@linux.dev>,
-	Christoph Lameter <cl@linux-foundation.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Kees Cook <kees@kernel.org>, Marco Elver <elver@google.com>,
-	GONG Ruiqi <gongruiqi@huaweicloud.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hardening@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v3 5/6] mm/slab: Support disabling
- KMALLOC_PARTITION_CACHES at boot
-Message-ID: <202611140317.3kXloW0R-lkp@intel.com>
-References: <9a4caff0336c78a7adc746786c81c9c01f89c40b.1794506262.git.chris@chrisdown.name>
+	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=X+n2NrFp
+Received: by mail-pj2-f2.google.com with SMTP id 98e67ed59e1d1-3b14c80b210so310223a91.0
+        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 11:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google; t=1794599894; x=1795204694; darn=lists.linux.dev;
+        h=user-agent:message-id:content-disposition:content-type:mime-version
+         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SA/I1XcNdOqWCHpHPoabvJbPaHjQpV93aW+4lUY75XM=;
+        b=X+n2NrFpcQxVWCetjdj8qKBghArUkxvkHd0OUlkRmyx9eEI19Fa5Px/rmxlhxir7eM
+         7xZ/VkBQL2qiQPkpLVnXfB63UbmuIujmPrG1V6edDBKGrKZLrl4xqTRdRYfEpa08ngfH
+         T7PIeV/Bud6ddSPD4UxqXmgHul5AV1FU0tvss=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794599894; x=1795204694;
+        h=user-agent:message-id:content-disposition:content-type:mime-version
+         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SA/I1XcNdOqWCHpHPoabvJbPaHjQpV93aW+4lUY75XM=;
+        b=k8i+jNGiEKdSfg+ssfbt4BG/Vxq1EBc+2lng9leWjWJ+Chm2xXlJdQ5vLvvPuy1/r4
+         3xjMqcfFyFWhQo179FdKKbWC0s99GaUXxJ7cts8G1BYl7iq8zgyL+bik3sUv07C05lW5
+         0cn6G9NK1VOy4/mU3ud5TcYPxWJd+FjYjJoJaq38jxjHBWtKmZMKxqiMMJdaUOvL+/qs
+         iM7nIk5rbQ+ixiOA1Y0qFtn+GzxdpgwpR4IRq29H4DqibhwYxs/2PkQYD/a6dK0ukQjf
+         BvZaUyQA/8XIPti/jiBTbTfJPzSPGFTxyw1A+nLuBSi6Jd8YaJJOLNK6jWFqtAtUcXmq
+         3Xdg==
+X-Forwarded-Encrypted: i=1; AL+hErFWj0otpnayT/YJT+8bqfwaRyWQQoGcceL8y+88/dtF4DcghplhlycyWQzygDbacaPcA6dm@lists.linux.dev
+X-Gm-Message-State: APuU4Z+6mP7JtKfOcYglSWitTWUDnlQ1rm7RWPbSeWcnR8TADHIEIpdK
+	sfXlOf5fHcbhSBsSPNMfKxVsVHewi+5ENE+ObcVpAFt2Vt0tPZeggSXgnjp3dW2k0vTp6g1jHir
+	qG+3dIqVN8wb8oypLJA==
+X-Gm-Gg: AYBFou1ib5uza0lEQEq87x+lMO6Al6H7tMwe13xQFt+WrhdwHo2MPJvwx8QDb2+czyX
+	dEyEZa71kY9icB2jgA7ppHeVRol8it6hBy5zLIX/iotHh8opnDrKFN2O/zbFPFr1JDMrS85CAkr
+	ZKXIERhZmPktsk5sqU0RyFa5YAYgDYIOTr5T1ySq47JdpzJbhtgAfJ02BC09RaOAotiwNluNkJy
+	i+578z5zihFRpbLdCu2GoQ1ibm4hvB/om0eWBV4vsg6IsgQI/ee7s853OG+2Y2djxI9p16QDjF8
+	mJ6xhd2Ip236J3ji8LdDIa0xqZz8EDEKwyKBa1fzu0wSqiYgIOqUUpJG26CB1lXHeQkm7rlblGh
+	0H2WCjdDW8xInz/0OejG4l8zKJ9j3bpeeTBZCd+EJhI+axyAYuITDqvBcTYe6UFYJuXhSjF2I5t
+	QrbgTs7YgDdAfrkyjDthClQxqHY/bPUqnJ0u9csSF9VnLuaJO4RrfK+Yu7lVLRDh05vqWMK+TGK
+	5SgbgtAaRIX0Hs8F6/M0VOHTN17GMdwudT37+5ti2HKKJDZmO5lKbVprQd14iM2zLXgZu3tfsGG
+	ZhRTfpOj73rpxjthQ6PyqS7zO9/2GAEGGggmvyJGTJBz4dv2P6I73Xz3tEKn5bJiTKZZCefjqyf
+	6uCNv1Lms6cSamS9tzaMfQ4HkpDylyotLLfUfMXItgtuc+Qld9foIEDikCQOT4pxqafuPh8XIdq
+	2FA91FxLo7o2eeUem83tZPvP2aUiQd2rXQr4zb+n2tkx3TaDnD8ysoB3GFyF8QElYeyXEGroP0s
+	Uo9yoyG
+X-Received: by 2002:a17:90b:394e:b0:3ab:be66:ddbf with SMTP id 98e67ed59e1d1-3b1b0b60493mr3259630a91.54.1794599894079;
+        Fri, 13 Nov 2026 11:58:14 -0800 (PST)
+Received: from [172.22.0.2] ([50.175.87.158])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1aec66f4csm5853480a91.14.2026.11.13.11.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 11:58:13 -0800 (PST)
+Date: Fri, 13 Nov 2026 11:58:10 -0800
+From: Chris Down <chris@chrisdown.name>
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: dennis@kernel.org, tj@kernel.org, cl@gentwo.org, peterz@infradead.org, mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, acme@kernel.org, yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock guard type
+In-Reply-To: <20261110012235.1024461-3-vineet.gupta@linux.dev>
+References: <20261110012235.1024461-1-vineet.gupta@linux.dev> <20261110012235.1024461-3-vineet.gupta@linux.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -94,105 +96,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <9a4caff0336c78a7adc746786c81c9c01f89c40b.1794506262.git.chris@chrisdown.name>
+Message-ID: <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
+User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
 
-Hi Chris,
+Hi Vineet,
 
-kernel test robot noticed the following build warnings:
+Vineet Gupta <vineet.gupta@linux.dev> writes:
+>	typedef local_lock_t __seg_gs
+>	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
+>
+>	typedef struct { local_lock_t __seg_gs
+>	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
+>
+>Both put the tag on local_lock_t, an aggregate: the first on a typedef of
+>it, the second on the pointee of the guard's member.
 
-[auto build test WARNING on ce6518e61e3b4bf4f97f7ac6204049b9eba7eb75]
+The typedef is the aggregate case, and it's the only one of the two that
+GCC warns about. But the second one is just the "T __percpu *p" spelling
+that 1/2 keeps the tag for. _T->lock really is a pointer to per-cpu memory,
+since local_lock() passes it to this_cpu_ptr(). So the tag is correct
+there. This patch drops it from the guard's lock member and the
+constructor's argument as well, not only from the typedef. I think it
+should keep the tag on those two and only drop it from the typedef.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/mm-slab-Enable-SLAB_FREELIST_HARDENED-by-default/20261113-005125
-base:   ce6518e61e3b4bf4f97f7ac6204049b9eba7eb75
-patch link:    https://lore.kernel.org/r/9a4caff0336c78a7adc746786c81c9c01f89c40b.1794506262.git.chris%40chrisdown.name
-patch subject: [PATCH v3 5/6] mm/slab: Support disabling KMALLOC_PARTITION_CACHES at boot
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20261114/202611140317.3kXloW0R-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1b1fed44d3dcca649a9877915d57c3357a98124e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261114/202611140317.3kXloW0R-lkp@intel.com/reproduce)
+>Every variant of an
+>aggregate shares one DIE, so there is nowhere to record it, exactly as for
+>DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
+>without complaint, but pahole does not translate it from that position,
+>so with today's toolchains it reaches BTF from neither compiler.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611140317.3kXloW0R-lkp@intel.com/
+That's true of the typedef, but not of the member. With clang 23 and
+pahole 1.32 the lock member comes out as PTR -> TYPE_TAG 'percpu' ->
+local_lock_t, the same as any other per-cpu pointer.
 
-All warnings (new ones prefixed by >>):
+For the typedef, clang 23 puts the annotation on the typedef's own DIE, as
+you say, so there is somewhere to record it. It's only pahole that doesn't
+pick it up yet. You also mentioned GCC patches for type tags on typedefs
+in the pahole thread [0]. Once those land, does this warning go away?
 
->> mm/slab_common.c:1029:44: warning: non-overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
-    1029 |         } else if (type > KMALLOC_PARTITION_START && type <= KMALLOC_PARTITION_END) {
-         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>Unlike the per-cpu declarations this changes no BTF at all. A tag in that
+>position was never recorded, so there is nothing to remove, and the one
+>percpu TYPE_TAG that does reach a local_lock type comes from those casts,
+>which keep it. An x86 defconfig built with clang is identical with and
+>without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
+>and .text is unchanged. The patch removes a GCC diagnostic and no more.
 
+The defconfig BTF only stays the same because nothing in a defconfig uses
+these guards. lib/test_context-analysis.c is the only user in the tree.
+With CONFIG_CONTEXT_ANALYSIS_TEST=y, class_local_lock_t,
+class_local_lock_irq_t, class_local_lock_irqsave_t and
+class_local_lock_nested_bh_t all lose the percpu tag on lock with this
+patch applied.
 
-vim +1029 mm/slab_common.c
+Nothing in BPF looks at those types today, so this doesn't break anything.
+But it does remove correct annotations to get rid of a warning that is
+only ever caused by the typedef itself. When the guards were added, the
+type was only ever used as _type *. The typedef came later with
+3931d4b98039 ("cleanup: Basic compatibility with context analysis"). If
+GCC isn't going to accept the tag on a typedef, could this be limited to
+that typedef in cleanup.h instead, so the guard's pointer keeps its tag?
+As far as I can see, lock_##_name##_t is only ever used through a
+pointer, in DECLARE_LOCK_GUARD_1_ATTRS().
 
-   999	
-  1000	static void __init
-  1001	new_kmalloc_cache(int idx, enum kmalloc_cache_type type)
-  1002	{
-  1003		slab_flags_t flags = 0;
-  1004		unsigned int minalign = __kmalloc_minalign();
-  1005		unsigned int aligned_size = kmalloc_info[idx].size;
-  1006		int aligned_idx = idx;
-  1007	
-  1008		if ((KMALLOC_RECLAIM != KMALLOC_NORMAL) && (type == KMALLOC_RECLAIM)) {
-  1009			flags |= SLAB_RECLAIM_ACCOUNT;
-  1010		} else if (IS_ENABLED(CONFIG_MEMCG) && (type == KMALLOC_CGROUP)) {
-  1011			if (mem_cgroup_kmem_disabled()) {
-  1012				kmalloc_caches[type][idx] = kmalloc_caches[KMALLOC_NORMAL][idx];
-  1013				return;
-  1014			}
-  1015			flags |= SLAB_ACCOUNT;
-  1016		} else if (IS_ENABLED(CONFIG_SLAB_OBJ_EXT) && type == KMALLOC_NO_OBJ_EXT) {
-  1017			if (!need_kmalloc_no_objext()) {
-  1018				kmalloc_caches[type][idx] = kmalloc_caches[KMALLOC_NORMAL][idx];
-  1019				return;
-  1020			}
-  1021			flags |= SLAB_NO_OBJ_EXT | SLAB_NO_MERGE;
-  1022		} else if (IS_ENABLED(CONFIG_ZONE_DMA) && (type == KMALLOC_DMA)) {
-  1023			flags |= SLAB_CACHE_DMA;
-  1024		}
-  1025	
-  1026		if (kmalloc_partition_enabled) {
-  1027			if (type >= KMALLOC_PARTITION_START && type <= KMALLOC_PARTITION_END)
-  1028				flags |= SLAB_NO_MERGE;
-> 1029		} else if (type > KMALLOC_PARTITION_START && type <= KMALLOC_PARTITION_END) {
-  1030			/* Use the normal caches, which have already been created. */
-  1031			kmalloc_caches[type][idx] = kmalloc_caches[KMALLOC_NORMAL][idx];
-  1032			return;
-  1033		}
-  1034	
-  1035		/*
-  1036		 * If memcg_kmem is enabled and this is a KMALLOC_NORMAL cache and not
-  1037		 * aliased with any other type, make sure it's never merged with any other
-  1038		 * cache.
-  1039		 *
-  1040		 * In other cases the kmalloc cache may end up being used for a
-  1041		 * __GFP_ACCOUNT allocation so mark it as such. The exception is a
-  1042		 * KMALLOC_NO_OBJ_EXT cache.
-  1043		 */
-  1044		if (!mem_cgroup_kmem_disabled()) {
-  1045			if (type == KMALLOC_NORMAL && KMALLOC_RECLAIM != KMALLOC_NORMAL)
-  1046				flags |= SLAB_NO_MERGE;
-  1047			else if (!(flags & SLAB_NO_OBJ_EXT))
-  1048				flags |= SLAB_MAY_ACCOUNT;
-  1049		}
-  1050	
-  1051		if (minalign > ARCH_KMALLOC_MINALIGN) {
-  1052			aligned_size = ALIGN(aligned_size, minalign);
-  1053			aligned_idx = __kmalloc_index(aligned_size, false);
-  1054		}
-  1055	
-  1056		if (!kmalloc_caches[type][aligned_idx])
-  1057			kmalloc_caches[type][aligned_idx] = create_kmalloc_cache(
-  1058						kmalloc_info[aligned_idx].name[type],
-  1059						aligned_size, flags);
-  1060		if (idx != aligned_idx)
-  1061			kmalloc_caches[type][idx] = kmalloc_caches[type][aligned_idx];
-  1062	}
-  1063	
+[0] https://lore.kernel.org/r/252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
+
+Chris
