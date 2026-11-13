@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.177
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794587601;
-	b=Qsb6qiZ78oMu25Oyf0jiBoRy9hQlLJP+UpIbIRzKZyixK5IEW/X/YKPP6vmiSWefzMkt
-	 QzfANrCxiS80EEwr8/jLHYzt9TE+Isvj777RqeS59j4T79/rIyrX9VP4UBClH8/WVcaNz
-	 OgBou5AAlrO6H3e1XsrFfQ0hC+LPtDccLKVKwhvpLRKcbeQnBRW5HYFjDZIEfMa5m5cWy
-	 EJM3IL5JhEAt/sEE+9l+3p8OD+8UOMDFUq9h/TsarnUmBfjsgrUU2Ka9WwojNOr048rj/
-	 HXUsZTuWMHDVQRKKdPk3yWw1tBPzDZ2uPPna2MxzMr0PLCgbh7CHqERqfZOejeHuMeg==
+	t=1794587655;
+	b=4ybdabmeCIOF5vj/X/HfhhznvpjAB0u0usadFkAcN57JT8uawhDMdIVphRwl79XODwiL
+	 gWrowKI6EoeudgwuhrL+Inr741MjsrBzJ9lGL+qM+m6qkI4rKcFnGVu8SEybATWeCj8rj
+	 /+slbfjklDE8CLcP9vYnHKwWaHPL9vf7dbq20qUIDCkHkNzarJPn6tIowqlnxLSQqfBmF
+	 vk+kdRBCEMk77V6ZN3/Psgse9Xc4xxK0MffLvSsIxzrnvuv/CiE5GygN4vdY4irbkMxnS
+	 E1gidz/IRHo0t3NaCop+ZL6KeWGmV3xaZ+sDy+nKHfRR+dxvkWQCfUamEVzol9Si84g==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794587601;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794587655;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
-	b=dD8nCwDhp2kKFxKpWBImZ94YWnEwxWDmdNfPy7DF/wG5qKz9DQrJp6wPL/rDA5e/1EhV
-	 O0YPVdYgTMPJ6btNbnyCbfiHfkG+9jj6RuVly2izgZY8Hzsbj7azNlQbgjh/QkKZvz2VQ
-	 qJxqMUXJ6TrLM3QKtCfs6RgEUZud92k4UIweHtJlURgGM2EvIIiKS3UojG3W2lA2vL9bK
-	 AErpVe8K0K5xI2JWt0UXUIQNoFAXD47+M2bC5PnxHnggr7TCXgNUsS0w2j3oTKaMDHh9K
-	 LWTN6sz54hMp49fzpJjexWK95qOWQTThf4QWeLyLKhAIQF/XYkDc3qFwEckBr26mcOQ==
+	bh=b7eNSuyQa1tFtsvn3toNo5OxAf5vVLIkRrt+TsETnhM=;
+	b=psWUx2GjOn1AgWBRAbXlSXdAYvK6W84ewG5S+CBc4xju8WLvzmjQGUyvReoXGDipVaoa
+	 ZttdubwRANL0bBNamoVrOGhZVua9uElVv+/JF/vMVcJrzYvMvNMkHEDdLu9liHjpw/aeZ
+	 P7LHs0rLXmAIZMPzRWKGQd49DcuOMZ4YCHZnMwb2Gd0MmJb8t2lH7IDIcarw3DSJJIKcf
+	 Qefm5AgRnOn7dGRtfbB79q4iytbg0zYlN+rjxj1gJEXo/vkg7dDNU28ORYzgHDBRIL0Wm
+	 c+ODYgfKWDv3TAGfC+vtOZ1zysi7NSL/b5cbIlfVwUOO2jfRayXd7Aacgo8T8lu00DQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gS+kzEPA;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HLYYFyIc;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.177
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A6F606A32D
-	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 16:33:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0A6F606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8369606A32E
+	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 16:34:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8369606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gS+kzEPA
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-533202fe429so424841cf.0
-        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 08:33:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794587600; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HLYYFyIc
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5383c97c8cfso447361cf.1
+        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 08:34:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794587654; cv=none;
         d=google.com; s=arc-20260327;
-        b=MwondL5ZHhjFQNLItV2A2Lv7Vep1FOYGzsHjtHVQi3QdWC9SgbzL6tl37AHxxud6ux
-         52VhaAVN3RWopN0Dbo6w+BDYcwfd4OvpUMhjX7+4b28tBT6IJPdkaZGfNdZx8nssv65G
-         mYn8OQsnd9Q4zi2UVtAjfdo/uBTosdWx11Z7WBWkxYWU/kzwUi0Rg6VbpK0F2pSG0XAS
-         XNvGeG7XDNMr4NESrDl3v2muHs+nMGW9YxWoKGD8Dx1HEbRW6U0bL1PRDRYs60AyPGXj
-         oInz6QBtj/xEL4cF678ByvrQAdsyiWMwru0RxIxKyIktK05W1jV+DwQ9ZHL/1k0l+vyS
-         WSoA==
+        b=UmLtVMrJdGRwIFaRCMIbgRfdT/z6KX7qHihcscWUVZaMv0634ViRLLExo66AaVCu22
+         6udEW6V9jBZZifoMJh+gfI0I1xU0bbTziSdfUFMczx9M84WiAvNRmCKcELT/u+aJIalx
+         AupsXQLF0hqS+z9KPiAeje1YBe7dM8R/tLGGJ/gtN+AJCcmpE0coGPonnbAuRyfOB4BU
+         TP2AP2neT88CeP6ke7yH/ei7uHzMhChJU9/J9qL5Z6ykrU6L4vmH0I4q4hxdIG5C7XAt
+         uv/NmHZ+mTCP7j8nlLo8jEWYExYPRjXdbNVm7cVeSyo7mwxSN/ffKgUtBSiKnnTMdMP0
+         nA3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
-        fh=S9/YNqOB5FRpDmgNHDGhA/kd+mytPIB0dHzN7m6Q7Vk=;
-        b=LXJ85f4ybadND3F+XJdAxrvXDysbabwiOako52hnupmaSSGjC3bUU+60YwAtEzybUw
-         rLKuHBrr47LLzLYwb78Dxw5sQ75j1VIpQHDANITEOdxJ52oe5t861PRA80Zd5cy1g+ZG
-         C11YTbUvhtBnmoP5f48+Ads3nMzHk4jR+DodKEE0P3eKAMKupaM57tAmJ5OQu8w0TBqw
-         KK6sE05d44RMdRM2KjQl1wPkDOdeCDuK3X+6QoRkwgkWL5IUxZCmxuPXbSWsiAWG49pp
-         BGxfaKhe8j7UYTsYMYTZCIaM0/zEbo+WOjEbEtif2QnrX1fih3/O3zMzqLRUsuvaGN/z
-         hQrg==;
+        bh=b7eNSuyQa1tFtsvn3toNo5OxAf5vVLIkRrt+TsETnhM=;
+        fh=fIm2GBk+iiCMBwQ70gyP7qNgrUwjPvb+gbX3lFy0dGo=;
+        b=WnV0UUvNc9B2dIu9eIVy11X9RFBnvPNcqvn/cth5JUtkDNv3DYWjd7cGiBc44r7lcs
+         l93Szl+xhL7s1fNbKmmngck6z65ebujqjMpn5lxYHAtBOnkOxcUfYDpkttUNwf5UPs/y
+         DZKyUg2MciuoI84n43UgxXQnaXNKExIybV9WWr9UzNalReQcBcZQ6FcMCnLxy8yV6fYT
+         zSC74/blRgGZdbS7rD5u/sHmdgJihVnPdEQxnTZsH22N20HYw9ELV4UO/Hc2IwxeJUWO
+         QnhnAs3D5EiuE8TKHLpqvDQzAzihzjaaKLDqUf6yq9npMGk3oOSoLEKKjMlVnz8ZWjpV
+         xt5A==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794587600; x=1795192400; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1794587654; x=1795192454; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
-        b=gS+kzEPAK6cRYsWfYUL5b2hJSyU5fiQOjf1TYslyX2HlOqMQerNeBCkitzSjb2RK3v
-         4HMxJqVXpoqJ9mSxg5kK9Tl8ie9rsQT3zGb0wQ0GSYF+anRzHjWfIfBkYljvp0MB8wZR
-         dNKXLs2DLD43OjAsdYDx3BL00OgiUsQ/2eKDBfJjWRhFkzPJ81vE6FoOXjkcZXj8fvJg
-         lMT8bk5VhCWWoMavcAwJIhhghgHvzZgKm4bUBQWWiTW7rlsARkF9K7WZF2/LG2xVImY6
-         7s0ur6NHwFp/p4dM7mW6KpOxDlyZ0wYPeVjEgbVMr1TNqptKayg/gT8xBRq7Kx80Od2g
-         PAgQ==
+        bh=b7eNSuyQa1tFtsvn3toNo5OxAf5vVLIkRrt+TsETnhM=;
+        b=HLYYFyIc3TDaUVJ0KedbsmTtXSc1TE1l+8kTaBhSUK1kPD4glA6NXT58mJtWdyHZn6
+         cEbxVtWSVSXXm+eiQsL8TF7unqpoq8wP9QQOehpr7rqPDl7NW/E0jg131aQfWSRJKKzz
+         KOFOJFjytJlw3r91i/RgPEUlHuw0YID7l0ukDpkn6Fh1bZhMcGxt2vVMQR8mhWLxxRp3
+         Nb+oB20DYajcvCtq3zNmb2YeC4MsJJL/pI2lvtjidRWoVDRxwW81BcFR+AMpJjt3C8LR
+         f6k78V1WWN9qioqttGZGav0lPXc2Fa0FfAk4etKSqsUQDszH9+cBrOLbBaK5BYCoAxma
+         AG/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794587600; x=1795192400;
+        d=1e100.net; s=20260707; t=1794587654; x=1795192454;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
-        b=0h7y1uKy9Zb9a0lCYlQgnKEsOpkBKpbLqVTltsapBoqmE5BMOZDZL84FP8fRQcXGYz
-         Z/5ejol3sWnLgHlKK1mn9RWDZ62oN8KBgz+LVVBdFwz3wL0hOlQeOR8x0P0DmcnVdn1a
-         b3+F2bpQZQUcjFKr1lkI4+8OuYoXla+fZcBCXpk+u5mQ9/fnXOwEjHilgCSyNd1cDJEM
-         yOWfBuKyt55TUoujiXBow49UtcgkTx6wo/iiXYgNG9Rmptq+KfSOYMTcOkTN1GTD9pG9
-         KzPI0PLhFEaGIhfZQ/CaCdl8TUIL1uyyTDvACObGZcrMoST13zss2D+xX75rTBgIOYPG
-         rMoA==
-X-Forwarded-Encrypted: i=1; AL+hErEbHX2rsLEjzk5DQvznDJ5F0neys6PGPO6G/6De7m9pveF00OG8xl13lkxms4Tga4QlMCEz@lists.linux.dev
-X-Gm-Message-State: APuU4Z8yO9SNvK6tDiTgHq2NXap2GUtBxr/5OAFxZ4oHWjcdka0Pk6hJ
-	0bW2733kTHP/nskBmdM7hxn+rAkrCSVg1SwAErG3paSOiAqFkiGtHkW4DappduPKJp9MLOde0OY
-	pY9VadHqyDG9Kzfyh/xPDT+DYk+uEkT2FEbqtOw8D
-X-Gm-Gg: AYBFou1j1/TB3HGJvmScjIPj0gqpUVBrQIv8cyBYzVfyMnQqQqQyU77fcYjxIB9t9UE
-	IqK2XIEahrnNt5jRwBxVB2ghJfJuL86j0woNLYjg9Z8eyEHGa6IsgyHZ8dHcWur5SWDDrMCWMS2
-	kT4H+j6WAGhXQlRZEzmuPAGLkjJLsL0EBfSIIkU4rGwmZ7A7fakJQ0lgDzzHpqX0g60g38nE4Ra
-	e5VH9q4p4tXB1IJ3dEkZc/1zN8PI/ngHNo8onohafWZokjx60oUjujxNz3RbY87NUvAS/zQV1Wv
-	z7oGZfTN0yn/nXrJQO6Zago4FOXtRvUOlCrcwCipn9tQgEXzgGSC/0Q8lOKFOSBPGAiRxwgElEN
-	HlFn97NSGT/+Ew8WmKvMyQa7uvmnDMs3ky6J3eOzXOAJUDYj+YbwO9ksD3y7cpHpL0Rc=
-X-Received: by 2002:a05:622a:124a:b0:536:97c0:dcd0 with SMTP id
- d75a77b69052e-55adbb72c40mr15083541cf.4.1794587599092; Fri, 13 Nov 2026
- 08:33:19 -0800 (PST)
+        bh=b7eNSuyQa1tFtsvn3toNo5OxAf5vVLIkRrt+TsETnhM=;
+        b=FzetUZzKAxVTmeqbCBrm2cMsYDR7GrhQ4egeaEhWZAJ3nOWaGnz1Z60dL/DxcBe9Dc
+         ZEiX01jH8PNlRkwdf2BtxWPC1BA41x0eDOp/lB1bgqpSU2LTDw/QwRcfm4lnzyvFV79K
+         LB/jHiXhW1GrdEAhYFcL1mZsrskXItnPLqWclSlzb+HYKmdBc+Wd9zhNBIF7C+IwuvsP
+         rs0YmNbVtc+7MbV5ee9dF3/4Z/mYGPp/ydCibm4QpiK374nfSR6zXPIOYvO0QXI5RGK2
+         6x++p6+ZA01cBwi+aGHTMHJDMysqhblk7wtvnwFGzPq8IiFIiDinBZrysgbsVBzgERAD
+         qhJQ==
+X-Forwarded-Encrypted: i=1; AL+hErFAZceOyaE6mbz1bSlvBp9G1v1RMkPaoz4yrlmQN1rG+OEtBJXQhtF+gZxjoLWkcjK9nHV4@lists.linux.dev
+X-Gm-Message-State: APuU4Z9O692pHrfZtTo8Tj9VQj4AZynp3Hw9BMuFZp1ai/XQxe1Kxt0f
+	n3CEnmIg/0AawFtNoqNGW7iyTWDzbvkvdGAoYPm4pWgX/xRYl5mTbme6sL/nvFcuGmL2na33P0H
+	jINoO3Buj4zxNR4XKWdYvHbdA4vzm3S0ovNoMgfmG
+X-Gm-Gg: AYBFou1u3ixR7eiymNZ08AhGQQsV9OW0FoGqkzYmCIwjE2p3AKpYIMmF9bkkVbXtCWG
+	EfXBY9AWs3JS5bKehBQU+dTGbspvONv0jHlTiaXAu/hMSNNzDFvpGYWirIvnQlW131H5uLDXg1R
+	G2vsnC+WK2OanYGZsWE2pV3bGI5cw7SA4KuUrlSFC0iEodIuzHngm7lAHQpRKoZBvQ4/H2xF3/6
+	psQTCtz5513GERzokocKAO1ALK3NAFfRL0PuNyksDYc5U9h3j9tSlXv2jO770cxxP4ppdzq/2XQ
+	vt5kaxlhGfULBGMj8k4UJZGXfbqZosXqhDlyxEYqCFOrJj5gBXBS8UJly/VCs5VrK8MYw0wC5D5
+	6OhezP/y0WARh8n2aOd/HOqTLZOoXwBt6PEaMddDrPSW48MxnGQbQ3ZKtC0dSs3S30Kk=
+X-Received: by 2002:a05:622a:408d:b0:530:e335:4ef with SMTP id
+ d75a77b69052e-55ad7e74d7dmr15053831cf.2.1794587652968; Fri, 13 Nov 2026
+ 08:34:12 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,14 +104,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111174213.3526604-1-irogers@google.com> <20261111174213.3526604-9-irogers@google.com>
- <avVgPUFGCPycCWSI@google.com>
-In-Reply-To: <avVgPUFGCPycCWSI@google.com>
+References: <20261111174213.3526604-1-irogers@google.com> <20261111174213.3526604-13-irogers@google.com>
+ <avVicOfEPnzFYChm@google.com>
+In-Reply-To: <avVicOfEPnzFYChm@google.com>
 From: Ian Rogers <irogers@google.com>
-Date: Fri, 13 Nov 2026 08:33:08 -0800
-X-Gm-Features: AclHuK9L-E3dF8YJnLshs1tY7VQqvZTZoGdVDHChKgorJQHTyeGB3QWOADeecfk
-Message-ID: <CAP-5=fVy8oN3okjJKHYvtqT0ZWWx=8uT24HkPhgvwwcKzvG4Aw@mail.gmail.com>
-Subject: Re: [PATCH v12 08/20] perf dsos: Skip BPF and OOL DSOs in dsos__find_kernel_dso()
+Date: Fri, 13 Nov 2026 08:34:01 -0800
+X-Gm-Features: AclHuK9OqGSk8ck1I4JLjB0pnpSD93w92b8e_EbtkFL6s6Mk7Zb6EDKfDxyZGp4
+Message-ID: <CAP-5=fVq3rovyLZCKBRSec2mOtpoqQizgLmPPg4n=WEtTRTk_Q@mail.gmail.com>
+Subject: Re: [PATCH v12 12/20] perf dsos: Use read lock fast path in dsos__findnew_id()
 To: Namhyung Kim <namhyung@kernel.org>
 Cc: acme@kernel.org, adrian.hunter@intel.com, bvanassche@acm.org, 
 	elver@google.com, james.clark@linaro.org, jolsa@kernel.org, 
@@ -122,69 +122,59 @@ Cc: acme@kernel.org, adrian.hunter@intel.com, bvanassche@acm.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 11, 2026 at 10:44=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
+On Wed, Nov 11, 2026 at 10:53=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
  wrote:
 >
-> On Wed, Nov 11, 2026 at 09:42:00AM -0800, Ian Rogers wrote:
-> > In machine__process_ksymbol_register(), set the binary type of non-OOL
-> > ksymbol DSOs to DSO_BINARY_TYPE__BPF_IMAGE (which
-> > machine__process_bpf_event_load() upgrades to
-> > DSO_BINARY_TYPE__BPF_PROG_INFO on PERF_BPF_EVENT_PROG_LOAD), and update
-> > dsos__find_kernel_dso_cb() to skip DSO_BINARY_TYPE__BPF_PROG_INFO,
-> > DSO_BINARY_TYPE__BPF_IMAGE, and DSO_BINARY_TYPE__OOL so that
-> > dsos__find_kernel_dso() does not match ksymbol DSOs in machine->dsos.
+> On Wed, Nov 11, 2026 at 09:42:04AM -0800, Ian Rogers wrote:
+> > In dsos__findnew_id(), try finding the DSO under the read lock first an=
+d
+> > only acquire the write lock when a new DSO must be inserted or an
+> > existing DSO needs its ID updated (checked via dso__needs_improve_id())=
+.
 > >
 > > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> >  tools/perf/util/dsos.c    | 3 +++
-> >  tools/perf/util/machine.c | 9 ++++-----
-> >  2 files changed, 7 insertions(+), 5 deletions(-)
+> >  tools/perf/util/dso.c  | 16 +++++++++++++++-
+> >  tools/perf/util/dso.h  |  1 +
+> >  tools/perf/util/dsos.c | 10 ++++++++++
+> >  3 files changed, 26 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
-> > index 1574c8885d78..fbbf98c4ccae 100644
-> > --- a/tools/perf/util/dsos.c
-> > +++ b/tools/perf/util/dsos.c
-> > @@ -475,6 +475,9 @@ static int dsos__find_kernel_dso_cb(struct dso *dso=
-, void *data)
-> >        * is_kernel_module() treats it as a kernel cpumode.
-> >        */
-> >       if (!dso__kernel(dso) ||
-> > +         dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_PROG_INFO |=
-|
-> > +         dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_IMAGE ||
-> > +         dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__OOL ||
-> >           is_kernel_module(dso__long_name(dso), PERF_RECORD_MISC_CPUMOD=
-E_UNKNOWN))
-> >               return 0;
+> > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> > index f0e02062c09c..4dc518f7cb7d 100644
+> > --- a/tools/perf/util/dso.c
+> > +++ b/tools/perf/util/dso.c
+> > @@ -1685,6 +1685,18 @@ const struct dso_id dso_id_empty =3D {
+> >       }
+> >  };
 > >
-> > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> > index 5eb5efa4eb90..0334cb01349a 100644
-> > --- a/tools/perf/util/machine.c
-> > +++ b/tools/perf/util/machine.c
-> > @@ -769,6 +769,10 @@ static int machine__process_ksymbol_register(struc=
-t machine *machine,
-> >                       dso__set_binary_type(dso, DSO_BINARY_TYPE__OOL);
-> >                       dso__data(dso)->file_size =3D event->ksymbol.len;
-> >                       dso__set_loaded(dso);
-> > +             } else {
-> > +                     dso__set_binary_type(dso, DSO_BINARY_TYPE__BPF_IM=
-AGE);
+> > +bool dso__needs_improve_id(const struct dso *dso, const struct dso_id =
+*id)
+> > +{
+> > +     const struct dso_id *dso_id =3D dso__id_const(dso);
+> > +
+> > +     if (!id)
+> > +             return false;
+> > +
+> > +     return (id->mmap2_valid && !dso_id->mmap2_valid) ||
+> > +            (id->mmap2_ino_generation_valid && !dso_id->mmap2_ino_gene=
+ration_valid) ||
+> > +            (build_id__is_defined(&id->build_id) && !build_id__is_defi=
+ned(&dso_id->build_id));
 >
-> Shouldn't this move into the if statement below?  At least it should
-> check if the ksym_type is BPF.
+> Don't we prefer build-ID over inode?  I'm curious if it needs to check
+> existing build-ID is defined first and return true.  Any chance it'd
+> overwrite a build-ID with an inode?
 
-Good catch. Setting DSO_BINARY_TYPE__BPF_IMAGE unconditionally was done
-so dsos__find_kernel_dso_cb() would also skip bpf_prog_* ksymbol DSOs
-before PERF_RECORD_BPF_EVENT sets DSO_BINARY_TYPE__BPF_PROG_INFO (or
-when --no-bpf-event is used), but that mislabels BPF programs as
-BPF_IMAGE.
+struct dso_id keeps the maj/min/ino fields and build_id as separate
+members rather than a union (unlike perf_record_mmap2), so build_id
+wouldn't be overwritten in memory, though setting mmap2_valid did take
+precedence in __dso_id__cmp() and `perf report --mmaps`.
 
-In v13, I've moved dso__set_binary_type(dso, DSO_BINARY_TYPE__BPF_IMAGE)
-into an `else if (event->ksymbol.ksym_type =3D=3D PERF_RECORD_KSYMBOL_TYPE_=
-BPF &&
-is_bpf_image(event->ksymbol.name))` block, and factored out
-dso__is_bpf_prog() from __map__is_bpf_prog() (which falls back to
-checking the "bpf_prog_" prefix) for dsos__find_kernel_dso_cb() to use.
+Agreed we should prioritize build-ID over inode. In v13, I've moved the
+build-ID checks ahead of the inode checks in __dso_id__cmp(),
+dso__needs_improve_id(), and __dso__improve_id(), returning early when
+the existing DSO already has a defined build-ID so inode metadata isn't
+added on top of it.
 
 Thanks,
 Ian
@@ -193,25 +183,72 @@ Ian
 > Namhyung
 >
 >
-> > +                     if (is_bpf_image(event->ksymbol.name))
-> > +                             dso__set_long_name(dso, "", false);
-> >               }
+> > +}
+> > +
+> >  void __dso__improve_id(struct dso *dso, const struct dso_id *id)
+> >  {
+> >       struct dsos *dsos =3D dso__dsos(dso);
+> > @@ -1692,6 +1704,8 @@ void __dso__improve_id(struct dso *dso, const str=
+uct dso_id *id)
+> >       bool changed =3D false;
 > >
-> >               map__set_start(map, event->ksymbol.addr);
-> > @@ -780,11 +784,6 @@ static int machine__process_ksymbol_register(struc=
-t machine *machine,
-> >               }
+> >       /* dsos write lock held by caller. */
+> > +     if (!id)
+> > +             return;
 > >
-> >               dso__set_loaded(dso);
-> > -
-> > -             if (is_bpf_image(event->ksymbol.name)) {
-> > -                     dso__set_binary_type(dso, DSO_BINARY_TYPE__BPF_IM=
-AGE);
-> > -                     dso__set_long_name(dso, "", false);
-> > -             }
-> >       } else {
-> >               dso =3D dso__get(map__dso(map));
+> >       if (id->mmap2_valid && !dso_id->mmap2_valid) {
+> >               dso_id->maj =3D id->maj;
+> > @@ -1715,7 +1729,7 @@ void __dso__improve_id(struct dso *dso, const str=
+uct dso_id *id)
+> >
+> >  int dso_id__cmp(const struct dso_id *a, const struct dso_id *b)
+> >  {
+> > -     if (a =3D=3D &dso_id_empty || b =3D=3D &dso_id_empty) {
+> > +     if (!a || !b || a =3D=3D &dso_id_empty || b =3D=3D &dso_id_empty)=
+ {
+> >               /* There is no valid data to compare so the comparison al=
+ways returns identical. */
+> >               return 0;
 > >       }
+> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> > index 9e38b3b69e9b..df1748763d95 100644
+> > --- a/tools/perf/util/dso.h
+> > +++ b/tools/perf/util/dso.h
+> > @@ -802,6 +802,7 @@ void dso__delete(struct dso *dso);
+> >  int dso__cmp_id(struct dso *a, struct dso *b);
+> >  void dso__set_short_name(struct dso *dso, const char *name, bool name_=
+allocated);
+> >  void dso__set_long_name(struct dso *dso, const char *name, bool name_a=
+llocated);
+> > +bool dso__needs_improve_id(const struct dso *dso, const struct dso_id =
+*id);
+> >  void __dso__improve_id(struct dso *dso, const struct dso_id *id);
+> >
+> >  int dso__name_len(const struct dso *dso);
+> > diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
+> > index fbbf98c4ccae..1b3f8b84ed30 100644
+> > --- a/tools/perf/util/dsos.c
+> > +++ b/tools/perf/util/dsos.c
+> > @@ -349,6 +349,16 @@ static struct dso *__dsos__findnew_id(struct dsos =
+*dsos, const char *name, const
+> >  struct dso *dsos__findnew_id(struct dsos *dsos, const char *name, cons=
+t struct dso_id *id)
+> >  {
+> >       struct dso *dso;
+> > +
+> > +     down_read(&dsos->lock);
+> > +     dso =3D __dsos__find_id(dsos, name, id, false, /*write_locked=3D*=
+/false);
+> > +     if (dso && !dso__needs_improve_id(dso, id)) {
+> > +             up_read(&dsos->lock);
+> > +             return dso;
+> > +     }
+> > +     up_read(&dsos->lock);
+> > +     dso__put(dso);
+> > +
+> >       down_write(&dsos->lock);
+> >       dso =3D __dsos__findnew_id(dsos, name, id);
+> >       up_write(&dsos->lock);
 > > --
 > > 2.56.0.542.g3ef89b7020-goog
 > >
