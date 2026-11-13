@@ -1,75 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794608088;
-	b=wh2rgKUWykoGKtQ7S4lPkUr+VNQbeCRtW0h1/kUzor3LYFbK5nc/roOoXZy++T3+vjeR
-	 5aNJ+J4o8/zfHLCtyWifgoeQHnG7eF45m+SjVMf8hQp/m6PglBviKdwqJX1TMSmMFZ2wT
-	 4BtkKj87Er18Vq0miMRltiZcfBbGg7AsPjM8pYSpuLGvcvEdOD7zgfMXYaCX37Z5dthgW
-	 4VfPziHn5qn3Ke43wK2exD6jgFJ6ItD/ipgj/OEbvuAjuIczeeZepOvTtmZ3YUIwFapH2
-	 B2WGzGpranBI9tzRGsNVzgv2222t3VPoDwiQZ1JZrvuE3vwpjgTUdyZweQr/QziT2Dw==
+	t=1794609376;
+	b=lhPjv/HvUO2zoLApENCEMeLVfRCwinuRoPg6dqzUELAf6ECod/sv50AuNVaNiqDNY2yX
+	 9Vv6iRd0d21thTWbdBWY8SAIW+ZUZ5gN5vo70+2B7v1ogNkDfGoy4DTDXvw6Fa6RU74iZ
+	 BxAnwpy0TSsxYEBnHruWRsf5czh+L1NizOc0rBiOJRFTR3hhpOZJwItX2a8WyU0vs1oiY
+	 z3wccKIQYaYK6VInDXAu+iQx6Sl0XdcvRosDB793a+3V1t7Ivn142ZTznO9trr03lAuAL
+	 8uuxqjV1lpliu/7cw3lYI5TDmWK3LEldCEyUkfZOP1vCGwL7E7/5KT8DcJvLKPac6xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794608088;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=ggQ4FFC8Bi0XuOsjCC8PKsr9I1n0o4RHBwZ93v/svPs=;
-	b=cvGKug5GIVPcV4raNrfLrjCHRuQvNogZktoEbD+ZQaCQ8SbitPMMIqRlBAH1111Q/vTi
-	 ObSY7HLN3ZHjHZeFl9Fw8L2CI6IOhHCsKyPVLduQ0bS0tLM9eQLQSs95znRyqFCUkjxIa
-	 N8TXSCnUqE02iTkDAE8S3dPNT0McnRUgxjkwXgOcvvyLKovpl8SBfRgRyoqoLjcEb8vfF
-	 PGsfa1TFH4zn9CvGFZQpefQ1kKQJxWe+eXeAuUUNOfnfay4ad4McV1D7b1iBDzWTOOtRk
-	 ILEOiivJXDOirPWMIhZIka3gJBmKuHrnb18tRFxNImY9AFr5c6xzC9YzZqK3YgA+qgg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794609376;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Tm0KsbHdwGJF54Zx8hQsqG6F8oKBBxs/HZqcH7Y8YjI=;
+	b=KJImR47AnK61PsYObAmIp+Q6JK68R9w1YM559eBc0Eq/4cuoy3C1IPN9/T7dai+f/2gj
+	 xLPIb424SkCh9xbuR1XFRJjziH6TWyxQUpIaftcq0WQYtidMourEg3Dx3kpHYskMsskHt
+	 5+Qz1UPaMJSumV4MExB3yQUtPdTyp1pVaflOMHVRnuAGHrpvCQxAY3on4hH6HWOf1fIgn
+	 Vlo0w9FPSGELQethe0sKRaVeHE1iV16JbNasUEM+oph3un8olty/gDRRSnN6MkYqlufXk
+	 r1A76lB8qcxnOtyhnlwllu/BDCHDugTp6WbppfvK0WayPF++bH2ru+5H2VNoayMc1rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VmD8fANC;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nLoEHnEq;
+	arc=none smtp.remote-ip=91.218.175.163
+Received: from mta0.migadu.com (out-163.mta0.migadu.com [91.218.175.163])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434C660A261B
-	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 22:14:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 434C660A261B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A46A606A55A
+	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 22:36:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A46A606A55A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VmD8fANC
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-341eff9e381so2199403eec.1
-        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 14:14:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794608087; x=1795212887; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ggQ4FFC8Bi0XuOsjCC8PKsr9I1n0o4RHBwZ93v/svPs=;
-        b=VmD8fANCJkBxCH2eO/8f39GOZ9XxbWS+W5RjFPRZ/ASzyCmGLNMpBKRc8h67OqpdFz
-         de+PwlFuDobmNMi19VOLU/2nkmKqFXyznXhQsntMRbXSHj7YhM58XBF9Dz+6f8XXuIuN
-         GRrINNiJzYltbhiOUWF4TYcdBfDog02s9N8RbkIOia9m3RsOCvdpwnIccIlWiTObKCB+
-         1dIL3qePf6WfEKnooj/64+JaifiHbnR3m5lJGUrhXhdCyz9alaIes9eREC7Qil2y3YTC
-         DoKbCw8Y4x1rhrhW4mujS10VAJKH2YeCodk3pumjsJr/hnDpYYfAzLu0FRocjW4PCUyD
-         9ywA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794608087; x=1795212887;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ggQ4FFC8Bi0XuOsjCC8PKsr9I1n0o4RHBwZ93v/svPs=;
-        b=pIRAQejmRVlrNfxNtc4x8/fyYQXza3AbU3uZ9DZXqntfMNokLGqXU1qmU3IVjHFNxJ
-         O8dRWRuwBxt6tV7ccehL0aVVe58F8qpRGEnkDUiZwlYcGOr8Q/XyK2CQSO7AmKdSWH69
-         kB8QOWWbeNlvKlxnCNbHrjaMBvN/golmBFzOiZH0AEXhoKI8UX8mVBYNAV+kig6wJmhX
-         GcKnxQZ3DapZ/arRccjtWFmNyxmk2ENW9Pltlis3D5LjxOlddTQ8Xwq1b/Oshk99jlyA
-         VHJ3RMvmRdVJRL0CWlLQw40DEqLeLHsd/ewa0jYgPWYOPKiyh0MDkOHBWCS8VdGdKfZY
-         sSCw==
-X-Forwarded-Encrypted: i=1; AL+hErGlNL0zMj0Askbd+u9YyqRHXl8niBindN2vwaln3ZuEbKhrfKyUSdftQuKAJ4dN4+K0FHys@lists.linux.dev
-X-Gm-Message-State: APuU4Z8oOhv2oL0N4ZiiGdXi7j4V0NsTfusEuEYwuGZfNtgqA0efU4PC
-	kllzCwdl0NDlimL+1dPp3g2l6s87a+z/sNxOmZqQg2UoRI2asAIoMb+6zrrd/WGXy2lwARNo7Yq
-	8P8rWGWTIh4SOzg==
-X-Received: from dlbph19.prod.google.com ([2002:a05:7022:3713:b0:195:8b4e:20b7])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:b905:b0:1a9:d04f:1b55 with SMTP id a92af1059eb24-1b50311e3efmr3121638c88.26.1794608087024;
- Fri, 13 Nov 2026 14:14:47 -0800 (PST)
-Date: Fri, 13 Nov 2026 14:12:54 -0800
-In-Reply-To: <20261113221248.3535369-11-wusamuel@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nLoEHnEq
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=TtBRXW6QA+XpUjRfc2qsO4A+37Kv5TpP9BUsEKKizFQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794609370; v=1; x=1795214170;
+ b=nLoEHnEq1ZQpjZzdWvaZtZme0132ShAMTCjauvoSbqTA6PsII5ve4EpcSu6HR9+7dBd2lWrE
+ s6D26Efm5liWkQy9KCBW1jMgEhSdXgMNSRvodyKj95Ucclpp66VuwNcfrg/jz8k7wLhAmYWV1QS
+ JDJuAjRrNzexoRuWeBYCRihQ=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 752cf6fae846f8b5;
+	Fri, 13 Nov 2026 22:36:10 +0000
+X-Mizu-Trace-ID: 752cf6fae846f8b5
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <55b6a4f6-46bf-4edd-9da3-e9cfd48e8a5c@linux.dev>
+Date: Fri, 13 Nov 2026 14:36:03 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,106 +57,56 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261113221248.3535369-11-wusamuel@google.com>
-X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261113221248.3535369-20-wusamuel@google.com>
-Subject: [PATCH bpf-next v3 9/9] selftests/bpf: Test typeless module ksym resolution
-From: Samuel Wu <wusamuel@google.com>
-To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
-	David Laight <david.laight.linux@gmail.com>, Samuel Wu <wusamuel@google.com>, 
-	kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/2] percpu: do not put btf_type_tag on per-cpu
+ variable declarations
+To: Chris Down <chris@chrisdown.name>
+Cc: dennis@kernel.org, tj@kernel.org, cl@gentwo.org, peterz@infradead.org,
+ mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, acme@kernel.org,
+ yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, llvm@lists.linux.dev
+References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+ <20261110012235.1024461-2-vineet.gupta@linux.dev>
+ <20261113115808.87a52a7c74e293ce@chrisdown.name>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20261113115808.87a52a7c74e293ce@chrisdown.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The module ksym tests use typed ksyms, which libbpf resolves through
-BTF. Add a weak typeless module ksym to the ksyms test, to cover the
-module path of KALLSYMS_QUERY_BY_NAME.
+On 11/13/26 11:58 AM, Chris Down wrote:
+> Hi Vineet,
+>
+> Vineet Gupta <vineet.gupta@linux.dev> writes:
+>> The message is confusing: this is a declaration, not a definition. But
+>> the compiler is right to object to a type tag on the aggregate, and the
+>> issue is fundamental: every variant of an aggregate shares one DIE, so
+>> there is nowhere to put it. clang drops it silently and GCC warns.
+> Not a big deal, but the definition in GCC's message is the definition of
+> struct cpuinfo_x86, not of cpu_info. It's saying the attribute is being
+> applied to the struct type after the struct was already defined, which is
+> accurate. So maybe just drop that first sentence?
 
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- tools/testing/selftests/bpf/prog_tests/ksyms.c | 9 +++++++++
- tools/testing/selftests/bpf/progs/test_ksyms.c | 4 ++++
- 2 files changed, 13 insertions(+)
+Oops, thanks for catching that. I misread which definition it meant. 
+Dropping the first sentence in v2.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-index dc7aab532fb1..801d38560473 100644
---- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-@@ -11,6 +11,7 @@ void test_ksyms(void)
- 	struct test_ksyms *skel;
- 	struct test_ksyms__data *data;
- 	__u64 link_fops_addr, per_cpu_start_addr;
-+	__u64 testmod_ksym_addr = 0;
- 	struct stat st;
- 	__u64 btf_size;
- 	int err;
-@@ -27,6 +28,12 @@ void test_ksyms(void)
- 	if (!ASSERT_NEQ(err, -ENOENT, "__per_cpu_start: ksym_find"))
- 		return;
- 
-+	if (env.has_testmod &&
-+	    !ASSERT_OK(kallsyms_find("bpf_testmod_ksym_percpu",
-+				     &testmod_ksym_addr),
-+		       "bpf_testmod_ksym_percpu: kallsyms_find"))
-+		return;
-+
- 	if (!ASSERT_OK(stat(btf_path, &st), "stat_btf"))
- 		return;
- 	btf_size = st.st_size;
-@@ -47,6 +54,8 @@ void test_ksyms(void)
- 	ASSERT_EQ(data->out__bpf_link_fops1, 0, "bpf_link_fops1");
- 	ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
- 	ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per_cpu_start");
-+	ASSERT_EQ(data->out__bpf_testmod_ksym_percpu, testmod_ksym_addr,
-+		  "bpf_testmod_ksym_percpu");
- 
- cleanup:
- 	test_ksyms__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/testing/selftests/bpf/progs/test_ksyms.c
-index 6c9cbb5a3bdf..0506bb574c4a 100644
---- a/tools/testing/selftests/bpf/progs/test_ksyms.c
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
-@@ -9,6 +9,7 @@ __u64 out__bpf_link_fops = -1;
- __u64 out__bpf_link_fops1 = -1;
- __u64 out__btf_size = -1;
- __u64 out__per_cpu_start = -1;
-+__u64 out__bpf_testmod_ksym_percpu = -1;
- 
- extern const void bpf_link_fops __ksym;
- extern const void __start_BTF __ksym;
-@@ -16,6 +17,8 @@ extern const void __stop_BTF __ksym;
- extern const void __per_cpu_start __ksym;
- /* non-existing symbol, weak, default to zero */
- extern const void bpf_link_fops1 __ksym __weak;
-+/* module symbol, weak, zero if bpf_testmod is not loaded */
-+extern const void bpf_testmod_ksym_percpu __ksym __weak;
- 
- SEC("raw_tp/sys_enter")
- int handler(const void *ctx)
-@@ -25,6 +28,7 @@ int handler(const void *ctx)
- 	out__per_cpu_start = (__u64)&__per_cpu_start;
- 
- 	out__bpf_link_fops1 = (__u64)&bpf_link_fops1;
-+	out__bpf_testmod_ksym_percpu = (__u64)&bpf_testmod_ksym_percpu;
- 
- 	return 0;
- }
--- 
-2.56.0.679.gc527c65306-goog
+> I've tested this with clang 23 and GCC 16. With clang, the same 280 types
+> and 3360 bytes of BTF go away. Likewise, with GCC, the per-cpu
+> declarations no longer warn, and the non-enclosed address space errors
+> are gone.
 
+Thanks for verifying, with both the compilers.
+
+> Once the commit message nits are fixed, please feel free to add:
+>
+> Reviewed-by: Chris Down <chris@chrisdown.name>
+> Tested-by: Chris Down <chris@chrisdown.name>
+
+Awesome, I'll add these in v2
+
+Thx,
+-Vineet
