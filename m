@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794530736;
-	b=HJos7re1JPWh6rLBTbZn1JVOXlegdugNxVZSS2XTxK+Xw1utPXRVksZdeRNuTjOlkYx7
-	 kEONVkhEPPwU7JRcqxXvsxrMS+WA32ybwH7TgZEH6fpHwbX6X154FP2Nd0I8SoQTG6qN/
-	 fOrtaU8ZyELX9SAj5urS8FLW8DVHky1wTdmzH3jOaRjhr51ik6+f3xpfkFH+uaXU/bYu8
-	 9IyBiN0eobIE0cGMaV2jb4mpxe9d9L5epOSbdTLy2Ys8DA21oNKker4U2Nh1YRJIQrRpd
-	 zZnVHOSSSP4qTgZxsGVOG6D/CK84whdDLjI7e+2p7/6x1CUd8FBjOWe1JFu/5jUlpcg==
+	t=1794530745;
+	b=cVMmYSx8edoBrYDdC/19/7w1dNGDzfTwg2xs80d5DaUgLXb5qcNKvH47CaI+fSiZ67+R
+	 VD0EV5qsY/ZMn+ZVJg6pAclwm+gW9ijaIttk8qso3gmzzJQVc6xhVtAmsE+jdhyQBKxUT
+	 bywV9BdcihIikkGYTS4am+Fg/lQp7owCa8cJE1BHTl9upFqe2eDqcr333/uwYakW9ulfF
+	 rwDeDlszfGitWHK+OABqZi5NbakOx6ADLynhIohNarZ8aQKc8NGI3o4jqhdeF7+LW1M71
+	 t7T6UDIYLGIL2n85OOeLd7MS2QoJb0600zh+MjyHqzWs/6DSDpL1o5+4y+DtagqQCdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794530736;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794530745;
 	h=Received:DKIM-Signature:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
 	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=byQFz16WVUl5yiVMUGC0Lc1lZ6xNCBWBcgXPenWtDkE=;
-	b=oTbGXLgnlEvOyicKMGzgrEXfOTLhKSsoMfwPsxZGJLyFwG2zqfzeP6nfl3KqzGOjPTOJ
-	 ZYw+cWop04dXjSglkE+1i6kYAj8VhUxbEVsGv8uMigh/CsiNnNyhY3tcHcEMEWBikV/bb
-	 69cglV2nzoOEa9lX+ZvM0ZsN6aydFZjbgLl239Yo6ElXNKtJkzL+RkZ6Zwe1Fuv4UtdEF
-	 07bylvXFw6/NibCFFYA6uv6Xo1qEdD8EOG3Rm1gUmasXDuvLk0i9DtYatr5kVIxyZBsl+
-	 sJ2zxwGxWDqX08IzgtPsZirGHzTky691pJoSfzG95Us3qpPy9hxW81r8eBMxbYO0kug==
+	bh=KY5kDp14poeFBGtqNIrB31vAeISG/NjBxcQdpcZh9x0=;
+	b=OoEJzH1DFJNrUA8WSB8jnANjVouG60Do5yWX2pBd9z/GW/aeL46IBSP/OiKV57Lr85Fi
+	 HDu2dOZnDHZmZ27HmRrdN52MGRptJHYd2opDLfZFEfmyO5iuhu5HLNatZES8PNrZjBsnF
+	 HJy32LsMJKpC3kdBDPD9+Dy0hlIN513d/rSzDUPD9euMc7qkPpPqf8g/oAXPdZ510qG+q
+	 2I6B/YERx7bzom3XgJIrxX+jBZqC3g2270kJEIRhapAOceXGMgylYfPJ1aZbkasqwgCwG
+	 TsLIsZjlyHg/W5uQK0PXXj/xmzb+nFoGoifdG8OCa2u75XiT6ahcPg/dAuKsm/LSXzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=be8MKGWW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f8QF2j8p;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EF1606A31C;
-	Fri, 13 Nov 2026 00:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0961C606A32D;
+	Fri, 13 Nov 2026 00:45:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=be8MKGWW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 029F81F000C4;
-	Fri, 13 Nov 2026 00:45:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f8QF2j8p
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066F61F000C5;
+	Fri, 13 Nov 2026 00:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794530736;
-	bh=byQFz16WVUl5yiVMUGC0Lc1lZ6xNCBWBcgXPenWtDkE=;
+	s=k20260515; t=1794530744;
+	bh=KY5kDp14poeFBGtqNIrB31vAeISG/NjBxcQdpcZh9x0=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=be8MKGWWy9NEcQSfVFN/w7WK64dx/QSUMBjDHw1XimQV5qPHdvb4Q4uBo4yihdYB3
-	 GUL5wP2AJHJO8KOO7RCwF+z0KOuhQfT/mjxzS4g6WqeycEYqnWBHRCjbYaAUHDEnW6
-	 7CgWu80Qo3pA0+OpesC9pCC31HN0pTJhcxu0/su82wk1FJ+6DVKSssdjxydMj1oSy3
-	 TYQJK9mkv2AAw+wK7jxi7AX6ADdRlmoD6G1rUbJ7dueKRpgB1pbqzn8qzZiaDDa978
-	 lCJ4KOmPHpjB6dx/6z5vR7c2RkM6DjWSEEoEzpjZiyVE+NTNdIk89GesZImW0EY4fF
-	 FeraAxq78f5FA==
+	b=f8QF2j8ptBripY6sRS8V+ZDSMpZao5SU6Jd1+fgbGc9Wb/1tDDW9ZvcE5k2X1zMb0
+	 Ohvvw+RyHlu4hGxcU/ssY1JrjBKZ/kEUcWgxHd/iV5R7oHStWbnbZotAB3qXugl9ru
+	 k5fXe9YcYGa5eEGnWsGOFEVzyQA9yxsGdDPxNrGsuR5HTsgkcHzzWruzza320RGfUH
+	 pLMB51eWD2z96wQ6gBONlBLkKa1IJv2vSgkrS5NotyrOsBz3mHK54Mx9UyKZQKHbwW
+	 3vpkMbvULwjSdbm/HbFT3VQ10YyDVsRHE55lnRunS/Lsjyv1ahe/WeTZH7BP7E+pQd
+	 IZJv1OaJ+/GnQ==
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -51,54 +51,68 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 01/20] coverage: move gcov and kcov under
- kernel/coverage/
+Subject: Re: [PATCH v2 16/20] coverage: add MC/DC measurement
 From: Nathan Chancellor <nathan@kernel.org>
 To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexander Potapenko <glider@google.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Ben Segall <bsegall@google.com>, 
- Bill Wendling <morbo@google.com>, Chuck Wolber <chuck@wolber.net>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Dmitry Vyukov <dvyukov@google.com>, Ingo Molnar <mingo@redhat.com>, 
- Juri Lelli <juri.lelli@redhat.com>, Justin Stitt <justinstitt@google.com>, 
- kasan-dev@googlegroups.com, K Prateek Nayak <kprateek.nayak@amd.com>, 
- linux-doc@vger.kernel.org, llvm@lists.linux.dev, 
+Cc: linux-kernel@vger.kernel.org, Wentao Zhang <wentaoz5@illinois.edu>, 
+ Alexander Potapenko <glider@google.com>, 
+ Andrey Konovalov <andreyknvl@gmail.com>, Bill Wendling <morbo@google.com>, 
+ Chuck Wolber <chuck@wolber.net>, Dmitry Vyukov <dvyukov@google.com>, 
+ Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
  Marco Elver <elver@google.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Mel Gorman <mgorman@suse.de>, 
  Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
+ Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nsc@kernel.org>, 
  Peter Oberparleiter <oberpar@linux.ibm.com>, 
- Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
- Thomas Gleixner <tglx@kernel.org>, Valentin Schneider <vschneid@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>
-In-Reply-To: <20261103015238.3780910-2-sashal@kernel.org>
+ Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>
+In-Reply-To: <20261103015238.3780910-17-sashal@kernel.org>
 References: <20261103015238.3780910-1-sashal@kernel.org>
- <20261103015238.3780910-2-sashal@kernel.org>
+ <20261103015238.3780910-17-sashal@kernel.org>
 Date: Thu, 12 Nov 2026 17:45:18 -0700
-Message-Id: <179453071828.814257.6686638707569844626.b4-review@b4>
+Message-Id: <179453071828.814257.2587871795236228245.b4-review@b4>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=500; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ZzcvWpryBOjS2P/e/kVW3juN01KPNSSyJL9+psGkVmw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFnfYpdaHl/2+mxZ6PYgi7Vx6iEvb4S77Nw13fzE8wKmq
- 009c6a4dpSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJMMxjZOh0ns/+1uaXz4S2
- WXZLi2tf+knsn9CbxV3JsYz5uZm/jgYjw4yye/1Wmgk/f1u+iJn53n5P2tG6Ba7OsvYJS+vP1l8
- /xwsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1391; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=75CuO+xG+V9JVao6G3ZBK2tMjQkp1WF0lq+KgCZ1jhg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFnfYpdqxAUecH/Nf5j5QMji0kylx1Xz9B5ff3Y8Y1JdN
+ Q/n9u99HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiizkY/llEabAu2y9ukqtr
+ k/Ox4Pd2e6E3jdeXFMhtLZmulbhknS7DPwOWPOH6FxZNha/cTRaqzfp2Xf9kDofkQ53skMA/bkc
+ uMQMA
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Mon, 02 Nov 2026 20:52:19 -0500, Sasha Levin <sashal@kernel.org> wrote:
-> The kernel carries more than one code coverage implementation, each
-> with its own directory, Kconfig menu, build plumbing and debugfs
-> interface. Start consolidating them by moving the existing
-> implementations next to each other:
-> 
->   kernel/gcov/  -> kernel/coverage/gcov/
->   kernel/kcov.c -> kernel/coverage/kcov.c
-> 
-> [...]
+> [ ... 63 lines skipped ... ]
+> +config COVERAGE_MCDC
+> +	bool "Measure modified condition/decision coverage (MC/DC)"
+> +	depends on LLVM_COV_KERNEL
+> +	depends on CLANG_VERSION >= 220000 || !WERROR
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+I don't have a super strong opinion here but I think I would rather see
+this just hard depend on Clang >= 22.1.0 rather than let these warnings
+pollute the build without -Werror. Maybe something for the future if we
+get too many reports.
+
+> [ ... 49 lines skipped ... ]
+> +ifdef CONFIG_COVERAGE_MCDC
+> +CFLAGS_COVERAGE	+= -fcoverage-mcdc \
+> +		   -Xclang -fmcdc-max-conditions=$(CONFIG_LLVM_COV_MCDC_MAX_CONDITIONS)
+> +# Decisions that MC/DC leaves out are nothing to fix in the code. Disable the
+> +# warnings here rather than in CFLAGS_COVERAGE, so that KCFLAGS=-Wpgo-coverage
+> +# can list them. Clang only allows this since version 22.
+> +KBUILD_CFLAGS	+= $(call cc-disable-warning, pgo-coverage)
+
+Please make this:
+
+  KBUILD_CFLAGS += $(call cc-option,-Wno-pgo-coverage)
+
+This might even want to be in scripts/Kconfig.toolchain as
+
+  config CC_OPT_WNO_PGO_COVERAGE
+    # clang-22: https://github.com/llvm/llvm-project/commit/80887c7de9d82c809555f52948af1a5d7484e28
+    # gcc: not supported
+    def_string "$(cc-option-str,-Wno-pgo-coverage)"
+
+so that it will be easy to clean this up when we use clang-22 as a
+minimum version.
 
 -- 
 Cheers,
