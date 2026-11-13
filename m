@@ -1,56 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794537759;
-	b=gt5PnLOxK6ySWhGg+bJC9btN3mZHOYeQ9r6amV8ZKTT0AdB/TKxMLHuRSJW3/wvuQmUJ
-	 onDbAmXpB3yyfaO0tbSOZIpvOLTFT3MauIUKvpE6MoOGHzkIG0U/XPsZ1DVCb7aCI+d4R
-	 16i1uVLKz2xihxRFah1nK/vtGvwEykBWq0yuE350t9u/YM/mTBIkvM1bq2D3DsX+vHZOT
-	 KDrmUVeV0twoS6xz7aNRkAz29Ke9tQ0h90lHNvnuGLfVsboH03O8thWdIh5MGi6fqw1mE
-	 ZTLNb0WgEEeenp/GzQWIOSaKqsF/k7JTGidFxBn5oaX8CjWrmDtAeiHT2zKTaZTVl1g==
+	t=1794538303;
+	b=DvfhLjoXz+RhWYK491zmw0b7Ttuz+LUlg4gTL0oYMvzz0kwxWohicKdQW8HjFKk70UwO
+	 LiW5Yetxs9eC3qp1KTP5V5VWMr4DX08yMl0KH49lW04sFJX+U1Vfhju9c0YwvHFibXjBW
+	 E3w1ixuXZA5dBk7MrSc5wunJrrgxWQ5yRYxB/ozkDOQ6WSMUOqIIi3cl4xu+Qc/eC9cQ2
+	 t6Ul6smA4IrWI2jMjSzmdiVj9hnr5TxeqqKx0Yoa4cv41dUn6yVw+64gErTVJf+QgpwtZ
+	 xDW203PnRYdUnT79FkbCeOdHBg+r+qq+Nolw21icsolbT7yMG0692qMV1p3E+wgauvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794537759;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=jQRGsd7cMv6GWPamWfpww1CqH3rlOptCcJ9oQe+sBGg=;
-	b=JALVUBcfy5chA0XAQekrKNpKIKRQuOYTUt6Oj/CqleCBJaUkHaNj0ZplAPJQoCg1IxI3
-	 q6zvjE9ee9Al1QAjKzvVdwxa7ytrd2+AVaEKk2w9v/RiMBtCc35e1Bkdl+cmBActmofT5
-	 RHBp5nhSGxtqYPDkxfhMCPTCHUuiMMhpcW8w/Pnz1RXWyE0FkKCCTkN5US9Z5y8XfPgzN
-	 1hRSJFuQtlXJihv0w5HPkxsYOw6cFGnA7kW98QPgJeJCjArX71b7y8jWGxN/8npxc8bgi
-	 MZhsRdpw2Ma6g9PzVNoVO0llT38GL82F+442lW3/8rMpDsxz/LG3rBmQWKpVVITKkjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794538303;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=9q3WecW58AVzVN8/3AXX3WSFjtoBFejU4UH87CoM6+E=;
+	b=ZBkPGihG7IwCzemVxQVc5vTB39YnoQkY7x9HI+cp2RYvmOgsmWhJ9d+eAsGpdlRlAeFH
+	 /94jHBnSu+KJWstVMnQmWVd8TiTH9w375BedED1id+9oXUjpDaN67NLGPmm6YxiEnAyJL
+	 RLnnJQlfykHdye4yZFSOZvH+zeOeLSQX0R6fCZamMuMNYzIAhga7uiYKf/3us6N/mguhw
+	 C2AW4rjJJmTNXLYzoNjZJPZs1Ko/e+27+l6Q7R4R4IZDql7ZiMe1Oy1c3rh5NQjbyOZ8a
+	 5SnZyyAoDcMbQzJC3pNK1K+HprjwcxoQFdPuIcjT81HsgSwm4tbpVyG4dgBXBZksZmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OE0b+NA8;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hmsndqWY;
+	arc=none smtp.remote-ip=198.175.65.14
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91A9606A330;
-	Fri, 13 Nov 2026 02:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E2460A3816;
+	Fri, 13 Nov 2026 02:51:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97E2460A3816
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OE0b+NA8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC1D91F000C4;
-	Fri, 13 Nov 2026 02:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794537758;
-	bh=jQRGsd7cMv6GWPamWfpww1CqH3rlOptCcJ9oQe+sBGg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OE0b+NA8xUWU6fbC4NV8Ynxt3V43jQEqtwT9grvgeXAyoQ1qVxA1c4zTRJySzfFND
-	 Tq8ko47QSBZx7ZAZ4m+18/Am7EdW3xbN3cF+8ruLeT4Fcbgo61CrDkKL3N3PggxO9i
-	 lw2bsC1NGw4D4N0ToxkKfLrhGTqvzq7W37hq+AGTmFm2bcjWVNdg41UoCilcdM0J+e
-	 3+EYP2voUdO6r3J5rFoEJE0bF4q/c2+8E05yp0zsZtpMTQf3Vq/eBcVoRC6wA5LhMW
-	 I5pRW/bT7gyziWMQi/fKkP9dBVjx+EyiAUf72Zgh07VWdKLU2neyeFJCrSEWeFB0QD
-	 tymQ47M+EBAWg==
-Date: Thu, 12 Nov 2026 18:42:36 -0800
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Longjun Luo <luolongjuna@gmail.com>
-Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, nathan@kernel.org, 
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
-	live-patching@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 01/11] objtool/klp: Fix checksums and copying of
- wide strings
-Message-ID: <avZ3jEbnuVu5Qv2G@jpoimboe>
-References: <20261104133158.3187525-1-luolongjuna@gmail.com>
- <20261104133158.3187525-2-luolongjuna@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hmsndqWY
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794538303; x=1826074303;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fxqpdnvOspyiKnPiU9wfiXKu4XCKOXuYAgetxr629AM=;
+  b=hmsndqWYvkivvkd5QAKKNdThBIEvxKZTBSj7IyB9f8MoQh47ZsDHIbuE
+   ZmMRjxDvbZbjmcuFm1pTtnHgD/Oicb742zMezAu4lz180Wr4ZxErgPnrT
+   QHL1NaUR+CCl5PPJK96dLKr3ZZrzKaFMHLyRO/WL4ixXg+oqB0rzwylf0
+   g5IG7E/JVELM5Xkh+kPfBqygWfwOJb2cxA7aBguCJYdnRuzuNab+bzWUn
+   QsM4nVb2rei1W9TOULScQrEIfEc0rnxh6mtzeyKlRHkv5c0iTQ79ARWkM
+   xVE7rrWaXbWB0WMPS8ec+93aqfUDUmdS04rXcxqHBQkH+O86WIQBfnYbO
+   A==;
+X-CSE-ConnectionGUID: vOonq1ErQyGMZlKpAkG8Pg==
+X-CSE-MsgGUID: mvmv6G4WSOujop1o3LB6ow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3232620"
+X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
+   d="scan'208";a="3232620"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 18:51:43 -0800
+X-CSE-ConnectionGUID: yPq+HySaSR+ZKVdZDROT3g==
+X-CSE-MsgGUID: ajzsGcyWSYijWq20X5aymw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
+   d="scan'208";a="8831933"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 12 Nov 2026 18:51:39 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xRhO5-000000012L5-1qoW;
+	Fri, 13 Nov 2026 02:51:37 +0000
+Date: Fri, 13 Nov 2026 10:50:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@kernel.org>, linux-acpi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	Jamie Nguyen <jamien@nvidia.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Dat Mach <dmach@nvidia.com>
+Subject: Re: [PATCH v2 3/3] firmware: arm_ffa: Share FF-A version negotiation
+Message-ID: <202611131010.OMo0VbqM-lkp@intel.com>
+References: <20261112-acpi_ffh_ffa-v2-3-575a9dbed22b@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -60,73 +88,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261104133158.3187525-2-luolongjuna@gmail.com>
+In-Reply-To: <20261112-acpi_ffh_ffa-v2-3-575a9dbed22b@kernel.org>
 
-On Wed, Nov 04, 2026 at 09:31:47PM +0800, Longjun Luo wrote:
-> SHF_STRINGS sections can contain elements wider than one byte. Using
-> strlen() truncates their contents at an embedded zero byte, hiding
-> changes and copying incomplete strings into the patch.
-> 
-> Find the terminating zero element using sh_entsize. Use the resulting
-> length for both reference checksums and copying, and propagate errors
-> through checksum calculation. Keep single-byte string handling unchanged.
-> 
-> Add a test for two- and four-byte strings, including references from data.
-> 
-> Validated the available objtool tests with GCC 16.2.1 and Clang
-> 22.1.8. No failures.
+Hi Sudeep,
 
-Please give example(s) of such "wide strings" in the changelog.
+kernel test robot noticed the following build warnings:
 
-> Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
-> Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
-> Fixes: 873a2208ea31 ("objtool/klp: Calculate object checksums")
-> Assisted-by: LLM
-> Signed-off-by: Longjun Luo <luolongjuna@gmail.com>
-> ---
->  tools/objtool/elf.c                           | 29 +++++++++
->  tools/objtool/include/objtool/elf.h           |  1 +
->  tools/objtool/klp-checksum.c                  | 44 ++++++++-----
->  tools/objtool/klp-diff.c                      | 14 ++--
->  .../tests/generic/fixtures/identity/common.h  | 15 +++++
->  .../generic/fixtures/identity/wide_string.c   | 36 ++++++++++
->  .../generic/test-checksum-wide-string.sh      | 39 +++++++++++
->  tools/objtool/tests/identity-lib.sh           | 65 +++++++++++++++++++
->  8 files changed, 223 insertions(+), 20 deletions(-)
->  create mode 100644 tools/objtool/tests/generic/fixtures/identity/common.h
->  create mode 100644 tools/objtool/tests/generic/fixtures/identity/wide_string.c
->  create mode 100755 tools/objtool/tests/generic/test-checksum-wide-string.sh
->  create mode 100644 tools/objtool/tests/identity-lib.sh
-> 
-> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-> index a791f4ea6ec1..71f1a272e468 100644
-> --- a/tools/objtool/elf.c
-> +++ b/tools/objtool/elf.c
-> @@ -1382,6 +1382,35 @@ struct elf *elf_create_file(GElf_Ehdr *ehdr, const char *name)
->  	return elf;
->  }
->  
-> +/* Wide strings, such as the u16 PSR setup table, end at an all-zero element. */
-> +ssize_t elf_string_len(struct section *sec, unsigned long offset)
+[auto build test WARNING on 7475ea8b58616b33c04afb976cf0fbaad9dd63fb]
 
-What is the "u16 PSR setup table"?
+url:    https://github.com/intel-lab-lkp/linux/commits/Sudeep-Holla/firmware-arm_ffa-Share-FF-A-register-field-definitions/20261112-111406
+base:   7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+patch link:    https://lore.kernel.org/r/20261112-acpi_ffh_ffa-v2-3-575a9dbed22b%40kernel.org
+patch subject: [PATCH v2 3/3] firmware: arm_ffa: Share FF-A version negotiation
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20261113/202611131010.OMo0VbqM-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1b1fed44d3dcca649a9877915d57c3357a98124e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261113/202611131010.OMo0VbqM-lkp@intel.com/reproduce)
 
-> +{
-> +	size_t entsize = sec->sh.sh_entsize, size, len;
-> +	const char *str;
-> +
-> +	/*
-> +	 * FIXME: GCC's range_string() uses a one-past-end string pointer.
-> +	 * strlen() reads past the section; preserve the string base and addend.
-> +	 */
-> +	if (entsize == 1)
-> +		return strlen(sec->data->d_buf + offset);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611131010.OMo0VbqM-lkp@intel.com/
 
-I don't understand what this comment means either.  Please make sure all
-comments and changelogs are written by humans, as LLMs tend to write
-nonsensically.
+All warnings (new ones prefixed by >>):
 
--- 
-Josh
+   In file included from drivers/tee/optee/ffa_abi.c:8:
+>> include/linux/arm_ffa.h:189:30: warning: declaration of 'struct arm_smccc_1_2_regs' will not be visible outside of this function [-Wvisibility]
+     189 |         void (*invoke)(const struct arm_smccc_1_2_regs *args,
+         |                                     ^
+   1 warning generated.
+
+
+vim +189 include/linux/arm_ffa.h
+
+   182	
+   183	#if IS_BUILTIN(CONFIG_ARM_FFA_VERSION_NEGOTIATION)
+   184	int arm_ffa_version_get(void (*invoke)(const struct arm_smccc_1_2_regs *args,
+   185					       struct arm_smccc_1_2_regs *res),
+   186				u32 input_version, u32 *version);
+   187	#else
+   188	static inline int arm_ffa_version_get(
+ > 189		void (*invoke)(const struct arm_smccc_1_2_regs *args,
+   190			       struct arm_smccc_1_2_regs *res),
+   191		u32 input_version, u32 *version) { return -EOPNOTSUPP; }
+   192	#endif /* CONFIG_ARM_FFA_VERSION_NEGOTIATION */
+   193	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
