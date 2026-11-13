@@ -1,80 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794597014;
-	b=sgMDUG1xglH/N1o/PE2XEr9Mlq+MuZSPEWHQaBaKEjBUyz5D8iNz6iobIBIj4le+TTfz
-	 GwJyfOP2XWPQaMNW1DovoqCTMovEp2NMW1iZgjkeeatNqSXfmHl9NnRLfCnZjCxqwQUO0
-	 R9CruW48cvob3ydM6Fbl05INl8oXML4icRvZaFtjbacBnWyQpv5v9SUyp1A7dg2BsGSlK
-	 zExXfEj41ik0bvgkyhl9o3OoBo/NFllO3yS352xLhRruMcsKzSd9s/aJZyJPrQHsJP1yi
-	 Wwd7IquDJtZD3i8AzAA623p9WgC88hyU1dptxlnif+flCL1I/FcDN4pej+RSdumNCXw==
+	t=1794599012;
+	b=l+rdufP4999jQeHqD/ikb2DaMj0YtlPXbqIHQh79ucno8d8bK4HTXw3adi3KDmkO2vqx
+	 ZiD9eswg8rZrBSRYDFeXHXEMxAPtlNQFNerdEOI6ct8NfapqJ29EUVS54q4OU50R9yqQr
+	 kRn7Js8+RReLkSfGGgeyI6h5kcAo2Irpm/ilHgoSBN/VXEep6pWfDqQ0M4i/uAS+bp7US
+	 sXXdl7xyMkUYgNGvHv8xYZaEewIWyTFPQnYW4ji756e6qZecq8i9sbkx+ENS0KZGnegM8
+	 VxF83BHUJXbTWZsDSLZc8KkpHugl7zC9D9T8Et+4QMYvha1E1AE82SKnphnUgjB/t/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794597014;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794599012;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=zeSc0Kmi4ulP+o8LuWHeCs5C4EMGcAlzHD8FkG+e35Q=;
-	b=tfMc3gzsiMcgVAti0EslhA7BkIrS5D08Mda0x3fFthVkDbQ/LSupCDq3Vr15A8pVZhTP
-	 7nq7GiqZwTq0BevzgcTuBbShe/CzVnhLe+z5sptdA8DQVVq3JpwgCY+mRL7srWCK32+LS
-	 yslcaHL5CzSGpgQtEBZLZrXzRLtEuGIqMXYVd3/7pegXhJzwPfnNd9c4bFUJ/L7bLfSjo
-	 2G3jpwkkWxMnRRRhp5HN/Y+u+ljl+zzjjDPTVoM1oT5ZfO+TmfRsi5c/djPgKz84UeTNS
-	 VF5TeMhgGX00XGAAsUL0bVdMgCE+0CWcGU9DvfmOvygCHstA2mpvaHO14kS2LEbsEdA==
+	bh=N4P8j+QMSewuz+uKE5PNg/893eiJ2vhGXM01N1veea0=;
+	b=NmCAP9N6TguGFpveIQ4dOPaAt/nJAUnERHYsOhgHykxq/t9xWnCpfQVkblCDcqMJYBS1
+	 5Zsse9iKYyyLlD8DPZew0dSaSrfNQq12R/e0tlg/B3UeFMg0Fpbko3ojWX/NBGAKJITv4
+	 TtyUfa4W48ECyBbv5vzYCDA2SzLniU2HzB5b0DXJ+dIc4vtlNT/qDw6mb3CdIhQn4TrA2
+	 Pm0H4FN7LtDju0CnQRURJ+XoOWC0P0JyOrQHNoEoprPFvI5c86tvldLSrCOKF6DG+crBM
+	 LNvRZZuz8zIvNZyAaNnIPbrpysUmFp822uywd9aEAgRc4V0ShqqJIokpnIyAzOvsm6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BZ5XgBQn;
-	arc=none smtp.remote-ip=192.198.163.16
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Mh/kL15m";
+	arc=none smtp.remote-ip=192.198.163.17
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1625606F314;
-	Fri, 13 Nov 2026 19:10:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1625606F314
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A8D606A32D;
+	Fri, 13 Nov 2026 19:43:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9A8D606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=BZ5XgBQn
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Mh/kL15m
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794597014; x=1826133014;
+  t=1794599012; x=1826135012;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AHpBbQRSEabbHUaavN2fFxopt7Q6u6OmKX3uFoHEXWU=;
-  b=BZ5XgBQnDglIyhdHBFeX47CGh6Dp9AAo5S63a3cqyvd4abaRQYc72qRY
-   hcL5dmCQBpfbcXifC3kOlHc9gjrRj1UdYeQiS7ZcnbHKGMjNTyM208jeD
-   J7mnO4qFtqJ8Zc58oAFSKBD0j5k9qPHByRzjnJoCxHexaZ2M9nKZiAXXB
-   mupKSGAK5nORzvIECLBFGSMHAv/wpreTA5zaNy4DgJHD4p1zWr+B9rNP1
-   nJYaNiz1VUt2vi2kaMyws14Ea7V7gKXAPC2hibSq8Fg9AxcKeQL1ICUUA
-   PoreLyhCBUiUHGi0E32Rr8VcNQjn964AxC8xZiijmmU40UfXqhnnXH1wv
-   w==;
-X-CSE-ConnectionGUID: ZKgyzML+S2GcVT8wYgEFHQ==
-X-CSE-MsgGUID: YxXyK0xZQyq6C9r9eRwhKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11965"; a="3444569"
+  bh=Cua/uwgNa005FQjs9yZ0Cq6T2u8yr5c8hJMGRbdb5yM=;
+  b=Mh/kL15mxEoSkpoYSFdmsj/WfT/hFJYX9kjr7z/pU6NohcIXkR4JCKfE
+   h6/2gDYF5sf4feyEBohfU8Xb5bQLDJrW/rjqDPc/Dv7JY4SU3daKhr4H/
+   aIAOw0Tg5Kd4/QQ59eI/P+5ZFbS8A55km1mFGVJ0iF3Zv/OKlcKROBqj5
+   M4y28LcGQph7tmxVKZ0BE4DaThf3oSugV500g/7QB2kCLuoKIbXWg/6aV
+   LplEUVmg5QjaggDpROKAXeoZ4pNCjBCVffW6SmhlIAK2e+723D1aEtQtu
+   rNT4RZhOEEucg5WVOEcW5iPwD9jEvDdR/A45jI3QF/UYVg3FUlHv/cJ92
+   A==;
+X-CSE-ConnectionGUID: ZI6rUoHLS3GokQrz6Novgw==
+X-CSE-MsgGUID: 7uabpCmETN6QXb44ryxsJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11965"; a="3405933"
 X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="3444569"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 11:10:13 -0800
-X-CSE-ConnectionGUID: Ma3FVthRQ1GYT2wYe5gHOQ==
-X-CSE-MsgGUID: iCDfZ9/nQJWs5TGzoEiIpw==
+   d="scan'208";a="3405933"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 11:43:31 -0800
+X-CSE-ConnectionGUID: pS34q/LXTGORiKyYo7IdWA==
+X-CSE-MsgGUID: RUTstUSRRweYGmOOPK6vdQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="9158508"
+   d="scan'208";a="8841713"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 13 Nov 2026 11:10:10 -0800
+  by orviesa005.jf.intel.com with ESMTP; 13 Nov 2026 11:43:27 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xRwf1-000000013kL-3pZr;
-	Fri, 13 Nov 2026 19:10:07 +0000
-Date: Sat, 14 Nov 2026 03:09:23 +0800
+	id 1xRxBE-000000013pP-0yI7;
+	Fri, 13 Nov 2026 19:43:24 +0000
+Date: Sat, 14 Nov 2026 03:42:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Florian Fainelli <f.fainelli@gmail.com>, linux-mips@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, macro@orcam.me.uk,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SiByte: Fix missing function prototypes
-Message-ID: <202611140242.xhMf9lU3-lkp@intel.com>
-References: <20261112195824.298915-1-f.fainelli@gmail.com>
+To: Chris Down <chris@chrisdown.name>, Vlastimil Babka <vbabka@kernel.org>,
+	Harry Yoo <harry@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Hao Li <hao.li@linux.dev>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Kees Cook <kees@kernel.org>, Marco Elver <elver@google.com>,
+	GONG Ruiqi <gongruiqi@huaweicloud.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-hardening@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH v3 5/6] mm/slab: Support disabling
+ KMALLOC_PARTITION_CACHES at boot
+Message-ID: <202611140317.3kXloW0R-lkp@intel.com>
+References: <9a4caff0336c78a7adc746786c81c9c01f89c40b.1794506262.git.chris@chrisdown.name>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -86,67 +96,102 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261112195824.298915-1-f.fainelli@gmail.com>
+In-Reply-To: <9a4caff0336c78a7adc746786c81c9c01f89c40b.1794506262.git.chris@chrisdown.name>
 
-Hi Florian,
+Hi Chris,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.4-rc2 next-20261112]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on ce6518e61e3b4bf4f97f7ac6204049b9eba7eb75]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Fainelli/MIPS-SiByte-Fix-missing-function-prototypes/20261112-115739
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20261112195824.298915-1-f.fainelli%40gmail.com
-patch subject: [PATCH] MIPS: SiByte: Fix missing function prototypes
-config: mips-bcm63xx_defconfig (https://download.01.org/0day-ci/archive/20261114/202611140242.xhMf9lU3-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/mm-slab-Enable-SLAB_FREELIST_HARDENED-by-default/20261113-005125
+base:   ce6518e61e3b4bf4f97f7ac6204049b9eba7eb75
+patch link:    https://lore.kernel.org/r/9a4caff0336c78a7adc746786c81c9c01f89c40b.1794506262.git.chris%40chrisdown.name
+patch subject: [PATCH v3 5/6] mm/slab: Support disabling KMALLOC_PARTITION_CACHES at boot
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20261114/202611140317.3kXloW0R-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 1b1fed44d3dcca649a9877915d57c3357a98124e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261114/202611140242.xhMf9lU3-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261114/202611140317.3kXloW0R-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611140242.xhMf9lU3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611140317.3kXloW0R-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/mips/mm/tlbex.c:40:
-   In file included from arch/mips/include/asm/sibyte/sb1250.h:28:
->> arch/mips/include/asm/sibyte/bcm1480_scd.h:261:9: warning: 'M_SPC_CFG_CLEAR' macro redefined [-Wmacro-redefined]
-     261 | #define M_SPC_CFG_CLEAR                 M_BCM1480_SPC_CFG_CLEAR
-         |         ^
-   arch/mips/include/asm/sibyte/sb1250_scd.h:392:9: note: previous definition is here
-     392 | #define M_SPC_CFG_CLEAR         _SB_MAKEMASK1(32)
-         |         ^
-   In file included from arch/mips/mm/tlbex.c:40:
-   In file included from arch/mips/include/asm/sibyte/sb1250.h:28:
->> arch/mips/include/asm/sibyte/bcm1480_scd.h:262:9: warning: 'M_SPC_CFG_ENABLE' macro redefined [-Wmacro-redefined]
-     262 | #define M_SPC_CFG_ENABLE                M_BCM1480_SPC_CFG_ENABLE
-         |         ^
-   arch/mips/include/asm/sibyte/sb1250_scd.h:393:9: note: previous definition is here
-     393 | #define M_SPC_CFG_ENABLE        _SB_MAKEMASK1(33)
-         |         ^
-   2 warnings generated.
+>> mm/slab_common.c:1029:44: warning: non-overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+    1029 |         } else if (type > KMALLOC_PARTITION_START && type <= KMALLOC_PARTITION_END) {
+         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/M_SPC_CFG_CLEAR +261 arch/mips/include/asm/sibyte/bcm1480_scd.h
+vim +1029 mm/slab_common.c
 
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  252  
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  253  /*
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  254   * System Performance Counter Control Register (Table 32)
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  255   * Register: PERF_CNT_CFG_1
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  256   * BCM1480 specific
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  257   */
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  258  #define M_BCM1480_SPC_CFG_CLEAR	    _SB_MAKEMASK1(0)
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  259  #define M_BCM1480_SPC_CFG_ENABLE    _SB_MAKEMASK1(1)
-8deab1144b5535 include/asm-mips/sibyte/bcm1480_scd.h Mark Mason      2007-03-28  260  #if SIBYTE_HDR_FEATURE_CHIP(1480)
-8deab1144b5535 include/asm-mips/sibyte/bcm1480_scd.h Mark Mason      2007-03-28 @261  #define M_SPC_CFG_CLEAR			M_BCM1480_SPC_CFG_CLEAR
-8deab1144b5535 include/asm-mips/sibyte/bcm1480_scd.h Mark Mason      2007-03-28 @262  #define M_SPC_CFG_ENABLE		M_BCM1480_SPC_CFG_ENABLE
-8deab1144b5535 include/asm-mips/sibyte/bcm1480_scd.h Mark Mason      2007-03-28  263  #endif
-4cbf2beac2265b include/asm-mips/sibyte/bcm1480_scd.h Andrew Isaacson 2005-10-19  264  
+   999	
+  1000	static void __init
+  1001	new_kmalloc_cache(int idx, enum kmalloc_cache_type type)
+  1002	{
+  1003		slab_flags_t flags = 0;
+  1004		unsigned int minalign = __kmalloc_minalign();
+  1005		unsigned int aligned_size = kmalloc_info[idx].size;
+  1006		int aligned_idx = idx;
+  1007	
+  1008		if ((KMALLOC_RECLAIM != KMALLOC_NORMAL) && (type == KMALLOC_RECLAIM)) {
+  1009			flags |= SLAB_RECLAIM_ACCOUNT;
+  1010		} else if (IS_ENABLED(CONFIG_MEMCG) && (type == KMALLOC_CGROUP)) {
+  1011			if (mem_cgroup_kmem_disabled()) {
+  1012				kmalloc_caches[type][idx] = kmalloc_caches[KMALLOC_NORMAL][idx];
+  1013				return;
+  1014			}
+  1015			flags |= SLAB_ACCOUNT;
+  1016		} else if (IS_ENABLED(CONFIG_SLAB_OBJ_EXT) && type == KMALLOC_NO_OBJ_EXT) {
+  1017			if (!need_kmalloc_no_objext()) {
+  1018				kmalloc_caches[type][idx] = kmalloc_caches[KMALLOC_NORMAL][idx];
+  1019				return;
+  1020			}
+  1021			flags |= SLAB_NO_OBJ_EXT | SLAB_NO_MERGE;
+  1022		} else if (IS_ENABLED(CONFIG_ZONE_DMA) && (type == KMALLOC_DMA)) {
+  1023			flags |= SLAB_CACHE_DMA;
+  1024		}
+  1025	
+  1026		if (kmalloc_partition_enabled) {
+  1027			if (type >= KMALLOC_PARTITION_START && type <= KMALLOC_PARTITION_END)
+  1028				flags |= SLAB_NO_MERGE;
+> 1029		} else if (type > KMALLOC_PARTITION_START && type <= KMALLOC_PARTITION_END) {
+  1030			/* Use the normal caches, which have already been created. */
+  1031			kmalloc_caches[type][idx] = kmalloc_caches[KMALLOC_NORMAL][idx];
+  1032			return;
+  1033		}
+  1034	
+  1035		/*
+  1036		 * If memcg_kmem is enabled and this is a KMALLOC_NORMAL cache and not
+  1037		 * aliased with any other type, make sure it's never merged with any other
+  1038		 * cache.
+  1039		 *
+  1040		 * In other cases the kmalloc cache may end up being used for a
+  1041		 * __GFP_ACCOUNT allocation so mark it as such. The exception is a
+  1042		 * KMALLOC_NO_OBJ_EXT cache.
+  1043		 */
+  1044		if (!mem_cgroup_kmem_disabled()) {
+  1045			if (type == KMALLOC_NORMAL && KMALLOC_RECLAIM != KMALLOC_NORMAL)
+  1046				flags |= SLAB_NO_MERGE;
+  1047			else if (!(flags & SLAB_NO_OBJ_EXT))
+  1048				flags |= SLAB_MAY_ACCOUNT;
+  1049		}
+  1050	
+  1051		if (minalign > ARCH_KMALLOC_MINALIGN) {
+  1052			aligned_size = ALIGN(aligned_size, minalign);
+  1053			aligned_idx = __kmalloc_index(aligned_size, false);
+  1054		}
+  1055	
+  1056		if (!kmalloc_caches[type][aligned_idx])
+  1057			kmalloc_caches[type][aligned_idx] = create_kmalloc_cache(
+  1058						kmalloc_info[aligned_idx].name[type],
+  1059						aligned_size, flags);
+  1060		if (idx != aligned_idx)
+  1061			kmalloc_caches[type][idx] = kmalloc_caches[type][aligned_idx];
+  1062	}
+  1063	
 
 --
 0-DAY CI Kernel Test Service
