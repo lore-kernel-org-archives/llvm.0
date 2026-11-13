@@ -1,77 +1,117 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794522555;
-	b=oBLA6knQ2hYAT3ZR96gYHbX8hQG9ORibnyOfMSZSYDgqBmOr9LO7hhHQtu1JzJnrESL8
-	 W13zXpA1z+nhcGy1BjhOgvOaChRLWPXedKR3l6UOXGXq3g08vaHtXmAjHf/11sttmb2Dx
-	 ea68j2Vvli0IravO4jGy3sf4WoRf5hYZ5FcMaf6xDAqhe7tyCy6WaYBmsOr5zbL8kORyx
-	 +Ap7m3j1SP+KnbLEFcN/2JhIESrK28jEIX535xVUgb0f7G0POXNJL6+0RAwAWoHdEDU4O
-	 SL423EQq/jPLtgGPSeKwWfInueLQ4cjSbwtrkDPFKBL+BtmDiaNvZpnJPUtqJz2Gh4w==
+	t=1794529947;
+	b=phwsAGaatriMxI5TIj3HniR+QKhphyfj2s5SoW/+X0U4SUgTxFF1dMTaIsudMtfx8Xa4
+	 J31fKCzn0w8ZPXU5uWeEdh993txiR2Gcn03F3TUgFNb6f6H7xbMfvFIyszpRQ/x5fdBVq
+	 qXNxbmU4/yy9VjTxkq5Hd5aAscIdq0o7ZA7PFRYlswFGwq+9Gdsx7TftzYu0Q0J+rAkWu
+	 EcwyUsPzZUXhh7wOJW4dnFmk4sAC14yXPdmEUhSmQ27AbTwS1RADlpnRS5xUOvsQyDRuG
+	 8MZZI3cxkJH0vXVJeX9E/uNvLg/2IaIaaxLg7jViRq7LOOMzp+j3iPCldusiwPZj5mw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794522555;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=v5+JB49zGwfz6x8QzP+xULfuT4zKF494oD+NRHmQd8g=;
-	b=CSEhTL3eQsRQgVqeiba9uUjv0aVnQ79Qo4tu/x+OmHX9I6246uN0Wf+6kLGibjxJEQZC
-	 Gf7R1qsrPxEc/vJZeDMLU+fhjwbbY4INceVo8oFg0+YE1NVx3rRrMmLoEYNlGZqd6TOdu
-	 GKyGjcKwzkM06YQr8xSdmszjmkamp+Kczg8y4ZHAhpsOYGTllpBfcNN6w4zD4/zM0l85B
-	 JYObNef1n3z1O+DlpeHxcabWvhr7sxeVW3y4NkS9oQe9egBgrG6c4gMsFB6u2KSFtFhl5
-	 fp4qatmLUIYglQUN5Vd9HarHH8eNkZkFp6YZFvHU3wif/QZBrwgzjVd88mkQwUCdyIg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794529947;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=uai/5LgacOngRy+lPwjlt1ceXIEJT+x7kJMhfO8OeOo=;
+	b=mwrMx3rV1tH8GUWoAj/PVTHemrWGDNecUEAc9u1byZRhrs/THh3P4mg1K0AHsUxc51Jl
+	 9u6owlXN95heOpQcN6lIce50wcLBxYLNLpkGbqaKIIMC8U72W0J+8UlHp6xw14XxhYCJh
+	 HXOqwwRNapjP2HJBlLFJDl/9WNbtjTgZ5Rw/hYO0arLKOJfc0gEJl8q6QuaPhzSZ/WokU
+	 kGg8GH+T6m2Y/Jr4x0xJQGEYV3J6mDmAP8MSzRu049mjVhnGM5pNHBOsQKccLNN6Jp42y
+	 3aXmXUTA/sgOMQ3aXiciTDsTIhJQJRtEBuPERovNzHGOLE8fWyMMBC2KtojuUK8WeBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="eGu/Gg+T";
-	arc=none smtp.remote-ip=198.175.65.11
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ng2LJC1Y;
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05387606A32D;
-	Thu, 12 Nov 2026 22:29:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05387606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CA1606A31C
+	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 00:32:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9CA1606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=eGu/Gg+T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794522554; x=1826058554;
-  h=date:from:to:cc:subject:message-id;
-  bh=mjIhBx9c4PapmPJhmOnRWWa5HG+y5lfjQ5VNCu3ZhXI=;
-  b=eGu/Gg+TqAbIYmrqDyihMmZJhkQF8hCbGGXQFrHzXjil6qo7KqGNhMhJ
-   AMqnmU3FSojeBuNYfNhOdkOkSH9WgS1JayW++c2daLvlhJTll9JvZjSa9
-   bhw2rtEwJRqmQAuzWIhPOSUYyZfUxRiXToK/wdnAFipzuvMo9jum6xNgk
-   r/3y/c4tsifHZdV5cx7aImeITozwY4pa1CGPGuY3UUY+25KpzFlTsMfUt
-   BSrDmHdCSyTYZfJts0BrnMBN42NjFC6FgGs/SGY3sQ31etycYDmls8FIi
-   w8CGRiyIr5+6i3uwEFgCUDfWD7oRQjw24P1VcJ8p+weAl8jioKOgSrA3Q
-   w==;
-X-CSE-ConnectionGUID: 74AuFaRHTwiZCUJgNXnIJQ==
-X-CSE-MsgGUID: /gopJsRKSnudYWrUS8x8ug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11964"; a="3218120"
-X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
-   d="scan'208";a="3218120"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 14:29:13 -0800
-X-CSE-ConnectionGUID: mEXAnhxFQZSMAWr+Y2dkZA==
-X-CSE-MsgGUID: /QJWUeLzRZ+DVkuaPlK0dA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,210,1787036400"; 
-   d="scan'208";a="10499358"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa012.fm.intel.com with ESMTP; 12 Nov 2026 14:29:11 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRdI4-0000000127T-3GNA;
-	Thu, 12 Nov 2026 22:29:08 +0000
-Date: Fri, 13 Nov 2026 06:28:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
- Michal Simek <monstr@monstr.eu>, Frank Li <Frank.Li@nxp.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v6.18_LTS 492/1483]
- arch/sparc/include/asm/io.h:16:9: warning: 'readw_be' macro redefined
-Message-ID: <202611130633.mhXKOMTv-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ng2LJC1Y
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-492fcbfaa87so156379f8f.3
+        for <llvm@lists.linux.dev>; Thu, 12 Nov 2026 16:32:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794529945; x=1795134745; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uai/5LgacOngRy+lPwjlt1ceXIEJT+x7kJMhfO8OeOo=;
+        b=Ng2LJC1YowpPuZL2Ptvl60Noc/2FaA21EAjHxFOkwF7/C/OAzkqVvPreCM7ScneoBb
+         l+i8Gfc/gIo8HRiW55FpAoIVBkixHiDVdv39dWZNr/6Pn25GfH/yOmPFay/nb4hulfSy
+         PQdVBG3irWYvB/6LhR1i2rwHTKKYH8D+ap6yW/aKc+xLB/HeAExqCsiKaNzqPlMmvdxt
+         KWGEJ6Mxx1x/X/Sd8Xt+lbtpHH/TuEkp6Ok7aM6PVAv5zhC7m1NYUT1jAlD3vtyrh5k8
+         yhY3wLgkCoi3llkuI4mS9ZUtyb7KFJZqw5OncClGKWaE5g4rYRjcicVs0xdM/ekA5NPk
+         0QfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794529945; x=1795134745;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=uai/5LgacOngRy+lPwjlt1ceXIEJT+x7kJMhfO8OeOo=;
+        b=qmPFRAgLCuJu9kv8BMEJfPOSRRQFgInPPeCYy19UpnNysNItqg9Q3XSbo4QLUDhXSi
+         CYhznGKV+47Q1NUq2CjmDUtd8ywBqlY05gShIa+YoaeZQW2vY0AMrTLiQu7WP7539Xkv
+         +4pD1bUUnKeK8p0M82fSvHzvo5kGbqXOUMLxntxRNTmpVXCSumLBafvWM9z3CNBtjMhE
+         zslvT0FEYd03noJnsDBHdQURLMzY1NOoOMrzQ8juv16cMrGpJiTN70yiEpiQtwoddW6c
+         0RVJGySJHqhFBfEflSHWeswvsyoax0iHT1bbe9POzqjcIJDSPuOSaZs1TYYeGqATlu3u
+         LKTQ==
+X-Forwarded-Encrypted: i=1; AL+hErGNvMIFj8kAA627ZZcD+QtqncTGzF1HxPXsXKPzDEhv/Zs1fumGu+rq7hfso0PHm/LonEOI@lists.linux.dev
+X-Gm-Message-State: APuU4Z8kgnYdUNyKlFG9qVvxBAehY/qkcAbSTKf5C8t1MPVTDLUQLdmo
+	/EyjfVMRNRc9D4hvh72OZawArkHyvGO5uYNgyrvsyBXqqNtVisg4s/+l
+X-Gm-Gg: AYBFou0TqGzgCeh7g4cjCuXNTmE+lhpqsSUOM9rUIBzRIkSy1r4XlpGP5CR7ba5xkIW
+	zHg8gJg7/nWfoZ4W/IQHegsdWsmmf6J2nrxRwYHE5hLVW5QQkrw47VtQ4VXm/aGa0kO1sQ+wmj+
+	L6Ydtalsh/bgT8lBN3B+JozS7pEgRGk8XR4S0w7a7gOTFAMptZj0TTKDOMxNpjZBwNT44Bz369V
+	P6XQdbljBEDUr0lRcqqsmpGTWLXrTyFj3MhId6cAQtOVWEU6x804T0fB+Pn4GNCNrL5L42TI4kK
+	MheRu/AIE19iAKMmV/Wi2GanV29kM2rEd87sdFaxKA758pwErn/atHnNphOOmSrOo7rwtumugKt
+	jGG4FnPLCSO67SfwOa1pRdh859PFfq4XWpLjM9uQI5uCOne/5Z2eWM2q0GERYPRZLk5Hx8IJ5u/
+	8j+aXzjLXmmN0emLC7LlKyXy7yluLMCpK37K+K2q5zw63HPELsU1+sfW9zTz8t4XcRcXlo12SgR
+	aJ+ZvWDd1+3IAdWE+ac+K6/BQToJyqx7yHa1Y+bautBgUSYfjWCgLx3qhdVILdrA6BvFHaJrfBu
+	rFbxrq4Ig5tUtnK9H9RDgVOFVdByohDluOTajQbGkBM43IC5JPr6gVtb5I4tRyVl3bnMrI/rNdn
+	N5LFh3CGRNOpZtVHGjwgh7XTPaxJu/kOpBxDJx3idVdfZ0T6rege3cw==
+X-Received: by 2002:a05:6000:29c9:b0:493:1004:96f7 with SMTP id ffacd0b85a97d-49c747700f2mr1324877f8f.54.1794529945019;
+        Thu, 12 Nov 2026 16:32:25 -0800 (PST)
+Received: from Ansuel-XPS24.localdomain (host-212-171-11-167.retail.telecomitalia.it. [212.171.11.167])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-49c5f7828a4sm2029768f8f.23.2026.11.12.16.32.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 16:32:23 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next v19 00/15] net: pcs: Introduce support for fwnode PCS
+Date: Fri, 13 Nov 2026 01:31:50 +0100
+Message-ID: <20261113003217.197757-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,205 +120,304 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.18_LTS
-head:   85261a88dc955839e3dabe5339b3a8d86ec545db
-commit: 66262fff1de8401d7f4dd6c23d0adab1701e28dc [492/1483] asm-generic/io.h: Add big-endian MMIO accessors
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261113/202611130633.mhXKOMTv-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261113/202611130633.mhXKOMTv-lkp@intel.com/reproduce)
+This series introduce a most awaited feature that is correctly
+provide PCS with fwnode without having to use specific export symbol
+and additional handling of PCS in phylink.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611130633.mhXKOMTv-lkp@intel.com/
+At times there were 2 different implementation (this and the one
+from Sean) but Sean agreed that this can be picked and used in favor
+of his implementation as long as his case with race condition is
+correctly handled.
 
-All warnings (new ones prefixed by >>):
+---
+First the PCS fwnode:
 
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-      19 |         (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:821:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     821 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-     119 |         ___constant_swab32(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-      20 |         (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:821:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     821 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-     119 |         ___constant_swab32(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-      21 |         (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:821:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     821 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-     119 |         ___constant_swab32(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-      22 |         (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:821:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     821 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-     120 |         __fswab32(x))
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:837:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     837 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:852:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     852 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:867:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     867 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:960:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     960 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:973:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     973 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:986:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     986 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1000:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1000 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1014:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1014 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1028:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1028 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1411:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1411 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
->> arch/sparc/include/asm/io.h:16:9: warning: 'readw_be' macro redefined [-Wmacro-redefined]
-      16 | #define readw_be(__addr)        __raw_readw(__addr)
-         |         ^
-   include/asm-generic/io.h:322:9: note: previous definition is here
-     322 | #define readw_be readw_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   arch/sparc/include/asm/io.h:17:9: warning: 'readl_be' macro redefined [-Wmacro-redefined]
-      17 | #define readl_be(__addr)        __raw_readl(__addr)
-         |         ^
-   include/asm-generic/io.h:337:9: note: previous definition is here
-     337 | #define readl_be readl_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   arch/sparc/include/asm/io.h:19:9: warning: 'writel_be' macro redefined [-Wmacro-redefined]
-      19 | #define writel_be(__w, __addr)  __raw_writel(__w, __addr)
-         |         ^
-   include/asm-generic/io.h:381:9: note: previous definition is here
-     381 | #define writel_be writel_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   arch/sparc/include/asm/io.h:20:9: warning: 'writew_be' macro redefined [-Wmacro-redefined]
-      20 | #define writew_be(__l, __addr)  __raw_writew(__l, __addr)
-         |         ^
-   include/asm-generic/io.h:369:9: note: previous definition is here
-     369 | #define writew_be writew_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:274:1: warning: no previous prototype for function '__vdso_clock_gettime' [-Wmissing-prototypes]
-     274 | __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec *ts)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:273:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     273 | notrace int
-         |         ^
-         |         static 
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:302:1: warning: no previous prototype for function '__vdso_clock_gettime_stick' [-Wmissing-prototypes]
-     302 | __vdso_clock_gettime_stick(clockid_t clock, struct __kernel_old_timespec *ts)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:301:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     301 | notrace int
-         |         ^
-         |         static 
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:327:1: warning: no previous prototype for function '__vdso_gettimeofday' [-Wmissing-prototypes]
-     327 | __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:326:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     326 | notrace int
-         |         ^
-         |         static 
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:363:1: warning: no previous prototype for function '__vdso_gettimeofday_stick' [-Wmissing-prototypes]
-     363 | __vdso_gettimeofday_stick(struct __kernel_old_timeval *tv, struct timezone *tz)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:362:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     362 | notrace int
-         |         ^
-         |         static 
-   29 warnings generated.
+The concept is to implement a producer-consumer API similar to other
+subsystem like clock or PHY.
 
+That seems to be the best solution to the problem as PCS driver needs
+to be detached from phylink and implement a simple way to provide a
+PCS while maintaining support for probe defer or driver removal.
 
-vim +/readw_be +16 arch/sparc/include/asm/io.h
+To keep the implementation simple, the PCS driver devs needs some
+collaboration to correctly implement this. This is O.K. as helper
+to correctly implement this are provided hence it's really a matter
+of following a pattern to correct follow removal of a PCS driver.
 
-21dccddf45aae2d Jan Andersson 2011-05-10   9  
-21dccddf45aae2d Jan Andersson 2011-05-10  10  /*
-21dccddf45aae2d Jan Andersson 2011-05-10  11   * Defines used for both SPARC32 and SPARC64
-21dccddf45aae2d Jan Andersson 2011-05-10  12   */
-21dccddf45aae2d Jan Andersson 2011-05-10  13  
-21dccddf45aae2d Jan Andersson 2011-05-10  14  /* Big endian versions of memory read/write routines */
-21dccddf45aae2d Jan Andersson 2011-05-10  15  #define readb_be(__addr)	__raw_readb(__addr)
-21dccddf45aae2d Jan Andersson 2011-05-10 @16  #define readw_be(__addr)	__raw_readw(__addr)
-21dccddf45aae2d Jan Andersson 2011-05-10  17  #define readl_be(__addr)	__raw_readl(__addr)
-21dccddf45aae2d Jan Andersson 2011-05-10  18  #define writeb_be(__b, __addr)	__raw_writeb(__b, __addr)
-21dccddf45aae2d Jan Andersson 2011-05-10  19  #define writel_be(__w, __addr)	__raw_writel(__w, __addr)
-21dccddf45aae2d Jan Andersson 2011-05-10  20  #define writew_be(__l, __addr)	__raw_writew(__l, __addr)
-21dccddf45aae2d Jan Andersson 2011-05-10  21  
+A PCS provider have to implement and call fwnode_pcs_add_provider() in
+probe function and define an xlate function to define how the PCS
+should be provided based on the requested interface and phandle spec
+defined in fwnode (based on the #pcs-cells)
 
-:::::: The code at line 16 was first introduced by commit
-:::::: 21dccddf45aae2d9f973696ce06115da0d1012b6 sparc: add {read,write}*_be routines
+fwnode_pcs_get() is provided to provide a specific PCS declared in
+fwnode at index.
 
-:::::: TO: Jan Andersson <jan@gaisler.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+A simple xlate function is provided for simple single PCS
+implementation, fwnode_pcs_simple_xlate.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+A PCS provider on driver removal must call fwnode_pcs_del_provider()
+to delete itself as a provider.
+
+---
+Second PCS handling in phylink:
+
+We have the PCS problem for the only reason that in initial
+implementation, we permitted way too much flexibility to MAC driver
+and things started to deviate. At times we couldn't think SoC
+would start to put PCS outside the MAC hence it was OK to assume
+they would live in the same driver. With the introduction of
+10g in more consumer devices, we are observing a rapid growth
+of this pattern with multiple PCS external to MAC.
+
+To put a stop on this, the only solution is to give back to phylink
+control on PCS handling and enforce more robust supported interface
+definition from both MAC and PCS side.
+
+It's suggested to read patch 0003 of this series for more info, here
+a brief explaination of the idea:
+
+This series introduce handling of PCS in phylink and try to deprecate
+.mac_select_pcs.
+
+Phylink now might contain a linked list of available PCS and
+those will be used for PCS selection on phylink_major_config.
+
+MAC driver needs to define pcs_interfaces mask in phylink_config
+for every interface that needs a dedicated PCS.
+
+These PCS needs to be provided to phylink at phylink_create time
+by setting the .fill_available_pcs and .num_possible_pcs in phylink_config.
+Helpers to parse PCS from fwnode are provided
+fwnode_phylink_pcs_count() that will return the count of PCS entries
+described in the firmware node and fwnode_phylink_pcs_parse() that will
+fill a preallocated array of PCS pointer with the actual available PCS
+(ignoring the one that still needs to be probed).
+
+phylink_create() will fill the internal PCS list with the passed
+array of PCS. phylink_major_config and other user of .mac_select_pcs
+are adapted to make use of this new PCS list.
+
+The supported interface value is also moved internally to phylink
+struct. This is to handle late removal and addition of PCS.
+(the bonus effect to this is giving phylink a clear idea of what
+is actually supported by the MAC and his constraint with PCS)
+
+The supported interface mask in phylink is done by OR the
+supported_interfaces in phylink_config with every PCS in PCS list.
+
+PCS removal is supported by forcing a mac_config, refresh the
+supported interfaces and run a phy_resolve().
+
+PCS late addition is supported by introducing a global notifier
+for PCS provider. If a phylink have the pcs_interfaces mask not
+zero, it's registered to this notifier.
+
+PCS provider will emit a global PCS add event to signal any
+interface that a new PCS might be available.
+
+The function will then check if the PCS is related to the MAC
+fwnode and add it accordingly.
+
+A user for this new implementation is provided as an Airoha PCS
+driver. This was also tested downstream with the IPQ95xx QCOM SoC
+and with the help of Daniel also on the various Mediatek MT7988
+SoC with both SFP cage implementation and DSA attached.
+
+Lots of tests were done with driver unbind/bind and with interface
+up/down also by adding print to make sure major_config_fail gets
+correctly triggered and reset once the PCS comes back.
+
+The dedicated commits have longer description on the implementation
+so it's suggested to also check there for additional info.
+
+It's worth to mention that OpenWrt is currently using this on
+Mediatek SoC and QCOM ipq807x/ipq60xx/ipq50xx and Airoha are
+already ported in staging tree for testing.
+
+Also realtek is using this and proved to correctly work.
+
+---
+
+Changes v19:
+- Rebase on top of net-next
+- RCU protect phylink from pcs struct
+- Fix dead-lock on phylink_validate
+- Handle possible PCS provider returning NULL (protective coding)
+- Improve capabilities handling refresh
+Changes v18:
+- Improve handling on late PCS addition
+- Fix wrong comment on airoha PCS driver
+- Rebase on top of net-next
+Changes v17:
+- Rebase on top of net-next
+- Add Review tag for DT patch
+- Recalculate capabilities on late removal/attach
+Changes v16:
+- Rebase on top of net-next
+- Add Tested-by tag
+- Add ACK for airoha ethernet patch + nit fix 
+Changes v15:
+- Rebase on top of net-next
+- Fix Coccicheck  warning
+Changes v14:
+- Fix deadlock when fill_available_pcs fails
+- Move notifier and fill down after resolve disable bit is set
+- Fix kconfig description
+Changes v13:
+- Fix regression in fwnode_pcs_get_from_pcsspec from v12
+- Fix reverse lock for phy_lock and state_mutex
+- Better handle lock in phylink_validate_mac_and_pcs and inband
+- Fix wrong pointer to fwnode_pcs_add_provider notifier
+- Fix compilation error for new C type in pcs_provider_notify
+Changes v12:
+- Fix kdoc for function
+- Rework PCS provider add and delete to be provider driven (instead of
+  relaying on scan of fwnode every time) (this also handle
+  multi PCS scenario)
+- Even further rework state mutex locking for concurrent pcs list
+- Restore MAC supported_interfaces validation in phylink_create()
+  wrongly dropped.
+- Use get/put for fwnode reference
+- Fix possible unment depndency for FWNODE_PCS
+- Fix almost impossible problem for PCS calibration
+- Hold rtnl with PCS deletion
+Changes v11:
+- Rework PCS release to notifier way (fix race as pointed out by bot)
+- Add Ack from Lorenzo for Airoha Ethernet driver
+- Introduce devm variant for pcs_provider_add
+- Better support firmware node reference for PCS late attach
+- Better protect list iteration with state mutex
+- Minor fixup to airoha pcs driver (flow control fixup)
+- Rebase on top of net-next
+Changes v10:
+- Minor code cleanup and fixes as suggested by bot
+- Drop devlink patch
+- Add reviewed by tag
+- Configure old_link_state on PCS release
+- Unlink PCS on error in phylink_create()
+- Use list_add_tail
+- Fix typo in Airoha PCS driver
+- Update phylink migration guide
+- Better handle late PCS attach (idempotent function and
+  add unser state_mutex)
+- Use dedicated lock in Airoha ethernet driver
+Changes v9:
+- Rebase on top of net-next/main
+- Drop early verification of supported_interface
+  (it can also be provided by get_capabilites MAC OP)
+Changes v8:
+- Back to RFC (net-next closed)
+- Address additional bug reported by Sashiko bot
+  - Better handle priv interface for Airoha PCS driver
+  - Better handle locking for modifying the PCS list in
+    phylink code
+  - Improve fwnode_phylink_pcs_parse() parsing on -ENOENT
+  - Better handle error condition in phylink_create()
+  - Turn down the link when current PCS is released
+- Fix compilation warning caused by copy paste error
+Changes v7:
+- Address all the bug from the Sashiko bot
+- Rename .num_available_pcs to .num_possible_pcs
+- Link PCS in phylink_create()
+- Correctly unregister the notifier on phylink_destroy()
+- Introduce fwnode_phylink_pcs_count()
+- Better handle locking in phylink for PCS handling
+- Better handle unavailable PCS at phylink_create() time
+- Improve Documentation file
+- Other minor fixes to address suggestion from bot
+- Rebase on top of net-next
+Changes v6:
+- Rebase on top of net-next
+- Add Documentation files
+- Add fw_devlink patch
+- Fix some comments typo
+- Rework the airoha_eth.c implementation with new multi serdes code
+- Extend PCS code with PCIe and USB support
+- Align schema to new property
+Changes v5:
+- Rebase on top of net-next
+- Use the new force_major_config
+- Reword some comments and commit description
+- Return -ENODEV instead of -EPROBE_DEFER to perevent race condition
+- Drop phy_interface_copy patch (Russell pushed an equivalent version)
+Changes v4:
+- Move patch 0002 phy_interface_copy to 0002 (fix bisectability
+  problem)
+- Address review from Lorenzo for Airoha ethernet driver
+- Fix kdoc error with missing Return (actually missing : before Return)
+- Fix UNMET dependency reported error for CONFIG_FWNODE_PCS
+- Revert to pcs.c instead of core.c (due to name conflict with other kmod)
+- Fix clang compilation error for Airoha PCS driver
+- Add missing inline function to pcs.h function
+Changes v3:
+- Out of RFC
+- Fix various spelling mistake
+- Drop circular dependency patch
+- Complete Airoha Ethernet phylink integration
+- Introduce .pcs_link_down PCS OP
+Changes v2:
+- Switch to fwnode
+- Implement PCS provider notifier
+- Better split changes
+- Move supported_interfaces to phylink
+- Add circular dependency patch
+- Rework handling with indirect addition/removal and
+  trigger of phylink_resolve()
+
+Christian Marangi (15):
+  net: phylink: keep and use MAC supported_interfaces in phylink struct
+  net: phylink: make PCS phylink instance access RCU protected
+  net: phylink: introduce internal phylink PCS handling
+  net: pcs: implement Firmware node support for PCS driver
+  net: phylink: save phylink instance fwnode on phylink_create
+  net: phylink: make phylink_validate state locked
+  net: phylink: add capabilities helper and track modified advertising
+  net: phylink: support PCS provider release
+  net: phylink: support late PCS provider attach
+  net: Document PCS subsystem
+  MAINTAINERS: add myself as PCS subsystem maintainer
+  net: phylink: add .pcs_link_down PCS OP
+  dt-bindings: net: pcs: Document support for Airoha Ethernet PCS
+  net: pcs: airoha: add PCS driver for Airoha AN7581 SoC
+  net: airoha: add phylink support
+
+ .../bindings/net/pcs/airoha,pcs.yaml          |  261 ++
+ Documentation/networking/index.rst            |    1 +
+ Documentation/networking/pcs.rst              |  234 ++
+ Documentation/networking/sfp-phylink.rst      |   35 +-
+ MAINTAINERS                                   |    9 +
+ drivers/net/ethernet/airoha/Kconfig           |    2 +
+ drivers/net/ethernet/airoha/airoha_eth.c      |  197 +-
+ drivers/net/ethernet/airoha/airoha_eth.h      |    5 +
+ drivers/net/ethernet/airoha/airoha_regs.h     |   12 +
+ drivers/net/pcs/Kconfig                       |    8 +
+ drivers/net/pcs/Makefile                      |    3 +
+ drivers/net/pcs/airoha/Kconfig                |   13 +
+ drivers/net/pcs/airoha/Makefile               |    7 +
+ drivers/net/pcs/airoha/pcs-airoha-common.c    | 1306 ++++++++++
+ drivers/net/pcs/airoha/pcs-airoha.h           | 1311 ++++++++++
+ drivers/net/pcs/airoha/pcs-an7581.c           | 2100 +++++++++++++++++
+ drivers/net/pcs/pcs.c                         |  314 +++
+ drivers/net/phy/phylink.c                     |  501 +++-
+ include/linux/linkmode.h                      |    6 +
+ include/linux/pcs/pcs-provider.h              |   70 +
+ include/linux/pcs/pcs.h                       |  174 ++
+ include/linux/phylink.h                       |   30 +-
+ 22 files changed, 6530 insertions(+), 69 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/airoha,pcs.yaml
+ create mode 100644 Documentation/networking/pcs.rst
+ create mode 100644 drivers/net/pcs/airoha/Kconfig
+ create mode 100644 drivers/net/pcs/airoha/Makefile
+ create mode 100644 drivers/net/pcs/airoha/pcs-airoha-common.c
+ create mode 100644 drivers/net/pcs/airoha/pcs-airoha.h
+ create mode 100644 drivers/net/pcs/airoha/pcs-an7581.c
+ create mode 100644 drivers/net/pcs/pcs.c
+ create mode 100644 include/linux/pcs/pcs-provider.h
+ create mode 100644 include/linux/pcs/pcs.h
+
+-- 
+2.55.0
+
