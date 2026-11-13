@@ -1,87 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794593764;
-	b=FQX7X3jMQC39Jqbq6QKkQ05ttrkQBbgs7Nagrct73PG4kzmRo9y4wC72oK4Rz8EVB3pt
-	 Z7BXUY/CeIu8qmgAblR+7fa7yi3IR6KzlCp7fysMjeQFTHdqJdsqdZHtjWX4HZMHFyJXc
-	 fHHjyq/sWyqhuuHRi1js0i4/IoSA4hL5Ag/D8TMWxiA1YT0baU9UP99R/oasWnnXw+pCd
-	 BfjD9dmf3IQQlgLyHFQH24m8w1FWY7Z5PS7RC0VF6kFB3Xjg6hu6uzVNyACQI0otfuTu6
-	 Tf4sanfs0IpqlJDUZOW/Tw7yFYM2SmSI5zEp+9c1rW/cfbZI4xSXkV8u9BQg9A4voYA==
+	t=1794594174;
+	b=5TR+Cp5LsgpFCjpOaGfveC8p2e4P110V00zcNTcpE4/ov38rxSkG9E5MTSkEm+UdYMfH
+	 cYRzD+D8rb7FFHW7ZxN9miLECkFpQH3f7D71FUiNl0cbcoY+aOteRp8580iy45M8UcJiC
+	 VZQjec84hrEOLUpUMXJ1Fv9OAoPukXZpeiQ1Nzb6NRjBsUXwRBpzs2V0u8btn9N1Zuizm
+	 c2Qs57Wavc6K0tFHoQ1zJlTj2j9wV0kmomrDnufpswJQt11tMuvQ9lxZQi12iaa1RekCB
+	 XkHplEdP6DIYYLftmLi1tRF/8haIx45LzYfTbSJA9OOBFjYSNJ/VlXmyed7mTf7Kl9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794593764;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=pQUxRNbmBjJR6+Wwn68YM2+HoelR9+Xfjwn5uNX5F18=;
-	b=qqJQNJYFjz21cExVWGRcxkflWOtlHbv4EkieMRjYRUtl3wdljPP77NGGHbyu1MYlQhje
-	 rx7rF6r7yeJOiSROQRWu0bzyoSGtQweCmRn5sgWwVmXwQ1CNBLZ2TmeUkcjdjzJV42Lgq
-	 sHjBiz7XHE6PDF9SFLFvk11OeIPiLlSI58UAhdLjyoDIH8f2TFlCbbwLZ4/Z+MEfR4Jds
-	 ZhmGg26hn+xXX+qVgp2x0w0CTebnLFzO0t+b9V1MP/e+/M6pkiBUiNtiwnTjq8uV7c5CD
-	 bJ53CxpokhUwA3NkKie2tqraS8ACm/BfAn5UuA/ZgGa+mCxdBh8xxlCAn8O9wF8CB4A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794594174;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=eP68cbAqEZ0aZdO/IraHM8siZBFgNnd6TZvBxVtWdf8=;
+	b=Wxe/Tb69YuJhkptsco2wVpb0OBacT4snb+8RalTEkpDVESqYcR0KBPHV6JLrUUjozzD4
+	 0+rryYSmCFOhJuCp23KmPdlIQpS9LD/4EiT2+YKL05iHdLkLPLUaAi85L9uiyAe1+pT0I
+	 7/33xaVXBPaayBDHHpAiBQPIhYdySutBq4qJQbSYSKsdMk+weIvcjZbL1XintTPSWqnPW
+	 hFp62gNrL70ika5DSAtKY0uaAdJaSnBnwjZWHLqEwAA6AHfVSFqVvHAgIVdpLA2fTmm7P
+	 YKKwVPuQEv6EageLGOe4OHM5HOVj7X1yB4GPrITTfby9bDyw/d+KxD3K/0y90DS8RFw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="VvLUNUa/";
-	arc=none smtp.remote-ip=198.175.65.10
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AWvkEOPG;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4556B60A2615;
-	Fri, 13 Nov 2026 18:16:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4556B60A2615
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DA7606A327;
+	Fri, 13 Nov 2026 18:22:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=VvLUNUa/
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794593764; x=1826129764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+EdMLnRI4DvU7CemabUqWgmvJ8PvY87bMeAtmHXl08o=;
-  b=VvLUNUa/H18fPheOLODPywsD9I1f0Hz1mi05yNvnM8LDvPtdcf2j0IvY
-   i4Whb6jW5rO/PL6FFaJc2UDanpztLLTCCtQAowyD+CREwPbdPmtzE6upn
-   hYmCqf4jdAsBLtMDHdFxF4FLgGktLqkXxIemnYSGTDrbmQ1Pb0o+CySf1
-   sIu1AwW1UEmpDhqzut+udQaxl7BaWx9H459PR+HOPa6pparmpZSrSqhb3
-   eBbb7zb1vrujwBR2bxXdwrFOc3C/hLjWVhC77Eur8zYcX9ean2z2Ohhh9
-   wBgo2V481AEtU6hFdvPQL8qKv14rPaZwjre7SeQHeoLvlPK7ihmwvunoc
-   g==;
-X-CSE-ConnectionGUID: rp5ddv18Rz2QFFk02un3Kg==
-X-CSE-MsgGUID: FD36gvxRTM6fWka6y9u1aA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11965"; a="3308789"
-X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="3308789"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 10:16:03 -0800
-X-CSE-ConnectionGUID: rEaKjM9uRNqRgcaAXeodEg==
-X-CSE-MsgGUID: e9o4fhDoTa6auUYtZN584g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="8791867"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 13 Nov 2026 10:16:00 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xRvoa-000000013dH-2RtK;
-	Fri, 13 Nov 2026 18:15:56 +0000
-Date: Sat, 14 Nov 2026 02:15:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Chiu <tchiu@tenstorrent.com>, Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andybnac@gmail.com,
-	Andy Chiu <tchiu@tenstorrent.com>, dfustini@oss.tenstorrent.com,
-	greentime.hu@sifive.com, Aurelien Jarno <aurelien@aurel32.net>,
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
-	daichengrong <daichengrong@iscas.ac.cn>,
-	Troy Mitchell <troy.mitchell@linux.dev>
-Subject: Re: [PATCH v7 1/6] riscv: vector: refactor vector context operations
-Message-ID: <202611140219.tkhKWAca-lkp@intel.com>
-References: <20261111184359.1239821-2-tchiu@tenstorrent.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AWvkEOPG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AFE1F000C5;
+	Fri, 13 Nov 2026 18:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794594173;
+	bh=eP68cbAqEZ0aZdO/IraHM8siZBFgNnd6TZvBxVtWdf8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=AWvkEOPGS+CS1RBqWl2bBT/Es6i/BO3kI0+XuFq9JQYPyrZDrWP5jHu5dyWuPXm+n
+	 UA4pJHA/jsk3ZBQtxoDrMF18gHtug4pzQhFEb1dkUQUELS099GmWdv+hwbblwnJBE3
+	 Jjl5y2Mdjx6+Xlk8nR4LZ9EhiRr6FIJgk85rz+4OR8RX7kKkb+iPO6MrKZYC/JYNzA
+	 Flq13vJQGzeet9d622mfF6wASG5uwMRln+zi+PLRN7PcRU+sBGGj2hqXSjhMfQLgoC
+	 aV5IoGDbLKJp0v8QM529n2CP8SwJ7MjHTM+S7hBp4f1RJn1zD48YWdHassLeSgcSJm
+	 clLyYyclO+IFQ==
+Date: Fri, 13 Nov 2026 10:22:51 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
+	Bill Wendling <morbo@google.com>, Chuck Wolber <chuck@wolber.net>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, Marco Elver <elver@google.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Thomas Gleixner <tglx@kernel.org>
+Subject: Re: [PATCH v2 11/20] objtool: Detect code coverage instrumentation
+ in noinstr code
+Message-ID: <avdUyFTijaXU5MwM@jpoimboe>
+References: <20261103015238.3780910-1-sashal@kernel.org>
+ <20261103015238.3780910-12-sashal@kernel.org>
+ <avVaaxKUA2ArB6RG@jpoimboe>
+ <20261112130906.1316655-1-sashal@kernel.org>
+ <20261112151232.GC1813469@noisy.programming.kicks-ass.net>
+ <avX80WkCFuGyS1y0@jpoimboe>
+ <20261113150920.1953634-1-sashal@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -91,140 +66,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261111184359.1239821-2-tchiu@tenstorrent.com>
+In-Reply-To: <20261113150920.1953634-1-sashal@kernel.org>
 
-Hi Andy,
+On Fri, Nov 13, 2026 at 10:09:20AM -0500, Sasha Levin wrote:
+> On Thu, Nov 12, 2026 at 10:41:44AM -0800, Josh Poimboeuf wrote:
+> >I must be missing something, if somebody sets a watchpoint in
+> >exc_debug_kernel(), don't they get to keep the pieces?
+> 
+> Fair enough, the watchpoint was just the easiest way to show it. The
+> real reason is that noinstr isn't supposed to have compiler
+> instrumentation at all, and inlining sneaks the counters back in.
 
-kernel test robot noticed the following build errors:
+That seems circular though, I'm still trying to figure out what the
+actual problem is.
 
-[auto build test ERROR on d1a8d411533d6be16ac79796c02a9bfc7d7958f1]
+> >It's also not clear why --hack-noinstr can't be extended to either NOP
+> >out the affected instructions, or change the address relocation to point
+> >to a dummy variable that won't trap.
+> 
+> I tried it, and I think it works better than patch 4, with some caveats :)
+> 
+> NOPing alone isn't enough: besides MC/DC, Clang sometimes loads a
+> counter address into a register and increments it later. So I NOP the
+> plain counter updates and point the rest at a dummy. With GCC that
+> gets all of them. With Clang, 230 of about 3500 still go to the dummy.
+> 
+> Compared to patch 4, a boot covers about 14% more code, since the
+> __always_inline helpers it dropped are some of the hottest code we
+> have. It also fixes a GCC MC/DC build failure and some objtool UACCESS
+> warnings that patch 4 caused, and it handles modules, which this check
+> never looked at.
+> 
+> The catch is that it's x86-64 only. Other architectures would stay
+> where they are today: whatever gets inlined into noinstr keeps its gcov
+> counters, and nothing checks. Keeping patch 4 just for them doesn't
+> look worth it to me. It cleans up Clang on arm64, but GCC still has
+> about 190 counters in noinstr there either way, and the GCC MC/DC
+> build failure shows up on arm64 too.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Chiu/riscv-vector-refactor-vector-context-operations/20261111-124323
-base:   d1a8d411533d6be16ac79796c02a9bfc7d7958f1
-patch link:    https://lore.kernel.org/r/20261111184359.1239821-2-tchiu%40tenstorrent.com
-patch subject: [PATCH v7 1/6] riscv: vector: refactor vector context operations
-config: riscv-randconfig-1001-20261113 (https://download.01.org/0day-ci/archive/20261114/202611140219.tkhKWAca-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261114/202611140219.tkhKWAca-lkp@intel.com/reproduce)
+FYI, a partial objtool port (without the more controversial CFG
+reverse-engineering bits) is likely coming to arm64 soon to support
+klp-build, in which case this should be possible there as well.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611140219.tkhKWAca-lkp@intel.com/
+> Peter, are you OK with fixing this on x86 only and leaving the other
+> architectures as they are? If so, I'll switch to this in v3 and drop
+> patch 4.
+> 
+> >And the changelog needs all that background, as the justification is not
+> >clear at all (to me).
+> 
+> Will do.
 
-All errors (new ones prefixed by >>):
+Thanks!
 
->> arch/riscv/kvm/vcpu.c:828:3: error: call to undeclared function 'kvm_riscv_vector_restore'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     828 |                 kvm_riscv_vector_restore(gcntx);
-         |                 ^
-   arch/riscv/kvm/vcpu.c:828:3: note: did you mean '__kvm_riscv_vector_restore'?
-   arch/riscv/include/asm/kvm_vcpu_vector.h:62:29: note: '__kvm_riscv_vector_restore' declared here
-      62 | static __always_inline void __kvm_riscv_vector_restore(struct kvm_cpu_context *context)
-         |                             ^
-   1 error generated.
-
-
-vim +/kvm_riscv_vector_restore +828 arch/riscv/kvm/vcpu.c
-
-   798	
-   799	/*
-   800	 * Actually run the vCPU, entering an RCU extended quiescent state (EQS) while
-   801	 * the vCPU is running.
-   802	 *
-   803	 * This must be noinstr as instrumentation may make use of RCU, and this is not
-   804	 * safe during the EQS.
-   805	 */
-   806	static void noinstr kvm_riscv_vcpu_enter_exit(struct kvm_vcpu *vcpu,
-   807						      struct kvm_cpu_trap *trap)
-   808	{
-   809		void *nsh;
-   810		struct kvm_cpu_context *gcntx = &vcpu->arch.guest_context;
-   811		struct kvm_cpu_context *hcntx = &vcpu->arch.host_context;
-   812	
-   813		/*
-   814		 * We save trap CSRs (such as SEPC, SCAUSE, STVAL, HTVAL, and
-   815		 * HTINST) here because we do local_irq_enable() after this
-   816		 * function in kvm_arch_vcpu_ioctl_run() which can result in
-   817		 * an interrupt immediately after local_irq_enable() and can
-   818		 * potentially change trap CSRs.
-   819		 */
-   820	
-   821		kvm_riscv_vcpu_swap_in_guest_state(vcpu);
-   822		guest_state_enter_irqoff();
-   823	
-   824		/* sstatus.VS != SR_VS_OFF is guaranteed when NEED_RESTORE is set */
-   825		if (current->thread.riscv_v_flags & RISCV_V_VCPU_NEED_RESTORE) {
-   826			current->thread.riscv_v_flags &= ~RISCV_V_VCPU_NEED_RESTORE;
-   827			current->thread.riscv_v_flags |= RISCV_V_VCPU_CTX;
- > 828			kvm_riscv_vector_restore(gcntx);
-   829			gcntx->sstatus = (gcntx->sstatus & ~SR_VS) | SR_VS_CLEAN;
-   830		}
-   831	
-   832		if (kvm_riscv_nacl_sync_sret_available()) {
-   833			nsh = nacl_shmem();
-   834	
-   835			if (kvm_riscv_nacl_autoswap_csr_available()) {
-   836				hcntx->hstatus =
-   837					nacl_csr_read(nsh, CSR_HSTATUS);
-   838				nacl_scratch_write_long(nsh,
-   839							SBI_NACL_SHMEM_AUTOSWAP_OFFSET +
-   840							SBI_NACL_SHMEM_AUTOSWAP_HSTATUS,
-   841							gcntx->hstatus);
-   842				nacl_scratch_write_long(nsh,
-   843							SBI_NACL_SHMEM_AUTOSWAP_OFFSET,
-   844							SBI_NACL_SHMEM_AUTOSWAP_FLAG_HSTATUS);
-   845			} else if (kvm_riscv_nacl_sync_csr_available()) {
-   846				hcntx->hstatus = nacl_csr_swap(nsh,
-   847							       CSR_HSTATUS, gcntx->hstatus);
-   848			} else {
-   849				hcntx->hstatus = csr_swap(CSR_HSTATUS, gcntx->hstatus);
-   850			}
-   851	
-   852			nacl_scratch_write_longs(nsh,
-   853						 SBI_NACL_SHMEM_SRET_OFFSET +
-   854						 SBI_NACL_SHMEM_SRET_X(1),
-   855						 &gcntx->ra,
-   856						 SBI_NACL_SHMEM_SRET_X_LAST);
-   857	
-   858			__kvm_riscv_nacl_switch_to(&vcpu->arch, SBI_EXT_NACL,
-   859						   SBI_EXT_NACL_SYNC_SRET);
-   860	
-   861			if (kvm_riscv_nacl_autoswap_csr_available()) {
-   862				nacl_scratch_write_long(nsh,
-   863							SBI_NACL_SHMEM_AUTOSWAP_OFFSET,
-   864							0);
-   865				gcntx->hstatus = nacl_scratch_read_long(nsh,
-   866									SBI_NACL_SHMEM_AUTOSWAP_OFFSET +
-   867									SBI_NACL_SHMEM_AUTOSWAP_HSTATUS);
-   868			} else {
-   869				gcntx->hstatus = csr_swap(CSR_HSTATUS, hcntx->hstatus);
-   870			}
-   871	
-   872			trap->htval = nacl_csr_read(nsh, CSR_HTVAL);
-   873			trap->htinst = nacl_csr_read(nsh, CSR_HTINST);
-   874		} else {
-   875			hcntx->hstatus = csr_swap(CSR_HSTATUS, gcntx->hstatus);
-   876	
-   877			__kvm_riscv_switch_to(&vcpu->arch);
-   878	
-   879			gcntx->hstatus = csr_swap(CSR_HSTATUS, hcntx->hstatus);
-   880	
-   881			trap->htval = csr_read(CSR_HTVAL);
-   882			trap->htinst = csr_read(CSR_HTINST);
-   883		}
-   884	
-   885		trap->sepc = gcntx->sepc;
-   886		trap->scause = csr_read(CSR_SCAUSE);
-   887		trap->stval = csr_read(CSR_STVAL);
-   888	
-   889		vcpu->arch.last_exit_cpu = vcpu->cpu;
-   890		guest_state_exit_irqoff();
-   891		kvm_riscv_vcpu_swap_in_host_state(vcpu);
-   892	}
-   893	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Josh
