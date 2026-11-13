@@ -1,75 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794558521;
-	b=cGtHQ618B9txObvKHZILvwLra8UsAuKc5eepXDv2lzb70NeINSzKOotL+962zZrJCZpY
-	 DLbxGnvdEqFzXnuydHorPjcT4qWvWRBaGipDrzfKxUytpcWm+kS0ZHbHfxVp/AqYwcAUc
-	 VSdjmx3UsMMd/i/DxYf8rHSqKcFnmr5SrHc4xbW2k5/EWyY3JjRpohGOaj2BQuco+8TDC
-	 eFmhHT9JGf+3T/9OIoR99+Hx4cdLd5WaWTTgfqDjVEyBRvKXwkJ7Lda5VvMwOtKsvrE3H
-	 nVr2C+19KWT5myKBH0Gym3GXXzMo1/NbTcO12o3ZTMmo9q+Z8oiKnIJG7+u5yr41fkQ==
+	t=1794567138;
+	b=b+psvOsEPBhJPXaIrrXAhVe0+VFwICiJDHC32wagZtI2lLFRSnRVHxkPxnvgf6ZGseGU
+	 Je5Qdv4x/Fub3tL0/LidhY8S6un6w7cW+CuY+0Hy7Jins2N4P7UkGsP7Qkd0NHEm7vcb5
+	 kwQTJko4oH9RxNSNGGjivv2umXU+c/QRQyhO/FbpCBC/9uePthAOVDWjvS1ErovN+ktHv
+	 At2dBDDT4knX3AVPtZwfBETxB3Es4GXEpm1IslksL0afNKalhJS/lX2AvrrtgREG94H6Q
+	 cLdFCG35goCDJymIyDnk1/uD+RGUzvfLub7SD+2DRXIL07/9Kq09kBLhlOQDfvKuiAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794558521;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=nrmFebnjevEyXDZoOWfiZZaPcF3U9vlhmYY98rYqI7g=;
-	b=CE9hKcQ+lCXSH2ZzquDgisaZLEwDO7R1Nnuf5MRTe8QnE87vYqrFzOgvWl/IbcqTet9x
-	 jBQHdTjd7T3+nsSxz4rLqfgLyVa3qb4JkxB1FtwZStoneGXgP6RKTittPy6ko3UdX9L1J
-	 PHGx1yxWnVvFj8Ibz6gq2dkq7vfaKH1e6WMgXXAPfpN52TqzQEDZaJ1qlNkHueRUd04qz
-	 /R0djTI5/xf5M5yqd53Rh66+aYsy18znGoUJ+TYk1JQeWahyDrOz+9Jib0GEwGtoVkSnQ
-	 rTburo6odt/8tIfAf61F1gZLpJAsUCBQ6yMPqFMuaheHUp16q01OjBoJKUw12I7gD0g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794567138;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:Content-Language:To:References:From:Cc:Autocrypt:Organization:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=S6FBjO5gc3xn7ht6Zu9lU/nDDIjHwR2pe7on+zxgXbo=;
+	b=MPXFeKQLaJJSLKA8FLdKOJavtHEf1YSemawe9+1qVhqZO19fpPQg+mPsEUiQE4xakkvr
+	 yxpQ1T2rubOq3uih7dhaQXN/DqL2uQK+pItI9XmVfPxZG3dPejNU8EgX8hz12s1UUib28
+	 Xaxh6gp1YYAQYSjuDEC/W1nS0DBeKiyu23W1cr/Ei1Fc0pSk4jHwMLPkkqMAf1z8vtWO3
+	 dQMPXFCDjSYQtHmE9v2EVkgAar3waiIBRod0eR2kqrei+kPblo7/roz3Janexj3VeDrAi
+	 6DYSb8V/ErSNuE2ZLmExtVlsrj0uWkCsY/9rDL1UxJ78XUzt6qBdyRZr3rqWbGYXJUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DY4ltKq9;
-	arc=none smtp.remote-ip=209.85.216.70
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="LsDfByW/";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF3B606C995
-	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 08:28:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0FF3B606C995
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jenhaochen.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4F1606A33D;
+	Fri, 13 Nov 2026 10:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DY4ltKq9
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3b18165dc53so1034278a91.3
-        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 00:28:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794558520; x=1795163320; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nrmFebnjevEyXDZoOWfiZZaPcF3U9vlhmYY98rYqI7g=;
-        b=DY4ltKq9vo54Fp7uGmu8TzwhHzw6SmAyBl4T31MxY1zaTotUvte03n+7bqFubG4QsT
-         VJPFADyE6rKOWMm7lYnblxxQGQ5o2F3+O1HgZIJGsJaGT1cFf9KzMcfzuL6nX+oXu142
-         XdumpR2+QvXNthcKTscigwQ6fwKS172s0CxcJXjNi46CyD+SMf9JMLqw/mktW4/IsC/t
-         DkjVJDoBRfQ0Z8WoWu/A6Cd8xqsnYMJW2oSulo98mBVr0oDufgVFnkgZogC/3PIKpOZi
-         9Q18KJgO5DR6A/N6UiRwHm+AiHcYlswYqXaI9rPOc/C6/IdtAjrDMUZb9H0QXPdN2kiH
-         Fduw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794558520; x=1795163320;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=nrmFebnjevEyXDZoOWfiZZaPcF3U9vlhmYY98rYqI7g=;
-        b=Xia1h7jRsPkCBGDU+HA+dzrODH4qaKeKyMX95+bkI3VR2e7Z2p0bOYV2Dyy45ZxgBU
-         g/4Vxh6DQ3mhi7QLFOxKP4F/5+/uY1rAnuTwB/V3Rb3IynVhiwLAdMLiNDgX090kMYjc
-         S41VoBH65pF2vHqyqS3KEV5lsITIBOkX0nyO9gHRlxJqm/aYuw7lekzXI3MSSSwR7rAP
-         4sY+7mGDKZXrjHYC0zlPh4/0kWB5dAf2hizkIWVJqNQr0qPJe3xMdeywirawkrXYs++2
-         JgFs2+Ge9pbt1f2J541YgriDskSFt5Ffjng4GUVB4j6x8rxHIZQ3Ed9GLeFq5Qmj6Jt4
-         h9UQ==
-X-Forwarded-Encrypted: i=1; AL+hErGvZunHqQqD3uDTNk66ylsEAMGy28RHles1h5OCsow0lEa5WwAPWY/7laqjlFjSkPr5BFxk@lists.linux.dev
-X-Gm-Message-State: APuU4Z/WGwYQgqPoLy/pON4X8q4J9klS/sRtnh9kOvj8L/3nk9ey+Ggx
-	0oCWa7T0CWq99w3zI9PZBafhDLG4xH6hvwj5RKdYQrcBGUKk0+WDFQjQHZhRHOAn8jVx0NkrzeB
-	8vqr7Zw5cJlwdKqM0EU3G2Q==
-X-Received: from pjvd14.prod.google.com ([2002:a17:90a:d98e:b0:3b0:9569:4e9a])
- (user=jenhaochen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3d87:b0:3ab:2737:3395 with SMTP id 98e67ed59e1d1-3b1b0a3a2f9mr1460229a91.42.1794558520120;
- Fri, 13 Nov 2026 00:28:40 -0800 (PST)
-Date: Fri, 13 Nov 2026 08:28:37 +0000
-In-Reply-To: <CANiq72=zg8WeupV5TPTr2tUxAt7imSZXacw=CBf75MdfcAv-rA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LsDfByW/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 010C71F000C4;
+	Fri, 13 Nov 2026 10:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794567137;
+	bh=S6FBjO5gc3xn7ht6Zu9lU/nDDIjHwR2pe7on+zxgXbo=;
+	h=Date:Subject:To:References:From:Cc:In-Reply-To;
+	b=LsDfByW/6XkSMBcdvn7j1+BxQm/Eo8jJQkVcGqcCe3ms2ZVXI7EOrgn3gUPbqsNpc
+	 if2WCcMgw0tINi1wLlyaYQFkAkWBi/pOA0wp137yAQ1S+bNPkJWLJZFGF2Vj3GYLxi
+	 gurs/cZC70OATQBpxsu7oasdDe47Z9ZwPEgQxqkTlN71r0YvHgcuOJwW7Xek9UdmHw
+	 ssVt1630MgMRDdjQ9u1+kLRLjUJ59MY+f1hiNDDRAMOlH4/EziZrjsaWmXVKjtvXlA
+	 rcURG4c+cfr7/sl9SzvzIO2celWZ3kdT7eB7s1yURl1OS5F6iHWU6Bhs7NkIhNrdqa
+	 eQSZQa5stsH/g==
+Message-ID: <737e3c57-9aad-4081-ac75-f79cb2084349@kernel.org>
+Date: Fri, 13 Nov 2026 11:52:05 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,95 +50,103 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261031030807.4101384-1-jenhaochen@google.com> <CANiq72=zg8WeupV5TPTr2tUxAt7imSZXacw=CBf75MdfcAv-rA@mail.gmail.com>
-X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
-Message-ID: <20261113082837.4011638-1-jenhaochen@google.com>
-Subject: Re: [PATCH] kbuild: rust: pass AutoFDO flags to Clang with inline helpers
-From: Jenhao Chen <jenhaochen@google.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Rong Xu <xur@google.com>, 
-	Han Shen <shenhan@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Matthew Maurer <mmaurer@google.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Qais Yousef <qyousef@google.com>, Ben Wei <benwei@google.com>, 
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Jenhao Chen <jenhaochen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next v19 10/15] net: Document PCS subsystem
+Content-Language: fr
+To: Christian Marangi <ansuelsmth@gmail.com>
+References: <20261113003217.197757-1-ansuelsmth@gmail.com>
+ <20261113003217.197757-11-ansuelsmth@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
+ Heiner Kallweit <hkallweit1@gmail.com>, Russell King
+ <linux@armlinux.org.uk>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ llvm@lists.linux.dev
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20261113003217.197757-11-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 11, 2026 at 7:48 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> This sounds reasonable, but my LLM spotted that Clang will run
-> `AddDiscriminatorsPass`  again, i.e. on the optimized bitcode that
-> `rustc` produced. So the profile ends up indexed by Clang's renumbered
-> discriminators, and then the build that uses the profile will not find
-> a match for some code (depending on inlining decisions), i.e. that
-> part of the profile is silently dropped.
->
-> It proposes `-mllvm -no-discriminators` in
-> `CC_FLAGS_RUST_INLINE_HELPERS` so that Clang doesn't add them, i.e.
-> using the `rustc` ones.
->
-> Rong, Han: is that expected?
+Hi Christian,
 
-Hi Miguel,
+Thank you for the patch.
 
-Nice catch -- I tested this on drivers/android/binder/rust_binder_main.o
-(arm64, Clang 22 + rustc 1.91) and confirmed that the duplicate
-AddDiscriminatorsPass run is real and that passing
-`-mllvm -no-discriminators` to the post-llvm-link $(CC) step improves
-profile matching in both stages:
+On 13/11/2026 01:32, Christian Marangi wrote:
+> Add extensive documentation of the new PCS subsystem and the fwnode
+> implementation with producer/consumer API.
+> 
+> Also update the sfp-phylink migration guide.
 
-1. Why the second AddDiscriminatorsPass renumbers discriminators:
-   In Stage 1, rustc runs AddDiscriminatorsPass on pre-inlining IR and
-   then runs its optimization/inlining pipeline before emitting .bc.
-   When post-llvm-link $(CC) runs AddDiscriminatorsPass again on the
-   already-inlined .m.bc, llvm/lib/Transforms/Utils/AddDiscriminators.cpp
-   keys blocks by (filename, line) without checking inlinedAt and
-   overwrites existing base discriminators via
-   cloneWithBaseDiscriminator(). On rust_binder_main.o, that second pass
-   increases non-zero DWARF .debug_line discriminator rows from 6,245 to
-   9,313 (+3,068 rows, +49%).
+FYI, the Netdev CI seems to have issues with this patch when building
+the documentation, because a new warning is visible:
 
-   In the profile-use build, rustc's SampleProfileLoaderPass runs before
-   rustc's inliner (against pre-inlining discriminators), while Stage 3
-   sees a different post-inlining CFG once Stage 1 has applied the
-   profile.
 
-2. Measured round-trip impact (42 sampled functions in
-   rust_binder_main.o):
-   - Stage 1 (rustc -Zprofile-sample-use): annotated branch_weights
-     increase from 454 to 490 (+7.9%) when the profile is generated and
-     used with `-mllvm -no-discriminators` in Stage 3.
-   - Stage 3 ($(CC) -fprofile-sample-use): SampleProfileLoader record
-     coverage increases from 39.3% (2,832 / 7,205) to 54.0%
-     (3,707 / 6,860, +14.7 percentage points), and sample coverage
-     increases from 42.9% (757.8K / 1,767.6K) to 56.4%
-     (989.6K / 1,753.4K, +13.6 percentage points; 969 -> 1,035
-     branch_weights). Against a hardware ETM profile, Stage 3 matched
-     function entry counts also increase by +33.9%.
+/srv/nipa-builds-contest/testing/wt-doc-build/Documentation/networking/pcs.rst:3:
+WARNING: Duplicate C declaration, also defined at networking/kapi:486.
 
-3. Side-effect checks:
-   - C helpers: rust/helpers/helpers*.bc is compiled separately via
-     cmd_rust_helper (without CC_FLAGS_RUST_INLINE_HELPERS), so C
-     helpers still get their pre-inlining base discriminators before
-     llvm-link.
-   - Flow-sensitive discriminators: MIRAddFSDiscriminators in
-     llvm/lib/CodeGen/MIRFSDiscriminator.cpp checks
-     EnableFSDiscriminator and shouldEmitDebugInfoForProfiling() rather
-     than NoDiscriminators, so post-link FS discriminators remain
-     enabled.
+When executing:
 
-Rong, Han, Miguel, Nathan: would you prefer adding
-`-mllvm -no-discriminators` directly to `CC_FLAGS_RUST_INLINE_HELPERS`
-in the top-level Makefile, or appending it in scripts/Makefile.autofdo
-under `ifdef CONFIG_RUST_INLINE_HELPERS`? Happy to send v2 once we align
-on the preferred spot.
+  https://github.com/linux-netdev/nipa/blob/main/contest/tests/build-doc.sh
 
-Thanks,
-Jenhao
+Logs:
+
+  https://netdev-ctrl.bots.linux.dev/build/doc-build/results/909345/
+
+Cheers,
+Matt
