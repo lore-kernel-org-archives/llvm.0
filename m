@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794587541;
-	b=NpofYFvjvO8C27hqUtN4EA1O78bnTd15JRETP2/FCp2aHhronSCVNQD+8DNLul+5f0ap
-	 lvJ08SaElWHljffD4zPvut+tk7g+E3y6K6WAexy47hXpZFNeMdjazafvNulBItO/9qqtq
-	 kIAWp8dUe38xkmevpxn/z2BSXvngAffzWEIQ0CjPNIZBFNFD0pGRhYCaUWqNptsbwQdOn
-	 fM6FoJrwzkoSVGW9Im2NeGiGOoe6s8GtkVW0OgUQgPEtE0OtuZp52KbsjQHMiS321TbY4
-	 IqmXsLsNA635OQMjt2AIxGiyJJN56LfIIbDav7RpyPQOvzgO3Ny6tW9jWXzEYniZphA==
+	t=1794587601;
+	b=Qsb6qiZ78oMu25Oyf0jiBoRy9hQlLJP+UpIbIRzKZyixK5IEW/X/YKPP6vmiSWefzMkt
+	 QzfANrCxiS80EEwr8/jLHYzt9TE+Isvj777RqeS59j4T79/rIyrX9VP4UBClH8/WVcaNz
+	 OgBou5AAlrO6H3e1XsrFfQ0hC+LPtDccLKVKwhvpLRKcbeQnBRW5HYFjDZIEfMa5m5cWy
+	 EJM3IL5JhEAt/sEE+9l+3p8OD+8UOMDFUq9h/TsarnUmBfjsgrUU2Ka9WwojNOr048rj/
+	 HXUsZTuWMHDVQRKKdPk3yWw1tBPzDZ2uPPna2MxzMr0PLCgbh7CHqERqfZOejeHuMeg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794587541;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794587601;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZW/ulXbPYhjI2BnnmxNm9CpFmpm9yyYOMi+EkQ8/Vcs=;
-	b=CRi7YwQNuOiwWDXEY6dxO7F2eBX76N9yyrtOVuV9MaVqxTGi0fkGA+N1W9y43jfbsIhd
-	 F2BKnz6c5xhSX8lyBQh0RHRvhI+3eWlcBSRgxkPhxRkOqt4wSJgLwiXQVbX+j2/mBvtGx
-	 cyr9rUBX09wY5m15S7832zWsMGp3MGVsWqFrqhRhNxAhe8zcA8S9iiRiVQt0tRCZBYYDi
-	 Q7Q1mBxhREc3WBTagBvintHrW9Sc16OKEtN4/X7ZF9xNGk9KY5ziGtk102JyDxZ3dNS28
-	 /CEImrANUW/sm13Vwjg80pQ76T+sS+korTiBxgfAG0u0McidnOJ1XF2m7SiOaKJcrZg==
+	bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
+	b=dD8nCwDhp2kKFxKpWBImZ94YWnEwxWDmdNfPy7DF/wG5qKz9DQrJp6wPL/rDA5e/1EhV
+	 O0YPVdYgTMPJ6btNbnyCbfiHfkG+9jj6RuVly2izgZY8Hzsbj7azNlQbgjh/QkKZvz2VQ
+	 qJxqMUXJ6TrLM3QKtCfs6RgEUZud92k4UIweHtJlURgGM2EvIIiKS3UojG3W2lA2vL9bK
+	 AErpVe8K0K5xI2JWt0UXUIQNoFAXD47+M2bC5PnxHnggr7TCXgNUsS0w2j3oTKaMDHh9K
+	 LWTN6sz54hMp49fzpJjexWK95qOWQTThf4QWeLyLKhAIQF/XYkDc3qFwEckBr26mcOQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GS1QuJ9s;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gS+kzEPA;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AC0606A887
-	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 16:32:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98AC0606A887
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A6F606A32D
+	for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 16:33:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0A6F606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GS1QuJ9s
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-55be673e029so152811cf.1
-        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 08:32:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794587539; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gS+kzEPA
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-533202fe429so424841cf.0
+        for <llvm@lists.linux.dev>; Fri, 13 Nov 2026 08:33:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794587600; cv=none;
         d=google.com; s=arc-20260327;
-        b=ckz6zYW9bwD6x34ZxJGGlQ62JXtTYZ6df7vgIvqqfXVdaWdGXo8IAur/j5VYtlNwO/
-         c7OFPxd0bEgCIfGPy/jjuk0CwVr3FOWTLxMx9cNwSEnQfOGqSEaXaG7jpqut96jGGbPW
-         qRRB0+fJG+fVhIv2nOvAZ1T/o3TibtEoQkE8TNwDaMHc2yhxHZbZlziNPk+IdPX45Kk9
-         1oh3pnmDhmd25XPdwcYedc5YsiTyy9xQP+4+x7/Xd+m4CbM+ZDhFO9Q7shQ19fyfMtJQ
-         JGue2IopICMQyH2WxuNnhh0QhshCy/SET1byfeyUBP6QUJLF7EWQSuY1/mnC4G8dFPCU
-         wnJw==
+        b=MwondL5ZHhjFQNLItV2A2Lv7Vep1FOYGzsHjtHVQi3QdWC9SgbzL6tl37AHxxud6ux
+         52VhaAVN3RWopN0Dbo6w+BDYcwfd4OvpUMhjX7+4b28tBT6IJPdkaZGfNdZx8nssv65G
+         mYn8OQsnd9Q4zi2UVtAjfdo/uBTosdWx11Z7WBWkxYWU/kzwUi0Rg6VbpK0F2pSG0XAS
+         XNvGeG7XDNMr4NESrDl3v2muHs+nMGW9YxWoKGD8Dx1HEbRW6U0bL1PRDRYs60AyPGXj
+         oInz6QBtj/xEL4cF678ByvrQAdsyiWMwru0RxIxKyIktK05W1jV+DwQ9ZHL/1k0l+vyS
+         WSoA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZW/ulXbPYhjI2BnnmxNm9CpFmpm9yyYOMi+EkQ8/Vcs=;
-        fh=L/4FFLWBIysrOzzuaemUIgSRhB6AwjjjAhYlQpP/VGA=;
-        b=fXav+Yq8UNtwlKgolNXGhBAtRzKuK9oRKHvtiBWyAIDQN5vmZE2Jmzk+NAKQn8anf/
-         vvEUBfOVQ2xGJ7+p/1OCORtN/z9NGqPKY1cvLS3sEUqGPdtUW5SWVzNZDogyF4hza9VE
-         CTYMcz5hamEW4YGLNyCCXweJt7yeRBXIxM/JAYOm7F5JADqqYIGzDHKzoUTt8SNCONW+
-         0betRjmzCnoxdw/yulip//MN5nmDc5rEkEdyGuKP0x3RY4jz+XKkEBC6cS6klIZ0A9sG
-         HkVrBTOqQUfrjmcLfnoatEvTCcsjz+haIUY9Bmzw2ib0peVS8BW+39ZRslr4jTYwQvnC
-         OYLg==;
+        bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
+        fh=S9/YNqOB5FRpDmgNHDGhA/kd+mytPIB0dHzN7m6Q7Vk=;
+        b=LXJ85f4ybadND3F+XJdAxrvXDysbabwiOako52hnupmaSSGjC3bUU+60YwAtEzybUw
+         rLKuHBrr47LLzLYwb78Dxw5sQ75j1VIpQHDANITEOdxJ52oe5t861PRA80Zd5cy1g+ZG
+         C11YTbUvhtBnmoP5f48+Ads3nMzHk4jR+DodKEE0P3eKAMKupaM57tAmJ5OQu8w0TBqw
+         KK6sE05d44RMdRM2KjQl1wPkDOdeCDuK3X+6QoRkwgkWL5IUxZCmxuPXbSWsiAWG49pp
+         BGxfaKhe8j7UYTsYMYTZCIaM0/zEbo+WOjEbEtif2QnrX1fih3/O3zMzqLRUsuvaGN/z
+         hQrg==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794587539; x=1795192339; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1794587600; x=1795192400; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ZW/ulXbPYhjI2BnnmxNm9CpFmpm9yyYOMi+EkQ8/Vcs=;
-        b=GS1QuJ9slcz98os/jLiMX6GoBA5KlBuztPbwXMYxZtMdBDsjrtkE54QbO4x6X6GKd2
-         q1SDdtb8ifmtj/YJ/Z3ImCctkoj3qL3iT73bA0VuyVFK8kqVzytvOjY5IhQz/hyjaO44
-         p4nxqYWkUqpRYN4OqpRe7wPWDQXIZDVGruukfLaTgJE6XkvoNOI+N8sJGc4R3PoO4rYt
-         G7y9svg5p/Vph1M4o6uUSn1xwFsgvhncpfcO7db7JxdgUygyG6v0b0qDXbYpytVpmNJu
-         c5GCUR4zzJ+m1XeZcAI6TFDgaX+xFwTMontTtccvlI9hmIenJ56pOGzrN4+IjmKTVEFY
-         72sA==
+        bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
+        b=gS+kzEPAK6cRYsWfYUL5b2hJSyU5fiQOjf1TYslyX2HlOqMQerNeBCkitzSjb2RK3v
+         4HMxJqVXpoqJ9mSxg5kK9Tl8ie9rsQT3zGb0wQ0GSYF+anRzHjWfIfBkYljvp0MB8wZR
+         dNKXLs2DLD43OjAsdYDx3BL00OgiUsQ/2eKDBfJjWRhFkzPJ81vE6FoOXjkcZXj8fvJg
+         lMT8bk5VhCWWoMavcAwJIhhghgHvzZgKm4bUBQWWiTW7rlsARkF9K7WZF2/LG2xVImY6
+         7s0ur6NHwFp/p4dM7mW6KpOxDlyZ0wYPeVjEgbVMr1TNqptKayg/gT8xBRq7Kx80Od2g
+         PAgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794587539; x=1795192339;
+        d=1e100.net; s=20260707; t=1794587600; x=1795192400;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZW/ulXbPYhjI2BnnmxNm9CpFmpm9yyYOMi+EkQ8/Vcs=;
-        b=00WY4/lro+VlEE2kSYAgu4QocwoQHSZJuDXXDCyQCcNu3uXqpIQcu+Mb1sVXrWZwFN
-         NMb1bRamJOX6y7kO02WTIeN55h8EONMNCkT5CaJ1fdnlNtMLfzN6jDZZCk7nNVmE97m5
-         f9tjxM93DlBMzGtO7mkFODEuJu2n09fvCLperkGHWCcl5LFPadczL1bh13A0qsODCiMj
-         oxcrkB3ivP6Z4tWJuLvZDjJcuIpOOB4M5RudNzHwzgpFGWuRrqmL2vHyWff4pnqkBC9K
-         1DbdFj0QAw8Lu66yYANauQ3TRf0WzMIb3lsi5GbNK5CLcD2/SYu0d8r65LSPshbLMYJq
-         b1fA==
-X-Forwarded-Encrypted: i=1; AL+hErG4IVWCQAcj5coabDfdEPXNqCtBfCvZxRrx2J2BPwTi12TUMuIzjSqa+T0Vaw+5bkRWcI5d@lists.linux.dev
-X-Gm-Message-State: APuU4Z8ca01rTAxOaow9y+/EcGWvYc6dZVOfHP2z3ZvMd8XmshjpOWVt
-	PGokoQUceBt0fa1AVKLc5U4PvD3cEbfoGcgvEf78FYAr8dgTuKK0kR25x9mAfzdKOlNioBZTude
-	7kQnHxfNuOW+e1qOtIoEO49eLwHLAYjMo5WaAojEP
-X-Gm-Gg: AYBFou3Tis4HUFY5MeA59ZNxsWfsKmd5QLBl03u9pAJQhdXLGlt/VGYenWojtIKF+mF
-	ROFuSkDjBX7NTS/mDArjNaLzFaeaTLY6K5BHgxrsk8o1e9bdGRMaCKoTNiFFaM0WsksCYb35ZUq
-	SYA8UBZOP3UBOLYmQutW0+l8USXR7y7sC8w/yL8k5aSANFZkQVfFKna8FkcgDEdp+kH4KvSjM8W
-	P59mq7wjL2lBE/gjLAwFq8afwgYO0GeiSPWFJUHTcRuxyKkbzPO5M+l8EisG1FffJA2AWIJT/iR
-	HU5zQjfRQI+g0HXMUPiZSGzg81xSimSPgn9JqRdTMgLvGkmpw3aSZoAWU2jMNWEFqBCoeYHfDNT
-	QIwKz7VpRQ6XC/04n/x//3eQWZUiAlEqiCwixLQ/6aURqVgV2NOuSM3gJE2zdimD+70E=
+        bh=AdWoW+YMAuhD4166hiUdRwKU0699eDdRXcepk33gue8=;
+        b=0h7y1uKy9Zb9a0lCYlQgnKEsOpkBKpbLqVTltsapBoqmE5BMOZDZL84FP8fRQcXGYz
+         Z/5ejol3sWnLgHlKK1mn9RWDZ62oN8KBgz+LVVBdFwz3wL0hOlQeOR8x0P0DmcnVdn1a
+         b3+F2bpQZQUcjFKr1lkI4+8OuYoXla+fZcBCXpk+u5mQ9/fnXOwEjHilgCSyNd1cDJEM
+         yOWfBuKyt55TUoujiXBow49UtcgkTx6wo/iiXYgNG9Rmptq+KfSOYMTcOkTN1GTD9pG9
+         KzPI0PLhFEaGIhfZQ/CaCdl8TUIL1uyyTDvACObGZcrMoST13zss2D+xX75rTBgIOYPG
+         rMoA==
+X-Forwarded-Encrypted: i=1; AL+hErEbHX2rsLEjzk5DQvznDJ5F0neys6PGPO6G/6De7m9pveF00OG8xl13lkxms4Tga4QlMCEz@lists.linux.dev
+X-Gm-Message-State: APuU4Z8yO9SNvK6tDiTgHq2NXap2GUtBxr/5OAFxZ4oHWjcdka0Pk6hJ
+	0bW2733kTHP/nskBmdM7hxn+rAkrCSVg1SwAErG3paSOiAqFkiGtHkW4DappduPKJp9MLOde0OY
+	pY9VadHqyDG9Kzfyh/xPDT+DYk+uEkT2FEbqtOw8D
+X-Gm-Gg: AYBFou1j1/TB3HGJvmScjIPj0gqpUVBrQIv8cyBYzVfyMnQqQqQyU77fcYjxIB9t9UE
+	IqK2XIEahrnNt5jRwBxVB2ghJfJuL86j0woNLYjg9Z8eyEHGa6IsgyHZ8dHcWur5SWDDrMCWMS2
+	kT4H+j6WAGhXQlRZEzmuPAGLkjJLsL0EBfSIIkU4rGwmZ7A7fakJQ0lgDzzHpqX0g60g38nE4Ra
+	e5VH9q4p4tXB1IJ3dEkZc/1zN8PI/ngHNo8onohafWZokjx60oUjujxNz3RbY87NUvAS/zQV1Wv
+	z7oGZfTN0yn/nXrJQO6Zago4FOXtRvUOlCrcwCipn9tQgEXzgGSC/0Q8lOKFOSBPGAiRxwgElEN
+	HlFn97NSGT/+Ew8WmKvMyQa7uvmnDMs3ky6J3eOzXOAJUDYj+YbwO9ksD3y7cpHpL0Rc=
 X-Received: by 2002:a05:622a:124a:b0:536:97c0:dcd0 with SMTP id
- d75a77b69052e-55adbb72c40mr15062001cf.4.1794587538562; Fri, 13 Nov 2026
- 08:32:18 -0800 (PST)
+ d75a77b69052e-55adbb72c40mr15083541cf.4.1794587599092; Fri, 13 Nov 2026
+ 08:33:19 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,15 +104,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111174213.3526604-1-irogers@google.com> <20261111174213.3526604-3-irogers@google.com>
- <avVdS5oMaBnqYlyE@google.com>
-In-Reply-To: <avVdS5oMaBnqYlyE@google.com>
+References: <20261111174213.3526604-1-irogers@google.com> <20261111174213.3526604-9-irogers@google.com>
+ <avVgPUFGCPycCWSI@google.com>
+In-Reply-To: <avVgPUFGCPycCWSI@google.com>
 From: Ian Rogers <irogers@google.com>
-Date: Fri, 13 Nov 2026 08:32:06 -0800
-X-Gm-Features: AclHuK-FYliLfeQVudbxbHqQXCKRr44t1WWqUitEpfJBqGl-reP7ALR2TW1ovOU
-Message-ID: <CAP-5=fVYmLMkbR1ehEDKt08+AN6sm+HxkuExLULd8YF-H_F+rw@mail.gmail.com>
-Subject: Re: [PATCH v12 02/20] tools headers compiler: Synchronize
- compiler_types.h with the kernel sources
+Date: Fri, 13 Nov 2026 08:33:08 -0800
+X-Gm-Features: AclHuK9L-E3dF8YJnLshs1tY7VQqvZTZoGdVDHChKgorJQHTyeGB3QWOADeecfk
+Message-ID: <CAP-5=fVy8oN3okjJKHYvtqT0ZWWx=8uT24HkPhgvwwcKzvG4Aw@mail.gmail.com>
+Subject: Re: [PATCH v12 08/20] perf dsos: Skip BPF and OOL DSOs in dsos__find_kernel_dso()
 To: Namhyung Kim <namhyung@kernel.org>
 Cc: acme@kernel.org, adrian.hunter@intel.com, bvanassche@acm.org, 
 	elver@google.com, james.clark@linaro.org, jolsa@kernel.org, 
@@ -123,45 +122,69 @@ Cc: acme@kernel.org, adrian.hunter@intel.com, bvanassche@acm.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 11, 2026 at 10:31=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
+On Wed, Nov 11, 2026 at 10:44=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
  wrote:
 >
-> On Wed, Nov 11, 2026 at 09:41:54AM -0800, Ian Rogers wrote:
-> > Synchronize the non-__KERNEL__ sections of
-> > tools/include/linux/compiler_types.h and
-> > tools/include/linux/compiler-gcc.h with the kernel sources (including
-> > ___PASTE/__PASTE, BTF_TYPE_TAG, object-size helpers, asm_goto_output,
-> > ASM_INPUT_*, asm_inline, __typeof_unqual__/__unqual_scalar_typeof,
-> > __signed_scalar_typeof, __native_word, compiletime_assert, and the
-> > __diag pragma helpers required by compiler-context-analysis.h), and
-> > remove the duplicated definitions from tools/include/linux/compiler.h.
+> On Wed, Nov 11, 2026 at 09:42:00AM -0800, Ian Rogers wrote:
+> > In machine__process_ksymbol_register(), set the binary type of non-OOL
+> > ksymbol DSOs to DSO_BINARY_TYPE__BPF_IMAGE (which
+> > machine__process_bpf_event_load() upgrades to
+> > DSO_BINARY_TYPE__BPF_PROG_INFO on PERF_BPF_EVENT_PROG_LOAD), and update
+> > dsos__find_kernel_dso_cb() to skip DSO_BINARY_TYPE__BPF_PROG_INFO,
+> > DSO_BINARY_TYPE__BPF_IMAGE, and DSO_BINARY_TYPE__OOL so that
+> > dsos__find_kernel_dso() does not match ksymbol DSOs in machine->dsos.
 > >
 > > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> >  tools/include/linux/compiler-gcc.h   |  72 +++++++++-
-> >  tools/include/linux/compiler.h       |  50 +------
-> >  tools/include/linux/compiler_types.h | 206 ++++++++++++++++++++++++++-
-> >  3 files changed, 275 insertions(+), 53 deletions(-)
+> >  tools/perf/util/dsos.c    | 3 +++
+> >  tools/perf/util/machine.c | 9 ++++-----
+> >  2 files changed, 7 insertions(+), 5 deletions(-)
 > >
-> > diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/c=
-ompiler-gcc.h
-> > index e20f98e14e81..e005e8d5dfda 100644
-> > --- a/tools/include/linux/compiler-gcc.h
-> > +++ b/tools/include/linux/compiler-gcc.h
-> > @@ -1,7 +1,7 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> > -#ifndef _TOOLS_LINUX_COMPILER_H_
-> > +#ifndef __LINUX_COMPILER_TYPES_H
+> > diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
+> > index 1574c8885d78..fbbf98c4ccae 100644
+> > --- a/tools/perf/util/dsos.c
+> > +++ b/tools/perf/util/dsos.c
+> > @@ -475,6 +475,9 @@ static int dsos__find_kernel_dso_cb(struct dso *dso=
+, void *data)
+> >        * is_kernel_module() treats it as a kernel cpumode.
+> >        */
+> >       if (!dso__kernel(dso) ||
+> > +         dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_PROG_INFO |=
+|
+> > +         dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_IMAGE ||
+> > +         dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__OOL ||
+> >           is_kernel_module(dso__long_name(dso), PERF_RECORD_MISC_CPUMOD=
+E_UNKNOWN))
+> >               return 0;
+> >
+> > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> > index 5eb5efa4eb90..0334cb01349a 100644
+> > --- a/tools/perf/util/machine.c
+> > +++ b/tools/perf/util/machine.c
+> > @@ -769,6 +769,10 @@ static int machine__process_ksymbol_register(struc=
+t machine *machine,
+> >                       dso__set_binary_type(dso, DSO_BINARY_TYPE__OOL);
+> >                       dso__data(dso)->file_size =3D event->ksymbol.len;
+> >                       dso__set_loaded(dso);
+> > +             } else {
+> > +                     dso__set_binary_type(dso, DSO_BINARY_TYPE__BPF_IM=
+AGE);
 >
-> I'm not sure if it's better to keep the TOOLS part in the macro guard.
-> It would make the sync-ing a bit harder.  And I also see other files
-> already don't have TOOLS so it seems ok to drop.
+> Shouldn't this move into the if statement below?  At least it should
+> check if the ksym_type is BPF.
 
-Agreed   tools/include/linux/compiler_types.h already used
-__LINUX_COMPILER_TYPES_H for its guard, and since it now includes
-<linux/compiler-gcc.h> directly (matching the kernel), compiler-gcc.h
-needs to check __LINUX_COMPILER_TYPES_H as well so direct includes of
-<linux/compiler_types.h> work. Kept as-is in v13.
+Good catch. Setting DSO_BINARY_TYPE__BPF_IMAGE unconditionally was done
+so dsos__find_kernel_dso_cb() would also skip bpf_prog_* ksymbol DSOs
+before PERF_RECORD_BPF_EVENT sets DSO_BINARY_TYPE__BPF_PROG_INFO (or
+when --no-bpf-event is used), but that mislabels BPF programs as
+BPF_IMAGE.
+
+In v13, I've moved dso__set_binary_type(dso, DSO_BINARY_TYPE__BPF_IMAGE)
+into an `else if (event->ksymbol.ksym_type =3D=3D PERF_RECORD_KSYMBOL_TYPE_=
+BPF &&
+is_bpf_image(event->ksymbol.name))` block, and factored out
+dso__is_bpf_prog() from __map__is_bpf_prog() (which falls back to
+checking the "bpf_prog_" prefix) for dsos__find_kernel_dso_cb() to use.
 
 Thanks,
 Ian
@@ -170,460 +193,25 @@ Ian
 > Namhyung
 >
 >
-> >  #error "Please do not include <linux/compiler-gcc.h> directly, include=
- <linux/compiler.h> instead."
-> > -#endif
-> > +#endif /* __LINUX_COMPILER_TYPES_H */
+> > +                     if (is_bpf_image(event->ksymbol.name))
+> > +                             dso__set_long_name(dso, "", false);
+> >               }
 > >
-> >  /*
-> >   * Common definitions for all gcc versions go here.
-> > @@ -33,10 +33,76 @@
-> >  #define __packed     __attribute__((packed))
-> >  #endif
-> >  #ifndef __noreturn
-> > -#define __noreturn   __attribute__((noreturn))
-> > +#define __noreturn   __attribute__((__noreturn__))
-> >  #endif
-> >  #ifndef __aligned
-> >  #define __aligned(x) __attribute__((aligned(x)))
-> >  #endif
-> >  #define __printf(a, b)       __attribute__((format(printf, a, b)))
-> >  #define __scanf(a, b)        __attribute__((format(scanf, a, b)))
-> > +
-> > +/*
-> > + * Turn individual warnings and errors on and off locally, depending
-> > + * on version.
-> > + */
-> > +#define __diag_str1(s)               #s
-> > +#define __diag_str(s)                __diag_str1(s)
-> > +
-> > +#ifdef __clang__
-> > +#define __diag_clang(version, severity, s) \
-> > +     __diag_clang_ ## version(__diag_clang_ ## severity s)
-> > +
-> > +/* Severity used in pragma directives */
-> > +#define __diag_clang_ignore  ignored
-> > +#define __diag_clang_warn    warning
-> > +#define __diag_clang_error   error
-> > +
-> > +#define __diag(s)            _Pragma(__diag_str(clang diagnostic s))
-> > +
-> > +#if __clang_major__ >=3D 23
-> > +#define __diag_clang_23(s)   __diag(s)
-> > +#else
-> > +#define __diag_clang_23(s)
-> > +#endif
-> > +
-> > +#define __diag_clang_all(s)  __diag(s)
-> > +
-> > +#define __diag_ignore_all(option, comment) \
-> > +     __diag_clang(all, ignore, option)
-> > +
-> > +/*
-> > + * clang has horrible behavior with "g" or "rm" constraints for asm
-> > + * inputs, turning them into something worse than "m". Avoid using
-> > + * constraints with multiple possible uses (but "ir" seems to be ok):
-> > + *
-> > + *   https://github.com/llvm/llvm-project/issues/20571
-> > + */
-> > +#define ASM_INPUT_G "ir"
-> > +#define ASM_INPUT_RM "r"
-> > +#define ASM_OUTPUT_RM "=3Dr"
-> > +
-> > +#define CC_HAS_TYPEOF_UNQUAL (__clang_major__ > 19 || (__clang_major__=
- =3D=3D 19 && __clang_minor__ > 0))
-> > +#else /* !__clang__ */
-> > +#define __diag_GCC(version, severity, s) \
-> > +     __diag_GCC_ ## version(__diag_GCC_ ## severity s)
-> > +
-> > +/* Severity used in pragma directives */
-> > +#define __diag_GCC_ignore    ignored
-> > +#define __diag_GCC_warn              warning
-> > +#define __diag_GCC_error     error
-> > +
-> > +#define __diag(s)            _Pragma(__diag_str(GCC diagnostic s))
-> > +
-> > +#if GCC_VERSION >=3D 80000
-> > +#define __diag_GCC_8(s)              __diag(s)
-> > +#else
-> > +#define __diag_GCC_8(s)
-> > +#endif
-> > +
-> > +#define __diag_GCC_all(s)    __diag(s)
-> > +
-> > +#define __diag_ignore_all(option, comment) \
-> > +     __diag(__diag_GCC_ignore option)
-> > +
-> > +#define CC_HAS_TYPEOF_UNQUAL (__GNUC__ >=3D 14)
-> > +#endif /* __clang__ */
-> > diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compi=
-ler.h
-> > index 03ecf9086643..505fbb0080d0 100644
-> > --- a/tools/include/linux/compiler.h
-> > +++ b/tools/include/linux/compiler.h
-> > @@ -1,41 +1,11 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> > -#ifndef _TOOLS_LINUX_COMPILER_H_
-> > -#define _TOOLS_LINUX_COMPILER_H_
-> > +#ifndef __LINUX_COMPILER_H
-> > +#define __LINUX_COMPILER_H
+> >               map__set_start(map, event->ksymbol.addr);
+> > @@ -780,11 +784,6 @@ static int machine__process_ksymbol_register(struc=
+t machine *machine,
+> >               }
 > >
-> >  #ifndef __ASSEMBLY__
-> >
-> >  #include <linux/compiler_types.h>
-> >
-> > -#ifndef __compiletime_error
-> > -# define __compiletime_error(message)
-> > -#endif
+> >               dso__set_loaded(dso);
 > > -
-> > -#ifdef __OPTIMIZE__
-> > -# define __compiletime_assert(condition, msg, prefix, suffix)         =
-       \
-> > -     do {                                                            \
-> > -             extern void prefix ## suffix(void) __compiletime_error(ms=
-g); \
-> > -             if (!(condition))                                       \
-> > -                     prefix ## suffix();                             \
-> > -     } while (0)
-> > -#else
-> > -# define __compiletime_assert(condition, msg, prefix, suffix) do { } w=
-hile (0)
-> > -#endif
-> > -
-> > -#define _compiletime_assert(condition, msg, prefix, suffix) \
-> > -     __compiletime_assert(condition, msg, prefix, suffix)
-> > -
-> > -/**
-> > - * compiletime_assert - break build and emit msg if condition is false
-> > - * @condition: a compile-time constant condition to check
-> > - * @msg:       a message to emit if condition is false
-> > - *
-> > - * In tradition of POSIX assert, this macro will break the build if th=
-e
-> > - * supplied condition is *false*, emitting the supplied error message =
-if the
-> > - * compiler has support to do so.
-> > - */
-> > -#define compiletime_assert(condition, msg) \
-> > -     _compiletime_assert(condition, msg, __compiletime_assert_, __COUN=
-TER__)
-> > -
-> >  /* Optimization barrier */
-> >  /* The "volatile" is due to gcc bugs */
-> >  #define barrier() __asm__ __volatile__("": : :"memory")
-> > @@ -48,10 +18,6 @@
-> >  #define __always_unused __attribute__((__unused__))
-> >  #endif
-> >
-> > -#ifndef __noreturn
-> > -#define __noreturn __attribute__((__noreturn__))
-> > -#endif
-> > -
-> >  #ifndef unreachable
-> >  #define unreachable() __builtin_unreachable()
-> >  #endif
-> > @@ -68,11 +34,6 @@
-> >  #define __naked __attribute__((__naked__))
-> >  #endif
-> >
-> > -/* Are two types/vars the same type (ignoring qualifiers)? */
-> > -#ifndef __same_type
-> > -# define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typ=
-eof(b))
-> > -#endif
-> > -
-> >  /* Enforce static storage duration. */
-> >  #define ASSERT_STATIC_STORAGE(name) \
-> >       static typeof(name) * const __always_unused \
-> > @@ -242,11 +203,6 @@ static __always_inline void __write_once_size(vola=
-tile void *p, void *res, int s
-> >       __u.__val;                                      \
-> >  })
-> >
-> > -
-> > -/* Indirect macros required for expanded argument pasting, eg. __LINE_=
-_. */
-> > -#define ___PASTE(a, b) a##b
-> > -#define __PASTE(a, b) ___PASTE(a, b)
-> > -
-> >  #ifndef OPTIMIZER_HIDE_VAR
-> >  /* Make the optimizer believe the variable can be manipulated arbitrar=
-ily. */
-> >  #define OPTIMIZER_HIDE_VAR(var)                                       =
-       \
-> > @@ -263,4 +219,4 @@ static __always_inline void __write_once_size(volat=
-ile void *p, void *res, int s
-> >
-> >  #endif /* __ASSEMBLY__ */
-> >
-> > -#endif /* _TOOLS_LINUX_COMPILER_H */
-> > +#endif /* __LINUX_COMPILER_H */
-> > diff --git a/tools/include/linux/compiler_types.h b/tools/include/linux=
-/compiler_types.h
-> > index b3adbf5682f0..31e9f7d2a466 100644
-> > --- a/tools/include/linux/compiler_types.h
-> > +++ b/tools/include/linux/compiler_types.h
-> > @@ -2,8 +2,6 @@
-> >  #ifndef __LINUX_COMPILER_TYPES_H
-> >  #define __LINUX_COMPILER_TYPES_H
-> >
-> > -/* Builtins */
-> > -
-> >  /*
-> >   * __has_builtin is supported on gcc >=3D 10, clang >=3D 3 and icc >=
-=3D 21.
-> >   * In the meantime, to support gcc < 10, we implement __has_builtin
-> > @@ -13,6 +11,23 @@
-> >  #define __has_builtin(x) (0)
-> >  #endif
-> >
-> > +/* Indirect macros required for expanded argument pasting, eg. __LINE_=
-_. */
-> > +#define ___PASTE(a, b) a##b
-> > +#define __PASTE(a, b) ___PASTE(a, b)
-> > +
-> > +#ifndef __ASSEMBLY__
-> > +
-> > +/*
-> > + * Skipped when running bindgen due to a libclang issue;
-> > + * see https://github.com/rust-lang/rust-bindgen/issues/2244.
-> > + */
-> > +#if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TA=
-G) && \
-> > +     __has_attribute(btf_type_tag) && !defined(__BINDGEN__)
-> > +# define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
-> > +#else
-> > +# define BTF_TYPE_TAG(value) /* nothing */
-> > +#endif
-> > +
-> >  #include <linux/compiler-context-analysis.h>
-> >
-> >  /* Compiler specific macros. */
-> > @@ -20,14 +35,101 @@
-> >  #include <linux/compiler-gcc.h>
-> >  #endif
-> >
-> > +#ifndef __compiletime_error
-> > +# define __compiletime_error(message)
-> > +#endif
-> > +
-> > +#ifndef __noreturn
-> > +# define __noreturn __attribute__((__noreturn__))
-> > +#endif
-> > +
-> > +#endif /* __ASSEMBLY__ */
-> > +
-> > +/*
-> > + * When the size of an allocated object is needed, use the best availa=
-ble
-> > + * mechanism to find it. (For cases where sizeof() cannot be used.)
-> > + *
-> > + * Optional: only supported since gcc >=3D 12
-> > + *
-> > + *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Object-Size-Checking.html
-> > + * clang: https://clang.llvm.org/docs/LanguageExtensions.html#evaluati=
-ng-object-size
-> > + */
-> > +#if __has_builtin(__builtin_dynamic_object_size)
-> > +#define __struct_size(p)     __builtin_dynamic_object_size(p, 0)
-> > +#define __member_size(p)     __builtin_dynamic_object_size(p, 1)
-> > +#else
-> > +#define __struct_size(p)     __builtin_object_size(p, 0)
-> > +#define __member_size(p)     __builtin_object_size(p, 1)
-> > +#endif
-> > +
-> > +/*
-> > + * Determine if an attribute has been applied to a variable.
-> > + * Using __annotated needs to check for __annotated being available,
-> > + * or negative tests may fail when annotation cannot be checked. For
-> > + * example, see the definition of __is_cstr().
-> > + */
-> > +#if __has_builtin(__builtin_has_attribute)
-> > +#define __annotated(var, attr)       __builtin_has_attribute(var, attr=
-)
-> > +#endif
-> > +
-> > +/*
-> > + * Optional: only supported since gcc >=3D 15, clang >=3D 19
-> > + *
-> > + *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index=
--_005f_005fbuiltin_005fcounted_005fby_005fref
-> > + * clang: https://clang.llvm.org/docs/LanguageExtensions.html#builtin-=
-counted-by-ref
-> > + */
-> > +#if __has_builtin(__builtin_counted_by_ref) && \
-> > +    !defined(CONFIG_CC_HAS_BROKEN_COUNTED_BY_REF)
-> > +#define __flex_counter(FAM)  __builtin_counted_by_ref(FAM)
-> > +#else
-> > +#define __flex_counter(FAM)  ((void *)NULL)
-> > +#endif
-> > +
-> > +/*
-> > + * Some versions of gcc do not mark 'asm goto' volatile:
-> > + *
-> > + *  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D103979
-> > + *
-> > + * We do it here by hand, because it doesn't hurt.
-> > + */
-> >  #ifndef asm_goto_output
-> > -#define asm_goto_output(x...) asm goto(x)
-> > +#define asm_goto_output(x...) asm volatile goto(x)
-> > +#endif
-> > +
-> > +/*
-> > + * Clang has trouble with constraints with multiple
-> > + * alternative behaviors ("g" , "rm" and "=3Drm").
-> > + */
-> > +#ifndef ASM_INPUT_G
-> > +  #define ASM_INPUT_G "g"
-> > +  #define ASM_INPUT_RM "rm"
-> > +  #define ASM_OUTPUT_RM "=3Drm"
-> > +#endif
-> > +
-> > +#ifdef CONFIG_CC_HAS_ASM_INLINE
-> > +#define asm_inline asm __inline
-> > +#else
-> > +#define asm_inline asm
-> > +#endif
-> > +
-> > +#ifndef __ASSEMBLY__
-> > +/*
-> > + * Use __typeof_unqual__() when available.
-> > + */
-> > +#if (defined(CC_HAS_TYPEOF_UNQUAL) && CC_HAS_TYPEOF_UNQUAL) || defined=
-(__CHECKER__)
-> > +# define USE_TYPEOF_UNQUAL 1
-> > +#endif
-> > +
-> > +/* Are two types/vars the same type (ignoring qualifiers)? */
-> > +#ifndef __same_type
-> > +# define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typ=
-eof(b))
-> >  #endif
-> >
-> >  /*
-> >   * __unqual_scalar_typeof(x) - Declare an unqualified scalar type, lea=
-ving
-> >   *                          non-scalar types unchanged.
-> >   */
-> > +#ifndef USE_TYPEOF_UNQUAL
-> >  /*
-> >   * Prefer C11 _Generic for better compile-times and simpler code. Note=
-: 'char'
-> >   * is not type-compatible with 'signed char', and we define a separate=
- case.
-> > @@ -45,5 +147,103 @@
-> >                        __scalar_type_to_expr_cases(long),             \
-> >                        __scalar_type_to_expr_cases(long long),        \
-> >                        default: (x)))
-> > +#else
-> > +#define __unqual_scalar_typeof(x) __typeof_unqual__(x)
-> > +#endif
-> > +
-> > +#endif /* !__ASSEMBLY__ */
-> > +
-> > +/*
-> > + * __signed_scalar_typeof(x) - Declare a signed scalar type, leaving
-> > + *                          non-scalar types unchanged.
-> > + */
-> > +
-> > +#define __scalar_type_to_signed_cases(type)                          \
-> > +             unsigned type:  (signed type)0,                         \
-> > +             signed type:    (signed type)0
-> > +
-> > +#define __signed_scalar_typeof(x) typeof(                            \
-> > +             _Generic((x),                                           \
-> > +                      char:  (signed char)0,                         \
-> > +                      __scalar_type_to_signed_cases(char),           \
-> > +                      __scalar_type_to_signed_cases(short),          \
-> > +                      __scalar_type_to_signed_cases(int),            \
-> > +                      __scalar_type_to_signed_cases(long),           \
-> > +                      __scalar_type_to_signed_cases(long long),      \
-> > +                      default: (x)))
-> > +
-> > +/* Is this type a native word size -- useful for atomic operations */
-> > +#define __native_word(t) \
-> > +     (sizeof(t) =3D=3D sizeof(char) || sizeof(t) =3D=3D sizeof(short) =
-|| \
-> > +      sizeof(t) =3D=3D sizeof(int) || sizeof(t) =3D=3D sizeof(long))
-> > +
-> > +#ifdef __OPTIMIZE__
-> > +/*
-> > + * #ifdef __OPTIMIZE__ is only a good approximation; for instance "mak=
-e
-> > + * CFLAGS_foo.o=3D-Og" defines __OPTIMIZE__, does not elide the condit=
-ional code
-> > + * and can break compilation with wrong error message(s). Combine with
-> > + * -U__OPTIMIZE__ when needed.
-> > + */
-> > +# define __compiletime_assert(condition, msg, prefix, suffix)         =
-       \
-> > +     do {                                                            \
-> > +             /*                                                      \
-> > +              * __noreturn is needed to give the compiler enough     \
-> > +              * information to avoid certain possibly-uninitialized  \
-> > +              * warnings (regardless of the build failing).          \
-> > +              */                                                     \
-> > +             __noreturn extern void prefix ## suffix(void)           \
-> > +                     __compiletime_error(msg);                       \
-> > +             if (!(condition))                                       \
-> > +                     prefix ## suffix();                             \
-> > +     } while (0)
-> > +#else
-> > +# define __compiletime_assert(condition, msg, prefix, suffix) ((void)(=
-condition))
-> > +#endif
-> > +
-> > +#define _compiletime_assert(condition, msg, prefix, suffix) \
-> > +     __compiletime_assert(condition, msg, prefix, suffix)
-> > +
-> > +/**
-> > + * compiletime_assert - break build and emit msg if condition is false
-> > + * @condition: a compile-time constant condition to check
-> > + * @msg:       a message to emit if condition is false
-> > + *
-> > + * In tradition of POSIX assert, this macro will break the build if th=
-e
-> > + * supplied condition is *false*, emitting the supplied error message =
-if the
-> > + * compiler has support to do so.
-> > + */
-> > +#define compiletime_assert(condition, msg) \
-> > +     _compiletime_assert(condition, msg, __compiletime_assert_, __COUN=
-TER__)
-> > +
-> > +#define compiletime_assert_atomic_type(t)                            \
-> > +     compiletime_assert(__native_word(t),                            \
-> > +             "Need native word sized stores/loads for atomicity.")
-> > +
-> > +/* Helpers for emitting diagnostics in pragmas. */
-> > +#ifndef __diag
-> > +#define __diag(string)
-> > +#endif
-> > +
-> > +#ifndef __diag_GCC
-> > +#define __diag_GCC(version, severity, string)
-> > +#endif
-> > +
-> > +#ifndef __diag_clang
-> > +#define __diag_clang(version, severity, string)
-> > +#endif
-> > +
-> > +#define __diag_push()        __diag(push)
-> > +#define __diag_pop() __diag(pop)
-> > +
-> > +#define __diag_ignore(compiler, version, option, comment) \
-> > +     __diag_ ## compiler(version, ignore, option)
-> > +#define __diag_warn(compiler, version, option, comment) \
-> > +     __diag_ ## compiler(version, warn, option)
-> > +#define __diag_error(compiler, version, option, comment) \
-> > +     __diag_ ## compiler(version, error, option)
-> > +
-> > +#ifndef __diag_ignore_all
-> > +#define __diag_ignore_all(option, comment)
-> > +#endif
-> >
-> >  #endif /* __LINUX_COMPILER_TYPES_H */
+> > -             if (is_bpf_image(event->ksymbol.name)) {
+> > -                     dso__set_binary_type(dso, DSO_BINARY_TYPE__BPF_IM=
+AGE);
+> > -                     dso__set_long_name(dso, "", false);
+> > -             }
+> >       } else {
+> >               dso =3D dso__get(map__dso(map));
+> >       }
 > > --
 > > 2.56.0.542.g3ef89b7020-goog
 > >
