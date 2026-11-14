@@ -1,47 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794689172;
-	b=Br24Dg/UjC9wf2IYqsctBjSciz3wNa6FllREABtCb2JuN4DGwYZJJXByAaui/zfB2y51
-	 +m5cTKlSlVYPQ1PDcrIeHHOsn7WVXFgxecuf1h4N0Asff1FCZw7rhoe4gMvp1BvFugrXE
-	 uPMWG+i1PzBEBmsMo9nI0U0DLdWULsIzFp+hdnptKhuOlUsomRbUSvel7Efl6qUgz84wl
-	 MR8lbi4tzSyik8bdi5+yd8/rBFlppvEvhEtt9VmTRmkh1hq/53+zzkmKhJ6bDpPUDs6yz
-	 FbzMsALV2JgVbGy90pufjXZZeUYEO8ulAG3X70GS5Md1B++nY89+TEI+xkepjcX4UUQ==
+	t=1794689913;
+	b=MZhUv7rpqZTbFCeymbb3t5rGmfOsU9StmSL9AnLy+s0o7WB5G2YLrkUoDufA6+G+aseD
+	 1CEr6EHNwVQWO9Cq8rpaYgS6Irqe3FPaSV4bBNaZPvKlF0SQ5gSfn/Sg3qXZM2SGeIAu5
+	 sSoFgaObNw5qiJiT+BCby91kuhh7J8EEDxMh7x1piYOAVKA6OYkgu0XcEqXFdmYYUCElE
+	 qeZl6LPyg1YbDJmnq0frqBM9YmnNiC7fve7baHhkU7DsJF9ovgeHTH909cmd4oL4tlWV/
+	 3lWpPTv6PV1uge6mj0tjBrcT9/ofZk2a5GYrs7rGOTsQSr6aCb2qlM8RxCfSSuRmK0Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794689172;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=TPRCWORSqF8ZjYcKMrEN1FixOiVWDLvhJDYEhpk+m5g=;
-	b=I7PZlgkGmSmisVF79ZXczWbqijMQDYExPOryBoLtj6qNyw43zDtPGaasQ0TOjqyWEdWe
-	 dgZ+4QqmKnRugFuUQL+e6Aqciyuc4Xtu0qKXhYynNxN1cZmG43FAFwpLlR/NSrbYc5td4
-	 rbC0h5Q5rnRj2gx3eTUAe+8uBBv00b0ySsDsxjk8kRPyzRIXhVv3tr9nLesrTnB4hgBAi
-	 0IFabmBz6MBdJftErGAjCR2nQB9NcRhILL8cZpTVhY9WRgb9ISIeTJ7LbwahkLy67s6AB
-	 B7OjgvdBk5waGGU4Ff9Pf5Er+QbGDKIlmXNTr9Ch6eoetB+B7sQXMiQ60zdUj50XV8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794689913;
+	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=p8sA69clyuMHBtVgMFHobbbcfk1WWAj1HgbHgwO8ICc=;
+	b=bc+GxzsH4h7epKxHmu6p9Sg1GO5zmHtMa6uxe7n5WmQagHkNWOcqpzimIBqsdx2Ixgl9
+	 ej0UohACpUDrH6T5jwouX/PUIZorE5Ga9idvk3aBFkB0zNhHq0zi1HCgtfqMS1sQRp4Lv
+	 Q6UAo7qBypdl64u1vkH2I+EPp4PixHA3ep0dEGKkRS/R3SgrALjzyrpd0DBOiQ0HOlR0a
+	 ZHPmewpxYR8oegE9Mweh8gav1taGVQ4NXV+RvTOwPiu5Ql3n17X0Re1/UVmWLPn1Eitc2
+	 I6eySITa0g45lTS7Mzn8Piw2Ejh14NHfgWhIjBoVwbmN90jDZNFNImnJ6wDBcuhOirQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VlTmiNCQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=alien8.de;
+	spf=pass smtp.mailfrom=alien8.de;
+	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=WBGE2QbX;
+	arc=none smtp.remote-ip=65.109.113.108
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A8A606A331;
-	Sat, 14 Nov 2026 20:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45058606A329
+	for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 20:58:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45058606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VlTmiNCQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D0F1F000C4;
-	Sat, 14 Nov 2026 20:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794689170;
-	bh=TPRCWORSqF8ZjYcKMrEN1FixOiVWDLvhJDYEhpk+m5g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VlTmiNCQR8Rx93B+APIqwf+sbbdYCT8jmE9sKo2Wc0iQ5NVywQDvtuqiDcZcs5faG
-	 ZTyy9kJyXogpOOhBlp0StBtbLPtiJbjseeQFaqh1wQndyO3lCjVkjacnyhcv+5LUBG
-	 eUok3bye0KWPOtrJN6S/CcB0UT9l97eI5MWK4bV9ayAZAo6e169DmILZqx3iQvsnYq
-	 xLNq2+8ZgIV+kVzcoLqoDzgOsjFw+Gi9x1IZ1sIYUXxprAauPDcDSnP/rAhHvVLrmQ
-	 ZwWbh0OFGvR80ibhJKV4DODsM/LLXFnfSveMA3IHyshDOVMHnHV0dOur7qfYVfNlUy
-	 QF/SsRx941KqA==
-Date: Sat, 14 Nov 2026 13:46:05 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
+	dkim=pass (4096-bit key, unprotected) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=WBGE2QbX
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0968440E0255;
+	Sat, 14 Nov 2026 20:58:26 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id gn7jUe7z44Gq; Sat, 14 Nov 2026 20:58:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1794689902; bh=p8sA69clyuMHBtVgMFHobbbcfk1WWAj1HgbHgwO8ICc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WBGE2QbXYH2H/WaGisAPvaSw1M8JF+a3j6UbFCsulz3fxgrN2KtlEvf3Jn2zSpF6u
+	 flc5O3ivtf4aCYTd+/MlbZDu/7xREfugzQ9xEngsFEYaxwkvlWzWOgelklSpxwhmgu
+	 NKoMOqoW48VT31nJXUF2SNw0ah03SFA47o0cx3YfuxF25BxH49cnxysHwv/FeS4RCf
+	 VZaRv70jrozkd86UWe29KxQYWzlZ49fuHBjVlZSgYtxcnyjerl/lO4cYs4zyHJAkzs
+	 lTo26A+m7NjrpTQJdu2pBNAenGRY707E7LMKRKZ/4/QqG5cr6GFGNdETrj3u6xhJ1z
+	 WMyYGfH3DL2QNHODOjw54bMUCt5n3uuynN1gJy8MgyJMmfn72XTCZRnR5wSdhCOebm
+	 6MebRUxBLnx2D9FeVhCtLVOD+hKEbC2Gkc6upsYURi+i4vNRNu36sYLkE95Fdi63KR
+	 zBNevyVPXR2kVS4FMCAfZ/tnwyA6wu+woXlWG3tvoVgkHc9FPOOiHlhgioc5Okna8U
+	 lBoI5X0fbDc81IFDHdr5l5w+RI13a/A3T5Gy0tY7muGSERaugUViav/w5vFhhnFh/4
+	 Cn9Eqwv+vKmiyndo9pSvswwWuXoZDBnofupYXHk8/iZCxzQLRPHaToq9i0cLCq47pn
+	 eC0lpXCDGwSOvaJu3M0N3lNY=
+Received: from stx.tnic (unknown [209.52.143.85])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2C57F40E021B;
+	Sat, 14 Nov 2026 20:58:10 +0000 (UTC)
+Date: Sat, 14 Nov 2026 12:58:06 -0800
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
 	"H. Peter Anvin" <hpa@zytor.com>,
@@ -51,9 +74,10 @@ Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
 	llvm@lists.linux.dev, stable@vger.kernel.org
 Subject: Re: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
  non-x86_64 hosts
-Message-ID: <20261114204605.GA173332@ax162>
+Message-ID: <20261114205806.GCavjLXgsKNNwK0zLz@fat_crate.local>
 References: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
  <20261114202524.GBavjDtC9Z3j7PrV3Y@fat_crate.local>
+ <20261114204605.GA173332@ax162>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -63,31 +87,26 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261114202524.GBavjDtC9Z3j7PrV3Y@fat_crate.local>
+In-Reply-To: <20261114204605.GA173332@ax162>
 
-On Sat, Nov 14, 2026 at 12:25:24PM -0800, Borislav Petkov wrote:
-> This looks like a whack-a-mole-y fix to me. Especially if the other arches
-> would have the same problem.
+On Sat, Nov 14, 2026 at 01:46:05PM -0700, Nathan Chancellor wrote:
+> No other architectures provide an option to turn on '-march=native' like
+> x86 does. It all lives within arch/x86, so I would just be adding a
+> check to arch/x86/Makefile instead of arch/x86/Kconfig.cpu. Making the
+> option unselectable seems like a better option. If other architectures
+> did want to add this option, I agree generically abstacting this check
+> would be reasonable.
 
-I made that comment more about the different architecture
-implementations in the clang driver but I guess it could apply to the
-kernel as well. However...
+Are you going to move it somewhere generic when other arches decide all of
+a sudden they love the native thing?
 
-> So wouldn't a more generic fix checking
-> 
-> 	native arch == target arch
-> 
-> somewhere in the makefile be better?
-
-No other architectures provide an option to turn on '-march=native' like
-x86 does. It all lives within arch/x86, so I would just be adding a
-check to arch/x86/Makefile instead of arch/x86/Kconfig.cpu. Making the
-option unselectable seems like a better option. If other architectures
-did want to add this option, I agree generically abstacting this check
-would be reasonable.
+(If it were me, I'd simply whack that native thing. It is such a waste of
+energy).
 
 -- 
-Cheers,
-Nathan
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
