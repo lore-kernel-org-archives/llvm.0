@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794653098;
-	b=jygM42jFxtGQuu9sT+5W/bl3VFeTM5wtnzHUnp8dHOq7ulCrI4Oexx6B8KmTFegyRgn1
-	 J0mWhecIonhyZXDei/xZMKx9wPN4HKvlFEbdNV8urhgwKKa2klcxKybux/bAi1+w5jxfA
-	 SZnRAYILr9spcpO+5zYduXBoSGuOsbkoDUmbVuoDBAHo7kV98AwSp6bR0eUKih4utiQCx
-	 mORYxZ0LFJMfh7xkcSMwI3qL4z/Jk/gtQQg2IQC7jRJl7zyiTlfRVJR/TxcsE9m26Kvi+
-	 wYZ0HqG+/cp68+6ilEkV0uiNzJw1BD2E0kZ6pmGpWoesVdDbUw3BnmUB5NIiUiLAPIA==
+	t=1794653100;
+	b=qmB+1+vRHT2X9b1/UpaVC4vZEQUGqAbiP/md4Rz5bQu+6Y4gG/gSXmLQALBnI2Lod7a7
+	 IE2888br+AUiQYpL8WS+fITc6NMjYZ8ldci8eIqkrSsWzlEbdMSVkZ5B7a/4ekwEFSZv+
+	 tGcOUEx0P+QkUgMEIfzJe9fyCBiDHKzm7QHaaZRKCz525V6CnX7WI5YWyN1PlY0xdds+U
+	 JS2kQvK2SowK/RC65YIkeyE7TKzZGplIXW3nrgJo63LCQmJU8Ogjaglx9XKXQjEPeO5wC
+	 8pKa0bYHG+oH7PQjn3FqyWojF9tS5WXf/C+BYz+SH165A7UzKY66zXQL3jteOuWEruA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794653098;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794653100;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=geHgxObFWVvRZemosAYU/Jzp3fHhQwXYyeBLmeYyX4s=;
-	b=TSkldTtv8BJFUoXwXkFBNXItXzEUq/yJFaBkQq/58SoTYW1EGBAdMTrk/x+JHuBbyJml
-	 tdFuCc6owoU3lQI7Rc2EbHRztxQrUWRx4TtGzWk8J2pupyaZT8WMdYbuVFanLXLdLRbeY
-	 Mk8vFl6CMKTQCzNFf6a1Wsi7ocQwTwzGj8EwXVT+7VEJ0VfszE9GydZh1BP2NzyU9c4R5
-	 a4ItYQWOb8w60Yl4H7yXo63QeFhJ9YDOdW7yC/pZHGjGRl50JdY6rOIx/+FntYrmOcZM4
-	 h4NH4pyypb/g/ZOV6b2Hufu2fgAu4+c4b6Od9xX6y8m6rz/Xur8/McHuz1nhMdixVCQ==
+	bh=tAo6nikI8vemEGEz0TkkBtn52WiIVtD7jF6kIst+qVE=;
+	b=oxYaPaQRgVbJ0o9/9hfQ/A57FN4bxZZU5oApQ9KiiXqcmSyMBpKvk9qIuqT7pm3oRriq
+	 Q5iYTIbVVC6ad/9KLBBMjEZg72Ow9vaqEKSmXRqlp1DQ7w5BqeuJ3deFtIE6SVyx5dKmv
+	 IargQNeLUrsNm8TomrLmpF6W6U5/iky4j1FcxwWswmyyy6Bu4TG6hzhgXGB9ci20mCfRv
+	 BjapHv7OyYjSYZcGfY+tXtCvqWR4JM4UcTF/WEvQgdli7PPhBekhRhYkGNRy26317HAo1
+	 6GtNyhy2yAvfbwPZdV1In+9gKJph3OW/ddj4kIr3pSt4Jd6uG29hWuvpFWftzcLY8XA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gDpy1UnC;
-	arc=none smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZnuOctqA;
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE381606A8B0
-	for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 10:44:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE381606A8B0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A1A606B950
+	for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 10:44:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4A1A606B950
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gDpy1UnC
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a5b2be99a8so11622145e9.2
-        for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 02:44:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZnuOctqA
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a3517554f7so23206435e9.2
+        for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 02:44:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794653096; x=1795257896; darn=lists.linux.dev;
+        d=gmail.com; s=20260707; t=1794653098; x=1795257898; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=geHgxObFWVvRZemosAYU/Jzp3fHhQwXYyeBLmeYyX4s=;
-        b=gDpy1UnCDecFV12547DbNVeEFY38LoEJqAQ/kJKaV6gEyhQ2DAFvJaMSzLoSoFTfuo
-         7syl1Gf4DoV4+BzUf33/P9iRvEqDi1M78zznfj1uYdrjekZuzdNDlhRe/l8eMIso2oZd
-         jULPlUPsyBo5h4YbFwjWKAaICYWaW0QIwgc0T8FmP2H/Yjqm3dMrqBTiirf3/+jhuT6V
-         GSFMmWLEMY7O7MpldvJtszqxU7IO5m3m+viWJg33fLeSdTGzI8X1BFkEzpX1xU0VLsh0
-         qKqUsDXpDjb4QYJ/p9vwwo2zFjQCB8uI/jX4cXzhEfV3v9EqoJOzmm1xAZ/ew2/fPO/1
-         bWqQ==
+        bh=tAo6nikI8vemEGEz0TkkBtn52WiIVtD7jF6kIst+qVE=;
+        b=ZnuOctqAXM2/3zV9LTjl2He5G4flISpyR7Cjqx0KQdvbfHt6A6FZpd3/mzB21j+ul1
+         C8Y0iNUqjPlGk6AKhBdCBAPbQ1joDCgS8DF5Uh18gx4/peH3fyZTtkQaxgw31Ga2yjJV
+         i/K/tim9VYkiUHlx7OUkDDVuVo3mIPC7L26ftCkWuoBafKXo3xTwZkPGjKRgjE5kyE1E
+         1a4GCU5MSKOTCLqxmymtqItP8rAgl+10mqJGpyEY7iNc0OalqlawC5y/GzurWYkldI8/
+         tZFUwo0MxNrvw9yJYRp8YyyNIxb+V6GJ2tE6gYc5hX1/pAXn+Uf1sqXLLKT6KwA0RZ5z
+         yRFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794653096; x=1795257896;
+        d=1e100.net; s=20260707; t=1794653098; x=1795257898;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=geHgxObFWVvRZemosAYU/Jzp3fHhQwXYyeBLmeYyX4s=;
-        b=kwYeWI49mIgRb079OXD3nvK2vppUNqWylA/CFH9aZm4/YeA58nc1uEekOkl9Rkf1Z8
-         Bfla9y6z1/ZO/fb5rCku9uMTP4gfZLZTzo4FxfOPcekOwwULRSQdEA0BQyegNloL0ktc
-         /vNf6g8FFuurVul8pVNtKiCANVKRweVKCEBcWvO5bGfQP6qN6kWgoMExFrAIHgCuHY73
-         yUtkeG9CTwHrDV6FUB1hVKLHMnes1a9+7zIQwbkqR4XutbGXWwgUIlnqV+odlqMoomiu
-         VUQaWkPizPbH71I1oH55l87m+P3pAQQlMHE2PtxCFKsrc8MdcpK9dCZJg28x+SwgoFtw
-         68GA==
-X-Forwarded-Encrypted: i=1; AL+hErExambu5Q+Jy2dNrmxcVEnOcd8FS0OK8ZCNXAZlcvbSTz28O7csndz+55TDjLAOoMGdvfrW@lists.linux.dev
-X-Gm-Message-State: APuU4Z/JdTuyIWpOCn9wan6NCtfjiwBT7Cn5uXtNIQrTotnK1d4GSN9b
-	X3ycNfzvJZdsyNIsce5fCY3RAG+erRErbSbNB3tSdwMCyeKENbyAxY7Y
-X-Gm-Gg: AYBFou1XWFVtoKUD3/oObiLaJBvLIZbLxKcHT04VGl5UbJ3XjC+MRvdRBeYas4qS2IA
-	aYLM8HKxQZw5Jp7u040yeqgBBOWBiHTMBw4tVv7akQj0e6wsqYGkLEuXs/cK80XVZTQucWqdfHm
-	XAAWTjDpt0J1q3hMIj9442Geqwz4Lx03g7M4ecWACdmOp+6NLXc9IIoLbB6npxyk0AE7ayOR1s0
-	aOGjQxg2LYIkruF2twOTZ7VEvhd7sgqLxd1/wJC2ELxzQztCdMq6fykLTK8c2eGVFNdidzsX3ut
-	Y7tVML0NFgfXGcj6LxD3YSWhm+TVJt9mEBcK6CG4ViYeOuT6N+/gcJZoCBgqrhNcCUHxKOBFHUt
-	bB1UHcM9tLaw/odRylF6VmJ1+S1pm+ceWfWR8oDNMwa6xEn9OGZsPql8otu4B+AtcbfDv/4Ympw
-	p8OMEuPP2t7LYUkDFRFhdmv7h0skThh+O/45FPsq/aodNiGJXNN7g1fJzhS/A2zRoaT5S2n7/vy
-	RqdCcRTd4yMMZ0Gd00lktoqm9M6QI9VLvMS/pNcf+zJObjKq6k6x80dpfgDPtc5z+rvMwgTauRD
-	2iLVJh3T691W9kkcB7puMy12zzagD/KMRKT5gGv+iQgIQNRQA8pk6x8FK3NqT8yPCAduk0zBsp7
-	qWDvcXwZ/+ByfDBQ6juFQP6GWN5EMA0CLNg==
-X-Received: by 2002:a05:600c:4e8e:b0:4a3:59c9:a743 with SMTP id 5b1f17b1804b1-4bb55a8faffmr109717835e9.27.1794653096148;
-        Sat, 14 Nov 2026 02:44:56 -0800 (PST)
+        bh=tAo6nikI8vemEGEz0TkkBtn52WiIVtD7jF6kIst+qVE=;
+        b=GArQo4Ijmc4KkzST3unW2FjFtxlCy8hs/rCvcpOKXAR73TajNTzYd4eedjCj7C6XmP
+         39FpOiR809M43LZ4Jhg9SRLViiY7PNHyt/MLHVqylyHJ15FTcrfVZ1SryUtLQSKd4Q9g
+         GkLKsv6U4kAmB4h3Z9d4qc+w+qoF+UhcO8ofyu9A+kWtWYze2x6QwcZWijwgo7NKZDgy
+         V3gU0uxOcUJxyho20+7K3TM47Fexi7OCDB6zvl/XIiAzWvRqTzID6MqTym/mptLnBphF
+         RFXCZVOoe9csYc/K22dZyNXAvGYnlfwHB6wdnOAU7m0zgGAeFWRscgjp5NgPPYHYA0y9
+         PjBQ==
+X-Forwarded-Encrypted: i=1; AL+hErFu7AutQIMaKsVc008cG8FbuWRoW5W3uPhfShkGe5tZXgeMtA1zDMI87kBVHz6+8ldu03cC@lists.linux.dev
+X-Gm-Message-State: APuU4Z/94qbhy6I7pzmFugJeMhOU6VwthJIoYd4pAcmGOEO+O56aEk96
+	H/H7FkXk+bbVX/ONN/+Nwx5rCLKDI0DIStjpYJVdEDcM3h56umYtuhdg
+X-Gm-Gg: AYBFou0EzYS+PYLyndS4PU9BRI3Vn1fkD6EmJPcsJhXusCAfcHiaG2WYrUDl3F2yYSi
+	oMNXb8fDXP5s26iZgExxt9huuTRPYkytrtdl4RZH+hULUZ7odosejo1RVdUyV2RTgec95ooYGC1
+	LX5xhxrXxhktL9vfi6H+2ry/WtN5XQplMKyjK/H/cGx++gWhxNb8asiuvWHMBmDKhpJ1BFr0M6H
+	nUYCJG4DUG3Ep8kCeV+68AmwRluV6X5IUfw+2mDZvp39b8Q/bvkBWN+e1QWfigS0nqie1efX2wu
+	yi+aP14YkVfo3AsHNKhnCFSlk1v6VhJpyGFJsiDuvHovyfCyIgJBUPlJur+l+AQR2PQ4yGENYw4
+	j54Y0XisWhSfBBt1tlCbkfLTVJMFGZGd8lof536vo6Or3CmAT64/OStM3lYJEieOvBaqpqF720E
+	HHYjkAZD977gJcXbfm03CFiRZifJahBYXy/O6pNsxfZYXtd3xeFCfkEDG4OsWdjAnlpIyJMbTKA
+	6mxdELFaIrLpeJAQ3+7KgT8iCnDc0l2BxwOKbDBaZqw0AF2bgHMxUo1RKFUuo//N+x01IcthyoK
+	4uPe9xKx+GuNFjfaCojzgR/AnOIN2X2PnQTgYu0BM4dtOBnnf4EtQZpgUvGhdUinZMjoc1QXGgr
+	6HqSk3S5d6VSB2BA2bF48TX2iRFrM8+V0Ow==
+X-Received: by 2002:a05:600c:34d0:b0:4a2:5ca:767f with SMTP id 5b1f17b1804b1-4bb559f3737mr101333915e9.4.1794653098050;
+        Sat, 14 Nov 2026 02:44:58 -0800 (PST)
 Received: from Ansuel-XPS24.localdomain (93-34-92-103.ip49.fastwebnet.it. [93.34.92.103])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4bb56719391sm52858285e9.1.2026.11.14.02.44.54
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4bb56719391sm52858285e9.1.2026.11.14.02.44.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 02:44:55 -0800 (PST)
+        Sat, 14 Nov 2026 02:44:57 -0800 (PST)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -109,9 +109,9 @@ To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH net-next v20 11/15] MAINTAINERS: add myself as PCS subsystem maintainer
-Date: Sat, 14 Nov 2026 11:43:50 +0100
-Message-ID: <20261114104426.235620-12-ansuelsmth@gmail.com>
+Subject: [PATCH net-next v20 12/15] net: phylink: add .pcs_link_down PCS OP
+Date: Sat, 14 Nov 2026 11:43:51 +0100
+Message-ID: <20261114104426.235620-13-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261114104426.235620-1-ansuelsmth@gmail.com>
 References: <20261114104426.235620-1-ansuelsmth@gmail.com>
@@ -126,34 +126,88 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-List all the files of the Ethernet PCS subsystem and add myself as
-maintainer.
+Permit for PCS driver to define specific operation to tear down the link
+between the MAC and the PCS.
+
+This might be needed for some PCS that reset counter or require special
+reset to correctly work if the link needs to be restored later.
+
+On phylink_link_down() call, the additional phylink_pcs_link_down() will
+be called after .mac_link_down to tear down the link.
+
+PCS driver will need to define .pcs_link_down to make use of this.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/net/phy/phylink.c |  9 +++++++++
+ include/linux/phylink.h   | 12 ++++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 893b0670a7b6..44c116f6cfd8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10033,6 +10033,15 @@ F:	include/uapi/linux/if_bridge.h
- F:	include/linux/netfilter_bridge/
- F:	net/bridge/
+diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+index 2bf7a1ecebd6..11f03f985c2d 100644
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+@@ -1044,6 +1044,12 @@ static void phylink_pcs_link_up(struct phylink_pcs *pcs, unsigned int neg_mode,
+ 		pcs->ops->pcs_link_up(pcs, neg_mode, interface, speed, duplex);
+ }
  
-+ETHERNET PCS SUBSYSTEM
-+M:	Christian Marangi <ansuelsmth@gmail.com>
-+L:	netdev@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/networking/pcs.rst
-+F:	drivers/net/pcs/pcs.c
-+F:	include/linux/pcs/pcs-provider.h
-+F:	include/linux/pcs/pcs.h
++static void phylink_pcs_link_down(struct phylink_pcs *pcs)
++{
++	if (pcs && pcs->ops->pcs_link_down)
++		pcs->ops->pcs_link_down(pcs);
++}
 +
- ETHERNET PHY LIBRARY
- M:	Andrew Lunn <andrew@lunn.ch>
- M:	Heiner Kallweit <hkallweit1@gmail.com>
+ static void phylink_pcs_disable_eee(struct phylink_pcs *pcs)
+ {
+ 	if (pcs && pcs->ops->pcs_disable_eee)
+@@ -1756,6 +1762,9 @@ static void phylink_link_down(struct phylink *pl)
+ 
+ 	pl->mac_ops->mac_link_down(pl->config, pl->act_link_an_mode,
+ 				   pl->cur_interface);
++
++	phylink_pcs_link_down(pl->pcs);
++
+ 	phylink_info(pl, "Link is Down\n");
+ }
+ 
+diff --git a/include/linux/phylink.h b/include/linux/phylink.h
+index 418e8bec311d..e8c3f693336a 100644
+--- a/include/linux/phylink.h
++++ b/include/linux/phylink.h
+@@ -528,6 +528,7 @@ struct phylink_pcs {
+  * @pcs_an_restart: restart 802.3z BaseX autonegotiation.
+  * @pcs_link_up: program the PCS for the resolved link configuration
+  *               (where necessary).
++ * @pcs_link_down: tear down link between MAC and PCS.
+  * @pcs_disable_eee: optional notification to PCS that EEE has been disabled
+  *		     at the MAC.
+  * @pcs_enable_eee: optional notification to PCS that EEE will be enabled at
+@@ -555,6 +556,7 @@ struct phylink_pcs_ops {
+ 	void (*pcs_an_restart)(struct phylink_pcs *pcs);
+ 	void (*pcs_link_up)(struct phylink_pcs *pcs, unsigned int neg_mode,
+ 			    phy_interface_t interface, int speed, int duplex);
++	void (*pcs_link_down)(struct phylink_pcs *pcs);
+ 	void (*pcs_disable_eee)(struct phylink_pcs *pcs);
+ 	void (*pcs_enable_eee)(struct phylink_pcs *pcs);
+ 	int (*pcs_pre_init)(struct phylink_pcs *pcs);
+@@ -690,6 +692,16 @@ void pcs_an_restart(struct phylink_pcs *pcs);
+ void pcs_link_up(struct phylink_pcs *pcs, unsigned int neg_mode,
+ 		 phy_interface_t interface, int speed, int duplex);
+ 
++/**
++ * pcs_link_down() - tear down link between MAC and PCS
++ * @pcs: a pointer to a &struct phylink_pcs.
++ *
++ * This call will be made just after mac_link_down() to inform the PCS the
++ * link has gone down. PCS should be configured to stop processing packets
++ * for transmission and reception.
++ */
++void pcs_link_down(struct phylink_pcs *pcs);
++
+ /**
+  * pcs_disable_eee() - Disable EEE at the PCS
+  * @pcs: a pointer to a &struct phylink_pcs
 -- 
 2.55.0
 
