@@ -1,100 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794676291;
-	b=n02Rsh7u02Y9m2vbgP2iELRM71rWv7XbWawS5jFcC+BIRGRFC4ZgcVyMMnOrMpTdjU0E
-	 XQKG8zEaITzfSgHlecRWYBvK4EG3+aO+XoLVnYW6C4OUZR/TAYSzCttq6jsp7zQfmqxzS
-	 uhg8Ca9LWbHZ0dYfQEGEl4AsQ3LRQISPpIeyjxYVHW4IzcqM2G068qPbRxBBqZ2613HRS
-	 JlJ7N06ttP3MH28euvjIBeJhbJRq3S6SIvVDw7ozQ5MejFPcatjFqXiAE8qZ8cI+zaxKo
-	 dFzTXJfsen3a37nAHjzcvfKviucAQzw3lKQ2yqbeTfmPLdZ5PNMrAHnxZ49Qhr0//OA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794676291;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=VSOfGERFH4pEDKWamyJaLP62gyGxpA0Ka4pqh6Z9BNk=;
-	b=NltG2fuIT7cmbua+ZaIuXBW6hAiLxIYwnheI+LCYpcRVsgA+n05hPrHaVuzu8BAS33II
-	 U8TbMEE9yypMec7cwP7nIAyG2Wb7JvMG0743ao9HWoSbQGzMDEsUJzX3rEw1CGGkdxyfX
-	 /855VID25qQoDbg4fYnhCkGJMkd8kYs7BOMy6tr3aD9QW06S8ukMUDX/u0Faa/u7mSvpX
-	 CMVQ86HJRvW9uAyz05/cvCi35nVQhiZVX41u8Lagp5jFMGUOnX8FJTcyesdpXuBeJ5BDc
-	 pj8+e84WNXRlmEhElLq87GNKPmIvf6oOBErTARYhMyC020pOchv1jChI1x4NpdS2RQA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ydiZVToZ;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.47
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794687948;
+	b=a3XUegE2lVhq12etdhXMflDb8V8hkMywg/QiMQVdkFAie3I/LwmgOQyRtKTecbvpjRNH
+	 wrxo/oQ0b2i+2nLeohKc/mbzDb0UKdMhU1oJv3dYj0NKxe+ZwdFXi3Kq0y1eH95fOSFHh
+	 DPN9lmT6j5Z7GkMNsUM5fsLYI7lobMWhd6yyQtoMJVfzZ5LD1ayueZ9o4LdDseplELFyb
+	 v9rJpJdryC9h0qPGmxQWO3rdqbv5gdD20aPrx+Pq2GGz5gFxMox+JLpqT7rNPlcJbcrG8
+	 Uy4UP5luTphgvTRSHVKHTBaU6xYG2c1F2d887dXNJA3tcsgNxlVs6WBSH/F5G22vvxw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794687948;
+	h=DMARC-Filter:Received:X-Virus-Scanned:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=vRrAXztdODnH1CKdqe/Log9jwTdTF6QE5zhsHAVoEhY=;
+	b=u2uZziPVUNZ854GWD30d9B9u7adE5yl6D8FPCyJ7eD90YQaqhAtrQUlliobEqF7CeYjk
+	 BFGU3kgjdpcV/upTWLWsxwUX0PmhY8zS+7S41G8L9I26wtVwWtyYIkyz6+ny/0dkonhBj
+	 kvoVA9nAPT3M1TD5+rYB2HOhgo62Q57REKGScMwmTbvf53WkgK6C7OAdn1volAxDLe8ji
+	 eR07bTBOKEKIG0qSc5AQsXdLYDGQi+QFhwtI0Fup7T6mGXM9mqL8VcRiqM+Juo1fBRFeW
+	 59ycOJ9Ce4f2MOWfmPRJZSH3X/pLlB32Ahz46xGK+84XBTlxWCX8xs39upRiB2QqQYg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=alien8.de;
+	spf=pass smtp.mailfrom=alien8.de;
+	arc=none smtp.remote-ip=65.109.113.108
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70691606A329
-	for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 17:11:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70691606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ydiZVToZ
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-67bf3c6654fso2119119d50.1
-        for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 09:11:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794676290; cv=none;
-        d=google.com; s=arc-20260327;
-        b=p7/NLBbPwc/PQysSZDUmpwd7aCoC+297gxRvLFVxdt1Sh1AzwD9W6f/0sBaEyE5BYF
-         usmBFY6GOeCscEl2exCxhm4BN21xJvTxyTUzMGlCi96nsAfGncX2GPvwaIjnUwmXPK/x
-         a23//q0PaFfHisHXCwi7OmESRE2ut/PjLuaxiYvoDa+yMv1tmyDU0gLeLBW5TcZQQJYh
-         KmPAjhYq7wXFChQNDY6jyB9OyaepLTV4Rn2mcDOY4fFxwsEq+mi+XY3wfoDrgtDkStgj
-         uy46OUm5QPbZpYiiZpjnc/bV9lxeueHlyKaUukhCxhtZppYXyrz8a9vtmLD+TILcqIqI
-         zcgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VSOfGERFH4pEDKWamyJaLP62gyGxpA0Ka4pqh6Z9BNk=;
-        fh=F5booKSVN5SMvnnqQV+1bwlWUU4KSIMzTaexjcDT3sI=;
-        b=J+FWNG4ARRcEv1JrGe7q2dlHDPC37D7xa9tpkKsrrYxEHfnZSZfFlyJLo5axVRRzMb
-         Z+gxbWymGTBaHUmYcZZL8ZjroApxF+MiGnqhhKAVx++tZKwrjDKOLswfIONrKjXl1RrO
-         zy0dQd+oTx1LEPIQShoUVlT1/+dv32VdmorJ/NHx5WE/0dsLIenpIkAKmvO83sPWdMKV
-         QpA1WEGY/K6jNvRDjI28fxv5uZeMfMCQXz98/n5g82Uya0e/sb7q2FZIIWPbFqlo9moL
-         nCpBIcfmWrQAf+v46hwnHT6QZXMCeqx48DCdpKsj7M1Ae9RXRqR4jVDbrwOxWTzgOOIZ
-         2IJA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794676290; x=1795281090; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=VSOfGERFH4pEDKWamyJaLP62gyGxpA0Ka4pqh6Z9BNk=;
-        b=ydiZVToZ4xUf7GGhA1Ovw7st/Gt2G8lPSXpLWFImf1MoLtmOz9xQ37XZ7t5/iaEQwH
-         r5e1bB/tusrnR0GE+wWyMyLSTqO6psbbamTflyglvjIVEie7sDQ8mVCix6QvbT7hJ1VW
-         5eDQtfUvRAr4MqalhmRw2sS8VFPuskwcFfN4AfMaJelJc1BPc+S8r71xEPqp/09UEKoa
-         IFdKIdG59dA5gbtVIxCok20+zKnA80OfBlcgjpJJxXYiy6Ik/AeBGIquIEPGOX+8AHq6
-         wJnUHciSBnuUgjDzZRjh4C5msvksNrB3n70YlOwmUUAo0xuJbxsU8xLcpnCh2zKMe6SI
-         pIIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794676290; x=1795281090;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VSOfGERFH4pEDKWamyJaLP62gyGxpA0Ka4pqh6Z9BNk=;
-        b=bPexiTZt9M8Fbq+IPJACpCk2k5U5ujILE5WpcH76AbO72K4Zaxnou27lA8dC5U8vRj
-         RNsfLjuRcEjNnWJA8BRs/w5zVY37+1A0mVa9DGlEtlH37kyS8KBJ4KJf1XU7Lj4Q3ohR
-         LDKxIpI+81Tr3wZm14WI89On9wUbREWDcHK/GXVYFWm/Rx6oNXsvVremxt1DAs5QHqtN
-         ZEhbO+es9pTlZW/RBUir17YmdppVI4Hb+m0zYtRMUWIlc+RNkw9o8NS7nRYNTjyTYoLd
-         SF6oNjRlpyEKF0rs5iT4LpWUfIf8XGWgfIS1CiOJENZA3obsM7lEp2G6qRl4bWSheCt+
-         0rvw==
-X-Forwarded-Encrypted: i=1; AL+hErEYc8xmzixyb5zOp6KGcbhRAvvbgxkC4EF4Td0qRFDLie6Gm4iEdg3bihBSjafReEnj1mKc@lists.linux.dev
-X-Gm-Message-State: APuU4Z8hPYliiIlO8NEbaAwk3Fot/dVbpRc0KblvgXfBTwTysaV/iAsD
-	9etGb6VBRk6GPm5MJmyhtXjR0YGt4m8ywufb2MdQY6mATl3FDsLHLZvPHlO7BjN94uIXS6o7W4i
-	eBhgxAjtSAepgg19rkgqvrCR1ws/st3NtWVLU
-X-Gm-Gg: AYBFou3UB8OanXYF9hcAiycnhCYAiBNuo6b6uJBm28XGnZGCyyYLLi3MwrdoiDToEpi
-	Opfilut1wm0zBALmBFpD1fJE6Coiy6PqGvQBWjrHWJ29YJSvyTvQT/QfQ2Oy6u9oKqR8RjyP8e+
-	YDSPJ28G+8aS8FqMbbANpokX2czym4bC0/QmbacUUB8emTc9k048GNo6lP207URjsi4SHgzxaxK
-	5fUqIq7IjDqk+CXcYLCKLHn1jKfuZTRXGm4KUz4P4rWNyHK2S6HpDUxMxfkD8VaCOHoz/CnDJg4
-	iYOBLZrZ2g00EYkDFNICrHFpRS7Gq+xBO+IYE4obZAdJ2GMIAv2L5uMGVDhpI5Gexw8xGwq1aEj
-	Xn9aP0g8U6GceePQnvnxVfJ4XKwXhREgSbk34Lu8=
-X-Received: by 2002:a05:690e:4845:b0:674:981:a937 with SMTP id
- 956f58d0204a3-67d8972f1eamr2440317d50.121.1794676290257; Sat, 14 Nov 2026
- 09:11:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1797E606A329
+	for <llvm@lists.linux.dev>; Sat, 14 Nov 2026 20:25:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1797E606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 881E540E0140;
+	Sat, 14 Nov 2026 20:25:44 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ixGd063xhOPR; Sat, 14 Nov 2026 20:25:41 +0000 (UTC)
+Received: from stx.tnic (unknown [209.52.143.85])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 23FAF40E021B;
+	Sat, 14 Nov 2026 20:25:28 +0000 (UTC)
+Date: Sat, 14 Nov 2026 12:25:24 -0800
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
+ non-x86_64 hosts
+Message-ID: <20261114202524.GBavjDtC9Z3j7PrV3Y@fat_crate.local>
+References: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,37 +66,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261104133158.3187525-1-luolongjuna@gmail.com>
- <avZ9Ku61M8z-2axF@jpoimboe> <CAKL4jwXA4OBVLFGAP4DWw6i9d5bneU=Ur=D58FnrssOt7ygm6A@mail.gmail.com>
- <avdWz3m2YJnlGgnS@jpoimboe>
-In-Reply-To: <avdWz3m2YJnlGgnS@jpoimboe>
-From: Longjun Luo <luolongjuna@gmail.com>
-Date: Sun, 15 Nov 2026 01:11:19 +0800
-X-Gm-Features: AclHuK8SkhxY4RW-7U4DuqAnwzbj1NmDVqMiHao8193oK5xeW2NzqHxvET-tpi0
-Message-ID: <CAKL4jwXicjF4xJR0HSK7X49gUqp3df1_sGF9KBmeTKGeE_uwVw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 00/11] objtool/klp: DWARF-based cross-build symbol correlation
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, 
-	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, 
-	justinstitt@google.com, live-patching@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
 
-> Thanks, that makes sense, but for upstreaming I think we will need to
-> take a more iterative approach, even if it ends up causing some
-> intermediate patches to be obsoleted by later ones.
+On Fri, Nov 13, 2026 at 05:31:34PM -0700, Nathan Chancellor wrote:
+> When cross compiling x86_64 from an aarch64 machine using clang with
+> CONFIG_X86_NATIVE_CPU enabled, there may be a slew of warnings from each
+> .c file, which makes it nearly impossible to find real issues.
+> 
+>   '+crc' is not a recognized feature for this target (ignoring feature)
+>   '+fp-armv8' is not a recognized feature for this target (ignoring feature)
+>   '+lse' is not a recognized feature for this target (ignoring feature)
+>   '+neon' is not a recognized feature for this target (ignoring feature)
+>   '+sha2' is not a recognized feature for this target (ignoring feature)
+>   '+sha3' is not a recognized feature for this target (ignoring feature)
+>   '-rand' is not a recognized feature for this target (ignoring feature)
+>   '-sme' is not a recognized feature for this target (ignoring feature)
+>   '-sme2' is not a recognized feature for this target (ignoring feature)
+>   '-sve' is not a recognized feature for this target (ignoring feature)
+> 
+> Internally, clang expands '-march=native' into a list of target features
+> to enable based on the detected CPU. The x86 part of the clang driver
+> notes
+> 
+>   // FIXME: Reject attempts to use -march=native unless the target matches
+>   // the host.
+> 
+> which was first added by the initial '-march=native' support in clang in
+> 2009 [1] (other architecture drivers appear to have a similar problem).
+> 
+> Due to the lack of validation that the host CPU is an x86_64 CPU,
+> '-march=native' is expanded using the aarch64 host CPU's target
+> features, which are unrecognized by the x86 backend.
+> 
+> While this should obviously be fixed in the compiler, this does not help
+> currently released toolchains that have this issue. As a simple
+> workaround, only allow CONFIG_X86_NATIVE_CPU to be enabled when
+> targeting and running on an x86_64 host.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: ea1dcca1de12 ("x86/kbuild/64: Add the CONFIG_X86_NATIVE_CPU option to locally optimize the kernel with '-march=native'")
+> Link: https://github.com/llvm/llvm-project/commit/e13ada6a3b236f505b24501d456dec2518e4944c [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/x86/Kconfig.cpu | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
+> index 6e7a366f0798..4043b7227e36 100644
+> --- a/arch/x86/Kconfig.cpu
+> +++ b/arch/x86/Kconfig.cpu
+> @@ -216,7 +216,7 @@ config RUSTC_HAS_APXF
+>  
+>  config X86_NATIVE_CPU
+>  	bool "Build and optimize for local/native CPU"
+> -	depends on X86_64
+> +	depends on X86_64 && $(success,test "$(shell,uname -m)" = "x86_64")
+>  	depends on CC_HAS_MARCH_NATIVE
+>  	depends on !RUST || RUSTC_HAS_APXF
+>  	help
 
-Agreed. I actually got into livepatch through kpatch =E2=80=94 I guess I go=
-t a
-bit nervous and wrote the RFCs like papers.
+This looks like a whack-a-mole-y fix to me. Especially if the other arches
+would have the same problem.
 
-I'll follow up case by case within the current design. For cases
-klp-build leaves unsupported for now, I think documenting the limits
-would help patch authors and AI tools know what to check.
+So wouldn't a more generic fix checking
 
-The two RFCs can stay as background on another approach, for
-cross-checking and future discussion.
+	native arch == target arch
 
-Longjun
+somewhere in the makefile be better?
+
+Thx. 
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
