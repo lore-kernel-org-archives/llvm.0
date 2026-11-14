@@ -1,49 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794616301;
-	b=U4x7gIxvNfeSdW4Rrs5mBF30//Yimoz5cUNji+dmNfWtMQHSrKjSobGg14f9fTXAOO3A
-	 UIE8GPqxmzIFxROXNE3OmvHU2y2QzXlcrjrcOmJdaEgvy9/Js7I1yVeQOdh2GlS7XMfQo
-	 3y081cjN6WDGOs+e+ugjmI/l5dBVHxJluzYOy4q/XLcDMsZkhmU/Huzrn/+eVWgK8aXIP
-	 OEJXAJXwwNrgPt0j+bk4i15NzimAqJxwQO3ZzgUa6b2bg2hzb1qpP0lc+oB2cIxRo+80G
-	 Wv6nxYFqsZjUpcoUfFSipZyOsT0AjAGycuiEtMG7Acfv/G6mbuXTzbxxexLU7jNIXTA==
+	t=1794622966;
+	b=r/Ifrk3WHVaiUTAlpg/2k+4qE83/DOk71AN6y8Cm5rL2Y+XExkv55w2ml1fUcJKW46+F
+	 fBDp4TeUPETnG2ed2OjAxrmeMZpth4J5+L9EFqEV+SlTsey9kKi24SNi+0hLyC8dZUq+E
+	 hynIwvy/e1AThMdmEFsBPPb5goNi3nJvyRX6BZRjX9qfx10LekqnHgvMW3bCHCYYPvTk8
+	 BenvfnP4XMmYAaFOYR/rP9sFnx9KZy3bUIO6ZAEGlXX+ASOC1m+JTVadUvkCoyVD2zuHq
+	 zRqdoQkV7pO5LQ1fQTrgSJC2jMY55GQMkx0NOM9aaAeyn00b4SEwc9G0XKYdf7FMrfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794616301;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=nWFJU6jG2nUMaqkeyLP3XCyQiCaq/xk6DozgGya/SAU=;
-	b=fyQQ0h1M9Vkph7EQ4NRdI+B97AXnh1hI9JTMvtzfYOxXbQM+qeVdoZuvBrzN49qDNFiJ
-	 8auomO+zCAehsLG4MtRM/8p4r8WQTCbNvl/TZF09vQJQqG9hzSaD0URdUs2dLDw7MjKRL
-	 kFKtYDf+x9scESuqEIApRQzizVkzx8MxtDNq1Ffv1LW9NGIjvXsELkMZ/6LK298UMXmaA
-	 hy/EPXXX8lpL6V6fDyVt818xkN0BhZVVfYwGI68CHXUgbESrGFQm0ehx5SPIXGICrTEdu
-	 oOgOWcOp4d4nUgHPv2mUmtZzmNaAuHcLSwh4teXXiJsLHqKrb2F+qJY5qez2Y2+Pm/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794622966;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=KYH8GK+3gKCbe8AFviicg/gKMInfl4KxsgkMklQwI0I=;
+	b=Nm7SN5UuX0G+dsnNz599PQETxz/3YgPK7jJsRHhk2tgyVn+sn3UP/bff2v1J2ZBNdlxV
+	 5ZtQfdcWo986+K6zs8YWEB7N1b2xxuHOiX5GpOZyRbjFJpjlwNNMbJPYyIbIAMp5HKZqQ
+	 O71xwTnbEAG4Q+PEua5VGcAP4EpyIG8vWb6Q97TUbQ9slSuvnV85KbouykOEcdKdP6QV0
+	 hzbAw86gtuY3fkaMdryo2jKxZK3C6wMYaD8CAF7fan1PZLJuR/qzoQBZZs1QHAnOtXlYV
+	 DeZVrBxwf/M7bup8CZPF4UuTDGCLa2mcVZYmDeo2HCZLniy9psJ/tmkfom+goY2rR0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NMYaxWkO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=rMuN7IjH;
+	arc=none smtp.remote-ip=198.137.202.133
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAA1606A886;
-	Sat, 14 Nov 2026 00:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2CB606A323;
+	Sat, 14 Nov 2026 02:22:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F2CB606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NMYaxWkO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF691F000C4;
-	Sat, 14 Nov 2026 00:31:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794616301;
-	bh=nWFJU6jG2nUMaqkeyLP3XCyQiCaq/xk6DozgGya/SAU=;
-	h=From:Date:Subject:To:Cc;
-	b=NMYaxWkOsZ5OMtX2IWuSRS7ohG7e+p4s0tg5fR5BZ4XxHMPiaipIoELxuCioerXY4
-	 EGvAIcvR6vMXnGHMOEDUOQci62r5mSo3Rwfg2yN/Ds0H87ZG5ZKgrn2LJo5gmleD02
-	 tFnlAdcsSjH7besKfiMWJkB00RoYhWrrEMmZYx2KRwikBtNkuGrnOAdMhxZfNvtJb7
-	 +v9tIdkCEB4b/UBBmcTB6UQzkvMXf+9wosJ0nVTzfqmt53+ndo+bCEIdp08AyjTwuD
-	 xB66YqTxQlL0KOjEdm+amiLhkoXyUWVWc6cOb3owunZ5NsaP8jmK6a4HNT20B7QgSA
-	 XVyk/meUmfmSg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 13 Nov 2026 17:31:34 -0700
-Subject: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
- non-x86_64 hosts
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=rMuN7IjH
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=KYH8GK+3gKCbe8AFviicg/gKMInfl4KxsgkMklQwI0I=; b=rMuN7IjHqau/xc2v+L3+j7J4jB
+	17LlIfCgQ9gZKjdEwR0HXIgEkj3NXbY5xvNTsPXiBiBfWA7YMTlJ7vBYcuHX96ZzfRi0CTxMs86wl
+	szbPVi6oRy0+B+JhKwwaPFbRr0o0r2J9sBRAnfvxJ9HqKtDTT0ekYY8C0ExAavytJEuPy3UAsP/+H
+	jtp3ovKisKoc+9HBVJkeYRwch5zTVe0ensOeH+7US5c+8EmqjHPgOFqeEtk9N0MQMUEAjwUvcWpoB
+	UyCXCYk39aCtWB0QK+nkmZcnkxvlWVz0csE1AnKnDzudY0naphVcLgXLHfs6Kf163UQupHv8uGenu
+	cBJGZsIw==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xS3Pd-0000000F6qc-1hxV;
+	Sat, 14 Nov 2026 02:22:41 +0000
+Message-ID: <43fb0823-e3c7-4946-98f1-7d0b2b0a1f01@infradead.org>
+Date: Fri, 13 Nov 2026 18:22:36 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,93 +58,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/9] Documentation: ioctl-number: Add
+ PROCFS_IOCTL_MAGIC range 0x10-0x11
+To: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek
+ <pmladek@suse.com>, David Laight <david.laight.linux@gmail.com>,
+ kernel-team@android.com, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-modules@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-12-wusamuel@google.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20261113221248.3535369-12-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yWNUQqDMBAFryL73YUmkRh6lVIkxlW30E1JVATx7
- sb2c+bBvB0yJaYMj2qHRCtnjlJA3SoIk5eRkPvCoO/aKqUMbs6iRPz4FCYUP/NKGKUouabW1ui
- cNqarnW/6Bkrnm2jg7ffxfP05L92bwnyF4ThOEKG5RYUAAAA=
-X-Change-ID: 20261113-x86-no-march-native-on-non-x86_64-88233b48a7d7
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2878; i=nathan@kernel.org;
- h=from:subject:message-id; bh=eywPKAu/kU8DQhuF328zoSAitB85AxpSw0zyNWVg8h8=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFnfVz+f82PxgaNrppb4WrLuXaDId33OyXkvT4q3tc1/U
- x+q9jrnVkcpC4MYF4OsmCJL9WPV44aGc84y3jg1CWYOKxPIEAYuTgGYiEYdw3+3Euklt08v3unG
- f2v1xwbd6VtuW/H/1NjDtVvzvsUSC55rDP+MEgs4U1d+PPDB6F3Z49unRLnWdmn+3v9r6alNbfM
- Df/BxAgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-When cross compiling x86_64 from an aarch64 machine using clang with
-CONFIG_X86_NATIVE_CPU enabled, there may be a slew of warnings from each
-.c file, which makes it nearly impossible to find real issues.
 
-  '+crc' is not a recognized feature for this target (ignoring feature)
-  '+fp-armv8' is not a recognized feature for this target (ignoring feature)
-  '+lse' is not a recognized feature for this target (ignoring feature)
-  '+neon' is not a recognized feature for this target (ignoring feature)
-  '+sha2' is not a recognized feature for this target (ignoring feature)
-  '+sha3' is not a recognized feature for this target (ignoring feature)
-  '-rand' is not a recognized feature for this target (ignoring feature)
-  '-sme' is not a recognized feature for this target (ignoring feature)
-  '-sme2' is not a recognized feature for this target (ignoring feature)
-  '-sve' is not a recognized feature for this target (ignoring feature)
 
-Internally, clang expands '-march=native' into a list of target features
-to enable based on the detected CPU. The x86 part of the clang driver
-notes
+On 11/13/26 2:12 PM, Samuel Wu wrote:
+> PAGEMAP_SCAN (0x10) and PROCMAP_QUERY (0x11) use PROCFS_IOCTL_MAGIC.
+> ext4 uses the same numbers on other files, so mark the row as a
+> conflict.
+> 
+> Suggested-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
 
-  // FIXME: Reject attempts to use -march=native unless the target matches
-  // the host.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks.
 
-which was first added by the initial '-march=native' support in clang in
-2009 [1] (other architecture drivers appear to have a similar problem).
+> ---
+>  Documentation/userspace-api/ioctl/ioctl-number.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> index dbe462040999..fbc3537fc9ee 100644
+> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> @@ -248,6 +248,7 @@ Code  Seq#    Include File                                             Comments
+>  'f'   00-0F  fs/ext4/ext4.h                                            conflict!
+>  'f'   00-0F  linux/fs.h                                                conflict!
+>  'f'   00-0F  fs/ocfs2/ocfs2_fs.h                                       conflict!
+> +'f'   10-11  linux/fs.h                                                conflict! procfs ioctls (PROCFS_IOCTL_MAGIC)
+>  'f'   13-27  linux/fscrypt.h
+>  'f'   81-8F  linux/fsverity.h
+>  'g'   00-0F  linux/usb/gadgetfs.h
 
-Due to the lack of validation that the host CPU is an x86_64 CPU,
-'-march=native' is expanded using the aarch64 host CPU's target
-features, which are unrecognized by the x86 backend.
-
-While this should obviously be fixed in the compiler, this does not help
-currently released toolchains that have this issue. As a simple
-workaround, only allow CONFIG_X86_NATIVE_CPU to be enabled when
-targeting and running on an x86_64 host.
-
-Cc: stable@vger.kernel.org
-Fixes: ea1dcca1de12 ("x86/kbuild/64: Add the CONFIG_X86_NATIVE_CPU option to locally optimize the kernel with '-march=native'")
-Link: https://github.com/llvm/llvm-project/commit/e13ada6a3b236f505b24501d456dec2518e4944c [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/Kconfig.cpu | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index 6e7a366f0798..4043b7227e36 100644
---- a/arch/x86/Kconfig.cpu
-+++ b/arch/x86/Kconfig.cpu
-@@ -216,7 +216,7 @@ config RUSTC_HAS_APXF
- 
- config X86_NATIVE_CPU
- 	bool "Build and optimize for local/native CPU"
--	depends on X86_64
-+	depends on X86_64 && $(success,test "$(shell,uname -m)" = "x86_64")
- 	depends on CC_HAS_MARCH_NATIVE
- 	depends on !RUST || RUSTC_HAS_APXF
- 	help
-
----
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-change-id: 20261113-x86-no-march-native-on-non-x86_64-88233b48a7d7
-
-Best regards,
---  
-Cheers,
-Nathan
-
+-- 
+~Randy
