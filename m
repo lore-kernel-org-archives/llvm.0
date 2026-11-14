@@ -1,81 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794612890;
-	b=NLCGANEuXyRVMeRZBeWLpL6/xK1rK1Ytbn41Sq3A4JRZ+wOFTmthUCijWU+b1rIPGuSs
-	 zGW0nLOSQ1btolYkB7Zb2AwiulKZw5k1gMmHP42/E5MlN0NDjl7grg5rJ64XKxSviOf2/
-	 gp+d2iNNFDErz6plZELQybuafL+tw/g9AW9bxXExfQp+bk1fX4KuHehTKf9rAG0Bt7cC4
-	 xWAGO+RyG2ns0Tn49FjHoKJXvvTuQafRpkyMM3KD1x1qT0aAnTbD2QcCTA79i7nVFL/lM
-	 JfDlp14hANOBiKas8teBuoon47J3m9H/h9v8ay8v7zD0TiBxOSeNX15FN++0Opg9moA==
+	t=1794616301;
+	b=U4x7gIxvNfeSdW4Rrs5mBF30//Yimoz5cUNji+dmNfWtMQHSrKjSobGg14f9fTXAOO3A
+	 UIE8GPqxmzIFxROXNE3OmvHU2y2QzXlcrjrcOmJdaEgvy9/Js7I1yVeQOdh2GlS7XMfQo
+	 3y081cjN6WDGOs+e+ugjmI/l5dBVHxJluzYOy4q/XLcDMsZkhmU/Huzrn/+eVWgK8aXIP
+	 OEJXAJXwwNrgPt0j+bk4i15NzimAqJxwQO3ZzgUa6b2bg2hzb1qpP0lc+oB2cIxRo+80G
+	 Wv6nxYFqsZjUpcoUfFSipZyOsT0AjAGycuiEtMG7Acfv/G6mbuXTzbxxexLU7jNIXTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794612890;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=iKPyD0fcQHjU+nZY9PhDSccu4A7Tiq9IV5sts7cPeIc=;
-	b=nCXJ0elKYr2iYf7ymkb50lDF+pJQFTqT/vhvENc9O/F0FvSEuvgZ8hMJIlpTlhPW3deA
-	 tTYA54cdRmCXWPOPl/R8u1eahgqmjXP5VDyJzKD6nAfcWReiFPREOF+LKk8mI3MzYV+zO
-	 YS1fEmQZnSEF4f6eaYlJK1m8pFGbt3hu2Toca9bT7E5HnkJdm3esqeUfFJa+R3ifmNueE
-	 D/LGr7KBrW038S6X5mcRrVi1OYkJ8ZV9RrU7iPlp61nkUITJkBKD8JKwjOOXkE4CdLi8z
-	 EO+g2Jf3D59gcxqiZSqvb0Urt2+RZskIC2TPAAzmNnPOBf9dpCR8dkdMxtZ3TFyDBsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794616301;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=nWFJU6jG2nUMaqkeyLP3XCyQiCaq/xk6DozgGya/SAU=;
+	b=fyQQ0h1M9Vkph7EQ4NRdI+B97AXnh1hI9JTMvtzfYOxXbQM+qeVdoZuvBrzN49qDNFiJ
+	 8auomO+zCAehsLG4MtRM/8p4r8WQTCbNvl/TZF09vQJQqG9hzSaD0URdUs2dLDw7MjKRL
+	 kFKtYDf+x9scESuqEIApRQzizVkzx8MxtDNq1Ffv1LW9NGIjvXsELkMZ/6LK298UMXmaA
+	 hy/EPXXX8lpL6V6fDyVt818xkN0BhZVVfYwGI68CHXUgbESrGFQm0ehx5SPIXGICrTEdu
+	 oOgOWcOp4d4nUgHPv2mUmtZzmNaAuHcLSwh4teXXiJsLHqKrb2F+qJY5qez2Y2+Pm/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=I2ZgzY3t;
-	arc=none smtp.remote-ip=192.198.163.10
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NMYaxWkO;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B6C606A898;
-	Fri, 13 Nov 2026 23:34:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37B6C606A898
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAA1606A886;
+	Sat, 14 Nov 2026 00:31:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=I2ZgzY3t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794612889; x=1826148889;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oARI0lz8E8wlq5FlviYP9LbHzAMB8U71otiLJAe+IpQ=;
-  b=I2ZgzY3tFPhah1zvR6mWKt3nQMPowwdzDV3q9BSGzfTADVGs9foAWuHo
-   QobUBYCf3fs6gWGveWItOlHZ/eJkhm0Kfg9+NOxfaV9ynBzxaHwuubpxK
-   xXYHw06mnhrgqarpBN4JI4CljxJr4P43rWslc9zQr3OiA/E4kahbh7DY8
-   vApEUBq3ILzzSGRsq5iQaF4CJoShkqIZSuTHcRjjcxcVRua+6AFb8xcIR
-   Ch6ZHhzh7c8/Fajlh31O/HjvEnKguHNhU4SlxUp1qdrzqhHciheab29IE
-   eXkBrpWLFBbUfhjk4a15mrKzXQZWv8zwt21qX/S95oH4beeQE8srnxH5G
-   g==;
-X-CSE-ConnectionGUID: A9676raxSr+n/PRmz21s4w==
-X-CSE-MsgGUID: Oqv9FaAoSm+P7DKoJ3TgDA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11965"; a="3323682"
-X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="3323682"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2026 15:34:48 -0800
-X-CSE-ConnectionGUID: inmdYYaIS2mHAFqRoc1IIQ==
-X-CSE-MsgGUID: mrkHf29aQmGNu8K7Q9mq4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,212,1787036400"; 
-   d="scan'208";a="8925562"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 13 Nov 2026 15:34:47 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xS0n5-000000014Qh-2ylI;
-	Fri, 13 Nov 2026 23:34:43 +0000
-Date: Sat, 14 Nov 2026 07:34:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiangwu Lai <laixiangwu@cmss.chinamobile.com>,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, hugo@hugovil.com,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Xiangwu Lai <laixiangwu@cmss.chinamobile.com>
-Subject: Re: [PATCH v2] serial: sc16is7xx: Fix clock leak on invalid clock
- frequency
-Message-ID: <202611140752.jrPC8oJ4-lkp@intel.com>
-References: <20261113103855.2144-1-laixiangwu@cmss.chinamobile.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NMYaxWkO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF691F000C4;
+	Sat, 14 Nov 2026 00:31:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794616301;
+	bh=nWFJU6jG2nUMaqkeyLP3XCyQiCaq/xk6DozgGya/SAU=;
+	h=From:Date:Subject:To:Cc;
+	b=NMYaxWkOsZ5OMtX2IWuSRS7ohG7e+p4s0tg5fR5BZ4XxHMPiaipIoELxuCioerXY4
+	 EGvAIcvR6vMXnGHMOEDUOQci62r5mSo3Rwfg2yN/Ds0H87ZG5ZKgrn2LJo5gmleD02
+	 tFnlAdcsSjH7besKfiMWJkB00RoYhWrrEMmZYx2KRwikBtNkuGrnOAdMhxZfNvtJb7
+	 +v9tIdkCEB4b/UBBmcTB6UQzkvMXf+9wosJ0nVTzfqmt53+ndo+bCEIdp08AyjTwuD
+	 xB66YqTxQlL0KOjEdm+amiLhkoXyUWVWc6cOb3owunZ5NsaP8jmK6a4HNT20B7QgSA
+	 XVyk/meUmfmSg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 13 Nov 2026 17:31:34 -0700
+Subject: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
+ non-x86_64 hosts
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -85,138 +53,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261113103855.2144-1-laixiangwu@cmss.chinamobile.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yWNUQqDMBAFryL73YUmkRh6lVIkxlW30E1JVATx7
+ sb2c+bBvB0yJaYMj2qHRCtnjlJA3SoIk5eRkPvCoO/aKqUMbs6iRPz4FCYUP/NKGKUouabW1ui
+ cNqarnW/6Bkrnm2jg7ffxfP05L92bwnyF4ThOEKG5RYUAAAA=
+X-Change-ID: 20261113-x86-no-march-native-on-non-x86_64-88233b48a7d7
+To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2878; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=eywPKAu/kU8DQhuF328zoSAitB85AxpSw0zyNWVg8h8=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFnfVz+f82PxgaNrppb4WrLuXaDId33OyXkvT4q3tc1/U
+ x+q9jrnVkcpC4MYF4OsmCJL9WPV44aGc84y3jg1CWYOKxPIEAYuTgGYiEYdw3+3Euklt08v3unG
+ f2v1xwbd6VtuW/H/1NjDtVvzvsUSC55rDP+MEgs4U1d+PPDB6F3Z49unRLnWdmn+3v9r6alNbfM
+ Df/BxAgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Xiangwu,
+When cross compiling x86_64 from an aarch64 machine using clang with
+CONFIG_X86_NATIVE_CPU enabled, there may be a slew of warnings from each
+.c file, which makes it nearly impossible to find real issues.
 
-kernel test robot noticed the following build errors:
+  '+crc' is not a recognized feature for this target (ignoring feature)
+  '+fp-armv8' is not a recognized feature for this target (ignoring feature)
+  '+lse' is not a recognized feature for this target (ignoring feature)
+  '+neon' is not a recognized feature for this target (ignoring feature)
+  '+sha2' is not a recognized feature for this target (ignoring feature)
+  '+sha3' is not a recognized feature for this target (ignoring feature)
+  '-rand' is not a recognized feature for this target (ignoring feature)
+  '-sme' is not a recognized feature for this target (ignoring feature)
+  '-sme2' is not a recognized feature for this target (ignoring feature)
+  '-sve' is not a recognized feature for this target (ignoring feature)
 
-[auto build test ERROR on linux-review/laixiangwu/serial-sc16is7xx-Fix-clock-leak-on-invalid-clock-frequency/20261030-165507]
+Internally, clang expands '-march=native' into a list of target features
+to enable based on the detected CPU. The x86 part of the clang driver
+notes
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiangwu-Lai/serial-sc16is7xx-Fix-clock-leak-on-invalid-clock-frequency/20261113-183854
-base:   https://github.com/intel-lab-lkp/linux laixiangwu/serial-sc16is7xx-Fix-clock-leak-on-invalid-clock-frequency/20261030-165507
-patch link:    https://lore.kernel.org/r/20261113103855.2144-1-laixiangwu%40cmss.chinamobile.com
-patch subject: [PATCH v2] serial: sc16is7xx: Fix clock leak on invalid clock frequency
-config: powerpc-randconfig-1000-20261114 (https://download.01.org/0day-ci/archive/20261114/202611140752.jrPC8oJ4-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261114/202611140752.jrPC8oJ4-lkp@intel.com/reproduce)
+  // FIXME: Reject attempts to use -march=native unless the target matches
+  // the host.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611140752.jrPC8oJ4-lkp@intel.com/
+which was first added by the initial '-march=native' support in clang in
+2009 [1] (other architecture drivers appear to have a similar problem).
 
-All errors (new ones prefixed by >>):
+Due to the lack of validation that the host CPU is an x86_64 CPU,
+'-march=native' is expanded using the aarch64 host CPU's target
+features, which are unrecognized by the x86 backend.
 
->> drivers/tty/serial/sc16is7xx.c:1622:9: error: use of undeclared label 'out_clk'
-    1622 |                         goto out_clk;
-         |                              ^
-   1 error generated.
+While this should obviously be fixed in the compiler, this does not help
+currently released toolchains that have this issue. As a simple
+workaround, only allow CONFIG_X86_NATIVE_CPU to be enabled when
+targeting and running on an x86_64 host.
 
+Cc: stable@vger.kernel.org
+Fixes: ea1dcca1de12 ("x86/kbuild/64: Add the CONFIG_X86_NATIVE_CPU option to locally optimize the kernel with '-march=native'")
+Link: https://github.com/llvm/llvm-project/commit/e13ada6a3b236f505b24501d456dec2518e4944c [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/Kconfig.cpu | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-vim +/out_clk +1622 drivers/tty/serial/sc16is7xx.c
+diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
+index 6e7a366f0798..4043b7227e36 100644
+--- a/arch/x86/Kconfig.cpu
++++ b/arch/x86/Kconfig.cpu
+@@ -216,7 +216,7 @@ config RUSTC_HAS_APXF
+ 
+ config X86_NATIVE_CPU
+ 	bool "Build and optimize for local/native CPU"
+-	depends on X86_64
++	depends on X86_64 && $(success,test "$(shell,uname -m)" = "x86_64")
+ 	depends on CC_HAS_MARCH_NATIVE
+ 	depends on !RUST || RUSTC_HAS_APXF
+ 	help
 
-a5bb146502b22f Hugo Villeneuve     2025-10-27  1567  
-d49216438139bc Hugo Villeneuve     2024-04-09  1568  int sc16is7xx_probe(struct device *dev, const struct sc16is7xx_devtype *devtype,
-3837a0379533aa Hugo Villeneuve     2023-10-30  1569  		    struct regmap *regmaps[], int irq)
-dfeae619d781de Jon Ringle          2014-04-24  1570  {
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1571  	unsigned long freq = 0, *pfreq = dev_get_platdata(dev);
-2aa916e67db3e6 Daniel Mack         2020-05-21  1572  	unsigned int val;
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1573  	u32 uartclk = 0;
-dfeae619d781de Jon Ringle          2014-04-24  1574  	int i, ret;
-dfeae619d781de Jon Ringle          2014-04-24  1575  	struct sc16is7xx_port *s;
-cf9c37530fdabc Hugo Villeneuve     2024-04-09  1576  	bool port_registered[SC16IS7XX_MAX_PORTS];
-dfeae619d781de Jon Ringle          2014-04-24  1577  
-3837a0379533aa Hugo Villeneuve     2023-10-30  1578  	for (i = 0; i < devtype->nr_uart; i++)
-3837a0379533aa Hugo Villeneuve     2023-10-30  1579  		if (IS_ERR(regmaps[i]))
-3837a0379533aa Hugo Villeneuve     2023-10-30  1580  			return PTR_ERR(regmaps[i]);
-dfeae619d781de Jon Ringle          2014-04-24  1581  
-2aa916e67db3e6 Daniel Mack         2020-05-21  1582  	/*
-2aa916e67db3e6 Daniel Mack         2020-05-21  1583  	 * This device does not have an identification register that would
-2aa916e67db3e6 Daniel Mack         2020-05-21  1584  	 * tell us if we are really connected to the correct device.
-2aa916e67db3e6 Daniel Mack         2020-05-21  1585  	 * The best we can do is to check if communication is at all possible.
-f6959c5217bd79 Hugo Villeneuve     2023-12-11  1586  	 *
-f6959c5217bd79 Hugo Villeneuve     2023-12-11  1587  	 * Note: regmap[0] is used in the probe function to access registers
-f6959c5217bd79 Hugo Villeneuve     2023-12-11  1588  	 * common to all channels/ports, as it is guaranteed to be present on
-f6959c5217bd79 Hugo Villeneuve     2023-12-11  1589  	 * all variants.
-2aa916e67db3e6 Daniel Mack         2020-05-21  1590  	 */
-3837a0379533aa Hugo Villeneuve     2023-10-30  1591  	ret = regmap_read(regmaps[0], SC16IS7XX_LSR_REG, &val);
-2aa916e67db3e6 Daniel Mack         2020-05-21  1592  	if (ret < 0)
-158e800e0fde91 Annaliese McDermond 2021-03-29  1593  		return -EPROBE_DEFER;
-2aa916e67db3e6 Daniel Mack         2020-05-21  1594  
-dfeae619d781de Jon Ringle          2014-04-24  1595  	/* Alloc port structure */
-84f1c5c0174ace Gustavo A. R. Silva 2019-01-04  1596  	s = devm_kzalloc(dev, struct_size(s, p, devtype->nr_uart), GFP_KERNEL);
-e0925b4a0417d3 Hugo Villeneuve     2025-10-27  1597  	if (!s)
-dfeae619d781de Jon Ringle          2014-04-24  1598  		return -ENOMEM;
-dfeae619d781de Jon Ringle          2014-04-24  1599  
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1600  	/* Always ask for fixed clock rate from a property. */
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1601  	device_property_read_u32(dev, "clock-frequency", &uartclk);
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1602  
-e8ed246ded863e Andre Werner        2025-01-21  1603  	s->polling = (irq <= 0);
-104c1b9dde9d85 Andre Werner        2025-01-10  1604  	if (s->polling)
-104c1b9dde9d85 Andre Werner        2025-01-10  1605  		dev_dbg(dev,
-104c1b9dde9d85 Andre Werner        2025-01-10  1606  			"No interrupt pin definition, falling back to polling mode\n");
-104c1b9dde9d85 Andre Werner        2025-01-10  1607  
-dd515504148c43 Xiangwu Lai         2026-11-13  1608  	s->clk = devm_clk_get_optional_enabled(dev, NULL);
-cb1b206cff461d Andy Shevchenko     2021-05-17  1609  	if (IS_ERR(s->clk))
-cb1b206cff461d Andy Shevchenko     2021-05-17  1610  		return PTR_ERR(s->clk);
-cb1b206cff461d Andy Shevchenko     2021-05-17  1611  
-cb1b206cff461d Andy Shevchenko     2021-05-17  1612  	freq = clk_get_rate(s->clk);
-cb1b206cff461d Andy Shevchenko     2021-05-17  1613  	if (freq == 0) {
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1614  		if (uartclk)
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1615  			freq = uartclk;
-dfeae619d781de Jon Ringle          2014-04-24  1616  		if (pfreq)
-dfeae619d781de Jon Ringle          2014-04-24  1617  			freq = *pfreq;
-a9226b472bbffe laixiangwu          2026-10-30  1618  		if (freq) {
-24bc6e68efa00f Andy Shevchenko     2019-03-18  1619  			dev_dbg(dev, "Clock frequency: %luHz\n", freq);
-a9226b472bbffe laixiangwu          2026-10-30  1620  		} else {
-a9226b472bbffe laixiangwu          2026-10-30  1621  			ret = -EINVAL;
-a9226b472bbffe laixiangwu          2026-10-30 @1622  			goto out_clk;
-a9226b472bbffe laixiangwu          2026-10-30  1623  		}
-dfeae619d781de Jon Ringle          2014-04-24  1624  	}
-dfeae619d781de Jon Ringle          2014-04-24  1625  
-dfeae619d781de Jon Ringle          2014-04-24  1626  	s->devtype = devtype;
-dfeae619d781de Jon Ringle          2014-04-24  1627  	dev_set_drvdata(dev, s);
-dfeae619d781de Jon Ringle          2014-04-24  1628  
-3989144f863ac5 Petr Mladek         2016-10-11  1629  	kthread_init_worker(&s->kworker);
-9e6f4ca3e567d5 Jakub Kicinski      2015-05-29  1630  	s->kworker_task = kthread_run(kthread_worker_fn, &s->kworker,
-9e6f4ca3e567d5 Jakub Kicinski      2015-05-29  1631  				      "sc16is7xx");
-dd515504148c43 Xiangwu Lai         2026-11-13  1632  	if (IS_ERR(s->kworker_task))
-dd515504148c43 Xiangwu Lai         2026-11-13  1633  		return PTR_ERR(s->kworker_task);
-dd515504148c43 Xiangwu Lai         2026-11-13  1634  
-28d2f209cd1620 Peter Zijlstra      2020-04-21  1635  	sched_set_fifo(s->kworker_task);
-9e6f4ca3e567d5 Jakub Kicinski      2015-05-29  1636  
-4fb92bdb8e84e6 Hui Wang            2024-06-18  1637  	ret = sc16is7xx_reset(dev, regmaps[0]);
-4fb92bdb8e84e6 Hui Wang            2024-06-18  1638  	if (ret)
-4fb92bdb8e84e6 Hui Wang            2024-06-18  1639  		goto out_kthread;
-43c51bb573aab6 Florian Vallee      2016-07-19  1640  
-cf9c37530fdabc Hugo Villeneuve     2024-04-09  1641  	/* Mark each port line and status as uninitialised. */
-dfeae619d781de Jon Ringle          2014-04-24  1642  	for (i = 0; i < devtype->nr_uart; ++i) {
-cf9c37530fdabc Hugo Villeneuve     2024-04-09  1643  		s->p[i].port.line = SC16IS7XX_MAX_DEVS;
-cf9c37530fdabc Hugo Villeneuve     2024-04-09  1644  		port_registered[i] = false;
-8a1060ce974919 Hugo Villeneuve     2023-12-21  1645  	}
-8a1060ce974919 Hugo Villeneuve     2023-12-21  1646  
-cf9c37530fdabc Hugo Villeneuve     2024-04-09  1647  	for (i = 0; i < devtype->nr_uart; ++i) {
-dfeae619d781de Jon Ringle          2014-04-24  1648  		s->p[i].port.dev	= dev;
-dfeae619d781de Jon Ringle          2014-04-24  1649  		s->p[i].port.irq	= irq;
-dfeae619d781de Jon Ringle          2014-04-24  1650  		s->p[i].port.uartclk	= freq;
-3837a0379533aa Hugo Villeneuve     2023-10-30  1651  		s->p[i].regmap		= regmaps[i];
-21144bab4f1191 Tomasz Moń          2022-03-01  1652  
-a5bb146502b22f Hugo Villeneuve     2025-10-27  1653  		ret = sc16is7xx_setup_channel(&s->p[i], i, &port_registered[i]);
-b4a778303ea0fc Hugo Villeneuve     2023-08-07  1654  		if (ret)
-b4a778303ea0fc Hugo Villeneuve     2023-08-07  1655  			goto out_ports;
-dfeae619d781de Jon Ringle          2014-04-24  1656  	}
-dfeae619d781de Jon Ringle          2014-04-24  1657  
-1a0a2a1e57aa8d Hugo Villeneuve     2023-09-27  1658  	sc16is7xx_setup_irda_ports(s);
-9eb90d57b55a0a Pascal Huerst       2020-05-29  1659  
-f6959c5217bd79 Hugo Villeneuve     2023-12-11  1660  	ret = sc16is7xx_setup_mctrl_ports(s, regmaps[0]);
-0499942928341d Hugo Villeneuve     2023-08-07  1661  	if (ret)
-0499942928341d Hugo Villeneuve     2023-08-07  1662  		goto out_ports;
-0499942928341d Hugo Villeneuve     2023-08-07  1663  
+---
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+change-id: 20261113-x86-no-march-native-on-non-x86_64-88233b48a7d7
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+--  
+Cheers,
+Nathan
+
