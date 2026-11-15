@@ -1,63 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794745904;
-	b=sxkvxZQuOdsOa+BSa0jQlECD/JJdRhE76lHxdauueIgxxKnW7b3ERA1IRA97ISwGwWim
-	 xRNSe8THu/C+q51rqBRe5z6lEeQs7TW7tcs0w1BgQ592SwuBWHCYyVclA4hMApAZauNiS
-	 qOR1JRYRxH4em/wYnPkFvQkxxqtdTLtrP6TosUgYPMzMrGBZkTQ1kyWDeqrOcOB4oHVyl
-	 d/Kvogskn5bhFxm8NsCvurA23wu9qtE5kMuSp8EkWNE0LAI/hkbLSvVmZwyJdqh07sMgr
-	 O1SueD99jBv/zxgPhYAv0FEPw/EMfvQVxF3hqVFt3hTUAFUEWK1Gdzx7nL20p6wU/Eg==
+	t=1794746202;
+	b=wdhuwPg5u0iNkGswsMn71B5bG/67r846p6Um9wLoAEGvgwNrziZBVSLPXW/ZZb/SIf08
+	 QbdBzV4/o3qNvkNbOYB7URSGp+kjdhhC8qKsooYmt1wLxR+/bqm8OeP/ZvaLAU48ary5T
+	 4FtWZLq8pFkAAGbhC6eNLMTzS8DWevDBhY8TV4aSZJcF+OFuKtckn08hcEdNrFB//oMsU
+	 nBPRsP/6u7woxSx9gVK4Tju+P0OritK2g8cm14MpkeLmt6Xz2QwloCHT7bPfCBnkSqv2x
+	 Exujbn9te9gtphx5IiNSEZs6Yu2wsJH9Kk7LuQQNIVxjZX4/Ls3gRCVWWLlxP9navFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794745904;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=GlevWmVgnm99xWVRUylqyXtiUrBDAyjJZv3w5J7mbDM=;
-	b=SBZBetw90DA85a/jsq5883gCeMybvKn0dC/erb/ePb9nAqOB2VuIuAGVXH67Iv/AFZiV
-	 GTo8RhwVK7wwip1EudZZHv7D2mnEYV1KlrSonG36MlyYcJOfSKsz+aQVpEx9GRlBX29d4
-	 SFlRK6VK+KDzD8+MXXsSsCo/gfNuOofbcLEtqABBGcalU6/r6CveyhC1uifve3X9QBVWL
-	 oEkk4v6kSpV/LYaQbIgq78Wv+NSaf811PF9tSsJADl2YSmcFZlpKnOaEvCkD+pPU/uq7k
-	 zQJHBd/moNTe11ydfkELk2A9LYbN1fkNF3s67IUX7Hu0NJXsbs3/bGsjFWAh+Sh/4Hg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794746202;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=CUXzAClohS4gZDLkyAO1P6r4f8IwXQ7NyaGsuPtk+zk=;
+	b=IEAz36nAzl8+WyrOqOGqkLqStiWKHn+aREsj+jlfwFdQT7PlIKGX96ZOzbKrzIPvQM5B
+	 AUAZCAMoadnpuD19NHQ7MZaz/uIWFV2MKnPnxwzZ11TPfgm6wHxj4/vznJv1jjTe4cDsL
+	 VYQhFqBXiPiHbwdaWGypQ07i0mhgHMId0+BmTEmfWPqn2ucF0q5E+v6+e6z+on7uwOZGR
+	 0PEM0QxivlSJ3WnF+lMAvR+XhB7ZgpwLAwn4nIbgeTpd6X+2D1EZWLJSY6j7Ibuh+NMkB
+	 2cxgem093zZuqVbL1S6J43JB/e+sMJH4X13wik6uS7qfgFCiU1y/xFpt6+uZzuRj33w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S7glPu0B;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="mOpF62/R";
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 757DA606A31A;
-	Sun, 15 Nov 2026 12:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE30606A32E;
+	Sun, 15 Nov 2026 12:36:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EE30606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S7glPu0B
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id E93171F000C4;
-	Sun, 15 Nov 2026 12:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794745904;
-	bh=GlevWmVgnm99xWVRUylqyXtiUrBDAyjJZv3w5J7mbDM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=S7glPu0BlJ7Vq+IWNILFSE3/hQnCsjmROKUgrsXtRCs3hC6cZL/GBusLuhKRKZ8+K
-	 Zpr07TzgPc7iA/anIH4DFuHa+O2Qrac02QGzfkuBO5KzgR4KIHP5z2THeqYo71Wacm
-	 tI6WjZnbmM7QSKY1/B8smjENxExr6EBraRFARAmzivrBR9iQSjAB5J735uZNx3Ycjw
-	 G3T6WBq5vR3SEPcC/YiOIwomIFwvuED3XlyvljHhJ7yuqfUhfhPVx5ayyXweIwmtZL
-	 SB9ERAHjw1AurnstMpVTE2y80Nvsp4Cbk/Nas4zqWspUXNCCJWB85LbWThevJrGi+h
-	 NmhUS2UQ6d0jw==
-Date: Sun, 15 Nov 2026 07:31:42 -0500
-From: Joel Fernandes <jfern@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>, rcu@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] rcu/nocb: Avoid unsequenced accesses to jiffies in
- show_rcu_nocb_state()
-Message-ID: <20261115123142.GA650613@joelbox>
-References: <20261114-rcu-tree_nocb-wunsequenced-v1-1-057996a86f0e@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mOpF62/R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794746201; x=1826282201;
+  h=date:from:to:cc:subject:message-id;
+  bh=He8fsfNVZP2bl/lUsH4P1NgWF5WYMoGd6TsyLJfC5pg=;
+  b=mOpF62/R7ZnUFquMOJg7K1Psr2sjmbZQbBjXx9GcH64QJWK6dwDsuIDU
+   UpmTn3PIClR2Wz75UtOlwbX6wWem1JHhJ85qyjsp0h5o0wcSP4DuBpvkP
+   vSbAmNsUyK8aM2Kccmz3wrVcScTvTfWKrRbw/zbHLDakk3PMxvC2rp55t
+   LmYOYuA6g0dQqG7jKbDbINPFU7j62vOJpTBU3OWzZCn/O3MKjvTSVOFag
+   QSs9P6D2TakVv9CuF6/6xXyu6Tm99AYBt5p5QhBEQGwqTvM7FO9IeucOf
+   bTRs96f9HKx5sxAVzM+FdJCHTr6g4u+/SMQOemODFAwdkGXpZdFZ6zGLx
+   A==;
+X-CSE-ConnectionGUID: jChOq1PpQTaqOlVjLun/IA==
+X-CSE-MsgGUID: 0cqW6Wo3QD6u0WDorFHQew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3413658"
+X-IronPort-AV: E=Sophos;i="6.27,214,1787036400"; 
+   d="scan'208";a="3413658"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 04:36:39 -0800
+X-CSE-ConnectionGUID: 9YXbVVHpTZ2t1Z/L0KXRAw==
+X-CSE-MsgGUID: fRASeZdiSXKSdDMFPaUGBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,214,1787036400"; 
+   d="scan'208";a="11102660"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa011.fm.intel.com with ESMTP; 15 Nov 2026 04:36:38 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xSZTH-000000016pS-1LgH;
+	Sun, 15 Nov 2026 12:36:35 +0000
+Date: Sun, 15 Nov 2026 20:35:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Pirko <jiri@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpirko-mlxsw:wip_attestation_all_2 61/68]
+ drivers/attestation/providers/sim.c:368:12: warning: stack frame size (1616)
+ exceeds limit (1280) in 'attestation_sim_mr_extend'
+Message-ID: <202611152010.EoqoqlKR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,90 +80,76 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261114-rcu-tree_nocb-wunsequenced-v1-1-057996a86f0e@kernel.org>
 
-On 11/14, Nathan Chancellor <nathan@kernel.org> wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], an instance appears in show_rcu_nocb_state(),
-> which can break the build with CONFIG_WERROR=y / W=e:
-> 
->   In file included from kernel/rcu/tree.c:5123:
->   kernel/rcu/tree_nocb.h:1651:3: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->    1650 |                 jiffies - rdp->nocb_bypass_first,
->         |                 ~~~~~~~
->    1651 |                 jiffies - rdp->nocb_nobypass_last,
->         |                 ^
-> 
-> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-> 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior. Per C11 6.5.2.2.10/12, the evaluation of arguments in a
-> function call is indeterminately sequenced, meaning any side effects in
-> the arguments are unsequenced.
-> 
-> Add a local variable to hold the value of jiffies before the function
-> call so that there are no unsequenced side effects, clearing up the
-> warning.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: f7a81b12d6af ("rcu/nocb: Print no-CBs diagnostics when rcutorture writer unduly delayed")
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2192
-> Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://github.com/jpirko/linux_mlxsw wip_attestation_all_2
+head:   7ff5e548abbc2312431d4eea9ad283347963a6e2
+commit: 8c87940832749279ae0ee5b91b280fff1d951737 [61/68] attestation: Add the simulation family implementation
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261115/202611152010.EoqoqlKR-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5dabc01bba1df10de6fb3c32fcf9db4aafe78f38)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261115/202611152010.EoqoqlKR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611152010.EoqoqlKR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/attestation/providers/sim.c:368:12: warning: stack frame size (1616) exceeds limit (1280) in 'attestation_sim_mr_extend' [-Wframe-larger-than]
+     368 | static int attestation_sim_mr_extend(struct attestation_dev *att,
+         |            ^
+   1 warning generated.
 
 
-Reviewed-by: Joel Fernandes <jfern@kernel.org>
+vim +/attestation_sim_mr_extend +368 drivers/attestation/providers/sim.c
 
-I will send it for 7.4 -rc.
+   367	
+ > 368	static int attestation_sim_mr_extend(struct attestation_dev *att,
+   369					     unsigned int mr_id,
+   370					     const struct ctlv_cursor *mr_options,
+   371					     const struct attestation_digest_set *values)
+   372	{
+   373		struct attestation_digest changed[HASH_ALGO__LAST];
+   374		struct attestation_sim *sim = attestation_sim_from_att(att);
+   375		DECLARE_BITMAP(extended, HASH_ALGO__LAST) = {};
+   376		struct attestation_sim_mr *mr;
+   377		unsigned long bank;
+   378		size_t index;
+   379		int ret;
+   380	
+   381		ret = attestation_sim_callback_enter(sim, ATTESTATION_SIM_CB_MR_EXTEND);
+   382		if (ret)
+   383			return ret;
+   384		guard(mutex)(&sim->hardware_lock);
+   385		if (sim->notification_pending)
+   386			return -EAGAIN;
+   387		mr = attestation_sim_mr_lookup(sim, mr_id);
+   388		if (!mr)
+   389			return -ENOENT;
+   390		for (index = 0; index < values->values_count; index++) {
+   391			const struct attestation_digest *value = &values->values[index];
+   392			size_t length = hash_digest_size[value->algorithm];
+   393	
+   394			for (bank = 0; bank < mr->props.algorithms_count; bank++)
+   395				if (mr->values[bank].algorithm == value->algorithm)
+   396					break;
+   397			if (bank == mr->props.algorithms_count ||
+   398			    __test_and_set_bit(bank, extended))
+   399				return -EINVAL;
+   400			changed[bank].algorithm = value->algorithm;
+   401			ret = attestation_sim_digest(value->algorithm,
+   402						     mr->values[bank].data, length,
+   403						     value->data, length,
+   404						     changed[bank].data);
+   405			if (ret)
+   406				return ret;
+   407		}
+   408		for_each_set_bit(bank, extended, HASH_ALGO__LAST)
+   409			mr->values[bank] = changed[bank];
+   410		return 0;
+   411	}
+   412	
 
-thanks,
-
-Joel Fernandes
-
-> ---
->  kernel/rcu/tree_nocb.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index b6cfee4e5039..8448a7c578e8 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1618,6 +1618,7 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
->  	struct rcu_segcblist *rsclp = &rdp->cblist;
->  	bool waslocked;
->  	bool wassleep;
-> +	unsigned long j;
->  
->  	if (rdp->nocb_gp_rdp == rdp)
->  		show_rcu_nocb_gp_state(rdp);
-> @@ -1639,6 +1640,7 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
->  		rsclp->gp_seq[RCU_NEXT_READY_TAIL].exp);
->  	sprintf(bufn, "%ld", rsclp->seglen[RCU_NEXT_TAIL]);
->  	sprintf(bufb, "%ld", rcu_cblist_n_cbs(&rdp->nocb_bypass));
-> +	j = jiffies;
->  	pr_info("   CB %d^%d->%d %c%c%c%c%c F%ld L%ld C%d %c%s%c%s%c%s%c%s%c%s q%ld %c CPU %d%s\n",
->  		rdp->cpu, rdp->nocb_gp_rdp->cpu,
->  		nocb_next_rdp ? nocb_next_rdp->cpu : -1,
-> @@ -1647,8 +1649,8 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
->  		"lL"[raw_spin_is_locked(&rdp->nocb_lock)],
->  		"sS"[!!rdp->nocb_cb_sleep],
->  		".W"[swait_active(&rdp->nocb_cb_wq)],
-> -		jiffies - rdp->nocb_bypass_first,
-> -		jiffies - rdp->nocb_nobypass_last,
-> +		j - rdp->nocb_bypass_first,
-> +		j - rdp->nocb_nobypass_last,
->  		rdp->nocb_nobypass_count,
->  		".D"[rcu_segcblist_ready_cbs(rsclp)],
->  		rcu_segcblist_segempty(rsclp, RCU_DONE_TAIL) ? "" : bufd,
-> 
-> ---
-> base-commit: 18b332441bbf59fa537929fe390238e137a6caff
-> change-id: 20261114-rcu-tree_nocb-wunsequenced-02d11678cf42
-> 
-> Best regards,
-> --  
-> Cheers,
-> Nathan
-> 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
