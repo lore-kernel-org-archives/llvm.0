@@ -1,88 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794767928;
-	b=2fnrwUyrtJweypEQdwvG5F5Nyl1y7Ei5kdfH3OR04VcTJxzkDHDJFETxjif0AJJYLDHh
-	 a6h5vFmov2BGa8hanU58KIyD3f3OW8bzvFIRgVX3QTGKaL33zxkDHZa0Aaai1xhughLjo
-	 QwgsF+kAs/TuAeln4cofUMi/eabYYtbIvMgwh1AinwvUT3TUgmuVZcmFbWYMvoCos27ml
-	 +1ErU7S41GNZbTQtPk2cL6qOYyw68vpN0tqtYyFn5rf9lvsYWRVfOhbW80rYyn2qptjHM
-	 OERDs6OhuPB2RbNyYFDeyjquPfC7UQy/E7l2d6pb6hxiKVRcbHbMoqLtjFDugG92QpA==
+	t=1794771545;
+	b=ht9e48ECeeIMNUqO+SRYsM/BmzBRrlj9HEetx5xgSeK9e1Pr9flttt4fE0Rj/X3byksg
+	 7Ig3hjz4aMw7jH/cmNiz9GPrDs/q+LLev7lZz2JnEW+CUukGFg1lplAfmWfjFu/5b8urH
+	 U8n7G/j56i2srEiI0eId/aDUoVHdF5Lq5MlopxZD0Z0YaOpZfdryHU98DNpux4hpy9q67
+	 jKfgsTZz/b2f0V7qLuh6vo99MI4AvSUkcVmAb1Yd4fErYQlU1Usy50QDBHraaLKiOADjQ
+	 3o8gPouYIMIByJ5oRcbL5/q7NcfYODzyPzEKAB2/fR8JJ9wB7E1k5fM7ggxZDtgruNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794767928;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=n38R8THVBERh6YX8fumxgq2SeV93NHDPiTWFfSKg6qw=;
-	b=bqph7EDaR5TrAL4j+0kL3veHBvdmOcH8zKd8nvUh8NvR4k6e+Ghxph5BFAmL+ko9aT6z
-	 1SurrVzieVWUsIV4AcOVvacmjZCk6Lmdj5b7a6i0zA8A77oFPY4uRTVAkd9QfMqKCzSQQ
-	 bke3qm2r8KG9QhDSIxNO2MXcOUaiy+TyHZh9zoQ4YmDhEzPjUIAiXmJYVSlEIro0eCkO8
-	 mw2GSTRot9aK/ybJJ84q8YiDARJqCh8Zx9B6GetjRT/5XeiOBEEANSQitGWfwwS/eFNPs
-	 s5X6SJ/m0cqKTfMxJUHZX9eqpgpulKNCUnsNd6HZsT4TK7ePY1Bwo5NGisuVFq4gBdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794771545;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=nhfeoYtF7WorX7zGjUIuskRdAMeUM/Fthys1xBCjJm0=;
+	b=nOxt/zB4e2MAd88yK2g6LfDYzNXqU2MvfapAk8CsotFrau6kNJE6jd2C4FpfLSoBibwx
+	 nwaFAItza7ciyuNcjDA1bqIGJj1ifKkikkjg/D8uztDgjs6+gGHXii6+23VYWCjUEAAOm
+	 +L3RdHRMjSmCGAEnCxxzffrq03qLuCrZPAh3pzKjNgf8XqddbUcxBz0RLyoLiBZWLYnrU
+	 D/wmyfYxkQ1qM01MKOW06kkeccG6Lp5+28SOPJA1C39o6iDqXs2416W6pwfljMUdzJgrz
+	 TcXduxZsgFgd4ym2bKWQVc5tcRIflntz2Vg5ZDx/KjVyYDUPmWY36P4PHOme6Bt9OtA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PWPpc8v9;
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dVa3kJOZ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E71606A32E;
-	Sun, 15 Nov 2026 18:38:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93E71606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179CA606A333;
+	Sun, 15 Nov 2026 19:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PWPpc8v9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794767928; x=1826303928;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ho9p6bSo8pi1QrenazGvesf4HhUNwYmhTsTzMNwIz5w=;
-  b=PWPpc8v9wuWuUQd/mGlRblIC6Z39upTInKfSshMXSibsdCxMwFctkljF
-   new8rJp0SjLEghvOHrv81o2O6Od4d7BVTOWWyqGS/L9w4yOvLokopvCoP
-   +s19EHL9IEiVu7vNfOukaFfJMvt8f3Ai1lmFShkJP+ZE3rfcovL+Qk4Lu
-   8cBEVQNruP7OfJEiz2a9imx4VB5x6mailoRjgG7es8lwNtAqxb7bWmJNn
-   Gr6elVwdu8icibNdjzjqYvdWv4uc7sknbRYIy0zypFje6vWyLF1g1FiLd
-   2WsL57KLKb0mWpRGBonidsJlrMe8LU1NN5hUYSqv/WCdy29RVmPUb8A9R
-   g==;
-X-CSE-ConnectionGUID: t3SrRrdKRquFjqv2QbY02A==
-X-CSE-MsgGUID: IupdkW33QCGV2XZMj+XaEw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3498587"
-X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
-   d="scan'208";a="3498587"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 10:38:47 -0800
-X-CSE-ConnectionGUID: xgioXYEnTiuMMwCr8er90g==
-X-CSE-MsgGUID: i+uioB1WQR2VnUR4b4a0wQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
-   d="scan'208";a="9372476"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 15 Nov 2026 10:38:44 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xSf7g-000000017C8-1yn4;
-	Sun, 15 Nov 2026 18:38:40 +0000
-Date: Mon, 16 Nov 2026 02:37:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, Guo Ren <guoren@kernel.org>,
-	Pekka Enberg <penberg@kernel.org>,
-	Patrick =?iso-8859-1?Q?St=E4hlin?= <me@packi.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-Subject: Re: [PATCH v4 2/3] riscv: probes: reject probes inside an LR/SC
- sequence
-Message-ID: <202611160252.d58noD11-lkp@intel.com>
-References: <20261115-probes-in-lrsc-v4-2-48b9b036bd1d@mobileye.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dVa3kJOZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8141F000C4;
+	Sun, 15 Nov 2026 19:39:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794771544;
+	bh=nhfeoYtF7WorX7zGjUIuskRdAMeUM/Fthys1xBCjJm0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=dVa3kJOZBz7IO1OByxjM4DlK62AKKz9Ka3JoFzukyf8Mtt0WvAaVeywOTe2Oxg/b8
+	 pJyd/Hcb01G5boe98nFycm5mUUClT8X7Ntu/1hFxdikFhRyhtf5j8ITJmO/TeBJjtn
+	 MllBZTZzBOIQzHQks6G53m4E5EztR9RrlaTTKls1hOvK+K0NTFkTZ0W9xoU+OfWydr
+	 ehuUkkZB4od/5R7m6mbCjNblOJ3ivYl6FVgGGrPUx9aJuPBpos7I+xoq6QBgkYsa+6
+	 gWd3jR4JLD89gS/0b1XfIfCvKSoESH/3bKWJJBKhwwBrXXZ7j6EIEV0axeTCYXQoLi
+	 8Uf7b4PEUNkjQ==
+Date: Sun, 15 Nov 2026 11:39:02 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
+ Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
+ Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
+ Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
+ <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Chris J Arges
+ <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
+ kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <20261115113902.4834dda6@kernel.org>
+In-Reply-To: <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -92,87 +88,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261115-probes-in-lrsc-v4-2-48b9b036bd1d@mobileye.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Vladimir,
+On Wed, 11 Nov 2026 01:07:46 +0000 Tianyi Gao wrote:
+> - On veth, an XDP program removes software GSO from the peer, limits
+>   its MTU, and can copy skbs from the peer.
 
-kernel test robot noticed the following build warnings:
+Could you remind us why you XDP_REDIRECT xdp_frames to the veth
+if you end up allocating the skb on the veth, anyway?
 
-[auto build test WARNING on c03c1a14507dfaf8b856c2608f9ac216021fc222]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Kondratiev/riscv-kprobes-fix-out-of-bounds-read-in-riscv_probe_decode_insn/20261115-143733
-base:   c03c1a14507dfaf8b856c2608f9ac216021fc222
-patch link:    https://lore.kernel.org/r/20261115-probes-in-lrsc-v4-2-48b9b036bd1d%40mobileye.com
-patch subject: [PATCH v4 2/3] riscv: probes: reject probes inside an LR/SC sequence
-config: riscv-randconfig-1000-20261115 (https://download.01.org/0day-ci/archive/20261116/202611160252.d58noD11-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ca14e3d05c4e63d6e8103945c86b958ed2f55d5f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261116/202611160252.d58noD11-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611160252.d58noD11-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/riscv/kernel/probes/kprobes.c:5:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:148:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> arch/riscv/kernel/probes/kprobes.c:75:4: warning: add explicit braces to avoid dangling else [-Wdangling-else]
-      75 |                         else
-         |                         ^
-   2 warnings generated.
-
-
-vim +75 arch/riscv/kernel/probes/kprobes.c
-
-    51	
-    52	/*
-    53	 * Walk the instructions from the enclosing symbol up to addr to check that
-    54	 * addr is an instruction boundary. Then reject a probe inside an LR/SC
-    55	 * sequence: the breakpoint trap drops the reservation, so the SC would fail
-    56	 * and the loop would hit the probe again on every retry. The sequence is
-    57	 * recognised by a forward scan with the constrained-sequence rules, as for
-    58	 * uprobes, so an lr that is not followed by an sc (as in __cmpwait()) does
-    59	 * not taint the rest of the function.
-    60	 */
-    61	static int __kprobes arch_check_kprobe(unsigned long addr)
-    62	{
-    63		unsigned long tmp, offset;
-    64	
-    65		/* start iterating at the closest preceding symbol */
-    66		if (!kallsyms_lookup_size_offset(addr, NULL, &offset))
-    67			return -EILSEQ;
-    68	
-    69		tmp = addr - offset;
-    70	
-    71		while (tmp <= addr) {
-    72			if (tmp == addr)
-    73				if (riscv_probe_in_lrsc_body((u16 *)addr, RISCV_LRSC_SCAN_BYTES))
-    74					return -EINVAL;
-  > 75				else
-    76					return 0;
-    77	
-    78			tmp += GET_INSN_LENGTH(*(u16 *)tmp);
-    79		}
-    80	
-    81		return -EILSEQ;
-    82	}
-    83	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I thought that was to let veth run its own prog before skb is allocated
+but you're saying that you want to avoid veth having a prog, so clearly
+it's not that.
