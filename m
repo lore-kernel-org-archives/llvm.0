@@ -1,49 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794716431;
-	b=jk3Cj2Arz59jNmtCdf4KPQjfolItE0XLRVbQNtFVk6Y8aWWFZ2HRpUXDiTKEojlQOrsl
-	 anP4OaOrxn/ABSEmB8Ri4QFP6QHxPeyc3FSO3aiHyrPI4VXe1vMZByoRN3dePVxQNHlOq
-	 48z3mypRYAu03qQtRjohAaf4LhoovOETt7Z7a/tMoOq/OgWGgi/pSTkNs0Dev3MVWNdeI
-	 BjwLdiPThO+n4193+2dH6qxKAmEbA0LNEq1u5zwnRniw0CsXGgH5+YhWrQeBNqid9xsA9
-	 kETB+oA0RYshlP3r/cHEwBHw9rCK0XJW+4Yq5PD7vA49B4BcbqhKlsnGielb9wSQ3pw==
+	t=1794716617;
+	b=CzBmuaolTQt87jLU+BSnhQci7639B2xZH/WhkVsgvlRkoaJ/TNCLZPoYvlvGnVPhVxo/
+	 xVRmhbmXYS2n0dypuA9K4x2KbWSQZTxsDcgLiwXmEINg664FAaX9N2Ev9/dGvSZ2PlNQd
+	 ZefmRTkGqGGJ4TpVoMZ02LGAGSyfABlGdkSX3pIe8tt6JizU2OY69bilT4BuBevw+4eA2
+	 nN5vJ/iPzhISLVYBQ8qju0at9g971yKD5tzqZGP4d5esfLFJb7tEAK04fqPuI24gvLVwK
+	 ZliZaaK0zN6Jrcg2sHksI7fuWWQXC/Foh/8RhJUpwyFDhoZgjnzoCCFgFMLe+RYPKJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794716431;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794716617;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=bvlsH/sbn+K2R4f7czn8STf5Bd21I+JO8/DeovfDxJ0=;
-	b=RcjXFYbWy9B2orSsU+Kjoeg6HcxVGvekfSZlTGlU304BEQBGmiAtzB74vZRHS3ZfF2j6
-	 n8f7+ACNXFM9HuB01+QUoegxsOoSnwu8eqYSSewKjoURKHmzrtjV3mFuY7Fi2qUi+qyOf
-	 eY/f4zakB5n1TVe+FGs5U6ArWxp6z6atOAY5PbJMpAKRMCswZeRPtwwSQojBkpYgxDVbb
-	 egKdruega0FrFBqbJ+DFJ7CMnEpnrVTxJl5Zo9JR0RQ7A782BVFhngjQ8e/C7tU4fm9eg
-	 3J/FpXqKBYS7HQdnYCwzKDMLHlXyBQGOHsYD7ARfCEah7UgGVJE6HOBSmjD5spTTP0g==
+	bh=A4I4qu/iwSH9El3GjPAfCR6Msrnw2D8e/uEUG113PAM=;
+	b=tLN7aPehvL1MjuBPEEMhg30KZsMa7Sqem5sKlu0CXi72mZVkw50h+y6aqEgUPTDvPLB/
+	 Syce++tBNISKEAxKCGe/hZwrTWTWRQ2sl/nheGenhcDGPf4MOE4nU0vXsyYNGY5/J6jky
+	 /sLWmQUKJo0gJfuD4Dx4qPZHcGLydVesY3+EDiwbaotDK8GFkXmMBm/07JWBEMrY0yTi6
+	 sVvXQb95P3+C2mB6fKqjyeVUcNidjxxuiICxr+K7aGgQt7gsnBTvLyCNl6u/m/uVocvmG
+	 rlNuTXiZnp5RfhVR1SnXzZ1xQ0yGbIoB08yJqb1Li0yWGXp+fh9An/AG24/GbD6QH+Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hU4MYkLZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jmC61Bve;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353EB606A323;
-	Sun, 15 Nov 2026 04:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C8C606A323;
+	Sun, 15 Nov 2026 04:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hU4MYkLZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C1D1F000C4;
-	Sun, 15 Nov 2026 04:20:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jmC61Bve
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38ABF1F000C4;
+	Sun, 15 Nov 2026 04:23:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794716430;
-	bh=bvlsH/sbn+K2R4f7czn8STf5Bd21I+JO8/DeovfDxJ0=;
+	s=k20260515; t=1794716617;
+	bh=A4I4qu/iwSH9El3GjPAfCR6Msrnw2D8e/uEUG113PAM=;
 	h=From:Date:Subject:To:Cc;
-	b=hU4MYkLZXw12HdHIP9yihXb3opRHpFwJbEwjWtexlAp1zvjAnPuUNqwutAW4UCHGR
-	 pTnK3vGMRfTlQnQkFWxMEUNy46wtoRU6D1EpfMhnJ+F9TjdeGHq4+b0Acweqxjzpq0
-	 GyjHEHELZe/Q+TWGc00FxF8pcC3bvk4tqkYYmyWPiGHohG5H/9ZBctmu48kVj5Vost
-	 JDEyw90VdlqEiv8qKBSRLi+VychXiy/EdEQlwhUoWzrtega0T0LjoADqKQwFStHDjN
-	 8hXN/UvNsuVBo8GXbePb/+OWdXGD4e4f6PSjmAyRrktOFh1A5Ln8B9zVJEdiujiN5E
-	 zvB7qoPaG4vSQ==
+	b=jmC61BvepYRA0P/xbjjR6VV829gwlfHqVed7ADgROAY47YEf9tYfqGlMHZ06ekpOA
+	 VpPy+u1tROFdvnB9BFm3y1lpVoeuQEaVPyeDwY/4/q41hQaZwS9Vt5p7NEnOVBeGGo
+	 ZavjeyUksnty3ZX/93Z3IwvrTpm2hE/uVGaMjDykn9VP3c4ZeNs7U96vO+61Ooqucr
+	 69om0NzX22WYgZp19IzMYNLRY7qddy+9D4/QLqCAXNmEgTa4Q22PNqkN8qzJNb68CV
+	 KDfATnVSAehIB1YPZs2hU1A7Nnif26SzOUH+s9qSi+8ghZm5v4VT4176vL/QYA5bbL
+	 mEJuL03xkXDLA==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Sat, 14 Nov 2026 21:19:52 -0700
-Subject: [PATCH] sched/topology: Avoid unsequenced accesses to jiffies in
- sd_init()
+Date: Sat, 14 Nov 2026 21:23:26 -0700
+Subject: [PATCH] blk-throttle: Avoid unsequenced accesses to jiffies in
+ throtl_schedule_pending_timer()
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -55,100 +55,84 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261114-topology-wunsequenced-v1-1-686a36fe61f5@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yXMyw6CMBBG4Vchs7YJgwbUVzEspP3BMabFDvUSw
- rtbYfktzplJEQVK52KmiJeoBJ/Bu4Ls7eoHGHHZVJVVzcwHM4UxPMLwNe/kFc8Eb+EMH3t2++7
- EdWMpt2NEL5/1e2k3a+rusNN/RsvyAyaiFcp5AAAA
-X-Change-ID: 20261114-topology-wunsequenced-18f1d3b9167c
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, Ingo Molnar <mingo@kernel.org>, 
+Message-Id: <20261114-blk-throttle-wunsequenced-v1-1-d28ed5553ff3@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yXMwQ6CMAyA4VchPduEDmKMr2I8sFKkSoauG5oQ3
+ p2px+/w/yuYRBWDc7VClEVN51BAhwp47MJNUPticLU7ElGLfnpgGuOc0iT4zsHklSWw9Mg8NPW
+ pcw2Th9I/owz6+b0v178t+7tw+g5h23ZfaRVbfQAAAA==
+X-Change-ID: 20261114-blk-throttle-wunsequenced-ccf308a23c1b
+To: Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+ Jens Axboe <axboe@kernel.dk>
+Cc: cgroups@vger.kernel.org, linux-block@vger.kernel.org, 
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
  Nathan Chancellor <nathan@kernel.org>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3032; i=nathan@kernel.org;
- h=from:subject:message-id; bh=dsqEYcSriLtcVQdAiw5Q3eG9QiLqh3XfUg5g6y/H4E0=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFk/jdlCmL04GOb9d/taLZbaX1D3Vf+7TWoJc9K8E2yyU
- xckq6t2lLIwiHExyIopslQ/Vj1uaDjnLOONU5Ng5rAygQxh4OIUgImwTGFkeFHD/MPbMWll7wex
- OdsKFk3+KNUgEKiU4RLT6PeHzyf4HiPDHmbTg3HBn3ZOL/88+be3yM9VIQzfIu9cuhX0RGJ5xnQ
- jbgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2551; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=QkGwnED++mIJD2hpQCP/OIux2aV3aOzS1no61B7/dRw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFk/jY+Er4jMLfJbc/2W8FRt1R6pC+yaGza4RMRtjOvZE
+ JS5OfBFRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhINRsjwxsBuekFWpPjpFss
+ 7q3ons05+e26CZ49zFUb97R0x868lcLwP+q96kcbO/t77AeWqhgdX2CRXdTtXlHhv86Fa4vRllt
+ HWAA=
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
 After a recent improvement in clang to warn on unsequenced accesses to
-volatile variables [1], an instance appears in sd_init(), which can
-break the build with CONFIG_WERROR=y / W=e:
+volatile variables [1], two instances appear in
+throtl_schedule_pending_timer(), which can break the build with
+CONFIG_WERROR=y / W=e:
 
-  In file included from kernel/sched/build_utility.c:86:
-  kernel/sched/topology.c:2008:29: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
-   1998 |                 .last_balance           = jiffies,
-        |                                           ~~~~~~~
-   1999 |                 .balance_interval       = sd_weight,
-   2000 |
-   2001 |                 /* 50% success rate */
-   2002 |                 .newidle_call           = 512,
-   2003 |                 .newidle_success        = 256,
-   2004 |                 .newidle_ratio          = 512,
-   2005 |                 .newidle_stamp          = now,
-   2006 |
-   2007 |                 .max_newidle_lb_cost    = 0,
-   2008 |                 .last_decay_max_lb_cost = jiffies,
-        |                                           ^
+  block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+    469 |                    expires - jiffies, jiffies);
+        |                              ~~~~~~~  ^
+  block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+    469 |                    expires - jiffies, jiffies);
+        |                              ~~~~~~~  ^
 
 Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
 6.5.2, unsequenced side effects on the same scalar object are undefined
-behavior. Per C11 6.7.9.23, the evaluation of the initialization list
-expressions in a designated initializer is indeterminately sequenced
-relative to each other, meaning any side effects in the initialization
-list are unsequenced.
+behavior. Per C11 6.5.2.2.10/12, the evaluation of arguments in a
+function call is indeterminately sequenced, meaning any side effects in
+the arguments are unsequenced.
 
-Move the initialization of these fields outside the designated
-initializer to place sequence points between the accesses to jiffies,
-clearing up the warning.
+Add a local variable to hold the value of jiffies before the function
+call so that there are no unsequenced side effects, clearing up the
+warning.
 
 Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2190
-Fixes: 2b4cfe64dee0 ("sched/numa: Initialize newidle balance stats in sd_numa_init()")
+Fixes: 69df0ab030c9 ("blk-throttle: separate out throtl_service_queue->pending_timer from throtl_data->dispatch_work")
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2191
 Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- kernel/sched/topology.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ block/blk-throttle.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 99878da03bce..f5975079f453 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1994,7 +1994,6 @@ sd_init(struct sched_domain_topology_level *tl,
- 					| sd_flags
- 					,
+diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+index c5e26551956a..a1db2babd846 100644
+--- a/block/blk-throttle.c
++++ b/block/blk-throttle.c
+@@ -454,6 +454,7 @@ static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
+ 					  unsigned long expires)
+ {
+ 	unsigned long max_expire = jiffies + 8 * DFL_THROTL_SLICE;
++	unsigned long j;
  
--		.last_balance		= jiffies,
- 		.balance_interval	= sd_weight,
+ 	/*
+ 	 * Since we are adjusting the throttle limit dynamically, the sleep
+@@ -465,8 +466,9 @@ static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
+ 	if (time_after(expires, max_expire))
+ 		expires = max_expire;
+ 	mod_timer(&sq->pending_timer, expires);
++	j = jiffies;
+ 	throtl_log(sq, "schedule timer. delay=%lu jiffies=%lu",
+-		   expires - jiffies, jiffies);
++		   expires - j, j);
+ }
  
- 		/* 50% success rate */
-@@ -2004,10 +2003,11 @@ sd_init(struct sched_domain_topology_level *tl,
- 		.newidle_stamp		= now,
- 
- 		.max_newidle_lb_cost	= 0,
--		.last_decay_max_lb_cost	= jiffies,
- 		.child			= child,
- 		.name			= tl->name,
- 	};
-+	sd->last_balance = jiffies;
-+	sd->last_decay_max_lb_cost = jiffies;
- 
- 	WARN_ONCE((sd->flags & (SD_SHARE_CPUCAPACITY | SD_ASYM_CPUCAPACITY)) ==
- 		  (SD_SHARE_CPUCAPACITY | SD_ASYM_CPUCAPACITY),
+ /**
 
 ---
-base-commit: d7e670601af6c564ccf6d3b2ddf70ee4f41a6d1c
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-change-id: 20261114-topology-wunsequenced-18f1d3b9167c
+base-commit: ab43ec385580b8f8abf72d70fa3acbf4e4f098a5
+change-id: 20261114-blk-throttle-wunsequenced-ccf308a23c1b
 
 Best regards,
 --  
