@@ -1,49 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794716617;
-	b=CzBmuaolTQt87jLU+BSnhQci7639B2xZH/WhkVsgvlRkoaJ/TNCLZPoYvlvGnVPhVxo/
-	 xVRmhbmXYS2n0dypuA9K4x2KbWSQZTxsDcgLiwXmEINg664FAaX9N2Ev9/dGvSZ2PlNQd
-	 ZefmRTkGqGGJ4TpVoMZ02LGAGSyfABlGdkSX3pIe8tt6JizU2OY69bilT4BuBevw+4eA2
-	 nN5vJ/iPzhISLVYBQ8qju0at9g971yKD5tzqZGP4d5esfLFJb7tEAK04fqPuI24gvLVwK
-	 ZliZaaK0zN6Jrcg2sHksI7fuWWQXC/Foh/8RhJUpwyFDhoZgjnzoCCFgFMLe+RYPKJg==
+	t=1794716789;
+	b=hgj2NJyM9wGBAgLjkkzLQtzfqWh25jRZXbLasWvtEpOYEeeB2yvG2wW5D+fIDbqxNaO8
+	 9KpLEoNbD3R3wq86AP3rarQ5h0Zx8QlU7rFarlTAW7HSCKjm2U7wjVz/5iww0oF9UUx6d
+	 4r4X1c0qoqhvbf8sMTRWVoQkIPy0ouXTpQbxE3dMhts1k/V17ZSrEqnzUvHnMwpgh7WVB
+	 vhjd/1nbEnCtwaUYc24/MGL4lnec1ZVu+KRjOqMdei9t903EZ49aeoruLQZiBaczh8bPv
+	 +glJd3N9Cs47FHxoOi+FAoBkzOgVktvhLaIA0cWwX9//nCkqghirrG1YuXA1kBpgHZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794716617;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794716789;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=A4I4qu/iwSH9El3GjPAfCR6Msrnw2D8e/uEUG113PAM=;
-	b=tLN7aPehvL1MjuBPEEMhg30KZsMa7Sqem5sKlu0CXi72mZVkw50h+y6aqEgUPTDvPLB/
-	 Syce++tBNISKEAxKCGe/hZwrTWTWRQ2sl/nheGenhcDGPf4MOE4nU0vXsyYNGY5/J6jky
-	 /sLWmQUKJo0gJfuD4Dx4qPZHcGLydVesY3+EDiwbaotDK8GFkXmMBm/07JWBEMrY0yTi6
-	 sVvXQb95P3+C2mB6fKqjyeVUcNidjxxuiICxr+K7aGgQt7gsnBTvLyCNl6u/m/uVocvmG
-	 rlNuTXiZnp5RfhVR1SnXzZ1xQ0yGbIoB08yJqb1Li0yWGXp+fh9An/AG24/GbD6QH+Q==
+	bh=PE1T7Z5KhZcynu05MtgfaEQGAVsUUdvQevTG2LkwgU0=;
+	b=mCQUbcdYoc5+PlwkqsnUk6MOUrPVxsknybIIeDnR9a4UEmEypDl1q85109KeOQdcJDHJ
+	 1vQRvDgy/Q/guS9cw5vkpEMPrbq63Z4gIyiOQ6Ji5HTTUqP9L9/Plggq8nIQhbxG9vxG6
+	 fZx2g9ZcAIPVte7F14zx9fCd+RooyRLtkG64wgQ43HKzkis8Q1M1/BD339O2L8c0/YSXE
+	 9cTer6qT2CZpepRtAhIZO+wcgsLoABqRhdDexdeCz89WyvEoMM55CRydVBH4mJITodulF
+	 20JtDCIuCjQDwbT3iiBf+faiIAaIVMNKd/P7CasWzGdjWWdjjttFZNmBfm30RUZPr3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jmC61Bve;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UHTzTboY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C8C606A323;
-	Sun, 15 Nov 2026 04:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A22606A329;
+	Sun, 15 Nov 2026 04:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jmC61Bve
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38ABF1F000C4;
-	Sun, 15 Nov 2026 04:23:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UHTzTboY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E6A1F000C4;
+	Sun, 15 Nov 2026 04:26:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794716617;
-	bh=A4I4qu/iwSH9El3GjPAfCR6Msrnw2D8e/uEUG113PAM=;
+	s=k20260515; t=1794716788;
+	bh=PE1T7Z5KhZcynu05MtgfaEQGAVsUUdvQevTG2LkwgU0=;
 	h=From:Date:Subject:To:Cc;
-	b=jmC61BvepYRA0P/xbjjR6VV829gwlfHqVed7ADgROAY47YEf9tYfqGlMHZ06ekpOA
-	 VpPy+u1tROFdvnB9BFm3y1lpVoeuQEaVPyeDwY/4/q41hQaZwS9Vt5p7NEnOVBeGGo
-	 ZavjeyUksnty3ZX/93Z3IwvrTpm2hE/uVGaMjDykn9VP3c4ZeNs7U96vO+61Ooqucr
-	 69om0NzX22WYgZp19IzMYNLRY7qddy+9D4/QLqCAXNmEgTa4Q22PNqkN8qzJNb68CV
-	 KDfATnVSAehIB1YPZs2hU1A7Nnif26SzOUH+s9qSi+8ghZm5v4VT4176vL/QYA5bbL
-	 mEJuL03xkXDLA==
+	b=UHTzTboYfT+0FUVWPaFs3CBRV+60pYByu+ICQjNjd+D7cj8oqYHlFSDzCIYxt0JNq
+	 /sKSyzVY2GG6qn8sx0VsjDExZopjVM0aJdTTttw3HtdPbrBDDPeDPJpwfpLWn504DA
+	 YBxKFuK6PHNN47p36qcuqX8YRIW0iqlSeSdw+rcqB+BF35WzdbkpmzJAhY5HUnG9kh
+	 XnuLdDyCFuqsLqB5h/r/XGVI5Wp4jHWCaGq8Qutac9MQuvU+3HqGYTCVJI5hd8j4a+
+	 EvRCfCG6RFo18kXmgMt9DqAhSIwdZxa3If7ZvaGIGnvxW1NR0nGRNCkIDHkXo8eQDa
+	 N4EKxB47qLcPg==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Sat, 14 Nov 2026 21:23:26 -0700
-Subject: [PATCH] blk-throttle: Avoid unsequenced accesses to jiffies in
- throtl_schedule_pending_timer()
+Date: Sat, 14 Nov 2026 21:26:10 -0700
+Subject: [PATCH] rcu/nocb: Avoid unsequenced accesses to jiffies in
+ show_rcu_nocb_state()
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -55,37 +55,42 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261114-blk-throttle-wunsequenced-v1-1-d28ed5553ff3@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yXMwQ6CMAyA4VchPduEDmKMr2I8sFKkSoauG5oQ3
- p2px+/w/yuYRBWDc7VClEVN51BAhwp47MJNUPticLU7ElGLfnpgGuOc0iT4zsHklSWw9Mg8NPW
- pcw2Th9I/owz6+b0v178t+7tw+g5h23ZfaRVbfQAAAA==
-X-Change-ID: 20261114-blk-throttle-wunsequenced-ccf308a23c1b
-To: Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
- Jens Axboe <axboe@kernel.dk>
-Cc: cgroups@vger.kernel.org, linux-block@vger.kernel.org, 
+Message-Id: <20261114-rcu-tree_nocb-wunsequenced-v1-1-057996a86f0e@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yXMQQrCQAwF0KuUrA00Q6niVUTEZn51XKSa6ahQe
+ ndHXb7NWyjDEzLtm4Ucz5TTZBWyaUivZ7uAU6ym0IZeRDp2LTw7cLJJB34Vy3gUmCJyG6JIv93
+ p2AWqwd0xpvcvPxz/zmW4QefvSOv6AZK2dnp+AAAA
+X-Change-ID: 20261114-rcu-tree_nocb-wunsequenced-02d11678cf42
+To: "Paul E. McKenney" <paulmck@kernel.org>, 
+ Frederic Weisbecker <frederic@kernel.org>, 
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+ Joel Fernandes <jfern@kernel.org>, Josh Triplett <josh@joshtriplett.org>, 
+ Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
+ Puranjay Mohan <puranjay@kernel.org>, rcu@vger.kernel.org, 
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
  Nathan Chancellor <nathan@kernel.org>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2551; i=nathan@kernel.org;
- h=from:subject:message-id; bh=QkGwnED++mIJD2hpQCP/OIux2aV3aOzS1no61B7/dRw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFk/jY+Er4jMLfJbc/2W8FRt1R6pC+yaGza4RMRtjOvZE
- JS5OfBFRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhINRsjwxsBuekFWpPjpFss
- 7q3ons05+e26CZ49zFUb97R0x868lcLwP+q96kcbO/t77AeWqhgdX2CRXdTtXlHhv86Fa4vRllt
- HWAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2941; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=7OmRRHFXh1lWL/xG22s5IPrApVcaF15LGgvPQEIuTBU=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFk/TfJa94gduDl1nayy18pNik8mzyt6rRV6UOhs33zx/
+ N5//7K9O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEZk9m+B+TEWwlbPRcWjV7
+ /Zy++fGLzR+K/Hh7NXLJx3vnTfcz1Kxh+O9Zsbzs2rywDrEyd7NJTzZleiql6KUyH3594q1/+3H
+ jZj4A
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
 After a recent improvement in clang to warn on unsequenced accesses to
-volatile variables [1], two instances appear in
-throtl_schedule_pending_timer(), which can break the build with
-CONFIG_WERROR=y / W=e:
+volatile variables [1], an instance appears in show_rcu_nocb_state(),
+which can break the build with CONFIG_WERROR=y / W=e:
 
-  block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
-    469 |                    expires - jiffies, jiffies);
-        |                              ~~~~~~~  ^
-  block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
-    469 |                    expires - jiffies, jiffies);
-        |                              ~~~~~~~  ^
+  In file included from kernel/rcu/tree.c:5123:
+  kernel/rcu/tree_nocb.h:1651:3: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+   1650 |                 jiffies - rdp->nocb_bypass_first,
+        |                 ~~~~~~~
+   1651 |                 jiffies - rdp->nocb_nobypass_last,
+        |                 ^
 
 Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
 6.5.2, unsequenced side effects on the same scalar object are undefined
@@ -98,41 +103,49 @@ call so that there are no unsequenced side effects, clearing up the
 warning.
 
 Cc: stable@vger.kernel.org
-Fixes: 69df0ab030c9 ("blk-throttle: separate out throtl_service_queue->pending_timer from throtl_data->dispatch_work")
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2191
+Fixes: f7a81b12d6af ("rcu/nocb: Print no-CBs diagnostics when rcutorture writer unduly delayed")
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2192
 Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- block/blk-throttle.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/rcu/tree_nocb.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index c5e26551956a..a1db2babd846 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -454,6 +454,7 @@ static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
- 					  unsigned long expires)
- {
- 	unsigned long max_expire = jiffies + 8 * DFL_THROTL_SLICE;
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index b6cfee4e5039..8448a7c578e8 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1618,6 +1618,7 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
+ 	struct rcu_segcblist *rsclp = &rdp->cblist;
+ 	bool waslocked;
+ 	bool wassleep;
 +	unsigned long j;
  
- 	/*
- 	 * Since we are adjusting the throttle limit dynamically, the sleep
-@@ -465,8 +466,9 @@ static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
- 	if (time_after(expires, max_expire))
- 		expires = max_expire;
- 	mod_timer(&sq->pending_timer, expires);
+ 	if (rdp->nocb_gp_rdp == rdp)
+ 		show_rcu_nocb_gp_state(rdp);
+@@ -1639,6 +1640,7 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
+ 		rsclp->gp_seq[RCU_NEXT_READY_TAIL].exp);
+ 	sprintf(bufn, "%ld", rsclp->seglen[RCU_NEXT_TAIL]);
+ 	sprintf(bufb, "%ld", rcu_cblist_n_cbs(&rdp->nocb_bypass));
 +	j = jiffies;
- 	throtl_log(sq, "schedule timer. delay=%lu jiffies=%lu",
--		   expires - jiffies, jiffies);
-+		   expires - j, j);
- }
- 
- /**
+ 	pr_info("   CB %d^%d->%d %c%c%c%c%c F%ld L%ld C%d %c%s%c%s%c%s%c%s%c%s q%ld %c CPU %d%s\n",
+ 		rdp->cpu, rdp->nocb_gp_rdp->cpu,
+ 		nocb_next_rdp ? nocb_next_rdp->cpu : -1,
+@@ -1647,8 +1649,8 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
+ 		"lL"[raw_spin_is_locked(&rdp->nocb_lock)],
+ 		"sS"[!!rdp->nocb_cb_sleep],
+ 		".W"[swait_active(&rdp->nocb_cb_wq)],
+-		jiffies - rdp->nocb_bypass_first,
+-		jiffies - rdp->nocb_nobypass_last,
++		j - rdp->nocb_bypass_first,
++		j - rdp->nocb_nobypass_last,
+ 		rdp->nocb_nobypass_count,
+ 		".D"[rcu_segcblist_ready_cbs(rsclp)],
+ 		rcu_segcblist_segempty(rsclp, RCU_DONE_TAIL) ? "" : bufd,
 
 ---
-base-commit: ab43ec385580b8f8abf72d70fa3acbf4e4f098a5
-change-id: 20261114-blk-throttle-wunsequenced-ccf308a23c1b
+base-commit: 18b332441bbf59fa537929fe390238e137a6caff
+change-id: 20261114-rcu-tree_nocb-wunsequenced-02d11678cf42
 
 Best regards,
 --  
