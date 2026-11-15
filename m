@@ -1,110 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.156
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794755933;
-	b=nu19wyg0k4GPELVJOzkkEKUCiQKVYjc80P9KTGgxrf31I4P4cuMPvuCuU9kzEbOtwaZT
-	 GD+DPo3R0WY8NWcfo5buI9oYMShb1z+kqT5rou5cHtBEmYd6pEvl/ejNnIQtnfw77UyzC
-	 Lu+Y/zd9V4NapTw/FkSVF/nWlU1B6XNE5W0eIgbLKYeCGCtQe1GL6P8QgmNyl2OCBPBI+
-	 zV/gVB9SrCKa6cdH+b3UwTYsmakWz8slWpGJ7pFYnLu0BYmDV2dYI5L2OdBKnBH2QyYN7
-	 mOkLmEcgVv+TrEWamB2LeQvYdWERDrRf5OUcBDi9trvv0NOk7fS7UKcouFssamWdmhQ==
+	t=1794756566;
+	b=cWgYrxYBAqXHnQQiQfcfuFEjTjQlbrrD94003xspjuO5T9bk3BWcvgjMMbNG39mBBLSB
+	 as0k9V22+f5m+WJoBhGHXheKzHBUo0NAjylW7wdy7tZlcjvRnMTTqdr7LPF7DwAh4il/d
+	 Yo2BoCXOHxpJRvSBTCRpb7mP7pWWX/tV6IKLguPTss4yihY3SjBq2bIL+iZO90Jse+NiL
+	 /g0sEveRoRrYk59kMNuv0wI5hXenWZYz40PYPAc0ChxJI5Caa10ZVMOLTN0QCxgoHSHcB
+	 DHNI/do4EWSayuCZ8bW9yddETAzv2ZzXqcmKap9ANNWq/03Wb8QUh34WlYYalUY84SA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794755933;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=jXL3awY87I7bqCpFDm1wxAqeA5Al9Z5LUc/nPR+6gxs=;
-	b=XeYGV7CkJl9v86wjIrTzVRleXfRkXLKjBdBX8YauF93cXK2Ri3XuO+3UDaEsCDKSsA/y
-	 BnFE2JxcoUY8904pYHS3hI4+IN8blgG4cORzr+iW+Wx81SI9v2i+mhyzBODZRGNM0Dd8f
-	 8d8uUdhspHkJOoAivWqpCSm3oOsXTn9z5NZA8ZNmQoO4BqQXpkA6C4y7Pc+oaTtVZ+ZMi
-	 z9xGkr0M83nY3yqnRoFOG9jw3W6iWD8Ep/xdDlyEP/S8gZZhiYg0eD1wXgCHCgBYQqsy8
-	 BctMDssWNBqgnSi5oP9Ky4Wy6epy42ZyBRxuDnokT2BJ6mxBAoi+6NtmZhFMXR73ZzA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794756566;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=Yb/rW1NOmAiEOX8njX27I+yC9sCUQ2ioynhsTqMUeEU=;
+	b=WBi+mndNG2sD2B6WkzwolVEKRTJlRc040yy/UsO/iaiARcAlvAYGMNn/SxJGjc4xdlHV
+	 b/zAS9yJhOHyT6zy6R3JhFI4Iz3UjoWJiz2iV6SULpQZbRBDbDpwGXwoyNlsqC53NUkBj
+	 JGw/tjo2fqlBSCrbPGm2GTA/s3v5SbFkOhE0tGjq5TLgBAYI73KhWS01UQtyFoS/1joKG
+	 ZTdx5T9Z5ljwg1+FFiGy1glrC8+XzOqfBTSLVYUrt9xKMSkeoMQYd0aGcXoYP8UFpT0gY
+	 ZwdZ9lqt0Vi8wf35zMsKTbgLM0NmDs6fcQ24X2gbFRSpsH7+hoArgSBdbOYDAqfPzDQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=X3fyl0AE;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=LN+XwsJg;
-	arc=none smtp.remote-ip=202.12.124.156
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=in3oqOzp;
+	arc=none smtp.remote-ip=198.175.65.21
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067E6606A31D
-	for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 15:18:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 067E6606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF46606A31E;
+	Sun, 15 Nov 2026 15:29:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EBF46606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=X3fyl0AE;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=LN+XwsJg
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id DEC6F7A007A
-	for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 10:18:51 -0500 (EST)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Sun, 15 Nov 2026 10:18:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1794755929;
-	 x=1794842329; bh=jXL3awY87I7bqCpFDm1wxAqeA5Al9Z5LUc/nPR+6gxs=; b=
-	X3fyl0AEfeBvHFst5Q0V1UEsQeby1BM81HLqcTKPmAuriRvCkJtvXMNqjk3o21zv
-	tRZTqOGdm041GVhK72a39b/+gfrMUE98uXp4FKhaSjZZV8oiFStFk3YJoUx30HFu
-	emCd5JhI4WFKRIwA0vTUqrxqf7llJjPNxk8UNRXyPYXOGmwjzoGCK/AVELeqyA1T
-	Mf3+GebDYnpJmA8POXM/TzFfW6cYecKlX9syieJT3Fc/T/Pfi/I/VHV1QIetjC/K
-	ngKqz1MHdYO9Wot9lKt5+xBAcbRSb6bfwcUppMqESa6XU/J/ngZvm1xn67zg7zlH
-	CqSBjwTZpNagioRE6sbHXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794755929; x=
-	1794842329; bh=jXL3awY87I7bqCpFDm1wxAqeA5Al9Z5LUc/nPR+6gxs=; b=L
-	N+XwsJgSy6unJDUxVhbAN9jjR4ChGLpK09UWox0eeTi3aau0ZlGYyDgSYisfeo6H
-	V0NpLW6Wt0EJ7sWWpm7PoXWnfTsm6X7EAaLlF2pdx6Hv6tBfS406PDbg7DqMSX9e
-	pX20y1bpyPyRZEb+MLH/aF1FGcYJSvyuQMNb+5+S0ZXXSMhvoqIvLWjE7OI18ZOJ
-	FXewkwQADJnGK1i8pVgotICZYo1BGU7w/2XVhokJKwC8EzlpkX+pzpVfrN5CrhEq
-	aRem9s9O2dN16nywVapYeU0fUkXegPHJ6YXhVJ1yEfu9weCAN/BYB0d3rQtw37zH
-	OqGoGoEgun05KfNlkXs2w==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794755929; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
-	s=fm2:rsa-sha256:Crn53s49OtF9oir8swUxFibqZooZroh+BcIRYVQcxTMFIpr
-	vct8fQjoiQGFVpU+X2bW3VEjFDYZQCR9glcHBmmzZtz4ESSnyPPCvPTyozvjNV55
-	UoUpdQLCKHDbfBYkIcywMLaSZ5LRNDJlQtPL3LvNmLVZZW4cHW4OxPRYrF38v03U
-	WsQCTcAZaoT/Aer7hrdqBK6UyMZ1ZtM8pJKEOQ0ykPNdv35wZMbc7Uohg0w2ZUry
-	VWjuf+GSHUHBOVkQPg3m5F4B7FaW8ySoInIKylQITuQAUB2HxGO1x2iBr/5w1Guy
-	p1b98YMXVcBBdNwBSDI4htCGWv/tpVJP2xUgJdQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:RPRGmgdxnBnNv5uquxYy8MBAVAddXarUAKannPbarMQ=:LPIofgvPCh59qWtpBBu3/xvmkCvTHB5eJOFqs6HnklQ=;
-X-ME-Sender: <xms:Vs35auF3ZKeoxzwOsUYqSkStVskbs4R-NGUIdeyhfyeixyyk9EN3ZA>
-    <xme:Vs35aqIEdga0nfRUy1jvgxGicKyLl7wz4lxqhsowM6MD8fEPuqveb7hRDmyeV22hw
-    eqH_O14ewKa36SMvMq3UQGHhWn8C5qo0Qy9uxzoAAV37KTnw9Vp-1Hs>
-X-ME-Proxy-Cause: dmFkZTG0KPJjbF0MaYzlr1rMKbFVKZccD29mlx5DJ2nDT7gsDYCCpAPlozFsGDxohcC0/r
-    rBNTGt6QIyhi+iHgRSTHcMZwGyMov7EYB/dRho9I5EtscXX8S47EQ95GzVnNrVZ7/87yQl
-    W+t2L/rmREhnML0NmZgivhr89fiMdi0TupTTBVSxjvICnNewjWK5RL/9Aauzl1KonQ6Nxe
-    NEWqX4k3HjKJETMzrTNMg238sNyGliWAM3YNCpjFRAvg+11+z0nJt6eJjlFMdihuPNbgIm
-    oYg+mzbAvXGVjFYQFNtth3taHKaeWEkuhsGKNyHHNPiZcPoe08V914VpI6+MtAPh2X17cw
-    FuBgm7wf7JfRdStmmfKL1GwGzkX4/BxT6+huZ7YIOqNgCkcHUAVroQ0OnY222fxJk82r9S
-    UouzJSAmkJtqWmfeYCPE7yv5BfOT00gCZ9RF/HnUOSO2cSH4QXPDYMPsFB1melKmKAd5DE
-    U8ZEMFMDe3MXzPL0Bf060i9FZ/du702JWrVBV7M8iUjqjTFwJk2g2RT2y3wMmwXo2p31BO
-    TS/nfxaAXtBzKxURMxws+YH3t11fQ7Sj2TFX0JKgypZhMZtveSU2ZgNCOA9Z3ygn7G4BG7
-    imxonf/MrJU+NVTafWwmyXTbOjFMBCs94nvQjGLiLz4+9S7XgAPqgyQWVsGg
-X-ME-Proxy: <xmx:V835ahrv4y2-PQDiHSsLS0XYo1QHdz5R1BdqX1MXkUm-FttaFVZsxg>
-    <xmx:V835al4upEkIi7RJYjYyJk2fjijUGXxBNFBHDXaCSkP3X5EicHxwUg>
-    <xmx:V835agcOfApQazsMJguSEf37x-hfOcQn58VFpyTCxaMteRTE03SfOw>
-    <xmx:V835ai6xj3oYcT99JabivV--4v_uh8k8TdJQfAbpvVX23n2U379t3g>
-    <xmx:Wc35amsAonV99wwPoCZRTnv44dyVVUBYx-zoO6bdqCvwHDlfQyhY36aI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 5C25C32A009C; Sun, 15 Nov 2026 10:18:46 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=in3oqOzp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794756566; x=1826292566;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z+Gdrxc3ydTyR+6uvWLKyFCQ1TI3j9Fxfs4TZg3tGNY=;
+  b=in3oqOzpSVOujUmPwk4QNFONNuyBcEEpBEypABMzkikEC6CuC88be3DM
+   agZoaW2a74DnSmr1TPqKhh7Prewb0kmiP1YXCcpqwMoHiKZvGxKHy52Ce
+   8+hWmjQfF4Wve2knTWSRdltGDkfEgkNfLsdluNMeh97l8t1nubiiobcto
+   58qq1lZh4SovnkGSiS+YeGkC3cDG6NqKXq/rhyeMhOU8jkUv+QJe76rTO
+   CHv7hRUhXBaeZ7AkbhucADDx2QZfM1c7CiTk8irjkG/m0B2/FZe6N3pHl
+   B9zqxExEqKOTCr/UToN/StYlFc5gPG7q6JvgmpC7EOb57pXsIBi2HCO4K
+   Q==;
+X-CSE-ConnectionGUID: URmtrDgWQdmdBmbGuh5Dyw==
+X-CSE-MsgGUID: f9HYkYgSTEqVg1sFX3T44w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3579334"
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="3579334"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 07:29:25 -0800
+X-CSE-ConnectionGUID: uHGKMeRrTCafyscBwkhRzQ==
+X-CSE-MsgGUID: 71k7X6P9QdSw6nMHEdQ/kQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="9597153"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 15 Nov 2026 07:29:23 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xScAS-000000016zE-3MLt;
+	Sun, 15 Nov 2026 15:29:20 +0000
+Date: Sun, 15 Nov 2026 23:28:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Xu Xin (vivo)" <xu.xin@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	chengming.zhou@linux.dev, david@kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, ljs@kernel.org
+Subject: Re: [PATCH v2 2/2] mm/ksm: add initialization helpers for
+ scan_get_next_rmap_item()
+Message-ID: <202611152302.OUfZlgfW-lkp@intel.com>
+References: <20261115080049.132515-1-xu.xin@linux.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -114,57 +84,221 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: A4hrlnFi848o
-Date: Sun, 15 Nov 2026 16:18:26 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Message-Id: <dbf6e2a3-ac52-4d0f-a2df-b78163e9d57a@app.fastmail.com>
-In-Reply-To: 
- <20261114-lkdtm-usercopy-wunsequenced-v1-1-d9f288701932@kernel.org>
-References: 
- <20261114-lkdtm-usercopy-wunsequenced-v1-1-d9f288701932@kernel.org>
-Subject: Re: [PATCH] lkdtm/usercopy: Avoid unsequenced accesses to cache_size in
- lkdtm_usercopy_init()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261115080049.132515-1-xu.xin@linux.dev>
 
-On Sun, Nov 15, 2026, at 05:37, Nathan Chancellor wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], an instance appears in lkdtm_usercopy_init(),
-> which can break the build with CONFIG_WERROR=y / W=e:
->
-> drivers/misc/lkdtm/usercopy.c:431:9: error: unsequenced accesses to 
-> volatile qualified 'cache_size' [-Werror,-Wunsequenced]
->   429 |                 kmem_cache_create_usercopy("lkdtm-usercopy", 
-> cache_size,
->       |                                                              
-> ~~~~~~~~~~
->   430 |                                            0, 0,
->   431 |                                            cache_size / 4,
->       |                                            ^
->
-> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-> 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior.  Per C11 6.5.2.2.10/12, the evaluation of arguments in a
-> function call is indeterminately sequenced, meaning any side effects in
-> the arguments are unsequenced.
->
-> cache_size is marked as volatile to hide its value from the compile time
-> constant checks in the hardened usercopy routines. Refactor the
-> calculations based on cache_size into their own volatile variables to
-> keep the values hidden while avoiding unsequenced accesses on the same
-> object.
->
-> Cc: stable@vger.kernel.org
-> Fixes: e47e311843de ("lkdtm: Update usercopy tests for whitelisting")
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2195
-> Link: 
-> https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 
-> [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi Xu,
 
-lgtm,
+kernel test robot noticed the following build warnings:
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+[auto build test WARNING on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Xin-vivo/mm-ksm-extract-helper-functions-for-scan-cycle-cleanup/20261115-160032
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20261115080049.132515-1-xu.xin%40linux.dev
+patch subject: [PATCH v2 2/2] mm/ksm: add initialization helpers for scan_get_next_rmap_item()
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20261115/202611152302.OUfZlgfW-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ca14e3d05c4e63d6e8103945c86b958ed2f55d5f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261115/202611152302.OUfZlgfW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611152302.OUfZlgfW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/ksm.c:2693:6: warning: variable 'mm_slot' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2693 |         if (scan_should_start_new_cycle()) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/ksm.c:2720:10: note: uninitialized use occurs here
+    2720 |         slot = &mm_slot->slot;
+         |                 ^~~~~~~
+   mm/ksm.c:2693:2: note: remove the 'if' if its condition is always true
+    2693 |         if (scan_should_start_new_cycle()) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/ksm.c:2684:29: note: initialize the variable 'mm_slot' to silence this warning
+    2684 |         struct ksm_mm_slot *mm_slot;
+         |                                    ^
+         |                                     = NULL
+   1 warning generated.
+
+
+vim +2693 mm/ksm.c
+
+  2680	
+  2681	static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+  2682	{
+  2683		struct mm_struct *mm;
+  2684		struct ksm_mm_slot *mm_slot;
+  2685		struct mm_slot *slot;
+  2686		struct vm_area_struct *vma;
+  2687		struct ksm_rmap_item *rmap_item;
+  2688		struct vma_iterator vmi;
+  2689	
+  2690		if (list_empty(&ksm_mm_head.slot.mm_node))
+  2691			return NULL;
+  2692	
+> 2693		if (scan_should_start_new_cycle()) {
+  2694			advisor_start_scan();
+  2695			trace_ksm_start_scan(ksm_scan.seqnr, ksm_rmap_items);
+  2696	
+  2697			/*
+  2698			 * A number of pages can hang around indefinitely in per-cpu
+  2699			 * LRU cache, raised page count preventing write_protect_page
+  2700			 * from merging them.  Though it doesn't really matter much,
+  2701			 * it is puzzling to see some stuck in pages_volatile until
+  2702			 * other activity jostles them out, and they also prevented
+  2703			 * LTP's KSM test from succeeding deterministically; so drain
+  2704			 * them here (here rather than on entry to ksm_do_scan(),
+  2705			 * so we don't IPI too often when pages_to_scan is set low).
+  2706			 */
+  2707			lru_add_drain_all();
+  2708	
+  2709			ksm_prune_migrate_nodes();
+  2710			ksm_reset_unstable_trees();
+  2711	
+  2712			mm_slot = scan_get_first_mm();
+  2713			if (!mm_slot)
+  2714				return NULL;
+  2715	next_mm:
+  2716			ksm_scan.address = 0;
+  2717			ksm_scan.rmap_list = &mm_slot->rmap_list;
+  2718		}
+  2719	
+  2720		slot = &mm_slot->slot;
+  2721		mm = slot->mm;
+  2722		vma_iter_init(&vmi, mm, ksm_scan.address);
+  2723	
+  2724		mmap_read_lock(mm);
+  2725		if (ksm_test_exit(mm))
+  2726			goto no_vmas;
+  2727	
+  2728		for_each_vma(vmi, vma) {
+  2729			if (!(vma->vm_flags & VM_MERGEABLE))
+  2730				continue;
+  2731			if (ksm_scan.address < vma->vm_start)
+  2732				ksm_scan.address = vma->vm_start;
+  2733			if (!vma_has_anon_rmap(vma))
+  2734				ksm_scan.address = vma->vm_end;
+  2735	
+  2736			while (ksm_scan.address < vma->vm_end) {
+  2737				struct ksm_next_page_arg ksm_next_page_arg;
+  2738				struct page *tmp_page = NULL;
+  2739				struct folio *folio;
+  2740	
+  2741				if (ksm_test_exit(mm))
+  2742					goto no_vmas;
+  2743	
+  2744				int found;
+  2745	
+  2746				found = walk_page_range_vma(vma, ksm_scan.address,
+  2747							    vma->vm_end,
+  2748							    &ksm_next_page_ops,
+  2749							    &ksm_next_page_arg);
+  2750	
+  2751				if (found > 0) {
+  2752					folio = ksm_next_page_arg.folio;
+  2753					tmp_page = ksm_next_page_arg.page;
+  2754					ksm_scan.address = ksm_next_page_arg.addr;
+  2755				} else {
+  2756					VM_WARN_ON_ONCE(found < 0);
+  2757					ksm_scan.address = vma->vm_end - PAGE_SIZE;
+  2758				}
+  2759	
+  2760				if (tmp_page) {
+  2761					flush_anon_page(vma, tmp_page, ksm_scan.address);
+  2762					flush_dcache_page(tmp_page);
+  2763					rmap_item = get_next_rmap_item(mm_slot,
+  2764						ksm_scan.rmap_list, ksm_scan.address);
+  2765					if (rmap_item) {
+  2766						ksm_scan.rmap_list =
+  2767								&rmap_item->rmap_list;
+  2768	
+  2769						if (should_skip_rmap_item(folio, rmap_item)) {
+  2770							folio_put(folio);
+  2771							goto next_page;
+  2772						}
+  2773	
+  2774						ksm_scan.address += PAGE_SIZE;
+  2775						*page = tmp_page;
+  2776					} else {
+  2777						folio_put(folio);
+  2778					}
+  2779					mmap_read_unlock(mm);
+  2780					return rmap_item;
+  2781				}
+  2782	next_page:
+  2783				ksm_scan.address += PAGE_SIZE;
+  2784				cond_resched();
+  2785			}
+  2786		}
+  2787	
+  2788		if (ksm_test_exit(mm)) {
+  2789	no_vmas:
+  2790			ksm_scan.address = 0;
+  2791			ksm_scan.rmap_list = &mm_slot->rmap_list;
+  2792		}
+  2793		/*
+  2794		 * Nuke all the rmap_items that are above this current rmap:
+  2795		 * because there were no VM_MERGEABLE vmas with such addresses.
+  2796		 */
+  2797		remove_trailing_rmap_items(ksm_scan.rmap_list);
+  2798	
+  2799		spin_lock(&ksm_mmlist_lock);
+  2800		slot = list_entry(mm_slot->slot.mm_node.next,
+  2801				  struct mm_slot, mm_node);
+  2802		ksm_scan.mm_slot = mm_slot_entry(slot, struct ksm_mm_slot, slot);
+  2803		if (ksm_scan.address == 0) {
+  2804			/*
+  2805			 * We've completed a full scan of all vmas, holding mmap_lock
+  2806			 * throughout, and found no VM_MERGEABLE: so do the same as
+  2807			 * __ksm_exit does to remove this mm from all our lists now.
+  2808			 * This applies either when cleaning up after __ksm_exit
+  2809			 * (but beware: we can reach here even before __ksm_exit),
+  2810			 * or when all VM_MERGEABLE areas have been unmapped (and
+  2811			 * mmap_lock then protects against race with MADV_MERGEABLE).
+  2812			 */
+  2813			mm_slot_remove(&mm_slot->slot);
+  2814			spin_unlock(&ksm_mmlist_lock);
+  2815	
+  2816			mm_slot_free(mm_slot_cache, mm_slot);
+  2817			/*
+  2818			 * Only clear MMF_VM_MERGEABLE. We must not clear
+  2819			 * MMF_VM_MERGE_ANY, because for those MMF_VM_MERGE_ANY process,
+  2820			 * perhaps their mm_struct has just been added to ksm_mm_slot
+  2821			 * list, and its process has not yet officially started running
+  2822			 * or has not yet performed mmap/brk to allocate anonymous VMAS.
+  2823			 */
+  2824			mm_flags_clear(MMF_VM_MERGEABLE, mm);
+  2825			mmap_read_unlock(mm);
+  2826			mmdrop(mm);
+  2827		} else {
+  2828			mmap_read_unlock(mm);
+  2829			/*
+  2830			 * mmap_read_unlock(mm) first because after
+  2831			 * spin_unlock(&ksm_mmlist_lock) run, the "mm" may
+  2832			 * already have been freed under us by __ksm_exit()
+  2833			 * because the "mm_slot" is still hashed and
+  2834			 * ksm_scan.mm_slot doesn't point to it anymore.
+  2835			 */
+  2836			spin_unlock(&ksm_mmlist_lock);
+  2837		}
+  2838	
+  2839		/* Repeat until we've completed scanning the whole list */
+  2840		mm_slot = ksm_scan.mm_slot;
+  2841		if (mm_slot != &ksm_mm_head)
+  2842			goto next_mm;
+  2843	
+  2844		advisor_stop_scan();
+  2845	
+  2846		trace_ksm_stop_scan(ksm_scan.seqnr, ksm_rmap_items);
+  2847		ksm_scan.seqnr++;
+  2848		return NULL;
+  2849	}
+  2850	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
