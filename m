@@ -1,77 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.156
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794755914;
-	b=NPP05gJXBDZjxxuKzZfDZYAMJxiTiXz9eYyizZq2yYP0WXavwtCll12Q8ByMeYVRoo3E
-	 mOI4YHKzw80dMHj+S5MDnAAIDB7kHP/EuHnoZoN+cuD+TEy/cSfnc3XzoRRGMtv1acCtK
-	 gkTASnMlz+WjqA7ujcY3H0iwcfbFYS5sKlTkVITRXpVZmpd8pPRSmPUOa54O412kRcuon
-	 uglKm5ToVBc2nnmRduaw9cGKY+0JlF6p+DFd3dlYhJfLc0AmTwFKflucY6k9L3Z9aqMX9
-	 xFhv8d+Y84ShU1afA2q952cjlxQDAi01DFW2CD9kkjHdPdIVD2XEi/x4YPuOLD5Oz4g==
+	t=1794755933;
+	b=nu19wyg0k4GPELVJOzkkEKUCiQKVYjc80P9KTGgxrf31I4P4cuMPvuCuU9kzEbOtwaZT
+	 GD+DPo3R0WY8NWcfo5buI9oYMShb1z+kqT5rou5cHtBEmYd6pEvl/ejNnIQtnfw77UyzC
+	 Lu+Y/zd9V4NapTw/FkSVF/nWlU1B6XNE5W0eIgbLKYeCGCtQe1GL6P8QgmNyl2OCBPBI+
+	 zV/gVB9SrCKa6cdH+b3UwTYsmakWz8slWpGJ7pFYnLu0BYmDV2dYI5L2OdBKnBH2QyYN7
+	 mOkLmEcgVv+TrEWamB2LeQvYdWERDrRf5OUcBDi9trvv0NOk7fS7UKcouFssamWdmhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794755914;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=k5Qp03CAQ8BatLGqMbyRg2JVFKmiz6vka1EtIHQp7Pc=;
-	b=JW4mZkSuUiT++cavrcZIJXq73piuQhU7Tvx9L7DeH44h3p/UfKQ/bLP46H/VUJrMVOn1
-	 xSJ3AC/2hG6hDpcmKfr+b6lWcLK8SMTSkklv7mmlHXZG7ebVTK9g0mE8zG16aOPooFEkz
-	 Dr1e0zOkVSQ49ZN5iTfM0ypTWSK2BdTQe4w+rDU7SwtJH4zSGMp6wM7M6MMqgaDPd+lyG
-	 /ZO25lhc65VBJR5F0S4lPkwKoy8H85YDoAhPzZgSW0TYAtmeRq1Wi5xhVvs5+UlPuumtf
-	 ZFonSqxsLIpIG46pTO4+lB6HC48ftUFb9Mgid3M3QLE6Vvog/9Q+xclUC6GIEjk8pvw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794755933;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=jXL3awY87I7bqCpFDm1wxAqeA5Al9Z5LUc/nPR+6gxs=;
+	b=XeYGV7CkJl9v86wjIrTzVRleXfRkXLKjBdBX8YauF93cXK2Ri3XuO+3UDaEsCDKSsA/y
+	 BnFE2JxcoUY8904pYHS3hI4+IN8blgG4cORzr+iW+Wx81SI9v2i+mhyzBODZRGNM0Dd8f
+	 8d8uUdhspHkJOoAivWqpCSm3oOsXTn9z5NZA8ZNmQoO4BqQXpkA6C4y7Pc+oaTtVZ+ZMi
+	 z9xGkr0M83nY3yqnRoFOG9jw3W6iWD8Ep/xdDlyEP/S8gZZhiYg0eD1wXgCHCgBYQqsy8
+	 BctMDssWNBqgnSi5oP9Ky4Wy6epy42ZyBRxuDnokT2BJ6mxBAoi+6NtmZhFMXR73ZzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=axmlKbHD;
-	arc=none smtp.remote-ip=192.198.163.13
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=X3fyl0AE;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=LN+XwsJg;
+	arc=none smtp.remote-ip=202.12.124.156
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB1C606A31E;
-	Sun, 15 Nov 2026 15:18:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AFB1C606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067E6606A31D
+	for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 15:18:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 067E6606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=axmlKbHD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794755913; x=1826291913;
-  h=date:from:to:cc:subject:message-id;
-  bh=3PUFe8lGfmRoHU6PGkmQY4a6erVkVN1VaPEhG8iDapw=;
-  b=axmlKbHDOf0dcOY3r8i6Kv030nNQuUmv/V72u8XvN/L8owk2DK5NKmhA
-   mwP4zFtY1sMC8NuwZhXZ07HfTeT7SqUJTagCUI2FgJMCRxvGhIs+H/xUG
-   igd9ycZ7qQGrvCQjVYx+eiYzPeasUWfgX0dGOxGxAjlCqfD4IqOGV8wsn
-   6ou1ZSyMLCdCLd8YcC7rCFITqb/20pbDC588vZWJmzoG3f3qtNG29wFmE
-   tcDvgVB+bszfZVfGwIpp5xuxb7c4mveRl9ub+JpNf9Qeq1oK19xLbVffT
-   /8S9mucW8DhalUjL+PTQMWqwPITcnuOXpgZy4kVe26Pwf+7TzNEP6hW1t
-   A==;
-X-CSE-ConnectionGUID: 5zmKdW74RASTWg5ZdNiBZw==
-X-CSE-MsgGUID: 4ijzIHKzT4q4EeKcoDyk6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3493285"
-X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
-   d="scan'208";a="3493285"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 07:18:33 -0800
-X-CSE-ConnectionGUID: hgYGchmpSnufnt+cFIY40w==
-X-CSE-MsgGUID: jj27NBEsSLeFx0dPrFBjNQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
-   d="scan'208";a="9500856"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 15 Nov 2026 07:18:21 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xSbzm-000000016yq-2Hw2;
-	Sun, 15 Nov 2026 15:18:18 +0000
-Date: Sun, 15 Nov 2026 23:17:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>
-Subject: [kvm:kvm-memprot-v4 32/54] arch/loongarch/kvm/vcpu.c:167:53:
- error: expected ')'
-Message-ID: <202611152311.FOhXX4Pi-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=X3fyl0AE;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=LN+XwsJg
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id DEC6F7A007A
+	for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 10:18:51 -0500 (EST)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Sun, 15 Nov 2026 10:18:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1794755929;
+	 x=1794842329; bh=jXL3awY87I7bqCpFDm1wxAqeA5Al9Z5LUc/nPR+6gxs=; b=
+	X3fyl0AEfeBvHFst5Q0V1UEsQeby1BM81HLqcTKPmAuriRvCkJtvXMNqjk3o21zv
+	tRZTqOGdm041GVhK72a39b/+gfrMUE98uXp4FKhaSjZZV8oiFStFk3YJoUx30HFu
+	emCd5JhI4WFKRIwA0vTUqrxqf7llJjPNxk8UNRXyPYXOGmwjzoGCK/AVELeqyA1T
+	Mf3+GebDYnpJmA8POXM/TzFfW6cYecKlX9syieJT3Fc/T/Pfi/I/VHV1QIetjC/K
+	ngKqz1MHdYO9Wot9lKt5+xBAcbRSb6bfwcUppMqESa6XU/J/ngZvm1xn67zg7zlH
+	CqSBjwTZpNagioRE6sbHXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794755929; x=
+	1794842329; bh=jXL3awY87I7bqCpFDm1wxAqeA5Al9Z5LUc/nPR+6gxs=; b=L
+	N+XwsJgSy6unJDUxVhbAN9jjR4ChGLpK09UWox0eeTi3aau0ZlGYyDgSYisfeo6H
+	V0NpLW6Wt0EJ7sWWpm7PoXWnfTsm6X7EAaLlF2pdx6Hv6tBfS406PDbg7DqMSX9e
+	pX20y1bpyPyRZEb+MLH/aF1FGcYJSvyuQMNb+5+S0ZXXSMhvoqIvLWjE7OI18ZOJ
+	FXewkwQADJnGK1i8pVgotICZYo1BGU7w/2XVhokJKwC8EzlpkX+pzpVfrN5CrhEq
+	aRem9s9O2dN16nywVapYeU0fUkXegPHJ6YXhVJ1yEfu9weCAN/BYB0d3rQtw37zH
+	OqGoGoEgun05KfNlkXs2w==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1794755929; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm2:rsa-sha256:Crn53s49OtF9oir8swUxFibqZooZroh+BcIRYVQcxTMFIpr
+	vct8fQjoiQGFVpU+X2bW3VEjFDYZQCR9glcHBmmzZtz4ESSnyPPCvPTyozvjNV55
+	UoUpdQLCKHDbfBYkIcywMLaSZ5LRNDJlQtPL3LvNmLVZZW4cHW4OxPRYrF38v03U
+	WsQCTcAZaoT/Aer7hrdqBK6UyMZ1ZtM8pJKEOQ0ykPNdv35wZMbc7Uohg0w2ZUry
+	VWjuf+GSHUHBOVkQPg3m5F4B7FaW8ySoInIKylQITuQAUB2HxGO1x2iBr/5w1Guy
+	p1b98YMXVcBBdNwBSDI4htCGWv/tpVJP2xUgJdQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:RPRGmgdxnBnNv5uquxYy8MBAVAddXarUAKannPbarMQ=:LPIofgvPCh59qWtpBBu3/xvmkCvTHB5eJOFqs6HnklQ=;
+X-ME-Sender: <xms:Vs35auF3ZKeoxzwOsUYqSkStVskbs4R-NGUIdeyhfyeixyyk9EN3ZA>
+    <xme:Vs35aqIEdga0nfRUy1jvgxGicKyLl7wz4lxqhsowM6MD8fEPuqveb7hRDmyeV22hw
+    eqH_O14ewKa36SMvMq3UQGHhWn8C5qo0Qy9uxzoAAV37KTnw9Vp-1Hs>
+X-ME-Proxy-Cause: dmFkZTG0KPJjbF0MaYzlr1rMKbFVKZccD29mlx5DJ2nDT7gsDYCCpAPlozFsGDxohcC0/r
+    rBNTGt6QIyhi+iHgRSTHcMZwGyMov7EYB/dRho9I5EtscXX8S47EQ95GzVnNrVZ7/87yQl
+    W+t2L/rmREhnML0NmZgivhr89fiMdi0TupTTBVSxjvICnNewjWK5RL/9Aauzl1KonQ6Nxe
+    NEWqX4k3HjKJETMzrTNMg238sNyGliWAM3YNCpjFRAvg+11+z0nJt6eJjlFMdihuPNbgIm
+    oYg+mzbAvXGVjFYQFNtth3taHKaeWEkuhsGKNyHHNPiZcPoe08V914VpI6+MtAPh2X17cw
+    FuBgm7wf7JfRdStmmfKL1GwGzkX4/BxT6+huZ7YIOqNgCkcHUAVroQ0OnY222fxJk82r9S
+    UouzJSAmkJtqWmfeYCPE7yv5BfOT00gCZ9RF/HnUOSO2cSH4QXPDYMPsFB1melKmKAd5DE
+    U8ZEMFMDe3MXzPL0Bf060i9FZ/du702JWrVBV7M8iUjqjTFwJk2g2RT2y3wMmwXo2p31BO
+    TS/nfxaAXtBzKxURMxws+YH3t11fQ7Sj2TFX0JKgypZhMZtveSU2ZgNCOA9Z3ygn7G4BG7
+    imxonf/MrJU+NVTafWwmyXTbOjFMBCs94nvQjGLiLz4+9S7XgAPqgyQWVsGg
+X-ME-Proxy: <xmx:V835ahrv4y2-PQDiHSsLS0XYo1QHdz5R1BdqX1MXkUm-FttaFVZsxg>
+    <xmx:V835al4upEkIi7RJYjYyJk2fjijUGXxBNFBHDXaCSkP3X5EicHxwUg>
+    <xmx:V835agcOfApQazsMJguSEf37x-hfOcQn58VFpyTCxaMteRTE03SfOw>
+    <xmx:V835ai6xj3oYcT99JabivV--4v_uh8k8TdJQfAbpvVX23n2U379t3g>
+    <xmx:Wc35amsAonV99wwPoCZRTnv44dyVVUBYx-zoO6bdqCvwHDlfQyhY36aI>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 5C25C32A009C; Sun, 15 Nov 2026 10:18:46 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,88 +113,58 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+X-ThreadId: A4hrlnFi848o
+Date: Sun, 15 Nov 2026 16:18:26 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nathan Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Message-Id: <dbf6e2a3-ac52-4d0f-a2df-b78163e9d57a@app.fastmail.com>
+In-Reply-To: 
+ <20261114-lkdtm-usercopy-wunsequenced-v1-1-d9f288701932@kernel.org>
+References: 
+ <20261114-lkdtm-usercopy-wunsequenced-v1-1-d9f288701932@kernel.org>
+Subject: Re: [PATCH] lkdtm/usercopy: Avoid unsequenced accesses to cache_size in
+ lkdtm_usercopy_init()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-memprot-v4
-head:   e71c4e83c03926c300f6c43e79b783d47ba8b588
-commit: 494d2885086430d3eb267af6aaf35093e2ba78db [32/54] KVM: Introduce kvm_check_gen()/kvm_memslots_check_gen()
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261115/202611152311.FOhXX4Pi-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261115/202611152311.FOhXX4Pi-lkp@intel.com/reproduce)
+On Sun, Nov 15, 2026, at 05:37, Nathan Chancellor wrote:
+> After a recent improvement in clang to warn on unsequenced accesses to
+> volatile variables [1], an instance appears in lkdtm_usercopy_init(),
+> which can break the build with CONFIG_WERROR=y / W=e:
+>
+> drivers/misc/lkdtm/usercopy.c:431:9: error: unsequenced accesses to 
+> volatile qualified 'cache_size' [-Werror,-Wunsequenced]
+>   429 |                 kmem_cache_create_usercopy("lkdtm-usercopy", 
+> cache_size,
+>       |                                                              
+> ~~~~~~~~~~
+>   430 |                                            0, 0,
+>   431 |                                            cache_size / 4,
+>       |                                            ^
+>
+> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
+> 6.5.2, unsequenced side effects on the same scalar object are undefined
+> behavior.  Per C11 6.5.2.2.10/12, the evaluation of arguments in a
+> function call is indeterminately sequenced, meaning any side effects in
+> the arguments are unsequenced.
+>
+> cache_size is marked as volatile to hide its value from the compile time
+> constant checks in the hardened usercopy routines. Refactor the
+> calculations based on cache_size into their own volatile variables to
+> keep the values hidden while avoiding unsequenced accesses on the same
+> object.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: e47e311843de ("lkdtm: Update usercopy tests for whitelisting")
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2195
+> Link: 
+> https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 
+> [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611152311.FOhXX4Pi-lkp@intel.com/
+lgtm,
 
-All errors (new ones prefixed by >>):
-
->> arch/loongarch/kvm/vcpu.c:167:53: error: expected ')'
-     167 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
-         |                                                                   ^
-   arch/loongarch/kvm/vcpu.c:166:5: note: to match this '('
-     166 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
-         |            ^
-   arch/loongarch/kvm/vcpu.c:1821:53: error: expected ')'
-    1821 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
-         |                                                                   ^
-   arch/loongarch/kvm/vcpu.c:1820:5: note: to match this '('
-    1820 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
-         |            ^
-   2 errors generated.
-
-
-vim +167 arch/loongarch/kvm/vcpu.c
-
-   151	
-   152	static void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
-   153	{
-   154		u32 version;
-   155		u64 steal;
-   156		gpa_t gpa;
-   157		struct kvm_steal_time __user *st;
-   158		struct gfn_to_hva_cache *ghc;
-   159	
-   160		ghc = &vcpu->arch.st.cache;
-   161		gpa = vcpu->arch.st.guest_addr;
-   162		if (!(gpa & KVM_STEAL_PHYS_VALID))
-   163			return;
-   164	
-   165		gpa &= KVM_STEAL_PHYS_MASK;
-   166		if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
- > 167			     kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
-   168			if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st))) {
-   169				ghc->gpa = INVALID_GPA;
-   170				return;
-   171			}
-   172		}
-   173	
-   174		st = (struct kvm_steal_time __user *)ghc->hva;
-   175		if (kvm_guest_has_pv_feature(vcpu, KVM_FEATURE_PREEMPT)) {
-   176			unsafe_put_user(0, &st->preempted, out);
-   177			vcpu->arch.st.preempted = 0;
-   178		}
-   179	
-   180		unsafe_get_user(version, &st->version, out);
-   181		if (version & 1)
-   182			version += 1; /* first time write, random junk */
-   183	
-   184		version += 1;
-   185		unsafe_put_user(version, &st->version, out);
-   186		smp_wmb();
-   187	
-   188		unsafe_get_user(steal, &st->steal, out);
-   189		steal += current->sched_info.run_delay - vcpu->arch.st.last_steal;
-   190		vcpu->arch.st.last_steal = current->sched_info.run_delay;
-   191		unsafe_put_user(steal, &st->steal, out);
-   192	
-   193		smp_wmb();
-   194		version += 1;
-   195		unsafe_put_user(version, &st->version, out);
-   196	out:
-   197		mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
-   198	}
-   199	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Arnd Bergmann <arnd@arndb.de>
