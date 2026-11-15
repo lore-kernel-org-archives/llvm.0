@@ -1,113 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794752675;
-	b=4/Al0xmTviD5FCZB+xLU87Adiarr7HpYXYmDAIBkh3e9YAHf3u/HBl7Wd7yGDAn2j71s
-	 3lDH20XxeSpYL2yKjOMwL0dJbL9zGroFRYueFzbUcX/orjTR2pvPeUKDwtlP2KgA5AZP5
-	 0nz/LDapnxbVfUwXyIBgUNF42mVqjDkf1I+GdJ9b606LUse5l1q5m5UFz0jtqZE8X6X91
-	 6VelXsG04sxAEJtLGRNxt8cPwHfljXYS1zpM8dePv9GJyxEAwy/Wzg4ClQgLIkg46QD7K
-	 UAIV9R21FM+0aPF6yP+SUMCqEJw9XrDD89idqf/bTVGdxSeSHAvZaGWrO935y2bNDVQ==
+	t=1794755914;
+	b=NPP05gJXBDZjxxuKzZfDZYAMJxiTiXz9eYyizZq2yYP0WXavwtCll12Q8ByMeYVRoo3E
+	 mOI4YHKzw80dMHj+S5MDnAAIDB7kHP/EuHnoZoN+cuD+TEy/cSfnc3XzoRRGMtv1acCtK
+	 gkTASnMlz+WjqA7ujcY3H0iwcfbFYS5sKlTkVITRXpVZmpd8pPRSmPUOa54O412kRcuon
+	 uglKm5ToVBc2nnmRduaw9cGKY+0JlF6p+DFd3dlYhJfLc0AmTwFKflucY6k9L3Z9aqMX9
+	 xFhv8d+Y84ShU1afA2q952cjlxQDAi01DFW2CD9kkjHdPdIVD2XEi/x4YPuOLD5Oz4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794752675;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=7QzzvIBZ5m85jb8a3T2vbOcaHxM8nqWRH2JKBq6oOx8=;
-	b=syYuDnYkyTld1EG4xdQ5mcr7aF/CfcSk5uJpPq5N9kDGBt1BR9LqHk9fotnkhqHXRxN/
-	 jr1O8LOrJ+UxTXvbWgbuns+hPHGkAvI1BU8lpsFdRAH9OkiH924Lq+v8vy0N3sHhGVnzc
-	 8HO2Wc0VLDPWt/rfBepZD3tH32ztKeq3tL+F6dWphpFSSJiXAATL08UOnODijaaYM/xj4
-	 RVT6VHBrdqzmylLp24deuBPoBa3WiUoVyzz0ABbIc/vkcJFhsFyGkB712XjZPQ9TIOZEV
-	 sRZcCfPuPUikngg6z780Z4dSfkzHnHaNHv+aL2Qj1VB0JTjO4oN8upNIb8GejOSp/lg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794755914;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=k5Qp03CAQ8BatLGqMbyRg2JVFKmiz6vka1EtIHQp7Pc=;
+	b=JW4mZkSuUiT++cavrcZIJXq73piuQhU7Tvx9L7DeH44h3p/UfKQ/bLP46H/VUJrMVOn1
+	 xSJ3AC/2hG6hDpcmKfr+b6lWcLK8SMTSkklv7mmlHXZG7ebVTK9g0mE8zG16aOPooFEkz
+	 Dr1e0zOkVSQ49ZN5iTfM0ypTWSK2BdTQe4w+rDU7SwtJH4zSGMp6wM7M6MMqgaDPd+lyG
+	 /ZO25lhc65VBJR5F0S4lPkwKoy8H85YDoAhPzZgSW0TYAtmeRq1Wi5xhVvs5+UlPuumtf
+	 ZFonSqxsLIpIG46pTO4+lB6HC48ftUFb9Mgid3M3QLE6Vvog/9Q+xclUC6GIEjk8pvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PpdtUu+g;
-	arc=none smtp.remote-ip=209.85.128.44
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=axmlKbHD;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC0A606A331
-	for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 14:24:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DC0A606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB1C606A31E;
+	Sun, 15 Nov 2026 15:18:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AFB1C606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PpdtUu+g
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4b467581b98so19855515e9.0
-        for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 06:24:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794752674; x=1795357474; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7QzzvIBZ5m85jb8a3T2vbOcaHxM8nqWRH2JKBq6oOx8=;
-        b=PpdtUu+gXeXeea9VRjO8xyx+8VzYUvRNNQgRVf/Ol4y8a/1a2FwP48XiwJD4G0niX4
-         n8hHjmpp3xwGaUtB6NuwKGpvSsfZdR97aNhdPj97AoNOd4B5RtVGHsg7mbp/IHlQlbka
-         KNjhEyT/Yq7Wkuxht69TlsRRLwmsF2q5TF0j3I/i/yy4LTxYnpPPc4K5fVJv2mNAwhH4
-         2PXpKGGxXtQCQ/+VT+fYWAIgdayRCS5tvUC2/XX/rggCKAyZEl9hd21j0xSOYSI75+cU
-         boXT0fNn7O6utoDHvQVucKVuLydG4DfGSE6+pzC2yqSLnzDIgjFico3ez0dcODttfcSb
-         szzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794752674; x=1795357474;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7QzzvIBZ5m85jb8a3T2vbOcaHxM8nqWRH2JKBq6oOx8=;
-        b=lOWKUddV1ldJ0t2sjkTdCCtQVFMz5V4znlBDIUCIhDiDzXP/VP4Y3B0ewh6xAwPhBX
-         9CLZqj5AxYHyBJH5nsN7ffXI0KvEqq+oLeyO2MJvDGfQkc+YiEvA2QqGMMW2ebDC7RtS
-         Vlm59Y/QDz1pFyxdY09T/K5JiMlAxVqthEe2NkKKnKQLFCbAIeyFcGKSDc1XU8w0BE0i
-         ZcWS0zpQgQ6kw4bgyazjeG/pqOs2M1qMRk2UZJhbp3a6JvU4H8M8bfkUp0IEZ25PnlrE
-         xrdxvon+HhFPLHCBppK3EutUnGvrl8hCXJRxDEqtJCXRXf5pRrb2ZTi8k1TAYRQBGF8a
-         ggkg==
-X-Forwarded-Encrypted: i=1; AL+hErEmT3ULIHo5mhLw7KR3yUW/cuFxJ8le15M4xXXtbT6RJl07cK6MeHu3bjDvwh1VsQUmADgB@lists.linux.dev
-X-Gm-Message-State: APuU4Z+GXBnvVvxQn1bWR2YeXytPrEIey/yCY0HPKB+utfOOqXcxt4UJ
-	tq4n4POpJma/mwi4bN89ncv+6G/xs52UraO9OGyrDKywMoj2I05RjVSq
-X-Gm-Gg: AYBFou3TqTStslE93edJCiypDUMVkw21ozrfPgsEdEL9lZOWlW+pgNqXPXfLihArm+x
-	qiRIPK47oYL2H2DCOeApyj5+3+wQDvWuuxRSCVWCyFJtiQKMrfEaWUu3rCal/jTR6r9bRp/8L7q
-	ViU5UVbFsyPz+Ni+ed67qlH3Ouac2ZwbR2Iqv4m8RoKuZF2Q4GDTeyfD6XF840odEUO2Ey4B5j/
-	cx2pvd9qFOBvXxkopxOU8MA6zKZKPdF1o47g0a5nCERAV58qmNxdAYMpc6QJIgWXDqQLKdHwBSE
-	POd0guJMuV4bUCg6Eol0yPBOXYjaP65BALBWHe7j+E9URD1t397NDt0Dd4z0JTchnFXIxCoejMd
-	hj/vZHisWKXtOYb1/Iab7LE9IyCJmyOdMKspNOv4w4rXdWd8WIY3Hy0itES/8I6VQe0GII5vFzF
-	F/GU/Xs+ecRiWo9AEi7k0yPdVjOlO8fZoi7wdXVzgSZceOF9E+P80FvtNTiQ4R7EkIdQAHtfoUi
-	Grs6O3uA/Oq/0NfBXaP8XW+FPK3Lr/le6SgROvaGHGll6esDlCTD86iSflzUAO4aFYYlpeyViWr
-	ep3mKOzC1lYqlGk8078962hHyDjgTs33y3h64WWn080q2S8utVwz9lXFrrTzW29GaJO8HEEsG7k
-	EQkIP5CXB+bw=
-X-Received: by 2002:a05:600c:c0c5:b0:4a1:cef3:fb3a with SMTP id 5b1f17b1804b1-4bb55a6602amr130912825e9.9.1794752673813;
-        Sun, 15 Nov 2026 06:24:33 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb4e2adf53sm318854915e9.15.2026.11.15.06.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 06:24:33 -0800 (PST)
-Date: Sun, 15 Nov 2026 14:24:31 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Luis
- Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
- Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 0/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
- and KALLSYMS_QUERY_BY_ADDR ioctls
-Message-ID: <20261115142431.1587690a@pumpkin>
-In-Reply-To: <20261113221248.3535369-11-wusamuel@google.com>
-References: <20261113221248.3535369-11-wusamuel@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=axmlKbHD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794755913; x=1826291913;
+  h=date:from:to:cc:subject:message-id;
+  bh=3PUFe8lGfmRoHU6PGkmQY4a6erVkVN1VaPEhG8iDapw=;
+  b=axmlKbHDOf0dcOY3r8i6Kv030nNQuUmv/V72u8XvN/L8owk2DK5NKmhA
+   mwP4zFtY1sMC8NuwZhXZ07HfTeT7SqUJTagCUI2FgJMCRxvGhIs+H/xUG
+   igd9ycZ7qQGrvCQjVYx+eiYzPeasUWfgX0dGOxGxAjlCqfD4IqOGV8wsn
+   6ou1ZSyMLCdCLd8YcC7rCFITqb/20pbDC588vZWJmzoG3f3qtNG29wFmE
+   tcDvgVB+bszfZVfGwIpp5xuxb7c4mveRl9ub+JpNf9Qeq1oK19xLbVffT
+   /8S9mucW8DhalUjL+PTQMWqwPITcnuOXpgZy4kVe26Pwf+7TzNEP6hW1t
+   A==;
+X-CSE-ConnectionGUID: 5zmKdW74RASTWg5ZdNiBZw==
+X-CSE-MsgGUID: 4ijzIHKzT4q4EeKcoDyk6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3493285"
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="3493285"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 07:18:33 -0800
+X-CSE-ConnectionGUID: hgYGchmpSnufnt+cFIY40w==
+X-CSE-MsgGUID: jj27NBEsSLeFx0dPrFBjNQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="9500856"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 15 Nov 2026 07:18:21 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xSbzm-000000016yq-2Hw2;
+	Sun, 15 Nov 2026 15:18:18 +0000
+Date: Sun, 15 Nov 2026 23:17:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>
+Subject: [kvm:kvm-memprot-v4 32/54] arch/loongarch/kvm/vcpu.c:167:53:
+ error: expected ')'
+Message-ID: <202611152311.FOhXX4Pi-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -116,30 +80,88 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Fri, 13 Nov 2026 14:12:45 -0800
-Samuel Wu <wusamuel@google.com> wrote:
+tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-memprot-v4
+head:   e71c4e83c03926c300f6c43e79b783d47ba8b588
+commit: 494d2885086430d3eb267af6aaf35093e2ba78db [32/54] KVM: Introduce kvm_check_gen()/kvm_memslots_check_gen()
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261115/202611152311.FOhXX4Pi-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261115/202611152311.FOhXX4Pi-lkp@intel.com/reproduce)
 
-> /proc/kallsyms is the primary interface for userspace to query the kernel
-> symbol table. However, resolving even a handful of symbols or addresses
-> requires reading and parsing the entire text file, which is often several
-> megabytes and takes thousands of read() syscalls.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611152311.FOhXX4Pi-lkp@intel.com/
 
-Separate from this, I've wondered about separating out the /proc/kallsyms
-code from the code that actually handles the symbol table itself.
-The two parts are pretty much separate.
-IIRC it uses a static function to get the symbol type (which does most
-of the work of getting the name - which it also wants) so it isn't
-completely trivial.
+All errors (new ones prefixed by >>):
 
-I'm pretty sure all (well almost all) the changes will be lower down
-the file than my changes and won't cause (hard) conflicts.
+>> arch/loongarch/kvm/vcpu.c:167:53: error: expected ')'
+     167 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+         |                                                                   ^
+   arch/loongarch/kvm/vcpu.c:166:5: note: to match this '('
+     166 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+         |            ^
+   arch/loongarch/kvm/vcpu.c:1821:53: error: expected ')'
+    1821 |                      kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+         |                                                                   ^
+   arch/loongarch/kvm/vcpu.c:1820:5: note: to match this '('
+    1820 |         if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+         |            ^
+   2 errors generated.
 
-I've been compiling kernel/kallsyms.c and kernel_kallsyms_selftests.c
-in userspace for testing both, but had to cut the bottom off kallsyms.c
-to get it to compile with a sane number of definitions.
 
-David
+vim +167 arch/loongarch/kvm/vcpu.c
+
+   151	
+   152	static void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
+   153	{
+   154		u32 version;
+   155		u64 steal;
+   156		gpa_t gpa;
+   157		struct kvm_steal_time __user *st;
+   158		struct gfn_to_hva_cache *ghc;
+   159	
+   160		ghc = &vcpu->arch.st.cache;
+   161		gpa = vcpu->arch.st.guest_addr;
+   162		if (!(gpa & KVM_STEAL_PHYS_VALID))
+   163			return;
+   164	
+   165		gpa &= KVM_STEAL_PHYS_MASK;
+   166		if (unlikely(!kvm_check_gen(vcpu->kvm, ghc->generation) || gpa != ghc->gpa ||
+ > 167			     kvm_is_error_hva(ghc->hva) || !ghc->memslot) {
+   168			if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st))) {
+   169				ghc->gpa = INVALID_GPA;
+   170				return;
+   171			}
+   172		}
+   173	
+   174		st = (struct kvm_steal_time __user *)ghc->hva;
+   175		if (kvm_guest_has_pv_feature(vcpu, KVM_FEATURE_PREEMPT)) {
+   176			unsafe_put_user(0, &st->preempted, out);
+   177			vcpu->arch.st.preempted = 0;
+   178		}
+   179	
+   180		unsafe_get_user(version, &st->version, out);
+   181		if (version & 1)
+   182			version += 1; /* first time write, random junk */
+   183	
+   184		version += 1;
+   185		unsafe_put_user(version, &st->version, out);
+   186		smp_wmb();
+   187	
+   188		unsafe_get_user(steal, &st->steal, out);
+   189		steal += current->sched_info.run_delay - vcpu->arch.st.last_steal;
+   190		vcpu->arch.st.last_steal = current->sched_info.run_delay;
+   191		unsafe_put_user(steal, &st->steal, out);
+   192	
+   193		smp_wmb();
+   194		version += 1;
+   195		unsafe_put_user(version, &st->version, out);
+   196	out:
+   197		mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
+   198	}
+   199	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
