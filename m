@@ -1,62 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794757981;
-	b=MP/7O4FomxD7Aw9uNgnEYJ1cT+t96IoW+cVjYPitt8f5mz7lRvhZ4Xs8yNSbZhWyL/07
-	 d2PszTzrTKf2QNqKHTsi64hDIVFCa/HmN9qWAyTptiJe8rZjsCZV4urD2TBp0R7vobb3Y
-	 inWDQU1RCDTk8cs/NGzaEMgTYHTBBgys0pcOjyNdrLnQsyV4nLn3oDDzTQDQfomTokXZN
-	 xH1A5aP0A2j6oUfw1mE/ME6HiWtrmvuwJP8MHdqTzasb5XeazL9v3Uh9H4JTf5Fz2Bht6
-	 PQbCs+784PVgV0XYzqd8u5dPYISX94wizBEmun5m1PtL+F1m6WdvzLiwws5IR5BMuPw==
+	t=1794757991;
+	b=gH1GBdS1Slyfy1+22NrHQ7gKXnC+TPSUL9wL1XVwZC/DL3GS9XW69m+PM87jhlWijFJK
+	 y9qlVDmc5IM9jk2mvIbO5LGLA8SfyNFMi6sdgZzpp4cHt0PLXPHsOpkhXnmMJN3rqx3Um
+	 ybqZsQlO5vhCnASWLiNXyIqB+qMWHhU/HGb81ZAhTESeLnRqLnuOl9Kkkak8ru1zxwYTD
+	 4LGLQwzAyTU076sk8NRpHh5h9juq31xiLhzfkArqQZvEv8r5XvYvlhe9XQF90mzCBFyUx
+	 Ga8+j6DYSBno9mESE3v41RcqkKr2g1KPzm2ZVDqe3JyTtc5MTaFjNXqD0MQGNgGeofg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794757981;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=3w2k8dv60M9yhIxrZGVgOz8RjAq82d6eRw88JC7KQX8=;
-	b=1ynuJPiki3JTSRFxKCdWQSWzZDEafgvVsw7zn85u9/eaPJWjXWmdyVXQMV3oX9PpHquF
-	 9P0FTIAAvKYafXel4fxZXPL58bZ7Z31JGL7gPGQqH5odfjThnwvkcnJhq/Sy6ycC3Dsxj
-	 PTOKWRT0Ax3by5o/v6bPpxCh1cTCCWaQYdrm7aJWmIBSaUI4/2ENr9ScxpDO2wPqAVYTq
-	 eQocRzIa+chgLP42rkncPFbcn2RLA2WSC96LxvKdqeG2zoKlqvLJT3AR5NwIMjUGthAVY
-	 dTMY7C7gfWr/u6+SyjHy15wiqGnpzPK/3lX1ZPSGoQtQ5enN0tQeKUnkiZu6uak21/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794757991;
+	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=br1F6rx2z239r/9xCTQgT7hTSXdQ1STMvzPD8aikQWs=;
+	b=yVT7qk1FthUyAAbEeLx0ZAYfMpSA3FdKxVn7/sbDXOz1FDwl3f8l8eFlVWc0vN8F400q
+	 QaN+oryeIasZTQBOCQDK4IweG0b7P5oOQ8iHoN/bouET0anEIjxAUADTO+pdZZdhaAfdY
+	 oxbsf6gSG7WBjFDtA4Bzkk9bXrkWi4wgEuqClGW/3VjG8SOfpWkBpT54xUxktvOa4nbyM
+	 MEQbFctidXY9XveEqm721CWvqKSa2VkYIfc4w/CMWWPM8cR9MX/Z5gIKKpUG6nzqXRj/n
+	 5zsw+C1JuDbFGkr0UMVGSxXHh/ABtTIwdeT76ofZUuDmXSXwnDyCOceIw7Jt5qw4xEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=lunn.ch;
-	spf=pass smtp.mailfrom=lunn.ch;
-	dkim=pass header.d=lunn.ch header.i=@lunn.ch header.a=rsa-sha256 header.s=20171124 header.b=5PuG6+tJ;
-	arc=none smtp.remote-ip=156.67.10.101
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	dmarc=pass header.from=alien8.de;
+	spf=pass smtp.mailfrom=alien8.de;
+	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=KrFT9Mhz;
+	arc=none smtp.remote-ip=65.109.113.108
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2D5606A334;
-	Sun, 15 Nov 2026 15:53:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA2D5606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65E6606A31F
+	for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 15:53:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C65E6606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.a=rsa-sha256 header.s=20171124 header.b=5PuG6+tJ
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=3w2k8dv60M9yhIxrZGVgOz8RjAq82d6eRw88JC7KQX8=; b=5PuG6+tJNvkZcOd+koxl9dO8Up
-	2s8H+g6pF4Nty9+e3X93gr8+RsU+m25LMKR0z9qxMzeLJFfTUfgk/fCkKP8ClkHHQmkNPtK7DfBnq
-	WVr8jYk7pkpGY+qGnIUBKGDL84cKBCUxOAa5zHeeYxYwLHeAIzF+AOBkVhEHRg8WKHxU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1xScXH-00GdYo-RW; Sun, 15 Nov 2026 16:52:55 +0100
-Date: Sun, 15 Nov 2026 16:52:55 +0100
-From: Andrew Lunn <andrew@lunn.ch>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=KrFT9Mhz
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 89CCB40E01F4;
+	Sun, 15 Nov 2026 15:53:02 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id TvAwHo6x9pPC; Sun, 15 Nov 2026 15:52:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1794757979; bh=br1F6rx2z239r/9xCTQgT7hTSXdQ1STMvzPD8aikQWs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KrFT9MhzFLLDqOxM2wzt59BT3y58CHCiRcWr7hmsUQ+Bx2E5xNr1XiKejqJRIH2+B
+	 8US7qzAyJGcmksh+zbUGIorcQx8uBVDt8gLTuPId2CxDuIqaomfPZbjOIFLs1Y74lN
+	 di4+DgCwFvDWydLV0vG6+l5WSS1B+7GvIeO139mZls5yUsl4SgiRzwpV/v5YZBxsUm
+	 DY9By72tWc+rm1+9woElIRKVZULwZd97HROlhedNvmzjeau8Aksh4F+Lf1E+/qQLgb
+	 60BW0Bz/P238gHPhLKYFqwyZ5KX7eiwIwI2p7gi95Tn0O9Dj8PBBjoHW261QoA9EDS
+	 CujsvfTllPvt7UPCwh1WJM/fsMB2O2sPyQKx49sfmFmBs99iIp38kg8L1b8EbaHLa1
+	 Aowb0QEVB3kuou/37Je0A0GtmBSrQZ3sAHCKsVyRaQRErYl0V46CBTE5EgWdODtn3g
+	 10xTEqEHJK6RPYWZC6Dz5AgVLj96PKJZ6ePdDWmlkIm/+2GA+aELJ9rX0+jFOnU+D1
+	 q4ilqqLrXrcZbLo16x5lK4z29DljODIMSldXtrG3v4DLkqi71ioKolRxOG9QLmw6lw
+	 AEeGz0fAVKPEP4FMB0fS8dxz5YR6dyoFOumNjx+hOib9vB3sysmvzSBGsehot9eptr
+	 Rrcm+UOssG/cLrGWlPU07xZk=
+Received: from stx.tnic (unknown [209.52.143.85])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E0D6740E00DC;
+	Sun, 15 Nov 2026 15:52:46 +0000 (UTC)
+Date: Sun, 15 Nov 2026 07:52:42 -0800
+From: Borislav Petkov <bp@alien8.de>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH net] net: microchip: encx24j600: Avoid unsequenced
- accesses to jiffies in encx24j600_tx()
-Message-ID: <58014e4c-fd79-44d7-af47-35da26616570@lunn.ch>
-References: <20261114-encx24j600-wunsequenced-v1-1-c978fc36cacd@kernel.org>
+Subject: Re: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
+ non-x86_64 hosts
+Message-ID: <20261115155242.GAavnVSv7VTBO51JGK@fat_crate.local>
+References: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
+ <20261114202524.GBavjDtC9Z3j7PrV3Y@fat_crate.local>
+ <20261114204605.GA173332@ax162>
+ <20261114205806.GCavjLXgsKNNwK0zLz@fat_crate.local>
+ <20261115050730.GB600738@ax162>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,35 +89,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261114-encx24j600-wunsequenced-v1-1-c978fc36cacd@kernel.org>
+In-Reply-To: <20261115050730.GB600738@ax162>
 
-On Sat, Nov 14, 2026 at 09:38:26PM -0700, Nathan Chancellor wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], an instance appears in encx24j600_tx(), which
-> can break the build with CONFIG_WERROR=y / W=e:
-> 
->   drivers/net/ethernet/microchip/encx24j600.c:898:14: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->     898 |                   jiffies, jiffies - dev_trans_start(dev));
->         |                   ~~~~~~~  ^
-> 
-> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-> 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior. Per C11 6.5.2.2.10/12, the evaluation of arguments in a
-> function call is indeterminately sequenced, meaning any side effects in
-> the arguments are unsequenced.
-> 
-> Add a local variable to hold the value of jiffies before the function
-> call so that there are no unsequenced side effects, clearing up the
-> warning.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 04fbfce7a222 ("net: Microchip encx24j600 driver")
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2196
-> Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Sat, Nov 14, 2026 at 10:07:30PM -0700, Nathan Chancellor wrote:
+> Another option short of adding this test or killing it entirely would be
+> depending on !COMPILE_TEST, as I only noticed this because
+> CONFIG_X86_NATIVE_CPU gets enabled for allmodconfig.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+This sounds better to me, TBH. As in: we don't need to do native CPU compile
+tests in environments like cross-compiling on another uarch where this doesn't
+even make sense to begin with.
 
-    Andrew
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
