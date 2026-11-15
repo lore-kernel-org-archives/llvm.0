@@ -1,85 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794757991;
-	b=gH1GBdS1Slyfy1+22NrHQ7gKXnC+TPSUL9wL1XVwZC/DL3GS9XW69m+PM87jhlWijFJK
-	 y9qlVDmc5IM9jk2mvIbO5LGLA8SfyNFMi6sdgZzpp4cHt0PLXPHsOpkhXnmMJN3rqx3Um
-	 ybqZsQlO5vhCnASWLiNXyIqB+qMWHhU/HGb81ZAhTESeLnRqLnuOl9Kkkak8ru1zxwYTD
-	 4LGLQwzAyTU076sk8NRpHh5h9juq31xiLhzfkArqQZvEv8r5XvYvlhe9XQF90mzCBFyUx
-	 Ga8+j6DYSBno9mESE3v41RcqkKr2g1KPzm2ZVDqe3JyTtc5MTaFjNXqD0MQGNgGeofg==
+	t=1794767928;
+	b=2fnrwUyrtJweypEQdwvG5F5Nyl1y7Ei5kdfH3OR04VcTJxzkDHDJFETxjif0AJJYLDHh
+	 a6h5vFmov2BGa8hanU58KIyD3f3OW8bzvFIRgVX3QTGKaL33zxkDHZa0Aaai1xhughLjo
+	 QwgsF+kAs/TuAeln4cofUMi/eabYYtbIvMgwh1AinwvUT3TUgmuVZcmFbWYMvoCos27ml
+	 +1ErU7S41GNZbTQtPk2cL6qOYyw68vpN0tqtYyFn5rf9lvsYWRVfOhbW80rYyn2qptjHM
+	 OERDs6OhuPB2RbNyYFDeyjquPfC7UQy/E7l2d6pb6hxiKVRcbHbMoqLtjFDugG92QpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794757991;
-	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=br1F6rx2z239r/9xCTQgT7hTSXdQ1STMvzPD8aikQWs=;
-	b=yVT7qk1FthUyAAbEeLx0ZAYfMpSA3FdKxVn7/sbDXOz1FDwl3f8l8eFlVWc0vN8F400q
-	 QaN+oryeIasZTQBOCQDK4IweG0b7P5oOQ8iHoN/bouET0anEIjxAUADTO+pdZZdhaAfdY
-	 oxbsf6gSG7WBjFDtA4Bzkk9bXrkWi4wgEuqClGW/3VjG8SOfpWkBpT54xUxktvOa4nbyM
-	 MEQbFctidXY9XveEqm721CWvqKSa2VkYIfc4w/CMWWPM8cR9MX/Z5gIKKpUG6nzqXRj/n
-	 5zsw+C1JuDbFGkr0UMVGSxXHh/ABtTIwdeT76ofZUuDmXSXwnDyCOceIw7Jt5qw4xEw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794767928;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=n38R8THVBERh6YX8fumxgq2SeV93NHDPiTWFfSKg6qw=;
+	b=bqph7EDaR5TrAL4j+0kL3veHBvdmOcH8zKd8nvUh8NvR4k6e+Ghxph5BFAmL+ko9aT6z
+	 1SurrVzieVWUsIV4AcOVvacmjZCk6Lmdj5b7a6i0zA8A77oFPY4uRTVAkd9QfMqKCzSQQ
+	 bke3qm2r8KG9QhDSIxNO2MXcOUaiy+TyHZh9zoQ4YmDhEzPjUIAiXmJYVSlEIro0eCkO8
+	 mw2GSTRot9aK/ybJJ84q8YiDARJqCh8Zx9B6GetjRT/5XeiOBEEANSQitGWfwwS/eFNPs
+	 s5X6SJ/m0cqKTfMxJUHZX9eqpgpulKNCUnsNd6HZsT4TK7ePY1Bwo5NGisuVFq4gBdQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=alien8.de;
-	spf=pass smtp.mailfrom=alien8.de;
-	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=KrFT9Mhz;
-	arc=none smtp.remote-ip=65.109.113.108
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PWPpc8v9;
+	arc=none smtp.remote-ip=192.198.163.17
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65E6606A31F
-	for <llvm@lists.linux.dev>; Sun, 15 Nov 2026 15:53:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C65E6606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E71606A32E;
+	Sun, 15 Nov 2026 18:38:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93E71606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=KrFT9Mhz
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 89CCB40E01F4;
-	Sun, 15 Nov 2026 15:53:02 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id TvAwHo6x9pPC; Sun, 15 Nov 2026 15:52:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1794757979; bh=br1F6rx2z239r/9xCTQgT7hTSXdQ1STMvzPD8aikQWs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KrFT9MhzFLLDqOxM2wzt59BT3y58CHCiRcWr7hmsUQ+Bx2E5xNr1XiKejqJRIH2+B
-	 8US7qzAyJGcmksh+zbUGIorcQx8uBVDt8gLTuPId2CxDuIqaomfPZbjOIFLs1Y74lN
-	 di4+DgCwFvDWydLV0vG6+l5WSS1B+7GvIeO139mZls5yUsl4SgiRzwpV/v5YZBxsUm
-	 DY9By72tWc+rm1+9woElIRKVZULwZd97HROlhedNvmzjeau8Aksh4F+Lf1E+/qQLgb
-	 60BW0Bz/P238gHPhLKYFqwyZ5KX7eiwIwI2p7gi95Tn0O9Dj8PBBjoHW261QoA9EDS
-	 CujsvfTllPvt7UPCwh1WJM/fsMB2O2sPyQKx49sfmFmBs99iIp38kg8L1b8EbaHLa1
-	 Aowb0QEVB3kuou/37Je0A0GtmBSrQZ3sAHCKsVyRaQRErYl0V46CBTE5EgWdODtn3g
-	 10xTEqEHJK6RPYWZC6Dz5AgVLj96PKJZ6ePdDWmlkIm/+2GA+aELJ9rX0+jFOnU+D1
-	 q4ilqqLrXrcZbLo16x5lK4z29DljODIMSldXtrG3v4DLkqi71ioKolRxOG9QLmw6lw
-	 AEeGz0fAVKPEP4FMB0fS8dxz5YR6dyoFOumNjx+hOib9vB3sysmvzSBGsehot9eptr
-	 Rrcm+UOssG/cLrGWlPU07xZk=
-Received: from stx.tnic (unknown [209.52.143.85])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E0D6740E00DC;
-	Sun, 15 Nov 2026 15:52:46 +0000 (UTC)
-Date: Sun, 15 Nov 2026 07:52:42 -0800
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
- non-x86_64 hosts
-Message-ID: <20261115155242.GAavnVSv7VTBO51JGK@fat_crate.local>
-References: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
- <20261114202524.GBavjDtC9Z3j7PrV3Y@fat_crate.local>
- <20261114204605.GA173332@ax162>
- <20261114205806.GCavjLXgsKNNwK0zLz@fat_crate.local>
- <20261115050730.GB600738@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PWPpc8v9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794767928; x=1826303928;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ho9p6bSo8pi1QrenazGvesf4HhUNwYmhTsTzMNwIz5w=;
+  b=PWPpc8v9wuWuUQd/mGlRblIC6Z39upTInKfSshMXSibsdCxMwFctkljF
+   new8rJp0SjLEghvOHrv81o2O6Od4d7BVTOWWyqGS/L9w4yOvLokopvCoP
+   +s19EHL9IEiVu7vNfOukaFfJMvt8f3Ai1lmFShkJP+ZE3rfcovL+Qk4Lu
+   8cBEVQNruP7OfJEiz2a9imx4VB5x6mailoRjgG7es8lwNtAqxb7bWmJNn
+   Gr6elVwdu8icibNdjzjqYvdWv4uc7sknbRYIy0zypFje6vWyLF1g1FiLd
+   2WsL57KLKb0mWpRGBonidsJlrMe8LU1NN5hUYSqv/WCdy29RVmPUb8A9R
+   g==;
+X-CSE-ConnectionGUID: t3SrRrdKRquFjqv2QbY02A==
+X-CSE-MsgGUID: IupdkW33QCGV2XZMj+XaEw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3498587"
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="3498587"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 10:38:47 -0800
+X-CSE-ConnectionGUID: xgioXYEnTiuMMwCr8er90g==
+X-CSE-MsgGUID: i+uioB1WQR2VnUR4b4a0wQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="9372476"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 15 Nov 2026 10:38:44 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xSf7g-000000017C8-1yn4;
+	Sun, 15 Nov 2026 18:38:40 +0000
+Date: Mon, 16 Nov 2026 02:37:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, Guo Ren <guoren@kernel.org>,
+	Pekka Enberg <penberg@kernel.org>,
+	Patrick =?iso-8859-1?Q?St=E4hlin?= <me@packi.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Subject: Re: [PATCH v4 2/3] riscv: probes: reject probes inside an LR/SC
+ sequence
+Message-ID: <202611160252.d58noD11-lkp@intel.com>
+References: <20261115-probes-in-lrsc-v4-2-48b9b036bd1d@mobileye.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -89,23 +92,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261115050730.GB600738@ax162>
+In-Reply-To: <20261115-probes-in-lrsc-v4-2-48b9b036bd1d@mobileye.com>
 
-On Sat, Nov 14, 2026 at 10:07:30PM -0700, Nathan Chancellor wrote:
-> Another option short of adding this test or killing it entirely would be
-> depending on !COMPILE_TEST, as I only noticed this because
-> CONFIG_X86_NATIVE_CPU gets enabled for allmodconfig.
+Hi Vladimir,
 
-This sounds better to me, TBH. As in: we don't need to do native CPU compile
-tests in environments like cross-compiling on another uarch where this doesn't
-even make sense to begin with.
+kernel test robot noticed the following build warnings:
 
-Thx.
+[auto build test WARNING on c03c1a14507dfaf8b856c2608f9ac216021fc222]
 
--- 
-Regards/Gruss,
-    Boris.
+url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Kondratiev/riscv-kprobes-fix-out-of-bounds-read-in-riscv_probe_decode_insn/20261115-143733
+base:   c03c1a14507dfaf8b856c2608f9ac216021fc222
+patch link:    https://lore.kernel.org/r/20261115-probes-in-lrsc-v4-2-48b9b036bd1d%40mobileye.com
+patch subject: [PATCH v4 2/3] riscv: probes: reject probes inside an LR/SC sequence
+config: riscv-randconfig-1000-20261115 (https://download.01.org/0day-ci/archive/20261116/202611160252.d58noD11-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ca14e3d05c4e63d6e8103945c86b958ed2f55d5f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261116/202611160252.d58noD11-lkp@intel.com/reproduce)
 
-https://people.kernel.org/tglx/notes-about-netiquette
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611160252.d58noD11-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/probes/kprobes.c:5:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:148:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> arch/riscv/kernel/probes/kprobes.c:75:4: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+      75 |                         else
+         |                         ^
+   2 warnings generated.
+
+
+vim +75 arch/riscv/kernel/probes/kprobes.c
+
+    51	
+    52	/*
+    53	 * Walk the instructions from the enclosing symbol up to addr to check that
+    54	 * addr is an instruction boundary. Then reject a probe inside an LR/SC
+    55	 * sequence: the breakpoint trap drops the reservation, so the SC would fail
+    56	 * and the loop would hit the probe again on every retry. The sequence is
+    57	 * recognised by a forward scan with the constrained-sequence rules, as for
+    58	 * uprobes, so an lr that is not followed by an sc (as in __cmpwait()) does
+    59	 * not taint the rest of the function.
+    60	 */
+    61	static int __kprobes arch_check_kprobe(unsigned long addr)
+    62	{
+    63		unsigned long tmp, offset;
+    64	
+    65		/* start iterating at the closest preceding symbol */
+    66		if (!kallsyms_lookup_size_offset(addr, NULL, &offset))
+    67			return -EILSEQ;
+    68	
+    69		tmp = addr - offset;
+    70	
+    71		while (tmp <= addr) {
+    72			if (tmp == addr)
+    73				if (riscv_probe_in_lrsc_body((u16 *)addr, RISCV_LRSC_SCAN_BYTES))
+    74					return -EINVAL;
+  > 75				else
+    76					return 0;
+    77	
+    78			tmp += GET_INSN_LENGTH(*(u16 *)tmp);
+    79		}
+    80	
+    81		return -EILSEQ;
+    82	}
+    83	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
