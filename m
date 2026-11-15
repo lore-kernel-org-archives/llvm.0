@@ -1,61 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794719255;
-	b=snyGBraOQEreXWfj3z2FQTQlMZyGBKZ4iE3KLbyqiuaCpzYDmdl3Zf+p+vB1dwOvOijZ
-	 VN5isnZ112BuCj1PVt0LVbVaKxkyQYWdy3Oc+Jy54t3TIFDVZjTNtaTzVirA72Rm9ed/a
-	 cPgWZy2o5E8buJjzICNdQE14eY+uz3vdwECCE3XFl7qgbzHSn5lRr6UahfVDm1OeKbeyg
-	 +nnT64Ip4MabO6CllJmc7GmD2fZZXHyX14j0EbIxVdKJgqJykQylhaHu46NBDirpnkrxt
-	 RKvaXn59Kppx5y6y07IX7sB56TIZsovtxT9+BnE2PbOo838VWc7uMks4O6hbz3vuVgQ==
+	t=1794721111;
+	b=MTJy6gpK+f4A55qOtFpOdAhKrtfsCvRSu3rEyYUuOh1HTlW0VIAbKk6u39rsAMCZyW9F
+	 BbXFfArMn7ijoy7YcYI7EIP+FKfJQ7rRY+l1DRrjzqyDMIUER4cERv9zqMmJS8S7XMd9H
+	 4/sEix0gWXUMsnBGCCNWbbL0V6RX56ab38aakrwBEj/1fZXQvXlXcHeSHt0hxMGeSo7So
+	 7V8AmaE7aNEkqOFrU889aJ1QxbWJe0Fs1hwMf8KuGrV6yzGtQGbCiiRsK5Mjy2HQ+zpmg
+	 8MQiem6VqddB0y+qpSVdhak1A09spr/cK//PQ9BSGNmyELw00jbsQw4cMkbitHN96Tg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794719255;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ikScGg7wBKTFsbJ/gDhTQR58vzTQcrwVNkVKkfOyHeQ=;
-	b=d4qX7KbUmnVf2t8fekFk9TMrjEqHneHkjaGX5bY8XbbjHd1uLXQKsvrstpFnbgzlF5h0
-	 vWYR6xK3jDqljeUvAXtsCVmBnA+LGTgImc5lFf33cJ8QBshd+nNVBoAKJqGaTC6CcKYtW
-	 QFxwHHqrSghPWAVpLphQW1Kh4f25cIGBO+sy7Quzei7W4VpGuewgI6lEd6iGaG/D6aNau
-	 O2oxQL+P/sX2FCNQHVoGTGDJAhFoqZjIhabc6mvbb2qmgFx80Ax2HVw0V7xv2N4OhAuK8
-	 5k469tGqGCjNuTDGQ+aUmao3jZhGEp7oyyUIl1w68+n2Y299t5P/IBUbZ22JabiwkbQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794721111;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=iBc/N0te4uGl1upWmaerJ5EnmDnwWxf3GzS/WZ3t1BI=;
+	b=3Xr5bD/Uf8BorDs8f90ZLbj3Fbm7EP65/3t0/MYmfNunizB89V3pztQ7pWEIv+rt7HtO
+	 Zb8fYT2unEKjW1yh5VbYxatKWf0facMZvV2PTVGUH2u3CQp+kQGJ8JyXgQ5YlMzerQM8S
+	 twPtQkBmPDIjw44Qwjsn77Bm3R0/gYe+OojhRWPaHBJytTTV2Nd4XG3/LFGfF7ZWnZ1sQ
+	 Ac+7GH0Eq50p/aGgO/nAFxVk+5hbQRZB+RM22/5k5Pzep43kmoiAcxMUwv6Gemptn3HHf
+	 UUid/mHxKFWtbfW+m4apZw7652IMK1S61Ig7wmXCXpcyaRAc/W6B66sB4qbnb1uq0fQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gv182j1S;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UnL4uGc8;
+	arc=none smtp.remote-ip=192.198.163.18
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2449F606A323;
-	Sun, 15 Nov 2026 05:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C59606A32C;
+	Sun, 15 Nov 2026 05:38:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8C59606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gv182j1S
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5511F000C4;
-	Sun, 15 Nov 2026 05:07:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794719254;
-	bh=ikScGg7wBKTFsbJ/gDhTQR58vzTQcrwVNkVKkfOyHeQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Gv182j1SrsNW+vBDS+pykRsj8qYVG8aIuI90aGACVYsIszE1iQUPEVUMkp5txwyUF
-	 T3K8o0/CUQtG/DAvzx1pVQJOuSP1W3t2fzF/Pr95ULXXWbl57C97Hh9JV01ZdWeEG1
-	 Jc6DaZX2+JXCl8A41UzeRNTEFbr8pDeSM4YOwSLCFnGjdiR7dnEhp/QqCPK2wc+roG
-	 GvnEu/fNdibLdCbbyLZe746MZJ9fENN3crBFZ5d6tNuaAP4UhLPJuhxncMc99SAZm2
-	 p/bGLGIB/+YEtGq9EZeR4puJ3Avey3S/UjeIcjKHn6+xYn9vyMITYScAdziPbPPYYr
-	 h4e51aFjHSCGA==
-Date: Sat, 14 Nov 2026 22:07:30 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
- non-x86_64 hosts
-Message-ID: <20261115050730.GB600738@ax162>
-References: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
- <20261114202524.GBavjDtC9Z3j7PrV3Y@fat_crate.local>
- <20261114204605.GA173332@ax162>
- <20261114205806.GCavjLXgsKNNwK0zLz@fat_crate.local>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UnL4uGc8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794721110; x=1826257110;
+  h=date:from:to:cc:subject:message-id;
+  bh=cN8VRjbFGf7EDKbHsGvoUKpkYVRXccny+OAbNUhv03E=;
+  b=UnL4uGc8T9IQe0lMhd/nMLBiuOOSM+1F65fIyVWNDxZYtY419w0z1M0j
+   slXjY4X57VwR3S+K0qrMhVflKyyk6H4adgG/bj7dcaUFQ6FzN8nMbzJ5X
+   7YRQH5AwG0CWORfUPRVzwX2v8Z/iA2ziLg8CR1DGRShh+X3a7+HiDXhzK
+   agVgXe4GUSS2LuaWQUgijdiwDHBC2ZuwoNAoM9We/3HfVThPIPtY7w9i1
+   6jiXPFnp2M+bBtn/4Ecs8gw9+0MvKXcBlhdZNK1535NOeMOBk0mjJJjtg
+   qX4KbFBnn7ckjRlTx6s2/Y1bwNtWhD+r636D1IZxOWQArgt1cWYr/yKS7
+   Q==;
+X-CSE-ConnectionGUID: YIMc1WN6Q9CDwmwS81i6vg==
+X-CSE-MsgGUID: ZiJrjmiZTTycwSLzTgxj/A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11966"; a="3514526"
+X-IronPort-AV: E=Sophos;i="6.27,214,1787036400"; 
+   d="scan'208";a="3514526"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2026 21:38:29 -0800
+X-CSE-ConnectionGUID: QmOuLtEtRyKr486EYTWzxw==
+X-CSE-MsgGUID: c7Udr9iVQgegiML2BVCUEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,214,1787036400"; 
+   d="scan'208";a="11043415"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa011.fm.intel.com with ESMTP; 14 Nov 2026 21:38:28 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xSSwb-000000016RA-1YT4;
+	Sun, 15 Nov 2026 05:38:25 +0000
+Date: Sun, 15 Nov 2026 13:37:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Pirko <jiri@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpirko-mlxsw:wip_attestation_all_2 26/68]
+ drivers/attestation/core/ctlv.c:525:5: warning: stack frame size (1312)
+ exceeds limit (1280) in 'ctlv_attestation_mr_log_get_query'
+Message-ID: <202611151346.rHqtau4i-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,35 +80,32 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261114205806.GCavjLXgsKNNwK0zLz@fat_crate.local>
 
-On Sat, Nov 14, 2026 at 12:58:06PM -0800, Borislav Petkov wrote:
-> On Sat, Nov 14, 2026 at 01:46:05PM -0700, Nathan Chancellor wrote:
-> > No other architectures provide an option to turn on '-march=native' like
-> > x86 does. It all lives within arch/x86, so I would just be adding a
-> > check to arch/x86/Makefile instead of arch/x86/Kconfig.cpu. Making the
-> > option unselectable seems like a better option. If other architectures
-> > did want to add this option, I agree generically abstacting this check
-> > would be reasonable.
-> 
-> Are you going to move it somewhere generic when other arches decide all of
-> a sudden they love the native thing?
+tree:   https://github.com/jpirko/linux_mlxsw wip_attestation_all_2
+head:   7ff5e548abbc2312431d4eea9ad283347963a6e2
+commit: 16f591ff3ae9d9236ce15a997eeaa3e037bde4a0 [26/68] attestation: Add the measurement register journal
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261115/202611151346.rHqtau4i-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5dabc01bba1df10de6fb3c32fcf9db4aafe78f38)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261115/202611151346.rHqtau4i-lkp@intel.com/reproduce)
 
-Yes, as I would expect another architecture implementing this to
-abstract the current x86 support out and adjust that check in the
-process but I can't guarantee that. I can only go off of what is
-currently in the tree.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611151346.rHqtau4i-lkp@intel.com/
 
-> (If it were me, I'd simply whack that native thing. It is such a waste of
-> energy).
+All warnings (new ones prefixed by >>):
 
-Another option short of adding this test or killing it entirely would be
-depending on !COMPILE_TEST, as I only noticed this because
-CONFIG_X86_NATIVE_CPU gets enabled for allmodconfig.
+>> drivers/attestation/core/ctlv.c:525:5: warning: stack frame size (1312) exceeds limit (1280) in 'ctlv_attestation_mr_log_get_query' [-Wframe-larger-than]
+     525 | int ctlv_attestation_mr_log_get_query(struct ctlv *ctlv, struct ctlv_op_ctx *ctx,
+         |     ^
+   1 warning generated.
 
--- 
-Cheers,
-Nathan
+
+vim +/ctlv_attestation_mr_log_get_query +525 drivers/attestation/core/ctlv.c
+
+   524	
+ > 525	int ctlv_attestation_mr_log_get_query(struct ctlv *ctlv, struct ctlv_op_ctx *ctx,
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
