@@ -1,49 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794716789;
-	b=hgj2NJyM9wGBAgLjkkzLQtzfqWh25jRZXbLasWvtEpOYEeeB2yvG2wW5D+fIDbqxNaO8
-	 9KpLEoNbD3R3wq86AP3rarQ5h0Zx8QlU7rFarlTAW7HSCKjm2U7wjVz/5iww0oF9UUx6d
-	 4r4X1c0qoqhvbf8sMTRWVoQkIPy0ouXTpQbxE3dMhts1k/V17ZSrEqnzUvHnMwpgh7WVB
-	 vhjd/1nbEnCtwaUYc24/MGL4lnec1ZVu+KRjOqMdei9t903EZ49aeoruLQZiBaczh8bPv
-	 +glJd3N9Cs47FHxoOi+FAoBkzOgVktvhLaIA0cWwX9//nCkqghirrG1YuXA1kBpgHZA==
+	t=1794717018;
+	b=e3rmuA4jCMFqQ7fbKoUy3XVzLbp1N+ww2VM1L28LdyUGnxXgJUCtFGgtw3CStd+vNEeg
+	 vhPMMwybH3HOvcOkBTZTJ1WzbU7af7ZYU+gHO1D3i53UC4jlfTeddUz4eNfVwphjwFwNl
+	 B48WlO8AZtw7a2AuZ2KRYMGhTrSxlrkfogXEfAsOkl8a58RkC6S4AmmXElyMxdumcBs6C
+	 MOIuyGPrPPjMrKuXbq70TBgY32POrScgbQNxwyDnssx6to5nzwXDOl/paIZsnSkb/Rqu5
+	 HRruiLufycumv1W77BkVEdFqdp1xkmfwmhPsTbmwLEJXu8YbV/aHg/s4m4GFV7VKlsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794716789;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794717018;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=PE1T7Z5KhZcynu05MtgfaEQGAVsUUdvQevTG2LkwgU0=;
-	b=mCQUbcdYoc5+PlwkqsnUk6MOUrPVxsknybIIeDnR9a4UEmEypDl1q85109KeOQdcJDHJ
-	 1vQRvDgy/Q/guS9cw5vkpEMPrbq63Z4gIyiOQ6Ji5HTTUqP9L9/Plggq8nIQhbxG9vxG6
-	 fZx2g9ZcAIPVte7F14zx9fCd+RooyRLtkG64wgQ43HKzkis8Q1M1/BD339O2L8c0/YSXE
-	 9cTer6qT2CZpepRtAhIZO+wcgsLoABqRhdDexdeCz89WyvEoMM55CRydVBH4mJITodulF
-	 20JtDCIuCjQDwbT3iiBf+faiIAaIVMNKd/P7CasWzGdjWWdjjttFZNmBfm30RUZPr3A==
+	bh=qSWECCtGDXdUz5py+dVMGpmrzXXOmBWZXWLybIApoNY=;
+	b=vXMxBM1qFjvWN8IX2WLr5ixbP7E7pOpArB57/inaQYNim0eYoDXHDaZraXZlJY25EXZy
+	 x43BEku2spddG91SAlibELY4jO+xQuphWBQu5LtbSx2jz8C9rPWS2r5MioWArS8W5NrqK
+	 EYB7mu2ihuOSQPNL/jihvOC7nLGQ1CG+G7+SYodwI6bRSvJ/8Mkt2k/I9dlyB1hBpGIXz
+	 pXbZmWSs85WJLno00E/CSGOclV0LBv2aeXJLN+gJTG+F3YF7hdFDAoBr4uUAv60my5ch3
+	 0Utf+kmcgz6KeXxI7/FjHqcXtMqIrDU9c4w/2mj40WdRsYPs8kjQ5QXUdi6omAbWAgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UHTzTboY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BJbOOHAf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A22606A329;
-	Sun, 15 Nov 2026 04:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3168606A323;
+	Sun, 15 Nov 2026 04:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UHTzTboY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E6A1F000C4;
-	Sun, 15 Nov 2026 04:26:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BJbOOHAf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A411F000C4;
+	Sun, 15 Nov 2026 04:30:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794716788;
-	bh=PE1T7Z5KhZcynu05MtgfaEQGAVsUUdvQevTG2LkwgU0=;
+	s=k20260515; t=1794717018;
+	bh=qSWECCtGDXdUz5py+dVMGpmrzXXOmBWZXWLybIApoNY=;
 	h=From:Date:Subject:To:Cc;
-	b=UHTzTboYfT+0FUVWPaFs3CBRV+60pYByu+ICQjNjd+D7cj8oqYHlFSDzCIYxt0JNq
-	 /sKSyzVY2GG6qn8sx0VsjDExZopjVM0aJdTTttw3HtdPbrBDDPeDPJpwfpLWn504DA
-	 YBxKFuK6PHNN47p36qcuqX8YRIW0iqlSeSdw+rcqB+BF35WzdbkpmzJAhY5HUnG9kh
-	 XnuLdDyCFuqsLqB5h/r/XGVI5Wp4jHWCaGq8Qutac9MQuvU+3HqGYTCVJI5hd8j4a+
-	 EvRCfCG6RFo18kXmgMt9DqAhSIwdZxa3If7ZvaGIGnvxW1NR0nGRNCkIDHkXo8eQDa
-	 N4EKxB47qLcPg==
+	b=BJbOOHAfJ8JcakyXQ2lueLKzkN8+oiF5xbu7e23UJJjn27lLLKTIYFJmma5RIh64D
+	 ZCvUJ0xaiEGuyNNN2lghrMu2+1zqwUueMQvkWph6fCCg2i0RURcJHszzxXsd/5Ku/y
+	 03u4/v2NJBzAIu/Z48Gzih+P7kUH844A1rpcdHzvoiVhqeQJtQ55pLTycNMNNHPbVs
+	 iKV0mXFlFjQF5e44WxzFEog3jElJSbbnDN/eLwrmhjtplYd6FasD4pq5q4VZL9ptEN
+	 WMs9TDeW4X7uSlf9lRK9IJAg+sfe7ypuXbfanIEz9MdWezzD3vZ9uvVfMjhHMyUMGz
+	 0nUojFCDNOmBw==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Sat, 14 Nov 2026 21:26:10 -0700
-Subject: [PATCH] rcu/nocb: Avoid unsequenced accesses to jiffies in
- show_rcu_nocb_state()
+Date: Sat, 14 Nov 2026 21:30:07 -0700
+Subject: [PATCH net] mptcp: Avoid unsequenced accesses to jiffies in
+ mptcp_reset_tout_timer()
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -55,97 +55,72 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261114-rcu-tree_nocb-wunsequenced-v1-1-057996a86f0e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yXMQQrCQAwF0KuUrA00Q6niVUTEZn51XKSa6ahQe
- ndHXb7NWyjDEzLtm4Ucz5TTZBWyaUivZ7uAU6ym0IZeRDp2LTw7cLJJB34Vy3gUmCJyG6JIv93
- p2AWqwd0xpvcvPxz/zmW4QefvSOv6AZK2dnp+AAAA
-X-Change-ID: 20261114-rcu-tree_nocb-wunsequenced-02d11678cf42
-To: "Paul E. McKenney" <paulmck@kernel.org>, 
- Frederic Weisbecker <frederic@kernel.org>, 
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
- Joel Fernandes <jfern@kernel.org>, Josh Triplett <josh@joshtriplett.org>, 
- Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
- Puranjay Mohan <puranjay@kernel.org>, rcu@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
+Message-Id: <20261114-mptcp-wunsequenced-v1-1-707a73a6c172@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yWMwQrCMBAFf6Xs2YBbSxF/RTyYzatGcI3ZRIXSf
+ 2/U4wzMzGTIEUaHbqaMV7T40Aa86UiuZ73AxdCY+m0/MvPg7qlIcu+qhmeFCoIT8X4/st+FQai
+ FKWOKn9/0SIpCp7+06m+Q8t3Rsqxa9bLeewAAAA==
+X-Change-ID: 20261114-mptcp-wunsequenced-ccbb861b3d4c
+To: Matthieu Baerts <matttbe@kernel.org>, 
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, stable@vger.kernel.org, 
  Nathan Chancellor <nathan@kernel.org>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2941; i=nathan@kernel.org;
- h=from:subject:message-id; bh=7OmRRHFXh1lWL/xG22s5IPrApVcaF15LGgvPQEIuTBU=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFk/TfJa94gduDl1nayy18pNik8mzyt6rRV6UOhs33zx/
- N5//7K9O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEZk9m+B+TEWwlbPRcWjV7
- /Zy++fGLzR+K/Hh7NXLJx3vnTfcz1Kxh+O9Zsbzs2rywDrEyd7NJTzZleiql6KUyH3594q1/+3H
- jZj4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2034; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=J/YSlnqi7aQ98+addJs8Lr4CNVb3jotGxM7r3NCMf7k=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFk/TUOePuv7w8r5I5zPMe9kik1ElAaT5y+7yM2nbjg8f
+ pjLPGlKRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjI62JGhuvpbdYi29fHVCcL
+ Nn2XsxSuqn+6L9B02np/4cI3bmF8vxj+Fxx69bSAozl73Q4O1z0sZuXBbKnldhafxCdEaJtNFDn
+ IAwA=
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
 After a recent improvement in clang to warn on unsequenced accesses to
-volatile variables [1], an instance appears in show_rcu_nocb_state(),
+volatile variables [1], an instance appears in mptcp_reset_tout_timer(),
 which can break the build with CONFIG_WERROR=y / W=e:
 
-  In file included from kernel/rcu/tree.c:5123:
-  kernel/rcu/tree_nocb.h:1651:3: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
-   1650 |                 jiffies - rdp->nocb_bypass_first,
-        |                 ~~~~~~~
-   1651 |                 jiffies - rdp->nocb_nobypass_last,
-        |                 ^
+  net/mptcp/protocol.c:3044:20: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+   3044 |                         tcp_jiffies32 + jiffies + mptcp_close_timeout(sk);
+        |                         ~~~~~~~~~~~~~   ^
 
 Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
 6.5.2, unsequenced side effects on the same scalar object are undefined
-behavior. Per C11 6.5.2.2.10/12, the evaluation of arguments in a
-function call is indeterminately sequenced, meaning any side effects in
-the arguments are unsequenced.
+behavior. Per C11 6.5.3, unless otherwise specified, side effects and
+value computations of subexpressions are unsequenced within expressions.
 
-Add a local variable to hold the value of jiffies before the function
-call so that there are no unsequenced side effects, clearing up the
-warning.
+Add an explicit sequence point by splitting the addition expression in
+half, eliminating the undefined behavior and clearing up the warning.
 
 Cc: stable@vger.kernel.org
-Fixes: f7a81b12d6af ("rcu/nocb: Print no-CBs diagnostics when rcutorture writer unduly delayed")
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2192
+Fixes: 76a13b315709 ("mptcp: invoke MP_FAIL response when needed")
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2193
 Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- kernel/rcu/tree_nocb.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ net/mptcp/protocol.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index b6cfee4e5039..8448a7c578e8 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1618,6 +1618,7 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
- 	struct rcu_segcblist *rsclp = &rdp->cblist;
- 	bool waslocked;
- 	bool wassleep;
-+	unsigned long j;
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 8968db58083e..8a9efebf3497 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -3041,7 +3041,8 @@ void mptcp_reset_tout_timer(struct mptcp_sock *msk, unsigned long fail_tout)
+ 		return;
  
- 	if (rdp->nocb_gp_rdp == rdp)
- 		show_rcu_nocb_gp_state(rdp);
-@@ -1639,6 +1640,7 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
- 		rsclp->gp_seq[RCU_NEXT_READY_TAIL].exp);
- 	sprintf(bufn, "%ld", rsclp->seglen[RCU_NEXT_TAIL]);
- 	sprintf(bufb, "%ld", rcu_cblist_n_cbs(&rdp->nocb_bypass));
-+	j = jiffies;
- 	pr_info("   CB %d^%d->%d %c%c%c%c%c F%ld L%ld C%d %c%s%c%s%c%s%c%s%c%s q%ld %c CPU %d%s\n",
- 		rdp->cpu, rdp->nocb_gp_rdp->cpu,
- 		nocb_next_rdp ? nocb_next_rdp->cpu : -1,
-@@ -1647,8 +1649,8 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
- 		"lL"[raw_spin_is_locked(&rdp->nocb_lock)],
- 		"sS"[!!rdp->nocb_cb_sleep],
- 		".W"[swait_active(&rdp->nocb_cb_wq)],
--		jiffies - rdp->nocb_bypass_first,
--		jiffies - rdp->nocb_nobypass_last,
-+		j - rdp->nocb_bypass_first,
-+		j - rdp->nocb_nobypass_last,
- 		rdp->nocb_nobypass_count,
- 		".D"[rcu_segcblist_ready_cbs(rsclp)],
- 		rcu_segcblist_segempty(rsclp, RCU_DONE_TAIL) ? "" : bufd,
+ 	close_timeout = (unsigned long)inet_csk(sk)->icsk_mtup.probe_timestamp -
+-			tcp_jiffies32 + jiffies + mptcp_close_timeout(sk);
++			tcp_jiffies32;
++	close_timeout += jiffies + mptcp_close_timeout(sk);
+ 
+ 	/* the close timeout takes precedence on the fail one, and here at least one of
+ 	 * them is active
 
 ---
-base-commit: 18b332441bbf59fa537929fe390238e137a6caff
-change-id: 20261114-rcu-tree_nocb-wunsequenced-02d11678cf42
+base-commit: aa40afa831ebfe45e40a23721711059f2ac584d4
+change-id: 20261114-mptcp-wunsequenced-ccbb861b3d4c
 
 Best regards,
 --  
