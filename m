@@ -1,47 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794840008;
-	b=ZazUgzXDj72zXREDMTuRcTl3CeHfmVyuRyDdVWpO12wCqLKXBeO8Vgj8g85uzr/JTXto
-	 d79zSuOy9mlIg72X1v8pW3R6Kcs+t4f2a4A7vor46T46RnUQLPrfmrlwzS9b0f3P7Tf/g
-	 jpkYzcLe9KBABe4BzfyWZbMqc4Op1laarM5dYFWTei6idszf0uDYksAQrB+7ONf9s7AEq
-	 ii4XlbaBC0DR0BPH3UfQ724icUOsehNtL11waUdduKqQt5+I9hoBgbjz4A8EmWAiI44dB
-	 m8Z2T2OuWqbFzFfEyYgs03oie4rZ8bmbXFuWWTSMWXOannyg8Yod2KuT/PdZBhByYGA==
+	t=1794843679;
+	b=Rmc+CxZE/x1FUmZG4Izn05ZooNgQw/gZPILiAwUIBhHrFnmBcPOpihaoVm6TlaTa8xvD
+	 ZZk+Ul/oDiZY4/WRYNhS0QDAVlkANNz467Or3yUAleZsJcHJsr5usi/zNXuoM4u9MZp5x
+	 04jNFNCdBJUpAkmIzlERwqkf1rcU0sTrsAR3iuUgqNHljLkGbEf+6bxQyglooGy6h+UF8
+	 COljwhLwmPo/eV82iKd2csUmGyjzdSn7dldv4gc2GIOslIVJchp+3XcUdYGL6NQvQKVpv
+	 j7imcBs9MKIBnLr4tvrGjiP6duUK4yEfDxSbeMRlwJFTGTiEHihe3oEIxzsjZlfxhDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794840008;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:Content-Language:To:Cc:References:From:Autocrypt:Organization:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=l2EBpH08xKGjJnPxYpGviTvnZuT+6vV8X+V/VrgfnoA=;
-	b=BlkCvQxIz9tpI/q13meTlPvQj+9Bukmqn0UAux0BwYz7HwUwDWw9oXPPBPcsw9fZk5G1
-	 Wxv9TnKXX/SsDJurH10XNaIrOWFalpV5FkkWrfEyoPCFeji4uPtjYBrdx5J2UvrreI/cA
-	 bMvr39+o4MsaCSxklxe/1RRCMvG5CxEjhY1QecFcUvO6Vq9rxkd2wAtCwEhJIlf2p0jry
-	 fJTob/Ox+uR230XQ2mKp+6yZlb40rHixo2BC8MGVu8gjdZedg/wdE8F4jZa+VgSR0QMdv
-	 EwjSq1YZoA7PPxYzBiUFcCPHUF7HlB5+9UUO/SGKI5339ploMxbvIu6/nGc+RbGdLRg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794843679;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=KWR/J/J58+Atn/vMtZtNZ6y3lmKLITgM/1HsveMyy7o=;
+	b=VOKsLARBHbzgHdrMzkAHuwfNCMeUuzyxOgZ47nFdOvQ4qjSmy1n1K31yOPvI/31wL7sU
+	 j+9XNiexPkuTO6kPESpHNAStTm9SBl3saejf9yCFPks3x+WdSVC89dpOV/tKxuvlb5NL8
+	 eduqTogytWJ7jeWKRPymq528lGPxrD5zAwPSA2lephJF88HzFvw/dy4k710mHaWspQWTl
+	 jus7zIAjJcgKefnUAz8WFOaONbZlVcGEdnvuORnzh6D2dpFgtHgwME3sL6OLZjKWEqvIB
+	 qBC5NAEFc461FSkq1rb4w3HtGYD0B7whSiV7pVQ6H2EGWHni7KFaaJ6OH0oZ4dbbMPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EzD/GQvN";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rx93tga+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14FD3606A32C;
-	Mon, 16 Nov 2026 14:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id B985B606A31C;
+	Mon, 16 Nov 2026 15:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EzD/GQvN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2921F000C4;
-	Mon, 16 Nov 2026 14:40:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rx93tga+
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 192521F000C4;
+	Mon, 16 Nov 2026 15:41:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794840007;
-	bh=l2EBpH08xKGjJnPxYpGviTvnZuT+6vV8X+V/VrgfnoA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=EzD/GQvNR1otlSd8m8+eabMhI+h/azuepFBT9Ub3NmseDVOzAH7kWm0cTfaBVrwZN
-	 PYJa3KDrymDi8ElGdVUSB8ndLE1YlG64gmRyaFpm3SBlFmbXXYB3W//ePI8DFTSdpc
-	 vUN/AJ9yR4oSGMoTq4wmKbFkJBeP+LiFP+naYrQrTQdSU1wFI+wEPYyn6Wc+ACYm4q
-	 96X5AjYy+bOd81oyk8a61CxLWXFLnPWlu4Dtkx9fSZkGIM8pbH7cmR5O0O3QhMlVGW
-	 AGWdA9F9RAKNPbig7CQgrlVocvp9yPH0k3kMd3cQulE9G0WxQIEZ/bTDw2eDbg6VsY
-	 l5fteDhN/fhhQ==
-Message-ID: <1d43222e-b864-44a3-a159-575fc1a9b388@kernel.org>
-Date: Mon, 16 Nov 2026 15:40:01 +0100
+	s=k20260515; t=1794843679;
+	bh=KWR/J/J58+Atn/vMtZtNZ6y3lmKLITgM/1HsveMyy7o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Rx93tga+iEZqWtg3d0GphcFn91pO9fZ2kWQnjfyHDfXHcGN+h2rKcnZvDufLT01Gw
+	 /laXOV5urbjZ9s3aucgOs1E62Sm5GAPzy9d1mAPYJum4fha+AR7FZTLm2ak1nQZxUL
+	 n0IVlYF4SuPVlvqOIqJusMUGDrK6PqNpdqK82sGqrWF8iPmp0maZXBlokGx90ZtD9X
+	 AfU0L+hVle+r8DbCH0mEwVX/5wIfakizj8nFw3WpiNSkKC3F926TILlkTxoZQGjA4A
+	 TZmk9ByNFgMI5B4hJAKA1p6sYqLDMguFVtfZ+qjvQr09HcA8o5o/nucXHXGSVnFOVY
+	 QroySXHMk9w4g==
+Date: Mon, 16 Nov 2026 16:40:53 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [linux-next:master 3784/7428]
+ include/linux/page-flags-layout.h:6:10: fatal error: 'generated/bounds.h'
+ file not found
+Message-ID: <avskBTulNo70xq-i@levanger>
+References: <202611160947.NOrZmI1p-lkp@intel.com>
+ <avroMXSm8hiG1W4N@monoceros>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -51,95 +60,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net] mptcp: Avoid unsequenced accesses to jiffies in
- mptcp_reset_tout_timer()
-Content-Language: fr
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- stable@vger.kernel.org
-References: <20261114-mptcp-wunsequenced-v1-1-707a73a6c172@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20261114-mptcp-wunsequenced-v1-1-707a73a6c172@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <avroMXSm8hiG1W4N@monoceros>
 
-Hi Nathan,
-
-On 15/11/2026 05:30, Nathan Chancellor wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], an instance appears in mptcp_reset_tout_timer(),
-> which can break the build with CONFIG_WERROR=y / W=e:
+On Mon, Nov 16, 2026 at 12:28:24PM +0100, Uwe Kleine-König (The Capable Hub) wrote:
+> On Mon, Nov 16, 2026 at 09:45:42AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > head:   84abb955b1015477aa11a96e2f3ac1b938b77f48
+> > commit: cdfdbc11552b99dbc5c45c55f62a76527ffcc73d [3784/7428] Move struct cpu_feature to <linux/cpufeature.h>
+> > config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20261116/202611160947.NOrZmI1p-lkp@intel.com/config)
+> > compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ca14e3d05c4e63d6e8103945c86b958ed2f55d5f)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261116/202611160947.NOrZmI1p-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202611160947.NOrZmI1p-lkp@intel.com/
+> > 
+> > Note: the linux-next/master HEAD 84abb955b1015477aa11a96e2f3ac1b938b77f48 builds fine.
+> >       It may have been fixed somewhere.
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    In file included from scripts/mod/devicetable-offsets.c:3:
+> >    In file included from include/linux/cpufeature.h:30:
+> >    In file included from arch/loongarch/include/asm/cpufeature.h:13:
+> >    In file included from arch/loongarch/include/asm/elf.h:9:
+> >    In file included from include/linux/fs.h:5:
+> >    In file included from include/linux/fs/super.h:5:
+> >    In file included from include/linux/fs/super_types.h:7:
+> >    In file included from include/linux/list_lru.h:14:
+> >    In file included from include/linux/xarray.h:16:
+> >    In file included from include/linux/gfp.h:7:
+> >    In file included from include/linux/mmzone.h:20:
+> > >> include/linux/page-flags-layout.h:6:10: fatal error: 'generated/bounds.h' file not found
+> >        6 | #include <generated/bounds.h>
+> >          |          ^~~~~~~~~~~~~~~~~~~~
+> >    1 error generated.
 > 
->   net/mptcp/protocol.c:3044:20: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->    3044 |                         tcp_jiffies32 + jiffies + mptcp_close_timeout(sk);
->         |                         ~~~~~~~~~~~~~   ^
+> This is the issue that Sasha Levin already reported and fixed in the
+> thread about cdfdbc11552b99dbc5c45c55f62a76527ffcc73d, see
+> https://lore.kernel.org/all/f610c07f39df15f3e7ebdc63bfcd759ca7a687a8.1794233316.git.sashal@kernel.org/.
+> Nicolas claimed to have applied it already.
 > 
-> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-> 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior. Per C11 6.5.3, unless otherwise specified, side effects and
-> value computations of subexpressions are unsequenced within expressions.
-> 
-> Add an explicit sequence point by splitting the addition expression in
-> half, eliminating the undefined behavior and clearing up the warning.
+> Best regards
+> Uwe
 
-Thank you for the fix, it looks good to me:
+yes, just re-checked: the fix is included in next-20261113 (commit 50ccc340081fd1e6cd175).
 
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-@Net maintainers: this can be applied in net directly (simple, safe, and
-avoid build break with -Werror on newer version of clang).
 
-Cheers,
-Matt
 -- 
-Sponsored by the NGI0 Core fund.
-
+Nicolas
