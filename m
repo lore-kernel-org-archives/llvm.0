@@ -1,54 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.84
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794833060;
-	b=pRdczLeyZyK40uzuzTgYkFO6bs8SJ3GXyRtOElJDIXNPAmvHvl5y7V0IAZIoweAwvij6
-	 5CnJu0UqtuMoSm+1ewrMe7HVSnJY8SO6BrFsNj01E6TisMcPwFU2pKsZ2go722afV4oBO
-	 qFyNFMLYDiOIZCVhwwqtFwjBtzIftQYNwQh2zkqsL0pWT7AieLqHj6jNzweBo7INjvE4V
-	 OlAV8L8KcSKGkj3nBT/BwNd+xGFgVAoXK0Tg5On51D7Ye080TOLkvTu+j2Zph99DUi2YV
-	 mQgFNig4E4JWikkEYZJxsZ9N7Pl6AqQLvqOCVMZGhnSlbaafeRYJBjvri4+HkXm8NCg==
+	t=1794840008;
+	b=ZazUgzXDj72zXREDMTuRcTl3CeHfmVyuRyDdVWpO12wCqLKXBeO8Vgj8g85uzr/JTXto
+	 d79zSuOy9mlIg72X1v8pW3R6Kcs+t4f2a4A7vor46T46RnUQLPrfmrlwzS9b0f3P7Tf/g
+	 jpkYzcLe9KBABe4BzfyWZbMqc4Op1laarM5dYFWTei6idszf0uDYksAQrB+7ONf9s7AEq
+	 ii4XlbaBC0DR0BPH3UfQ724icUOsehNtL11waUdduKqQt5+I9hoBgbjz4A8EmWAiI44dB
+	 m8Z2T2OuWqbFzFfEyYgs03oie4rZ8bmbXFuWWTSMWXOannyg8Yod2KuT/PdZBhByYGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794833060;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=HdBYWB42Ov1f7t5UzOhOjOd4BKScNXzBpb3W6636xpA=;
-	b=c360fj7kkFFXT4RxDi4qNQ765Dz0aYJCd+7M4D2jEzdA3aH1BlF4b+U1W8o1DKZYeBoc
-	 bGM9ljsfqdCGMwA489i3b1BZH9Tott8XEznifK55Rj7hDWEzIoDNrxy3em/EgrCsmFIbr
-	 uzM133lFmgRda3oOhY5KDQEjnVlhGm1DePt3kupGEe+HmOtZlryytE4RXq+lsgsmA35rq
-	 4IdkLzKzzj+eXRbFfQXAfwBEMzhDSur49wv2uHgLuGEr9YoeUhkLnPH7j1lMJXuQUcwSp
-	 yLdmE6nk+oVgOGNZ9u7AkaOCZxZWC/FomwIS1ZrfjlJ6LkDc5VjVm8lxkse4aYz1F7Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794840008;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:Content-Language:To:Cc:References:From:Autocrypt:Organization:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=l2EBpH08xKGjJnPxYpGviTvnZuT+6vV8X+V/VrgfnoA=;
+	b=BlkCvQxIz9tpI/q13meTlPvQj+9Bukmqn0UAux0BwYz7HwUwDWw9oXPPBPcsw9fZk5G1
+	 Wxv9TnKXX/SsDJurH10XNaIrOWFalpV5FkkWrfEyoPCFeji4uPtjYBrdx5J2UvrreI/cA
+	 bMvr39+o4MsaCSxklxe/1RRCMvG5CxEjhY1QecFcUvO6Vq9rxkd2wAtCwEhJIlf2p0jry
+	 fJTob/Ox+uR230XQ2mKp+6yZlb40rHixo2BC8MGVu8gjdZedg/wdE8F4jZa+VgSR0QMdv
+	 EwjSq1YZoA7PPxYzBiUFcCPHUF7HlB5+9UUO/SGKI5339ploMxbvIu6/nGc+RbGdLRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SBi8nsIQ;
-	arc=none smtp.remote-ip=95.215.58.84
-Received: from mta1.migadu.com (out-84.mta1.migadu.com [95.215.58.84])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EzD/GQvN";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511C9606A32C
-	for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 12:44:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 511C9606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14FD3606A32C;
+	Mon, 16 Nov 2026 14:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SBi8nsIQ
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=t5dJVaGKrDmbOPD5DFRf/whdm1YuXTQu5zTjuKwHh4A=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794833057; v=1; x=1795437857;
- b=SBi8nsIQOJA45gIFRMHH2Ml12AHpKafEV6fzehZjssQob1eD04E8DSiHGJNRwbZzHOnxpAdU
- 38ehjlTif7N09vwGwPXrZ3vrKTQL7/E+cIEJHT/WOuGeARKOwPLiiXPs7PAeqezV40PLL8SV0qX
- zvBsGB2ZdjU4OWBfA1Gn94eQ=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 10d7ca4d1171aa70;
-	Mon, 16 Nov 2026 12:44:17 +0000
-X-Mizu-Trace-ID: 10d7ca4d1171aa70
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <01f0b173-dbd2-484e-8e53-f4a001af9acb@linux.dev>
-Date: Mon, 16 Nov 2026 20:44:06 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EzD/GQvN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2921F000C4;
+	Mon, 16 Nov 2026 14:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794840007;
+	bh=l2EBpH08xKGjJnPxYpGviTvnZuT+6vV8X+V/VrgfnoA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=EzD/GQvNR1otlSd8m8+eabMhI+h/azuepFBT9Ub3NmseDVOzAH7kWm0cTfaBVrwZN
+	 PYJa3KDrymDi8ElGdVUSB8ndLE1YlG64gmRyaFpm3SBlFmbXXYB3W//ePI8DFTSdpc
+	 vUN/AJ9yR4oSGMoTq4wmKbFkJBeP+LiFP+naYrQrTQdSU1wFI+wEPYyn6Wc+ACYm4q
+	 96X5AjYy+bOd81oyk8a61CxLWXFLnPWlu4Dtkx9fSZkGIM8pbH7cmR5O0O3QhMlVGW
+	 AGWdA9F9RAKNPbig7CQgrlVocvp9yPH0k3kMd3cQulE9G0WxQIEZ/bTDw2eDbg6VsY
+	 l5fteDhN/fhhQ==
+Message-ID: <1d43222e-b864-44a3-a159-575fc1a9b388@kernel.org>
+Date: Mon, 16 Nov 2026 15:40:01 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -58,91 +51,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v2] blk-throttle: Avoid unsequenced accesses to jiffies in
- throtl_schedule_pending_timer()
-To: Nathan Chancellor <nathan@kernel.org>, Tejun Heo <tj@kernel.org>,
- Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>
-References: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net] mptcp: Avoid unsequenced accesses to jiffies in
+ mptcp_reset_tout_timer()
+Content-Language: fr
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+ mptcp@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ stable@vger.kernel.org
+References: <20261114-mptcp-wunsequenced-v1-1-707a73a6c172@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20261114-mptcp-wunsequenced-v1-1-707a73a6c172@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+Hi Nathan,
 
-
-在 2026/11/16 11:37, Nathan Chancellor 写道:
+On 15/11/2026 05:30, Nathan Chancellor wrote:
 > After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], two instances appear in
-> throtl_schedule_pending_timer(), which can break the build with
-> CONFIG_WERROR=y / W=e:
+> volatile variables [1], an instance appears in mptcp_reset_tout_timer(),
+> which can break the build with CONFIG_WERROR=y / W=e:
 > 
->   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->     469 |                    expires - jiffies, jiffies);
->         |                              ~~~~~~~  ^
->   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->     469 |                    expires - jiffies, jiffies);
->         |                              ~~~~~~~  ^
+>   net/mptcp/protocol.c:3044:20: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+>    3044 |                         tcp_jiffies32 + jiffies + mptcp_close_timeout(sk);
+>         |                         ~~~~~~~~~~~~~   ^
 > 
 > Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
 > 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior. Per C11 6.5.2.2.10/12, the evaluation of arguments in a
-> function call is indeterminately sequenced, meaning any side effects in
-> the arguments are unsequenced.
+> behavior. Per C11 6.5.3, unless otherwise specified, side effects and
+> value computations of subexpressions are unsequenced within expressions.
 > 
-> Add a local variable to hold the value of jiffies before the function
-> call so that there are no unsequenced side effects, clearing up the
-> warning.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 69df0ab030c9 ("blk-throttle: separate out throtl_service_queue->pending_timer from throtl_data->dispatch_work")
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2191
-> Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Add an explicit sequence point by splitting the addition expression in
+> half, eliminating the undefined behavior and clearing up the warning.
 
-Reviewed-by: Tao Cui <cuitao@kylinos.cn>
-> ---
-> Changes in v2:
-> - Reuse value of jiffies in max_expire to avoid
->   -Wunused-but-set-variable for j when CONFIG_BLK_DEV_IO_TRACE is
->   disabled (Sashiko)
-> - Link to v1: https://patch.msgid.link/20261114-blk-throttle-wunsequenced-v1-1-d28ed5553ff3@kernel.org
-> ---
->  block/blk-throttle.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index c5e26551956a..8e58e50bce4d 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -453,7 +453,8 @@ static void throtl_dequeue_tg(struct throtl_grp *tg)
->  static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
->  					  unsigned long expires)
->  {
-> -	unsigned long max_expire = jiffies + 8 * DFL_THROTL_SLICE;
-> +	unsigned long j = jiffies;
-> +	unsigned long max_expire = j + 8 * DFL_THROTL_SLICE;
->  
->  	/*
->  	 * Since we are adjusting the throttle limit dynamically, the sleep
-> @@ -466,7 +467,7 @@ static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
->  		expires = max_expire;
->  	mod_timer(&sq->pending_timer, expires);
->  	throtl_log(sq, "schedule timer. delay=%lu jiffies=%lu",
-> -		   expires - jiffies, jiffies);
-> +		   expires - j, j);
->  }
->  
->  /**
-> 
-> ---
-> base-commit: ab43ec385580b8f8abf72d70fa3acbf4e4f098a5
-> change-id: 20261114-blk-throttle-wunsequenced-ccf308a23c1b
-> 
-> Best regards,
-> --  
-> Cheers,
-> Nathan
+Thank you for the fix, it looks good to me:
+
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
+@Net maintainers: this can be applied in net directly (simple, safe, and
+avoid build break with -Werror on newer version of clang).
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
