@@ -1,54 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794855109;
-	b=yu6cOl1IQqh++pR2myuj/1odjmML7+xt06uVRTJNJok2fOjKhGlSuXUXeoPaKJCrUiLK
-	 JxdmiopAz6I72sfcd8IMne7A0zaNlZ7D+PE4kb1jmDx/+Uwp7xanM6wO0okRM9lJatK6t
-	 gs3bqrRWT5pb8Z0/UdIfUXgr+eq8qj+WfZece+ZKVI65komt6glduYQDg6RD+k8vuWFNs
-	 j70Bc27z7efEoe5EftwKVvRFw+rzDhxcDhLoQHRaeZNYQ38Ztcn/J812D2P4PttSmLWzO
-	 RS2fwfz/tYbwVHxyWvYmsjvyoTmaXUgfBC4gMOricnIkXNY9jE9yHmSZncCgX/BUPyQ==
+	t=1794855302;
+	b=mw3cc3mk+YbciTl9834U7HnubDKVxhePkXoGzLwHozRBcVQaUGnz0iY9/d64GAE5BIle
+	 YCqQ+dJnRJXgk2BCfP+n9/FzGuitUXhoas2hkhhZEtCrDUmUDUg7baTaNQlHGa6gLxQbO
+	 F5JfyXT+2VltNq/eFcy9plnInRymn795lOXWqWFJxPMda/Zvhmewv8+jlhW4Nn9su9sfp
+	 EmLUK6MpJv3/0M1oYnix8qFQ/K4odf6yedaCwTtFZI7kOTmQBnKV76fCMwq1scsUhLhIV
+	 h5LU5I6POcoTTF5gK3X7D952U0lk2VMABlS7oVAj8UtK4ZdSjZOpqUliyyiox8mAUuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794855109;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794855302;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=xMf0EawBmw76DM3vHihCHtrd9empoxXzcPgjEXDY21g=;
-	b=eURRCyui+9m5h4VEWnFvD2gVsB4TP00QY674J7/fJ7mXLDERinbrFh8iwZxcQ3zw8AOW
-	 8NlIlJSPkUBZGDpOKV+7k/fQoVUtGNSuWMVnoDvqLjoENSrDTiG2cEOM63u/DmB6WHy64
-	 1VclqE7DvDn1Hml34OcbwpJ6V8XIGsJBwiDEgsFPRP3d0i3ELWfggB4NC+2jsmiMHa8RT
-	 IiGaVI8PZfztKd0sNOKaJeoBI2/Msvv1HT++AOYGShX2xkEPhfm5v5tQRZ7lJPZVXBimd
-	 RvRH0GmWo1JwJ4wP5EKh3bB+9m7ywN+N6Gh/NtPu1Lpaq13OMjh8Butq+hsRze+4wGw==
+	bh=+HftUw/uUqd4jgUY6b3i56RpufOwZrQW8huZ8KLBZYk=;
+	b=hvMmCSOS7pYaFVAJPMdar1WVoBbOZ37XpO+Cpo+Bj26TbjUXfY6k7KPqlETzLeW8/hD/
+	 9O3zdEO2fpm8IbJGvaHnY1uRTPCVDQjVAc0zfp7k45JyDmxHkBEeMPR/AHYC/6RQzT/ZP
+	 88WeAfNJOR+PquBw+9ulzdGIdY2sRvIUfAXArkfhjUBFtp7KH1oDe8baNT9dG6n9KztYd
+	 Eloc1q+iLyq900vsH2bvoQ4giNIQ7gFJYwHbzaV6dNeeGvpByGgYzT7JWNRHwsGaMUk23
+	 Bfplp38NuKSlh60EjipiPBjuMfdoVUhXqeBdv9k1kRtlCIBghcCL7Wp1fquxh+OivIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UJfybVnY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="WckHz/bu";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D9F606A31C;
-	Mon, 16 Nov 2026 18:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BAB606A31C;
+	Mon, 16 Nov 2026 18:55:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UJfybVnY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40411F000C4;
-	Mon, 16 Nov 2026 18:51:47 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WckHz/bu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AE61F000CC;
+	Mon, 16 Nov 2026 18:54:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794855109;
-	bh=xMf0EawBmw76DM3vHihCHtrd9empoxXzcPgjEXDY21g=;
+	s=k20260515; t=1794855302;
+	bh=+HftUw/uUqd4jgUY6b3i56RpufOwZrQW8huZ8KLBZYk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UJfybVnYHKUzMRG+PJkxU6Fj7gexeWmiPkwwqtum/qybsRRlbuP2Wf8HLrNzXWb9a
-	 OoqoFkeajBumWDDcn1NSaq0w2G9AitqId6jO3jmPLq5MNcpK1/UqjaHIe+mB8VtywX
-	 +bjAJvVHy8hUHXE0bcT8uzsnDRaaSq9LD6lWcwmzJE1wLjfkfNmVdsXHcJ6RxGdd0u
-	 tbr5gkYtaBo65Skbo/ybm2v6P7qBLwS2WoEL+Ban4bK9QDp1E4ko75ey/mA2EkpuSw
-	 6HcI0zYRLyYzhGxmdVs/Lb2ahODjN3tNLUEUd3nRkE3dHwibsbDtkfQxvEyOxXz8W+
-	 3sXZmAcHzBkNA==
-Date: Mon, 16 Nov 2026 11:51:44 -0700
+	b=WckHz/buWLBASZYRje/c8GkwldfZTdQyUi+xHS34PNbWqlPot/94Rhhfr4G1xf8/I
+	 tubaZVo0xDsZ6CmunU8fkZtwRNXTkyOj9HbaaW4yby4NbjwG02GgXb/H+3+wuBDuNV
+	 oeLW1mTWjU1BOG76ckHM7Xjsuk0MDclSbTkU/MCG17x8ZjC5Mm5mSARkY89uNyH7zt
+	 CLncMKBDY8Aeh/jCs58Sw6ZjNy4f337rBvBbYHK2xWTt6QNPPQbObPYlFQY79YtG5D
+	 qUxA8RIMlA035DPw5/IsFikf6ysO7ies5NK2FNnSY3q35dr10luZOz0Pe1jtPJoaFp
+	 rkiCwu4QxFcJg==
+Date: Mon, 16 Nov 2026 11:54:56 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Xu Rao <raoxu@uniontech.com>,
-	linux-pm@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: gpio-charger: mark
- gpio_charger_properties as __maybe_unused
-Message-ID: <20261116185144.GA1036192@ax162>
-References: <20261116124117.2922333-1-sashal@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] sched/topology: Avoid unsequenced accesses to jiffies in
+ sd_init()
+Message-ID: <20261116185456.GA1036399@ax162>
+References: <20261114-topology-wunsequenced-v1-1-686a36fe61f5@kernel.org>
+ <avtMzjJxIpFWkW-L@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -60,49 +68,22 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261116124117.2922333-1-sashal@kernel.org>
+In-Reply-To: <avtMzjJxIpFWkW-L@google.com>
 
-On Mon, Nov 16, 2026 at 07:41:17AM -0500, Sasha Levin wrote:
-> Commit fad4655224f60 ("power: supply: gpio-charger: Keep properties per
-> device") keeps gpio_charger_properties[] only to size the per-device array
-> with ARRAY_SIZE(). clang sees that the array itself is never emitted and
-> warns, which fails the build with CONFIG_WERROR:
+On Mon, Nov 16, 2026 at 10:36:45AM -0800, Nick Desaulniers wrote:
+> On Sat, Nov 14, 2026 at 09:19:52PM -0700, Nathan Chancellor wrote:
+> > +	sd->last_balance = jiffies;
+> > +	sd->last_decay_max_lb_cost = jiffies;
 > 
->   drivers/power/supply/gpio-charger.c:26:35: error: variable 'gpio_charger_properties' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
-> 
-> Mark the array __maybe_unused.
-> 
-> Fixes: fad4655224f60 ("power: supply: gpio-charger: Keep properties per device")
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> fad4655224f60 is the tip of power-supply's for-next.
+> This pattern is going to wind up with two volatile (expensive) accesses,
+> (with potentially different values) rather than one access and the same
+> value by accessing `jiffies` once then storing the result in a temporary
+> local (before the designated initializer), then using that to initialize
+> the two fields in the designated initializer.
 
-Since the Fixes has 'Cc: stable', this one should too (unless this is
-just going to be squashed in).
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
->  drivers/power/supply/gpio-charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/gpio-charger.c b/drivers/power/supply/gpio-charger.c
-> index c90c824382c62..647f5bde38c7c 100644
-> --- a/drivers/power/supply/gpio-charger.c
-> +++ b/drivers/power/supply/gpio-charger.c
-> @@ -23,7 +23,7 @@ struct gpio_mapping {
->  } __packed;
->  
->  /* This list ensures, that the array is big enough for all optional features. */
-> -static enum power_supply_property gpio_charger_properties[] = {
-> +static enum power_supply_property gpio_charger_properties[] __maybe_unused = {
->  	POWER_SUPPLY_PROP_ONLINE,
->  	POWER_SUPPLY_PROP_STATUS,
->  	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
-> 
-> base-commit: fad4655224f60328cc9bcf4399eda8f6d7a587a6
-> -- 
-> 2.53.0
-> 
+Thanks, I should have revisited this solution once I had a wider view of
+the scope of this warning (it was one of the first patches I wrote)
+because I definitely would have done that. I'll respin.
 
 -- 
 Cheers,
