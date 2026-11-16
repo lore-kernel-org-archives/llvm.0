@@ -1,79 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794852098;
-	b=TmLdFHubDFRYZz9RV8bxz/6clx1h4MdN5GOJKyQ68TTco2Bn3VwJLkfGidzARfhEmonj
-	 zVGala2HoXRbAnK4dW6uEUNRPp1puwVYqbnF+xc8TID8X4ObRNq2gsNhwmb6ec63JNsxy
-	 3Yiz8TTwfO4KAEHIaqq4MuFDLYKv7sZE5N6YF+i75Dhcrpgzi7l1hTe5dqquUGhEjBxKp
-	 5QIid3qurT15g5WARUF3Jwi0B+8VnVsWQL/NEzs6Rdz0sAdOYASC1FBUJfga4u4/LH1Oe
-	 edu0OaOnPFitMShxA4Tm+LKZx6JV48WAT6U96U8GZ/u47CkfN0fu8LfcxIxUhqwEWcQ==
+	t=1794853036;
+	b=JxgE3PBPKuDmFW19uzWE5vcUFggMccEQNXDM8AIJ7Fn5Hq3DAehMviQGdE7tun5wxTBk
+	 9lcmJYbd44c91nKYdPOVMHkRUvvtPMi7Q3GRPzWaIjD1xgPXsLebx10/+kDG23guNfURX
+	 6/Wulkyoh9BM8QMN6CfTsoV24Lged4fT3U2RzLO2BzJa1SfKwmXpbMCqx9Mv7ugqqnFSi
+	 cc9CErDTUC9RmXGbs04iOOUtDSxXLIgbd0a5q1zQADaX2HaLX7hBF8Ip+3dj/OczsB18+
+	 eXN5/L/JsXlG5sqQY3wkBjE38oCXwC+3ckeoTSWdj1Ol1jSDBfDSp1F7RenmLBe9q6A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794852098;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=6bHNbn+AnrGcdiIjb4Ht7xasuv47Ac5iq3Lki+QWU7A=;
-	b=UVy7HjvZhgMmMuL2Ss0o86bFpRi/RFL4VRimbwZjxUmeW8n76RKnjp7dXrgc3q0heuPp
-	 penLMhlaLlUwLQorLLtdVQcKKiPP279dCJ3qxOg781W0BRmHgNjVL9tUZ7KZSV+1PdRfL
-	 YgyfBMXycM0PiKXkigfS9hSk7UKs8K2hChutMBS9RnskEVw6VvkwwNJ8dIpn/M1Q35/xJ
-	 Jz8VXIfSNRkM/czrayCMxJOtRiCTjTk+dePncDjbzxqnuEY2MISxGxcpyc+0nQbsUWjT0
-	 IELe4yK4Czr4uLx0vEDfVsb8YVgWkeiDOqb/klKxhwD56RjUXbKmLfrm1jK6lqSW49A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794853036;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=gdtJsINmNYNnzAIaY46IB+pxpQ6KX2atpqMRoNK0SJo=;
+	b=D8P73gj1aCULW6AbIyIHVIFGi7GKFYudVel2ADa/Fw/uZjY77pcvZ3LjEbZvo2Rlwb7Y
+	 Tglqxh+QmgcR+fvenQLHrRiic4LNPe2dton+jPId00g1umb1bX5pQjk1VsNtpaXGD93cQ
+	 vyHikQs/vpwq6+667nn4IcMoNQsutGSKLTdQZNbudTcf7nlC3JukRAcGBZbr4yY31JmhU
+	 sQt4TdmHGLKWTZKIZxzncZQQSUMz5MXBDK2GnaHr/CVqtfIg6jLcCzk8igJ0Hiy9f1oQs
+	 +3z8ssKigFX0QTlvYSkgFcOM4Je6Bb/PfoptJFnA76gF9fMliaVVliyieDCvuevIzNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=I37liP1F;
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WKOuYygf;
+	arc=none smtp.remote-ip=209.85.216.53
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C79606A33D;
-	Mon, 16 Nov 2026 18:01:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8C79606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E8B606A337
+	for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 18:17:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6E8B606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=I37liP1F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794852097; x=1826388097;
-  h=date:from:to:cc:subject:message-id;
-  bh=Bg5KF6+w4I+oh0aPQlU7TVcauuHaFzXGt0EAR5oTkWg=;
-  b=I37liP1Fs0u5RYysPepew9Ql8oPIrdQQEdHvsJOhB5Qhv2k85zo/NkFc
-   jdzCXnlL8Hk5LaANrRfE+A64Hj7zMtltTeganOQsQ3dCSZKQ+X9mK1h9Z
-   nJNpXzwT/QMDfU2A0JZpsP3cd2nKDiOHZK+8VjoQ5NeurNo2avDGy87qo
-   2Jr0+MgwCw8XVl/Gm/+M5AKABVRvnpjcixy23RhvI10sEFJJidmGrIWXQ
-   vS9wcP0f/AM6e9BXLL1HxPe95rfEvSw7yPP7OQ0cqC0jJJR6ym1Ely8FG
-   WfjSD5H/90AfOVBLnN5wO3xStJJkI9Zfyk7EMrW5C0fX6ohpIMG3gYCs7
-   w==;
-X-CSE-ConnectionGUID: igjwPxFyTb6heH/5EfwJLw==
-X-CSE-MsgGUID: 6gflfacgSuyS8RYolM7a2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11968"; a="3676528"
-X-IronPort-AV: E=Sophos;i="6.27,217,1787036400"; 
-   d="scan'208";a="3676528"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2026 10:01:36 -0800
-X-CSE-ConnectionGUID: Z73Ks279RpG/76Q/XeAxsA==
-X-CSE-MsgGUID: 7DtGVnf3Saes/RgnsGWDFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,217,1787036400"; 
-   d="scan'208";a="11328297"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa012.fm.intel.com with ESMTP; 16 Nov 2026 10:01:34 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xT11H-000000019Bo-2nNl;
-	Mon, 16 Nov 2026 18:01:31 +0000
-Date: Tue, 17 Nov 2026 02:00:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-doc@vger.kernel.org
-Subject: [cornelisnetworks:for-upstream_20261115-1518 35/35] Warning:
- drivers/infiniband/hw/hfi2/bulksvc_user.c:1291 This comment starts with
- '/**', but isn't a kernel-doc comment. Refer to
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202611170154.glIRRQ3t-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WKOuYygf
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3b179528d56so1775249a91.3
+        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 10:17:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794853035; x=1795457835; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gdtJsINmNYNnzAIaY46IB+pxpQ6KX2atpqMRoNK0SJo=;
+        b=WKOuYygfTX5VsprlOE6vZKwiK46mmqkYDdgd++ei7T7v3FX/lYvnc1cDN8wFeLjb+U
+         PKRMFFpMY+QHC7S7R/qh2LJ1AIAZSNEjMTlEKkxcJyf+S0VIS/7nhjozu+9wGNG2KQ/X
+         OFpsl+lVZ3uB3HDae0lFCSupBBSIdDHR0AoZ3o+6MVqJslhxi8d6rqP8BV5raj4IvMEv
+         GJBe2epUIe1RziqrKcj9oE5ZYRp/Z6lOz1yk4+pK0OVy2kkKOF6iGavZ86uWaIEg50zU
+         mf+appsujmG2pmxLzk1si/92MVl1LJaNEwQ0UcjoIEEnBsMT3yq0jhXrUda0pijSsWaW
+         fUqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794853035; x=1795457835;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gdtJsINmNYNnzAIaY46IB+pxpQ6KX2atpqMRoNK0SJo=;
+        b=g3fgMTNQ4esJnWralCW/gNbJ9ahPwOOs9joWMezuTc6tdChzjMBUnGY/EosOkX9OmW
+         Qzz3pLNR0zdS0eMXdJFVL99kLCskXpzHkrDhMQ+6XLjIl8INmFMjVDvTqkdXO4EGSvwj
+         vZwyvikRuH6CdcFer0hAXQcnkMt5gq7CkcrunWqmzwqXnrgGJS2oQJelLFgGxefkbKVH
+         k3UD/4wjmU7eVEL/irlKmRdgY68WVaXlaDsBH4KiLxkc2VPs6/5OCjNc1rAXd4i+zc1o
+         VJKl2rKDTX08hT46+EK2vCWrjz8sGZesMLFrKG+w7dzxBxUo8j1QDHKeUZ8s01YDW61T
+         9pfA==
+X-Forwarded-Encrypted: i=1; AL+hErHjeyeKC+ZmMN/VwP0+hyBwilecO1DLbF5BJIbdamg8VI31dN8bgUK9U7U41u30XQ7dqTu1@lists.linux.dev
+X-Gm-Message-State: APuU4Z95STxVXFXWxi00hqDG2fF8VY3tVaCql3c3bcEzuPbKk221XcAq
+	XkqC2h+a1WKEdUX6PPO4HLG03CU4RgKuGTZAnIb8Se5XUwLeBWdlCE848xVWtaASbA==
+X-Gm-Gg: AZFdTZcj1DT09ESLpQ9n9TJwLDVyxupYGAMbKaIgCs1n+COd3bx/tHpfTKeoGdmJp0/
+	xA3fQ+ilBWjVKyp8IEI1pgIDAT5pwuMsSn++AC1Nv0SPHwFo+0GjdtAucU77uNZ0LdBTIdcOiBN
+	XA8m157pFaFABCI+JerttSAlEDYTGqSZh2F1a/pAuSZRAqSArDV+cOwGxGoQiw6a/4Wr51EnZp+
+	9Btv9VI57PvicrJu9B9HKlDWtpPVZbp7yyDHo2CBRmPYxPoUh0lVrPfyH6g+c5UZJNT9m7n6Vwt
+	54niCHolEixeSHAFjC0ESEpY6xwx2vDISraa03JJT5je1q/r4mCsbrAyi7uEkKAUe2YYHtG8+KB
+	Hq8+jqHA/AOS4fc14bT8jRNEdQ7mNHA6cOLHEwGc7fKuB/IVWY/0KGqjtr1/1xAB2jv97kihMtF
+	wATgjk+zNvnWixugK9apgbiKyl8iD2mjsPQnF+ynwyHeK+5HK+sDZ27EJ4rpOzZuLiYK70m5NQ3
+	mc3v5sLw1y+1QeQTtaEkeauoFGnlnuYlrZlivifmc02jo9JxXtqBQ1gW1TCuDUco+jw/RbQB0yW
+	jiBp+0XhRqexMiAcrkG365cg5o1Br3VQ6NDht07Q4DPMVgL+/8DOej9LGSyHrVbUtwGAIGn1XMK
+	a0iGI8PR7QWYOac9b+R3biu308OevDVHRKWgbaPsiWsEqjJbBa7zxdwpuuh04r/rHkXsFQg3kWc
+	9QgteicfZkDzJwUQf8D8S01xolyd1hI+5UUvvLPwmuzSkE/FrfFG8GTrI=
+X-Received: by 2002:a17:90b:28cf:b0:3ac:8dfe:8ec9 with SMTP id 98e67ed59e1d1-3b1b0b47416mr9375279a91.47.1794853034181;
+        Mon, 16 Nov 2026 10:17:14 -0800 (PST)
+Received: from google.com ([2a00:79e0:2e87:6:9050:473d:cdf:7c63])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac70ea45sm272890a91.17.2026.11.16.10.17.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 10:17:12 -0800 (PST)
+Date: Mon, 16 Nov 2026 10:17:07 -0800
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Stefan Wahren <wahrenst@gmx.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH net v2] qca_spi: Avoid unsequenced accesses to jiffies in
+ qcaspi_netdev_tx_timeout()
+Message-ID: <avtIOfLOG3x0TRey@google.com>
+References: <20261115-qca_spi-wunsequenced-v2-1-8cf32f12d546@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,179 +100,75 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261115-qca_spi-wunsequenced-v2-1-8cf32f12d546@kernel.org>
 
-Hi Dennis,
+On Sun, Nov 15, 2026 at 09:45:22PM -0700, Nathan Chancellor wrote:
+> After a recent improvement in clang to warn on unsequenced accesses to
+> volatile variables [1], an instance appears in
+> qcaspi_netdev_tx_timeout(), which can break the build with
+> CONFIG_WERROR=y / W=e:
+> 
+>   drivers/net/ethernet/qualcomm/qca_spi.c:805:16: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+>     805 |                     jiffies, jiffies - dev_trans_start(dev));
+>         |                     ~~~~~~~  ^
+> 
+> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
+> 6.5.2, unsequenced side effects on the same scalar object are undefined
+> behavior. Per C11 6.5.2.2.10/12, the evaluation of arguments in a
+> function call is indeterminately sequenced, meaning any side effects in
+> the arguments are unsequenced.
+> 
+> Printing jiffies on its own is not that useful for debugging transmit
+> timeouts, so get rid of it to clear up the warning.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 291ab06ecf67 ("net: qualcomm: new Ethernet over SPI driver for QCA7000")
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2197
 
-First bad commit (maybe != root cause):
+Just hit a handful of these last week; thanks for getting issues filed
+per (I thought it was just one instance; having one issue per makes its
+clearer this is flagging a few more cases. Thanks for sending fixes for
+these, too).
 
-tree:   https://github.com/cornelisnetworks/linux.git for-upstream_20261115-1518
-head:   16b51e7cd1a98a98348c7b3d5824a3507c8132fa
-commit: 16b51e7cd1a98a98348c7b3d5824a3507c8132fa [35/35] RDMA/hfi2: Add tracepoints and enable hfi2 driver build
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20261117/202611170154.glIRRQ3t-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ca14e3d05c4e63d6e8103945c86b958ed2f55d5f)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261117/202611170154.glIRRQ3t-lkp@intel.com/reproduce)
+> Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611170154.glIRRQ3t-lkp@intel.com/
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All error/warnings (new ones prefixed by >>):
-
->> drivers/infiniband/hw/hfi2/bulksvc.c:1205:44: error: use of undeclared identifier 'HFI_RVT_WQ_PERCPU'
-    1205 |                             (svc->num_lanes == 1 ? WQ_UNBOUND : HFI_RVT_WQ_PERCPU);
-         |                                                                 ^~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/infiniband/hw/hfi2/bulksvc_verbs.c:2214:6: warning: variable 'err_rc' set but not used [-Wunused-but-set-variable]
-    2214 |         int err_rc = 0;
-         |             ^
-   drivers/infiniband/hw/hfi2/bulksvc_verbs.c:2458:6: warning: variable 'err_rc' set but not used [-Wunused-but-set-variable]
-    2458 |         int err_rc = 0;
-         |             ^
-   2 warnings generated.
---
->> drivers/infiniband/hw/hfi2/dms_roce.c:562:13: warning: unused variable 'roce_pio_movdir64b' [-Wunused-variable]
-     562 | static bool roce_pio_movdir64b;
-         |             ^~~~~~~~~~~~~~~~~~
-   1 warning generated.
---
->> drivers/infiniband/hw/hfi2/chip.c:6483:28: warning: variable 'extended_vl' set but not used [-Wunused-but-set-variable]
-    6483 |         unsigned int qpns_per_vl, extended_vl, ctxt, i, qpn, n, m;
-         |                                   ^
-   1 warning generated.
---
->> drivers/infiniband/hw/hfi2/eth_ethtool.c:1050:12: error: no member named 'ptp_clock' in 'struct ether_device'
-    1050 |         if (edev->ptp_clock) {
-         |             ~~~~  ^
-   drivers/infiniband/hw/hfi2/eth_ethtool.c:1051:43: error: no member named 'ptp_clock' in 'struct ether_device'
-    1051 |                 info->phc_index = ptp_clock_index(edev->ptp_clock);
-         |                                                   ~~~~  ^
-   2 errors generated.
---
->> drivers/infiniband/hw/hfi2/eth_main.c:214:10: error: call to undeclared function 'cne_ptp_get_ts_config'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     214 |                 return cne_ptp_get_ts_config(ndev, req);
-         |                        ^
-   drivers/infiniband/hw/hfi2/eth_main.c:214:10: note: did you mean 'cne_get_vf_config'?
-   drivers/infiniband/hw/hfi2/eth_main.h:345:5: note: 'cne_get_vf_config' declared here
-     345 | int cne_get_vf_config(struct net_device *ndev, int vf, struct ifla_vf_info *ivf);
-         |     ^
->> drivers/infiniband/hw/hfi2/eth_main.c:216:10: error: call to undeclared function 'cne_ptp_set_ts_config'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     216 |                 return cne_ptp_set_ts_config(ndev, req);
-         |                        ^
-   2 errors generated.
---
->> drivers/infiniband/hw/hfi2/eth_tx.c:227:23: error: no member named 'ptp_config' in 'struct ether_device'
-     227 |                 if (READ_ONCE(edev->ptp_config.tx_type) == HWTSTAMP_TX_ON &&
-         |                               ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:227:23: error: no member named 'ptp_config' in 'struct ether_device'
-     227 |                 if (READ_ONCE(edev->ptp_config.tx_type) == HWTSTAMP_TX_ON &&
-         |                               ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:227:23: error: no member named 'ptp_config' in 'struct ether_device'
-     227 |                 if (READ_ONCE(edev->ptp_config.tx_type) == HWTSTAMP_TX_ON &&
-         |                               ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:227:23: error: no member named 'ptp_config' in 'struct ether_device'
-     227 |                 if (READ_ONCE(edev->ptp_config.tx_type) == HWTSTAMP_TX_ON &&
-         |                               ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:227:23: error: no member named 'ptp_config' in 'struct ether_device'
-     227 |                 if (READ_ONCE(edev->ptp_config.tx_type) == HWTSTAMP_TX_ON &&
-         |                               ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:227:23: error: no member named 'ptp_config' in 'struct ether_device'
-     227 |                 if (READ_ONCE(edev->ptp_config.tx_type) == HWTSTAMP_TX_ON &&
-         |                               ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:227:23: error: no member named 'ptp_config' in 'struct ether_device'
-     227 |                 if (READ_ONCE(edev->ptp_config.tx_type) == HWTSTAMP_TX_ON &&
-         |                               ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:228:40: error: no member named 'ptp_in_progress' in 'struct ether_device'
-     228 |                     !test_and_set_bit_lock(1, &edev->ptp_in_progress)) {
-         |                                                ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:230:21: error: no member named 'ptp_tx_skb' in 'struct ether_device'
-     230 |                         WRITE_ONCE(edev->ptp_tx_skb, skb_get(skb));
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:230:21: error: no member named 'ptp_tx_skb' in 'struct ether_device'
-     230 |                         WRITE_ONCE(edev->ptp_tx_skb, skb_get(skb));
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:230:21: error: no member named 'ptp_tx_skb' in 'struct ether_device'
-     230 |                         WRITE_ONCE(edev->ptp_tx_skb, skb_get(skb));
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:230:21: error: no member named 'ptp_tx_skb' in 'struct ether_device'
-     230 |                         WRITE_ONCE(edev->ptp_tx_skb, skb_get(skb));
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:230:21: error: no member named 'ptp_tx_skb' in 'struct ether_device'
-     230 |                         WRITE_ONCE(edev->ptp_tx_skb, skb_get(skb));
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:230:21: error: no member named 'ptp_tx_skb' in 'struct ether_device'
-     230 |                         WRITE_ONCE(edev->ptp_tx_skb, skb_get(skb));
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:230:21: error: no member named 'ptp_tx_skb' in 'struct ether_device'
-     230 |                         WRITE_ONCE(edev->ptp_tx_skb, skb_get(skb));
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:231:21: error: no member named 'ptp_tx_start' in 'struct ether_device'
-     231 |                         WRITE_ONCE(edev->ptp_tx_start, get_jiffies_64());
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:231:21: error: no member named 'ptp_tx_start' in 'struct ether_device'
-     231 |                         WRITE_ONCE(edev->ptp_tx_start, get_jiffies_64());
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:231:21: error: no member named 'ptp_tx_start' in 'struct ether_device'
-     231 |                         WRITE_ONCE(edev->ptp_tx_start, get_jiffies_64());
-         |                                    ~~~~  ^
->> drivers/infiniband/hw/hfi2/eth_tx.c:231:21: error: no member named 'ptp_tx_start' in 'struct ether_device'
-     231 |                         WRITE_ONCE(edev->ptp_tx_start, get_jiffies_64());
-         |                                    ~~~~  ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
---
->> drivers/infiniband/hw/hfi2/vf2pf.c:472:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     472 |         int ret;
-         |             ^
-   1 warning generated.
---
->> drivers/infiniband/hw/hfi2/rvt_qp.c:2507:6: warning: variable 'j' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    2507 |         if (unlikely(num_sge > max_sge))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:77:22: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/hfi2/rvt_qp.c:2526:9: note: uninitialized use occurs here
-    2526 |         while (j) {
-         |                ^
-   drivers/infiniband/hw/hfi2/rvt_qp.c:2507:2: note: remove the 'if' if its condition is always false
-    2507 |         if (unlikely(num_sge > max_sge))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    2508 |                 goto bad_lkey;
-         |                 ~~~~~~~~~~~~~
-   drivers/infiniband/hw/hfi2/rvt_qp.c:2495:10: note: initialize the variable 'j' to silence this warning
-    2495 |         int i, j, ret;
-         |                 ^
-         |                  = 0
-   1 warning generated.
---
->> Warning: drivers/infiniband/hw/hfi2/eth_sriov.c:74 function parameter 'ivf' not described in 'cne_get_vf_config'
->> Warning: drivers/infiniband/hw/hfi2/eth_sriov.c:74 function parameter 'ivf' not described in 'cne_get_vf_config'
---
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:207 Incorrect use of kernel-doc format:  * hfi2_roce_resolve_ah - resolve L2/L3 addressing from a RoCE AH
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:217 function parameter 'dd' not described in 'hfi2_roce_resolve_ah'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:217 function parameter 'ah' not described in 'hfi2_roce_resolve_ah'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:217 function parameter 'udp_sport' not described in 'hfi2_roce_resolve_ah'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:217 function parameter 'addr' not described in 'hfi2_roce_resolve_ah'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:217 expecting prototype for hfi2_roce_modify_qp(). Prototype was for hfi2_roce_resolve_ah() instead
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:655 function parameter 'rdi' not described in 'hfi2_roce_mtu_from_qp'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:655 function parameter 'qp' not described in 'hfi2_roce_mtu_from_qp'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:655 function parameter 'pmtu' not described in 'hfi2_roce_mtu_from_qp'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:668 function parameter 'rdi' not described in 'hfi2_roce_get_pmtu_from_attr'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:668 function parameter 'qp' not described in 'hfi2_roce_get_pmtu_from_attr'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:668 function parameter 'attr' not described in 'hfi2_roce_get_pmtu_from_attr'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:716 function parameter 'qp' not described in 'hfi2_roce_do_send_from_rvt'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:655 function parameter 'rdi' not described in 'hfi2_roce_mtu_from_qp'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:655 function parameter 'qp' not described in 'hfi2_roce_mtu_from_qp'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:655 function parameter 'pmtu' not described in 'hfi2_roce_mtu_from_qp'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:668 function parameter 'rdi' not described in 'hfi2_roce_get_pmtu_from_attr'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:668 function parameter 'qp' not described in 'hfi2_roce_get_pmtu_from_attr'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:668 function parameter 'attr' not described in 'hfi2_roce_get_pmtu_from_attr'
->> Warning: drivers/infiniband/hw/hfi2/roce_verbs.c:716 function parameter 'qp' not described in 'hfi2_roce_do_send_from_rvt'
-..
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> Changes in v2:
+> - Eliminate printing jiffies entirely rather than using a local variable
+>   (Stefan)
+> - Link to v1: https://patch.msgid.link/20261114-qca_spi-wunsequenced-v1-1-6b219b906db7@kernel.org
+> ---
+>  drivers/net/ethernet/qualcomm/qca_spi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/qualcomm/qca_spi.c b/drivers/net/ethernet/qualcomm/qca_spi.c
+> index 38a779f4b866..249b4b549a12 100644
+> --- a/drivers/net/ethernet/qualcomm/qca_spi.c
+> +++ b/drivers/net/ethernet/qualcomm/qca_spi.c
+> @@ -801,8 +801,8 @@ qcaspi_netdev_tx_timeout(struct net_device *dev, unsigned int txqueue)
+>  {
+>  	struct qcaspi *qca = netdev_priv(dev);
+>  
+> -	netdev_info(qca->net_dev, "Transmit timeout at %ld, latency %ld\n",
+> -		    jiffies, jiffies - dev_trans_start(dev));
+> +	netdev_info(qca->net_dev, "Transmit timeout, latency %ld\n",
+> +		    jiffies - dev_trans_start(dev));
+>  	qca->net_dev->stats.tx_errors++;
+>  	/* Trigger tx queue flush and QCA7000 reset */
+>  	set_bit(SPI_RESET, &qca->flags);
+> 
+> ---
+> base-commit: aa40afa831ebfe45e40a23721711059f2ac584d4
+> change-id: 20261114-qca_spi-wunsequenced-a81e54616844
+> 
+> Best regards,
+> --  
+> Cheers,
+> Nathan
+> 
