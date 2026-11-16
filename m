@@ -1,49 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.20
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794862544;
-	b=lzvfV6FSQSaSZrPSgSO0qsxktDx9JA3rINbBGhp98ja+zkXBIsHonDb5Fno6KjyvOe2z
-	 15rFDaEPaGpozTykc1AMi6nSgQ3+FePaapyAEejIO9Eamg6+G64eD/UPkZMmn7NIqcneu
-	 uPofS+3td5Yy93bYhfSXy/Kbw3K8I7frlEVBwrhofTKIHIf2Hz6MJsp+3enwP/m5B2GrC
-	 YmBA6EMudf1nlGOUmbjNq1QGMi4I4EiJDaqsxnyF11TnszcZCnxzMvRx+evXnSbuxcbT2
-	 Uybgw1HiWtqADKHub4tL9ABaWeElIc70xPrU+xceg9NI3Om1hT7U624GAv0C9cuuWwA==
+	t=1794865750;
+	b=oyK2/3cMK8zvJndk+0Jki6rB2F95VR6ozV7Y5XB1RfryVRv8lr+WiVVbax1DPzOSzAO/
+	 8dtUE8Jq6hwQdQ3vs/fpxwCtyVaFpxyk6fSovJJaE9I0MNliTKEprhw3OCkmw1y7n5F6B
+	 3PnMnXjEncnamAA3PEpK0TOu5AC0r/vUgyt9EbPNqAH42GZOYevOWME69Np+2qiG0MPPk
+	 6uKus5zfPnS0lTTAGPWTxUJkAyFXaY0On2dBBo8MOO7OdvvV6qzRHOtVQ/uoW/Xqx/h14
+	 Gmo6+bi3fvcqe3rgF1h4h923e201DlZZLXvCIL+MgZ4N9as+eOGm69RNEv0EhDCh6lQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794862544;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=JpiHRtIiEHYG0g+BY20ZAPvVQUUBUsrr7vJkSH72tOE=;
-	b=CgW6G2Wb7dqHUESHZMwxSLUgu8S4OQmVgNZ0LrYk8xADsWeh5oq1XWa88rBO/2oCUFLG
-	 Qu4ChQcUSeQZUiRPDpTsEYRLyahqr741i6OOoA1shLLWfX+WITRUorJbj/X/kZM13Ly8Q
-	 31iQpSImxUeU/fFRzKjdw4sHRLM4Qxt9naiKdhdl45qRgZIU9tf+Fqunj6Edc+KqobW/V
-	 5rPQXwN60fZrvfRmJySIQ7ZCzs7cy7vICvnq66E2MA8y+wMfmJnjLj7smGypUkhPiuc6G
-	 ZRDfHQWZqUttYnpw9/A0YwPaUGMWQlLjK00joXnhmwwk0cNIoHD9kVwa3WwToXqA2SQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794865750;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=yJuKOBNNYnk1ty+KHw/zCYtkc5H0NaB5Yj6zALlwHps=;
+	b=lWXsLtXKEE6HFDyXTjK3epRJuQQQRCmVbMYqv9Du/r3ZPo5+1EWZUXiu8xTuKV5ofgMK
+	 L7VM4KEMiPyDK6C7QgS+nPCd0vVkhPDjKGTShmZ30Y5ptYKjxEa9b/aPb0kVDtKwgoN4H
+	 vd5wFVMvChfT24WRCGrsVWT2HQ0zUP9fgDFHLJJDJQtspQVwNAy9RSkbLE2SbTWv89V9A
+	 WMTUgDLV0QEgJ+XowM7o5dbOOdhL4d4D+zvEFzOD+bdvBAQa5WEXCjqiZFVfb4Znxu7jf
+	 lvMeKs9Ygs3PJZc0xgB6m7XrUt3DZgPrToVk5Wj1QS/F5JNL86Jy4giTGiiQhCOFy+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bW0xtvpI;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="AlM/Biop";
+	arc=none smtp.remote-ip=95.215.58.20
+Received: from mta1.migadu.com (out-20.mta1.migadu.com [95.215.58.20])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1003606A323;
-	Mon, 16 Nov 2026 20:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F254C606A322
+	for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 21:49:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F254C606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bW0xtvpI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 750B11F000C6;
-	Mon, 16 Nov 2026 20:55:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794862544;
-	bh=JpiHRtIiEHYG0g+BY20ZAPvVQUUBUsrr7vJkSH72tOE=;
-	h=From:Date:Subject:To:Cc;
-	b=bW0xtvpIH1XUubxCLTSIEBtaQQyg+fazIdPDGXNY86c6zXktXDVmhyTfNLzAD8ugJ
-	 u7+PX310dxqG31Pa+RI6ES1tR1fMO9R/yB+kY9guEXM+bfXCX5sAOylgNs2DFW1O2r
-	 xpF6M+teOaYzJxeAJrWYxV7K+qNXN+lI/8Y5XZrWuxV/bgfPbL64yX02JjWvNuaSvu
-	 jPjQKVWLcyBmQzjx+xO84EgpwnSE9brLjB3WmyzZ/NaDyk376RjAw0j31GSmzCtmA3
-	 yFHdwji3ujdLpw8aDC69snJEadkHi7IGopqf+JzF7PclgB5jCHsQZxIX0oGkq6KdEP
-	 sysGAj3aF5kSA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 16 Nov 2026 13:55:26 -0700
-Subject: [PATCH v2] sched/topology: Avoid unsequenced accesses to jiffies
- in sd_init()
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AlM/Biop
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=Oi5wYhbLjwdZu+R9/Qn3xoP1Vc2SrBmiTpo0zBudxz0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794865748; v=1; x=1795470548;
+ b=AlM/Biopx5/UDRyQdVuhR4RnwnBrRi6jcpqn4GjYSObCZTiZo0N66uM1OuCTN7CUEh2uZ9V7
+ B1GakYBDKwFWVE2JnDaRGkdiP+dsSW6slL1wLpVypXO9GKcljtqDhgI3hGWXH9f8FZyZeJ4AmJI
+ eenB7R++vCk5nvtGT3JV22cE=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 5853fed9c1d37e21;
+	Mon, 16 Nov 2026 21:49:07 +0000
+X-Mizu-Trace-ID: 5853fed9c1d37e21
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2e6d98fe-527f-4188-bca0-c9db1ad92bce@linux.dev>
+Date: Mon, 16 Nov 2026 13:49:02 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,125 +58,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock
+ guard type
+To: Chris Down <chris@chrisdown.name>
+Cc: dennis@kernel.org, tj@kernel.org, cl@gentwo.org, peterz@infradead.org,
+ mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, acme@kernel.org,
+ yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, llvm@lists.linux.dev
+References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+ <20261110012235.1024461-3-vineet.gupta@linux.dev>
+ <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261116-topology-wunsequenced-v2-1-54611119172b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/4WNQQ6CMBBFr0JmbY1TtKIr72FYQJlClbTYFpSQ3
- l2KB3D5kvffX8CT0+Thmi3gaNJeW7MC32Ugu8q0xHSzMvADF4h4ZMEOtrftzN6j8fQayUhqGBY
- Km7y+oDhLWLeDI6U/W/de/tiP9YNkSLFkdNoH6+bteMLk/fuYkCEThahyoUigOt2e5Az1e+taK
- GOMX9uN8PXNAAAA
-X-Change-ID: 20261114-topology-wunsequenced-18f1d3b9167c
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, 
- Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3664; i=nathan@kernel.org;
- h=from:subject:message-id; bh=kYoFFxXOitrN11C8It6IfIw2VCFnijveRC0lPF68XnM=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFm/c09tmnxCc8eMrmxHnqOuzdsizu91Zdxc/OrjhPgDu
- 0xFJY1YOkpZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEli5nZNhnP/3XDyt+/+aX
- fFai6m+4eC54Zt254f1q8sH5mh25d8UY/oddPMc1oWNaZs7T+6e6WzTVUv5fly875sKqnOi45v/
- E52wA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-After a recent improvement in clang to warn on unsequenced accesses to
-volatile variables [1], an instance appears in sd_init(), which can
-break the build with CONFIG_WERROR=y / W=e:
+On 11/13/26 11:58 AM, Chris Down wrote:
+> Hi Vineet,
+>
+> Vineet Gupta <vineet.gupta@linux.dev> writes:
+>> 	typedef local_lock_t __seg_gs
+>> 	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
+>>
+>> 	typedef struct { local_lock_t __seg_gs
+>> 	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
+>>
+>> Both put the tag on local_lock_t, an aggregate: the first on a typedef of
+>> it, the second on the pointee of the guard's member.
+> The typedef is the aggregate case, and it's the only one of the two that
+> GCC warns about. But the second one is just the "T __percpu *p" spelling
+> that 1/2 keeps the tag for. _T->lock really is a pointer to per-cpu memory,
+> since local_lock() passes it to this_cpu_ptr(). So the tag is correct
+> there. This patch drops it from the guard's lock member and the
+> constructor's argument as well, not only from the typedef. I think it
+> should keep the tag on those two and only drop it from the typedef.
 
-  In file included from kernel/sched/build_utility.c:86:
-  kernel/sched/topology.c:2008:29: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
-   1998 |                 .last_balance           = jiffies,
-        |                                           ~~~~~~~
-   1999 |                 .balance_interval       = sd_weight,
-   2000 |
-   2001 |                 /* 50% success rate */
-   2002 |                 .newidle_call           = 512,
-   2003 |                 .newidle_success        = 256,
-   2004 |                 .newidle_ratio          = 512,
-   2005 |                 .newidle_stamp          = now,
-   2006 |
-   2007 |                 .max_newidle_lb_cost    = 0,
-   2008 |                 .last_decay_max_lb_cost = jiffies,
-        |                                           ^
+Yes you are right, the patch conflated them. And although the warning is 
+same as in patch 1, there typedef is actually involved
 
-Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-6.5.2, unsequenced side effects on the same scalar object are undefined
-behavior. Per C11 6.7.9.23, the evaluation of the initialization list
-expressions in a designated initializer is indeterminately sequenced
-relative to each other, meaning any side effects in the initialization
-list are unsequenced.
 
-Add a local variable to hold the value of jiffies before the designated
-initializer so that there are no unsequenced side effects while using a
-consistent value, clearing up the warning.
+>> Every variant of an
+>> aggregate shares one DIE, so there is nowhere to record it, exactly as for
+>> DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
+>> without complaint, but pahole does not translate it from that position,
+>> so with today's toolchains it reaches BTF from neither compiler.
+> That's true of the typedef, but not of the member. With clang 23 and
+> pahole 1.32 the lock member comes out as PTR -> TYPE_TAG 'percpu' ->
+> local_lock_t, the same as any other per-cpu pointer.
 
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2190
-Fixes: 2b4cfe64dee0 ("sched/numa: Initialize newidle balance stats in sd_numa_init()")
-Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Use a local variable with one access to jiffies before designated
-  initializer (Nick)
-- Link to v1: https://patch.msgid.link/20261114-topology-wunsequenced-v1-1-686a36fe61f5@kernel.org
----
- kernel/sched/topology.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Yep it was wrong for the member. My config was lacking 
+CONFIG_CONTEXT_ANALYSIS_TEST and hence it missed this part.
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 99878da03bce..60fad1690894 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1956,6 +1956,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 	int sd_id, sd_weight, sd_flags = 0;
- 	struct cpumask *sd_span;
- 	u64 now = sched_clock();
-+	unsigned long j;
- 
- 	sd_span = sched_domain_span(sd);
- 	cpumask_and(sd_span, cpu_map, tl->mask(tl, cpu));
-@@ -1973,6 +1974,7 @@ sd_init(struct sched_domain_topology_level *tl,
- #endif
- 	sd_flags |= asym_cpu_capacity_classify(sd_span, cpu_map);
- 
-+	j = jiffies;
- 	*sd = (struct sched_domain){
- 		.min_interval		= sd_weight,
- 		.max_interval		= 2*sd_weight,
-@@ -1994,7 +1996,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 					| sd_flags
- 					,
- 
--		.last_balance		= jiffies,
-+		.last_balance		= j,
- 		.balance_interval	= sd_weight,
- 
- 		/* 50% success rate */
-@@ -2004,7 +2006,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 		.newidle_stamp		= now,
- 
- 		.max_newidle_lb_cost	= 0,
--		.last_decay_max_lb_cost	= jiffies,
-+		.last_decay_max_lb_cost	= j,
- 		.child			= child,
- 		.name			= tl->name,
- 	};
+> For the typedef, clang 23 puts the annotation on the typedef's own DIE, as
+> you say, so there is somewhere to record it. It's only pahole that doesn't
+> pick it up yet. You also mentioned GCC patches for type tags on typedefs
+> in the pahole thread [0]. Once those land, does this warning go away?
 
----
-base-commit: d7e670601af6c564ccf6d3b2ddf70ee4f41a6d1c
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-change-id: 20261114-topology-wunsequenced-18f1d3b9167c
+Correct, although [0] you referred to is a different, likely won't fix.
+The fix you have in mind is PR125888 [1] and the patches are here [2]
+This addresses the For BTF, as you say, pahole doesn't convert 
+annotation from a typedef DIE so the
 
-Best regards,
---  
-Cheers,
-Nathan
+>> Unlike the per-cpu declarations this changes no BTF at all. A tag in that
+>> position was never recorded, so there is nothing to remove, and the one
+>> percpu TYPE_TAG that does reach a local_lock type comes from those casts,
+>> which keep it. An x86 defconfig built with clang is identical with and
+>> without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
+>> and .text is unchanged. The patch removes a GCC diagnostic and no more.
+> The defconfig BTF only stays the same because nothing in a defconfig uses
+> these guards. lib/test_context-analysis.c is the only user in the tree.
+> With CONFIG_CONTEXT_ANALYSIS_TEST=y, class_local_lock_t,
+> class_local_lock_irq_t, class_local_lock_irqsave_t and
+> class_local_lock_nested_bh_t all lose the percpu tag on lock with this
+> patch applied.
 
+Yep I was missing that.
+
+> Nothing in BPF looks at those types today, so this doesn't break anything.
+> But it does remove correct annotations to get rid of a warning that is
+> only ever caused by the typedef itself. When the guards were added, the
+> type was only ever used as _type *. The typedef came later with
+> 3931d4b98039 ("cleanup: Basic compatibility with context analysis"). If
+> GCC isn't going to accept the tag on a typedef, could this be limited to
+> that typedef in cleanup.h instead, so the guard's pointer keeps its tag?
+> As far as I can see, lock_##_name##_t is only ever used through a
+> pointer, in DECLARE_LOCK_GUARD_1_ATTRS().
+
+I think GCC supporting them seems like a reasonable ask - fixes have 
+been posted, lets see.
+
+But to recap, I will drop this patch since it only needs to handle the 
+warning which can't be fixed in source and relies on the GCC fix.
+
+The point of this series was to do any needed kernel source changes 
+which can't be addresses in GCC.
+e.g. PR128480 [3] was deemed invalid/wont-fix on GCC side.
+
+> [0] https://lore.kernel.org/r/252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125888
+[2] 
+https://inbox.sourceware.org/gcc-patches/20261112191815.884167-1-vineet.gupta@linux.dev/
+[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=128480
+
+Thanks again for chiming in.
+-Vineet
