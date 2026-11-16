@@ -1,55 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.84
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794832879;
-	b=ceY6wx/ViaAcVUB2MrKbDm2Zk26rqcCZjd5AO2LbuDuLMIP+YdOxhKb017U+87fL3MQP
-	 5duf4qwe9FlAdlSq1a0/0b9i2E/hVMRCoWb2iS5vwuQB1r8T38Bq8I5FowZDyhuEfFSkr
-	 6Kj10Fc/DKKvQR+PDD2woG9mB0iDt7AcuUHNiny2DR8+AiSIRE48FzlP7lmqlhwh7sjsN
-	 V1OvM6ES+F927s5XAYmM2lT0e/UOc+ADYALXSsiEjuX+sKcH/PMgDqUoIabEukYn2X5Zq
-	 SiTQRv2bmTi89njXbP0COJXbelqMZR4ayhkI2i/5Eyfd8hJJj71AGfjUAFXgu47XXaQ==
+	t=1794833060;
+	b=pRdczLeyZyK40uzuzTgYkFO6bs8SJ3GXyRtOElJDIXNPAmvHvl5y7V0IAZIoweAwvij6
+	 5CnJu0UqtuMoSm+1ewrMe7HVSnJY8SO6BrFsNj01E6TisMcPwFU2pKsZ2go722afV4oBO
+	 qFyNFMLYDiOIZCVhwwqtFwjBtzIftQYNwQh2zkqsL0pWT7AieLqHj6jNzweBo7INjvE4V
+	 OlAV8L8KcSKGkj3nBT/BwNd+xGFgVAoXK0Tg5On51D7Ye080TOLkvTu+j2Zph99DUi2YV
+	 mQgFNig4E4JWikkEYZJxsZ9N7Pl6AqQLvqOCVMZGhnSlbaafeRYJBjvri4+HkXm8NCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794832879;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=B0s2EswTA+rUV5czJyyzCHyu5NeCkNsQpbNM91ynRNc=;
-	b=LbtuYwahPS0wSwfmQSKCzUihfC8tbEvjjiDOOlYbYuaobFMwOspMrvy9jaxRrLXQk+6G
-	 rVD771puie/AOG4KHmKMJFwNUz9zbOQeeIyQcGA5cItSY19fAw6OmSWHsJsD66/g026d+
-	 sODAN06P4rJNUcH7OcAJfrxBqvQD5D3grDdae9DjQltLPk/bxm8ed3ggjG4dzRwC5xeb5
-	 eqpVOKNQOpagb44/VGsX4A2iuQZtivamhAZY8AV996OB/Pfwc5ZdFfWkOxHKC3/SI5B/F
-	 8MT7GovvwTcneKuIS+jDM1eR7ijJ8zJMN03JmLVvBYfuokUqUHb3fW0AeP8FLpON0lA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794833060;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=HdBYWB42Ov1f7t5UzOhOjOd4BKScNXzBpb3W6636xpA=;
+	b=c360fj7kkFFXT4RxDi4qNQ765Dz0aYJCd+7M4D2jEzdA3aH1BlF4b+U1W8o1DKZYeBoc
+	 bGM9ljsfqdCGMwA489i3b1BZH9Tott8XEznifK55Rj7hDWEzIoDNrxy3em/EgrCsmFIbr
+	 uzM133lFmgRda3oOhY5KDQEjnVlhGm1DePt3kupGEe+HmOtZlryytE4RXq+lsgsmA35rq
+	 4IdkLzKzzj+eXRbFfQXAfwBEMzhDSur49wv2uHgLuGEr9YoeUhkLnPH7j1lMJXuQUcwSp
+	 yLdmE6nk+oVgOGNZ9u7AkaOCZxZWC/FomwIS1ZrfjlJ6LkDc5VjVm8lxkse4aYz1F7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JW1EDcCI;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SBi8nsIQ;
+	arc=none smtp.remote-ip=95.215.58.84
+Received: from mta1.migadu.com (out-84.mta1.migadu.com [95.215.58.84])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C8D606A31C;
-	Mon, 16 Nov 2026 12:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511C9606A32C
+	for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 12:44:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 511C9606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JW1EDcCI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8301F000C4;
-	Mon, 16 Nov 2026 12:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794832879;
-	bh=B0s2EswTA+rUV5czJyyzCHyu5NeCkNsQpbNM91ynRNc=;
-	h=From:To:Cc:Subject:Date;
-	b=JW1EDcCIu4pSSbHCGghi9ltT95bCuG0dQyeLthSofo2MYQfyP+L30GlA6sZVyW6V6
-	 y7kNip8kZIzf6N2PRvcXi6lmUorxb5aEn3cVlv0USpLy4mbSIGsYlJ/1cNgjL4lz6a
-	 2VZUMYMI9LmMqHKlYY8mrI2rZg4PnUP0F4ZjG6WKqpkgQWpitcY6xG00e5A9wTB1B9
-	 B3SG0vjFag/ZYX6zlL3EdDv1v/s08zf7Y8pGjmumkfD9hQT5Gn1GIKpjpG5FwYOxdX
-	 s+uBf8zjfv19ht/0pqqKcT6QRK3+jBRELvbjuG2L+dWNCFf5KVo2CkaCnBorgSZQKS
-	 QrkDFt6O5rEgg==
-From: Sasha Levin <sashal@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Xu Rao <raoxu@uniontech.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-pm@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: gpio-charger: mark gpio_charger_properties as __maybe_unused
-Date: Mon, 16 Nov 2026 07:41:17 -0500
-Message-ID: <20261116124117.2922333-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SBi8nsIQ
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=t5dJVaGKrDmbOPD5DFRf/whdm1YuXTQu5zTjuKwHh4A=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794833057; v=1; x=1795437857;
+ b=SBi8nsIQOJA45gIFRMHH2Ml12AHpKafEV6fzehZjssQob1eD04E8DSiHGJNRwbZzHOnxpAdU
+ 38ehjlTif7N09vwGwPXrZ3vrKTQL7/E+cIEJHT/WOuGeARKOwPLiiXPs7PAeqezV40PLL8SV0qX
+ zvBsGB2ZdjU4OWBfA1Gn94eQ=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 10d7ca4d1171aa70;
+	Mon, 16 Nov 2026 12:44:17 +0000
+X-Mizu-Trace-ID: 10d7ca4d1171aa70
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <01f0b173-dbd2-484e-8e53-f4a001af9acb@linux.dev>
+Date: Mon, 16 Nov 2026 20:44:06 +0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -59,40 +58,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v2] blk-throttle: Avoid unsequenced accesses to jiffies in
+ throtl_schedule_pending_timer()
+To: Nathan Chancellor <nathan@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>
+References: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Commit fad4655224f60 ("power: supply: gpio-charger: Keep properties per
-device") keeps gpio_charger_properties[] only to size the per-device array
-with ARRAY_SIZE(). clang sees that the array itself is never emitted and
-warns, which fails the build with CONFIG_WERROR:
 
-  drivers/power/supply/gpio-charger.c:26:35: error: variable 'gpio_charger_properties' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
 
-Mark the array __maybe_unused.
+在 2026/11/16 11:37, Nathan Chancellor 写道:
+> After a recent improvement in clang to warn on unsequenced accesses to
+> volatile variables [1], two instances appear in
+> throtl_schedule_pending_timer(), which can break the build with
+> CONFIG_WERROR=y / W=e:
+> 
+>   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+>     469 |                    expires - jiffies, jiffies);
+>         |                              ~~~~~~~  ^
+>   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+>     469 |                    expires - jiffies, jiffies);
+>         |                              ~~~~~~~  ^
+> 
+> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
+> 6.5.2, unsequenced side effects on the same scalar object are undefined
+> behavior. Per C11 6.5.2.2.10/12, the evaluation of arguments in a
+> function call is indeterminately sequenced, meaning any side effects in
+> the arguments are unsequenced.
+> 
+> Add a local variable to hold the value of jiffies before the function
+> call so that there are no unsequenced side effects, clearing up the
+> warning.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 69df0ab030c9 ("blk-throttle: separate out throtl_service_queue->pending_timer from throtl_data->dispatch_work")
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2191
+> Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Fixes: fad4655224f60 ("power: supply: gpio-charger: Keep properties per device")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-fad4655224f60 is the tip of power-supply's for-next.
-
- drivers/power/supply/gpio-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/gpio-charger.c b/drivers/power/supply/gpio-charger.c
-index c90c824382c62..647f5bde38c7c 100644
---- a/drivers/power/supply/gpio-charger.c
-+++ b/drivers/power/supply/gpio-charger.c
-@@ -23,7 +23,7 @@ struct gpio_mapping {
- } __packed;
- 
- /* This list ensures, that the array is big enough for all optional features. */
--static enum power_supply_property gpio_charger_properties[] = {
-+static enum power_supply_property gpio_charger_properties[] __maybe_unused = {
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
-
-base-commit: fad4655224f60328cc9bcf4399eda8f6d7a587a6
--- 
-2.53.0
+Reviewed-by: Tao Cui <cuitao@kylinos.cn>
+> ---
+> Changes in v2:
+> - Reuse value of jiffies in max_expire to avoid
+>   -Wunused-but-set-variable for j when CONFIG_BLK_DEV_IO_TRACE is
+>   disabled (Sashiko)
+> - Link to v1: https://patch.msgid.link/20261114-blk-throttle-wunsequenced-v1-1-d28ed5553ff3@kernel.org
+> ---
+>  block/blk-throttle.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index c5e26551956a..8e58e50bce4d 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -453,7 +453,8 @@ static void throtl_dequeue_tg(struct throtl_grp *tg)
+>  static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
+>  					  unsigned long expires)
+>  {
+> -	unsigned long max_expire = jiffies + 8 * DFL_THROTL_SLICE;
+> +	unsigned long j = jiffies;
+> +	unsigned long max_expire = j + 8 * DFL_THROTL_SLICE;
+>  
+>  	/*
+>  	 * Since we are adjusting the throttle limit dynamically, the sleep
+> @@ -466,7 +467,7 @@ static void throtl_schedule_pending_timer(struct throtl_service_queue *sq,
+>  		expires = max_expire;
+>  	mod_timer(&sq->pending_timer, expires);
+>  	throtl_log(sq, "schedule timer. delay=%lu jiffies=%lu",
+> -		   expires - jiffies, jiffies);
+> +		   expires - j, j);
+>  }
+>  
+>  /**
+> 
+> ---
+> base-commit: ab43ec385580b8f8abf72d70fa3acbf4e4f098a5
+> change-id: 20261114-blk-throttle-wunsequenced-ccf308a23c1b
+> 
+> Best regards,
+> --  
+> Cheers,
+> Nathan
 
