@@ -1,102 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794854444;
-	b=JIDPYUsvJCZig41y0hXvscDGFYxmBlAnKKehOVqCmE3bb52oyEDcxcp3p5P/X4sCAUsE
-	 Q4OLxYKTwlCkL2I/ueDIAzJcgcKDxM2/msl++T554De4NS0MhUUVubKNk63R7Cw0F/oR7
-	 QcN8ub2imx80bkCtiBqExBuipzrR/zSuwfchxmIy8KrZkX31FjVevuFY6zvt+Z+bIgkuV
-	 jAQ+V3u7kVswRArVZ/B73/7Trc9TEFqsbTKMqnDJfJxigFcVq7LlaOhwGBKNGlmswVNce
-	 Y4sF66HzK9uhoGUhBMq+uNFfPuAVfeayI9659/zqI4je50MAiR4OHKJy0O4MFVXTtqQ==
+	t=1794855109;
+	b=yu6cOl1IQqh++pR2myuj/1odjmML7+xt06uVRTJNJok2fOjKhGlSuXUXeoPaKJCrUiLK
+	 JxdmiopAz6I72sfcd8IMne7A0zaNlZ7D+PE4kb1jmDx/+Uwp7xanM6wO0okRM9lJatK6t
+	 gs3bqrRWT5pb8Z0/UdIfUXgr+eq8qj+WfZece+ZKVI65komt6glduYQDg6RD+k8vuWFNs
+	 j70Bc27z7efEoe5EftwKVvRFw+rzDhxcDhLoQHRaeZNYQ38Ztcn/J812D2P4PttSmLWzO
+	 RS2fwfz/tYbwVHxyWvYmsjvyoTmaXUgfBC4gMOricnIkXNY9jE9yHmSZncCgX/BUPyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794854444;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
-	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:X-Rspamd-Queue-Id:
-	 X-Spam-Level:X-Rspamd-Server:X-Rspamd-Action:X-Spam-Flag:
-	 X-Spamd-Result:X-Spam-Score;
-	bh=bW+N6M5VBiGaPpTGAq3tyvEmQIBYUtGPyL5eNMej44k=;
-	b=xUdoQesLMBOaVM9LSLTN3pbWUs8GYUE8PPkrQQUJeqG/MCOmK/zD09OV/xHMSc4EkgPs
-	 ZH6FUQuFoRtsKinvHwWhnitcJX1zeD1BXq+E1CT3cfpAC75kxoooZ9K2HSOmXyYCzl33N
-	 vr6z2s6DcjU+ZjV8UOVG4STjnxvRfDqeNvNkmlbpzO4nlgBGiFU7upjJwqn2RChtzwfX1
-	 /iu9p9vUitb/MJY8Mqy/9p8ldePAkqE70TZXS/JgPnBLFpRsjnyjI5yUAJn9gA5y42Z0r
-	 +mj8Eru3HOmuw+Jgu0iC9+sBoYKR8fQTryqRHbjrg0hOpp7sBh3EUOlfrnge0Pby3Mg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794855109;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=xMf0EawBmw76DM3vHihCHtrd9empoxXzcPgjEXDY21g=;
+	b=eURRCyui+9m5h4VEWnFvD2gVsB4TP00QY674J7/fJ7mXLDERinbrFh8iwZxcQ3zw8AOW
+	 8NlIlJSPkUBZGDpOKV+7k/fQoVUtGNSuWMVnoDvqLjoENSrDTiG2cEOM63u/DmB6WHy64
+	 1VclqE7DvDn1Hml34OcbwpJ6V8XIGsJBwiDEgsFPRP3d0i3ELWfggB4NC+2jsmiMHa8RT
+	 IiGaVI8PZfztKd0sNOKaJeoBI2/Msvv1HT++AOYGShX2xkEPhfm5v5tQRZ7lJPZVXBimd
+	 RvRH0GmWo1JwJ4wP5EKh3bB+9m7ywN+N6Gh/NtPu1Lpaq13OMjh8Butq+hsRze+4wGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=j3WjPL9S;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=j3WjPL9S;
-	arc=none smtp.remote-ip=195.135.223.130
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UJfybVnY;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D089606A323;
-	Mon, 16 Nov 2026 18:40:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D089606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D9F606A31C;
+	Mon, 16 Nov 2026 18:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=j3WjPL9S;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=j3WjPL9S
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C13962230D;
-	Mon, 16 Nov 2026 18:40:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1794854441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bW+N6M5VBiGaPpTGAq3tyvEmQIBYUtGPyL5eNMej44k=;
-	b=j3WjPL9SLm5UEruYv4nBQkfZVw/CvFQat0weEOQm937tsM6aLNagNzSNp/bmQUbt24YIJU
-	Wt1MLN8Uk/7NXEqIO8cnIUnKw/n/UXlLvIUa+TPEm6K5hfoisFDdFcJtRbBTee0R3Hmed/
-	RjdfXyaAHeFtQyTHoDNyOJdTPw7Bvvo=
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=j3WjPL9S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1794854441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bW+N6M5VBiGaPpTGAq3tyvEmQIBYUtGPyL5eNMej44k=;
-	b=j3WjPL9SLm5UEruYv4nBQkfZVw/CvFQat0weEOQm937tsM6aLNagNzSNp/bmQUbt24YIJU
-	Wt1MLN8Uk/7NXEqIO8cnIUnKw/n/UXlLvIUa+TPEm6K5hfoisFDdFcJtRbBTee0R3Hmed/
-	RjdfXyaAHeFtQyTHoDNyOJdTPw7Bvvo=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2F27E1334C;
-	Mon, 16 Nov 2026 18:40:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id bghDAilO+2rVeAAAD6G6ig
-	(envelope-from <jgross@suse.com>); Mon, 16 Nov 2026 18:40:41 +0000
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	virtualization@lists.linux.dev,
-	llvm@lists.linux.dev
-Cc: Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: [PATCH v6 16/17] x86/paravirt: Use alternatives for MSR access with paravirt
-Date: Mon, 16 Nov 2026 19:39:04 +0100
-Message-ID: <20261116183905.1591611-17-jgross@suse.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261116183905.1591611-1-jgross@suse.com>
-References: <20261116183905.1591611-1-jgross@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UJfybVnY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40411F000C4;
+	Mon, 16 Nov 2026 18:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794855109;
+	bh=xMf0EawBmw76DM3vHihCHtrd9empoxXzcPgjEXDY21g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UJfybVnYHKUzMRG+PJkxU6Fj7gexeWmiPkwwqtum/qybsRRlbuP2Wf8HLrNzXWb9a
+	 OoqoFkeajBumWDDcn1NSaq0w2G9AitqId6jO3jmPLq5MNcpK1/UqjaHIe+mB8VtywX
+	 +bjAJvVHy8hUHXE0bcT8uzsnDRaaSq9LD6lWcwmzJE1wLjfkfNmVdsXHcJ6RxGdd0u
+	 tbr5gkYtaBo65Skbo/ybm2v6P7qBLwS2WoEL+Ban4bK9QDp1E4ko75ey/mA2EkpuSw
+	 6HcI0zYRLyYzhGxmdVs/Lb2ahODjN3tNLUEUd3nRkE3dHwibsbDtkfQxvEyOxXz8W+
+	 3sXZmAcHzBkNA==
+Date: Mon, 16 Nov 2026 11:51:44 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Xu Rao <raoxu@uniontech.com>,
+	linux-pm@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: gpio-charger: mark
+ gpio_charger_properties as __maybe_unused
+Message-ID: <20261116185144.GA1036192@ax162>
+References: <20261116124117.2922333-1-sashal@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,251 +58,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: C13962230D
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-12.01 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
-	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:dkim,suse.com:email];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	R_RATELIMIT(0.00)[to_ip_from(RLkdkdrsxe9hqhhs5ask8616i6)];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -12.01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116124117.2922333-1-sashal@kernel.org>
 
-When not running as Xen PV guest, patch in the optimal MSR instructions
-via alternative and use direct calls otherwise.
+On Mon, Nov 16, 2026 at 07:41:17AM -0500, Sasha Levin wrote:
+> Commit fad4655224f60 ("power: supply: gpio-charger: Keep properties per
+> device") keeps gpio_charger_properties[] only to size the per-device array
+> with ARRAY_SIZE(). clang sees that the array itself is never emitted and
+> warns, which fails the build with CONFIG_WERROR:
+> 
+>   drivers/power/supply/gpio-charger.c:26:35: error: variable 'gpio_charger_properties' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+> 
+> Mark the array __maybe_unused.
+> 
+> Fixes: fad4655224f60 ("power: supply: gpio-charger: Keep properties per device")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+> fad4655224f60 is the tip of power-supply's for-next.
 
-This will especially have positive effects for performance when not
-running as a Xen PV guest with paravirtualization enabled, as there
-will be no call overhead for MSR access functions any longer.
+Since the Fixes has 'Cc: stable', this one should too (unless this is
+just going to be squashed in).
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V3:
-- new patch
-V4:
-- fix build error with clang (kernel test robot)
----
- arch/x86/include/asm/paravirt-msr.h   | 136 ++++++++++++++++++++------
- arch/x86/include/asm/paravirt_types.h |   1 +
- 2 files changed, 109 insertions(+), 28 deletions(-)
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-diff --git a/arch/x86/include/asm/paravirt-msr.h b/arch/x86/include/asm/paravirt-msr.h
-index afd9f7abec61..beb6ed47d797 100644
---- a/arch/x86/include/asm/paravirt-msr.h
-+++ b/arch/x86/include/asm/paravirt-msr.h
-@@ -27,67 +27,147 @@ extern struct pv_msr_ops pv_ops_msr;
- #define PV_CALLEE_SAVE_REGS_MSR_THUNK(func)		\
- 	__PV_CALLEE_SAVE_REGS_THUNK(func, ".text", MSR)
- 
-+#define ASM_CLRERR	"xor %[err],%[err]\n"
-+
-+#define PV_RDMSR_VAR(__msr, __val, __type, __func, __err)		\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_2(PARAVIRT_CALL,				\
-+			RDMSR_AND_SAVE_RESULT ASM_CLRERR, X86_FEATURE_ALWAYS, \
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=d" (__err), [val] "=a" (__val),		\
-+		  ASM_CALL_CONSTRAINT					\
-+		: paravirt_ptr(pv_ops_msr, __func), "c" (__msr)		\
-+		: "cc")
-+
-+#define PV_RDMSR_CONST(__msr, __val, __type, __func, __err)		\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_3(PARAVIRT_CALL,				\
-+			RDMSR_AND_SAVE_RESULT ASM_CLRERR, X86_FEATURE_ALWAYS, \
-+			ASM_RDMSR_IMM ASM_CLRERR, X86_FEATURE_MSR_IMM,	\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=d" (__err), [val] "=a" (__val),		\
-+		  ASM_CALL_CONSTRAINT					\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  "c" (__msr), [msr] "i" (__msr)			\
-+		: "cc")
-+
-+#define PV_WRMSR(__msr, __val, __type, __func, __err)			\
-+({									\
-+	unsigned long rdx = rdx;					\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_2(PARAVIRT_CALL,				\
-+			"wrmsr;" ASM_CLRERR, X86_FEATURE_ALWAYS,	\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=a" (__err), "=d" (rdx), ASM_CALL_CONSTRAINT	\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  "0" (__val), "1" ((__val) >> 32), "c" (__msr)		\
-+		: "memory", "cc");					\
-+})
-+
-+#define PV_WRMSRNS_VAR(__msr, __val, __type, __func, __err)		\
-+({									\
-+	unsigned long rdx = rdx;					\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_3(PARAVIRT_CALL,				\
-+			"wrmsr;" ASM_CLRERR, X86_FEATURE_ALWAYS,	\
-+			ASM_WRMSRNS ASM_CLRERR, X86_FEATURE_WRMSRNS,	\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=a" (__err), "=d" (rdx), ASM_CALL_CONSTRAINT	\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  "0" (__val), "1" ((__val) >> 32), "c" (__msr)		\
-+		: "memory", "cc");					\
-+})
-+
-+#define PV_WRMSRNS_CONST(__msr, __val, __type, __func, __err)		\
-+({									\
-+	unsigned long rdx = rdx;					\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_4(PARAVIRT_CALL,				\
-+			"wrmsr;" ASM_CLRERR, X86_FEATURE_ALWAYS,	\
-+			ASM_WRMSRNS ASM_CLRERR, X86_FEATURE_WRMSRNS,	\
-+			ASM_WRMSRNS_IMM ASM_CLRERR, X86_FEATURE_MSR_IMM,\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=a" (__err), "=d" (rdx), ASM_CALL_CONSTRAINT	\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  [val] "0" (__val), "1" ((__val) >> 32),		\
-+		  "c" (__msr), [msr] "i" (__msr)			\
-+		: "memory", "cc");					\
-+})
-+
- static __always_inline u64 read_msr(u32 msr)
- {
- 	u64 val;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : "=a" (val), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, read_msr), "c" (msr)
--		     : "rdx");
-+	if (__builtin_constant_p(msr))
-+		PV_RDMSR_CONST(msr, val, EX_TYPE_RDMSR, read_msr, err);
-+	else
-+		PV_RDMSR_VAR(msr, val, EX_TYPE_RDMSR, read_msr, err);
- 
- 	return val;
- }
- 
- static __always_inline void write_msr(u32 msr, u64 val)
- {
--	asm volatile(PARAVIRT_CALL
--		     : ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr), "c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	u64 err;
-+
-+	PV_WRMSR(msr, val, EX_TYPE_WRMSR, write_msr, err);
- }
- 
- static __always_inline void write_msrns(u32 msr, u64 val)
- {
--	asm volatile(PARAVIRT_CALL
--		     : ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr), "c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	u64 err;
-+
-+	if (__builtin_constant_p(msr))
-+		PV_WRMSRNS_CONST(msr, val, EX_TYPE_WRMSR, write_msr, err);
-+	else
-+		PV_WRMSRNS_VAR(msr, val, EX_TYPE_WRMSR, write_msr, err);
- }
- 
- static __always_inline int read_msr_safe(u32 msr, u64 *val)
- {
--	int err;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : [err] "=d" (err), "=a" (*val), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, read_msr_safe), "c" (msr));
-+	if (__builtin_constant_p(msr))
-+		PV_RDMSR_CONST(msr, *val, EX_TYPE_RDMSR_SAFE, read_msr_safe, err);
-+	else
-+		PV_RDMSR_VAR(msr, *val, EX_TYPE_RDMSR_SAFE, read_msr_safe, err);
- 
- 	return err ? -EIO : 0;
- }
- 
- static __always_inline int write_msr_safe(u32 msr, u64 val)
- {
--	int err;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : [err] "=a" (err), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr_safe),
--			"c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	PV_WRMSR(msr, val, EX_TYPE_WRMSR_SAFE, write_msr_safe, err);
- 
- 	return err ? -EIO : 0;
- }
- 
- static __always_inline int write_msrns_safe(u32 msr, u64 val)
- {
--	int err;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : [err] "=a" (err), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr_safe),
--			"c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	if (__builtin_constant_p(msr))
-+		PV_WRMSRNS_CONST(msr, val, EX_TYPE_WRMSR_SAFE, write_msr_safe, err);
-+	else
-+		PV_WRMSRNS_VAR(msr, val, EX_TYPE_WRMSR_SAFE, write_msr_safe, err);
- 
- 	return err ? -EIO : 0;
- }
-diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
-index 740ea819bbab..54f7c3d8fadf 100644
---- a/arch/x86/include/asm/paravirt_types.h
-+++ b/arch/x86/include/asm/paravirt_types.h
-@@ -442,6 +442,7 @@ extern struct paravirt_patch_template pv_ops;
- #endif	/* __ASSEMBLER__ */
- 
- #define ALT_NOT_XEN	ALT_NOT(X86_FEATURE_XENPV)
-+#define ALT_XEN_CALL	ALT_DIRECT_CALL(X86_FEATURE_XENPV)
- 
- #ifdef CONFIG_X86_32
- /* save and restore all caller-save registers, except return value */
+>  drivers/power/supply/gpio-charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/power/supply/gpio-charger.c b/drivers/power/supply/gpio-charger.c
+> index c90c824382c62..647f5bde38c7c 100644
+> --- a/drivers/power/supply/gpio-charger.c
+> +++ b/drivers/power/supply/gpio-charger.c
+> @@ -23,7 +23,7 @@ struct gpio_mapping {
+>  } __packed;
+>  
+>  /* This list ensures, that the array is big enough for all optional features. */
+> -static enum power_supply_property gpio_charger_properties[] = {
+> +static enum power_supply_property gpio_charger_properties[] __maybe_unused = {
+>  	POWER_SUPPLY_PROP_ONLINE,
+>  	POWER_SUPPLY_PROP_STATUS,
+>  	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+> 
+> base-commit: fad4655224f60328cc9bcf4399eda8f6d7a587a6
+> -- 
+> 2.53.0
+> 
+
 -- 
-2.56.0
-
+Cheers,
+Nathan
