@@ -1,100 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794854213;
-	b=cVdOeRYoDwlnQnge3XVtZtJ/E6nMwhntJjydq7wuHDDpy+DfDp9zq0GHjxkP0u01VcyX
-	 lyoDke5AVZEexM5nxa8ioFtgQLHyA08nJbX0R9HaXNmmSn56WadnRTC8vALXTLWAsj5U4
-	 eSj+ia9VfslmC94rMqmUDVK4Gv5KE1RCCTbvCFw3idHHYpgX8s7w+bpbmWRX/K3uIMNKy
-	 7Cd+htRLwW6KGSIB3yx9HLkCWA978fDq9nGwv/zAwpyQROxfV615ub6JgPoyIl9hKTThB
-	 0SLPsks1qD6zCVtRnjgJPYIQAvZ1YFuzWp+83QSGkze/HWavPoy6OAzN1GOhXhZi8MA==
+	t=1794854351;
+	b=ZfFRPXJCQRsi1M47MjlPtd4dslMmTaDY9agK9WJDjBVVE4A/2+zhHlY62sgVfJjnm9IW
+	 89BQyuSXbqeacyzadc0fC9mRdyUKVi9Z/XqT/zYmgTaY3KYxmgOgj/rgviwubZDzjSIyz
+	 tPoTzwlGii9LdNiYSsp0SknzJUs+VMaZkk47KPhElGXoHMNLhzHNt+2dh6TJ/oqizX4T2
+	 HhmeKr0rabKnww5JcDyjSz/nd2u3YsX9RsI1BkiOckhCHmunz/MBt8s1ShCggioH8LKC6
+	 SDBO71ClhBODr56RAaJANkG2wdQU0nrV3+qNw8ro4UFhdJs3m6Mjd9d8BoV5U0J5WbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794854213;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=5vf/mrFyr2K5/oxQ9g09zxEySxJUY4RSC0I96yoXnUc=;
-	b=rWjPuL2WOGLsvYNfBFmq+LoV9msheqqQH5PT94sCLSij4a412hwBAXJz5HGJByU4sVDT
-	 UMKtWRuYHg0PbWMWIEcqBHwEnbAiqGpSJ1Cqab7Ux6TBwfBbVphdX6ad8/YYxlCItWGBT
-	 PuGeA6kTOXy0rhsJ/wpDvrdibw9fK/dngPyF/s6ODX+Sc7QCho/sVdTBXfk7jn4hfacsx
-	 Sm5f6fwOr4N02E7HmMCO9i/n3s3+1Y3wdLCk1qz1P1GQmHKf7TzM9vrDAN6PQaXn+RvXx
-	 yAD5YhHgJfmpIXL6ROMvWm+cWCJjSs9yyNAAUYGFtXyR1EfL55NZlvl53fGCrTGzzHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794854351;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:Received:
+	 Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id:X-Spam-Level:
+	 X-Rspamd-Server:X-Rspamd-Action:X-Spam-Flag:X-Spamd-Result:
+	 X-Spam-Score;
+	bh=lh0jUNpR8nhRgfOHY5r+bwbPQ9w++53XNhmx7tZ4xXY=;
+	b=GxDOLedaO+uRTjtTICTIVJAOlsb4vMHJ2HiIMuAPqc/B0pleu3Os/cl4Gh6ceBRChAs6
+	 7b3WhLMgbkkpMAfNvMwH7D8Iq5Nbk/2SZnPJq+Vbe4B3gAC9TrsEm4HCu27Rsc/YXIsCQ
+	 GvEn1vCn4XrVKrLxJ43FylG1PWTrVEbflbzUVwYBFvI4o8oWe+BT3Q0QCz0AbbOAobTpQ
+	 378AiG8mx001GCsPU/RLdZMJC6z8FZh+ia4Rp/CjCVHcTwbUBPfBYTQERE1tFglAE+6Yw
+	 MMn4Co8JfPweOvNO7O9QnBbJWtVOm4awyAuk616Gl/LeTs1TiapbeGEHIEllEnkPcIw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OrsSf0Cq;
-	arc=none smtp.remote-ip=209.85.210.178
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=Agyb3zNw;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=Agyb3zNw;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C8E606A31C
-	for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 18:36:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3C8E606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E68B606A322;
+	Mon, 16 Nov 2026 18:39:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E68B606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OrsSf0Cq
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8b6a88e4341so1529490b3a.1
-        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 10:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794854212; x=1795459012; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5vf/mrFyr2K5/oxQ9g09zxEySxJUY4RSC0I96yoXnUc=;
-        b=OrsSf0Cqq43pQBnaVX2vO6dHUiUBjgE2ZeT8LACE4D+LYfuHANHJ8+rdEmf/tbbLa+
-         s0r/qJGSpLKIxJoTIXJ+0OlJ9n48F00YPsELDgjC6eS9sfzlOV65TmjlLc1oUVJJtGuI
-         Crem3favbfz6Z81thyEG9ssGRfa/NqhuGvS2Q2A+8ciubz2HVlWXm8Lz0gKTcY2CJJzb
-         o7nx1YyL1P0iMjZFolzv+6NJxne/cF6+6JauUuHDR9X7yWfZv+CpSIsnGPHPcmmG3aOE
-         pQJ7cazKCIRGqcw3Tj7SVSg23C48DhME6P2YGewd5THBBSmXW0rBeAZ2p0oUiQWX9Q29
-         3wOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794854212; x=1795459012;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5vf/mrFyr2K5/oxQ9g09zxEySxJUY4RSC0I96yoXnUc=;
-        b=uTDBNg+2Do2213wo8yyDeEnFYu9nWJDbEllnZ0ljjitTqqdkTfWVNAo4r6XIPKCrUm
-         gezgwK+6zER7Z2ErKypDQihhsBqStgEJ50VW7T+NuxCgLpGCOdQR6UkLtdr29WyV3NMj
-         vcY2NptZDPJJChIA6Qh3HqPXYRU/u8Cn2yQU4bJ+o+n9kWnrYD2UbtBNUjiW6T4vxc78
-         cLvbQ3EDQRKmBhoSLXHC0/T5fMC5y4WiOVR/z4VSnGFFDA9odtCBy0iPszeJEVx4aaV7
-         Z5lNSRcZr3ojxEDBQ1l3sxiCfz1IMjJeGT3iPRVq3+sFStDnXOkDq9C6dDkID2PXLYO4
-         wf9g==
-X-Forwarded-Encrypted: i=1; AL+hErGXOheUVAn4S/rP6beCqB/yVtoX2CkTERcftdVJg+zslAfOsAM1dwGuHfwpGmoDsfidlp/C@lists.linux.dev
-X-Gm-Message-State: APuU4Z8OV1T4nYelxTE15kd5xgLFo03QHmnr89YCAXX35r2Xqu/pTUFF
-	XSTUsMp/lVu3pdieIY5NFIwgd/ODRlq7PlJBiO+Okrhby8rCPYqlTzAFykDUByg+eA==
-X-Gm-Gg: AZFdTZf7+SPXDrFOSsn2YK+eGsYr59d/15LtBZgSAiSpOPDi/gMFxviyXoVReARUlMK
-	pK4P7zYomZK/LK9FJJrxqtAEDMR7l3KruGleDGgnnCW1AASDydSL3GHvwfeSEQyENIBl2hYUtH+
-	vOTDO7WpCGhp8tooJBTJTYPOBQjXx82bJRfsA3qbJ944gmNt2POu5haomvKCeLiHyU1w8dGjw/a
-	tX7oKIUBsKfVjVWsQPa9HkvHP+vMRE+fZ3JmaT2Xk6ArZJvpqYc0fLnVH8zLPi5nW+wIgySso2L
-	ky8BkusQzeg+SlLPsxojjaDBsP+Bubsg1IHvEpV7V7SQOsYi4nlEDAtG1lEH1PR1XB8hkXFISOk
-	2LstCCUf95vIdovB/hq1j6pEXEsOU4QSj7Pi0rDe2lhNZI6XGFu2CEGKVotSvOP76xFsGi0dj52
-	XRI/ZFsF39N2BokrT4ojmfz59aL39lwsxGCpwU3Gw/AOZCTVuJKIWzJ5L82i18QYE2eaKFA4h4J
-	1d+xEgv1kkJOgChrRlacdcjgABFJS8W1/WOqUB9nD2Fp4JQjxwbrvoM1rf/qydm1UKeOcwjmM5O
-	64ccTzlB+c55UlRmbSldTs1kOnMLPy7ht8MUc1mMobkpUSiqBAeMmVUaXtgbWysLTqhlrWelZUM
-	xDs24GTEjjHzwJGMPuUsZyBbWnFz9CJ7dJcJQLG9dabFXSaws9sLiC67fJuLKa6LFcaycRhBEJO
-	rOqy+4R9XouvI/bUQFPqqke0fq+aVreB+L0Q==
-X-Received: by 2002:a17:90a:e550:b0:3b3:a4ef:dcce with SMTP id 98e67ed59e1d1-3b3a4efdd63mr901353a91.24.1794854211639;
-        Mon, 16 Nov 2026 10:36:51 -0800 (PST)
-Received: from google.com ([2a00:79e0:2e87:6:9050:473d:cdf:7c63])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac606d8csm345808a91.16.2026.11.16.10.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 10:36:50 -0800 (PST)
-Date: Mon, 16 Nov 2026 10:36:45 -0800
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH] sched/topology: Avoid unsequenced accesses to jiffies in
- sd_init()
-Message-ID: <avtMzjJxIpFWkW-L@google.com>
-References: <20261114-topology-wunsequenced-v1-1-686a36fe61f5@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=Agyb3zNw;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=susede1 header.b=Agyb3zNw
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8133B1F899;
+	Mon, 16 Nov 2026 18:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1794854348; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=lh0jUNpR8nhRgfOHY5r+bwbPQ9w++53XNhmx7tZ4xXY=;
+	b=Agyb3zNwVYHXMZ2/i/w8Np3lM2YYjCbXbWDz+Zd7mHdiq7J+Oq3m8JQHnFiDJmVFFGeNwe
+	5vW17bI7VQ5/kUK/IzDKgK1f+UkQt+qB4p6M5Fflpn5GpBfbFq+XloQEtCvLc6ggwzopxn
+	py/9RjfekEZssXeK7VSUR1FXbxPAXI0=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=Agyb3zNw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1794854348; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=lh0jUNpR8nhRgfOHY5r+bwbPQ9w++53XNhmx7tZ4xXY=;
+	b=Agyb3zNwVYHXMZ2/i/w8Np3lM2YYjCbXbWDz+Zd7mHdiq7J+Oq3m8JQHnFiDJmVFFGeNwe
+	5vW17bI7VQ5/kUK/IzDKgK1f+UkQt+qB4p6M5Fflpn5GpBfbFq+XloQEtCvLc6ggwzopxn
+	py/9RjfekEZssXeK7VSUR1FXbxPAXI0=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7F7921334C;
+	Mon, 16 Nov 2026 18:39:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id MmR0FctN+2okdwAAD6G6ig
+	(envelope-from <jgross@suse.com>); Mon, 16 Nov 2026 18:39:07 +0000
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	linux-coco@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	llvm@lists.linux.dev
+Cc: Juergen Gross <jgross@suse.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Kiryl Shutsemau <kas@kernel.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	xen-devel@lists.xenproject.org,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Xin Li <xin@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH v6 00/17] x86/msr: Inline rdmsr/wrmsr instructions
+Date: Mon, 16 Nov 2026 19:38:48 +0100
+Message-ID: <20261116183905.1591611-1-jgross@suse.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,93 +117,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261114-topology-wunsequenced-v1-1-686a36fe61f5@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 8133B1F899
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-12.01 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCPT_COUNT_TWELVE(0.00)[34];
+	URIBL_BLOCKED(0.00)[suse.com:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.com:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	R_RATELIMIT(0.00)[to_ip_from(RLkdkdrsxe9hqhhs5ask8616i6)];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -12.01
 
-On Sat, Nov 14, 2026 at 09:19:52PM -0700, Nathan Chancellor wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], an instance appears in sd_init(), which can
-> break the build with CONFIG_WERROR=y / W=e:
-> 
->   In file included from kernel/sched/build_utility.c:86:
->   kernel/sched/topology.c:2008:29: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->    1998 |                 .last_balance           = jiffies,
->         |                                           ~~~~~~~
->    1999 |                 .balance_interval       = sd_weight,
->    2000 |
->    2001 |                 /* 50% success rate */
->    2002 |                 .newidle_call           = 512,
->    2003 |                 .newidle_success        = 256,
->    2004 |                 .newidle_ratio          = 512,
->    2005 |                 .newidle_stamp          = now,
->    2006 |
->    2007 |                 .max_newidle_lb_cost    = 0,
->    2008 |                 .last_decay_max_lb_cost = jiffies,
->         |                                           ^
-> 
-> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-> 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior. Per C11 6.7.9.23, the evaluation of the initialization list
-> expressions in a designated initializer is indeterminately sequenced
-> relative to each other, meaning any side effects in the initialization
-> list are unsequenced.
-> 
-> Move the initialization of these fields outside the designated
-> initializer to place sequence points between the accesses to jiffies,
-> clearing up the warning.
-> 
-> Cc: stable@vger.kernel.org
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2190
-> Fixes: 2b4cfe64dee0 ("sched/numa: Initialize newidle balance stats in sd_numa_init()")
-> Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  kernel/sched/topology.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 99878da03bce..f5975079f453 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -1994,7 +1994,6 @@ sd_init(struct sched_domain_topology_level *tl,
->  					| sd_flags
->  					,
->  
-> -		.last_balance		= jiffies,
->  		.balance_interval	= sd_weight,
->  
->  		/* 50% success rate */
-> @@ -2004,10 +2003,11 @@ sd_init(struct sched_domain_topology_level *tl,
->  		.newidle_stamp		= now,
->  
->  		.max_newidle_lb_cost	= 0,
-> -		.last_decay_max_lb_cost	= jiffies,
->  		.child			= child,
->  		.name			= tl->name,
->  	};
-> +	sd->last_balance = jiffies;
-> +	sd->last_decay_max_lb_cost = jiffies;
+When building a kernel with CONFIG_PARAVIRT_XXL the paravirt
+infrastructure will always use functions for reading or writing MSRs,
+even when running on bare metal.
 
-This pattern is going to wind up with two volatile (expensive) accesses,
-(with potentially different values) rather than one access and the same
-value by accessing `jiffies` once then storing the result in a temporary
-local (before the designated initializer), then using that to initialize
-the two fields in the designated initializer.
+Switch to inline RDMSR/WRMSR instructions in this case, reducing the
+paravirt overhead.
 
-Example: https://godbolt.org/z/h8bvvKK6j
+The first patch is a prerequisite fix for alternative patching. Its
+is needed due to the initial indirect call needs to be padded with
+NOPs in some cases with the following patches.
 
->  
->  	WARN_ONCE((sd->flags & (SD_SHARE_CPUCAPACITY | SD_ASYM_CPUCAPACITY)) ==
->  		  (SD_SHARE_CPUCAPACITY | SD_ASYM_CPUCAPACITY),
-> 
-> ---
-> base-commit: d7e670601af6c564ccf6d3b2ddf70ee4f41a6d1c
-> base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> change-id: 20261114-topology-wunsequenced-18f1d3b9167c
-> 
-> Best regards,
-> --  
-> Cheers,
-> Nathan
-> 
+In order to make this less intrusive, some further reorganization of
+the MSR access helpers is done in the patches 2-5.
+
+The next 5 patches are converting the non-paravirt case to use direct
+inlining of the MSR access instructions, including the WRMSRNS
+instruction and the immediate variants of RDMSR and WRMSR if possible.
+
+Patches 11-13 are some further preparations for making the real switch
+to directly patch in the native MSR instructions easier.
+
+Patch 14 is switching the paravirt MSR function interface from normal
+call ABI to one more similar to the native MSR instructions.
+
+Patch 15 is a little cleanup patch.
+
+Patch 16 is the final step for patching in the native MSR instructions
+when not running as a Xen PV guest.
+
+Patch 17 converts the rest of the MSR helpers to __always_inline.
+
+This series has been tested to work with Xen PV and on bare metal.
+
+Based on [1] and [2].
+
+Changes since V5:
+- Rebase
+
+Changes since V4:
+- Rebase
+- dropped patch 3 of V4, as already covered by [1]
+
+Changes since V3:
+- Rebase
+- wrmsrns() related changes (patches 9+10)
+
+Changes since V2:
+- switch back to the paravirt approach
+
+Changes since V1:
+- Use Xin Li's approach for inlining
+- Several new patches
+
+[1]: https://lore.kernel.org/lkml/20261116150208.1572254-1-jgross@suse.com/T/#md59eab1d0c8b23a3184cbab408629c86f95e8419
+[2]: https://lore.kernel.org/lkml/20261116160259.1579333-1-jgross@suse.com/T/#mf22bd746d396918f2d8163541405b2222770600a
+
+Juergen Gross (17):
+  x86/alternative: Support alt_replace_call() with instructions after
+    call
+  coco/tdx: Rename MSR access helpers
+  x86/msr: Minimize usage of native_*() msr access functions
+  x86/msr: Move MSR trace calls one function level up
+  x86/hyperv: Switch from __rdmsr() to native_rdmsrq()
+  x86/opcode: Add immediate form MSR instructions
+  x86/extable: Add support for immediate form MSR instructions
+  x86/msr: Make wrmsrns() a first class citizen
+  x86/msr: Introduce sync_cpu_after_wrmsrns()
+  x86/msr: Use the alternatives mechanism for RDMSR
+  x86/alternatives: Add ALTERNATIVE_4()
+  x86/paravirt: Split off MSR related hooks into new header
+  x86/paravirt: Prepare support of MSR instruction interfaces
+  x86/paravirt: Switch MSR access pv_ops functions to instruction
+    interfaces
+  x86/msr: Reduce number of low level MSR access helpers
+  x86/paravirt: Use alternatives for MSR access with paravirt
+  x86/msr: Make all MSR access functions __always_inline
+
+ arch/x86/coco/tdx/tdx.c                   |   8 +-
+ arch/x86/hyperv/hv_crash.c                |   6 +-
+ arch/x86/hyperv/ivm.c                     |   2 +-
+ arch/x86/include/asm/alternative.h        |   6 +
+ arch/x86/include/asm/fred.h               |   2 +-
+ arch/x86/include/asm/msr.h                | 356 +++++++++++++++++-----
+ arch/x86/include/asm/paravirt-msr.h       | 180 +++++++++++
+ arch/x86/include/asm/paravirt.h           |  45 ---
+ arch/x86/include/asm/paravirt_types.h     |  57 ++--
+ arch/x86/include/asm/qspinlock_paravirt.h |   4 +-
+ arch/x86/kernel/alternative.c             |   5 +-
+ arch/x86/kernel/cpu/mshyperv.c            |   4 +-
+ arch/x86/kernel/kvmclock.c                |   2 +-
+ arch/x86/kernel/paravirt.c                |  42 ++-
+ arch/x86/kvm/svm/svm.c                    |  16 +-
+ arch/x86/lib/x86-opcode-map.txt           |   5 +-
+ arch/x86/mm/extable.c                     |  41 ++-
+ arch/x86/xen/enlighten_pv.c               |  52 +++-
+ arch/x86/xen/pmu.c                        |   4 +-
+ tools/arch/x86/lib/x86-opcode-map.txt     |   5 +-
+ tools/objtool/check.c                     |   1 +
+ 21 files changed, 645 insertions(+), 198 deletions(-)
+ create mode 100644 arch/x86/include/asm/paravirt-msr.h
+
+-- 
+2.56.0
+
