@@ -1,86 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794868033;
-	b=hplwH9RTpse1hTyCVrZWZ2cKJrDCbfM7bI+tn0t3zA7m/viyc3RfR8ptaVZ5lWLqRrH3
-	 ns13UNQ/lBGauS7NgxeOPNRQpOZJ61PNHnl8w3/kpub/H2YiOKsWduzGV3Kx2TzDVMUjV
-	 AbPZp8gD3i27sDxSyGLT5+FJ1PZrIXme5ofoV6/b6DKaqghCzCQIpqQNPMy87f1USo015
-	 XsPaUdeEtxq23f4FQb8aZCYdCCqPLXdgkYLAH+j+s7D60p5ES3v1VQ4hmxNi72WRx16Zx
-	 pEwMdolETgmH1bVf7e4+yQ/ipkBT15VHfd2y3AWYj8bhunA1Vho7uFEexfLHGWeY7jg==
+	t=1794868123;
+	b=1Gcl9mdbxMCG2uqyERTCHpD6RtBwOXWdVbnt1tFivi3G/6hsHe0MxpblEf+xp5txxbM1
+	 K7ilofBpD/9OGl77VRRLsALRB3uOCaK+8TSLXXOaNrftIeoHgqYm3edXJpYupG85LQzYY
+	 dnf2RBGHzrnty1LZIEGkgjgTJ3gJ00foGAM85ivvauxwGwrI1y18CtRVMeIEWlthZVdyl
+	 70QCa+QvPrfQVvZOAiQWIaAXHBnofnlB9UxKM80xGi/yatXMk0ayJK45G1YMJ64mw87/I
+	 QLqs8AL5WPVmPEDO6HIxpAS3XQSJc9L5yY6N6XDPz9rQK/8ldp4R2aM47udEkaFMpEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794868033;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
-	b=b+bKZ6Rqb2EEz3bnwpwmKMF6d5XVjEWW+toF4reYNspT0sd3OyMIGhQMizXZFdQ+fe78
-	 v8nrsipoD5lG0eqd3UWG1KgSrduYm+cV+1u+eP5A9401Woiwx9AajxCbeaDyYw7SZMDaE
-	 6qNc0V3J1YK1XNq/96OygV8UpencbJrUAiIeXhVZkZ9gxMfsFZdn0iX1M2vtdys5lfVpi
-	 8ea9sjpfIGObhvr2rOGJzvpywuT6fnZCcdnA01au0VA12A+BEgBDgzuCiybJf6orNrYZK
-	 wEoEuNCbHv+ymqL1v5Cn+FRXDR5FHRPK9SoNLzhta9sP5bs8tUNRS5PrtlnZbnA9l1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794868123;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=EN+xjqjb98UaRHMjBVBOXaIhAP0+1stF7wDJi81/iGY=;
+	b=OxXqUbHgkxsWtjH0+BAzQjW90F6UPIzup70nRg78nm8jGzfVgyxG5qHMSho7ca9azEOY
+	 POt9RVvKBrWiGihsm7m7v2ESm9xwLDIQNrZ/fABXOWCcrMdN/SQHlASfleK2579J0cjLa
+	 OivFbP1yfjQ+5VonEJ7U5VFX4nsy0YKAZkENygnpLSIiCK4b13NxxsUXP0kK5JGs7n59f
+	 reg8mbF3s71e+M/Hz7GJL7CYJMfSuMKc2Q8RisVJX3kbZN3ncuvU0ef6T7dtL6frXFsAC
+	 hEet+qPwUaiMf5yxZIUzRUAohfuhebpQ60G7n6DknCP8v+cKhwjo8sIs9NQYc2/UetQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SJcFh3o8;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1F8606A884;
-	Mon, 16 Nov 2026 22:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7C2606A89C
+	for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 22:28:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AD7C2606A89C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283BA1F000C4;
-	Mon, 16 Nov 2026 22:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794868032;
-	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=md2D4WPOInNakDSqWfE1IPbeod9zOxz2pjEYXRvX5XiOz3ugZVGikYj7oFVPNv5TA
-	 anRLz9W1IPaeffFSXdQM5eIkNzSl7SSBVcl2XNx1GIfniOATopc5iOYnfIW2tcJICz
-	 aVn8KUWMqGcxXYidnfS7JXA/XupIgyyf55FAXfxOjNnYtNjcQUssyVADQa/bzbhV3W
-	 UicZSxsZqypH7o7MtWctPXY/bJPQqUdH6+NnMUSsGHKKnFY1lnd0GDxpKiTXt7vuKS
-	 VxK1w0CvT9hWXVQ6g73MyFiBbMOQ63w53AYN7IuB3i9vZCAPLRr0V5/4yR2A03YPn6
-	 UCdDxRThMLAvA==
-Date: Mon, 16 Nov 2026 14:27:10 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
- <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
- Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
- Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
- Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
- Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
- Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
- <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
- <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
- <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Chris J Arges
- <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
- kernel-team@cloudflare.com, Tianyi Gao <tianyi.gao@linux.dev>
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-Message-ID: <20261116142710.347e8571@kernel.org>
-In-Reply-To: <CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
-References: <cover.1794281983.git.tianyi@cloudflare.com>
-	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
-	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
-	<20261115113902.4834dda6@kernel.org>
-	<CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SJcFh3o8
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-49134c8509fso3864184f8f.1
+        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 14:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794868121; x=1795472921; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EN+xjqjb98UaRHMjBVBOXaIhAP0+1stF7wDJi81/iGY=;
+        b=SJcFh3o8AhWiUtVn4WC0pTBXBsJRNXVns3CznIXZeg6eUU0nfYLB1ILLHDVuJ1M5/R
+         BMJB7jbAM+1jhoi2Lv3NGOnaZgzY1bOjf8Cc7Ghc5C0yqEhB/1Ll/p6bdaKUmlg3XE47
+         2q8baYoXugD7JA2lnaFplKsAUqZokYPa8+SfZEizTUcMWxRI2Q5Cihd0PpvQ9xDrkBbA
+         seUJ2JGv+9/58VCNirvqsbSudOLSqpHEPMqeuNeZIshJJ4nyg2K2BCe9zAJtkYPtextj
+         jJMb/77ZBL7XotcDSqXf4LqJlDWbnZ128XFE5ex9+VCAuSFB7sAkSWIIa/fZx7HRFOoa
+         vARw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794868121; x=1795472921;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EN+xjqjb98UaRHMjBVBOXaIhAP0+1stF7wDJi81/iGY=;
+        b=c/bG6jMXrztxNzuGhCOcTBn1DPSZVkYspIwfhWcMRhgZF16towigXR1eUR8yDvPrk8
+         PmobCuZezJjJgCgZ7frDVbHOxczjGJv71KYTJebOMtIDiLu5czMfdj3irbxu9qDAu7cw
+         7GlUzfrwoJeEXNmpmscqCGbaPSjV3RA4j8qvEzH3YBDsd9cyjhBERdbhOR4k+HhRkUtu
+         taqDaucswLd8AAfXHmET+OIrviPyrQts/tfmHpuv5Vqe9thpHz1Fg/CHA8zy8LWdTaxl
+         2pDuNG2OO0E3PWsGzKlw90OUAVrBbEkdwKjiKmRnohZcKOVAYpIEiEpapU0x7yGyJLZ4
+         5cCw==
+X-Forwarded-Encrypted: i=1; AL+hErFLGmY8aB56An5g/CuXrRXlpypfa3TLXULtVSyVbsXIYM/zgJPfq4x2CAZa5WXj4mihOLlW@lists.linux.dev
+X-Gm-Message-State: APuU4Z9fBzeiJ5LriMusKn0L6feTHr7+D+ZtoRIrztraWnbGqz9FbDyb
+	s8mkCDXeVY4MvlQcCw2B4Oe+OWOj1UGi5jLCW8LggAHIh13nwsGWe9le
+X-Gm-Gg: AZFdTZdFehAm++YRLcnvhNTfM5KXV2BhUqd88BpXur/EgzsbBkwLi75VkAGw+Hn0Kd9
+	s8Pp/+TRFralxZSgpq4W1mxzuntS/ecduZ3NM6tyzpkPnbux5jQDpNh7xiW5idV3/ad2CGksCFu
+	p261BC6PXU2AmWfNZjt1jtJRvneP8O3VxaLVdI+7x7IHlij1bejknWgsj4OMyme6fVfvA2C+RQr
+	zfLPyPiWt1Mwgam6dw91JdX7lDbAUIBRp9olNNAER2o2UFzjEGVirwwjZTsFgssXURUvC6a2Wd3
+	EdUHR+30wGbE5IrWCYfRjjRu516GHIBs0ANwvKa4rh/7vNCX36KaX0sHE37AYq+ERQyqLtdT+By
+	ZDmTIm+Rwr7ZpAAZaZIlzHGFfI2sQlpTmu+7r8RhZmjYzNyehlgZREJGVLaxGMc6xbIqlau3o/4
+	cZvCiKHsx+nWwW/9lqmrf3PX0WnRr/u2czeeokWx/EH8LhwRZgI++iaYEfFPvF9A1QJny0XbM6J
+	mbwmFfMDpwv7AOTtxnfUEg9eTksYxzyYihyeCpT8K86ZJNy/NhpxswW1BW7XCXgDwGpnZVtLBYW
+	5De3GECzC+8C8StxHnU0C135uEC/nGLum7n5zqiHpHzbgCELmHxyKegPEE5sku627A==
+X-Received: by 2002:a05:6000:2513:b0:48e:47e6:fdfb with SMTP id ffacd0b85a97d-49c70ed7c9cmr23140856f8f.13.1794868121017;
+        Mon, 16 Nov 2026 14:28:41 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4a32155283bsm2125683f8f.37.2026.11.16.14.28.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 14:28:40 -0800 (PST)
+Date: Mon, 16 Nov 2026 22:28:39 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Borislav Petkov
+ <bp@alien8.de>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/build: Do not allow X86_NATIVE_CPU to be enabled on
+ non-x86_64 hosts
+Message-ID: <20261116222839.4b4a04f2@pumpkin>
+In-Reply-To: <20261116191120.GC1036192@ax162>
+References: <20261113-x86-no-march-native-on-non-x86_64-v1-1-cbc8b096d1c4@kernel.org>
+	<20261114202524.GBavjDtC9Z3j7PrV3Y@fat_crate.local>
+	<20261114204605.GA173332@ax162>
+	<20261114205806.GCavjLXgsKNNwK0zLz@fat_crate.local>
+	<CAKwvOd=f+ib1XVvFfiW2mF8NoWo1jr55fJo=QOuZCJmzQCVmtg@mail.gmail.com>
+	<20261116191120.GC1036192@ax162>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -90,44 +108,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 15 Nov 2026 23:36:34 +0000 Tianyi Gao wrote:
-> On Sun, 15 Nov 2026 11:39:02 -0800 Jakub Kicinski wrote:
-> > On Wed, 11 Nov 2026 01:07:46 +0000 Tianyi Gao wrote:  
-> > > - On veth, an XDP program removes software GSO from the peer, limits
-> > >   its MTU, and can copy skbs from the peer.  
-> >
-> > Could you remind us why you XDP_REDIRECT xdp_frames to the veth
-> > if you end up allocating the skb on the veth, anyway?
-> >
-> > I thought that was to let veth run its own prog before skb is allocated
-> > but you're saying that you want to avoid veth having a prog, so clearly
-> > it's not that.  
-> 
-> Thank you for your comment!
-> 
-> XDP_REDIRECT into a veth without a program on it has been supported
-> since commit 0e672f306a28 ("veth: check for NAPI instead of xdp_prog
-> before xmit of XDP frame"). There is demand for it [1].
-> 
-> With or without a program on the veth, and on cpumap, this series
-> keeps the RX metadata from the NIC until the skb is built.
-> 
-> [1] https://lore.kernel.org/all/20210416175929.35c3c389@carbon/
+On Mon, 16 Nov 2026 12:11:20 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Perhaps I'm slow but I don't see how this answers my question.
-I read your reply as "the config is supported and my team uses it".
+> On Mon, Nov 16, 2026 at 10:28:54AM -0800, Nick Desaulniers wrote:
+> > On Sat, Nov 14, 2026 at 12:58=E2=80=AFPM Borislav Petkov <bp@alien8.de>=
+ wrote: =20
+> > >
+> > > (If it were me, I'd simply whack that native thing. It is such a wast=
+e of
+> > > energy). =20
+> >=20
+> > There's always KCFLAGS.  i.e. we _could_ remove it from the x86 build,
+> > and <whoever cares> could still do
+> >=20
+> > $ make KCFLAGS=3D"-march=3Dnative" ...
+> >=20
+> > (I'm agreeing with Boris here) =20
+>=20
+> I have no objections to deleting X86_NATIVE_CPU but as Ingo notes in the
+> v2, people do use this and it is much more convenient for a regular user
+> to adjust this single configuration option in their local configuration
+> file than fiddling with KCFLAGS (potentially having to modify their
+> distribution's packaging file in the process).
 
-The question is _why_ you use it. Let's leave the cpumap case aside,
-you provided no legitimate reason why having an XDP prog in that case
-is a problem. With veth - you are right that attaching XDP causes
-problems for pure skb traffic. For veth cases, however, there's no
-strong reason to delay the skb allocation. Hence my question.
-Why not let the driver allocate the skb if we know that the
-redirect target will need to allocate one, anyway.
+It would certainly also be nice to put something in the .config file
+(or at least in the obj directory) that selects the correct compiler
+for the kernel being built.
+Otherwise it is easy to forget to request a cross compiler (etc).
+(Maybe there is - but I've not found it.)
 
-Since your patches are not a natural / clean extension of the existing
-infrastructure - we should step back and make sure the use case is
-practically justified.
+David
+
+>=20
+> > Nathan,
+> > Was there a bug on file against clang for this?  I can picture a fix
+> > in my head for this... =20
+>=20
+> I am not sure I ever found one. I can file one later today.
+>=20
+
