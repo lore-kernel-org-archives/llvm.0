@@ -1,63 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794857946;
-	b=HorCRbNRZRKybssLCr5wFceL84ku8LHkpY9nUFxHAHpfULKuyiCRwVpl5i2v6QI2N19F
-	 CXctNlIPIshXEChuAzmLs3lOkbaYMZw8uKOJAyHGsRyyF6Z5oRsH8TR82dnJTjnyQV7/j
-	 5MTkQElhNs56a0/ITR3Z09H2j9S/x3xCGAvgKn9oPcnoLnIOQ+LzCoxbesztFCfXgChRM
-	 kmrjMiV2xxGHw5Z+h48cBQ9U3tFDWI3/2Naf1wemEaUgLG1cF80HRn7W8xULaKDADOFXr
-	 /ZxRCWMed1RAcWca91EDoD1N8YyTErANGEEGsnIPx3YfmziCPC52cGcuLQ3O+aNpYBQ==
+	t=1794862259;
+	b=nPnOuz024fd7xzC1lQDbK/l6isFjlJf8lf4Fj5vrbpsF/SCpFMQmslj9XNSQCAF0b0CM
+	 Qn5os9FiloQ46UGmUbsZvj14Ue39PqBPUt4zK0uEQjp70mFXDxgtTEqbx4kJ2Rmm3LrV6
+	 201LdHCWnJzuKbuWOBmVSPLV7+cujxMjRu+iOBIhyTDwuKF+0ZyhWeaADO7DA9ie4X+Ep
+	 b8wmpUe5wJlEZ5YijOh6xCSKD6h2Ds+lNlvIgBtWUTtQE+Zi/xgXgIwoW9EY7jKvdX45C
+	 Vhb3lbffIHhLHRZ2OW1TPdYTB7+xp+SnMDz+bqIPvXOlu+njB6NNkILmA6e00SwRx/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794857946;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=XSrD94cLp+aFWvtYg7yPqUaSsfnhrS+s9J7K3EwFKFA=;
-	b=rymfB7AFxGup4Wk284jdYgF2GJWZJ7iTl3vXVWhMD9nK6HxHnGTWiAWuDuMnBn6WtBYv
-	 1QcYcn9P6Mm3iSLq4F4Brm6vxHpzF930uK0+ywxPCgpYty7jVcLEGhVrWQWl9Bfe72aNK
-	 FOXng/idtYl754SHybpmrKHrL2Wpk+2EYhk62Yhz/t8gqpcb83XfmzaEFeQgnDXh/8NnH
-	 3mipnIDT/OGymbZ09gvdE0SDxkwdp90zKDyLplAlOhpHvJlaB32bIDyi2PEpJFFkLAH5g
-	 uC39t7PMXIt8EIQrrEvwnCybMnWKCWtaQfbFvctmIz/NsGw8yD3kck4NxJGzr1WlLHA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794862259;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=mF+5LJPny8StaD39CFoDqff04cfc3UL1BENucKw5erQ=;
+	b=TeCf7A4lHAysxnyWeITsQbvtJcAylDeQVgIlxvJSFG+mLZpM9h7Q1aVcz1AYjMh5k9lJ
+	 Tai+NlsOduBn50k/dkGwf4H+CQ2z0QhGcksTAw0XnijKV3zezUl2nacnU0+8+e1BTJeFI
+	 aEtWko9dz8+bJEg2nDnXZ2FfHzaLKegkJrEh1whYeE5vS3NLobqqTzMMpXtAKE5L60UYn
+	 91lick8+MBRyTwWM2hyHBeY1rYjpbPdksVTaDyQKiKCPcXwLqpLKD7zLLfYawnsopNa2+
+	 6r5ajaEPtLnWsOw8UZgaYTJHFTbiLH6PkeoFVrOJbxiZML3VjrZNnbuBIjR9bDQ7rhA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZATBVlba;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=CokH3zAJ;
+	arc=none smtp.remote-ip=198.175.65.17
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515DB606A31C;
-	Mon, 16 Nov 2026 19:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A59606A31C;
+	Mon, 16 Nov 2026 20:50:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 15A59606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZATBVlba
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C4E1F000C4;
-	Mon, 16 Nov 2026 19:39:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794857946;
-	bh=XSrD94cLp+aFWvtYg7yPqUaSsfnhrS+s9J7K3EwFKFA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ZATBVlbaOIbrv8L1W8WmvvvEQnkugSgwhqr7UDldPRqA4S8+ZklVXZV8j/BcA+imM
-	 338sRioeumRIBORQE0TBQuDrOyuUrJgoOE7fsX5NT4fS02WsI2avhUasO7sh6SGX1p
-	 gfOJIza6mN/GY81kHygQmBtknxLpEtuoQ6VaF42U93TqO+g/XWZprhCWH5TS+vmFp0
-	 tcMIp2f68AmpkDEKEkLwUVSKd5mmm7+Z2iKjQgDMSa6s2g+KdzerHW/CPTnXPy8iHY
-	 M/G8PEw7fVc/ghctiqxOrIqRZEhgzUGIVhi9WRbauQdspH2SuR0zLIBwQeQQTKkVk7
-	 1dcaLA8eaYBBA==
-From: Sasha Levin <sashal@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	linux-kernel@vger.kernel.org,
-	Bill Wendling <morbo@google.com>,
-	Chuck Wolber <chuck@wolber.net>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	Marco Elver <elver@google.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Thomas Gleixner <tglx@kernel.org>
-Subject: Re: [PATCH v2 11/20] objtool: Detect code coverage instrumentation in noinstr code
-Date: Mon, 16 Nov 2026 14:39:03 -0500
-Message-ID: <20261116193903.227017-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <avdUyFTijaXU5MwM@jpoimboe>
-References: <20261103015238.3780910-1-sashal@kernel.org> <20261103015238.3780910-12-sashal@kernel.org> <avVaaxKUA2ArB6RG@jpoimboe> <20261112130906.1316655-1-sashal@kernel.org> <20261112151232.GC1813469@noisy.programming.kicks-ass.net> <avX80WkCFuGyS1y0@jpoimboe> <20261113150920.1953634-1-sashal@kernel.org> <avdUyFTijaXU5MwM@jpoimboe>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=CokH3zAJ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794862258; x=1826398258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NGPITMRExA4k1FsoRlFIhpMvIupdLuYZuYltGtidHuE=;
+  b=CokH3zAJSwK4hYPEhgvSr+7kQioZJ+UX9BmsDFUaR7dfDZOkmmJ3p8no
+   OKmBoJ7hULyXJyW3E8aNjzRnZy8ZU8lTVO0RPKCH+0IzKygtmHnCERdGk
+   myszkeeWy6XakoO3hyBWyBgGLfphz6pWYlyS/d6iiZDDmsVVg24XimWrR
+   6OTl/WK3VPRqNuNDXRJDsKgVgv5+x2n6qTKA83zQF0XPMC2X1Geq+zkKZ
+   lIF2qiFoAHZz56FBZ5+3doMcgLMks4D6k+Y0rFgOnFvugg21ScrbBnY67
+   XdeCxSFIvG7ClrPzz6faQjJXLdNWi4mc2LAB6emtCK7J4dZDQlC7nueOl
+   A==;
+X-CSE-ConnectionGUID: SyZtZQvJSeG14CwGe84s9w==
+X-CSE-MsgGUID: 6jjst9MRTt2Xk/24l8zPUA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11968"; a="3627624"
+X-IronPort-AV: E=Sophos;i="6.27,217,1787036400"; 
+   d="scan'208";a="3627624"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2026 12:50:58 -0800
+X-CSE-ConnectionGUID: 3br2HG2yQbaqG5uDAy28jQ==
+X-CSE-MsgGUID: 7pnb/xcOSci17EykFV5phg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,217,1787036400"; 
+   d="scan'208";a="9660346"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 16 Nov 2026 12:50:56 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xT3fB-000000019PN-24hQ;
+	Mon, 16 Nov 2026 20:50:53 +0000
+Date: Tue, 17 Nov 2026 04:50:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: huang zheng <huangzheng9869@gmail.com>, jaegeuk@kernel.org,
+	chao@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, huangzheng1@xiaomi.com,
+	Huang Zheng <huangzheng9869@gmail.com>
+Subject: Re: [PATCH v2] f2fs: add checkpoint step timing statistics to debugfs
+Message-ID: <202611170426.9bqr9xq4-lkp@intel.com>
+References: <20261116095011.2868219-1-huangzheng9869@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -67,69 +85,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116095011.2868219-1-huangzheng9869@gmail.com>
 
-On Fri, Nov 13, 2026 at 10:22:51AM -0800, Josh Poimboeuf wrote:
->That seems circular though, I'm still trying to figure out what the
->actual problem is.
+Hi huang,
 
-Right, sorry, I'm still trying to piece things together myself :)
+kernel test robot noticed the following build errors:
 
-From what I get from Peter[1], a counter update is a store, and a store can
-trap:
+[auto build test ERROR on jaegeuk-f2fs/dev-test]
+[also build test ERROR on jaegeuk-f2fs/dev linus/master v7.4-rc3 next-20261113]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  Because you can get exceptions from memory accesses just fine, which, if
-  you're inside an exception handler and haven't dealt with recursion
-  conditions yet, can be fatal.
+url:    https://github.com/intel-lab-lkp/linux/commits/huang-zheng/f2fs-add-checkpoint-step-timing-statistics-to-debugfs/20261116-175011
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+patch link:    https://lore.kernel.org/r/20261116095011.2868219-1-huangzheng9869%40gmail.com
+patch subject: [PATCH v2] f2fs: add checkpoint step timing statistics to debugfs
+config: i386-randconfig-1010-20261116 (https://download.01.org/0day-ci/archive/20261117/202611170426.9bqr9xq4-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261117/202611170426.9bqr9xq4-lkp@intel.com/reproduce)
 
-So if I try to play with it and produce #DB by placing a data breakpoint, I can
-observe:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611170426.9bqr9xq4-lkp@intel.com/
 
- - exc_debug_kernel() bumps __gcov0.local_db_save twice before it reads
-   DR7. With a write breakpoint on that counter the next kernel #DB
-   never returns, the CPU spins between asm_exc_debug and
-   exc_debug_kernel with DR7 still armed.
+All errors (new ones prefixed by >>):
 
- - exc_page_fault() bumps __gcov0.read_cr2 right before "mov %cr2". If
-   the breakpoint on it samples user callchains, the #DB handler faults
-   walking the user frame pointer and CR2 is gone. I tried 300 writes to
-   freshly mapped pages with %rbp pointing into a PROT_NONE page, and
-   all 300 got a SIGSEGV for the %rbp address.
+>> fs/f2fs/checkpoint.c:1744:3: error: call to undeclared function 'update_cp_stats'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1744 |                 update_cp_stats(sbi, cpc);
+         |                 ^
+   fs/f2fs/checkpoint.c:1744:3: note: did you mean 'update_ckpt_flags'?
+   fs/f2fs/checkpoint.c:1616:13: note: 'update_ckpt_flags' declared here
+    1616 | static void update_ckpt_flags(struct f2fs_sb_info *sbi, struct cp_control *cpc)
+         |             ^
+   1 error generated.
 
-I don't think it's a "keep the pieces" thing, since we already refuse
-breakpoints on the other data that code touches. So for example,
-within_cpu_entry(), and 3943abf2dbfa ("x86/debug: Prevent data breakpoints on
-cpu_dr7") is a very similar case I think: something local_db_save() reads
-before DR7 is cleared.
 
-It's not only a coverage problem either (I think I just got this as "additional
-homework" from Peter :p ). The within_cpu_entry() list is kept by hand (having
-objtool enforce it has been on the TODO list since 2021 [2]), and the same
-kernel without coverage has holes in it too:
+vim +/update_cp_stats +1744 fs/f2fs/checkpoint.c
 
- - A read/write breakpoint on cpu_current_top_of_stack gives the same
-   300 of 300 wrong fault addresses, as sync_regs() reads it before CR2
-   is read.
-
- - With spectre_v2=ibrs, a read/write breakpoint on
-   x86_spec_ctrl_current hangs the CPU in paranoid_entry(), which reads
-   it before DR7 is cleared.
-
-So what coverage adds is thousands more of these in places nobody can list, and
-with GCC they're ordinary .data/.bss that can't be blacklisted. That's what the
-objtool rewrite gets rid of.
-
->FYI, a partial objtool port (without the more controversial CFG
->reverse-engineering bits) is likely coming to arm64 soon to support
->klp-build, in which case this should be possible there as well.
-
-Nice. Without the CFG, can it still tell what's inside
-instrumentation_begin()/end()? If not it could just drop every counter
-in .noinstr.text, I think that's fine.
-
-[1] https://lore.kernel.org/all/20210614190700.GF68749@worktop.programming.kicks-ass.net/
-[2] https://lore.kernel.org/all/YB0+P3LiduCpWctO@hirez.programming.kicks-ass.net/
+  1732	
+  1733	static inline void check_cp_time(struct f2fs_sb_info *sbi, struct cp_control *cpc)
+  1734	{
+  1735		unsigned long long sb_diff, cur_diff;
+  1736		enum cp_time ct;
+  1737	
+  1738		sb_diff = (u64)ktime_ms_delta(sbi->cp_stats.times[CP_TIME_END],
+  1739						sbi->cp_stats.times[CP_TIME_START]);
+  1740		cur_diff = (u64)ktime_ms_delta(cpc->stats.times[CP_TIME_END],
+  1741						cpc->stats.times[CP_TIME_START]);
+  1742	
+  1743		if (cur_diff > sb_diff) {
+> 1744			update_cp_stats(sbi, cpc);
+  1745			if (cur_diff < CP_LONG_LATENCY_THRESHOLD)
+  1746				return;
+  1747	
+  1748			f2fs_warn(sbi, "checkpoint was blocked for %llu ms", cur_diff);
+  1749			for (ct = CP_TIME_START; ct < CP_TIME_MAX - 1; ct++)
+  1750				f2fs_warn(sbi, "Step#%d: %llu ms", ct,
+  1751					(u64)ktime_ms_delta(cpc->stats.times[ct + 1],
+  1752							cpc->stats.times[ct]));
+  1753		}
+  1754	}
+  1755	
 
 -- 
-Thanks,
-Sasha
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
