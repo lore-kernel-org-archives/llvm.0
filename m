@@ -1,54 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.20
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794865750;
-	b=oyK2/3cMK8zvJndk+0Jki6rB2F95VR6ozV7Y5XB1RfryVRv8lr+WiVVbax1DPzOSzAO/
-	 8dtUE8Jq6hwQdQ3vs/fpxwCtyVaFpxyk6fSovJJaE9I0MNliTKEprhw3OCkmw1y7n5F6B
-	 3PnMnXjEncnamAA3PEpK0TOu5AC0r/vUgyt9EbPNqAH42GZOYevOWME69Np+2qiG0MPPk
-	 6uKus5zfPnS0lTTAGPWTxUJkAyFXaY0On2dBBo8MOO7OdvvV6qzRHOtVQ/uoW/Xqx/h14
-	 Gmo6+bi3fvcqe3rgF1h4h923e201DlZZLXvCIL+MgZ4N9as+eOGm69RNEv0EhDCh6lQ==
+	t=1794868033;
+	b=hplwH9RTpse1hTyCVrZWZ2cKJrDCbfM7bI+tn0t3zA7m/viyc3RfR8ptaVZ5lWLqRrH3
+	 ns13UNQ/lBGauS7NgxeOPNRQpOZJ61PNHnl8w3/kpub/H2YiOKsWduzGV3Kx2TzDVMUjV
+	 AbPZp8gD3i27sDxSyGLT5+FJ1PZrIXme5ofoV6/b6DKaqghCzCQIpqQNPMy87f1USo015
+	 XsPaUdeEtxq23f4FQb8aZCYdCCqPLXdgkYLAH+j+s7D60p5ES3v1VQ4hmxNi72WRx16Zx
+	 pEwMdolETgmH1bVf7e4+yQ/ipkBT15VHfd2y3AWYj8bhunA1Vho7uFEexfLHGWeY7jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794865750;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=yJuKOBNNYnk1ty+KHw/zCYtkc5H0NaB5Yj6zALlwHps=;
-	b=lWXsLtXKEE6HFDyXTjK3epRJuQQQRCmVbMYqv9Du/r3ZPo5+1EWZUXiu8xTuKV5ofgMK
-	 L7VM4KEMiPyDK6C7QgS+nPCd0vVkhPDjKGTShmZ30Y5ptYKjxEa9b/aPb0kVDtKwgoN4H
-	 vd5wFVMvChfT24WRCGrsVWT2HQ0zUP9fgDFHLJJDJQtspQVwNAy9RSkbLE2SbTWv89V9A
-	 WMTUgDLV0QEgJ+XowM7o5dbOOdhL4d4D+zvEFzOD+bdvBAQa5WEXCjqiZFVfb4Znxu7jf
-	 lvMeKs9Ygs3PJZc0xgB6m7XrUt3DZgPrToVk5Wj1QS/F5JNL86Jy4giTGiiQhCOFy+w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794868033;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
+	b=b+bKZ6Rqb2EEz3bnwpwmKMF6d5XVjEWW+toF4reYNspT0sd3OyMIGhQMizXZFdQ+fe78
+	 v8nrsipoD5lG0eqd3UWG1KgSrduYm+cV+1u+eP5A9401Woiwx9AajxCbeaDyYw7SZMDaE
+	 6qNc0V3J1YK1XNq/96OygV8UpencbJrUAiIeXhVZkZ9gxMfsFZdn0iX1M2vtdys5lfVpi
+	 8ea9sjpfIGObhvr2rOGJzvpywuT6fnZCcdnA01au0VA12A+BEgBDgzuCiybJf6orNrYZK
+	 wEoEuNCbHv+ymqL1v5Cn+FRXDR5FHRPK9SoNLzhta9sP5bs8tUNRS5PrtlnZbnA9l1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="AlM/Biop";
-	arc=none smtp.remote-ip=95.215.58.20
-Received: from mta1.migadu.com (out-20.mta1.migadu.com [95.215.58.20])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F254C606A322
-	for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 21:49:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F254C606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1F8606A884;
+	Mon, 16 Nov 2026 22:27:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AlM/Biop
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=Oi5wYhbLjwdZu+R9/Qn3xoP1Vc2SrBmiTpo0zBudxz0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794865748; v=1; x=1795470548;
- b=AlM/Biopx5/UDRyQdVuhR4RnwnBrRi6jcpqn4GjYSObCZTiZo0N66uM1OuCTN7CUEh2uZ9V7
- B1GakYBDKwFWVE2JnDaRGkdiP+dsSW6slL1wLpVypXO9GKcljtqDhgI3hGWXH9f8FZyZeJ4AmJI
- eenB7R++vCk5nvtGT3JV22cE=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 5853fed9c1d37e21;
-	Mon, 16 Nov 2026 21:49:07 +0000
-X-Mizu-Trace-ID: 5853fed9c1d37e21
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2e6d98fe-527f-4188-bca0-c9db1ad92bce@linux.dev>
-Date: Mon, 16 Nov 2026 13:49:02 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283BA1F000C4;
+	Mon, 16 Nov 2026 22:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794868032;
+	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=md2D4WPOInNakDSqWfE1IPbeod9zOxz2pjEYXRvX5XiOz3ugZVGikYj7oFVPNv5TA
+	 anRLz9W1IPaeffFSXdQM5eIkNzSl7SSBVcl2XNx1GIfniOATopc5iOYnfIW2tcJICz
+	 aVn8KUWMqGcxXYidnfS7JXA/XupIgyyf55FAXfxOjNnYtNjcQUssyVADQa/bzbhV3W
+	 UicZSxsZqypH7o7MtWctPXY/bJPQqUdH6+NnMUSsGHKKnFY1lnd0GDxpKiTXt7vuKS
+	 VxK1w0CvT9hWXVQ6g73MyFiBbMOQ63w53AYN7IuB3i9vZCAPLRr0V5/4yR2A03YPn6
+	 UCdDxRThMLAvA==
+Date: Mon, 16 Nov 2026 14:27:10 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
+ Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
+ Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
+ Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
+ <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Chris J Arges
+ <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
+ kernel-team@cloudflare.com, Tianyi Gao <tianyi.gao@linux.dev>
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <20261116142710.347e8571@kernel.org>
+In-Reply-To: <CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+	<20261115113902.4834dda6@kernel.org>
+	<CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -58,113 +90,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/2] local_lock: do not put btf_type_tag on the lock
- guard type
-To: Chris Down <chris@chrisdown.name>
-Cc: dennis@kernel.org, tj@kernel.org, cl@gentwo.org, peterz@infradead.org,
- mingo@redhat.com, will@kernel.org, boqun@kernel.org, longman@redhat.com,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, acme@kernel.org,
- yonghong.song@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, llvm@lists.linux.dev
-References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
- <20261110012235.1024461-3-vineet.gupta@linux.dev>
- <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20261113115810.cd33f9ed58c02dd9@chrisdown.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 11/13/26 11:58 AM, Chris Down wrote:
-> Hi Vineet,
->
-> Vineet Gupta <vineet.gupta@linux.dev> writes:
->> 	typedef local_lock_t __seg_gs
->> 	__attribute__((btf_type_tag("percpu"))) lock_local_lock_t;
->>
->> 	typedef struct { local_lock_t __seg_gs
->> 	__attribute__((btf_type_tag("percpu"))) *lock; } class_local_lock_t;
->>
->> Both put the tag on local_lock_t, an aggregate: the first on a typedef of
->> it, the second on the pointee of the guard's member.
-> The typedef is the aggregate case, and it's the only one of the two that
-> GCC warns about. But the second one is just the "T __percpu *p" spelling
-> that 1/2 keeps the tag for. _T->lock really is a pointer to per-cpu memory,
-> since local_lock() passes it to this_cpu_ptr(). So the tag is correct
-> there. This patch drops it from the guard's lock member and the
-> constructor's argument as well, not only from the typedef. I think it
-> should keep the tag on those two and only drop it from the typedef.
+On Sun, 15 Nov 2026 23:36:34 +0000 Tianyi Gao wrote:
+> On Sun, 15 Nov 2026 11:39:02 -0800 Jakub Kicinski wrote:
+> > On Wed, 11 Nov 2026 01:07:46 +0000 Tianyi Gao wrote:  
+> > > - On veth, an XDP program removes software GSO from the peer, limits
+> > >   its MTU, and can copy skbs from the peer.  
+> >
+> > Could you remind us why you XDP_REDIRECT xdp_frames to the veth
+> > if you end up allocating the skb on the veth, anyway?
+> >
+> > I thought that was to let veth run its own prog before skb is allocated
+> > but you're saying that you want to avoid veth having a prog, so clearly
+> > it's not that.  
+> 
+> Thank you for your comment!
+> 
+> XDP_REDIRECT into a veth without a program on it has been supported
+> since commit 0e672f306a28 ("veth: check for NAPI instead of xdp_prog
+> before xmit of XDP frame"). There is demand for it [1].
+> 
+> With or without a program on the veth, and on cpumap, this series
+> keeps the RX metadata from the NIC until the skb is built.
+> 
+> [1] https://lore.kernel.org/all/20210416175929.35c3c389@carbon/
 
-Yes you are right, the patch conflated them. And although the warning is 
-same as in patch 1, there typedef is actually involved
+Perhaps I'm slow but I don't see how this answers my question.
+I read your reply as "the config is supported and my team uses it".
 
+The question is _why_ you use it. Let's leave the cpumap case aside,
+you provided no legitimate reason why having an XDP prog in that case
+is a problem. With veth - you are right that attaching XDP causes
+problems for pure skb traffic. For veth cases, however, there's no
+strong reason to delay the skb allocation. Hence my question.
+Why not let the driver allocate the skb if we know that the
+redirect target will need to allocate one, anyway.
 
->> Every variant of an
->> aggregate shares one DIE, so there is nowhere to record it, exactly as for
->> DECLARE_PER_CPU() of a struct. clang writes the annotation into DWARF
->> without complaint, but pahole does not translate it from that position,
->> so with today's toolchains it reaches BTF from neither compiler.
-> That's true of the typedef, but not of the member. With clang 23 and
-> pahole 1.32 the lock member comes out as PTR -> TYPE_TAG 'percpu' ->
-> local_lock_t, the same as any other per-cpu pointer.
-
-Yep it was wrong for the member. My config was lacking 
-CONFIG_CONTEXT_ANALYSIS_TEST and hence it missed this part.
-
-> For the typedef, clang 23 puts the annotation on the typedef's own DIE, as
-> you say, so there is somewhere to record it. It's only pahole that doesn't
-> pick it up yet. You also mentioned GCC patches for type tags on typedefs
-> in the pahole thread [0]. Once those land, does this warning go away?
-
-Correct, although [0] you referred to is a different, likely won't fix.
-The fix you have in mind is PR125888 [1] and the patches are here [2]
-This addresses the For BTF, as you say, pahole doesn't convert 
-annotation from a typedef DIE so the
-
->> Unlike the per-cpu declarations this changes no BTF at all. A tag in that
->> position was never recorded, so there is nothing to remove, and the one
->> percpu TYPE_TAG that does reach a local_lock type comes from those casts,
->> which keep it. An x86 defconfig built with clang is identical with and
->> without this patch: 152551 BTF types and a 6828300 byte .BTF either way,
->> and .text is unchanged. The patch removes a GCC diagnostic and no more.
-> The defconfig BTF only stays the same because nothing in a defconfig uses
-> these guards. lib/test_context-analysis.c is the only user in the tree.
-> With CONFIG_CONTEXT_ANALYSIS_TEST=y, class_local_lock_t,
-> class_local_lock_irq_t, class_local_lock_irqsave_t and
-> class_local_lock_nested_bh_t all lose the percpu tag on lock with this
-> patch applied.
-
-Yep I was missing that.
-
-> Nothing in BPF looks at those types today, so this doesn't break anything.
-> But it does remove correct annotations to get rid of a warning that is
-> only ever caused by the typedef itself. When the guards were added, the
-> type was only ever used as _type *. The typedef came later with
-> 3931d4b98039 ("cleanup: Basic compatibility with context analysis"). If
-> GCC isn't going to accept the tag on a typedef, could this be limited to
-> that typedef in cleanup.h instead, so the guard's pointer keeps its tag?
-> As far as I can see, lock_##_name##_t is only ever used through a
-> pointer, in DECLARE_LOCK_GUARD_1_ATTRS().
-
-I think GCC supporting them seems like a reasonable ask - fixes have 
-been posted, lets see.
-
-But to recap, I will drop this patch since it only needs to handle the 
-warning which can't be fixed in source and relies on the GCC fix.
-
-The point of this series was to do any needed kernel source changes 
-which can't be addresses in GCC.
-e.g. PR128480 [3] was deemed invalid/wont-fix on GCC side.
-
-> [0] https://lore.kernel.org/r/252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125888
-[2] 
-https://inbox.sourceware.org/gcc-patches/20261112191815.884167-1-vineet.gupta@linux.dev/
-[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=128480
-
-Thanks again for chiming in.
--Vineet
+Since your patches are not a natural / clean extension of the existing
+infrastructure - we should step back and make sure the use case is
+practically justified.
