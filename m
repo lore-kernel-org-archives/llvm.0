@@ -1,60 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794788160;
-	b=pbDWcn7xw6kYFjweOB4N4+UCw/3G8ryy8gLgLEwxdqkl0RiiwqIl5tSt2JanqF4FqT/J
-	 IBeuIoLe3vnl1eU6vx/a0XoXgCHS1LMKl1hjQOZmA9VekKD2Nf2PC1UIJ7VpwEhmnyuKn
-	 +EmwHpEXcWVu1E/emc52CUCE3jb99199z9bMart3nTIAehphucpjukqjaJ8VwxXizn/j9
-	 2peKB3H8MaV25ePQEJjNxIiDGDxAbUVu8WqBdJ4mM+Tg7lIVj4AEDX8K1enYJWcINamLS
-	 o/Txjwbz/zCeg6N9mdyUvJaI4v9rW0ETXjZZopiFbzfGTfB5n9hF4bFgUwLWF0nvy0w==
+	t=1794790384;
+	b=TslQQEIQTtuGFFPqknLE73EklaozHYLMh1s0jK6aKfnBBjUY2FJ2o04K3KUOxsUNbyLo
+	 ZEt67OelzL2bObJbEY1bs32MlOSRkcsoTxtlULBr1fav4j88zGN9ED1qP+i19FMQR8hMA
+	 ARkPGcgd/OJF1jqek1mG+o7KnTnBPKAFL5fCNkz8SeHWtxHi5dSxPZ34aTNJKcLpMiNBO
+	 jBxHPQ6/jbVbWvIchT3dZ+jEyS1y0izQlOjbrNmK+A5lxYEyjx0LfH/COHS3xdF9PtPYm
+	 69zXdCzQ2XfN77tAotKkn4fQSwF2klB/qJ+84HlcBCHARLns2/2aSJ1GPE7ZCM1uLKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794788160;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=XbflNfoz1rdC4d5kBQ1bUVRq6zWboFqnaVnEoOvRsHY=;
-	b=amI1oKrRCCMxv5mIcVACD/9i8qX1LlkKwUYsN7lMjd3I26HJcFCRQQFGQoEgn3TiD1X1
-	 klSNJvbARM+8Ce3hVLCzwnemc6xxhL4uVHIjIATcW5tm7DqQkdV2DMj9jV7D1K5lGaMJk
-	 nxtok7jHmaT907iNrucna0pW85g2GQROGIvZsxkkzGdZz79Qj2DxHfUxwVLFPV1sw8N1v
-	 SYFXjuIREgBX5/2S9j39PQyK32OFyTjCKPdtZ2pRyy5Nyfs9nF7lTFZBTgG614g1L9Wx8
-	 I60wTL/xGVL9apPTbpcY+3QQcUyFOmOAvck5XgPcEH9QbcRpX0pvMXEzYGm4eyIldkQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794790384;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=TbXR1DlKKuOwhV3PqlSfdkNh4TOa9cw6NjlogJdKa+E=;
+	b=pXzzwIVYswKFRoC+1TlGRfOVNyQmzOJsF7QxjyR9VHAmv0oOqvEaKWATQEogQEOYwdUU
+	 z77kCmvg1HM3u5hYEOP/H1dQ6Ih/gLLAf18FmDP8N+bI95tUM6MVoSPVgr7Z9NaNRNgPY
+	 vWU9jXuLrtm2pbBvuQHnz+JzmO9q4kvM0i5kkRdMJCfhBfnLLdtetyE+WBZMPrnV3EBbB
+	 5Vyzq+G3JGtYWC6ZeerDt+3sN40UemGpTIWuTHiUwluDTAPHtS1uvnIDTN8gZIy7TrQ8a
+	 6hJWvXLJ3bwFhTF02i+sP2InhGivd8bqXdPPuFOy2Ew7iX6+OAaFIIe/Zkk6pV7dMnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bp9HFEmm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ov0zrn7S;
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 02125606A31F;
-	Mon, 16 Nov 2026 00:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6B7606A323;
+	Mon, 16 Nov 2026 00:53:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF6B7606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bp9HFEmm
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 7048A1F000C4;
-	Mon, 16 Nov 2026 00:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794788159;
-	bh=XbflNfoz1rdC4d5kBQ1bUVRq6zWboFqnaVnEoOvRsHY=;
-	h=From:To:Cc:Subject:Date;
-	b=bp9HFEmmGyo4Y8XZCQON32KppS8KTJN7EbqjHg62h3Dxb4YkUNhXf1ifdNX7xh4eG
-	 JyMNWvkGk/WXeSDEnDBh92QyQrf/pf4Ep13S/tYO2ywZerWeDR58214Mw7RFFvHHFK
-	 C+q6/DBe5ytIIy1V7SFNz0EB3u9VJeB2DS3D4T3p+a9dBvOaRsQPb9U9IbBJiqwZBf
-	 Y9m5QigtLyp9fZAYEHnHLYMSgcjXSdR0b6pn/zXLEz4dd3yJFGhoVtLuq1Oe/j5C+/
-	 2xXzvL6mrC62neXa1GxqiC0BgJL9ia/L5vaGb2GbJ1ueOVsGZukMJNBbovl0YFRbMs
-	 l5/8okG3elj0w==
-From: Joel Fernandes <jfern@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ov0zrn7S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794790384; x=1826326384;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oC4EL+G54eJpi+ckY286iUB3+w/3VL3BuLJIsdbKVSo=;
+  b=Ov0zrn7SH4OOOV0OUcesz/WiMjxwqCq9H7EucNOcS9TrGeRB6eshldqG
+   MJrSQZEHPgXjAyJ409UqbaPENJfZiNVyUzXObKkE6iJu06Qo923sIBiF2
+   oj6yTGNeFJSCmXKKPU8/ZYTiYILBESNJKym5LYOT+4JdBmGaalDd4GBZK
+   G7PWZB7biuB7aAeIwcNvD7pMi31DzMGSwSui3HFG7gg+9WFrHINBHee5s
+   qbpe2EQPYSkTs27hwk5IBoz/ViX827JYDG8xiWQ78+1j7zW9GanEFOApI
+   XVEoIhGhfDXgHxSMVTjOAil8mTRCEVWKWJD7XxCaE74wCQtEFgICytJtm
+   g==;
+X-CSE-ConnectionGUID: cm/Hp0ZpT9iNhog2an9Vmg==
+X-CSE-MsgGUID: prnbfZWqTYCTLQCIAN9ZBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3436246"
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="3436246"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 16:53:03 -0800
+X-CSE-ConnectionGUID: XlWbHG4ZTUaLA2VnjtdcFg==
+X-CSE-MsgGUID: qIe+KKi/QrmnQzUK/p+f1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
+   d="scan'208";a="11141439"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa012.fm.intel.com with ESMTP; 15 Nov 2026 16:53:01 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xSkxu-000000017YW-1ua5;
+	Mon, 16 Nov 2026 00:52:58 +0000
+Date: Mon, 16 Nov 2026 08:51:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sasha Levin <sashal@kernel.org>, Kees Cook <kees@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Steven Rostedt <rostedt@goodmis.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Song Liu <song@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	rcu@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [GIT PULL] RCU fixes for v7.4
-Date: Sun, 15 Nov 2026 19:15:56 -0500
-Message-ID: <20261116001556.763913-1-jfern@kernel.org>
-X-Mailer: git-send-email 2.54.0
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Petr Mladek <pmladek@suse.com>, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] seq_buf: always inline seq_buf_terminate()
+Message-ID: <202611160835.RPhYOuAv-lkp@intel.com>
+References: <20261115153430.1607764-1-sashal@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,66 +86,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261115153430.1607764-1-sashal@kernel.org>
 
-Hi Linus,
+Hi Sasha,
 
-Please pull these RCU fixes into v7.4.
+kernel test robot noticed the following build warnings:
 
-The following changes since commit aebb7274476403040d582c61478df8f4a7bf9cd3:
+[auto build test WARNING on 7b8cd26b6aab8cf147165610d13964f79200a5a7]
 
-  Linux 7.4-rc3 (2026-11-15 14:30:11 -0800)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sasha-Levin/seq_buf-always-inline-seq_buf_terminate/20261115-103429
+base:   7b8cd26b6aab8cf147165610d13964f79200a5a7
+patch link:    https://lore.kernel.org/r/20261115153430.1607764-1-sashal%40kernel.org
+patch subject: [PATCH] seq_buf: always inline seq_buf_terminate()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261116/202611160835.RPhYOuAv-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261116/202611160835.RPhYOuAv-lkp@intel.com/reproduce)
 
-are available in the Git repository at:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611160835.RPhYOuAv-lkp@intel.com/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git tags/rcu-fixes.v7.4-20261115a
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-for you to fetch changes up to c3f98ff6309a29979e1867bc3c9d4172755ca122:
+>> WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_set_overflow+0x3 (section: .text) -> bootup_event_seq (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_set_overflow+0xd (section: .text) -> bootup_event_seq (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_set_overflow+0x16 (section: .text) -> bootup_event_seq (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_set_overflow+0x1d (section: .text) -> bootup_event_seq (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_set_overflow+0x2b (section: .text) -> bootup_event_seq (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: seq_buf_set_overflow+0x35 (section: .text) -> bootup_event_seq (section: .init.data)
 
-  rcu/nocb: Avoid unsequenced accesses to jiffies in show_rcu_nocb_state() (2026-11-15 18:52:04 -0500)
-
-----------------------------------------------------------------
-RCU fixes for v7.4
-
-Fix a build break with recent clang, which warns about unsequenced
-accesses to the volatile jiffies variable in show_rcu_nocb_state() and
-fails the build with CONFIG_WERROR=y / W=e.  Read jiffies once into a
-local variable instead.
-
-Also replace the rcupdate.rcu_task_collapse_debug module parameter, added
-in the v7.4 merge window, with pr_debug() for the RCU Tasks callback
-contend/collapse messages.  The messages stay off by default and can be
-enabled with dynamic debug, and no official kernel carries the extra
-parameter.
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEcoCIrlGe4gjE06JJqA4nf2o45hAFAmr6RvAACgkQqA4nf2o4
-5hCnfg/8DqHU2c4j5ZLgYK7oD99BNg4VTErwkBwwx8eCRb87agrdljsQo8keZBwB
-BSbN+gaasl3NvqKUh7lAopAvoZtfk3ymtw4oafDCHa5jJFZV1E2bGUbDBKBwuzlj
-6BBHEPFitd5q6z6nlyhSx7289NYoRhr9InMNv/L2kYKnn4bq79Ojf1Z5nQZRHPRz
-TUGIwDoVf0G+oh0z2TtrMSNAC4OBPP7Hsq2/m3xaeS2pWS8YziFM7rXcnJaWve4t
-D4VjZGWOTQCWOCeYBbyckXSa2zLBSlwCfarbkPfpo1FhdcwBmXdeNvt9MnZ2sRP0
-Ff/x+rd5LkzQ3niHYufuxflGv5XLoiaJgiU9rztlD9U2O9sheVaRcf7BaDs77C+f
-NmteR2H67svHfK93bOgTNvFVBX90Y4Qa4WPft6g9QbuGkIGD6hJRBbveTeCNsbPM
-vmvU/cPYwjcpGZiyPcglpAoIYK8e9F7hspXrpvJTjnoF0p1b2TefpHZS+ozZIcj8
-6uD28K2dp+CLAzuLkC5FzgITvWPdIEYiEq9WD0A/kOPO5fZ0+BmOiekb4iBnnHdK
-H6HujCvGYhwLGqlJ1aoc7VxoQp+zz9ZOwJzQ4pV9xO/WiHZroEiQvinsgs1+NYOb
-jATSr9YPap8CNRqjwMNXK1ppKKkfPdix+JYcx4/WGFzZhCiDM54=
-=tbXB
------END PGP SIGNATURE-----
-
-thanks,
-
-Joel Fernandes
-
-----------------------------------------------------------------
-Nathan Chancellor (1):
-      rcu/nocb: Avoid unsequenced accesses to jiffies in show_rcu_nocb_state()
-
-Song Liu (1):
-      rcu-tasks: Use pr_debug() for callback contend/collapse messages
-
- Documentation/admin-guide/kernel-parameters.txt |  7 -------
- kernel/rcu/tasks.h                              | 15 +++------------
- kernel/rcu/tree_nocb.h                          |  6 ++++--
- 3 files changed, 7 insertions(+), 21 deletions(-)
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
