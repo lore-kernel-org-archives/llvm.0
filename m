@@ -1,100 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.128.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1794953026;
-	b=297GL20/ryulBW0C0YG4dyHzjNOXDa+6ElMGlSYDrbxhEoUdsrYDSRWCGqwt98lwQMtT
-	 117Gon9VuxLe8lspladT9FtbZ5fEpW8McniV3nOzf3sGcxnQRxcS6JVOX2M8fzVsROsnz
-	 hqr37tqRuHzbdaaFxEMZP5ci0f0EU+sfYcMZ1WSv9Ux0QPC+cVP+ZRikq0s6qXbJYlALM
-	 OCn+yivXApi8c456m+sdWPb5bxQWV3SNFyopr97eGEs8hvuG6tVLlSHptLz3hK21sCYsE
-	 YZTXv2qT/ou4Nwabgdhs1Armh907Ci1J5nMxJkq/4mEm55uxpENNF6IL72lQnm7Pb6A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794953026;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
-	b=dxyt9qBupmcfMFm1q2Q24wtY7U1KX3iuQX49VBstc7NvzksIOsoOs2ACTDR03231Lqk9
-	 ns1XaQzR+puc2KcUoA3zOiBzfq1fD6V0fBt+wa4G7p4DTlDg01Z2SOu8C0T/h1ujHrGd7
-	 y/3uQpS7GSyUHXkKNvVMnX8tpKEN+yPUIa24nW5/GAmx3lijUIWW9OsJaACJ57/PaF6cx
-	 4YEJsOpFBIHMSbTDUUS7u2nkpBVplcaMrJ7e7dY1KlERI5z7o7lPWtRk7/S9XxPFfRSFt
-	 JcImw4aoHvWHFhssWAsUVnduLj58gNLSVVkeg0CpjzBg73w2aEqvNRXpsa/OoAj6Uig==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ffvabOib;
-	arc=fail smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.135
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794953322;
+	b=A3FV1oGw0gcMQ4W7xmmknU/wBvOWTeVZ4Sn/0cTzdzEpLoTcG7EljwzU+hgsfYxfOHq+
+	 2fW/AILLQhWdy33xPzJfShKTj3pPTnDFXtx5pUveW3f8hVI7NqbfgLlhV64LUOzspdPIh
+	 JTWHwuIxjhPE05Xrj9X4HDYFKzWLbGUHFb0M2sRQOZi9CAJmA500Fbu5xA3b410dCcEU4
+	 eSTbLrfeO5L3UgkB/tsBQ9SxiYgCTrbrFEKKfmWThZKppadNlpUq1qzTvbYCm5q9PCh9i
+	 XLtDAaL7FOD8DwSoQGG4AFTFVCfFV2bziQa1k6tMdy2mCaPcecpr36KYXpDLT757Tdg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794953322;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=bI8B5pGHz5h1ly//mHf7ndgFx4Rz2ltW2HmUrfyIsQA=;
+	b=VvntJxmX+YI40sijQ25oWuEkhwdqyq42GVuKx3euooGrOn07tbce+AutQnw3NwKZB39T
+	 rI0yxVnoiouJ89mn7XeBSd8HUyPPU4evIYAYdRJUGgnu50N50As3mh1mBfznKB3aIeeuW
+	 jlIVmjtJg3/DaFeWcrtW381aP6DapIP3nWy9ahgvBLOFkLuY23eRBSTwDQZxYwbd2V+d/
+	 TByN/Mm/F7hQEKRil6U7Vl0LepbciMHR4TfQ18IwmUCL9kafZhRdF/IwswAmpDJrS+O5A
+	 WOH92c4BSgi6lsio8PqSY5+hWu0k7L1F9+OJWy+0x9TfP/Ea7yXEwBDVxJip7rRlL7A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=M3qujAI1;
+	arc=none smtp.remote-ip=95.215.58.135
+Received: from mta1.migadu.com (out-135.mta1.migadu.com [95.215.58.135])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA67606A31C
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 22:03:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BFA67606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BAA606A32F
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 22:08:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82BAA606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ffvabOib
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bb6860f867so6015e9.1
-        for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 14:03:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794953024; cv=none;
-        d=google.com; s=arc-20260327;
-        b=YsFWfjs17zW7+vKJgA/bcHleP3lvuoFpNA6TFFGcQvwt0Xx4H4yw9uvfRX6Fr0cKEO
-         5D1PU63e7tr4fZnXflq+v8joofpZ0FRHcqII+ajoyRTweJi5xxZl+dY3lLPgSwamzKlB
-         c9gF36qKcF29/4kcoWH9uMdoNt2TUMrLK9o2YIFSolEGhqR9o33UL387ur4oE84abdQ7
-         sIsKaVFgL0E7z9Oatb+U9F7ZTDyYh4uaIhEIYrUV6/gbResMy0QmKSI250x3A41NSuB/
-         cDiP0FguBdonC5iSr1JvLNVuQ3KpdiEM6HkB/aykEaLTf+OKy0/JR/vmMrhO6FnoZdMz
-         iL6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
-        fh=oX4zibg2Us8t3d+IiiYnLGs1ZbKCCmqXtwx66s0LVRw=;
-        b=RVwgpWqzmjmMD48MWgQM1Cyz1YQgpKrvmIoKQTnFaDGb2EbmacpCBhNjUdDURC2FA4
-         HmWE/l9aGY2RnuyO81+gYGUksBhbSd2V7e3XQqYN/2Nk/quEXdYzyJofvDRIo6DSy8Eh
-         0Kw5bHJidXNONyDSCljvIP+N8KjpVGW62Ci6McA2H9Xl+EopJlhZtLYsKJkSYdmiilqD
-         IHjogX2Dt6hAFaESORDMfv7hEzGh1wGpKXsiGmmmLtxdQNg6lnJxbHZEFzrxJhtM8av5
-         5CQzi/WLIgIR+arfVe34OZpUA4pGXYJ9G6uqS1zR4ZwQq9jveNfkOMc5HuUV7zby559s
-         JdbA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794953024; x=1795557824; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
-        b=ffvabOibxepp6gBozoQh9P13vbSE8yx93qgmndtejcny7a99KXEFMcqoV6h4bDxfUe
-         /u0ncAoejJYN7Pd+7vDs2nj4S8wqNNN4SbqMCc8jVWUvS+A1+WG0P1er0N62G3GE/Eiu
-         HwG4D4u2s59/UuyWREzEQOO/b1gs+as2GVcQdN39i4IM6NaBM53jzS6AR25aLbjIi7t8
-         p1sSZvUAPt6x8XkIO8Bwp3cQRtBNrTX8Bu/J1l2IuvDw+MxZ8IVEj0cGsEEoUQwJBCib
-         8Aty+VhdKSZY6+Rj7lBjkqWsVqAk9Njt5w9wNwS7iSKzm21V289DcqGp0CwJa92n1hhO
-         Xnjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794953024; x=1795557824;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
-        b=OAcsQtgFxpjwmZ+W/Y4OyUXqlAkb80psGAfWsv9yOmtFsur5j1mzCUeoh5Kp++9ReC
-         LcIs/BIy9YXdKtYnuWZDbL6ZTVT6be8Kv+MXJY0ZvcnVRvwtsjIb4gqbXR37J6wMgdec
-         60WN0cBeGavlIwtmqhcNhsuM856D3vjr7bAT2hYMmznYUrVVAglY4UF1LkrSi+u919pt
-         Ez8yHV1BvhfyB+CG1C92LhsBI58G4z21NzsRauDbghMCH0hVy4be4Bl6/J8bXAnn+xXm
-         nwbmi+FT6WspCWR5b49pgRDlreYmghR5eDH+YZZXdlfPbJc1DS0Jt5hLphDNBCeE6j3o
-         piSw==
-X-Forwarded-Encrypted: i=1; AL+hErFgI2DdtoKPjjZDvRdwrT3llpWbjuE0JEo8ELnwAFUsHKvvwth13WCJbRO2gtE5OUMmKGq0@lists.linux.dev
-X-Gm-Message-State: APuU4Z+9j3ltno4kE6yHiAeqPuSvT5UFFLW7DNOWhnwBnbGziw+RMtKL
-	dTC78C+fCDmc7zPc/lYUNZiY3vkwbLAXBBavvCuzAp7b0qE1Z5ocL8QKW+o5alqUe1O32TlGpz5
-	Fqqm3IKQd3lxEiCClJI8M++cTx+zOGWvtUA0TSf8U
-X-Gm-Gg: AYBFou0sJHY5VQUgNMEa346XuhNlrRhvwU0hdPXMx9m/6DbwcFFzFSiOWekyWfEeffX
-	VaoB9peqZ4EQTHvpm6N1atQmeMvwJ0bgKE9qJo3DIoMLM2W5umYbopi30nNihX9HmkLKOiUIx/s
-	j8Rm2PjVXnc+r9sK3okTsZetYuK5wXSQCBgTliGzP0CCyrgVcBTqPhrK3XWNjfbxGgu643DB8d6
-	nDKJRiJ9G/JH48tCnerVJDiX5y91SGFlcsU+a5jYIP2S6Y37nQuS24Twy184aEjBE87KexITV7e
-	DBGXQCGfEQRiDW7FMEjbu6Pe9RwxwHaAfvJe77QvsFaGaiSDPXzE/tP3nwZ1ORSqDN/wuhojDT3
-	e1Hk+KRhtFQoKD9Ft0WtJPOu/fWzzYh5efA==
-X-Received: by 2002:a05:600c:8586:b0:4a1:d225:6d7 with SMTP id
- 5b1f17b1804b1-4bb7d58b5f2mr160695e9.3.1794953023558; Tue, 17 Nov 2026
- 14:03:43 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=M3qujAI1
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=6n3oDTFw9gSbVu7ljl4fwt44Xt31tv6c5y9tagZDFdI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794953318; v=1; x=1795558118;
+ b=M3qujAI1eAiVRSUeR1KRAUAEnb1jINv2xfB6M1rMuIkDL39OO8hpitN0ywH/Wdh9ZqAEhH03
+ ciCo0aG/EhCSCabtGg3pLu74jNK6ofZDj3NAY8n5s8y9Efri7hUovj4mC1emwg4EXZK0ls3/l+u
+ DI7b2an/LIHq3fDEy3QuZNxE=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 2bbf6e667b38bebf;
+	Tue, 17 Nov 2026 22:08:37 +0000
+X-Mizu-Trace-ID: 2bbf6e667b38bebf
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: dennis@kernel.org,
+	tj@kernel.org,
+	cl@gentwo.org
+Cc: chris@chrisdown.name,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	acme@kernel.org,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	llvm@lists.linux.dev,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH v2] percpu: do not put btf_type_tag on per-cpu variable declarations
+Date: Tue, 17 Nov 2026 14:08:24 -0800
+Message-ID: <20261117220824.609017-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,39 +80,133 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20260820135733.37121-1-gary@kernel.org> <DKTW8F3C5TC1.BE0JLOWMZCTX@garyguo.net>
- <CABCJKueCgEZ9XePNnJhbxbOP=v5X6-PvFg4poRfo=j6htovJFw@mail.gmail.com>
- <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com> <avy_9SPRaPSKD8b4@google.com>
-In-Reply-To: <avy_9SPRaPSKD8b4@google.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 17 Nov 2026 14:03:06 -0800
-X-Gm-Features: Aa3M54obldq6YruWajcrqkfkI0bnKtN_pPopxVMwZ7IRPXUGwGNOW9PukA8ODCo
-Message-ID: <CABCJKue=wV7gx5D1PuBWOgWnAFC2kzGSFSqshun3=AoLg6b=_w@mail.gmail.com>
-Subject: Re: [PATCH] rust: cfi: disable function merging if CFI is enabled
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel test robot <yi1.lai@intel.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 17, 2026 at 12:58=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> =
-wrote:
->
-> Function merging should also be disabled with gendwarfksyms. It causes
-> faux::Registration::as_raw() and Page::as_ptr() to get merged, which
-> incorrectly causes the former to get the CRC of the latter.
+__percpu carries BTF_TYPE_TAG(percpu), which records that a pointer
+points to per-cpu memory. __PCPU_ATTRS() applies __percpu to the per-cpu
+variable itself, so DECLARE_PER_CPU() and DEFINE_PER_CPU() put the tag in
+declaration specifier position on the variable's own type.
 
-Sounds reasonable to me. Although, I assume this is only really a
-problem if the functions stop being merged later on, e.g. because
-they're no longer ABI compatible?
+arch/x86/include/asm/processor.h has
 
-Sami
+	DECLARE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
+
+which an x86 defconfig preprocesses to
+
+	extern __seg_gs __attribute__((btf_type_tag("percpu")))
+	__attribute__((section(".data..percpu" "..read_mostly")))
+	__typeof__(struct cpuinfo_x86) cpu_info;
+
+and GCC warns:
+
+	processor.h:232:36: warning: ignoring attributes applied to
+	'struct cpuinfo_x86' after definition [-Wattributes]
+
+which -Werror turns into a build failure.
+
+The compiler is right to object to a type tag on the aggregate, and the
+issue is fundamental: every variant of an aggregate shares one DIE, so
+there is nowhere to put it. clang drops it silently and GCC warns.
+
+The tag is meant to record that a pointer points to per-cpu memory, and
+cpu_info is not a pointer.
+
+And this gets worse: for a pointer-typed per-cpu variable GCC attaches
+the tag to the pointee, so
+
+	static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+
+comes out as PTR -> TYPE_TAG 'percpu' -> struct bpf_hrtimer. The truth
+is the other way round: hrtimer_running lives in per-cpu memory and
+points at ordinary memory, while that record says it is an ordinary
+pointer to per-cpu memory. clang emits no tag there at all.
+
+Add __percpu_var, which skips the btf tag (__percpu under sparse) and
+use it in __PCPU_ATTRS(). The cpu_info declaration above becomes
+
+	extern __seg_gs
+	__attribute__((section(".data..percpu" "..read_mostly")))
+	__typeof__(struct cpuinfo_x86) cpu_info;
+
+The pointer spelling, T __percpu *p, is unchanged and keeps its tag.
+
+Before this patch the tag also qualified the variable's type, so &var
+had type "T __percpu *", and a pointer does have a DIE of its own:
+pahole emitted PTR -> TYPE_TAG 'percpu' -> T for each one.
+this_cpu_ptr(&var) is that shape, and that is where the records came
+from.
+
+Those are the records an x86 defconfig built with clang loses: 280 BTF
+types, 140 TYPE_TAG and the 140 pointers carrying them, with .BTF
+shrinking by 3360 bytes. They are the derived pointers -- clang never
+recorded the declarations themselves. None of them were reachable: a
+record points at a type only if something is declared with it, and
+nothing is declared with these. The 803 places that do declare a
+"T __percpu *" keep theirs -- the 110 tagged pointers that something
+references are the same before and after. .text is byte-identical.
+
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+Reviewed-by: Chris Down <chris@chrisdown.name>
+Tested-by: Chris Down <chris@chrisdown.name>
+---
+Changes in v2:
+ - Dropped the "message is confusing" sentence: GCC's "after definition"
+   refers to the definition of struct cpuinfo_x86, not to the declaration
+   of cpu_info, so the message is accurate (Chris Down).
+ - Dropped 2/2, "local_lock: do not put btf_type_tag on the lock guard
+   type". Only the tag on the typedef generates a warning, and that
+   needs a GCC fix [1] anyway. The pointer usage "T __percpu *" is fine
+   (Chris Down).
+ - Rebased onto v7.4-rc2.
+
+RFC: https://lore.kernel.org/r/20261110012235.1024461-1-vineet.gupta@linux.dev/
+
+[1] https://inbox.sourceware.org/gcc-patches/20261112191815.884167-1-vineet.gupta@linux.dev/
+
+ include/linux/compiler_types.h | 8 ++++++++
+ include/linux/percpu-defs.h    | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index c5921f139007..b250d6870324 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -50,6 +50,7 @@
+ # define __user		__attribute__((noderef, address_space(__user)))
+ # define __iomem	__attribute__((noderef, address_space(__iomem)))
+ # define __percpu	__attribute__((noderef, address_space(__percpu)))
++# define __percpu_var	__percpu
+ # define __rcu		__attribute__((noderef, address_space(__rcu)))
+ static inline void __chk_user_ptr(const volatile void __user *ptr) { }
+ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+@@ -68,7 +69,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ #  define __user	BTF_TYPE_TAG(user)
+ # endif
+ # define __iomem
++/*
++ * btf_type_tag records "points to per-cpu memory", so it belongs on the
++ * pointer spelling only. Declaring the per-cpu variable itself puts the tag
++ * in declaration specifier position, where clang drops it and GCC attaches it
++ * to the wrong type, so __percpu_var leaves it out.
++ */
+ # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
++# define __percpu_var	__percpu_qual
+ # define __rcu		BTF_TYPE_TAG(rcu)
+ 
+ # define __chk_user_ptr(x)	(void)0
+diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
+index dbe3267a0a13..f53fc430aaad 100644
+--- a/include/linux/percpu-defs.h
++++ b/include/linux/percpu-defs.h
+@@ -45,7 +45,7 @@
+  * that section.
+  */
+ #define __PCPU_ATTRS(sec)						\
+-	__percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
++	__percpu_var __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
+ 	PER_CPU_ATTRIBUTES
+ 
+ #define __PCPU_DUMMY_ATTRS						\
+-- 
+2.53.1-Meta
+
