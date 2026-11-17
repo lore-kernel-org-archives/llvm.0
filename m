@@ -1,115 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794920417;
-	b=HEGIY3Af4PAzpAR2j+hQKw+w+WLyx9sH8fAaS3izc7oKH+s+/CmKRQ0MO4w9SO+2ME9O
-	 TZsQhRWuoA+CUhNHhu0tGN+onngmdr/0q5GzlZjPLL/C5FQTo3dCBjrM2p/od8YELD8Cc
-	 YhZ1IIXop6qdtEcMtEcOuLEvAA8tSAaYofq7TYLoj6GXRHqz9a/yMkYbF9dtvZsDws/aK
-	 gRzso57ZnXcAe3svbndW9HKgVnji3m/4Svb3SNhDSVN9Sq/yEeBlgRek58PLdoec60Sha
-	 zmTmQATQrmL71DHKoX5z01U8b6PwkWWUAk21MSSEPzhSMgHi90C8g4D15JgKQa9B40Q==
+	t=1794921232;
+	b=5YME34QyH6vf/rg4KCdkPPiWJpwr//q4Z0oUvAKnZfVQdOR0cDL5Ysf0FDQVsbJpXDE/
+	 vivAXyDpcDGwfeK4X532Zte2AEFcMHqeFahtZ1nrkdNKgi2lW40EEyGDE0goW05nnWFo8
+	 3dvIPr4YRq+RuTCRx4cun6kTeqvK516E3yNQ/yxvNqeocEuNGHmkDq5Tersd4ErjtwZQX
+	 YI/lCJAcA4wYHQLs/BMDvguntTODFRJQ9jD+zZoY8OfjBewbxmtCZIzn9m4OKMd5NJRGw
+	 ryQ2a45tLhwpM/cks5ulgzVD05Q+FG9huIONLv6qx7mYwgCT2Iwck/nrJeFLyHcq2xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794920417;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=ckAIzUV5oWihOIEXseRYjbrEU/6METgnwVW7WGDvtlo=;
-	b=nxOzHvPYq9mBvJAkmyXFoF6LoGTb7pA0xKZMvGp1/ICWSf6+DRolYwJmTv8BRlY+W5iK
-	 VqRDWrF5LlSPdnAfj+wLdS0rzYR64/uo8sl9tFSBCBNREFDylQd7MSvQ6zmwacRaB9SWu
-	 2Bmo22LQIWHDMNusjzExPrNf5iFuHGaJ8DURFByK3ZhX6ScIWLr2QGae+zUp6A/WuyMiU
-	 9roMFr8KgQ0vDlQSDKLnGGKYX1VaoMg+4kh0hUaIRyitdoJfFS/o4gOstxy9RDr5qZMtV
-	 K5pPc/DjJMVrX9hmHzE8tzo4Jni63IpFGXCg3JDud6uXiScHVBK3tP2blGw6KX48g3A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794921232;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=0V6Hn6Bzy9lL0q161tKd2Kz567msE8dbDMP1VHYg+7M=;
+	b=BkAa1on5VcgcM99X7Yo46vFPIpdvd8KlUQ13fGmkMQzVUIa+DeBfL631cKD1/ZppPTaA
+	 29JYpFozseLIQN8sX4Lua0A0aRlQY+OQhnLFYTdgXY4PT6bWlImFCR4W/A02Z2jIccO9a
+	 OyxrZ52gqyLy++m0OHPlcwAcD3LC1ZtUxZcWE2qeBuJxn8JxfwwJnYqZfNUr8JS9QylsB
+	 r8cyOeZ+74irGQILlfN7le1aBK7btiioy7PP1cydgoc4PXmSDM/plnnmjg/rSXjvAquGp
+	 2ptvIWSaDsKxDliColKFxPqQnKFk/ywunlYLAQ8ytJdL+b5vQjWGeDfaDjEEC0VS9lA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UpWy+fIg;
-	arc=none smtp.remote-ip=209.85.221.52
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ykheu33k;
+	arc=none smtp.remote-ip=198.175.65.15
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73DD606A887
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 13:00:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A73DD606A887
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3AB606A329;
+	Tue, 17 Nov 2026 13:13:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E3AB606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UpWy+fIg
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-49412eb1474so2429291f8f.3
-        for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 05:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794920415; x=1795525215; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ckAIzUV5oWihOIEXseRYjbrEU/6METgnwVW7WGDvtlo=;
-        b=UpWy+fIgy6al9ZdOiJLpXg/XUsOPw4JYAVtxnu7oaKRq+V59A4/vSTgTmEV3FLdG+z
-         7DsPWqe6RoyZGhOCxmK1U+jigEGNb5mU1p9fu9Pn7Q4ZKyeQPGJ3nooxu0DMa9frmRhu
-         XVtD/4nepKMoVPpC9ZgWEihKIOEkj+WAaTduzord4XReoBHgVv6auLuB29aq7PwWCY8n
-         ALTBjrHRU1BzfAHB+Cyu/5Abe+RcbFragc7QJiTxrtpH83OSI3Szj6yAtjrr929UBxF4
-         N8N63johsRPH54hx7tCi52sWiMEzaAmNLJJm52SQQ1qeaBXC2lIzLsOtvBB+RZAr7xpF
-         kDvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794920415; x=1795525215;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ckAIzUV5oWihOIEXseRYjbrEU/6METgnwVW7WGDvtlo=;
-        b=bTT0qW1zWUDjh+XMNIFF7XdmJsB1yToMUxDA+wfoi2IH1No1t7hrN2AX64/qZgdjzW
-         45l+C+tdwbSq+0EkaTNV9DFiNYxkVXvUcM4wkuWmXbiqf3PPqDU5SsrqW9oCGs1Q3wX6
-         BL9+uv3VE3Tfk+MIu+virsdJB6ZUcUyaWjkImtRTzwClvsI8ZiIblm+Od8QOfwPSeq4Z
-         abEvtEjPotUVRRdaibae6tOCIPuBafu7tYu188JUzJsKAi37dkyYe1xeK2RLxumTbwIQ
-         APGVSVmtw/TtKWIf/oJSeROPUWGKR5iWr6UPTbW9cAySIpKhXacuNCZmVHG6+Qfu+Kjc
-         NDqw==
-X-Forwarded-Encrypted: i=1; AL+hErET/2WdagNpdn7lswEawhFk4oudyIAhoAkizLYsDCS++MTcWYwOv14ByhGWD/fnzYuKl5JO@lists.linux.dev
-X-Gm-Message-State: APuU4Z9o21u4Vp9F8IGUJKsSb1J+jpOsyYu2MuweKjeAZSIxALyqRP24
-	Pr/R3nydqrsVx1HQSmQW2QccP8WEIi8955fobyNEXVi16CweerFKvo6Y
-X-Gm-Gg: AZFdTZfeKr87aPyWT7s3NkLRliMfL+dA91gih2greEEc4f/hA3/5AH3eewaUtyS8Rfd
-	HFn34gjzgAYMr9m70hwwPVZ9/Vyhc1OtepDI5zZduYvoV9w/+NGCCx3eLBZDfvrqSjN+v1eJbeK
-	iOvWAanL10bM2PlXpzmaQEemzeIW0Mqov8XE5a2SD/Ar5yIpLEB2obgwZEMJ/RAIFdpnPbX55k4
-	N06Pg+0jtl12OP3LipPcuMs8b4FxMZWnXHbEoMm04aetqEO4lq0agMogJU2Jj2R5g8z0aoJTPi4
-	Js8NsHnLbxP5S4WAQK1P5Ii9IfDSBVTJd/hEEUn78UVBB1wsP/c2PbZuN5EwZS0+YqPJa29xKrh
-	aaW2CnsaNfpXh+pdu2gP3UkYHnHw6uWAWKAWm9ohmEZXTah78BKVS3FRnkYDUsrb8Xnf6/CCLbD
-	HOP8RNKVQyjoU969B7913JUKU69RgTVptFlem6ShFQygZmjEsHLtvNG+Up0UEhhUzKeYvi/SPOs
-	H2v0f/Bg195lIo5mLb5M6NY6QqWT5HEQrhxgd3YhsxEPIfKTnuM59rkQcaN0Sdm2pdm4YwVo4cr
-	AC4SB5OdUhkA2ihH2KD9HH4ex3pzzq7Uh7H5tRr2uNYZQnBUeDnKDqdiUV/JDTlN95va0YXvaDn
-	O6M+K7yPBvv8=
-X-Received: by 2002:a05:6000:46d0:b0:498:2754:6a80 with SMTP id ffacd0b85a97d-49c725e538bmr20536616f8f.28.1794920414596;
-        Tue, 17 Nov 2026 05:00:14 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c5ff2be55sm28207005f8f.28.2026.11.17.05.00.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 05:00:13 -0800 (PST)
-Date: Tue, 17 Nov 2026 13:00:11 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Luis
- Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron
- Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 0/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
- and KALLSYMS_QUERY_BY_ADDR ioctls
-Message-ID: <20261117130011.05eee0a9@pumpkin>
-In-Reply-To: <CAG2KctpP7QH=tdSB=op703rA=CtjQKAXqOen8JEHg1ygy9sgyg@mail.gmail.com>
-References: <20261113221248.3535369-11-wusamuel@google.com>
-	<20261115142431.1587690a@pumpkin>
-	<CAG2KctpP7QH=tdSB=op703rA=CtjQKAXqOen8JEHg1ygy9sgyg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Ykheu33k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794921231; x=1826457231;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gGBVdmYhKcN8lVHFGD4v7uz42UJ0d7Axml0auQE91Uw=;
+  b=Ykheu33k/g8FSWc/OfYnY8oc+LetEqw0+zA46k4oAh21M+BOQFTff/9T
+   UJHK+lImiL5lA902H3a5TEC/kFtRdsKLx9ykSyPAcw6r/L2RvRnnbowX5
+   zNsa+qgrazXoU0l5Oz3SIjGKjlwSB6rq5cvqH67Rv5Foe0IMmiG0RPNpx
+   wLJNcOnSoNSa3uHNERTly1nkSLh/BsCb9+r5Sgru2o9N7vHR2BbTtnsnj
+   Qgd4ueItqk+ELsrFdjGdZ40dfgjfpJe83eLt7/fvPvIebcnHGt7xMKiKw
+   P0zN5uvoiv9vG6WwpQG8N7rMqHX74FGjCU+7LIqAU44IlwbHOfshwpo7L
+   g==;
+X-CSE-ConnectionGUID: fQbaSXLgQAeKV+6nhxJcZQ==
+X-CSE-MsgGUID: zvYvUSAnTdqI1TUhObpzdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3692979"
+X-IronPort-AV: E=Sophos;i="6.27,218,1787036400"; 
+   d="scan'208";a="3692979"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 05:12:37 -0800
+X-CSE-ConnectionGUID: 7FRvp3HuTyu9zQ6iVdEGGA==
+X-CSE-MsgGUID: BVcJhLL8RmmW264/t2GT+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,218,1787036400"; 
+   d="scan'208";a="9737508"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 17 Nov 2026 05:12:36 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xTIzB-00000001BbT-1q3a;
+	Tue, 17 Nov 2026 13:12:33 +0000
+Date: Tue, 17 Nov 2026 21:10:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ismael Luceno <ismael@iodev.co.uk>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ismael Luceno <ismael@iodev.co.uk>, David Sterba <dsterba@suse.com>,
+	Chris Mason <chris.mason@fusionio.com>,
+	"open list:BTRFS FILE SYSTEM" <linux-btrfs@vger.kernel.org>
+Subject: Re: [PATCH 4/8] btrfs: add a helper to scan all block devices
+Message-ID: <202611172034.2xFLZZpu-lkp@intel.com>
+References: <20261116224316.11237-14-ismael@iodev.co.uk>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -119,66 +84,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116224316.11237-14-ismael@iodev.co.uk>
 
-On Mon, 16 Nov 2026 19:15:11 -0800
-Samuel Wu <wusamuel@google.com> wrote:
+Hi Ismael,
 
-> On Sun, Nov 15, 2026 at 6:24=E2=80=AFAM David Laight
-> <david.laight.linux@gmail.com> wrote:
-> >
-> > On Fri, 13 Nov 2026 14:12:45 -0800
-> > Samuel Wu <wusamuel@google.com> wrote:
-> > =20
-> > > /proc/kallsyms is the primary interface for userspace to query the ke=
-rnel
-> > > symbol table. However, resolving even a handful of symbols or address=
-es
-> > > requires reading and parsing the entire text file, which is often sev=
-eral
-> > > megabytes and takes thousands of read() syscalls. =20
-> >
-> > Separate from this, I've wondered about separating out the /proc/kallsy=
-ms
-> > code from the code that actually handles the symbol table itself.
-> > The two parts are pretty much separate.
-> > IIRC it uses a static function to get the symbol type (which does most
-> > of the work of getting the name - which it also wants) so it isn't
-> > completely trivial.
-> >
-> > I'm pretty sure all (well almost all) the changes will be lower down
-> > the file than my changes and won't cause (hard) conflicts.
-> >
-> > I've been compiling kernel/kallsyms.c and kernel_kallsyms_selftests.c
-> > in userspace for testing both, but had to cut the bottom off kallsyms.c
-> > to get it to compile with a sane number of definitions.
-> >
-> > David =20
->=20
-> You mean separating the core symbol code (top of file) from the procfs
-> interface (bottom of file) into two separate files, right? If so,
-> seems reasonable to me, especially since the file is approaching 1000
-> lines even before our changes.
->=20
-> And agree, even with both our patches, most functions can remain
-> static in their new homes.
+kernel test robot noticed the following build errors:
 
-I just tried it (on 7.4-rc1).
-Only had to make kallsymbols_get_symbol_type(), kallsymbols_expand_symbol()
-and get_symbol_offset() non-static (added to kallsyms_internal.h) and
-split the file before the definition of kallysms_iter.
-Then tidied up a few #includes.
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on btrfs/for-next brauner-vfs/vfs.all linus/master v7.4-rc3 next-20261116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I've found a much bigger problem though.
-All the sprint_symbol() functions do unchecked writes into the caller
-supplied buffer (no length is passed).
-While the buffer is (usually) long enough for the name, there isn't
-guaranteed to be enough space for the "+0xoffset [modulename buildid]"
-that might easily be another 60 characters.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ismael-Luceno/btrfs-add-config-options-for-the-root-device-scan/20261116-234317
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/20261116224316.11237-14-ismael%40iodev.co.uk
+patch subject: [PATCH 4/8] btrfs: add a helper to scan all block devices
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261117/202611172034.2xFLZZpu-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261117/202611172034.2xFLZZpu-lkp@intel.com/reproduce)
 
-Some of the people who have modified that code recently really ought
-to have fixed it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611172034.2xFLZZpu-lkp@intel.com/
 
-David
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
+>> ERROR: modpost: fs/btrfs/btrfs.ko: symbol 'block_class' undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
