@@ -1,62 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794940510;
-	b=o92Q06e5mhZn7vwQ8O+ZtpDr4J34c++wJKkJTuodzwH7sjDyIetbG/Vg5/fB8nGKC7Km
-	 HVDavzv5gGV/lhFED3DCLBRD0fpxwKKBcSlaB55gKTRtytvVNkV3clklr9hMDXoapxKvf
-	 efXkR6g9tE+sHI3O14CUUyLKaHIDmcS9Bojd/1FgDDYVcrgmV5Mw1zgEfaFHeCSm4sTzF
-	 lBtKLfFQs/TgMKwBFYInKRJrVw9mUAJqUvyzKRFmr71kXmejDANH6+f6pfkFp7ldGM+FB
-	 bnS8DW5LgpOxQNCkdTeYF2p6EBpNyH8mIo9hJE+0bI9sozReEu6gCtRh/Ldlixlu5Ng==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794940510;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=uexNMGpxUY9OOBDnfN+FganeasLxdCgYq2rQnF6AVfQ=;
-	b=TdrFgRp6x6jpa+fOuru4CEmX7T3lTOEcbPM+r8Dx9A+wxMFkZw0yVyeN1lf0DViPAeHt
-	 Qdo+pM0LiomyIUXrLWUqFrapNNLiXvq4Zn8eRcPO7V/6dNSRD6/Bwx4ZzjB6HXRxXVgy6
-	 5EdMM7DucCx7S5mlT/cd4LUU/wqBgVSEEbUw80eKLXnU7asNO8ttV8JGbRmoHtH60o8en
-	 o7AYqzgbLk2jADGeXIg8QS9tZ/Y94eM6j9omdomBd/YUyneJedXG+/tB85AGWxn4VuFSM
-	 J1QZ5WD8fZGV+DcEJLJEPQkqKNRtgHslg6UXqWAJrg6aakZTz1OcXgLm9zyXipNtRNw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=TPrXIgoW;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794940774;
+	b=5Zs1O5BTgZIPZxkdy990GZc+/630e8HOTbFw/kH3OX/zK9QjYiwyMSoqTyknDwmAGKqU
+	 /e19MhMAbO2e9O3PEipYoZRF+A8uz4JSgqp0FdDls/07DNh20LPTOTq0vbFjJYr2jQfRO
+	 HZmi3yNmY7XSWZTdgQw2+lUQO208DYdBfeFA2UAYOiy5CTyxmdmZ82U/hmB+Ye83haJdd
+	 rFnJO6ksaIDgaNSybY2kEcW+ii1jfw+LcdzM/ON9r3yuOe+jZ1JFRFyABJsHCHot427sd
+	 Xenk/UG4Td9DBBnCXhm0J5lN1FN0OsBzJrbUuu5JgC+OTvJK0mFhQ/n9ZBuPrvn8EHQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794940774;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=lncRKJb281LFN/OuiZfN4zyt8y+KUOcywEPbnI0NV+o=;
+	b=dTTycgOnBfjP8AqeIFwD24DqmbzsfCAdbiomhwsvBLvsFVFXda2wUt2piYLzlGo33Yku
+	 0WATs3JVTF/xqgsTNqVtZEtsrhZbiXV7xCO2eSo2RDA9vzbKsa6UOcClCxyBVngjdnU75
+	 X4HbSEtnxWfPFvFJej3elBsnaRJ9OeBWCa4/ZYFp2YYrLmIpZxMyU/rqFlEWwvBQ6svfw
+	 CCGZ4BToD8Mb1PxdhFguoxD8172UDGxgHcL44DPAYT95pXGPsf24UikXhg1CtBVL9vM66
+	 cwEk5MWJ932CCBtaR0dAmKNiXInXChE+AYK24b4btZMn16JHHiInLLLreEd+5zrQnOg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=BJMRm899;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73411606A886;
-	Tue, 17 Nov 2026 18:35:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73411606A886
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90741606A32A
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 18:39:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 90741606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=TPrXIgoW
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uexNMGpxUY9OOBDnfN+FganeasLxdCgYq2rQnF6AVfQ=; b=TPrXIgoWCC4gHzComIOd+EOReG
-	MLYqaaYpa9M9ELdQQ18R88rAHEWNnALZku4jwNmmYX0Rwp0lDo9EvhMVKFWzSy2CW4Zp1HDRipNZl
-	mMuizWCB4KUG1ldsL17fvvAjQ89wIC679O/TKI0IUHtaXNmtBGj1jXLMR8Pk6r+VSFx9ZtHUsmwNY
-	ohTxP7qcFBhZYYiueKqgX0Rc3fUkNVJ4oWtOESfUNw9bxw1p38OER6359GIy+es6JZdApkGGo+s57
-	tXocYidbk5Iml0oVS7hzG7cl2gcfyc7an+l1oSvbxW09YiU/ETKp+klJr8gMnJV+FsdmAbSDxpqN+
-	KCSCrUCg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xTO1K-0000000FIqE-1sdF;
-	Tue, 17 Nov 2026 18:35:06 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4F215300708; Tue, 17 Nov 2026 19:35:05 +0100 (CET)
-Date: Tue, 17 Nov 2026 19:35:05 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Ali Nasrollahi <a.nasrolahi01@gmail.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kees@kernel.org, nathan@kernel.org
-Subject: Re: [PATCH] x86/cfi: mark cfi_debug as __maybe_unused
-Message-ID: <20261117183505.GL1813469@noisy.programming.kicks-ass.net>
-References: <20261116173027.229752-1-A.Nasrolahi01@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=BJMRm899
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4a33359c1b3so43351f8f.3
+        for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 10:39:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794940768; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qDp/Gin+1zSQIqeB9+koDazw+YoM6A1ZCqQS9ud54FEcLoBdUlsDqWs4RivjQznPO0
+         ysGY3k+ezY1sp+MLq7Lfinga7FKkiCftIkfK+5JuTrOz6fFCjzucuh2DPk5Tp19M81KU
+         J32z7T6t/JQYSzhszR+FD6xZy8W1ZRozj1bKmGF0fcBZ0QNg2jHUxvFtw4bZ5PRlFmML
+         hSEC0HacD+E6gMI9VWGJk59BWlRRgP0p4vorsSDhxIcX6a1zs+hBX8+CUSG6DcYo+bWx
+         NlbTbz69qsQSYCSDou3ciIZSvkz6itlETV4hvnyV+gnjlqzLsKX36yYS7qfKZSAj48MV
+         cs7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lncRKJb281LFN/OuiZfN4zyt8y+KUOcywEPbnI0NV+o=;
+        fh=JFG4Gir2LCR/RDY5WJRVGzosZU0e1223Q2oUA3Gt9eQ=;
+        b=d0FDGahXEPCTnrQdxT3/Z36DKOLfhpLtjj0eeQW7MeDw4dnZRdRANK4jYBSzVig0hF
+         QcgTcqLgDnsM9njVEw3NAeWTVz+xTIQV8H26Z0SNzCK2YEIBC+EnggenYnPCjy13yVXg
+         m36f7ihtjX9/EMnatgOGL/5odbqbSP3UIabQ1Lzek+F8j8HIVoamqUtJjxXRBRJRyucP
+         hRDGTWyeu5yeW9RhAgwlOlpfvO8ZYAPIyEFLt+pRUybWPAPjm4jRUxj4pwHf/qk62QII
+         YbWXMpsZYAJXfKWYBNkQGhu7Zb6d7foXkGB5yw+nP3iG1p6toAbW5scpHs6NtSZ08eCj
+         xOzw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794940768; x=1795545568; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lncRKJb281LFN/OuiZfN4zyt8y+KUOcywEPbnI0NV+o=;
+        b=BJMRm899lO53ptufGpWOtP9HqIxBf8AqcJbqtqIgAzgLil3H4QvCRTsGWV5h7sikmK
+         tThlw4StxhK88PCRrOG0tLkQv3LO0vKC9Er1fe3d5xO+5AfY3eAWnOrI5w7gC593l/pK
+         0O6+pHxXVMge9BsfVdpTYvzs5gUIwcbAfwb6iBQpaqncP8oXG/NRCKKXctv7zrByMRCc
+         I+HF3Q+uJSddD1ZpM09neEM9Hv8mm7QzvUIOZn1ffzKbDbuB+ShhwNq9r+FseNLouTbi
+         /gxwRA2iNE3KBtIFfwaA8u0jRyn4bIypMREzF2rFI5lF+wnZkAUu3GEBONlYQI63IM9v
+         gR0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794940768; x=1795545568;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lncRKJb281LFN/OuiZfN4zyt8y+KUOcywEPbnI0NV+o=;
+        b=RsOq2KQJqXre7bl4p87WWpKcoezbvdm90JCDTwzWNZ4pmdhlM0xgWDJ6KC4ooFm9Mp
+         eEF9uCnMGARD7oGt/F30ZGu+5qsSjAVBhzK3upbnPhvtb0OVLIz8aKzeJ6pHbbeLw5N3
+         EMnMUNZgbMWxBa7thmeTvVhAs+KDb2bnfBCb9+3Vy28VYGbBlY1V+r0Hv7/wbD/mvX1P
+         mfg8J7e9UZpFqsv0BA3b566I/zVs5OXhSCDUX0iOt9KzbYXNAGIO2K04+QX27tABfO3F
+         xXR2OqF4fHp6ccF6RvanJ6cYXyxXcI3StyzXNtlbi4ZghuvlIWST4kLkZtKe+eiOfHKX
+         /Now==
+X-Forwarded-Encrypted: i=1; AL+hErF3BY1sArc9QKPVW/Zm5bmho8eM8r8jdXYFKA5w2ZvRFcbHkSe3i9yH9w0G9XJaIO0f8TRQ@lists.linux.dev
+X-Gm-Message-State: APuU4Z/6J4OIvMl99MrEqIRUGJ77uZXFbbUe0qSub6WM5bRO2Qc7+n3w
+	Ms32yHTGenN8HQ8bGWdHWSlJ+rY4rrFPT5SI2ajJsGXOky4HlgHglojPLadFqHfSjDiKuElflDS
+	q0Uh241RXbqQuKJsdBw/Rk3maGpEciTJfkWApYhJ1
+X-Gm-Gg: AZFdTZfPPGGiCnlzEIRolzLtfJgnrd7/mP0x3GSYAdL5MnFQ0syH4qWFNw5rckkdYGy
+	U6+KDmFmXlTFUyRoYckFmpYbBY+AgGaW/hnCKz9ihsh/YNEa7b/5OnRyy3kmJvSgOSxcKkFnehb
+	kZ84jbUZfa9Wf3jEUX1W/yJW04WyZ9LUFEEkyXxmKtBx6mrwTvciGWjtOZpsVTYAjjX89C8RL1l
+	DjLu3Xgx47Noj1tFxhIlukgfPms6fcPjMg9RJ9yS8cfi58NRkjGmL2wgeBpoggSjBEgeRqeMr8h
+	q0n7bk2VeQKcinQvz+N3uOb6N/6xtDup3j8XCHd9kqfQd6EsmWoVxuorcjYK23XcyMDbYaOc/AE
+	XbVlyJVFf9NcZTJ92Z7fqRpTnqsLXdzgLi4jz86zQHcUWPt+ofRv9+R82pIZ+fA5qKXiR22eRFJ
+	qnpsFinxb10tI/2IcdXUiEzWHp7z1kWXHnridq2Pw6w2b81dVF1oqwEkes7nx/GA7ZcBHUDEPj+
+	KwPl7iXq6Brq2WOgnylP4UwLOSCN20qBiNP7Q==
+X-Received: by 2002:a5d:4b41:0:b0:4a3:8b21:51bf with SMTP id
+ ffacd0b85a97d-4a63f182f83mr533473f8f.48.1794940767380; Tue, 17 Nov 2026
+ 10:39:27 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,50 +106,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261116173027.229752-1-A.Nasrolahi01@gmail.com>
+References: <20261116-topology-wunsequenced-v2-1-54611119172b@kernel.org> <20261117183043.GK1813469@noisy.programming.kicks-ass.net>
+In-Reply-To: <20261117183043.GK1813469@noisy.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 17 Nov 2026 10:39:15 -0800
+X-Gm-Features: Aa3M54pKRYI09jyRw-sTO4FGJp-XI-xiu5wM8zF3drrRidtrcRZTdo0aa8zBllU
+Message-ID: <CAKwvOd=9pjhCnreMvoAH_0PegYg60ouaZL=BAjB242bE48J23g@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/topology: Avoid unsequenced accesses to jiffies
+ in sd_init()
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 16, 2026 at 09:00:27PM +0330, Ali Nasrollahi wrote:
->     When CONFIG_FINEIBT is disabled, cfi_debug is never read, but
->     alternative_instructions() still resets it after calling
->     __apply_fineibt(). Clang 23 diagnoses this as -Wunused-but-set-global
->     with W=1, causing a build failure when CONFIG_WERROR=y. Mark cfi_debug
->     as __maybe_unused to account for configurations without FineIBT.
-> 
-> Signed-off-by: Ali Nasrollahi <A.Nasrolahi01@gmail.com>
+On Tue, Nov 17, 2026 at 10:30=E2=80=AFAM Peter Zijlstra <peterz@infradead.o=
+rg> wrote:
+>
+> I don't speak enough C legal to actually understand the Changelog, but
+> the actual change seems daft. Is this really needed?
 
-Does something like so also work?
+I would imagine a delta of the disassembly here before/after the
+change would make it more obvious (one less volatile access, which be
+have arbitrary ordering between initializing other members).
 
----
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index efbc11f8c336..9bfc36566e17 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1195,9 +1195,9 @@ void __init_or_module apply_seal_endbr(s32 *start, s32 *end) { }
- #endif
- 
- enum cfi_mode cfi_mode __ro_after_init = __CFI_DEFAULT;
--static bool cfi_debug __ro_after_init;
- 
- #ifdef CONFIG_FINEIBT_BHI
-+static bool cfi_debug __ro_after_init;
- bool cfi_bhi __ro_after_init = false;
- #endif
- 
-@@ -1894,6 +1894,7 @@ static void __init_or_module __apply_fineibt(s32 *start_retpoline, s32 *end_retp
- 		break;
- 	}
- 
-+	cfi_debug = false;
- err:
- 	pr_err("Something went horribly wrong trying to rewrite the CFI implementation.\n");
- }
-@@ -2281,7 +2282,6 @@ void __init alternative_instructions(void)
- 
- 	__apply_fineibt(__retpoline_sites, __retpoline_sites_end,
- 			__cfi_sites, __cfi_sites_end, true);
--	cfi_debug = false;
- 
- 	/*
- 	 * Rewrite the retpolines, must be done before alternatives since
+But I guess I'm also curious why jiffies is defined as volatile
+anyway? I thought the usual guidance was to use
+cast-to-volatile-qualified pointer during access, rather than declare
+as volatile?
+
+--=20
+Thanks,
+~Nick Desaulniers
