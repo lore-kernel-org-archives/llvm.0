@@ -1,72 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794890108;
-	b=LUVBpFlG8pbosiq8ovyWzD6JETaMwp0blqMscCccm4Pe7pvd8yv0uRjEuGOvoAmkOksA
-	 ZKHzzIQTjmESGun4kJINxywK9vvF28i3wR8uytPos7vkt3Y6BW2L2otq24Nm23QMnOV4i
-	 +ktWa3NH/e6oQVLTaP4RWxFoRkJRVIc8gkX2DizPxa5qnXIK0jgdh69d9K06LiSBQEnIB
-	 3uKmYaUE/DowqeHfso/YJ2RbPbsOsFE2qJc6GvhQCfuuffsZiSQCLqaZqoy9bUYV7vyaA
-	 BaKWZ6Lssj77STDMjeF/zZLv884CWhncM09l0IuR3v+5/NFD9VyithYKL2k+dAosN4A==
+	t=1794890110;
+	b=ABbyzMIzist5eco2VT6Zw/8hIzHbXqiCKaIx2oHkWqyzyH1gL3tB7ldtYGzb8Aqg5xyA
+	 vYoQUvG1x8zIYW1DFfFRqEA8VvVE1ZNuVBfKYOeIwJfDxckuZ9smh7pcBCTjBBd9EyceP
+	 Mvtne2DckFaRklxt6G2LCGqG7EbtE6KKh+/tWbUv4E0bVChXMy0Xy0WSGfdRwiya5Cfbt
+	 QpnXFFXVRdC5m+yC1EHMqDlItLp+RLqaxHnGHfR8+sDxK+K/oOlOcA0bDEiGhi6b+Q5af
+	 ttGMVzFbuhouDCPPec7tvOGPRl2zWZm69Xs4AslWRUJD+tGeZLB6CFl3g097fqTZ2Zg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794890108;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794890110;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=9ljMd+8qHZtmdzxzGXfXq4+janfrVyX1V/6KLR49owU=;
-	b=MZW7elepkH7PFQkEiiX9a0+hC9beRQoLQDy8pQ4zngRujjtkZV9KtQruoYZnhh86GIpp
-	 tCqUN8jyR26FQchEhoSHzJZWuaXzltkCE6muyPpKdIvozmevS1xIpfZO361l0j0rW1kjR
-	 oQ0iD1tSzTlx4OYkj8SwKkoc/QZwzpdfgS/MYiNweHkh6a9bqg6lhbpFyCLc71i6ILF7G
-	 jcWwSo33bvevwdV7219WNTjmrAugZp9s6aL8FC7nnkkxFFYFUrljB9u0RZqRAImTsmOC5
-	 cwp+mU2DsUVICv0uvdv1qgGJLIDFzH4aoGixbTvp5FrVKr/glJHIYq+nCWnENhk4MFQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=kv88xp0i2ySFrcN1aLaQoGF5JG/nfVb1F5vxVlAqWpE=;
+	b=erZ4qLeDSMwd83AXAaZbYz2txR5A3kF+pMWFoiy+z0lB24X8LmKAFTO9XsMdYxoiALl4
+	 /A3eBKbVc8G6bIn3543WtVIRIy9Z60Yzm7DOMC3huoQbREzZwoTFcBFzwOZsxH1qT+3IT
+	 /hmWdQFrqj8HdN93PfREvrJAlO+GJTUzyknp+3spLkUvm5PkrC8tkmgs4ARO43WtAC2R8
+	 GUa0iyfcJzqXu/+CIo9IrC/EJsfo9hfh/4uCvu+RKBWGC+FykUFjWJo3FL3wK18xFyfne
+	 jcLSLkQTPRlExxuzqeeQX/UOvE8AO8fos2GMcWtqiRPUjptYG4TaN/Wazq5weQrYDtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Gg4uR7yB;
-	arc=none smtp.remote-ip=209.85.216.72
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cJLHgA2k;
+	arc=none smtp.remote-ip=209.85.215.198
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A1D606A330
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 04:35:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0A1D606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B81606A333
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 04:35:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4B81606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Gg4uR7yB
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3b0a13ae043so2602306a91.0
-        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 20:35:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cJLHgA2k
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cc1ca15334cso4538729a12.1
+        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 20:35:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794890107; x=1795494907; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9ljMd+8qHZtmdzxzGXfXq4+janfrVyX1V/6KLR49owU=;
-        b=Gg4uR7yBaXiPEl7C96QpKt4VX6hTWHMDfLuJe2jgFPelDhmc2IuyjNuTECaJOV3bvy
-         d4vGACg84HBfY8CYB0XlI8CG7NRI2GGiwwR8gcGhTpNHG7cNHI0VRFtEptwG2TUMcUVV
-         5f6E8UAGnm2WNVKzOwXpduWqEckyiI4cAqzKU+ZUGBcQmxntgiwRpKLZqBRWnKPCVMXH
-         29GjDXEUAk6jOl7znMdKIqp2yUMXWDpRuKUc/qX4hjAcKmQCRN9jnxEkPrDmz8LsLgc9
-         t0b3lnHtjshCh1q4QQSEIdpmBfjm01euvGye6BYJm6mIETD1YuQhhes8SIRAHwZZm3tF
-         up3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794890107; x=1795494907;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1794890109; x=1795494909; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9ljMd+8qHZtmdzxzGXfXq4+janfrVyX1V/6KLR49owU=;
-        b=SURdcVczg5xSvaHWckdLOIwpQyXe+HdQG/Nf4XLUyDeGK+IZvir0bQySY8dNZ9jjHD
-         9R8yIwewoDghU2+okijfjRjlvvd8HMuCyRuzsUBd9X5drE1e3e+aC0ULBt0hbXq1Qjxj
-         rF9+2UBjgTEOdLOBBbsu9SNeqQtFTlwcBkUUsAs4pdRNsJKeKCsFv6S6Shgh3JA/SJKq
-         pu7toF+JOHQyCgL+YN+l46yBQOX8narCDkLOu56Iu+o0nfvVblbxxyR6yBZ31PJ8Srpc
-         Reg2rEPVh5kEePBZJQ72K4gAOvDNjF+L4h76Argoksr0dz4/rz2+nHzsNLDo0Ks7h4rO
-         DzOw==
-X-Forwarded-Encrypted: i=1; AL+hErE6muUVXpHdffm33aALhgUBM7liURpLapKXgwWTHi11Eh0GGHci2J+Gn/ZlztvR8shkfXJ5@lists.linux.dev
-X-Gm-Message-State: APuU4Z90VN/9UiJ/2uBA/zKAp6xu1ApeTTNmTuG9XBkeE0UBXYexn/OJ
-	JPwPKS5g8mfF1DVS7ifTfOC7FpbA6OkAywQTptcecrT/uBbsUfcs9WY23uZ30/9DGVi4W8jnBpg
-	bndl4FYVEV39Xif+vbBx5lCqwTw==
-X-Received: from pgfd23-n2.prod.google.com ([2002:a05:6a02:6557:20b0:cd6:1195:61cb])
+        bh=kv88xp0i2ySFrcN1aLaQoGF5JG/nfVb1F5vxVlAqWpE=;
+        b=cJLHgA2klDkZqbQkeM5ydHl+eq68S5+JG/qnKOLjMQVhOixw5eB8vWGLeTbxQev2oi
+         4Pl0jJZklSIwkHKQ9QiO11lhufYcwd9LJBC93fDNO1EUMigmYXDogIb9u9BHcKDqf+UR
+         73ERU7SN9oFfNwTGVoMS2xye/qxzKp1PYhUcM4QxP/vJEyiI5g/g1WxxaXeq8uNiiiEy
+         aphC6UQLcukQuJjWnxP0nJ/ABNMxTML9b09zpprheFc3pdijbfCZzB3CK3/DoXA0wl8s
+         4cQfQDnQl4bEAxOJfTFHdxTz+nWMK1lqKSIpSlhqJgn3/uhtUc8qKvAbTe0XcnSjRG4s
+         6u5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794890109; x=1795494909;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kv88xp0i2ySFrcN1aLaQoGF5JG/nfVb1F5vxVlAqWpE=;
+        b=0nvj2hCxDhNBsZRFH0VSf2LLrsSDnvVXRqo9nYGlzVMOkt0c0VRnZYr44zUHXg91hx
+         GGZziVE5+c65FxQDxmgwL/7c8li2OgJaDRn6tU8VUMVN4pdW5Lu40RH2ZhOJngds60ke
+         3q47wckKQ8U0rFGYm7XwAFlLITV9TEvcM2ZebQMJ2FTWK8ktmI3wbzGwI18axKeeHy3H
+         NtJsqGHAlUzS17Wfz32cTHs1Ax0PtouJHMwZ7FWTGPGiULLZ26jbipWYn302IY/IO7VJ
+         CuDvu5EruzBUGmfy29UUFLgWm8eydJzM8A4pQOsTZyIJza0jPz9XFGps2SH57Vd9gG7d
+         G8Mg==
+X-Forwarded-Encrypted: i=1; AL+hErHG+r8e23mbthyS+MlIQpzJtm76cwwTHlnOWImRUyiXElCTmfc9XFLuegBrK++Bz8E4L16u@lists.linux.dev
+X-Gm-Message-State: APuU4Z94MW/ZUgG5Vnk0X7SNYyikyWu4ub//IjPrA5W2bfDduPqRDXS+
+	qyWkQuCLIF/StqbbzaWxZ//SGAUI9Y8tZhMcHcC1XUSWCB8U+OJNHJ80xVt7CmosF9jHqUf22QF
+	paocm+qDIATzgnKFNhMKw1Dofgg==
+X-Received: from pgcle3-n1.prod.google.com ([2002:a05:6a02:8b83:10b0:cdd:9295:e893])
  (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3841:b0:3a6:e99b:bbdb with SMTP id 98e67ed59e1d1-3b1b0cfe3d9mr12853706a91.50.1794890106931;
- Mon, 16 Nov 2026 20:35:06 -0800 (PST)
-Date: Tue, 17 Nov 2026 04:34:52 +0000
+ 2002:a05:6a21:e347:b0:3eb:67a9:20cd with SMTP id adf61e73a8af0-3f7a6baa73fmr9854448637.18.1794890108718;
+ Mon, 16 Nov 2026 20:35:08 -0800 (PST)
+Date: Tue, 17 Nov 2026 04:34:53 +0000
+In-Reply-To: <20261117043504.1021063-1-dylanbhatch@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,9 +79,11 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
+References: <20261117043504.1021063-1-dylanbhatch@google.com>
 X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261117043504.1021063-1-dylanbhatch@google.com>
-Subject: [RFC PATCH 00/12] arm64, unwind: add .lr_unwind unwinder for reliable stacktrace
+Message-ID: <20261117043504.1021063-2-dylanbhatch@google.com>
+Subject: [RFC PATCH 01/12] arm64, unwind: build with .eh_frame and add
+ gen_lr_unwind skeleton
 From: Dylan Hatch <dylanbhatch@google.com>
 To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>
@@ -95,167 +100,350 @@ Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemlof
 	Dylan Hatch <dylanbhatch@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Implement a build-time .eh_frame-to-.lr_unwind table generator and
-in-kernel unwinder for arm64. The primary goal is to support reliable
-stacktrace (arch_stack_walk_reliable()) across in-kernel exception
-boundaries (pt_regs).
+Add CONFIG_ARM64_LR_UNWIND to build the kernel with .eh_frame unwind
+tables while discarding .eh_frame in the final vmlinux and module linker
+scripts unless CONFIG_UNWIND_PATCH_PAC_INTO_SCS is enabled. Wire up a
+skeleton scripts/gen_lr_unwind host tool invoked on vmlinux.o.
 
-On arm64, normal stack unwinding follows frame pointer (x29) chains.
-However, when an asynchronous exception or interrupt occurs inside the
-kernel, the frame pointer chain alone is insufficient to unwind reliably
-from the interrupted context (pt_regs):
-
-  1. Before the prologue updates x29 (mov x29, sp), after the epilogue
-     restores x29/x30, or throughout a leaf function, the interrupted
-     function's return address is live in x30 (pt_regs->regs[30]) while
-     x29 still points to the caller's frame record.
-  2. Between saving the frame record on the stack (e.g.
-     stp x29, x30, [sp, #-N]!) and updating x29 (mov x29, sp), or in
-     functions where the compiler restores x29/x30 before adjusting sp,
-     the interrupted function's frame record resides at [sp + sp_off]
-     while x29 still points to the caller's frame record.
-  3. Inside the function body after mov x29, sp, [x29] points to the
-     interrupted function's own frame record and x30 may have been
-     clobbered by nested calls.
-
-Without knowing which state holds at the interrupted PC, the unwinder
-cannot determine whether pt_regs->regs[30] is a valid frame or a
-duplicate of [x29 + 8], nor can it recover a frame record at
-[sp + sp_off] before x29 is updated, forcing arch_stack_walk_reliable()
-to reject stack traces that cross an in-kernel exception boundary.
-
-This RFC is proposed as an alternative to an SFrame [1] based solution:
-[2]. While SFrame works well with recent GNU binutils (2.46+), it is not
-yet supported by LLVM/Clang toolchains. Conversely, compiler-generated
-.eh_frame tables (-fasynchronous-unwind-tables, enabled by
-CONFIG_UNWIND_TABLES) are supported today by both GCC and Clang/LLVM,
-and arm64 already includes a DWARF .eh_frame parser in
-arch/arm64/kernel/pi/patch-scs.c for dynamic Shadow Call Stack patching.
-
-Rather than retaining bulky raw .eh_frame sections in kernel memory and
-interpreting variable-length DWARF CFI opcodes during stack unwinding,
-this series introduces a build-time host tool (scripts/gen_lr_unwind)
-that reuses and extends arm64's .eh_frame parser (<asm/eh_frame.h>) to
-distill .eh_frame into compact, fixed-width .lr_unwind_fde and
-.lr_unwind_ranges sections, and strips .eh_frame from the final vmlinux
-and module binaries.
-
-Each annotated function is described by an 8-byte struct lr_fde entry
-(32-bit PC-relative start_offset + 32-bit range_desc), sorted at build
-time by scripts/sorttable (and at module load time) for O(log N) lookup.
-Each instruction range within a function is classified into one of three
-exception-boundary unwind modes:
-  - LR_UNWIND_LIVE: x30 holds the return address, x29 is the caller's FP
-  - LR_UNWIND_FP:   [x29] holds the saved {x29, x30} frame record
-  - LR_UNWIND_SP:   [sp + sp_off] holds the saved {x29, x30} frame record
-
-Functions with non-standard x30 spills (such as frameless leaf functions
-spilling x30 without x29) are omitted from .lr_unwind_fde so the
-unwinder treats them as unreliable.
-
-For functions following the canonical 4-phase LIVE -> FP/SP -> SP -> LIVE
-layout (prologue <= 31 insns, body <= 4095 insns, epilogue/return <= 15
-insns each, and sp_off <= 496 bytes), the ranges and sp_off are packed
-directly into the 32-bit range_desc word of struct lr_fde; functions
-with more ranges or larger lengths reference 2-byte lr_range_t entries
-in .lr_unwind_ranges. Across vmlinux, .lr_unwind_fde and
-.lr_unwind_ranges total ~800-935 KiB (~4x smaller than raw .eh_frame).
-
-This series is available on github: [3].
-
-Structure of the series:
-  - Patches 1-6: Enable .eh_frame generation for CONFIG_ARM64_LR_UNWIND,
-    factor the .eh_frame parser out of patch-scs.c into <asm/eh_frame.h>,
-    extend it to track CFA and x29/x30 state, and implement
-    scripts/gen_lr_unwind (including --dump) to emit .lr_unwind sections.
-  - Patch 7: Teach scripts/sorttable to sort .lr_unwind_fde at build time.
-  - Patches 8-9: Add in-kernel .lr_unwind lookup, optional boot/module
-    validation (CONFIG_ARM64_LR_UNWIND_VALIDATION), and module support.
-  - Patches 10-11: Annotate call_on_irq_stack() and arm64 leaf assembly
-    functions (SYM_LEAF_FUNC_START / SYM_LEAF_FUNC_END) with CFI
-    directives so they are covered by .lr_unwind.
-  - Patch 12: Use .lr_unwind in arch/arm64/kernel/stacktrace.c to
-    reliably unwind across in-kernel exception boundaries.
-
-Ref:
-[1]: https://sourceware.org/binutils/docs/sframe-spec.html
-[2]: https://lore.kernel.org/all/20261117020648.323464-1-dylanbhatch@google.com/
-[3]: https://github.com/dylanbhatch/linux/tree/eh_frame
-
-Dylan Hatch (11):
-  arm64, unwind: build with .eh_frame and add gen_lr_unwind skeleton
-  arm64: factor .eh_frame parser out of patch-scs.c into
-    <asm/eh_frame.h>
-  arm64: eh_frame: track CFA and x29/x30 register state in CFI parser
-  arm64, unwind: parse .eh_frame into .lr_unwind entries in
-    gen_lr_unwind
-  scripts/gen_lr_unwind: emit .lr_unwind_fde and .lr_unwind_ranges
-  scripts/gen_lr_unwind: add --dump option to inspect .lr_unwind tables
-  scripts/sorttable: sort .lr_unwind_fde by start_offset
-  arm64, unwind: add in-kernel .lr_unwind lookup and validation
-  arm64/module, unwind: add .lr_unwind support for modules
-  arm64, crypto/lib: annotate leaf functions with CFI info
-  unwind: arm64: use .lr_unwind to unwind interrupt frames
-
-Weinan Liu (1):
-  arm64: entry: add unwind info for call_on_irq_stack()
-
- MAINTAINERS                            |   1 +
- arch/arm64/Kconfig                     |  20 +
- arch/arm64/crypto/aes-ce-ccm-core.S    |  12 +-
- arch/arm64/crypto/aes-neonbs-core.S    |  16 +-
- arch/arm64/crypto/ghash-ce-core.S      |  20 +-
- arch/arm64/crypto/sm4-ce-ccm-core.S    |  16 +-
- arch/arm64/crypto/sm4-ce-cipher-core.S |   4 +-
- arch/arm64/crypto/sm4-ce-core.S        |  44 +-
- arch/arm64/crypto/sm4-ce-gcm-core.S    |  16 +-
- arch/arm64/crypto/sm4-neon-core.S      |  12 +-
- arch/arm64/include/asm/eh_frame.h      | 552 +++++++++++++++++
- arch/arm64/include/asm/linkage.h       |  33 +
- arch/arm64/include/asm/lr_unwind.h     | 149 +++++
- arch/arm64/include/asm/module.h        |   6 +
- arch/arm64/include/asm/module.lds.h    |   2 +-
- arch/arm64/include/asm/scs.h           |   7 -
- arch/arm64/include/asm/sections.h      |   3 +
- arch/arm64/kernel/Makefile             |   5 +
- arch/arm64/kernel/entry.S              |  12 +-
- arch/arm64/kernel/lr_unwind.c          | 395 ++++++++++++
- arch/arm64/kernel/module.c             |  11 +
- arch/arm64/kernel/pi/patch-scs.c       | 259 +-------
- arch/arm64/kernel/setup.c              |   3 +
- arch/arm64/kernel/stacktrace.c         |  85 ++-
- arch/arm64/kernel/vmlinux.lds.S        |  27 +-
- arch/arm64/lib/clear_user.S            |   4 +-
- arch/arm64/lib/copy_from_user.S        |   4 +-
- arch/arm64/lib/copy_page.S             |   4 +-
- arch/arm64/lib/copy_to_user.S          |   4 +-
- arch/arm64/lib/memchr.S                |   4 +-
- arch/arm64/lib/memcmp.S                |   4 +-
- arch/arm64/lib/memcpy.S                |   8 +-
- arch/arm64/lib/memset.S                |   8 +-
- arch/arm64/lib/mte.S                   |  28 +-
- arch/arm64/lib/strchr.S                |   4 +-
- arch/arm64/lib/strcmp.S                |   4 +-
- arch/arm64/lib/strlen.S                |   4 +-
- arch/arm64/lib/strncmp.S               |   4 +-
- arch/arm64/lib/strnlen.S               |   4 +-
- arch/arm64/lib/strrchr.S               |   4 +-
- arch/arm64/lib/tishift.S               |  12 +-
- scripts/.gitignore                     |   1 +
- scripts/Makefile                       |   2 +
- scripts/Makefile.modfinal              |  10 +-
- scripts/Makefile.vmlinux_o             |   8 +-
- scripts/gen_lr_unwind.c                | 821 +++++++++++++++++++++++++
- scripts/link-vmlinux.sh                |   2 +-
- scripts/sorttable.c                    |  50 +-
- 48 files changed, 2325 insertions(+), 383 deletions(-)
- create mode 100644 arch/arm64/include/asm/eh_frame.h
- create mode 100644 arch/arm64/include/asm/lr_unwind.h
- create mode 100644 arch/arm64/kernel/lr_unwind.c
+Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+---
+ MAINTAINERS                         |   1 +
+ arch/arm64/Kconfig                  |  11 +++
+ arch/arm64/include/asm/module.lds.h |   2 +-
+ arch/arm64/kernel/vmlinux.lds.S     |  25 ++++-
+ scripts/.gitignore                  |   1 +
+ scripts/Makefile                    |   2 +
+ scripts/Makefile.vmlinux_o          |   8 +-
+ scripts/gen_lr_unwind.c             | 137 ++++++++++++++++++++++++++++
+ scripts/link-vmlinux.sh             |   2 +-
+ 9 files changed, 185 insertions(+), 4 deletions(-)
  create mode 100644 scripts/gen_lr_unwind.c
 
-
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 93abbb315065d..c7c8673291702 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4047,6 +4047,7 @@ F:	include/linux/arm-rmi-cmds.h
+ F:	include/linux/arm-rsi-cmds.h
+ F:	include/linux/arm-smccc-rmi.h
+ F:	include/linux/arm-smccc-rsi.h
++F:	scripts/gen_lr_unwind.c
+ F:	tools/testing/selftests/arm64/
+ X:	arch/arm64/boot/dts/
+ X:	arch/arm64/configs/defconfig
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 1075bc6618330..aa09c7ea61be3 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -2506,6 +2506,17 @@ config UNWIND_PATCH_PAC_INTO_SCS
+ 	select UNWIND_TABLES
+ 	select DYNAMIC_SCS
+ 
++config ARM64_LR_UNWIND
++	bool "Generate exception-boundary unwind tables from .eh_frame"
++	default y
++	select UNWIND_TABLES
++	help
++	  Generate compact .lr_unwind_fde and .lr_unwind_ranges sections at
++	  build time from DWARF .eh_frame unwind information to determine how
++	  to unwind across exception boundaries (whether the return address is
++	  live in x30, saved in the frame record at [x29], or saved in the
++	  frame record at an SP-relative offset).
++
+ config ARM64_CONTPTE
+ 	bool "Contiguous PTE mappings for user memory" if EXPERT
+ 	depends on TRANSPARENT_HUGEPAGE
+diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+index 603f92a8a73ed..84e5fa0250435 100644
+--- a/arch/arm64/include/asm/module.lds.h
++++ b/arch/arm64/include/asm/module.lds.h
+@@ -4,7 +4,7 @@ SECTIONS {
+ 	.text.ftrace_trampoline 0 : { BYTE(0) }
+ 	.init.text.ftrace_trampoline 0 : { BYTE(0) }
+ 
+-#ifdef CONFIG_UNWIND_TABLES
++#ifdef CONFIG_UNWIND_PATCH_PAC_INTO_SCS
+ 	/*
+ 	 * Currently, we only use unwind info at module load time, so we can
+ 	 * put it into the .init allocation.
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index 1869b44ae1909..b8f2963d10030 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -144,15 +144,35 @@ jiffies = jiffies_64;
+ #define TRAMP_TEXT
+ #endif
+ 
+-#ifdef CONFIG_UNWIND_TABLES
++#ifdef CONFIG_UNWIND_PATCH_PAC_INTO_SCS
+ #define UNWIND_DATA_SECTIONS				\
+ 	.eh_frame : {					\
+ 		__pi___eh_frame_start = .;		\
+ 		*(.eh_frame)				\
+ 		__pi___eh_frame_end = .;		\
+ 	}
++#define EH_FRAME_DISCARDS
+ #else
+ #define UNWIND_DATA_SECTIONS
++#define EH_FRAME_DISCARDS	*(.eh_frame)
++#endif
++
++#ifdef CONFIG_ARM64_LR_UNWIND
++#define LR_UNWIND_SECTIONS				\
++	. = ALIGN(4);					\
++	.lr_unwind_fde : {				\
++		__start_lr_unwind_fde = .;		\
++		KEEP(*(.lr_unwind_fde))			\
++		__stop_lr_unwind_fde = .;		\
++	}						\
++	. = ALIGN(2);					\
++	.lr_unwind_ranges : {				\
++		__start_lr_unwind_ranges = .;		\
++		KEEP(*(.lr_unwind_ranges))		\
++		__stop_lr_unwind_ranges = .;		\
++	}
++#else
++#define LR_UNWIND_SECTIONS
+ #endif
+ 
+ /*
+@@ -184,6 +204,7 @@ SECTIONS
+ 		*(.interp .dynamic)
+ 		*(.dynsym .dynstr .hash .gnu.hash)
+ 		*(.ARM.attributes)
++		EH_FRAME_DISCARDS
+ 	}
+ 
+ 	. = KIMAGE_VADDR;
+@@ -212,6 +233,8 @@ SECTIONS
+ 	/* everything from this point to __init_begin will be marked RO NX */
+ 	RO_DATA(PAGE_SIZE)
+ 
++	LR_UNWIND_SECTIONS
++
+ 	HYPERVISOR_RODATA_SECTIONS
+ 
+ #ifdef CONFIG_NVHE_EL2_TRACING
+diff --git a/scripts/.gitignore b/scripts/.gitignore
+index 7004565439107..a56a49fee309c 100644
+--- a/scripts/.gitignore
++++ b/scripts/.gitignore
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ /asn1_compiler
+ /gen_init_cpio
++/gen_lr_unwind
+ /gen_packed_field_checks
+ /generate_rust_target
+ /insert-sys-cert
+diff --git a/scripts/Makefile b/scripts/Makefile
+index d7fbb7ca098b1..cb5af9339e4ac 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -12,6 +12,7 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
+ hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_builder
+ hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_gen
+ hostprogs-always-$(CONFIG_TRACEPOINTS)			+= tracepoint-update
++hostprogs-always-$(CONFIG_ARM64_LR_UNWIND)		+= gen_lr_unwind
+ 
+ kallsyms-objs := kallsyms.o kallsyms-sysmap.o elf-parse.o
+ sorttable-objs := sorttable.o elf-parse.o
+@@ -31,6 +32,7 @@ rustdoc_test_builder-rust := y
+ rustdoc_test_gen-rust := y
+ 
+ HOSTCFLAGS_tracepoint-update.o = -I$(srctree)/tools/include
++HOSTCFLAGS_gen_lr_unwind.o = -I$(srctree)/tools/include
+ HOSTCFLAGS_kallsyms.o = -I$(srctree)/tools/include
+ HOSTCFLAGS_kallsyms-sysmap.o = -I$(srctree)/tools/include
+ HOSTCFLAGS_elf-parse.o = -I$(srctree)/tools/include
+diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+index 0b37bd5dc3a49..362382ec58b15 100644
+--- a/scripts/Makefile.vmlinux_o
++++ b/scripts/Makefile.vmlinux_o
+@@ -57,6 +57,10 @@ objtool-args = $(vmlinux-objtool-args-y) --link
+ 
+ vmlinux-o-ld-args-$(CONFIG_BUILTIN_MODULE_RANGES)	+= -Map=$@.map
+ 
++gen_lr_unwind := $(objtree)/scripts/gen_lr_unwind
++cmd_gen_lr_unwind = $(if $(CONFIG_ARM64_LR_UNWIND), ; $(gen_lr_unwind) $@)
++cmd_gen_lr_unwinddep = $(if $(CONFIG_ARM64_LR_UNWIND), { echo ; echo '$@: $$(wildcard $(gen_lr_unwind))' ; } >> $(dot-target).cmd)
++
+ quiet_cmd_ld_vmlinux.o = LD      $@
+       cmd_ld_vmlinux.o = \
+ 	$(LD) ${KBUILD_LDFLAGS} -r -o $@ \
+@@ -64,13 +68,15 @@ quiet_cmd_ld_vmlinux.o = LD      $@
+ 	$(addprefix -T , $(initcalls-lds)) \
+ 	--whole-archive vmlinux.a --no-whole-archive \
+ 	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
+-	$(cmd_objtool)
++	$(cmd_objtool) \
++	$(cmd_gen_lr_unwind)
+ 
+ cmd_check_function_names = $(srctree)/scripts/check-function-names.sh $@
+ 
+ define rule_ld_vmlinux.o
+ 	$(call cmd_and_savecmd,ld_vmlinux.o)
+ 	$(call cmd,gen_objtooldep)
++	$(call cmd,gen_lr_unwinddep)
+ 	$(call cmd,check_function_names)
+ endef
+ 
+diff --git a/scripts/gen_lr_unwind.c b/scripts/gen_lr_unwind.c
+new file mode 100644
+index 0000000000000..1b52662838653
+--- /dev/null
++++ b/scripts/gen_lr_unwind.c
+@@ -0,0 +1,137 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Generate .lr_unwind_fde and .lr_unwind_ranges sections from .eh_frame
++ * for arm64 exception-boundary unwinding.
++ */
++
++#include <elf.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <unistd.h>
++
++struct lr_unwind_ctx {
++	const void	*map;
++	size_t		map_size;
++
++	const Elf64_Shdr *eh_sec;
++	const Elf64_Shdr *rela_eh_sec;
++	const Elf64_Shdr *fde_sec;
++	unsigned int	symtab_shndx;
++};
++
++static int parse_eh_frame(struct lr_unwind_ctx *ctx)
++{
++	/* TODO: Parse CIEs/FDEs from .eh_frame and .rela.eh_frame */
++	(void)ctx;
++	return 0;
++}
++
++static int emit_lr_unwind_sections(const char *fname, struct lr_unwind_ctx *ctx,
++				   unsigned int orig_shnum,
++				   unsigned int shstrndx)
++{
++	/* TODO: Emit .lr_unwind_fde, .rela.lr_unwind_fde, and .lr_unwind_ranges */
++	(void)fname;
++	(void)ctx;
++	(void)orig_shnum;
++	(void)shstrndx;
++	return 0;
++}
++
++int main(int argc, char *argv[])
++{
++	struct lr_unwind_ctx ctx = { 0 };
++	unsigned int shnum, shstrndx;
++	const Elf64_Ehdr *ehdr;
++	const Elf64_Shdr *shdrs;
++	const char *shstrtab;
++	struct stat sb;
++	int fd, ret = 1;
++
++	if (argc != 2) {
++		fprintf(stderr, "Usage: %s <file>\n", argv[0]);
++		return 1;
++	}
++
++	fd = open(argv[1], O_RDONLY);
++	if (fd < 0) {
++		fprintf(stderr, "gen_lr_unwind: cannot open %s: %s\n",
++			argv[1], strerror(errno));
++		return 1;
++	}
++	if (fstat(fd, &sb) < 0 || (size_t)sb.st_size < sizeof(Elf64_Ehdr)) {
++		fprintf(stderr, "gen_lr_unwind: invalid file %s\n", argv[1]);
++		close(fd);
++		return 1;
++	}
++
++	ctx.map_size = sb.st_size;
++	ctx.map = mmap(NULL, ctx.map_size, PROT_READ, MAP_PRIVATE, fd, 0);
++	close(fd);
++	if (ctx.map == MAP_FAILED) {
++		fprintf(stderr, "gen_lr_unwind: mmap failed on %s: %s\n",
++			argv[1], strerror(errno));
++		return 1;
++	}
++
++	ehdr = ctx.map;
++	if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG) ||
++	    ehdr->e_ident[EI_CLASS] != ELFCLASS64 ||
++	    ehdr->e_ident[EI_DATA] != ELFDATA2LSB ||
++	    ehdr->e_type != ET_REL ||
++	    ehdr->e_machine != EM_AARCH64) {
++		fprintf(stderr, "gen_lr_unwind: %s is not an AArch64 ET_REL ELF\n",
++			argv[1]);
++		goto out;
++	}
++
++	shdrs = ctx.map + ehdr->e_shoff;
++	shnum = ehdr->e_shnum == SHN_UNDEF ? shdrs[0].sh_size : ehdr->e_shnum;
++	shstrndx = ehdr->e_shstrndx == SHN_XINDEX ?
++		   shdrs[0].sh_link : ehdr->e_shstrndx;
++	shstrtab = ctx.map + shdrs[shstrndx].sh_offset;
++
++	for (unsigned int i = 0; i < shnum; i++) {
++		const char *name = shstrtab + shdrs[i].sh_name;
++
++		if (!strcmp(name, ".lr_unwind_fde"))
++			ctx.fde_sec = &shdrs[i];
++		else if (!strcmp(name, ".eh_frame") ||
++			 !strcmp(name, ".init.eh_frame"))
++			ctx.eh_sec = &shdrs[i];
++		else if (!strcmp(name, ".rela.eh_frame") ||
++			 !strcmp(name, ".rela.init.eh_frame"))
++			ctx.rela_eh_sec = &shdrs[i];
++		else if (!strcmp(name, ".symtab"))
++			ctx.symtab_shndx = i;
++	}
++
++	if (ctx.fde_sec) {
++		ret = 0;
++		goto out;
++	}
++
++	if (!ctx.eh_sec || !ctx.rela_eh_sec || !ctx.symtab_shndx) {
++		ret = 0;
++		goto out;
++	}
++
++	if (!parse_eh_frame(&ctx) &&
++	    !emit_lr_unwind_sections(argv[1], &ctx, shnum, shstrndx))
++		ret = 0;
++	else
++		fprintf(stderr, "gen_lr_unwind: failed to generate .lr_unwind for %s\n",
++			argv[1]);
++
++out:
++	if (ctx.map)
++		munmap((void *)ctx.map, ctx.map_size);
++	return ret;
++}
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index d5710e900bd40..9c8bfb6ff05e0 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -61,7 +61,7 @@ vmlinux_link()
+ 	shift
+ 
+ 	if is_enabled CONFIG_LTO_CLANG || is_enabled CONFIG_X86_KERNEL_IBT ||
+-	   is_enabled CONFIG_KLP_BUILD; then
++	   is_enabled CONFIG_KLP_BUILD || is_enabled CONFIG_ARM64_LR_UNWIND; then
+ 		# Use vmlinux.o instead of performing the slow LTO link again.
+ 		objs=vmlinux.o
+ 		libs=
 -- 
 2.56.0.679.gc527c65306-goog
 
