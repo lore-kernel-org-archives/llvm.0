@@ -1,75 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794941391;
-	b=fMzF98VMyGMpdJrSBWI5VO0BdtG/chEifPdlYqjeeOn+We221Hu06NIIJcC2HrUr1Ste
-	 7gyDotc0zXUt/eczuBXXD6et+bIRQEI9+zhNNF6Zy1nnJHnA2WD6bTVbLBvKn1YgI2MbZ
-	 j5PeGUpDoEKHCxmNDnU1z2Z4+jUwBOzW6v7Ji7bdGMAnbB7hcvu/F3JINgNrsUAbwpuDL
-	 qudi2demhuhJudklbWncWN55R/Oy4jo2h3nr1r8SzfqjyhIfnBW0viWqPrbjPG5fd+zLE
-	 P2HsTkRJTUFRdL5wEyidtyeoQvl3zNxOOv1NSbspANuD+e9jRPAkLa9PLR+w1iRwBLA==
+	t=1794949112;
+	b=hmGBy1c4OQg/NUQ6SFJhpdeSIjo2ci3F+tTcAyffafM52b16iY7Vt04UCErF9SN1XFG7
+	 X6xjydXG4GJUZNGtQl5xjyVv6iK/OzOnctdQVezOMq9tqCf7UrCHwZ9FMlomoLMkdqimz
+	 gTnutxBTfTiAaxp/otcfUfyA/hz0NE2A1xdzV0hQrAovM1NalUxQp8ekvzRqMGvzyaG7X
+	 Oz/sQktYcNOY2qFDUyfCOo8ADThFCG6/7zjhXnORyXBMOL/sqYKvRKUZJisvguSxJ4NWq
+	 Hkln6v3VrgJyz+XpmMO+CFnI+OemcKLS0cfbJPbqzX/rZ1Z1HVOxWPWoTAUaiHG618g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794941391;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794949112;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=fE96Bwoq4dvubLO/ytQscTwlirtJcyD7QHCmaubFJQM=;
-	b=Zc/xLGeq9TfBta2vswPwHDMRfS6mtE0XEzUPF7xQXpEsy3uwLz/6xw8JYfFRlIWGxiuQ
-	 6WIQvfE4MZEquJPjHq3P50MeTlFg24X4HbZnJcyRw8eKAh+36d6S0YkqU/gUXYZhitcCm
-	 4238CvlDlsmO0JWCoL0E5NbBKgGCwf3Gc7Nvf7tgf2ZMmz5jxLWmw3YUF6r/j3JneZRU1
-	 ydRtUopsUiE6qPE2k/mCb6suVXPkD7MDoPY1C+o6n4qVhXhCBTF2CwGbQnp5xtIkiYU5O
-	 ix4dqYB4vfdIzHgCu+UeQXQ9tQ8knvx5WLUJiTpDRQLom3AR3ISNkwMo6kHUrQoVejA==
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=IQjnSpWNmOsfjWunLKeggnYLNfDLqDBiq6etlWznrnc=;
+	b=bJ2f2p3m8PZxgIlLePiHnh8BFX+mAK5LpT9ksLyMzCgDWa7qdIZo2dYVZbRvpezrcKw+
+	 +w+3AlDWRuofDC2OH/Wy2780ubOvx+bmoljnew5jVBGw3eJOs9eYTzpiMGk0BVTtObH+g
+	 iomJW56rV6FKoD0RMDPKx7PtOCsO5qSmzxpCjberEysh+VYiKKYAIS+j5lHKzmrcJegji
+	 HzL6AYYzLtOoizWIgbCYx4GpRw4N9UnIrq9j7pq9+nXIAVVo9jzvhdTxcw6r7j8GsXuCv
+	 y3hF4ukjKJslA5chdO1q8x7MeUIompb8lDFFr3EeDgKsEbG/XxMzqZnW+EFSyO8N1LA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WMSNBl01;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pZIJNrcH;
+	arc=none smtp.remote-ip=209.85.221.72
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5B560A3803
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 18:49:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F5B560A3803
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2A3606A32A
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 20:58:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A2A3606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WMSNBl01
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-33713e5e6daso270182eec.0
-        for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 10:49:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pZIJNrcH
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-492d47f142cso79355f8f.0
+        for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 12:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794941390; x=1795546190; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fE96Bwoq4dvubLO/ytQscTwlirtJcyD7QHCmaubFJQM=;
-        b=WMSNBl01fXJSk/OnsdcXE0c4T2uikgqeYLjA2j6YvGtzpHzRIrppzWsOEcMdD7IuLq
-         GgzJFlB/vq5t8Rh8EYfYPjYDq/hvyxCGU3QPLJJ/hIs4HSN25LDDSoY7KHkDzHj5Scwy
-         pOXXcElxYlrF9ZeyWZKjqBO0yYGKyQi6936N48qAxB2F2oMWzz5nInQtzXj/Fazipu0b
-         r/6w+1p26ax4MZFc3SNy8PD6FjIuNE7Cs7Jaz3uEswpwHqxNKf/yitCt+E1xYLsgjcro
-         i6avsp/bBSLsJ8YhOs4CZUJG2PAOQmEzH7jPDPEPnKwKuoDfA/xEx7qfPh8BlIAJD9rC
-         1YRA==
+        d=google.com; s=20260707; t=1794949110; x=1795553910; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=IQjnSpWNmOsfjWunLKeggnYLNfDLqDBiq6etlWznrnc=;
+        b=pZIJNrcHNybpIz2Pzlim+u6h4zbSfC2OsPye+eUa9zax/GWdF4blk81+wwauGz7sXj
+         sp2AtDrDcp9ZKEMaSOct0Kwa6139ul/jAz0KpqY1Y3gT223EZ7Sxk1PPfP3BQpX/+oUt
+         wlPFOFy4krB+iSImuEY4kL94NR9yPPYWU/LPkqfQe0PUdmOEoXXu+IWBrPzQNEJsqT+U
+         90s/laD8PYrtYHzfbP07C/SP+CZV3KBvj2OvrYzACPjZP75SBWotNodSd9I2KtaNRbqK
+         h1zB/ux10BkZ7wV9qv5xEsT2wzvxscYX3L2RL6qthGt176BHpD0y7Lc3ypSUVZpbBjIm
+         tyIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794941390; x=1795546190;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fE96Bwoq4dvubLO/ytQscTwlirtJcyD7QHCmaubFJQM=;
-        b=dBgnql4DCyRTrF09IbLEL8S73T+U9aEIGyOf6eiju7RQxZRvAHWts+0ZBn7oDJVzRG
-         HYdFVfLDAN1qqXwAep5Kb1TI7SrsidCCR+BWLslu218fxmLvI/HCwqGWJAZLKMcCbosb
-         f+jPHmk5EB67BwZXGi3quq5EH4QsTsJOuBuUTKMHPfVwtEAlkfhfj+3gxFl5SqhbEi8g
-         OeApenOjmjjJfzWmtmp5Vk0CtOV9Zs/K0Z1yKw+dPTqLyBjTs9drn8TTAhFeGWjZQRH2
-         dzvmJwTHzEBfGvhUabZeqpN7pB0SEtQADFjmSS/z7OQlOZhRTfkiuYlkrO1CdkfjtVlE
-         ZCRg==
-X-Forwarded-Encrypted: i=1; AL+hErE53OK5Xd4s7xXzxnlTVRb7tQzx1iEX9/IGBU5eI4/o8jj0mtkO8+xSaUwyOTYmkwo2oMPQ@lists.linux.dev
-X-Gm-Message-State: APuU4Z8Ov1IfijSWobE4hpfv6AUSeqSnlWz5uhs5pTgNCi/iBAUC6dut
-	iz8n0fyXGsGMcKXa3aC1keomy/V0pl6Prv13gJwT/VMH1HtRalbKvHqmwYkX1ghiQ8uHkioQoC3
-	BAwVTFDB4rQ==
-X-Received: from dycnd10.prod.google.com ([2002:a05:7301:c0a:b0:343:520f:7a80])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:804c:b0:378:2e89:3958
- with SMTP id 5a478bee46e88-38280f22793mr277558eec.19.1794941389993; Tue, 17
- Nov 2026 10:49:49 -0800 (PST)
-Date: Tue, 17 Nov 2026 10:48:44 -0800
-In-Reply-To: <20261117184844.99889-1-irogers@google.com>
+        d=1e100.net; s=20260707; t=1794949110; x=1795553910;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IQjnSpWNmOsfjWunLKeggnYLNfDLqDBiq6etlWznrnc=;
+        b=nRwTOLS7whmKYFAAodlmwn5eTKvVCzmGEluibZ8IwsRkb6aFO45p1YrgWIiQ/mtYCn
+         yHV2sIfpVVHtna6i+1g5PtNZlRdZloOBbAmlcshl1MS/cJwEgc+R9jsTkQbD+6AJbAA4
+         3Mi9rSTgyspGZbijeFiZdHrCKHazCb54NDBKIN74YRyKSaZqWu1V1/622es5xwFGhlWi
+         cgzd6GVJcxl4/3Slwwz3tE4X5hrwAt5Tx2Xf/+lWlpF044dAKSSPal6beAGMTYoc2g1W
+         rcByZCUUTaXe1iFdbaI+uapBA0RfpGO3IgW78c+ERyYozWxrocLtbkNZL7+j4xjy3yYR
+         ZQsA==
+X-Forwarded-Encrypted: i=1; AL+hErHvoZnRio08xL+cF46/A03Bc2F3rdD3dbx3p0ZAXBEgTuP02gI0S4y47cC8yPxyPkieOKNL@lists.linux.dev
+X-Gm-Message-State: APuU4Z824F4NUisq0oFzYBjAwex6xZhbuB6mWncEL/4SFp28r1NEZ9+x
+	mcfwjochwFiGLKB9+r2g1C80Yx95R4onRp51OSoD9lAq2fx2rqjfsr4PdP59W5gWWW6wYLDH8pL
+	u+XPOiJPq9DDFOE8QWA==
+X-Received: from wrcz19.prod.google.com ([2002:a05:6000:4553:b0:497:e67e:6f53])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6000:4a01:b0:48e:7833:2e7b with SMTP id ffacd0b85a97d-4a36c30c79bmr8397843f8f.1.1794949110053;
+ Tue, 17 Nov 2026 12:58:30 -0800 (PST)
+Date: Tue, 17 Nov 2026 20:58:29 +0000
+In-Reply-To: <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,62 +80,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
-References: <20261117184844.99889-1-irogers@google.com>
-X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
-Message-ID: <20261117184844.99889-24-irogers@google.com>
-Subject: [PATCH v14 23/23] perf machine: Add __guarded_by annotation to machines->guests
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>
-Cc: Bart Van Assche <bvanassche@acm.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	Weilin Wang <weilin.wang@intel.com>, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20260820135733.37121-1-gary@kernel.org> <DKTW8F3C5TC1.BE0JLOWMZCTX@garyguo.net>
+ <CABCJKueCgEZ9XePNnJhbxbOP=v5X6-PvFg4poRfo=j6htovJFw@mail.gmail.com> <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com>
+Message-ID: <avy_9SPRaPSKD8b4@google.com>
+Subject: Re: [PATCH] rust: cfi: disable function merging if CFI is enabled
+From: Alice Ryhl <aliceryhl@google.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>, Gary Guo <gary@garyguo.net>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	"Onur =?utf-8?B?w5Z6a2Fu?=" <work@onurozkan.dev>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	kernel test robot <yi1.lai@intel.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Annotate guests in struct machines with __guarded_by(&lock) and mark
-machines__init() with __context_unsafe().
+On Fri, Aug 21, 2026 at 11:20:18AM +0200, Miguel Ojeda wrote:
+> On Fri, Aug 21, 2026 at 1:43=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
+e.com> wrote:
+> >
+> > The LLVM fix itself is trivial, and it looks like a pull request for
+> > it already exists. I assume we'll want to drop this flag for fixed
+> > LLVM versions when they're available.
+>=20
+> I will link it in the commit message when I pick it up soon -- already
+> did in https://github.com/Rust-for-Linux/linux/issues/1132.
+>=20
+> I also added the `-Z` flag to https://github.com/Rust-for-Linux/linux/iss=
+ues/2.
+>=20
+> The `-Zmerge-functions` flag is internal but has been there since Rust
+> 1.34.0 in upstream commit:
+>=20
+>   b91d211b4030 ("Add a target option "merge-functions" taking values
+> in ("disabled", "trampolines", or "aliases (the default)) to allow
+> targets to opt out of the MergeFunctions LLVM pass. Also add a
+> corresponding -Z option with the same name and values.")
+>=20
+> so that should be fine, but I will ping upstream Rust so that they are
+> aware we are using it.
+>=20
+> And, yeah, agreed, we probably should remove the flag conditionally
+> later on, to confirm the bug is gone etc.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/machine.c | 1 +
- tools/perf/util/machine.h | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Function merging should also be disabled with gendwarfksyms. It causes
+faux::Registration::as_raw() and Page::as_ptr() to get merged, which
+incorrectly causes the former to get the CRC of the latter.
 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 0cc593d5372a..70870baa157e 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -234,6 +234,7 @@ void machine__delete(struct machine *machine)
- }
- 
- int machines__init(struct machines *machines, struct perf_session *session)
-+	__context_unsafe(/* initialization */)
- {
- 	int err = machine__init(&machines->host, "", HOST_KERNEL_ID);
- 
-diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
-index 80191545ee8a..67d517742fb6 100644
---- a/tools/perf/util/machine.h
-+++ b/tools/perf/util/machine.h
-@@ -3,6 +3,7 @@
- #define __PERF_MACHINE_H
- 
- #include <sys/types.h>
-+#include <linux/compiler-context-analysis.h>
- #include <linux/rbtree.h>
- #include "maps.h"
- #include "dsos.h"
-@@ -153,7 +154,7 @@ struct machines {
- 	struct perf_session *session;
- 	struct rw_semaphore lock;
- 	struct machine host;
--	struct rb_root_cached guests;
-+	struct rb_root_cached guests __guarded_by(&lock);
- };
- 
- int machines__init(struct machines *machines, struct perf_session *session);
--- 
-2.56.1.703.gf848ed807c-goog
-
+Alice
