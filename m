@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794890121;
-	b=zZGuE8ArJf4uP9p6EmzAbsQbE8IMRmYvo6Xr1bzTYs7OgVkm2RTgJg8uGFI+SuLw9VdM
-	 M8ThmzYv2+CDlHINoNbeS8GT+sP7h9szcQWrHEaQcY7zUK+bZJ+QzRNRv74OMGamcL2Wm
-	 AtFt9lWmBNokSg45ygNuvGdYqNslRN4YAJVT134MgBft6ns08fEGWhl55otOTHGWKb+Xb
-	 OK6qV1MlJn8X7Ni6OQzSjapQzD0cbr3RYrQKMw3L1nuR7AKQyuf8HVZGnMG47i9IP1M4A
-	 svRSHV3lC1FShdUPgWQpMu6nQJh+XkPcaOIISy8GRyP4dfd003q7Exv+gqT/Kzr8CZA==
+	t=1794890123;
+	b=bkVp4SeWhu2xwvNz/YP3ZlfHFGJWijD08N87X/uaiwu1XLAv8SrFOoGQMky7XNtF3TN3
+	 1LalWCR6BtmTU0pchm8RLrM3T4r86H73cGSRiI29ShSrVxeagzYFJWx7UqgZc1oMUlX31
+	 n1B1fC0XAFhc7M/v53vVhKncPEZPaF+56ZrQgl0Bdbh7m1lD8dyHKXwccOSASLz4tyckY
+	 u4Mffkr3g537jsF1bfiIlVTfuYfDBS89Q6hy4RuDhCEdG+1WjgpJnI+MC0/f4xH0okQni
+	 7rL6Qk0YmHseW6QKsLKBc2vLS+OGX8IYAi9wMZQq5RkfAYGcQrhVn3UKUzqDHAbOplA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794890121;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794890123;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=IAXKw3NCpczyqKMg/+5vupgdE1sofuSw9OuygiY0TQ0=;
-	b=IRGMOO4gXYxE5bmnNHnnIbnACWFhMc2TM8b1xhphLg+/bGMxIpFQ1H6iScZHi3wzJQLH
-	 2NWCp4ouaftIjGtLly0M800Axzm/+WmlibQqdklM8yGBbX/z6t5ieyzFABR/tOD+bllfO
-	 fSnVET5EqCdRbaGWiI5k888eQIB3Dr7U/0xQxxZZVGinoXdBy5yHezK01234/C7PHKDVA
-	 mgkNOym33dqzAbegUNp4e13HYaBaxmD8kp66nOCBfekbFRjJawJEFalrgoTJHMayibUmw
-	 dBzQv6nLVTOcD2EE0icoPbd20HzE6vK6fGkmn0G+SkrSVbPRBV8UJwknSvORNCSvHBw==
+	bh=vDuDdRL8iZneo/phC8IWAHFDoAthrBkjX6kaJXJOz94=;
+	b=vTtI7lvm9UM69fdqm92x31IO7iCznGFcR1qq31B6CssOpqRZCvyd3eg76T2NUxYK+Ll1
+	 yJ+DglESmWcSfzKk5EOCL2kcFeHdYEkPHtiCj+dgM8mUAODnUcHuAQ7iBjOz7x7fXKTx3
+	 /pjpzNnNM9EUcAkahusseZVJOi0CMrR3pkBUbBUfGyqo3FIVAnaflI2QM2JUwRQ6+jZxZ
+	 2FPCg/1EBBYU+WrM7DzFypi7kDzZjH4F46cVfJspQQYct9NZnsPFON4hlWpRY+bSIIgrl
+	 +TKUDZcrjVrQT003Xi7zvAUT5BIkcyPy7FyqFelBseEl1vzdI6VZmg/GFZzpMRC81aQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="pjF+u/ge";
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=nOweqfmr;
 	arc=none smtp.remote-ip=209.85.214.198
 Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893AD606A883
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 04:35:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 893AD606A883
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768E7606A880
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 04:35:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 768E7606A880
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pjF+u/ge
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2edd25534afso31687985ad.2
-        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 20:35:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=nOweqfmr
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2e9501034c4so61655075ad.0
+        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 20:35:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794890121; x=1795494921; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1794890122; x=1795494922; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IAXKw3NCpczyqKMg/+5vupgdE1sofuSw9OuygiY0TQ0=;
-        b=pjF+u/ge22rFPJ/g8daDyNiJm4+7EKus1RKsxq6J/KUTewKqAUdC05Y+mregicItbl
-         kTYPrdCo4Hv3G3+P4tJln9ZqI1GsOVRJ0XhIbAeIKRO7s+fxFk4sfipHG0nm3VTNg2ov
-         /5pCl5+qwYmZYvR8MZOi6ER5BUKKaO6O+qReTqW1SxXiOyXGG0rNO30249FDUZJkYY8h
-         p1noHp4NPhNV0LpyCKs32Oj516jpuWp7tnA4kbLx18ppp7YqoesAeERMieW03cCQFvID
-         VOwdxtyyUaVwg9xnvs+Wd9VEFCIMs9pb7Fdzry8J9xZuCLt4R2WwvVO5W4jZ6FMJo8e8
-         e1NQ==
+        bh=vDuDdRL8iZneo/phC8IWAHFDoAthrBkjX6kaJXJOz94=;
+        b=nOweqfmrapmbiKNiUNLPdOudnhp7Y8ABBYA89uVPJ8lPorl/C30UYetoaOsamqA4mO
+         1Z55K0TVvJD/2FWXf7MipeSNbLL8Ll6vPY9bsJ4uFNgQ1lbich95GWbT7z7YhgYy14NN
+         Wd9PmMcufnSKbg1GYeXlgKgxjQ5k+gEZMhmKRcVBD2qZUewBrK+mKKFFC4G+KgKk0woB
+         +Qbo1XYnNaH9LvU64npFz0Ml4WGBkDkS+cQF5Mwk0Zk/5rkf1IcuHMDPDwrhOzBtZiU4
+         KlbOru7Yv2Jo0znL7CBypeFyeI9fY2yEc1CxQii7u2cesBeZLPFFtd4qztZoVE5L5YSs
+         4ghg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794890121; x=1795494921;
+        d=1e100.net; s=20260707; t=1794890122; x=1795494922;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IAXKw3NCpczyqKMg/+5vupgdE1sofuSw9OuygiY0TQ0=;
-        b=qJ81rLSBW1jGgErZxz9nuRNDz5tgzlxfQiiipKea38MsD8POu9OCb1ytvIzq+UcpCN
-         AB0cG+vqKrSs04hgKjhGy01qsjVMpAfvGaqILvJnW8PYqUWb8MjLgk+zhR0mJDJMYUR7
-         DjTLG4XazEfIgiIVQ3szygXLI6nNhienZwy5TTXBHU7ju0JbCRPB5D69LeOnXNbevIFJ
-         Km2wy69Vf6t8za9wDwU5/CcXC7R+ZNx0Lwxi4LrQB42BS+6XUIqwu5Cyt5unyen6dRJI
-         T9jxFlAUzFubjcETsURjHQdzL2gYDZYrS9BGDKopxOq6G6u+UUzOoVsZY9vrtvXhR7bc
-         r55g==
-X-Forwarded-Encrypted: i=1; AL+hErEbtAf+cyyZhDOwf0BpIEhAXQHmEprXJZz9uSnMCJfU9pjbbYXrOls2lTpbSwntHqQlNrNV@lists.linux.dev
-X-Gm-Message-State: APuU4Z9K95UKSpuPcfMifIcY3TrNrA17xm0z8Spp9zrwWGSlmTYIOdtK
-	wSGep7KVaCBfZ9i2yvTLJaS1M+VxY+/ROoE/lKARn6zR1PV/l0kP2AI63um982d593KiZgdNTmp
-	9x9oCIjj36BgWCcbv6VqL/LbZCA==
-X-Received: from plkz11.prod.google.com ([2002:a17:902:708b:b0:2ed:e740:3702])
+        bh=vDuDdRL8iZneo/phC8IWAHFDoAthrBkjX6kaJXJOz94=;
+        b=2v9K5P4gICTuEWwI/ujB/UWXF8hwKjSRpy6jbHUMT53SSfLGLQAiEgPkYHc9cMlDfy
+         C1hkDKVReOm5oanC4cX39R1arvwQZOumuYh0TDU1KlCnjbtXqyv83DzElQ+5HRjk6hEM
+         +tY8NJAIQQPpH3PLJ16A+tNaUeMOvlwF8B7FthX144gXkjps3rV/Dnk97Yk+4lIs9sxs
+         +3YeLCvcZS4FbRsPfFW/kQFTyRPQS5aoOszCA7GQv/95u5TtsNtK00N6k7w2cY2xR7VL
+         kAXdgc40j8dwnma5RynoFk6zfI6T0uoKY/zH7mWkuuBq/dlc8KbzPmwyU/naOtVDwJHp
+         +9UA==
+X-Forwarded-Encrypted: i=1; AL+hErH5rSdr/oLyIQtw4QJVryXt/CFLusaq93Gj1njYiEI5SbrdYVdvEw9OS2Mp9kbJprHyboxI@lists.linux.dev
+X-Gm-Message-State: APuU4Z8jeIqb+VT+UTkMaHjkkiZM3pFUTrNl6WweaacgInSrbsuUG4qY
+	Gnrb0ofPd57ELi/HLQ+CX6lyLMi5AsvFWzMYzDuiSn2HXd4JMjm6tVRI66elndaY1zbQgH0qB6a
+	gJsnrET6dOZeAhxnCxPHTZpkUUw==
+X-Received: from plgn9.prod.google.com ([2002:a17:902:f609:b0:2df:4aa4:16d0])
  (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:da89:b0:2e9:4175:3065 with SMTP id d9443c01a7336-2ee0d9e2810mr119417075ad.4.1794890120511;
- Mon, 16 Nov 2026 20:35:20 -0800 (PST)
-Date: Tue, 17 Nov 2026 04:35:01 +0000
+ 2002:a17:903:f8d:b0:2e9:5507:b52c with SMTP id d9443c01a7336-2ee0de03f7dmr125521225ad.34.1794890121819;
+ Mon, 16 Nov 2026 20:35:21 -0800 (PST)
+Date: Tue, 17 Nov 2026 04:35:02 +0000
 In-Reply-To: <20261117043504.1021063-1-dylanbhatch@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261117043504.1021063-1-dylanbhatch@google.com>
 X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261117043504.1021063-10-dylanbhatch@google.com>
-Subject: [RFC PATCH 09/12] arm64/module, unwind: add .lr_unwind support for modules
+Message-ID: <20261117043504.1021063-11-dylanbhatch@google.com>
+Subject: [RFC PATCH 10/12] arm64: entry: add unwind info for call_on_irq_stack()
 From: Dylan Hatch <dylanbhatch@google.com>
 To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>
@@ -99,340 +99,84 @@ Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemlof
 	Dylan Hatch <dylanbhatch@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Generate .lr_unwind_fde and .lr_unwind_ranges sections for loadable
-kernel modules at modfinal link time, sort each module's FDE table in
-module_finalize(), and support module IP lookups in lr_unwind_find().
+From: Weinan Liu <wnliu@google.com>
 
-Co-developed-by: Weinan Liu <wnliu@google.com>
+DWARF CFI (Call Frame Information) specifies how to recover the return
+address and callee-saved registers at each PC in a given function.
+Compilers are able to generate the CFI annotations when they compile
+the code to assembly language. For handcrafted assembly, we need to
+annotate them by hand.
+
+Frame pointers alone are usually sufficient to recover stack frames
+(without CFI), except at the exception boundary, where more information
+is needed to determine if the LR is live.
+
+Since an exception can be taken from call_on_irq_stack(), annotate it
+with CFI. The actual entry assembly functions are left untouched, since
+they are not expected to take exceptions themselves.
+
 Signed-off-by: Weinan Liu <wnliu@google.com>
 Suggested-by: Jens Remus <jremus@linux.ibm.com>
 Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
 ---
- arch/arm64/include/asm/lr_unwind.h |   7 ++
- arch/arm64/include/asm/module.h    |   6 ++
- arch/arm64/kernel/lr_unwind.c      | 125 ++++++++++++++++++++++++++++-
- arch/arm64/kernel/module.c         |  11 +++
- scripts/Makefile.modfinal          |  10 ++-
- scripts/gen_lr_unwind.c            |   4 +-
- 6 files changed, 157 insertions(+), 6 deletions(-)
+ arch/arm64/kernel/entry.S | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/lr_unwind.h b/arch/arm64/include/asm/lr_unwind.h
-index bfb6abed05f76..649009b49becf 100644
---- a/arch/arm64/include/asm/lr_unwind.h
-+++ b/arch/arm64/include/asm/lr_unwind.h
-@@ -113,6 +113,8 @@ static __always_inline void lr_fde_unpack_inline(u32 desc, lr_range_t ranges[4])
- #include <linux/errno.h>
- #include <linux/init.h>
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index 8d17f61d1b5b2..aae27ccc0f2c1 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -30,6 +30,13 @@
+ #include <asm/asm-uaccess.h>
+ #include <asm/unistd.h>
  
-+struct module;
-+
- struct lr_unwind_section {
- 	const struct lr_fde	*fdes;
- 	unsigned int		num_fdes;
-@@ -123,12 +125,17 @@ struct lr_unwind_section {
- #ifdef CONFIG_ARM64_LR_UNWIND
- 
- void __init init_lr_unwind_table(void);
-+void lr_unwind_module_init(struct module *mod, void *fdes, size_t fdes_size,
-+			   const void *ranges, size_t ranges_size);
- int lr_unwind_find(unsigned long ip, enum lr_unwind_mode *mode,
- 		   unsigned int *sp_off);
- 
- #else /* !CONFIG_ARM64_LR_UNWIND */
- 
- static inline void __init init_lr_unwind_table(void) {}
-+static inline void lr_unwind_module_init(struct module *mod, void *fdes,
-+					 size_t fdes_size, const void *ranges,
-+					 size_t ranges_size) {}
- static inline int lr_unwind_find(unsigned long ip, enum lr_unwind_mode *mode,
- 				 unsigned int *sp_off)
- {
-diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
-index fb9b88eebeb15..3b6457875e453 100644
---- a/arch/arm64/include/asm/module.h
-+++ b/arch/arm64/include/asm/module.h
-@@ -6,6 +6,7 @@
- #define __ASM_MODULE_H
- 
- #include <asm-generic/module.h>
-+#include <asm/lr_unwind.h>
- 
- struct mod_plt_sec {
- 	int			plt_shndx;
-@@ -17,6 +18,11 @@ struct mod_arch_specific {
- 	struct mod_plt_sec	core;
- 	struct mod_plt_sec	init;
- 
-+#ifdef CONFIG_ARM64_LR_UNWIND
-+	struct lr_unwind_section lr_unwind_sec;
-+	bool			lr_unwind_init;
++#ifndef CONFIG_UNWIND_TABLES
++/*
++ * Do not generate .eh_frame unless CONFIG_UNWIND_TABLES is enabled.
++ */
++	.cfi_sections .debug_frame
 +#endif
 +
- 	/* for CONFIG_DYNAMIC_FTRACE */
- 	struct plt_entry	*ftrace_trampolines;
- 	struct plt_entry	*init_ftrace_trampolines;
-diff --git a/arch/arm64/kernel/lr_unwind.c b/arch/arm64/kernel/lr_unwind.c
-index 53e2c78a8bdaf..d554c2e1e57e2 100644
---- a/arch/arm64/kernel/lr_unwind.c
-+++ b/arch/arm64/kernel/lr_unwind.c
-@@ -5,11 +5,15 @@
+ 	.macro	clear_gp_regs
+ 	.irp	n,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29
+ 	mov	x\n, xzr
+@@ -880,8 +887,11 @@ NOKPROBE(ret_from_fork)
+  * 		          void (*func)(struct pt_regs *));
+  *
+  * Calls func(regs) using this CPU's irq stack and shadow irq stack.
++ * Open-code SYM_FUNC_START() so .cfi_startproc precedes the BTI landing pad.
+  */
+-SYM_FUNC_START(call_on_irq_stack)
++SYM_START(call_on_irq_stack, SYM_L_GLOBAL, SYM_A_ALIGN)
++	.cfi_startproc
++	bti	c
+ 	save_and_disable_daif x9
+ #ifdef CONFIG_SHADOW_CALL_STACK
+ 	get_current_task x16
+@@ -892,6 +902,9 @@ SYM_FUNC_START(call_on_irq_stack)
+ 	/* Create a frame record to save our LR and SP (implicit in FP) */
+ 	stp	x29, x30, [sp, #-16]!
+ 	mov	x29, sp
++	.cfi_def_cfa 29, 16
++	.cfi_offset 29, -16
++	.cfi_offset 30, -8
  
- #define pr_fmt(fmt)	"lr_unwind: " fmt
+ 	ldr_this_cpu x16, irq_stack_ptr, x17
  
-+#include <linux/cleanup.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/kprobes.h>
- #include <linux/limits.h>
-+#include <linux/module.h>
- #include <linux/printk.h>
-+#include <linux/rcupdate.h>
-+#include <linux/sort.h>
+@@ -907,9 +920,13 @@ SYM_FUNC_START(call_on_irq_stack)
+ 	 */
+ 	mov	sp, x29
+ 	ldp	x29, x30, [sp], #16
++	.cfi_restore 29
++	.cfi_restore 30
++	.cfi_def_cfa 31, 0
+ 	scs_load_current
+ 	restore_irq x9
+ 	ret
++	.cfi_endproc
+ SYM_FUNC_END(call_on_irq_stack)
+ NOKPROBE(call_on_irq_stack)
  
- #include <asm/lr_unwind.h>
- #include <asm/sections.h>
-@@ -17,10 +21,20 @@
- static bool lr_unwind_init __ro_after_init;
- static struct lr_unwind_section kernel_lr_sec __ro_after_init;
- 
-+#ifdef CONFIG_MODULES
-+static const char *objname(const struct lr_unwind_section *sec)
-+{
-+	if (sec == &kernel_lr_sec)
-+		return "vmlinux";
-+
-+	return container_of(sec, struct module, arch.lr_unwind_sec)->name;
-+}
-+#else
- static const char *objname(const struct lr_unwind_section *sec)
- {
- 	return "vmlinux";
- }
-+#endif
- 
- #define dbg_sec(sec, fmt, ...) \
- 	pr_debug("(%s): " fmt, objname(sec), ##__VA_ARGS__)
-@@ -55,10 +69,36 @@ static __always_inline bool is_kernel_ip_valid(unsigned long ip)
- 	return false;
- }
- 
-+#ifdef CONFIG_MODULES
-+static __always_inline bool within_mod_mem(unsigned long ip,
-+					   const struct module_memory *mem)
-+{
-+	return ip - (unsigned long)mem->base < mem->size;
-+}
-+
-+static __always_inline bool
-+is_sec_module_ip_valid(const struct lr_unwind_section *sec, unsigned long ip)
-+{
-+	struct module *mod = container_of(sec, struct module, arch.lr_unwind_sec);
-+
-+	return within_mod_mem(ip, &mod->mem[MOD_TEXT]) ||
-+	       within_mod_mem(ip, &mod->mem[MOD_INIT_TEXT]);
-+}
-+#else
-+static __always_inline bool
-+is_sec_module_ip_valid(const struct lr_unwind_section *sec, unsigned long ip)
-+{
-+	return false;
-+}
-+#endif
-+
- static __always_inline bool is_sec_ip_valid(const struct lr_unwind_section *sec,
- 					    unsigned long ip)
- {
--	return is_kernel_ip_valid(ip);
-+	if (sec == &kernel_lr_sec)
-+		return is_kernel_ip_valid(ip);
-+
-+	return is_sec_module_ip_valid(sec, ip);
- }
- 
- static __always_inline int __find_fde(const struct lr_unwind_section *sec,
-@@ -151,9 +191,31 @@ static __always_inline int __lr_unwind_find(const struct lr_unwind_section *sec,
- 	return -EINVAL;
- }
- 
-+#ifdef CONFIG_MODULES
-+static noinline int __lr_unwind_find_module(unsigned long ip,
-+					    enum lr_unwind_mode *mode,
-+					    unsigned int *sp_off)
-+{
-+	struct module *mod;
-+
-+	guard(preempt_notrace)();
-+
-+	mod = __module_text_address(ip);
-+	/* Pairs with smp_store_release() in lr_unwind_module_init() */
-+	if (mod && smp_load_acquire(&mod->arch.lr_unwind_init))
-+		return __lr_unwind_find(&mod->arch.lr_unwind_sec,
-+					ip, mode, sp_off);
-+
-+	return -EINVAL;
-+}
-+NOKPROBE_SYMBOL(__lr_unwind_find_module);
-+#endif
-+
- noinstr int lr_unwind_find(unsigned long ip, enum lr_unwind_mode *mode,
- 			   unsigned int *sp_off)
- {
-+	int ret = -EINVAL;
-+
- 	if (!mode || !sp_off)
- 		return -EINVAL;
- 
-@@ -164,7 +226,16 @@ noinstr int lr_unwind_find(unsigned long ip, enum lr_unwind_mode *mode,
- 		return __lr_unwind_find(&kernel_lr_sec, ip, mode, sp_off);
- 	}
- 
--	return -EINVAL;
-+#ifdef CONFIG_MODULES
-+	if (!rcu_is_watching())
-+		return -EINVAL;
-+
-+	instrumentation_begin();
-+	ret = __lr_unwind_find_module(ip, mode, sp_off);
-+	instrumentation_end();
-+#endif
-+
-+	return ret;
- }
- NOKPROBE_SYMBOL(lr_unwind_find);
- 
-@@ -272,3 +343,53 @@ void __init init_lr_unwind_table(void)
- 	lr_unwind_init = true;
- 	dbg_print_section(&kernel_lr_sec);
- }
-+
-+#ifdef CONFIG_MODULES
-+
-+static int lr_unwind_sort_cmp_fde(const void *a, const void *b)
-+{
-+	return cmp_int(lr_fde_start_addr(a), lr_fde_start_addr(b));
-+}
-+
-+static void lr_unwind_sort_swap_fde(void *a, void *b, int size)
-+{
-+	struct lr_fde *x = a, *y = b, tmp = *x;
-+	int delta = b - a;
-+
-+	x->start_offset = y->start_offset + delta;
-+	x->range_desc = y->range_desc;
-+	y->start_offset = tmp.start_offset - delta;
-+	y->range_desc = tmp.range_desc;
-+}
-+
-+void lr_unwind_module_init(struct module *mod, void *fdes, size_t fdes_size,
-+			   const void *ranges, size_t ranges_size)
-+{
-+	struct lr_unwind_section *sec = &mod->arch.lr_unwind_sec;
-+
-+	if (!fdes_size || (fdes_size % sizeof(struct lr_fde)) ||
-+	    (ranges_size % sizeof(lr_range_t))) {
-+		pr_warn("invalid .lr_unwind section sizes in module %s\n",
-+			mod->name);
-+		return;
-+	}
-+
-+	sec->fdes = fdes;
-+	sec->num_fdes = fdes_size / sizeof(struct lr_fde);
-+	sec->ranges = ranges;
-+	sec->num_ranges = ranges_size / sizeof(lr_range_t);
-+
-+	sort(fdes, sec->num_fdes, sizeof(struct lr_fde),
-+	     lr_unwind_sort_cmp_fde, lr_unwind_sort_swap_fde);
-+
-+	if (lr_unwind_validate_section(sec)) {
-+		pr_warn("invalid .lr_unwind section in module %s\n", mod->name);
-+		return;
-+	}
-+
-+	/* Ensure table is initialized before lr_unwind_find() observes it */
-+	smp_store_release(&mod->arch.lr_unwind_init, true);
-+	dbg_print_section(sec);
-+}
-+
-+#endif /* CONFIG_MODULES */
-diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-index 24adb581af0eb..685b4301df96e 100644
---- a/arch/arm64/kernel/module.c
-+++ b/arch/arm64/kernel/module.c
-@@ -21,6 +21,7 @@
- 
- #include <asm/alternative.h>
- #include <asm/insn.h>
-+#include <asm/lr_unwind.h>
- #include <asm/scs.h>
- #include <asm/sections.h>
- #include <asm/text-patching.h>
-@@ -515,5 +516,15 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		}
- 	}
- 
-+	s = find_section(hdr, sechdrs, ".lr_unwind_fde");
-+	if (s) {
-+		const Elf_Shdr *r = find_section(hdr, sechdrs,
-+						 ".lr_unwind_ranges");
-+
-+		lr_unwind_module_init(me, (void *)s->sh_addr, s->sh_size,
-+				      r ? (const void *)r->sh_addr : NULL,
-+				      r ? r->sh_size : 0);
-+	}
-+
- 	return module_init_ftrace_plt(hdr, sechdrs, me);
- }
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 01a37ec872b90..301393dbb9dd3 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -32,11 +32,17 @@ ifneq ($(WARN_ON_UNUSED_TRACEPOINTS),)
- cmd_check_tracepoint = $(objtree)/scripts/tracepoint-update --module $<;
- endif
- 
-+ifdef CONFIG_ARM64_LR_UNWIND
-+cmd_gen_lr_unwind = ; $(objtree)/scripts/gen_lr_unwind $@ && \
-+	$(OBJCOPY) --remove-section=.eh_frame --remove-section=.rela.eh_frame $@
-+endif
-+
- quiet_cmd_ld_ko_o = LD [M]  $@
-       cmd_ld_ko_o =							\
- 	$(LD) -r $(KBUILD_LDFLAGS)					\
- 		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
--		-T $(objtree)/scripts/module.lds -o $@ $(filter %.o, $^)
-+		-T $(objtree)/scripts/module.lds -o $@ $(filter %.o, $^) \
-+	$(cmd_gen_lr_unwind)
- 
- quiet_cmd_btf_ko = BTF [M] $@
-       cmd_btf_ko = 							\
-@@ -47,7 +53,7 @@ quiet_cmd_btf_ko = BTF [M] $@
- 	fi;
- 
- # Re-generate module BTFs if either module's .ko or vmlinux changed
--%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
-+%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(if $(CONFIG_ARM64_LR_UNWIND),$(objtree)/scripts/gen_lr_unwind) $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
- 	+$(call if_changed,ld_ko_o)
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-diff --git a/scripts/gen_lr_unwind.c b/scripts/gen_lr_unwind.c
-index 2058601ec6135..cc6b8790e00d8 100644
---- a/scripts/gen_lr_unwind.c
-+++ b/scripts/gen_lr_unwind.c
-@@ -797,12 +797,12 @@ int main(int argc, char *argv[])
- 		goto out;
- 	}
- 
--	if (!ctx.eh_sec || !ctx.rela_eh_sec || !ctx.symtab_shndx) {
-+	if (!ctx.eh_sec || !ctx.rela_eh_sec) {
- 		ret = 0;
- 		goto out;
- 	}
- 
--	if (!parse_eh_frame(&ctx) &&
-+	if (ctx.symtab_shndx && !parse_eh_frame(&ctx) &&
- 	    (!ctx.nr_fdes ||
- 	     !emit_lr_unwind_sections(fname, &ctx, shnum, shstrndx)))
- 		ret = 0;
 -- 
 2.56.0.679.gc527c65306-goog
 
