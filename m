@@ -1,75 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794890125;
-	b=PGR2HxlaC4287SnQPyXS1L9IBIXde8GGrXTNDV42AQDYWCZw5z1bCEldUcotpANeBMPF
-	 7Qy85JIMOttdir1meaMGbtsJnaB4py9KkAh2en3CL0YJFCVoz/+SQr05nf4SbWBYoCgGy
-	 Q57vmsLRXhKo0Qi6Nu9YE4h3Z2Lwv++ZoRf5ihIutQBb1Gq4Q+M5nFsnR7Ncc2AJxu2SC
-	 gIyb12DCrITIczDtGck1jhODtsnZGjg67pyn/9VqnmojDWmOVSCRkrSvOAzNkCZ4ek7IC
-	 9lMxXeAlmUsnfpB4/d1c/ApKrTVCN5hpgxKXVCBHLWK1YzouSRDJM0wBDC+iVy5OJog==
+	t=1794894592;
+	b=0VBl/qdNMs4/SrmWUlf7T9vZg3fe1mJUtCai8/XfAXWP5I6iULzphG1lN6/+Ditw7X5N
+	 kvQfUoPzlykFX2ZHoQZjXU6bYen+ojLYtf1A4RJsninRgvEof72Gx88A/IWROGKzkVn9T
+	 CIP9UL9sWqyb9wCrgqN3D2++d6BrQ7iyge1BgMdOnmHwAuH+Z7zKBJqwzx74zkNceRsT5
+	 bW+Prlx6VwLUlyyNmdnZ6yW6DyUSND3JvoOJVcJBFnFnFjZjYNr04b+ObfVcQyKpw+z0n
+	 7YJt6eeTi/PyVL6t8iU9yd1kshWCj6XJmD1dUJb+zgnSKmrxMHhUeWsXtUBKTQDuaug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794890125;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794894592;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=g8r2rmW8mXTC4Y+YUXI9eRvrm7kgFqB9xo4pH3w0HkU=;
-	b=yBQlkCyHH0Or9zpgGPrekQaoreDZRm8L/gvbkd0rSHU2lHq2X83QFenKPRHdcTib/Z6i
-	 EQNvgEcLJCFDaX8/xVEdlFVwMj/RDGvffyzkXg8qM6GMgaurwj3skml71/tLgDZfZGrpc
-	 lOpMWmLCEY4V/0AwYGe7v6ZpWaEQKRRNUrFkkgU6S3Zm//jiF4uvmkmCJ9rWM4nFNxEet
-	 5JcoFbfNU5yBErSMnbNEkHj6YI7SlY9xEwxlyjA16DqTgDeK0KZhYl4JdmNecQU/OvI01
-	 tLyL1gL6pkZSkmutTWv+IjTNMmPGXQsaRxNt9/xq/oDYoyYZsTML5mJDCWDRKMR3AFw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=eJPyKHP64G2eKzhiRICR4S2i28pJ2+2iaIFvgsyda0E=;
+	b=ebhC7fqVIEbPtC5IZtvU28fmoqEBjyBahZoI+jnV5jt2S21gVNQlmkFiY9abUWvr5fUj
+	 Tnp4QEjSZbBkayeDCIR01T1W+9sqxFRG9Onj7EsGHwz2MxRnDm16JoVEj6QbogeULy/2L
+	 jFn2zVXjc648YEZd6GtEv4RQHxj1jmSanTr+EZrigghfVpJsyJiv+c3ilbVQ2eRIDYW96
+	 a8q36jaVTrBkeW212UxzAkWohim5DntSlbzqpvIu7vp19CLw263eRz00RXbeLmNERpOHH
+	 o6C7BXCrUM8FefBjyv5/vVPc1jpVAxl46DfejyCOmqy5Rgltu/scedBATFxcouUaHLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Gh8Dq9Nh;
-	arc=none smtp.remote-ip=209.85.216.70
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OnQsETX9;
+	arc=none smtp.remote-ip=209.85.215.173
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AB160A5BC6
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 04:35:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 90AB160A5BC6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C391D606A31C
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 05:49:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C391D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Gh8Dq9Nh
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3ad30487d55so3218465a91.2
-        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 20:35:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OnQsETX9
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cdb1199bfd8so1793098a12.1
+        for <llvm@lists.linux.dev>; Mon, 16 Nov 2026 21:49:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794890125; x=1795494925; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=g8r2rmW8mXTC4Y+YUXI9eRvrm7kgFqB9xo4pH3w0HkU=;
-        b=Gh8Dq9NhALElk9h8PF7ATQP3ts0RyFSJasl16mgmzOC1sqwiW2AQ30Fl7FYZsfa6cL
-         UdQxqXMxc8a7PMt2dTl5hhn1zbYrgWIP/l0Y5P2sjhm9LzVzEpdfXYh7Ir9+Svp2rBHf
-         kFf2Y0KWvz3Yi2cvIniCxFJvmk2l4Q9z01pd0h3/uufDmqbf7Uma8bn/UnDU+wFSM+6B
-         DFM8nUfhZ9EiasOuFtY0y1nrHKMd0KUkgx8I1pdD8ARWbyP0ZTNBaMJurFQw9XlIwWka
-         qd03XG7EjT8qOs8dr6VgrudFsLu6kPoVZO7+OZ++oM6E4ZknRStGr2NSiYwNb4PRi7kB
-         QPdA==
+        d=gmail.com; s=20260707; t=1794894591; x=1795499391; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eJPyKHP64G2eKzhiRICR4S2i28pJ2+2iaIFvgsyda0E=;
+        b=OnQsETX9GfmMUEehVT+dqA6RfGhuvuVOrD2tCZ865tNUgbzNL1Y1194QZ2HQdi2WjA
+         LGpiYLG23TdkhB+X6Zyp3gYArZEnFpPAuw11DefMj2Boa3iqbpdHWAcV+lu5mpj4VdKV
+         Bryqnz3sxvm+BB9jQePkkT1SmygANp0C6pQ05Hf1C4kUOVXQSH/JCBLkZ8/LV/l+9HOd
+         cOocy2xAQuYlEXyJnOhIFKz4jxqUuXkfexhb/GzWJDn3DmrPPg8/Aolhnr+bsdCHsn0R
+         EzUV0mB0GLniyG3vy/ug84xuIsEYh5uKtwV2iMA0IJh07vkwDLH8V7zN05wX5qHRASG7
+         Ooqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794890125; x=1795494925;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1794894591; x=1795499391;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=g8r2rmW8mXTC4Y+YUXI9eRvrm7kgFqB9xo4pH3w0HkU=;
-        b=1I4FQF1tYztjN69Pkp6iMLaRF7WLTagVR2+cVxT0YRIHXVLi/eJne7VOa6qsCJSiw9
-         8x9XoR/rr1nHoYz1phV0h/ui7cxVYS7deXJtQkf+qmxXkCo4Wt3Ac1TA2Gu0UDwBiJXf
-         KHjObFOpa81IwGZzlWhG3dBeQk8qU4g4PJBxBWVI5NpauGeamj0F+8n2X6zQpsk0t95+
-         bVGCDolPx391YHuyJJ8H2M+fyJzK52z2vTuHUh1YRQZRqSD6gyrrd1KDQMOMfzfxYlbJ
-         er1IpuctRqWisB7khQeTk5vbZOnW5fBeRmRbzE7hmNaDncJymbYWOblIQk5sOCfJ67ms
-         s3pA==
-X-Forwarded-Encrypted: i=1; AL+hErH4EOzsXGLslir+wwoALQMpK163s4htnkJ5uC4Se1W7vRHZX+Wp/qbFAdeeDmOiXFPYNoAz@lists.linux.dev
-X-Gm-Message-State: APuU4Z+9eQz/5LyWsvQs7CXMEwzkIUv4lzM8HliH/6WyX2IhzeH0jLFd
-	nF9a/nyirGombUWO+V3HUvooELDHEjLZVPeGLKVIfiQQqV4EqZeQ7zjPXx8U/gG4KsdNmRy36PA
-	+xJekpKRlwvJRjUNNs2ztn0A/ng==
-X-Received: from pjto7.prod.google.com ([2002:a17:90a:c707:b0:3b3:b6df:b0be])
- (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3f50:b0:3b0:a1af:e4fc with SMTP id 98e67ed59e1d1-3b1b0d984bcmr13134201a91.63.1794890124572;
- Mon, 16 Nov 2026 20:35:24 -0800 (PST)
-Date: Tue, 17 Nov 2026 04:35:04 +0000
-In-Reply-To: <20261117043504.1021063-1-dylanbhatch@google.com>
+        bh=eJPyKHP64G2eKzhiRICR4S2i28pJ2+2iaIFvgsyda0E=;
+        b=BkflwQxYiUKBZ41lEeI3zGklxxZaDBIFPoLTn9OqO/GOKYrG0a8j3GblbiDWha40OU
+         EWVuPXt28BGZh2vc8yRhNQj8nj1GqBoSyBct4fNnRvXDU1LdIzxbZ0M2cFyEE2I+NidH
+         QMF/O9+nqDb/TdIroA/Kb0aEBwGMvnfCyKYO/mw58vZAiEuoPSFJDQMM5gWEjaEYrF9X
+         HvmlqBgcir31mjKx3gEQevafoIOs6qxr/xI5FEUEBhYoF3GZf17IhJHDiLdvlWf3+jnO
+         AvPq7mCHR2DvL4KxYWi8Rz8jWTLjMFTuMCUh08P0qJKF6umWo/lf7zoMmgw0LG3/HYmm
+         4U8A==
+X-Forwarded-Encrypted: i=1; AL+hErEi+NYsEsXfIu34S8q1PW1Rk0PKbDhbPqdWtXBZ5CaLU26KZBTf8+xXJHgEkgbEcfwMxru+@lists.linux.dev
+X-Gm-Message-State: APuU4Z9Q/g3MHQAXIoLLEsejqbms+rGitI+/0eXWqlT4x/dH95mgB8lg
+	tRgtH8ayNaDG1fSn40mdeYqlemv3nUbZqNCKyg+2Zr8aAtUppS0KiHLA
+X-Gm-Gg: AZFdTZc4AWrW4ZjbpqFvZk0XtRkAQo2pwKCp7bziiNQv5HUpGbK53qcr96sDW7g7/Tn
+	QzNooQXe/K6wgvnSxcuDyYBFYRZ3+xKhQ91E/939JzzfAETSXz+6wMZFmxxNcaP6ahEIgsGSI/z
+	Y2sCpNN7Cv0dC7MHzj9E44jS9kgaOrmXnOfimdqUX9ZkVzIu1JR5uxsJdXeYTNgUkFW/YkiDP8s
+	bDcHxSRvBMi2Sprrbtm2cjDdX/L81eF4wcPDxjFy1S+ASK/X2J3Pqx55blPSF4APvMSylzO8v9j
+	rYiNpdpEG3x3KjpnDCzxKjwv1kBnx9pa9Guo2fOUSd7iacZV24iC2HlTUe4NhtaCUxyQOOCBnyB
+	s+1q1RYe9OiuPMI9YCAB9NrKlcxvp16XR4GWk4aJeedNcplZiKVMBK4CNKWh3QfOfTDbLb6FsE8
+	KhPKaVuhLJJ+z+rmiYOtLBHDnxgEBH1bVhQyXN+Vg1tCrOFng6L7B0iojiROvZREadB741Ij9kY
+	MLb4s2fSV7OFWWXjPSS0RWuqVYt6g9fBSWJxqyLWCZy+vTl8u/lteGPJKyYjBFmGl4gEGsR8g2l
+	isD+YeCstro1WpFDwP7jOTSTxxMvAgpsUw==
+X-Received: by 2002:a17:90b:1846:b0:3a4:6f38:f2a2 with SMTP id 98e67ed59e1d1-3b1b0a3e7bemr11245113a91.25.1794894590926;
+        Mon, 16 Nov 2026 21:49:50 -0800 (PST)
+Received: from arm-a100.. ([140.112.28.118])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ab9f3c5dsm2313835a91.0.2026.11.16.21.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 21:49:50 -0800 (PST)
+From: Tzu-Ching Yang <shingekinocore@gmail.com>
+To: Brian Cain <bcain@kernel.org>,
+	linux-hexagon@vger.kernel.org
+Cc: Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hexagon: bitops: use the compiler builtins for ffs(), fls() and ffz()
+Date: Tue, 17 Nov 2026 13:49:39 +0800
+Message-Id: <20261117054939.2126980-1-shingekinocore@gmail.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,215 +98,205 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261117043504.1021063-1-dylanbhatch@google.com>
-X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261117043504.1021063-13-dylanbhatch@google.com>
-Subject: [RFC PATCH 12/12] unwind: arm64: use .lr_unwind to unwind interrupt frames
-From: Dylan Hatch <dylanbhatch@google.com>
-To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemloft.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Weinan Liu <wnliu@google.com>, 
-	Jens Remus <jremus@linux.ibm.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, llvm@lists.linux.dev, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Indu Bhagat <ibhagatgnu@gmail.com>, 
-	Prasanna Kumar T S M <ptsm@linux.microsoft.com>, live-patching@vger.kernel.org, 
-	Dylan Hatch <dylanbhatch@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Add kunwind_next_regs_lr_unwind() to unwind across pt_regs exception
-boundaries using .lr_unwind mode and SP-offset metadata (live x30, [x29]
-frame record, or [sp + sp_off] frame record), falling back to
-frame-pointer unwinding and marking the stacktrace unreliable on
-failure.
+The hexagon inline asm for ffs(), __ffs(), fls(), __fls() and ffz() is
+not needed: Clang, the only compiler that builds hexagon kernels, emits
+the same ct0, cl0 and ct1 instructions for the compiler builtins, and
+unlike the asm, the builtins fold constant arguments. The asm dates
+from the 2011 port (a86a7ce30ac0, "Hexagon: Add bitops support"),
+before the builtin-based asm-generic helpers existed (048fa2df92c3,
+"generic: Implement generic ffs/fls using __builtin_* functions").
 
-Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+Replace the asm with the asm-generic builtin helpers, and ffz() with
+the generic __ffs(~x), as arm64 does.
+
+ffs(0) and fls(0) still return 0. __ffs() and __fls() now return
+unsigned int, which is as wide as unsigned long on hexagon, and ffz()
+returns unsigned int instead of long. __ffs(0), __fls(0) and ffz(~0)
+remain undefined.
+
+With Clang 17 to 23, the functions of a defconfig vmlinux shrink by 1972
+to 6068 bytes in total (scripts/bloat-o-meter -t). One helper in
+lib/find_bit.c gets worse: _find_last_bit() executes one instruction
+more per call that finds a bit, because LLVM rewrites 31 - clz as 31 ^
+clz once it knows clz < 32, and the hexagon backend keeps the xor, which
+needs the 31 in a register, instead of sub(#31, Rs) [1]. A few 1 <<
+ffz() sites also grow by a few instructions, as LLVM rewrites that
+expression too [2]. __find_nth_bit() executes two fewer, and the other
+helpers that find_bit_benchmark calls the same number.
+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/all/affe7da1-41aa-4710-bee0-5e3c2b8a8dfc@app.fastmail.com/
+Link: https://github.com/llvm/llvm-project/issues/236764 [1]
+Link: https://github.com/llvm/llvm-project/issues/236765 [2]
+Signed-off-by: Tzu-Ching Yang <shingekinocore@gmail.com>
 ---
- arch/arm64/kernel/stacktrace.c | 85 ++++++++++++++++++++++++++++++----
- 1 file changed, 75 insertions(+), 10 deletions(-)
+I have no hexagon hardware, and mainline does not boot in QEMU yet. On
+Brian's out-of-tree bcain/hexagon-qemu-virt branch (dc370baa041d,
+v7.3-rc1 plus 24 patches) with this patch on top, qemu_defconfig plus
+the ffs and bitops KUnit tests and find_bit_benchmark, built with Clang
+17 and 23, boots under qemu-system-hexagon from qualcomm/qemu hex-next
+with -M virt,hvm=on (and under -M qcs6490-cdsp with the prebuilt H2
+hypervisor); the KUnit tests pass before and after, with the same
+.config on both sides. Under -M virt,hvm=on, with a TCG plugin that
+writes the same bitmaps into both kernels before each test and counts
+the executed instructions without interrupts, find_bit_benchmark's
+find_last_bit executes one instruction more per iteration,
+bitmap_find_next_zero_area_off 36 more on the random bitmap through its
+find_last_bit() calls, find_nth_bit and test_bitops' fns() two fewer,
+and the other tests the same.
 
-diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-index 3ebcf8c53fb04..842555a4a3fe2 100644
---- a/arch/arm64/kernel/stacktrace.c
-+++ b/arch/arm64/kernel/stacktrace.c
-@@ -10,6 +10,7 @@
- #include <linux/filter.h>
- #include <linux/ftrace.h>
- #include <linux/kprobes.h>
-+#include <linux/overflow.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
- #include <linux/sched/task_stack.h>
-@@ -17,6 +18,7 @@
- 
- #include <asm/efi.h>
- #include <asm/irq.h>
-+#include <asm/lr_unwind.h>
- #include <asm/stack_pointer.h>
- #include <asm/stacktrace.h>
- 
-@@ -26,6 +28,7 @@ enum kunwind_source {
- 	KUNWIND_SOURCE_CALLER,
- 	KUNWIND_SOURCE_TASK,
- 	KUNWIND_SOURCE_REGS_PC,
-+	KUNWIND_SOURCE_REGS_LR,
- };
- 
- union unwind_flags {
-@@ -45,6 +48,7 @@ union unwind_flags {
-  * @kr_cur:      When KRETPROBES is selected, holds the kretprobe instance
-  *               associated with the most recently encountered replacement lr
-  *               value.
-+ * @unreliable:  Stacktrace is unreliable.
-  */
- struct kunwind_state {
- 	struct unwind_state common;
-@@ -56,6 +60,7 @@ struct kunwind_state {
- 	enum kunwind_source source;
- 	union unwind_flags flags;
- 	struct pt_regs *regs;
-+	bool unreliable;
- };
- 
- static __always_inline void
-@@ -67,6 +72,7 @@ kunwind_init(struct kunwind_state *state,
- 	state->source = KUNWIND_SOURCE_UNKNOWN;
- 	state->flags.all = 0;
- 	state->regs = NULL;
-+	state->unreliable = false;
+Under qemu-hexagon (user mode), the old and new helpers return the
+same values for every defined 32-bit input, and fls64() and __ffs64()
+for selected 64-bit inputs, with Clang 17 to 23 at -O2 and -Os.
+
+defconfig (also with the KUnit tests and find_bit_benchmark, with -Os
+and with -mv73) and allmodconfig were built with Clang 17 to 23 before
+and after, with the same .config on both sides: same W=1 warnings, no
+calls to __ctzsi2(), __clzsi2() or ffs(), and a smaller bloat-o-meter -t
+total in every defconfig-based vmlinux. allmodconfig does not link with
+Clang 17 and 18, before or after: ld.lld before 19.1.5 rejects the calls
+in head.S as out of range.
+
+Instructions of each helper in a test function that only returns its
+result (return included), built with the kernel's flags by Clang 17
+to 22 at -O2 and -Os; Clang 23 adds an allocframe to both rows:
+
+            ffs  __ffs  fls  __fls  ffz
+  asm         6      3    4      4    3
+  builtin     5      2    3      3    2
+
+The instruction saved is the copy of the result to r0: the asm's
+early-clobber output ("=&r") cannot share the argument's register.
+
+In packets, only ffs() takes one more than the asm (4 -> 5): with
+df5e4db805d5 ("hexagon: disable the LLVM packetizer") applied, each
+instruction of the builtin version gets a packet of its own, while
+the asm is bundled by hand. Without that workaround, which linux-next
+does not have yet, ffs() goes from 6 instructions in 3 packets to 5
+in 2.
+
+Against the bcain/hexagon-fixes branch of bcain/linux.git
+(0304683b4c43); also applies to next-20261113 and to bitmap-for-next.
+
+ arch/hexagon/include/asm/bitops.h | 100 ++----------------------------
+ 1 file changed, 5 insertions(+), 95 deletions(-)
+
+diff --git a/arch/hexagon/include/asm/bitops.h b/arch/hexagon/include/asm/bitops.h
+index b23cb13833af..975328172b7c 100644
+--- a/arch/hexagon/include/asm/bitops.h
++++ b/arch/hexagon/include/asm/bitops.h
+@@ -194,101 +194,11 @@ arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
+ 	return retval;
  }
  
- /*
-@@ -181,7 +187,6 @@ int kunwind_next_regs_pc(struct kunwind_state *state)
- 	state->regs = regs;
- 	state->common.pc = regs->pc;
- 	state->common.fp = regs->regs[29];
--	state->regs = NULL;
- 	state->source = KUNWIND_SOURCE_REGS_PC;
- 	return 0;
- }
-@@ -244,6 +249,65 @@ kunwind_next_frame_record(struct kunwind_state *state)
- 	return 0;
- }
+-/*
+- * ffz - find first zero in word.
+- * @word: The word to search
+- *
+- * Undefined if no zero exists, so code should check against ~0UL first.
+- */
+-static inline long __attribute_const__ ffz(int x)
+-{
+-	int r;
+-
+-	asm("%0 = ct1(%1);\n"
+-		: "=&r" (r)
+-		: "r" (x));
+-	return r;
+-}
+-
+-/*
+- * fls - find last (most-significant) bit set
+- * @x: the word to search
+- *
+- * This is defined the same way as ffs.
+- * Note fls(0) = 0, fls(1) = 1, fls(0x80000000) = 32.
+- */
+-static inline __attribute_const__ int fls(unsigned int x)
+-{
+-	int r;
+-
+-	asm("{ %0 = cl0(%1);}\n"
+-		"%0 = sub(#32,%0);\n"
+-		: "=&r" (r)
+-		: "r" (x)
+-		: "p0");
+-
+-	return r;
+-}
+-
+-/*
+- * ffs - find first bit set
+- * @x: the word to search
+- *
+- * This is defined the same way as
+- * the libc and compiler builtin ffs routines, therefore
+- * differs in spirit from the above ffz (man ffs).
+- */
+-static inline __attribute_const__ int ffs(int x)
+-{
+-	int r;
+-
+-	asm("{ P0 = cmp.eq(%1,#0); %0 = ct0(%1);}\n"
+-		"{ if (P0) %0 = #0; if (!P0) %0 = add(%0,#1);}\n"
+-		: "=&r" (r)
+-		: "r" (x)
+-		: "p0");
+-
+-	return r;
+-}
+-
+-/*
+- * __ffs - find first bit in word.
+- * @word: The word to search
+- *
+- * Undefined if no bit exists, so code should check against 0 first.
+- *
+- * bits_per_long assumed to be 32
+- * numbering starts at 0 I think (instead of 1 like ffs)
+- */
+-static inline __attribute_const__ unsigned long __ffs(unsigned long word)
+-{
+-	int num;
+-
+-	asm("%0 = ct0(%1);\n"
+-		: "=&r" (num)
+-		: "r" (word));
+-
+-	return num;
+-}
+-
+-/*
+- * __fls - find last (most-significant) set bit in a long word
+- * @word: the word to search
+- *
+- * Undefined if no set bit exists, so code should check against 0 first.
+- * bits_per_long assumed to be 32
+- */
+-static inline __attribute_const__ unsigned long __fls(unsigned long word)
+-{
+-	int num;
+-
+-	asm("%0 = cl0(%1);\n"
+-		"%0 = sub(#31,%0);\n"
+-		: "=&r" (num)
+-		: "r" (word));
+-
+-	return num;
+-}
++#include <asm-generic/bitops/builtin-__ffs.h>
++#include <asm-generic/bitops/builtin-ffs.h>
++#include <asm-generic/bitops/builtin-__fls.h>
++#include <asm-generic/bitops/builtin-fls.h>
++#include <asm-generic/bitops/ffz.h>
  
-+#ifdef CONFIG_ARM64_LR_UNWIND
-+
-+/*
-+ * Unwind from a pt_regs according to .lr_unwind info.
-+ */
-+static __always_inline int
-+kunwind_next_regs_lr_unwind(struct kunwind_state *state)
-+{
-+	struct pt_regs *regs = state->regs;
-+	enum lr_unwind_mode mode;
-+	unsigned int sp_off;
-+	unsigned long fp;
-+	int err;
-+
-+	if (WARN_ON_ONCE(state->source != KUNWIND_SOURCE_REGS_PC))
-+		return -EINVAL;
-+	if (WARN_ON_ONCE(!regs))
-+		return -EINVAL;
-+
-+	state->regs = NULL;
-+
-+	err = lr_unwind_find(state->common.pc, &mode, &sp_off);
-+	if (err) {
-+		/* Fallback to FP based unwinder */
-+		state->unreliable = true;
-+		return kunwind_next_frame_record(state);
-+	}
-+
-+	switch (mode) {
-+	case LR_UNWIND_LIVE:
-+		if (state->common.fp & 0x7)
-+			return -EINVAL;
-+		state->common.pc = regs->regs[30];
-+		state->source = KUNWIND_SOURCE_REGS_LR;
-+		return 0;
-+	case LR_UNWIND_FP:
-+		return kunwind_next_frame_record(state);
-+	case LR_UNWIND_SP:
-+		if (check_add_overflow(regs->sp, (unsigned long)sp_off, &fp))
-+			return -EINVAL;
-+		state->common.fp = fp;
-+		return kunwind_next_frame_record(state);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+#else /* !CONFIG_ARM64_LR_UNWIND */
-+
-+static __always_inline int
-+kunwind_next_regs_lr_unwind(struct kunwind_state *state)
-+{
-+	state->regs = NULL;
-+	state->unreliable = true;
-+	return kunwind_next_frame_record(state);
-+}
-+
-+#endif /* CONFIG_ARM64_LR_UNWIND */
-+
- /*
-  * Unwind from one frame record (A) to the next frame record (B).
-  *
-@@ -259,10 +323,13 @@ kunwind_next(struct kunwind_state *state)
- 	state->flags.all = 0;
- 
- 	switch (state->source) {
-+	case KUNWIND_SOURCE_REGS_PC:
-+		err = kunwind_next_regs_lr_unwind(state);
-+		break;
- 	case KUNWIND_SOURCE_FRAME:
- 	case KUNWIND_SOURCE_CALLER:
- 	case KUNWIND_SOURCE_TASK:
--	case KUNWIND_SOURCE_REGS_PC:
-+	case KUNWIND_SOURCE_REGS_LR:
- 		err = kunwind_next_frame_record(state);
- 		break;
- 	default:
-@@ -294,7 +361,7 @@ do_kunwind(struct kunwind_state *state, kunwind_consume_fn consume_state,
- 			return -EINVAL;
- 		ret = kunwind_next(state);
- 		if (ret == -ENOENT)
--			return 0;
-+			return state->unreliable ? -EINVAL : 0;
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -394,14 +461,11 @@ static __always_inline bool
- arch_reliable_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
- {
- 	/*
--	 * At an exception boundary we can reliably consume the saved PC. We do
--	 * not know whether the LR was live when the exception was taken, and
--	 * so we cannot perform the next unwind step reliably.
--	 *
--	 * All that matters is whether the *entire* unwind is reliable, so give
--	 * up as soon as we hit an exception boundary.
-+	 * If unwinding across an exception boundary fell back to frame-pointer
-+	 * unwinding without a valid .lr_unwind entry, the caller frame may
-+	 * have been skipped or duplicated. Abort reliable stack walks.
- 	 */
--	if (state->source == KUNWIND_SOURCE_REGS_PC)
-+	if (state->unreliable)
- 		return false;
- 
- 	return arch_kunwind_consume_entry(state, cookie);
-@@ -452,6 +516,7 @@ static const char *state_source_string(const struct kunwind_state *state)
- 	case KUNWIND_SOURCE_CALLER:	return "C";
- 	case KUNWIND_SOURCE_TASK:	return "T";
- 	case KUNWIND_SOURCE_REGS_PC:	return "P";
-+	case KUNWIND_SOURCE_REGS_LR:	return "L";
- 	default:			return "U";
- 	}
- }
+ #include <asm-generic/bitops/lock.h>
+ #include <asm-generic/bitops/non-instrumented-non-atomic.h>
+
+base-commit: 0304683b4c43048082483e9445fdd0691d088431
 -- 
-2.56.0.679.gc527c65306-goog
+2.34.1
 
