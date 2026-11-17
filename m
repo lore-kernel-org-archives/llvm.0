@@ -1,87 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.158
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794903283;
-	b=R6fgBRBNh1LjmZBuia38GCSeKmR3fC7tvLq8ItpyYu993RoQoobQSm8tlkPL/Cj7JtUZ
-	 BPpr/Cc3hV+VGQ051lT7cO6FSpwt004JNijVm0D5qzjNA96Zqr4LtCjRjyCeTGnt74N9L
-	 BG5d8mS10RDtbEba6yFGgrqus1V7nM/EamAl8UlRWzH42KYDLm0c+ILE8JhN7l4ys4UNN
-	 mjUKa9A627IhVZcVMBp/oFGLDAzAg2LudGi73uPPEGr8HBS+WnhHwbs0jrdooho7ZXr8W
-	 23JDRATGI6WFSupCnPWIAWGpaAZQD+pynZlTg/cfiaH2xPZ3b3YIxuajfqqlRh1HCTA==
+	t=1794907030;
+	b=BDOj1E5hg0d16hqL8McLq5ZEB3yYvdgbjN6DaB3LngK1oWb4UOHlKDCY+VZ3bFL33y2O
+	 jbTDlIE2fLLJhBGJCEZ5BdrpFy0StftYHydlOkE7kQDGzO51YFUKLp56BH4TuW0H4RMnS
+	 UJyHy/mUgLPRJoRktWjcZ2ubmqEkup4FEMAgSQvP2qLw+lYXeqr6K14f3XwixTd65NZPv
+	 PVY+2AzQmPLd1SjtXlyRrjWZnmKgwb8ucgN6Kw9WUDI7PnLMW6jBbwy1BLDxisJ2TvsrI
+	 ifBnvo1ykC3o9v9n0OEbgdO8OZYJQ1HUq4ycHFFZH6fNpAKJbJA/G0VdusPSTP7JjTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794903283;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=u+/cwffwIYhunynydI3MCyk18sMtDgmDhaVBujjZGGU=;
-	b=CNocdTCSMsis7U54HHv/f4JD6FxzaV+inR1kaGDt4VQ8TsN30k+zq4Ts+J+1RRDo6TCD
-	 ZDx3hbIsEx/ruzn/Bom6RgumjOlb3F6RyBefQWHadSBdNxSvsKmMBukgT3OD8bb7d7Bsg
-	 cPC1vBOB1tB8JMAWM4BQvve8YEBD/6fPngw0VSnNKEwNRrMLQtGuciY/FAcGBGcWJfwoA
-	 qPxA6Grhow4HfdrZAfg8V0WnyOGUnfr9ZAx1srQ/+2R0dwF3lGRoPbhp+l9snSaUpZZSX
-	 pTKYIF3FDf1KfGgFsAntg4Cq9tIR1yQigw8nzpbqgRRaPeE5nyGknjcHoovC8qL2TYA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794907030;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=ylxYAdRJbN2+nc71qafuBh5CUEHqWV7dF5BSNuKNgSQ=;
+	b=5DEsP6rbQ7RdaegDz/HBVKUJJnw2J1+js9j/Clw7AOVfsBmYLId/0P/pDZCA2OpgLbfn
+	 M8+xvRSeBKwPGkjBNr4dCD6zhNL+04G8+JaVUEUhoZ2ADSWTHkvyXEMSZ+8t0eSf814oX
+	 7jWg9mBZh+sqGRa2tuEz76J1XKFdw4A4It2ONOmTLlJK23CeZKRz743e+OWxB5M+SVten
+	 JFT/0uxglA0LKPMmAgLjDU69aqzad5x1SxesysXZTOjCTbzvMLvhu35Ze8Rg8SmDZbffg
+	 ybczNbSSvjoMeZ70b5J4EXUJl//OuYYtFWUsEY6PoMo+SLnypgo3ENzyf1yzyrbXGEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=LIRuIEzW;
-	arc=none smtp.remote-ip=198.175.65.9
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=hA+RuZCt;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=tGdAx7tr;
+	arc=none smtp.remote-ip=202.12.124.158
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC9C606A31C;
-	Tue, 17 Nov 2026 08:14:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCC9C606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56BA606A31C
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 09:17:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C56BA606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=LIRuIEzW
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794903283; x=1826439283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HNmUx0jrvNZHfbPCL0lRJuOzMXqXrDP37LApWQ+VGqo=;
-  b=LIRuIEzWXHT6W14Zot/PA8K0urVntHnTCSIENZrMHH+VqyEn8KsDESb/
-   zbcDxHcgnbObk4n+qvWLQUBkl/DNqoHtNjDuqjBoeIn045N7AM5Udh9x8
-   Pk6v2p9ZhSM9MdgMSozAEDz6QVOVlh7Zz5l2KNrAhUEA+Dwksg81Mf68D
-   DX13y1ewHcTftVPg+iDNIH90UL+D5KrWG6URIMg6Vb1VDFfhmSDiN5BgI
-   /hUvuKQ/2Mth4KfSekmQHtl2aaSXe/kng6O4l1Zq/6bTbhDiifZ2/ShhG
-   9psKKLw6iJC0rNds+QXVEDOaB9imhUWnVJ+5GONgSV8v74I6EOb82H0AA
-   Q==;
-X-CSE-ConnectionGUID: B1ElCop7Qf2MVEOB982J/A==
-X-CSE-MsgGUID: 9IbkxsWAS7iukgTwT/EJng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11968"; a="3517173"
-X-IronPort-AV: E=Sophos;i="6.27,218,1787036400"; 
-   d="scan'208";a="3517173"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2026 00:14:42 -0800
-X-CSE-ConnectionGUID: HIAC5vPkQFS4EZd2BqhXXQ==
-X-CSE-MsgGUID: t3tuitAFQPSxn+gSWM/hXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,218,1787036400"; 
-   d="scan'208";a="9947828"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 17 Nov 2026 00:14:39 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xTEKq-00000001APf-071k;
-	Tue, 17 Nov 2026 08:14:36 +0000
-Date: Tue, 17 Nov 2026 16:14:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Airlie via B4 Relay <devnull+airlied.redhat.com@kernel.org>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <siqueira@igalia.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>,
-	Austin Zheng <austin.zheng@amd.com>, Jun Lei <jun.lei@amd.com>,
-	Kenneth Feng <kenneth.feng@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	Dave Airlie <airlied@redhat.com>
-Subject: Re: [PATCH 12/19] drm/amd/display: Migrate amdgpu_dm KUnit tests off
- struct dc internals
-Message-ID: <202611171624.vqpwzkOB-lkp@intel.com>
-References: <20261112-amdgpu-dc-cleanup-v1-12-0fae41718ad2@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=hA+RuZCt;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=tGdAx7tr
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id EA9FA7A016A
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 04:17:08 -0500 (EST)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 17 Nov 2026 04:17:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1794907026;
+	 x=1794993426; bh=ylxYAdRJbN2+nc71qafuBh5CUEHqWV7dF5BSNuKNgSQ=; b=
+	hA+RuZCtBlroKaHaa4om9KunlkijfGP3m5Jg3UQaLOMRXDqT9Gs088GRQLPFbqAp
+	PLYGf0mgpszIM4ns3teOJrWdgFX8RKIcwRmJAYU02GLXIrIl6l26ya2PInTL7blf
+	H18Z1ZEAunH3hXdRLkKbqKKw9MQNcbtDbl0nRFjjNM7IeO/7Nxw5Oi8R8mAGsDWD
+	//zAPISaT0eUicCjkV6R6jEZ6sAby/yv4NQFIfSooUR4GbZ+RYmjo7brwSO0M05W
+	JyRdnoQpGqYp0lOe7F5mXst+BW06gHPKfdEC7HgcBZLKBQUjXaV+KOeMA38FXWAW
+	GqInLtpn37TDqL7sKdvBVw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794907026; x=
+	1794993426; bh=ylxYAdRJbN2+nc71qafuBh5CUEHqWV7dF5BSNuKNgSQ=; b=t
+	GdAx7tr9oaHRUfB2MalZ7Rcqu8PJHKMZ0TovI/NdIFtDVHadNoSkmAnv5HPpm7py
+	N+y3Jm/fHIlx1qXJXdTLQWhtTKzPt5UD+SgNPrPF/cFTAJs6WeK3+VjPmFnxQ4Xp
+	dDcVsSTe6l0+cqBdjhMu0GvucYh03pCIKPwgdntGLIZrxuh7VH+T4omYBTCPQoR1
+	q3W2+OWbD73rvSqHqKLBvENeZTVYHPlngd4VjfqTUGaIUdDtH39wvWnupnpC0JE9
+	Gj6tYCPzoZpn/Fy8ykQD+Vr18dwHuLZM0PE5R8jwtP5lMiyLKluayuT0oww8YfFT
+	uC35KTMhFTO/Nk6c98KIQ==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1794907026; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm2:rsa-sha256:R7PQ5jgQQwnlRcsRkZ7Y3y2aNIgfuTVcdyHveDEicEaI3xB
+	+IAQaFI/TXF/YIojPHE5h3vxltCsWKVRs9jPWF/5cHUhOx0OU+hb1EbeJJ0lA826
+	WtDItD5GvLmSppxEIDLV4vQsSMFpyyKNSBzMnLdWgjz2nfJw2ygyzTDGe3E6UsWG
+	Tp+NxpUd/fN01ylK8uk8dD/IrehOKt/I02rMyAG0S0Dwd5zsbk2ONtw25Bla5oO/
+	+fqaPuHlpjpZTvTdcOsKFW8McXHPEc9nNFSzazD1dL6iQTytmkHbaRE3t9/PeuBd
+	7ox42hMnvGHGvJ5p9B/UCPGAlMcHuJWGcT/vCgQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:jamKSb1Mh9FEr48BCkl4zyWu3uo82vTju/A5t7S0N3o=:Am9tGrLXliDCWvBTMVenTyCZ+J+acKj5XOpZg9kpzA0=;
+X-ME-Sender: <xms:jxv8ataRDI4zM32UHdMoX2iu9LO8TbuwtWBlTB7U9_easuRFnU66PA>
+    <xme:jxv8avMvN6f3VMD2YAbeGbnZ6_3oESrJUuctc98tRLRcVNxlZxFf7iBzJKRGJwT72
+    UeH4877VjllIHcWEnqRZYlLT4tHkbpV8VdCVj-ZbW2d4KigKX5slILy>
+X-ME-Proxy-Cause: dmFkZTGJ09n7RVGHDV+ONr1e6D6IsZ0OG2CaZWAlS0KX6cFRTpTdKWBLQznxcKq+EUmVLy
+    xTDzG57fCSXaPatrWJcBUkG+Jy+VGW/J+CB0ROjg/czGo/wyNP2F0XrHSQ4KDngDLwhKV9
+    vfX4fmjtlUIlJrfXFRaYjinenkPyGvje6EjPNpP6ZY2MeXyFc4enM4lwwnq4GuNwjf4jXv
+    YfhsclJmzs80W+OD/6MC5Nvp5Eev+p1S/y8dSaThGCIo1yYxlj1DvjtJzY0tgahVmJr8N0
+    4oorMqXlGtcf3UX3+zV/7z48yK3cg9GsOkDkSn3RA6vTqMabBbheejxq0hJPj7h3+uoGfC
+    vNLWgkMlDvHY3A6q7TFxeCYWTM9ujVa1LW4rA3nk5SU5gC37ACwmm2M8niJPb4IvTBbRwS
+    U/ISeA4SuqlTaRer0izpEesK1qCd0Bu546ul3XTLjNdsuyYYtfh8LCIrmTJILPZUbvibeB
+    m/vd3/wMd8aCRdcvWUm8xBqe2burW+f1pzW2UjNOJcfYFVJKb8OLGA7wnK7mD56ckfw/OI
+    chvVxH6pT0X/CS73c/5ixlgzzbPf/29K6w6HaPz0vKIKHvPm7QCC64vflUrWCDDe4dcuL0
+    cLewWZYgiwMzBowumquS4ecSuaHRGbhbwAQ3B2rav/FsD++5URTm+AMIBHUw
+X-ME-Proxy: <xmx:kBv8agWcQvQmiaKxfascFJyX1-YfoU-OA8gjbQaMAqtMTMtkvjKisw>
+    <xmx:kBv8apihsRAHcejL5K-uj7qrnCBP2gONMAlOkTLIvCdbsoYuxoSAcA>
+    <xmx:kBv8aoqNcPyk-E6xnAilMfOVzIkaMYIeHEaIrZW17ofJ1dsbumoEnw>
+    <xmx:kBv8avH179OmU-I7pGjIwffLIVWDEUQKrhz_o91mRaKnrU7GJc07HQ>
+    <xmx:khv8aqY258t0zwwHyVJ4WFNGcx1vfkoZvRwX0-DLqfpiqQAeZDSUopUb>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id E21D832A009C; Tue, 17 Nov 2026 04:17:02 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -91,53 +114,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261112-amdgpu-dc-cleanup-v1-12-0fae41718ad2@redhat.com>
+X-ThreadId: AzjZfwey9aPB
+Date: Tue, 17 Nov 2026 10:16:42 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Tzu-Ching Yang" <shingekinocore@gmail.com>,
+ "Brian Cain" <bcain@kernel.org>, linux-hexagon@vger.kernel.org
+Cc: "Yury Norov" <yury.norov@gmail.com>,
+ "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
+ Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Message-Id: <e79e581e-3038-449d-a637-34389f3e9b97@app.fastmail.com>
+In-Reply-To: <20261117054939.2126980-1-shingekinocore@gmail.com>
+References: <20261117054939.2126980-1-shingekinocore@gmail.com>
+Subject: Re: [PATCH] hexagon: bitops: use the compiler builtins for ffs(), fls() and
+ ffz()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Dave,
+On Tue, Nov 17, 2026, at 06:49, Tzu-Ching Yang wrote:
+> The hexagon inline asm for ffs(), __ffs(), fls(), __fls() and ffz() is
+> not needed: Clang, the only compiler that builds hexagon kernels, emits
+> the same ct0, cl0 and ct1 instructions for the compiler builtins, and
+> unlike the asm, the builtins fold constant arguments. The asm dates
+> from the 2011 port (a86a7ce30ac0, "Hexagon: Add bitops support"),
+> before the builtin-based asm-generic helpers existed (048fa2df92c3,
+> "generic: Implement generic ffs/fls using __builtin_* functions").
+>
+> Replace the asm with the asm-generic builtin helpers, and ffz() with
+> the generic __ffs(~x), as arm64 does.
+>
+> ffs(0) and fls(0) still return 0. __ffs() and __fls() now return
+> unsigned int, which is as wide as unsigned long on hexagon, and ffz()
+> returns unsigned int instead of long. __ffs(0), __fls(0) and ffz(~0)
+> remain undefined.
+>
+> With Clang 17 to 23, the functions of a defconfig vmlinux shrink by 1972
+> to 6068 bytes in total (scripts/bloat-o-meter -t). One helper in
+> lib/find_bit.c gets worse: _find_last_bit() executes one instruction
+> more per call that finds a bit, because LLVM rewrites 31 - clz as 31 ^
+> clz once it knows clz < 32, and the hexagon backend keeps the xor, which
+> needs the 31 in a register, instead of sub(#31, Rs) [1]. A few 1 <<
+> ffz() sites also grow by a few instructions, as LLVM rewrites that
+> expression too [2]. __find_nth_bit() executes two fewer, and the other
+> helpers that find_bit_benchmark calls the same number.
+>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Link: 
+> https://lore.kernel.org/all/affe7da1-41aa-4710-bee0-5e3c2b8a8dfc@app.fastmail.com/
+> Link: https://github.com/llvm/llvm-project/issues/236764 [1]
+> Link: https://github.com/llvm/llvm-project/issues/236765 [2]
+> Signed-off-by: Tzu-Ching Yang <shingekinocore@gmail.com>
 
-kernel test robot noticed the following build warnings:
+LGTM,
 
-[auto build test WARNING on a6836fcbb5b22968019256025321d655b78bc49c]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Airlie-via-B4-Relay/drm-amd-display-Drop-the-dead-vmid-module/20261112-114336
-base:   a6836fcbb5b22968019256025321d655b78bc49c
-patch link:    https://lore.kernel.org/r/20261112-amdgpu-dc-cleanup-v1-12-0fae41718ad2%40redhat.com
-patch subject: [PATCH 12/19] drm/amd/display: Migrate amdgpu_dm KUnit tests off struct dc internals
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261117/202611171624.vqpwzkOB-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261117/202611171624.vqpwzkOB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611171624.vqpwzkOB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/tests/amdgpu_dm_kunit_helpers.c:57:25: warning: cast from 'void (*)(struct dc *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
-      57 |         kunit_add_action(test, (kunit_action_t *)dc_test_destroy, dc);
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +57 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/tests/amdgpu_dm_kunit_helpers.c
-
-    50	
-    51	struct dc *dm_kunit_alloc_dc(struct kunit *test)
-    52	{
-    53		struct dc *dc;
-    54	
-    55		dc = dc_test_create();
-    56		KUNIT_ASSERT_NOT_NULL(test, dc);
-  > 57		kunit_add_action(test, (kunit_action_t *)dc_test_destroy, dc);
-    58	
-    59		return dc;
-    60	}
-    61	EXPORT_SYMBOL(dm_kunit_alloc_dc);
-    62	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Arnd Bergmann <arnd@arndb.de>
