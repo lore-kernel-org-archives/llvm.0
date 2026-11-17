@@ -1,71 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794940250;
-	b=n5aVlRL5FENM2/8I3UMVUiOWM8WxCGFMlP7303z5HzptE30zQDxH4usfav6l9578IipZ
-	 QuqtRO/x4U5TpUtiwZjy1/ifMqDd8gE4ofC25rfmYorpACAfFkzEbk0kVcWgLw2fMuCcY
-	 nY/KNkVA1+axOcrNXA8gkMhD2V3Az8iOOl4i5nnkkyeYtrruwzIvZninBj5fnOVoaySIf
-	 4MJ6ANdWZBREpJ//RvdAHx5bWVsYiwvP9WX0sl9XvY41zFmtOhIMtQjHXG9oaJwNJRtRb
-	 YvALSOtOMHS6vWN/QOY/OElb/unyddDs9YpXXM6d7yyDw8A6/P4EAbtFH19M6V3EhSA==
+	t=1794940510;
+	b=o92Q06e5mhZn7vwQ8O+ZtpDr4J34c++wJKkJTuodzwH7sjDyIetbG/Vg5/fB8nGKC7Km
+	 HVDavzv5gGV/lhFED3DCLBRD0fpxwKKBcSlaB55gKTRtytvVNkV3clklr9hMDXoapxKvf
+	 efXkR6g9tE+sHI3O14CUUyLKaHIDmcS9Bojd/1FgDDYVcrgmV5Mw1zgEfaFHeCSm4sTzF
+	 lBtKLfFQs/TgMKwBFYInKRJrVw9mUAJqUvyzKRFmr71kXmejDANH6+f6pfkFp7ldGM+FB
+	 bnS8DW5LgpOxQNCkdTeYF2p6EBpNyH8mIo9hJE+0bI9sozReEu6gCtRh/Ldlixlu5Ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794940250;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794940510;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=9OHpVTRaAtsxgAwyU7FqfKE7aswl1KowsIraapIR5A0=;
-	b=1XfsJRBK+lKFgVjp/q/0CsL7sBc5Cg2SlVDWYwfBPLJ3ETe6K1juzsSjm2DQYDdrLmh3
-	 1aARf0/FxtNxXQ6T7OwNVwUu8z9Y4T+mnHrpWlWMR7axagJqg3y5ijYMeCY+x3LqR9YdO
-	 UVO2rnERZKrSGOH2QS4upIzaExdyvoC51m4bBewySnOBnTXqFLOPiyPMSsGRiAyzj58Vi
-	 DivoHdJldlcQDjPKcJOwM7Z3lTIBPmtepOpIIcnzAjDdf5eDiBxZqdSDj990F9e/NKx3e
-	 hTrR+mar3l70xQNDJ0SexxhZ+mm92KgH9Fc8HmzXLCA9D+gu/jN2K7LrAbr4GyxdESQ==
+	bh=uexNMGpxUY9OOBDnfN+FganeasLxdCgYq2rQnF6AVfQ=;
+	b=TdrFgRp6x6jpa+fOuru4CEmX7T3lTOEcbPM+r8Dx9A+wxMFkZw0yVyeN1lf0DViPAeHt
+	 Qdo+pM0LiomyIUXrLWUqFrapNNLiXvq4Zn8eRcPO7V/6dNSRD6/Bwx4ZzjB6HXRxXVgy6
+	 5EdMM7DucCx7S5mlT/cd4LUU/wqBgVSEEbUw80eKLXnU7asNO8ttV8JGbRmoHtH60o8en
+	 o7AYqzgbLk2jADGeXIg8QS9tZ/Y94eM6j9omdomBd/YUyneJedXG+/tB85AGWxn4VuFSM
+	 J1QZ5WD8fZGV+DcEJLJEPQkqKNRtgHslg6UXqWAJrg6aakZTz1OcXgLm9zyXipNtRNw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
 	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=Njg3S+5l;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=TPrXIgoW;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DFA606A32C;
-	Tue, 17 Nov 2026 18:30:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84DFA606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73411606A886;
+	Tue, 17 Nov 2026 18:35:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73411606A886
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=Njg3S+5l
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=TPrXIgoW
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9OHpVTRaAtsxgAwyU7FqfKE7aswl1KowsIraapIR5A0=; b=Njg3S+5liaJW+kh4Jq0SdPm+Lc
-	svtA1ZJa22rh/T7J9LDZFAE4WJKOLoIYd96nRUzGrox1Ct4e7uLR+HHhRpzm52Ga/z1NXqYAwWBCE
-	8Cd8An2WQ1BjR4D2Qv59udVpqP8Li6o5oXI9zaceAhh72lTpA0TXSeP2s3AmsuA2W9/imuzaB8dBa
-	bW5101kU73uPAAtZ3Wn3F/W96NcPrmUtzHHHdnNqfiKX3jUSpYC1B5jyQ/DhshwaI/TsyE6WAJ1R2
-	QEwrpzDdCek3IOYfT8PwdkRhcxuwTXjpuzIHxkuQYpD+szQU9CsoHInTTGxD36z8MeI/z1LvZUNPi
-	knDb9l6A==;
+	bh=uexNMGpxUY9OOBDnfN+FganeasLxdCgYq2rQnF6AVfQ=; b=TPrXIgoWCC4gHzComIOd+EOReG
+	MLYqaaYpa9M9ELdQQ18R88rAHEWNnALZku4jwNmmYX0Rwp0lDo9EvhMVKFWzSy2CW4Zp1HDRipNZl
+	mMuizWCB4KUG1ldsL17fvvAjQ89wIC679O/TKI0IUHtaXNmtBGj1jXLMR8Pk6r+VSFx9ZtHUsmwNY
+	ohTxP7qcFBhZYYiueKqgX0Rc3fUkNVJ4oWtOESfUNw9bxw1p38OER6359GIy+es6JZdApkGGo+s57
+	tXocYidbk5Iml0oVS7hzG7cl2gcfyc7an+l1oSvbxW09YiU/ETKp+klJr8gMnJV+FsdmAbSDxpqN+
+	KCSCrUCg==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xTNx6-00000003sry-12m3;
-	Tue, 17 Nov 2026 18:30:44 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xTO1K-0000000FIqE-1sdF;
+	Tue, 17 Nov 2026 18:35:06 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2099A300708; Tue, 17 Nov 2026 19:30:43 +0100 (CET)
-Date: Tue, 17 Nov 2026 19:30:43 +0100
+	id 4F215300708; Tue, 17 Nov 2026 19:35:05 +0100 (CET)
+Date: Tue, 17 Nov 2026 19:35:05 +0100
 From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] sched/topology: Avoid unsequenced accesses to jiffies
- in sd_init()
-Message-ID: <20261117183043.GK1813469@noisy.programming.kicks-ass.net>
-References: <20261116-topology-wunsequenced-v2-1-54611119172b@kernel.org>
+To: Ali Nasrollahi <a.nasrolahi01@gmail.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kees@kernel.org, nathan@kernel.org
+Subject: Re: [PATCH] x86/cfi: mark cfi_debug as __maybe_unused
+Message-ID: <20261117183505.GL1813469@noisy.programming.kicks-ass.net>
+References: <20261116173027.229752-1-A.Nasrolahi01@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,92 +68,48 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261116-topology-wunsequenced-v2-1-54611119172b@kernel.org>
+In-Reply-To: <20261116173027.229752-1-A.Nasrolahi01@gmail.com>
 
-On Mon, Nov 16, 2026 at 01:55:26PM -0700, Nathan Chancellor wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], an instance appears in sd_init(), which can
-> break the build with CONFIG_WERROR=y / W=e:
+On Mon, Nov 16, 2026 at 09:00:27PM +0330, Ali Nasrollahi wrote:
+>     When CONFIG_FINEIBT is disabled, cfi_debug is never read, but
+>     alternative_instructions() still resets it after calling
+>     __apply_fineibt(). Clang 23 diagnoses this as -Wunused-but-set-global
+>     with W=1, causing a build failure when CONFIG_WERROR=y. Mark cfi_debug
+>     as __maybe_unused to account for configurations without FineIBT.
 > 
->   In file included from kernel/sched/build_utility.c:86:
->   kernel/sched/topology.c:2008:29: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->    1998 |                 .last_balance           = jiffies,
->         |                                           ~~~~~~~
->    1999 |                 .balance_interval       = sd_weight,
->    2000 |
->    2001 |                 /* 50% success rate */
->    2002 |                 .newidle_call           = 512,
->    2003 |                 .newidle_success        = 256,
->    2004 |                 .newidle_ratio          = 512,
->    2005 |                 .newidle_stamp          = now,
->    2006 |
->    2007 |                 .max_newidle_lb_cost    = 0,
->    2008 |                 .last_decay_max_lb_cost = jiffies,
->         |                                           ^
-> 
-> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-> 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior. Per C11 6.7.9.23, the evaluation of the initialization list
-> expressions in a designated initializer is indeterminately sequenced
-> relative to each other, meaning any side effects in the initialization
-> list are unsequenced.
-> 
-> Add a local variable to hold the value of jiffies before the designated
-> initializer so that there are no unsequenced side effects while using a
-> consistent value, clearing up the warning.
-> 
-> Cc: stable@vger.kernel.org
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2190
-> Fixes: 2b4cfe64dee0 ("sched/numa: Initialize newidle balance stats in sd_numa_init()")
-> Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> Changes in v2:
-> - Use a local variable with one access to jiffies before designated
->   initializer (Nick)
-> - Link to v1: https://patch.msgid.link/20261114-topology-wunsequenced-v1-1-686a36fe61f5@kernel.org
-> ---
->  kernel/sched/topology.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 99878da03bce..60fad1690894 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -1956,6 +1956,7 @@ sd_init(struct sched_domain_topology_level *tl,
->  	int sd_id, sd_weight, sd_flags = 0;
->  	struct cpumask *sd_span;
->  	u64 now = sched_clock();
-> +	unsigned long j;
->  
->  	sd_span = sched_domain_span(sd);
->  	cpumask_and(sd_span, cpu_map, tl->mask(tl, cpu));
-> @@ -1973,6 +1974,7 @@ sd_init(struct sched_domain_topology_level *tl,
->  #endif
->  	sd_flags |= asym_cpu_capacity_classify(sd_span, cpu_map);
->  
-> +	j = jiffies;
->  	*sd = (struct sched_domain){
->  		.min_interval		= sd_weight,
->  		.max_interval		= 2*sd_weight,
-> @@ -1994,7 +1996,7 @@ sd_init(struct sched_domain_topology_level *tl,
->  					| sd_flags
->  					,
->  
-> -		.last_balance		= jiffies,
-> +		.last_balance		= j,
->  		.balance_interval	= sd_weight,
->  
->  		/* 50% success rate */
-> @@ -2004,7 +2006,7 @@ sd_init(struct sched_domain_topology_level *tl,
->  		.newidle_stamp		= now,
->  
->  		.max_newidle_lb_cost	= 0,
-> -		.last_decay_max_lb_cost	= jiffies,
-> +		.last_decay_max_lb_cost	= j,
->  		.child			= child,
->  		.name			= tl->name,
->  	};
+> Signed-off-by: Ali Nasrollahi <A.Nasrolahi01@gmail.com>
 
-I don't speak enough C legal to actually understand the Changelog, but
-the actual change seems daft. Is this really needed?
+Does something like so also work?
+
+---
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index efbc11f8c336..9bfc36566e17 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1195,9 +1195,9 @@ void __init_or_module apply_seal_endbr(s32 *start, s32 *end) { }
+ #endif
+ 
+ enum cfi_mode cfi_mode __ro_after_init = __CFI_DEFAULT;
+-static bool cfi_debug __ro_after_init;
+ 
+ #ifdef CONFIG_FINEIBT_BHI
++static bool cfi_debug __ro_after_init;
+ bool cfi_bhi __ro_after_init = false;
+ #endif
+ 
+@@ -1894,6 +1894,7 @@ static void __init_or_module __apply_fineibt(s32 *start_retpoline, s32 *end_retp
+ 		break;
+ 	}
+ 
++	cfi_debug = false;
+ err:
+ 	pr_err("Something went horribly wrong trying to rewrite the CFI implementation.\n");
+ }
+@@ -2281,7 +2282,6 @@ void __init alternative_instructions(void)
+ 
+ 	__apply_fineibt(__retpoline_sites, __retpoline_sites_end,
+ 			__cfi_sites, __cfi_sites_end, true);
+-	cfi_debug = false;
+ 
+ 	/*
+ 	 * Rewrite the retpolines, must be done before alternatives since
