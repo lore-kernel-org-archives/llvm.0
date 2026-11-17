@@ -1,76 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.72
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794949112;
-	b=hmGBy1c4OQg/NUQ6SFJhpdeSIjo2ci3F+tTcAyffafM52b16iY7Vt04UCErF9SN1XFG7
-	 X6xjydXG4GJUZNGtQl5xjyVv6iK/OzOnctdQVezOMq9tqCf7UrCHwZ9FMlomoLMkdqimz
-	 gTnutxBTfTiAaxp/otcfUfyA/hz0NE2A1xdzV0hQrAovM1NalUxQp8ekvzRqMGvzyaG7X
-	 Oz/sQktYcNOY2qFDUyfCOo8ADThFCG6/7zjhXnORyXBMOL/sqYKvRKUZJisvguSxJ4NWq
-	 Hkln6v3VrgJyz+XpmMO+CFnI+OemcKLS0cfbJPbqzX/rZ1Z1HVOxWPWoTAUaiHG618g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794949112;
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.128.47
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1794953026;
+	b=297GL20/ryulBW0C0YG4dyHzjNOXDa+6ElMGlSYDrbxhEoUdsrYDSRWCGqwt98lwQMtT
+	 117Gon9VuxLe8lspladT9FtbZ5fEpW8McniV3nOzf3sGcxnQRxcS6JVOX2M8fzVsROsnz
+	 hqr37tqRuHzbdaaFxEMZP5ci0f0EU+sfYcMZ1WSv9Ux0QPC+cVP+ZRikq0s6qXbJYlALM
+	 OCn+yivXApi8c456m+sdWPb5bxQWV3SNFyopr97eGEs8hvuG6tVLlSHptLz3hK21sCYsE
+	 YZTXv2qT/ou4Nwabgdhs1Armh907Ci1J5nMxJkq/4mEm55uxpENNF6IL72lQnm7Pb6A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794953026;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=IQjnSpWNmOsfjWunLKeggnYLNfDLqDBiq6etlWznrnc=;
-	b=bJ2f2p3m8PZxgIlLePiHnh8BFX+mAK5LpT9ksLyMzCgDWa7qdIZo2dYVZbRvpezrcKw+
-	 +w+3AlDWRuofDC2OH/Wy2780ubOvx+bmoljnew5jVBGw3eJOs9eYTzpiMGk0BVTtObH+g
-	 iomJW56rV6FKoD0RMDPKx7PtOCsO5qSmzxpCjberEysh+VYiKKYAIS+j5lHKzmrcJegji
-	 HzL6AYYzLtOoizWIgbCYx4GpRw4N9UnIrq9j7pq9+nXIAVVo9jzvhdTxcw6r7j8GsXuCv
-	 y3hF4ukjKJslA5chdO1q8x7MeUIompb8lDFFr3EeDgKsEbG/XxMzqZnW+EFSyO8N1LA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
+	b=dxyt9qBupmcfMFm1q2Q24wtY7U1KX3iuQX49VBstc7NvzksIOsoOs2ACTDR03231Lqk9
+	 ns1XaQzR+puc2KcUoA3zOiBzfq1fD6V0fBt+wa4G7p4DTlDg01Z2SOu8C0T/h1ujHrGd7
+	 y/3uQpS7GSyUHXkKNvVMnX8tpKEN+yPUIa24nW5/GAmx3lijUIWW9OsJaACJ57/PaF6cx
+	 4YEJsOpFBIHMSbTDUUS7u2nkpBVplcaMrJ7e7dY1KlERI5z7o7lPWtRk7/S9XxPFfRSFt
+	 JcImw4aoHvWHFhssWAsUVnduLj58gNLSVVkeg0CpjzBg73w2aEqvNRXpsa/OoAj6Uig==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pZIJNrcH;
-	arc=none smtp.remote-ip=209.85.221.72
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ffvabOib;
+	arc=fail smtp.remote-ip=209.85.128.47
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2A3606A32A
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 20:58:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A2A3606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA67606A31C
+	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 22:03:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BFA67606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pZIJNrcH
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-492d47f142cso79355f8f.0
-        for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 12:58:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ffvabOib
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bb6860f867so6015e9.1
+        for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 14:03:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794953024; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YsFWfjs17zW7+vKJgA/bcHleP3lvuoFpNA6TFFGcQvwt0Xx4H4yw9uvfRX6Fr0cKEO
+         5D1PU63e7tr4fZnXflq+v8joofpZ0FRHcqII+ajoyRTweJi5xxZl+dY3lLPgSwamzKlB
+         c9gF36qKcF29/4kcoWH9uMdoNt2TUMrLK9o2YIFSolEGhqR9o33UL387ur4oE84abdQ7
+         sIsKaVFgL0E7z9Oatb+U9F7ZTDyYh4uaIhEIYrUV6/gbResMy0QmKSI250x3A41NSuB/
+         cDiP0FguBdonC5iSr1JvLNVuQ3KpdiEM6HkB/aykEaLTf+OKy0/JR/vmMrhO6FnoZdMz
+         iL6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
+        fh=oX4zibg2Us8t3d+IiiYnLGs1ZbKCCmqXtwx66s0LVRw=;
+        b=RVwgpWqzmjmMD48MWgQM1Cyz1YQgpKrvmIoKQTnFaDGb2EbmacpCBhNjUdDURC2FA4
+         HmWE/l9aGY2RnuyO81+gYGUksBhbSd2V7e3XQqYN/2Nk/quEXdYzyJofvDRIo6DSy8Eh
+         0Kw5bHJidXNONyDSCljvIP+N8KjpVGW62Ci6McA2H9Xl+EopJlhZtLYsKJkSYdmiilqD
+         IHjogX2Dt6hAFaESORDMfv7hEzGh1wGpKXsiGmmmLtxdQNg6lnJxbHZEFzrxJhtM8av5
+         5CQzi/WLIgIR+arfVe34OZpUA4pGXYJ9G6uqS1zR4ZwQq9jveNfkOMc5HuUV7zby559s
+         JdbA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794949110; x=1795553910; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=IQjnSpWNmOsfjWunLKeggnYLNfDLqDBiq6etlWznrnc=;
-        b=pZIJNrcHNybpIz2Pzlim+u6h4zbSfC2OsPye+eUa9zax/GWdF4blk81+wwauGz7sXj
-         sp2AtDrDcp9ZKEMaSOct0Kwa6139ul/jAz0KpqY1Y3gT223EZ7Sxk1PPfP3BQpX/+oUt
-         wlPFOFy4krB+iSImuEY4kL94NR9yPPYWU/LPkqfQe0PUdmOEoXXu+IWBrPzQNEJsqT+U
-         90s/laD8PYrtYHzfbP07C/SP+CZV3KBvj2OvrYzACPjZP75SBWotNodSd9I2KtaNRbqK
-         h1zB/ux10BkZ7wV9qv5xEsT2wzvxscYX3L2RL6qthGt176BHpD0y7Lc3ypSUVZpbBjIm
-         tyIQ==
+        d=google.com; s=20260707; t=1794953024; x=1795557824; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
+        b=ffvabOibxepp6gBozoQh9P13vbSE8yx93qgmndtejcny7a99KXEFMcqoV6h4bDxfUe
+         /u0ncAoejJYN7Pd+7vDs2nj4S8wqNNN4SbqMCc8jVWUvS+A1+WG0P1er0N62G3GE/Eiu
+         HwG4D4u2s59/UuyWREzEQOO/b1gs+as2GVcQdN39i4IM6NaBM53jzS6AR25aLbjIi7t8
+         p1sSZvUAPt6x8XkIO8Bwp3cQRtBNrTX8Bu/J1l2IuvDw+MxZ8IVEj0cGsEEoUQwJBCib
+         8Aty+VhdKSZY6+Rj7lBjkqWsVqAk9Njt5w9wNwS7iSKzm21V289DcqGp0CwJa92n1hhO
+         Xnjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794949110; x=1795553910;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
+        d=1e100.net; s=20260707; t=1794953024; x=1795557824;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IQjnSpWNmOsfjWunLKeggnYLNfDLqDBiq6etlWznrnc=;
-        b=nRwTOLS7whmKYFAAodlmwn5eTKvVCzmGEluibZ8IwsRkb6aFO45p1YrgWIiQ/mtYCn
-         yHV2sIfpVVHtna6i+1g5PtNZlRdZloOBbAmlcshl1MS/cJwEgc+R9jsTkQbD+6AJbAA4
-         3Mi9rSTgyspGZbijeFiZdHrCKHazCb54NDBKIN74YRyKSaZqWu1V1/622es5xwFGhlWi
-         cgzd6GVJcxl4/3Slwwz3tE4X5hrwAt5Tx2Xf/+lWlpF044dAKSSPal6beAGMTYoc2g1W
-         rcByZCUUTaXe1iFdbaI+uapBA0RfpGO3IgW78c+ERyYozWxrocLtbkNZL7+j4xjy3yYR
-         ZQsA==
-X-Forwarded-Encrypted: i=1; AL+hErHvoZnRio08xL+cF46/A03Bc2F3rdD3dbx3p0ZAXBEgTuP02gI0S4y47cC8yPxyPkieOKNL@lists.linux.dev
-X-Gm-Message-State: APuU4Z824F4NUisq0oFzYBjAwex6xZhbuB6mWncEL/4SFp28r1NEZ9+x
-	mcfwjochwFiGLKB9+r2g1C80Yx95R4onRp51OSoD9lAq2fx2rqjfsr4PdP59W5gWWW6wYLDH8pL
-	u+XPOiJPq9DDFOE8QWA==
-X-Received: from wrcz19.prod.google.com ([2002:a05:6000:4553:b0:497:e67e:6f53])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:4a01:b0:48e:7833:2e7b with SMTP id ffacd0b85a97d-4a36c30c79bmr8397843f8f.1.1794949110053;
- Tue, 17 Nov 2026 12:58:30 -0800 (PST)
-Date: Tue, 17 Nov 2026 20:58:29 +0000
-In-Reply-To: <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com>
+        bh=ckejA570RD3D78V/L1UsrizD8mwzoxVTkTj1dMWPzK4=;
+        b=OAcsQtgFxpjwmZ+W/Y4OyUXqlAkb80psGAfWsv9yOmtFsur5j1mzCUeoh5Kp++9ReC
+         LcIs/BIy9YXdKtYnuWZDbL6ZTVT6be8Kv+MXJY0ZvcnVRvwtsjIb4gqbXR37J6wMgdec
+         60WN0cBeGavlIwtmqhcNhsuM856D3vjr7bAT2hYMmznYUrVVAglY4UF1LkrSi+u919pt
+         Ez8yHV1BvhfyB+CG1C92LhsBI58G4z21NzsRauDbghMCH0hVy4be4Bl6/J8bXAnn+xXm
+         nwbmi+FT6WspCWR5b49pgRDlreYmghR5eDH+YZZXdlfPbJc1DS0Jt5hLphDNBCeE6j3o
+         piSw==
+X-Forwarded-Encrypted: i=1; AL+hErFgI2DdtoKPjjZDvRdwrT3llpWbjuE0JEo8ELnwAFUsHKvvwth13WCJbRO2gtE5OUMmKGq0@lists.linux.dev
+X-Gm-Message-State: APuU4Z+9j3ltno4kE6yHiAeqPuSvT5UFFLW7DNOWhnwBnbGziw+RMtKL
+	dTC78C+fCDmc7zPc/lYUNZiY3vkwbLAXBBavvCuzAp7b0qE1Z5ocL8QKW+o5alqUe1O32TlGpz5
+	Fqqm3IKQd3lxEiCClJI8M++cTx+zOGWvtUA0TSf8U
+X-Gm-Gg: AYBFou0sJHY5VQUgNMEa346XuhNlrRhvwU0hdPXMx9m/6DbwcFFzFSiOWekyWfEeffX
+	VaoB9peqZ4EQTHvpm6N1atQmeMvwJ0bgKE9qJo3DIoMLM2W5umYbopi30nNihX9HmkLKOiUIx/s
+	j8Rm2PjVXnc+r9sK3okTsZetYuK5wXSQCBgTliGzP0CCyrgVcBTqPhrK3XWNjfbxGgu643DB8d6
+	nDKJRiJ9G/JH48tCnerVJDiX5y91SGFlcsU+a5jYIP2S6Y37nQuS24Twy184aEjBE87KexITV7e
+	DBGXQCGfEQRiDW7FMEjbu6Pe9RwxwHaAfvJe77QvsFaGaiSDPXzE/tP3nwZ1ORSqDN/wuhojDT3
+	e1Hk+KRhtFQoKD9Ft0WtJPOu/fWzzYh5efA==
+X-Received: by 2002:a05:600c:8586:b0:4a1:d225:6d7 with SMTP id
+ 5b1f17b1804b1-4bb7d58b5f2mr160695e9.3.1794953023558; Tue, 17 Nov 2026
+ 14:03:43 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,58 +103,40 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <20260820135733.37121-1-gary@kernel.org> <DKTW8F3C5TC1.BE0JLOWMZCTX@garyguo.net>
- <CABCJKueCgEZ9XePNnJhbxbOP=v5X6-PvFg4poRfo=j6htovJFw@mail.gmail.com> <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com>
-Message-ID: <avy_9SPRaPSKD8b4@google.com>
+ <CABCJKueCgEZ9XePNnJhbxbOP=v5X6-PvFg4poRfo=j6htovJFw@mail.gmail.com>
+ <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com> <avy_9SPRaPSKD8b4@google.com>
+In-Reply-To: <avy_9SPRaPSKD8b4@google.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Tue, 17 Nov 2026 14:03:06 -0800
+X-Gm-Features: Aa3M54obldq6YruWajcrqkfkI0bnKtN_pPopxVMwZ7IRPXUGwGNOW9PukA8ODCo
+Message-ID: <CABCJKue=wV7gx5D1PuBWOgWnAFC2kzGSFSqshun3=AoLg6b=_w@mail.gmail.com>
 Subject: Re: [PATCH] rust: cfi: disable function merging if CFI is enabled
-From: Alice Ryhl <aliceryhl@google.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Gary Guo <gary@garyguo.net>, 
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Gary Guo <gary@garyguo.net>, 
 	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	"Onur =?utf-8?B?w5Z6a2Fu?=" <work@onurozkan.dev>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	kernel test robot <yi1.lai@intel.com>, linux-kbuild@vger.kernel.org, 
+	Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel test robot <yi1.lai@intel.com>, linux-kbuild@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
 	llvm@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 21, 2026 at 11:20:18AM +0200, Miguel Ojeda wrote:
-> On Fri, Aug 21, 2026 at 1:43=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
-e.com> wrote:
-> >
-> > The LLVM fix itself is trivial, and it looks like a pull request for
-> > it already exists. I assume we'll want to drop this flag for fixed
-> > LLVM versions when they're available.
->=20
-> I will link it in the commit message when I pick it up soon -- already
-> did in https://github.com/Rust-for-Linux/linux/issues/1132.
->=20
-> I also added the `-Z` flag to https://github.com/Rust-for-Linux/linux/iss=
-ues/2.
->=20
-> The `-Zmerge-functions` flag is internal but has been there since Rust
-> 1.34.0 in upstream commit:
->=20
->   b91d211b4030 ("Add a target option "merge-functions" taking values
-> in ("disabled", "trampolines", or "aliases (the default)) to allow
-> targets to opt out of the MergeFunctions LLVM pass. Also add a
-> corresponding -Z option with the same name and values.")
->=20
-> so that should be fine, but I will ping upstream Rust so that they are
-> aware we are using it.
->=20
-> And, yeah, agreed, we probably should remove the flag conditionally
-> later on, to confirm the bug is gone etc.
+On Tue, Nov 17, 2026 at 12:58=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> =
+wrote:
+>
+> Function merging should also be disabled with gendwarfksyms. It causes
+> faux::Registration::as_raw() and Page::as_ptr() to get merged, which
+> incorrectly causes the former to get the CRC of the latter.
 
-Function merging should also be disabled with gendwarfksyms. It causes
-faux::Registration::as_raw() and Page::as_ptr() to get merged, which
-incorrectly causes the former to get the CRC of the latter.
+Sounds reasonable to me. Although, I assume this is only really a
+problem if the functions stop being merged later on, e.g. because
+they're no longer ABI compatible?
 
-Alice
+Sami
