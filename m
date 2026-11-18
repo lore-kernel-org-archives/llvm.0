@@ -1,76 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794953322;
-	b=A3FV1oGw0gcMQ4W7xmmknU/wBvOWTeVZ4Sn/0cTzdzEpLoTcG7EljwzU+hgsfYxfOHq+
-	 2fW/AILLQhWdy33xPzJfShKTj3pPTnDFXtx5pUveW3f8hVI7NqbfgLlhV64LUOzspdPIh
-	 JTWHwuIxjhPE05Xrj9X4HDYFKzWLbGUHFb0M2sRQOZi9CAJmA500Fbu5xA3b410dCcEU4
-	 eSTbLrfeO5L3UgkB/tsBQ9SxiYgCTrbrFEKKfmWThZKppadNlpUq1qzTvbYCm5q9PCh9i
-	 XLtDAaL7FOD8DwSoQGG4AFTFVCfFV2bziQa1k6tMdy2mCaPcecpr36KYXpDLT757Tdg==
+	t=1794961139;
+	b=ycetRm9mOKvVWIkbNAKlQcPJalOhohwBanQt/vT96KaGbaQbPggryirZjI7KRybcTR72
+	 nZOeJeW0uw8c+iZnyqhMW6gsHRmgkgyFSs/wcCVnX80uG7HUOfVASBU0vEj9rh+PEm5WW
+	 LiWHjuAjY61KOm5EWMtPmxPYdjvKGFK3He8FmxXDuKu69XyO2UpboGllBoKK33luwV6t9
+	 QfMfq1cPhW0SE8vxW1RreeAXtLTcjNwpx4fnzNOxSl8I1cd9PbnnwjhDESEnBKlNSnKio
+	 daWuVC/+xacEJVpdbv2FarTtA3w8lJ2ddMp4LPWdlYN4lqAY3GqFz5lXIEoWpjHktgQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794953322;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=bI8B5pGHz5h1ly//mHf7ndgFx4Rz2ltW2HmUrfyIsQA=;
-	b=VvntJxmX+YI40sijQ25oWuEkhwdqyq42GVuKx3euooGrOn07tbce+AutQnw3NwKZB39T
-	 rI0yxVnoiouJ89mn7XeBSd8HUyPPU4evIYAYdRJUGgnu50N50As3mh1mBfznKB3aIeeuW
-	 jlIVmjtJg3/DaFeWcrtW381aP6DapIP3nWy9ahgvBLOFkLuY23eRBSTwDQZxYwbd2V+d/
-	 TByN/Mm/F7hQEKRil6U7Vl0LepbciMHR4TfQ18IwmUCL9kafZhRdF/IwswAmpDJrS+O5A
-	 WOH92c4BSgi6lsio8PqSY5+hWu0k7L1F9+OJWy+0x9TfP/Ea7yXEwBDVxJip7rRlL7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794961139;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=CiaEOlN3DliPTegWH/OxBrR4pZjxHdFZsot9BUcRetk=;
+	b=XKENBPHq0z4ErIxwmA29C4NrvQSsaNd6NOT6B9z1WPgmAw8DEkPrYft1JuCAxZ9yE+7U
+	 NadVtN5EErxZ0fwg8NXPKnsiso0jX6S429tdjFMvfEe+cjLTyKcr3IeRL74UMd+7ii4w7
+	 BCCxhoWlQhwqXoIUJ6oZyxkpH6Oj0MA4hjPYz97+7+UskHuEiblkbI9uaOkFNF2kEJqra
+	 1AtT/ey2mBj6u446TSrnhStUa/bdmrbGecbpvMHAMyqXiGSIQH9b6/NqtWcB/hcZf8VPI
+	 VpBZ8jx4sHxjVRmdwIxcUBZTHbGdgsqdVCTH8qq+3/lkPG01jB6LygAidfIKZ4UDXng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=M3qujAI1;
-	arc=none smtp.remote-ip=95.215.58.135
-Received: from mta1.migadu.com (out-135.mta1.migadu.com [95.215.58.135])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H8Z8uMXb;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BAA606A32F
-	for <llvm@lists.linux.dev>; Tue, 17 Nov 2026 22:08:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82BAA606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D79606A31C;
+	Wed, 18 Nov 2026 00:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=M3qujAI1
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=6n3oDTFw9gSbVu7ljl4fwt44Xt31tv6c5y9tagZDFdI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794953318; v=1; x=1795558118;
- b=M3qujAI1eAiVRSUeR1KRAUAEnb1jINv2xfB6M1rMuIkDL39OO8hpitN0ywH/Wdh9ZqAEhH03
- ciCo0aG/EhCSCabtGg3pLu74jNK6ofZDj3NAY8n5s8y9Efri7hUovj4mC1emwg4EXZK0ls3/l+u
- DI7b2an/LIHq3fDEy3QuZNxE=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 2bbf6e667b38bebf;
-	Tue, 17 Nov 2026 22:08:37 +0000
-X-Mizu-Trace-ID: 2bbf6e667b38bebf
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: dennis@kernel.org,
-	tj@kernel.org,
-	cl@gentwo.org
-Cc: chris@chrisdown.name,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	acme@kernel.org,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	llvm@lists.linux.dev,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH v2] percpu: do not put btf_type_tag on per-cpu variable declarations
-Date: Tue, 17 Nov 2026 14:08:24 -0800
-Message-ID: <20261117220824.609017-1-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H8Z8uMXb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117E81F000C4;
+	Wed, 18 Nov 2026 00:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794961138;
+	bh=CiaEOlN3DliPTegWH/OxBrR4pZjxHdFZsot9BUcRetk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=H8Z8uMXbbN46/Dz3D2RrmXrHgVu5ybahMNNXc49qnRx6z5esm+e9cQXQNXAkFRcrN
+	 XjmuwGX7gj9Rh1y79PoI4NaK0mLI3lCX73yjdRDoB+D1y1WklzIy2e8f9mS3q4u+l/
+	 dLFiO9fYL3E7KTmVPPiOfWsjTNhS0YMv7GMyaIDCQ+pKEm8Lgacu/lrndDp8B7MNLx
+	 YwMbpf7AFMyuj1PqggDvwly759kt51eULOFCZw2i7JDZG6WT+TRtdZa0B7IB2fTULb
+	 hB4c/bZDmJWQPPjQJHU2uC878bQxQs4xyl6w8kaik3Dq8UI1RItPx7q2mDRwt/utdd
+	 +sV71LPdCs9XQ==
+Date: Tue, 17 Nov 2026 16:18:56 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
+ Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
+ Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
+ Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
+ <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Chris J Arges
+ <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
+ kernel-team@cloudflare.com, Tianyi Gao <tianyi.gao@linux.dev>
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <20261117161856.6f6c2ce9@kernel.org>
+In-Reply-To: <CAG4wq-cDYa2GkpWSYeOLwEPv45BtucZk+r=N2b1Srd=gUUO4MQ@mail.gmail.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+	<20261115113902.4834dda6@kernel.org>
+	<CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
+	<20261116142710.347e8571@kernel.org>
+	<CAG4wq-cDYa2GkpWSYeOLwEPv45BtucZk+r=N2b1Srd=gUUO4MQ@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,133 +92,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-__percpu carries BTF_TYPE_TAG(percpu), which records that a pointer
-points to per-cpu memory. __PCPU_ATTRS() applies __percpu to the per-cpu
-variable itself, so DECLARE_PER_CPU() and DEFINE_PER_CPU() put the tag in
-declaration specifier position on the variable's own type.
+On Mon, 16 Nov 2026 23:55:42 +0000 Tianyi Gao wrote:
+> On Mon, 16 Nov 2026 14:27:10 -0800 Jakub Kicinski wrote:
+> > The question is _why_ you use it. Let's leave the cpumap case aside,
+> > you provided no legitimate reason why having an XDP prog in that case
+> > is a problem. With veth - you are right that attaching XDP causes
+> > problems for pure skb traffic. For veth cases, however, there's no
+> > strong reason to delay the skb allocation. Hence my question.
+> > Why not let the driver allocate the skb if we know that the
+> > redirect target will need to allocate one, anyway.  
+> 
+> Sorry for not being clear enough.
+> 
+> On the setup we want to build: an XDP program on the NIC does the
+> decap for all traffic. The services run in namespaces, so the packets
+> must be delivered into them. Some services attach their own XDP
+> program to the veth, and some do not. The host does not control the
+> service's program.
 
-arch/x86/include/asm/processor.h has
+The host doesn't have to control the program, just know whether the
+program will be attached, and therefore whether to use TC or XDP.
 
-	DECLARE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
+> For a veth with a program, the skb path has the problems you mention,
+> so the host uses XDP_REDIRECT. For a veth without a program, we want
+> to use XDP_REDIRECT too, so that the host delivers to every namespace
+> in the same way.
+> 
+> In a minimal benchmark, pktgen sends UDP, and perf stat counts the
+> cycles on the RX CPU. bpf_redirect_peer() from tc costs 3% more
+> cycles per packet than XDP_REDIRECT with the checksum status kept
+> (mlx5, one extra __netif_receive_skb_core()). So one XDP_REDIRECT path
+> for all namespaces is both simpler and cheaper.
 
-which an x86 defconfig preprocesses to
+That's noise.
 
-	extern __seg_gs __attribute__((btf_type_tag("percpu")))
-	__attribute__((section(".data..percpu" "..read_mostly")))
-	__typeof__(struct cpuinfo_x86) cpu_info;
+> > Since your patches are not a natural / clean extension of the existing
+> > infrastructure - we should step back and make sure the use case is
+> > practically justified.  
+> 
+> Maybe I am missing something here. XDP_REDIRECT into a veth works
+> without an XDP program on the veth. To me, it is natural that the RX
+> metadata also reaches the skb on that path, without attaching an extra
+> XDP program.
 
-and GCC warns:
+Sure, nobody is arguing whether in an ideal world the metadata would 
+be magically available everywhere.
 
-	processor.h:232:36: warning: ignoring attributes applied to
-	'struct cpuinfo_x86' after definition [-Wattributes]
+Inventing a new way of storing metadata (either in this set or Alexei's
+simpler proposal) doesn't integrate naturally with HW drivers.
+And duplicates the information. Fast packet processing at HW drivers is
+the primary use case for XDP, we should keep that front of mind when
+designing.
 
-which -Werror turns into a build failure.
-
-The compiler is right to object to a type tag on the aggregate, and the
-issue is fundamental: every variant of an aggregate shares one DIE, so
-there is nowhere to put it. clang drops it silently and GCC warns.
-
-The tag is meant to record that a pointer points to per-cpu memory, and
-cpu_info is not a pointer.
-
-And this gets worse: for a pointer-typed per-cpu variable GCC attaches
-the tag to the pointee, so
-
-	static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
-
-comes out as PTR -> TYPE_TAG 'percpu' -> struct bpf_hrtimer. The truth
-is the other way round: hrtimer_running lives in per-cpu memory and
-points at ordinary memory, while that record says it is an ordinary
-pointer to per-cpu memory. clang emits no tag there at all.
-
-Add __percpu_var, which skips the btf tag (__percpu under sparse) and
-use it in __PCPU_ATTRS(). The cpu_info declaration above becomes
-
-	extern __seg_gs
-	__attribute__((section(".data..percpu" "..read_mostly")))
-	__typeof__(struct cpuinfo_x86) cpu_info;
-
-The pointer spelling, T __percpu *p, is unchanged and keeps its tag.
-
-Before this patch the tag also qualified the variable's type, so &var
-had type "T __percpu *", and a pointer does have a DIE of its own:
-pahole emitted PTR -> TYPE_TAG 'percpu' -> T for each one.
-this_cpu_ptr(&var) is that shape, and that is where the records came
-from.
-
-Those are the records an x86 defconfig built with clang loses: 280 BTF
-types, 140 TYPE_TAG and the 140 pointers carrying them, with .BTF
-shrinking by 3360 bytes. They are the derived pointers -- clang never
-recorded the declarations themselves. None of them were reachable: a
-record points at a type only if something is declared with it, and
-nothing is declared with these. The 803 places that do declare a
-"T __percpu *" keep theirs -- the 110 tagged pointers that something
-references are the same before and after. .text is byte-identical.
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-Reviewed-by: Chris Down <chris@chrisdown.name>
-Tested-by: Chris Down <chris@chrisdown.name>
----
-Changes in v2:
- - Dropped the "message is confusing" sentence: GCC's "after definition"
-   refers to the definition of struct cpuinfo_x86, not to the declaration
-   of cpu_info, so the message is accurate (Chris Down).
- - Dropped 2/2, "local_lock: do not put btf_type_tag on the lock guard
-   type". Only the tag on the typedef generates a warning, and that
-   needs a GCC fix [1] anyway. The pointer usage "T __percpu *" is fine
-   (Chris Down).
- - Rebased onto v7.4-rc2.
-
-RFC: https://lore.kernel.org/r/20261110012235.1024461-1-vineet.gupta@linux.dev/
-
-[1] https://inbox.sourceware.org/gcc-patches/20261112191815.884167-1-vineet.gupta@linux.dev/
-
- include/linux/compiler_types.h | 8 ++++++++
- include/linux/percpu-defs.h    | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index c5921f139007..b250d6870324 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -50,6 +50,7 @@
- # define __user		__attribute__((noderef, address_space(__user)))
- # define __iomem	__attribute__((noderef, address_space(__iomem)))
- # define __percpu	__attribute__((noderef, address_space(__percpu)))
-+# define __percpu_var	__percpu
- # define __rcu		__attribute__((noderef, address_space(__rcu)))
- static inline void __chk_user_ptr(const volatile void __user *ptr) { }
- static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
-@@ -68,7 +69,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
- #  define __user	BTF_TYPE_TAG(user)
- # endif
- # define __iomem
-+/*
-+ * btf_type_tag records "points to per-cpu memory", so it belongs on the
-+ * pointer spelling only. Declaring the per-cpu variable itself puts the tag
-+ * in declaration specifier position, where clang drops it and GCC attaches it
-+ * to the wrong type, so __percpu_var leaves it out.
-+ */
- # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
-+# define __percpu_var	__percpu_qual
- # define __rcu		BTF_TYPE_TAG(rcu)
- 
- # define __chk_user_ptr(x)	(void)0
-diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
-index dbe3267a0a13..f53fc430aaad 100644
---- a/include/linux/percpu-defs.h
-+++ b/include/linux/percpu-defs.h
-@@ -45,7 +45,7 @@
-  * that section.
-  */
- #define __PCPU_ATTRS(sec)						\
--	__percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
-+	__percpu_var __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
- 	PER_CPU_ATTRIBUTES
- 
- #define __PCPU_DUMMY_ATTRS						\
--- 
-2.53.1-Meta
-
+You want to cross from XDP realm to skb realm, after frame left the
+scope of the original driver, and with no BPF involvement.
+These constraints are unreasonable, and leave only clumsy and
+inflexible solution on the table.
