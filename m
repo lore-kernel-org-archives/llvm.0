@@ -1,62 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795007921;
-	b=dbMQNTwZXzuf1L0tFt87dXLD1BPHcJ1aKKjLh9Uzu/8Of1z2vgr2fJIZMlQUDnaEaCEY
-	 +xeoFbb3gUncy+AVaZPCKAnpdwRaKpZQ+fxkep+aRcSRYev73L3A8FbFFqJsemY1HsZ2A
-	 +R2utvmjDo6B7weOotUIzLy9rxXs9ePDsY2u0+X2P0GPg6rTt+YgeDdaFtEjvvo55II/Z
-	 gg7q8ZK/8BkO/+xbBVZpFEzzCVL61jAfU4/BHdJHIKVXoLoDqX8/nIGIAc9MjPqTGnvvp
-	 CPgRZeC16X6whyuP24s7IrD/6fbkfOOBDUEVIkeHcLSgHy4AerBP095cgMlCPvVvzHA==
+	t=1795018059;
+	b=oQs2VzwYPl4ji4Iec8PivH5L9VKW8Qf1HyRdLQCgIxlvK0QUWHobVXs8B/Gb5FY7GcfR
+	 jcAEx8vUiBbZyY6qTvULxmH/tP2zcX+r0vTzdgxHcCIJs1DnpTLGFLKI/X6TEHCk9Yeb4
+	 P1WIYlgqRVtj6zZVtsl/4qfWoosn8euBLfxXVSAflu+mv2m7DO8Jfm8L8lg6GloDmvsDI
+	 kQwuEUOyAWKXe1Ez2SVKmpdkmFo7SspA4l6/cheDraSQmfQ1guVHAXew0g+Fqx47j86Ke
+	 /+KnhCQqjBiZ8JGfeweuPU8X9LCVQFmxGyVAUb+QQ2g/1wQAStEb4o12m7j5CTg6U6A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795007921;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-INFO:X-CID-META:
-	 X-CID-BVR:X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=upd0IxCj2792Sd+Vd6lDIAbHvUW1f3kpvaia8Zd/3Ck=;
-	b=KXuDf4RgRuLb8rFPAeHaHPLlB5rqBbnURJWBY8g3+xU6bjsM4bUkQqBq1rvYdrhuJoEs
-	 5VnpwljVvsbQSqlRMVac/Jk9RXfpbGv2VeUFrpZTG1PaEcGmgaIVYhM+k2yf2i0QK7Tib
-	 zbtBId9ILcBI+MvCpl9ogjh+Vb8gKgUYOFrCeVw7EJqIvFtUqsOlcBCIEG9PAUTDzlM0s
-	 P3JiXaUBHrlQmRx9HNB9QhazvllayH2UQu0CavGgIG/k+FaYKnC4ck8Zm+VHAl5YILbIX
-	 lNTv20jGy2Xb9G39ZxUEw7cMtdOcIV9U2a4AQgk3e5HcnB/gwTIbihpPLDGbKXM8oGQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795018059;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
+	bh=CV7oamrSYXfpp3NnleoEpP5E6f5lbD9kU3nbbqKEnc8=;
+	b=WqML0/IY12ELo+Tf9LyAx7MY7pDD93hPGP4x7iRBmln2CSQrTakJDBj85hWGyQDRblgn
+	 QyRyk9mrluP/wyxGKDdhzSL26K+I9/PTa9RsC46edyqOPsCFmP6OVG38/QHq1d06vPy6l
+	 32K3jvMAq+NCoKZOSHAYgG73YcYj18gfTcTC2EoiTdPx+LhZbvOqkcRLjjRunAoiYUTxU
+	 BVYzVN2z0sEX0n6SR96v29bpBxNa33aTxvvDuv7lJZsDEPxPi/TKI/CzUPA8BE0ujBpUw
+	 224P0VCVgKJban8Al8fHeXuRxbioeDQwDWZE+/k/2RInPjxN8vKSL2d45aemZPz/iJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=frso8ZDI;
+	arc=none smtp.remote-ip=209.85.160.48
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BED606A332;
-	Wed, 18 Nov 2026 13:18:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6BED606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 8c311e00e35211f19a56ed5b684f684d-20261118
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:8e9c81ca-96b8-4040-b02f-cb5bf20b073f,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.19,REQID:8e9c81ca-96b8-4040-b02f-cb5bf20b073f,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:7db8b62,CLOUDID:590b889ced8d4f83e2e07ffedd64af85,BulkI
-	D:261118093247FQF070YS,BulkQuantity:2,SF:17|19|38|64|66|78|80|81|82|83|102
-	|127|136|153|841|865|898,TC:nil,Content:0|15|16|50|99,EDM:-3|-100,IP:-2,UR
-	L:99|1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1
-	,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 8c311e00e35211f19a56ed5b684f684d-20261118
-X-User: lienze@kylinos.cn
-Received: from [192.168.3.106] [(111.193.136.161)] by mailgw.kylinos.cn
-	(envelope-from <lienze@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 603697062; Wed, 18 Nov 2026 21:18:30 +0800
-Message-ID: <06e16d01-328b-4267-902b-1b4821139029@kylinos.cn>
-Date: Wed, 18 Nov 2026 21:18:26 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31DB606A31C
+	for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 16:07:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B31DB606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=frso8ZDI
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-49429181ce9so771193fac.0
+        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 08:07:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1795018057; x=1795622857; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CV7oamrSYXfpp3NnleoEpP5E6f5lbD9kU3nbbqKEnc8=;
+        b=frso8ZDIPM0fVorlI0ZNzCcRzovcseE6Jq9VQ+hhT5waDb7rCVo/Re3uBFac2xoB3Z
+         M0Rjrhgcfy10tM602AiKYwoKZf/6kmqgT5zN6MgFKa857+VsU7NXDwoFYpwOQmnwSJOQ
+         tnJjqZrLDTi3SC/7gqLLmak7up/eqL6Al3ES+Ujd/LJ0Azn+FpL6hqIqkCclG+3C3sr9
+         51ZQikHmGW+uYpDFwWJL0ceC0zrjC6h6DM8CHaUbamdQ8frnlxse+l1Oa5b8V1p2CVdv
+         hboQhLym7prL7jDVMcAYlFvpt/NhXZxhIrlcsbzoSYvXib5GEnBa3bL2NNBQlB1yWKZN
+         PUaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795018057; x=1795622857;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CV7oamrSYXfpp3NnleoEpP5E6f5lbD9kU3nbbqKEnc8=;
+        b=n1X4eUtvJX3Sd7CjIktPqJ8ggkSS4+ng6que2Vk3lfC+M/FdDcCre9JWpe9Pal2I71
+         Q5ZE4mUL5xr9RcRueQiKLhsH7oZ+Zx+kieDdRmKO36nZsGqJCDE+twd5PeM841VILoQ2
+         xEYmFkhkhsAWQZPQ77/66ZvJsu/sVyVP7UmOC1UT8uuEf22dgOHnU9T2Of9TNyyGfgbf
+         UhSs5MsId2X9u7zL26uBTd2zkYqdIQaVoytcJsuF9Lh+9bLJ0mh/T3ylVO1g+UXZ7+1x
+         Q2ZbM6XRTDFPtRkU4wOMZJLFnPXqprmJDECyCPbo+nJIPY3nsm/KZV0FrJ4owtQhMdUM
+         uVuA==
+X-Forwarded-Encrypted: i=1; AL+hErF5niFLYYhHNUmWnSiQzpUqCmP3mIQLSV52gfMkF2k4HnOyypPmrrMIcr2NtCq9SWFCIGM6@lists.linux.dev
+X-Gm-Message-State: APuU4Z/aomjFuHs3wqOafMmJ0HBYa7V62qLMYTM4QnP6gRHqqm4PQj2X
+	6ZApxK+9RvwtNqbMgwA2lqsEGCsP5EtQzRPDWiWv+njfHIyBWMNnhFaGsT6j++4smMM=
+X-Gm-Gg: AYBFou381MFQs9o0+ut03cxsxHHppa/cwnS/sO5gpFPqSPWmIKnIGonlaRv9ALSampo
+	Ek+72gILXmAUr0ph1pmgsOyLcyzfvyGhRLiEtaIQALn4vWOHsk8wKIjYodeWl5XjnLQxTdtgfiz
+	5crwzfP/3zfoatN+s6lUAeJTN5W94JJc0aRjOOvX8afn2grb/EC1oqwpvZ02/xMZJxuu5KIOhCy
+	5Jdqq4hkdK6S3PnaHlpJgtQnPLuHk5rdJEu3D39l1oiTRwaHRJvhiobKX9qws/E1ADIjTQPQmhk
+	ul4waXTsm7BgVWTP2zx8aJ9qibN9L9IlM6VkQW3dIMja0MFIKFAn7G0GwRK4HKk4lcw2Tw62nsJ
+	ChbSRW2FsjJyggMqSlIHiYxqfcMfm0BR/W6KPqLA+TVnZQGKTD7fshcyv4O9zarE0j2OgPB64Z1
+	r8xNZkepqPcs+rRlGggE0MaWNLv82ODcoTHcjZL8gFm+rhsw7Rs0nH5VyPV6dU1vs184mGT0KqB
+	/BtV5pSWtGyndM7GtG12pCty31mbWWzyxqtR4dZXWw7ujMdhRy8LLKV+hijkeXgQamEgusqGF38
+	nIVCOgELXm4d1/zygi80jBrS4gulgRcy01P5OZnumHpA8Rs9c7r95AK97tKuuTcdyBrqjFB5eAF
+	aRRZdjJ6RQ79vWKGfKU4B2E7EPOIpYb5watLVSNwo7Ns3D07HmFM=
+X-Received: by 2002:a05:6870:d285:b0:4ad:5a7a:f7e9 with SMTP id 586e51a60fabf-4b7613c52femr2613744fac.34.1795018057354;
+        Wed, 18 Nov 2026 08:07:37 -0800 (PST)
+Received: from [192.168.11.112] ([96.43.243.130])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4b743721fe9sm2624231fac.6.2026.11.18.08.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 08:07:36 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+In-Reply-To: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
+References: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
+Subject: Re: [PATCH v2] blk-throttle: Avoid unsequenced accesses to jiffies
+ in throtl_schedule_pending_timer()
+Message-Id: <179501805630.17649.245726738544852847.b4-ty@b4>
+Date: Wed, 18 Nov 2026 09:07:36 -0700
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,92 +100,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/damon/paddr: avoid truncation warning in high-address
- KUnit test
-To: Aveline Noir <jm5905938@gmail.com>, SJ Park <sj@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: damon@lists.linux.dev, David Hildenbrand <david@kernel.org>,
- Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
- Linux Memory Management List <linux-mm@kvack.org>,
- kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- mm-commits@vger.kernel.org, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, oe-kbuild-all@lists.linux.dev,
- rdunlap@infradead.org, sashiko-bot@kernel.org,
- sashiko-reviews@lists.linux.dev
-References: <20261118-fix-damon-paddr-sparse-20261118-v1-1-3a0e943406d5@gmail.com>
-Content-Language: en-US
-From: Enze Li <lienze@kylinos.cn>
-In-Reply-To: <20261118-fix-damon-paddr-sparse-20261118-v1-1-3a0e943406d5@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
 
+On Sun, 15 Nov 2026 20:37:57 -0700, Nathan Chancellor wrote:
+> After a recent improvement in clang to warn on unsequenced accesses to
+> volatile variables [1], two instances appear in
+> throtl_schedule_pending_timer(), which can break the build with
+> CONFIG_WERROR=y / W=e:
+> 
+>   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+>     469 |                    expires - jiffies, jiffies);
+>         |                              ~~~~~~~  ^
+>   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
+>     469 |                    expires - jiffies, jiffies);
+>         |                              ~~~~~~~  ^
+> 
+> [...]
 
-On 2026/11/18 01:04, Aveline Noir wrote:
-> Hi SJ, Andrew,
-> 
-> The kernel test robot caught this issue in my earlier addr_unit KUnit
-> patch. Feel free to fold this fix into that patch.
-> 
-> Thanks,
-> Aveline Noir
-> 
-> -- >8 --
-> When phys_addr_t is 32-bit, Sparse warns about truncating the u64 address
-> passed to damon_pa_core_addr() in damon_test_pa_addr_over_4g().  The
-> runtime kunit_skip() does not prevent Sparse from checking that
-> conversion.
-> 
-> Compile the high-address assertions only with CONFIG_PHYS_ADDR_T_64BIT,
-> and keep the test skipped otherwise.
-> 
-> Fixes: 7a983cc1b573 ("mm/damon/paddr: add KUnit tests for addr_unit conversion")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/20261117170155.fEdeuuhm-lkp@intel.com/
-> Signed-off-by: Aveline Noir <jm5905938@gmail.com>
+Applied, thanks!
 
-Reviewed-by: Enze Li <lienze@kylinos.cn>
+[1/1] blk-throttle: Avoid unsequenced accesses to jiffies in throtl_schedule_pending_timer()
+      commit: ae1171f38098098e88c13c38e462d27babb50038
 
-Thanks,
-Enze
+Best regards,
+-- 
+Jens Axboe
 
-> ---
-> The reported warning is gone with the original i386 config, Clang 22.1.8
-> and Sparse v0.6.5-rc1-21-g84ec0658. All executed DAMON KUnit tests passed
-> on x86_64 and i386 with and without PAE; the high-address case skips
-> without PAE.
-> ---
->  mm/damon/tests/paddr-kunit.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/damon/tests/paddr-kunit.h b/mm/damon/tests/paddr-kunit.h
-> index 9839cc233071..2b11f0e67a12 100644
-> --- a/mm/damon/tests/paddr-kunit.h
-> +++ b/mm/damon/tests/paddr-kunit.h
-> @@ -26,15 +26,16 @@ static void damon_test_pa_core_addr(struct kunit *test)
->  
->  static void damon_test_pa_addr_over_4g(struct kunit *test)
->  {
-> +#ifdef CONFIG_PHYS_ADDR_T_64BIT
->  	unsigned long addr = 0xffffffffUL;
->  	unsigned long addr_unit = 0x1000;
->  	u64 pa = 0xffffffff000ULL;
->  
-> -	if (!IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
-> -		kunit_skip(test, "phys_addr_t is 32-bit");
-> -
->  	KUNIT_EXPECT_EQ(test, damon_pa_phys_addr(addr, addr_unit), pa);
->  	KUNIT_EXPECT_EQ(test, damon_pa_core_addr(pa, addr_unit), addr);
-> +#else
-> +	kunit_skip(test, "phys_addr_t is 32-bit");
-> +#endif
->  }
->  
->  static struct kunit_case damon_paddr_test_cases[] = {
-> 
-> ---
-> base-commit: 7a983cc1b57309a875a9e07a934c9944bf3d088d
-> change-id: 20261118-fix-damon-paddr-sparse-20261118-fb08902768d7
+
 
