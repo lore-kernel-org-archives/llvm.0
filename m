@@ -1,101 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.49
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795032722;
-	b=hZg5Bw8DDYFQB/xCeQhXGXCkk81mSmshJHknzcbjG5tibvKurR4YNAbTq6ZIXavcU5pi
-	 MaUHRm/LH/Yc7SIL6HSAZfAZiNPCk6b2EkBPE62tj4OGW4xbssK1JACo6qD7A757DD766
-	 B2GwNwDrBXyb/GMP2F+37Qj4p7jR5oZVk6+iGozhPYax6zuB2ItXWj2sEV6AsCynji+A3
-	 kOKy+ISsiaKB13fkNwN7GbRwIWILUV0a346HRUPlaRpHAKAGYlxUOdPkmeSIRrWd52+XN
-	 vU4letzgeraBRPSXSRJAVIuNxbEAl2289KFnSy7qOf3Kh4uOFEASP5W3npsO/3YtSSQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795032722;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=kl4zj0/jNFlm2ibhU+UMkqFeZbcnh51SPv06nLRI2qY=;
-	b=geyFvU1krPMmRv7utkixww0+v4IAdQIEF6jFXra8EsTSwBepPcUIXmcx/pf/x69VNzeo
-	 EfczRJrIs28Q8LZ2Z0OHsS5Otyweno4w+7gp/iso9fdlAVeiawZa3n9N1fy64of/9FVHG
-	 mRfM4o57sVcIU0KDvOxFQYzxygCqN1vSNKJA7JnIOKXe2/mbqyg1PvTyUzdPYofWwZEHM
-	 Q883JSCZUBZHvHXbGZiJ7wsD+mC5HqG6LxPKNhBjOGSPzWDvVLxPeWXTZYrWOc9/V7kWP
-	 +/ifbCOQplJxg/eEAcJgfelgruNLjM32pu7G39gtBmGJ/jDhprZcygI/6Rtuex8wVUw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NVeszBlv;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.16
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795034680;
+	b=zXEDFmVRdkqBKM4F4Sdud5vJtjWzesfR9+dp7OcMf6WnOcg12kvqsf8cIoTtHZGeTPR9
+	 aGuqWn9kBggalAd4KLWdVQCv4sLa3aJ3SU7ndhRG7ppvu6tVvhExU0LQjckmWIcqJJgnK
+	 +WlAfOlBrH/sCrT51LaAWPQnRJjh18wsCtSArxiDIUIfug/z0Z75UU+9gC1kX9s/nC+jq
+	 HyrUGKc7pBMYv6+RMxVubgu6mxQ3WoR++NouxTXU+BfBhNJEs9Sq9gvG2YmVdexNGj1lf
+	 zigRFmcYktQQc7ZN4JN7eZc7A+DsPKWo/HPKFbDBXyuB12iMeLNI7ZaZUPF7pr8bTZA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795034680;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=Y6fG7lcGMiK8HBC1ZoJaefvrbvz2/uKtmaYcUkOU7Ys=;
+	b=wtGiBh5guCjSJ91wmbuLJ59G7d4xpz7nMQrRdT6oJN8KisvLa1abSan5HcwEBgAekho5
+	 4ZtUCaR285q6pyPnSSBcwZxwgkWShSwA52zermR0QzkifnsfLVgv1wj011isi9nLeX+kr
+	 vO7JtPbt+4bH1MVdM23se/Df5orwQ+px8iwq3NnPJJuVPO5M3LgdfqIw7TR1LI3paPttZ
+	 4yBYSLKOXl1Vikbqdzqkecx+AlI179ZbwtlQhWIqN2Bd/HZF8xUBVZdzaUqhAKv7xeTLD
+	 JQxTco38Wg16391n0YCeto4VchRdYABclHqc7j8E0cJaj/wJpfZLpqYvNk7uY9eMW2Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MmBjs1m9;
+	arc=none smtp.remote-ip=198.175.65.16
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E16606A332
-	for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 20:11:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4E16606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442A9606A334;
+	Wed, 18 Nov 2026 20:44:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 442A9606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NVeszBlv
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso11634065e9.2
-        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 12:11:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795032715; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JFETSZGdjfCJiA+EDE9PS8Q1nzxHFJLDo0KqnuJhTz12G0maLbDC3T+qsxxurl3hnT
-         FCF9r4IXuJj+V+y5ff2Ft342rsm/Mi+uexlGn3h+ER1em1owC98hTV33XtzAKVmUFzMv
-         sPeXpjvYI6zHvY6WwhPoP8Q6yDMO9GST1BPPICxyUNd1G6A5SpTK5HZUnDDDpB51NLKu
-         hU2zBFzxSnDWDWc8QF3jm2SVvOGsDuFzx61EDWaVy5X1k0/7Mpa6EQUrHBzYmpIj2bWS
-         ZMzG/h7n08F4gFHy+7lDQ92HhAvjf+cq1l7pLJwpn7/mPOMn0uACxnoHHkqaW8xrsCX+
-         ZaFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kl4zj0/jNFlm2ibhU+UMkqFeZbcnh51SPv06nLRI2qY=;
-        fh=5lH1Rkv2GK3ReseMfPb8D5BAlrak0GlBVhLResp6JY4=;
-        b=kwMztnf0eBUbaaFcXgZ5+X5Ebh6Fpsk6OxsOm4TLT1Cwym/BpCArQol+tUDGE95erI
-         989q9UaQDXQTEXOJBhi8uc2HdpLFsHG0OBATToSpSbXKnb66jkWvliGGkzYkEy69oOC3
-         NVBFwEfT8AFR1DIIT23cX0936fnxTY1l1twXa4A4ThfVSGDe8xWbabh0CBGqlKSSioxr
-         9vhbqrh8lBH5TgCj7WzgtgG9t/BBKB+hyWya7dLcWdeXWDPCFJhkM31SEQo/1K/ag1Gc
-         yL67iFgqCqbgqxS54eXMu7k8v0iPpYSShopLpNz3SKGhGonPq8AOCjbS71xoG66AduY9
-         TKWg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795032715; x=1795637515; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=kl4zj0/jNFlm2ibhU+UMkqFeZbcnh51SPv06nLRI2qY=;
-        b=NVeszBlv6LvNlkoJ6IAbTWc4WmPWFMfoxB0aI6876HJPunQsmnlAOlWuFea8WkZHQz
-         weB7ofhf6D9O++SJ/Eb7tDSlemmpC7SL4TrnGcP4ahBYF8eO0cug4VVRDr0VGy0CyqGN
-         44+ZWNfTk/nG0mpC347pADz249pvx9zUekkperqqGB+IoAaXG2FLOUkztKA/jtnyMBDg
-         CGMgtgKeZMlbjMrgJwC2n+jxxj3Y3eElcQHBx9YT6tJIMUs4jooFDI1jG+MBPyNig7+w
-         nr9q90DWqwDw65HS51jjFpBLr2H28qI0KQjIGee+RkEIXsndPd4aGbItACucAibNuIx6
-         7psQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795032715; x=1795637515;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kl4zj0/jNFlm2ibhU+UMkqFeZbcnh51SPv06nLRI2qY=;
-        b=T9P8v2W0RHL+zv+PDIG8U6BwD41KxUymMM8cTbt/6iPuDQU36HeRmzzdY3N3wVxsoF
-         zsoFF+6xCZpWVXmYuaaKFnYvUInJ29FMZFS2lvxzNj+/LGKg44MrNbuFuPBQJ/0A7O9d
-         gMIx2dd6FqJdlVb0JpiD8FrK+kMVQ95/FohHBz1eiRTg5d3o91gAkn9cZAaDwh6ane1D
-         cU0dTmZUrNGcF/th3CpGDpm4gHPsonMjwgYujk8tcdjVKD2zdPs1P4N9pv2SDRz6KDo8
-         uLbYRtzQB0n/vTrL5qnHLGRRm683P4trSwntn89OI/+X6+4/wQax9E6kYtGUFmQLIsll
-         9mKA==
-X-Forwarded-Encrypted: i=1; AL+hErHaSjFzG12aPrPQFQa4D/VXmblEeHXk/AJdTc0kzjsSEQ8zGLYFI8aSYz2uNP8zgwW3bWmr@lists.linux.dev
-X-Gm-Message-State: APuU4Z/9p9rpzgTrC47Jp+DImqFcnfVFMYlIQOtrSAF4tWwvHwG8pcvA
-	Tpp+LKycA6qTOzYIyQ3e5BeCQi/WeKyCBofSsayJIloPS6twgqBNFNWT7WY06l5m7wtRF9tNdD2
-	JTGnjSaGeEtRmrOznzOcj0hYucZnnv/I7COCYVgvC
-X-Gm-Gg: AYBFou3RyXuES0RrjkrPeKrZRTfEThkIDORFOWoCh1W20zYTLqga9z55WBAtvqLh7cT
-	PBePpZqtaGHeAcr/L2cEqideGj2mO54833qMEX5cUeTLP4tjrz70+vsd2XwEuDUrUOlYD3DANLj
-	KPU7Sd2utAZQae0JBtloLtpqi3vPbc0WJAR7xLl1Bl+HpLAqHWFx4o1bPAMxBi+zHKY5TFp5EHc
-	sKwUIBM4HcSAWaUt5j4BvHrW/dDTOvpuB5LjCLSA1vXy/nGBllPjWj/L7E/hzEavsbMguFPqDYL
-	on7vqDtq8c12E4HKcSiaLaPFRhIXrAKSgnxkCWmBmLr2nHBqlfX0E2yhStrBuQzVRAw/TjZjoBI
-	cGQPwuVncZWe0e125uOuqLGxW2qzeuhRACREU6umq2u53HiBYbhyaJF1O13UVAaEM4Fglxp2zCu
-	rw64j+bEot3OVa
-X-Received: by 2002:a05:600c:4f4f:b0:4a1:f377:5c6c with SMTP id
- 5b1f17b1804b1-4bb7da1274dmr73938355e9.10.1795032714637; Wed, 18 Nov 2026
- 12:11:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=MmBjs1m9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795034680; x=1826570680;
+  h=date:from:to:cc:subject:message-id;
+  bh=uTfT6odHoXTFSpYewsefSjYE/wOtmX7XB/D5nP2HstY=;
+  b=MmBjs1m9SqrhkCabPtLkqTRny4bCDI0j7CUiLEpT3kw16pORw0zCvIJ0
+   WwAwygmOT1+O6BoQ2Z3IFxw6ugWfiUgRU5SBZj1cEK+7xwIuy3XWQbySv
+   O2To5OMIZ5bxbSBQhU/Jhax6kJ3fTv+ZrUs+bXf7czkzMNSR2blIKFef4
+   0Hsj6DccGhVHPJvyrgqe6it8xr5cRcfqrZaZkbVXhnBQgCKabEkW2gbse
+   4LMdPDE9fg09OppkfrBV/zX7Rt89bdWdsmIes3hcsekXwkoolhPl5Kk+j
+   gL6uIBfRY9YmWH8/qnzoYlFfunGcsey60kb/XcZPXq+nE7UUbNeY25qJ1
+   Q==;
+X-CSE-ConnectionGUID: g2U9O4KCQLaTuC1iUSpKjA==
+X-CSE-MsgGUID: c+aB6KpPQX6daKOREGIl3g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11970"; a="3857007"
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="3857007"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 12:44:39 -0800
+X-CSE-ConnectionGUID: n6oCCFVST6+t1HjAXsFvBw==
+X-CSE-MsgGUID: Biixfo4SReKHPE/4AJbmOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="10572495"
+Received: from igk-lkp-server01.igk.intel.com (HELO 1073a420ae3a) ([10.211.93.152])
+  by fmviesa006.fm.intel.com with ESMTP; 18 Nov 2026 12:44:37 -0800
+Received: from kbuild by 1073a420ae3a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xTmWB-000000003TJ-0SnK;
+	Wed, 18 Nov 2026 20:44:35 +0000
+Date: Wed, 18 Nov 2026 21:44:07 +0100
+From: kernel test robot <lkp@intel.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [superna9999:topic/sm8650/el2-integ 2/36]
+ drivers/input/misc/pm8941-pwrkey.c:406:58: error: call to undeclared function
+ 'is_kernel_in_hyp_mode'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <20261118213853.EXkpojMM-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,75 +81,207 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-References: <20261118-rust-merge-functions-v1-1-fe86126522b9@google.com> <CAKwvOd=iOXmF9DS8iopFZEgsqORe6eHokpF_-3-jEfD7yPuDFA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=iOXmF9DS8iopFZEgsqORe6eHokpF_-3-jEfD7yPuDFA@mail.gmail.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Wed, 18 Nov 2026 21:11:42 +0100
-X-Gm-Features: Aa3M54q33nCN9_jrrnbqRVjKUIfyyWJWqzyIJScCl4pTAw6Zw2JFPOFUAC-yfZc
-Message-ID: <CAH5fLgidhnPbP=xXQ3162w6q0U6rWHPZ9Mu6-E5va4_CXyanOg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: rust: disable function merging unconditionally
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Matthew Maurer <mmaurer@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 18, 2026 at 7:48=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Wed, Nov 18, 2026 at 5:09=E2=80=AFAM Alice Ryhl <aliceryhl@google.com>=
- wrote:
-> >
-> > Function merging causes various different issues:
-> >
-> > * For CONFIG_CFI there's an LLVM bug causing functions with different
-> >   CFI hashes to get merged. This can lead to crashes at runtime.
->
-> Do you have a link to a bug filed against llvm?
+tree:   https://github.com/superna9999/linux topic/sm8650/el2-integ
+head:   237d9f2f9294f587cd9e1ce7fd5124d71ea60d12
+commit: 4bf6e743effcfb71eab2bdfe28614f486bced226 [2/36] input: misc: pm8941-pwrkey: allow reboot config when in EL2 on GEN3 PMICs
+config: s390-randconfig-2002-20261118 (https://download.01.org/0day-ci/archive/20261118/20261118213853.EXkpojMM-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261118/20261118213853.EXkpojMM-lkp@intel.com/reproduce)
 
-https://github.com/llvm/llvm-project/issues/217629
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261118213853.EXkpojMM-lkp@intel.com/
 
-> > * For gendwarfksyms it causes functions with different CRCs to get
-> >   merged. This leads to broken MODVERSIONS information if the function
-> >   changes in the future so that it can no longer be merged.
-> > * Wrong backtraces when a crash occurs in a merged function.
-> > * Possibly also issues with pahole/BTF as the merged function's debug
-> >   info is lost.
-> >
-> > These issues are new to Rust because in clang, function merging is off
-> > by default, so these things have never come up before. Because of this,
->
-> I've never heard of function merging (in clang). I've heard of
-> -Wl,--icf=3D{none,safe,all), a linker flag.  Is rustc setting that by
-> default, implicitly?
-> https://github.com/ClangBuiltLinux/linux/issues/1598
+All errors (new ones prefixed by >>):
 
-No, this isn't linker ICF. rustc doesn't pass --icf, and in any case
-kbuild invokes rustc with --emit=3Dobj and does the final link itself, so
-rustc's linker arguments never come into play.
+>> drivers/input/misc/pm8941-pwrkey.c:406:58: error: call to undeclared function 'is_kernel_in_hyp_mode'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     406 |             (pwrkey->data->allows_ps_hold_poff_config_in_el2 && is_kernel_in_hyp_mode())) {
+         |                                                                 ^
+   drivers/input/misc/pm8941-pwrkey.c:430:58: error: call to undeclared function 'is_kernel_in_hyp_mode'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     430 |             (pwrkey->data->allows_ps_hold_poff_config_in_el2 && is_kernel_in_hyp_mode()))
+         |                                                                 ^
+   2 errors generated.
 
-What I'm referring to is LLVM's MergeFunctions IR pass
-(llvm/lib/Transforms/IPO/MergeFunctions.cpp). It runs as part of the
-optimization pipeline, within a single codegen unit, before any object
-file is emitted. Clang only enables it with the cc1-only flag
--fmerge-functions, which the kernel never passes, so C code in the
-kernel never sees it.
 
-rustc, however, enables it by default whenever optimizing for speed or
-size (opt-level 2, 3, s or z), which covers both kernel configurations.
-It uses the "aliases" mode: when two functions have identical bodies,
-one is deleted and its symbol becomes a GlobalAlias to the other. You
-can turn it off with -Zmerge-functions=3Ddisabled.
+vim +/is_kernel_in_hyp_mode +406 drivers/input/misc/pm8941-pwrkey.c
 
-Alice
+   251	
+   252	static DEFINE_SIMPLE_DEV_PM_OPS(pm8941_pwr_key_pm_ops,
+   253					pm8941_pwrkey_suspend, pm8941_pwrkey_resume);
+   254	
+   255	static int pm8941_pwrkey_probe(struct platform_device *pdev)
+   256	{
+   257		struct pm8941_pwrkey *pwrkey;
+   258		bool pull_up, wakeup;
+   259		struct device *parent;
+   260		struct device_node *regmap_node;
+   261		const __be32 *addr;
+   262		u32 req_delay, mask, delay_shift;
+   263		int error;
+   264	
+   265		if (of_property_read_u32(pdev->dev.of_node, "debounce", &req_delay))
+   266			req_delay = 15625;
+   267	
+   268		if (req_delay > 2000000 || req_delay == 0) {
+   269			dev_err(&pdev->dev, "invalid debounce time: %u\n", req_delay);
+   270			return -EINVAL;
+   271		}
+   272	
+   273		pull_up = of_property_read_bool(pdev->dev.of_node, "bias-pull-up");
+   274	
+   275		pwrkey = devm_kzalloc_obj(&pdev->dev, *pwrkey);
+   276		if (!pwrkey)
+   277			return -ENOMEM;
+   278	
+   279		pwrkey->dev = &pdev->dev;
+   280		pwrkey->data = of_device_get_match_data(&pdev->dev);
+   281	
+   282		parent = pdev->dev.parent;
+   283		regmap_node = pdev->dev.of_node;
+   284		pwrkey->regmap = dev_get_regmap(parent, NULL);
+   285		if (!pwrkey->regmap) {
+   286			regmap_node = parent->of_node;
+   287			/*
+   288			 * We failed to get regmap for parent. Let's see if we are
+   289			 * a child of pon node and read regmap and reg from its
+   290			 * parent.
+   291			 */
+   292			pwrkey->regmap = dev_get_regmap(parent->parent, NULL);
+   293			if (!pwrkey->regmap) {
+   294				dev_err(&pdev->dev, "failed to locate regmap\n");
+   295				return -ENODEV;
+   296			}
+   297		}
+   298	
+   299		addr = of_get_address(regmap_node, 0, NULL, NULL);
+   300		if (!addr) {
+   301			dev_err(&pdev->dev, "reg property missing\n");
+   302			return -EINVAL;
+   303		}
+   304		pwrkey->baseaddr = be32_to_cpup(addr);
+   305	
+   306		if (pwrkey->data->has_pon_pbs) {
+   307			/* PON_PBS base address is optional */
+   308			addr = of_get_address(regmap_node, 1, NULL, NULL);
+   309			if (addr)
+   310				pwrkey->pon_pbs_baseaddr = be32_to_cpup(addr);
+   311		}
+   312	
+   313		pwrkey->irq = platform_get_irq(pdev, 0);
+   314		if (pwrkey->irq < 0)
+   315			return pwrkey->irq;
+   316	
+   317		error = regmap_read(pwrkey->regmap, pwrkey->baseaddr + PON_REV2,
+   318				    &pwrkey->revision);
+   319		if (error) {
+   320			dev_err(&pdev->dev, "failed to read revision: %d\n", error);
+   321			return error;
+   322		}
+   323	
+   324		error = regmap_read(pwrkey->regmap, pwrkey->baseaddr + PON_SUBTYPE,
+   325				    &pwrkey->subtype);
+   326		if (error) {
+   327			dev_err(&pdev->dev, "failed to read subtype: %d\n", error);
+   328			return error;
+   329		}
+   330	
+   331		error = of_property_read_u32(pdev->dev.of_node, "linux,code",
+   332					     &pwrkey->code);
+   333		if (error) {
+   334			dev_dbg(&pdev->dev,
+   335				"no linux,code assuming power (%d)\n", error);
+   336			pwrkey->code = KEY_POWER;
+   337		}
+   338	
+   339		pwrkey->input = devm_input_allocate_device(&pdev->dev);
+   340		if (!pwrkey->input) {
+   341			dev_dbg(&pdev->dev, "unable to allocate input device\n");
+   342			return -ENOMEM;
+   343		}
+   344	
+   345		input_set_capability(pwrkey->input, EV_KEY, pwrkey->code);
+   346	
+   347		pwrkey->input->name = pwrkey->data->name;
+   348		pwrkey->input->phys = pwrkey->data->phys;
+   349	
+   350		if (pwrkey->data->supports_debounce_config) {
+   351			if (pwrkey->subtype >= PON_SUBTYPE_GEN2_PRIMARY) {
+   352				mask = PON_DBC_DELAY_MASK_GEN2;
+   353				delay_shift = PON_DBC_SHIFT_GEN2;
+   354			} else {
+   355				mask = PON_DBC_DELAY_MASK_GEN1;
+   356				delay_shift = PON_DBC_SHIFT_GEN1;
+   357			}
+   358	
+   359			req_delay = (req_delay << delay_shift) / USEC_PER_SEC;
+   360			req_delay = ilog2(req_delay);
+   361	
+   362			error = regmap_update_bits(pwrkey->regmap,
+   363						   pwrkey->baseaddr + PON_DBC_CTL,
+   364						   mask,
+   365						   req_delay);
+   366			if (error) {
+   367				dev_err(&pdev->dev, "failed to set debounce: %d\n",
+   368					error);
+   369				return error;
+   370			}
+   371		}
+   372	
+   373		error = pm8941_pwrkey_sw_debounce_init(pwrkey);
+   374		if (error)
+   375			return error;
+   376	
+   377		if (pwrkey->data->pull_up_bit) {
+   378			error = regmap_update_bits(pwrkey->regmap,
+   379						   pwrkey->baseaddr + PON_PULL_CTL,
+   380						   pwrkey->data->pull_up_bit,
+   381						   pull_up ? pwrkey->data->pull_up_bit :
+   382							     0);
+   383			if (error) {
+   384				dev_err(&pdev->dev, "failed to set pull: %d\n", error);
+   385				return error;
+   386			}
+   387		}
+   388	
+   389		error = devm_request_threaded_irq(&pdev->dev, pwrkey->irq,
+   390						  NULL, pm8941_pwrkey_irq,
+   391						  IRQF_ONESHOT,
+   392						  pwrkey->data->name, pwrkey);
+   393		if (error) {
+   394			dev_err(&pdev->dev, "failed requesting IRQ: %d\n", error);
+   395			return error;
+   396		}
+   397	
+   398		error = input_register_device(pwrkey->input);
+   399		if (error) {
+   400			dev_err(&pdev->dev, "failed to register input device: %d\n",
+   401				error);
+   402			return error;
+   403		}
+   404	
+   405		if (pwrkey->data->supports_ps_hold_poff_config ||
+ > 406		    (pwrkey->data->allows_ps_hold_poff_config_in_el2 && is_kernel_in_hyp_mode())) {
+   407			pwrkey->reboot_notifier.notifier_call = pm8941_reboot_notify;
+   408			error = register_reboot_notifier(&pwrkey->reboot_notifier);
+   409			if (error) {
+   410				dev_err(&pdev->dev, "failed to register reboot notifier: %d\n",
+   411					error);
+   412				return error;
+   413			}
+   414		}
+   415	
+   416		wakeup = pwrkey->data->wakeup_source_default ||
+   417			of_property_read_bool(pdev->dev.of_node, "wakeup-source");
+   418	
+   419		platform_set_drvdata(pdev, pwrkey);
+   420		device_init_wakeup(&pdev->dev, wakeup);
+   421	
+   422		return 0;
+   423	}
+   424	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
