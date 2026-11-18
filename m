@@ -1,109 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.96.83
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.41
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795001151;
-	b=VfL1Kun5shBytqCwXsDPcdzut4Emuok7A54A+qzp7LhWT5oZXcRwa44Khb3d8x3BfZLE
-	 zjTk5iwc9atSYf8Z6sR9lNMai5Bot5v7Zc4st8ltx6jiQq0Ozw5mxLRaVVopgSIxYHF7m
-	 NJaWVQLUBRa1ascg24owjlcUJ9448efVoMionCYIsbq2y/jv/vOj+T3z8GUMZKn1epuYt
-	 VouCwRKYEXkFuBIz8B/ocwUs4Uq61TKI8jsTUpgpe/R84VSN2C5W/3pC8rX2y9OCnhyqF
-	 CUm0iyZupRMw6OJr+cmrbEvpBxax+bLiolp2jU58TGZ9u+zZidRlxhUZTiLO2CbKBSQ==
+	t=1795002775;
+	b=a58DlDSWnrM3pleewB7G5s5DjwP2dkPPUBrr1zNOZEsvGNUWxntmOACyA4iMkgMLAIia
+	 4wUii2NiFyOhwJsj7aYtrYR6FaWTF3mF+ShxxWILItK3CH3mQiCe0j3injQX5gVmSsSMA
+	 tNIe2kI7oT7oHuojprnLKZeFREqRMlNMkOctY1rm2vOO3hGRZR2Na08RYf/sTs1RJBgdn
+	 4sEg8Pd8MNdLo6Zwq+FRgCI98+VCmPbmUDqLiPYlw1NPB7ispVgvR8t548AmIybHwt6V6
+	 hY2amZe/PyFGGH9lCzAtbGQUVE4lOllpQwWTz2NvLDx4Ic4WsRod/bHNC0JPher63sQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795001151;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
-	 From:To:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:
-	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=S6KS9fD0pLBKmHIHqYmhqFr6ydbJAzSUHd1coRdsPnc=;
-	b=IbVG9boEqznecNDoYatf1dsYf6eH/mh66stU1ZZ4g9xvkIH+wcjfC7vsWrjeSdCjYDYM
-	 xPPPFxZqXNHULFSXbS7/Gxtdj/nu1lqqZYONGXKn7PexgbzTN7oZImo6gwmTATd/Rfkqq
-	 xLVsfd7OhlTw4qLsQP7/RqoGf7JuFY0KXsFqtTdhqk/wWLnz338YSg6oQ3kNj0C5P663l
-	 t8xRTJhQaGjg2Ic9n9uBT1fclw1a74yDaJF3tbTLVrOWhLSwaqhZ2WI1cwobxdNkMG2YL
-	 v25LUPJ24EHgZr6DjqHyJeEO1zEH6uTD6gyKWynG/4iviLn1dg72fuV/35fVulYZb7g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795002775;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=fuiSGVlrKGpkb2IYU7v/zhYyv1xq0dvV6f+0akTmk4E=;
+	b=SCE7ILeD1y60FYC9U/ALtZtaxHHYZhcpf1brM2Rm8FBM7CP00IA/J1aidua5wqwx0Npo
+	 QdbZargcP+9wjwwKkkq1fmY4YGrLeogd+uq2p/IhsCTQdnIxJ4UhNwclPjPhr2692k50K
+	 HtDV7f8xxU6bxPGHi//x3lbUPcvn1P/hFq4vH27ePfx/BOlV2b0I1tv4Y/4PRLMynp1CH
+	 HmzB2woBKN20u9Ha8WdaPlAl4XE8dxFB+HL3dV0LquktBWyDLKF4IHY34Qsqn4PqWwzjg
+	 aNUwy3OX+rGj/3JkYlzf9MKHfRuT4b0wn2eQJHghiZgS/i28QKKAEPEHvF/yhr0aMBQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=garyguo.net;
-	spf=pass smtp.mailfrom=garyguo.net;
-	dkim=pass header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=mW4hqGWi;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.96.83
-Received: from LO0P265CU003.outbound.protection.outlook.com (mail-uksouthazon11022083.outbound.protection.outlook.com [52.101.96.83])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Q2j9gZdG;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDCE606A31C
-	for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 11:25:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCDCE606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E4F606A32A
+	for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 11:52:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60E4F606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=mW4hqGWi
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=b5YSrHjmrySolsFJYQ9aVLrKzcJvSzQhuZxEItvOfd43x7CtfA9gkhWdCluew7xcTkD29VPUg+BkIi/6GoGI/cobiMO3MyHxHwRQXRZDtBiCAUIg6QubAghyZsd3HfEf8FdqlYTQ6U+ivzuYzpV+abAjyaML2bLV3y8j5BvYaVID5k9hPSnEcM7NQOoeX5SYMgWWZG4jJoGgCDyRAYboTy5fYUtOu1uUth1YL3o2ooOOjccKgbU+x3IJiplGguemmYVCDgbTdSKw1nCl8Z4wjOdar9UaJI6r8U3m7BP4hskpAK4wEt91zUKYJVKYeZyoeqjlW7p2E/4mKFVR8ZblHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S6KS9fD0pLBKmHIHqYmhqFr6ydbJAzSUHd1coRdsPnc=;
- b=UL6fYH0opI/kygxp24cdoXyemSsNdlxrFxlj+G/dkhVHkbLIILH/ZFQjW9OOXjKEB9XsmQukF/zHt5XugtGUEHS/PZyz5aJQwUZS+S0V8a767S9vhQmCmdM064QUSY79GbxQD2lvVTiN6ZjU622EmZRR3qPkPbnflRS2hHf22xjfBw23GiuwYl16tPreYQiMlbbTHwkZEsHUCjpMTU/ufWMHrl0rbedB1I/d+wM0Y7/eeLEiNUJ1gwuUYEZXaCk63UtM087XNEAB7eXkc+k/IdbkZB2VFCjIjj/kz42m1OVXjwNIqDW4xob/akPDiNCRjWCdPhVY7iAYMaW+7SPcbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S6KS9fD0pLBKmHIHqYmhqFr6ydbJAzSUHd1coRdsPnc=;
- b=mW4hqGWiSBd6Gp3Weej1qfTttiMmJhV7Z+PPwk+GCH1FVU/Qtqz/s10Ij/gzO/as6TEGaEJlZn2U0IBgUDhuPSvNT+wezaOJBiKgCcghI7N/6z6+8gUrnXj/7EOvjIO//Y8Crb4rwagcQE74OpzRo2Gtbduy5TrXXrc3dlYpyFA=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1cb::9)
- by LOCP265MB8642.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4b5::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
- 2026 11:25:47 +0000
-Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- ([fe80::55f6:f98b:7fad:c6e3]) by CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- ([fe80::55f6:f98b:7fad:c6e3%2]) with mapi id 15.21.0615.013; Wed, 18 Nov 2026
- 11:25:47 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 18 Nov 2026 11:25:46 +0000
-Message-Id: <DMYASURCURHG.2Z417FHDGBR5F@garyguo.net>
-Cc: "Sami Tolvanen" <samitolvanen@google.com>, "Gary Guo"
- <gary@garyguo.net>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
- Schier" <nsc@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng"
- <boqun@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Tamir Duberstein" <tamird@kernel.org>,
- "Alexandre Courbot" <acourbot@nvidia.com>, =?utf-8?q?Onur_=C3=96zkan?=
- <work@onurozkan.dev>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "kernel test robot" <yi1.lai@intel.com>, <linux-kbuild@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <llvm@lists.linux.dev>
-Subject: Re: [PATCH] rust: cfi: disable function merging if CFI is enabled
-From: "Gary Guo" <gary@garyguo.net>
-To: "Alice Ryhl" <aliceryhl@google.com>, "Miguel Ojeda"
- <miguel.ojeda.sandonis@gmail.com>
-X-Mailer: aerc 0.22.0
-References: <20260820135733.37121-1-gary@kernel.org>
- <DKTW8F3C5TC1.BE0JLOWMZCTX@garyguo.net>
- <CABCJKueCgEZ9XePNnJhbxbOP=v5X6-PvFg4poRfo=j6htovJFw@mail.gmail.com>
- <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com>
- <avy_9SPRaPSKD8b4@google.com>
-In-Reply-To: <avy_9SPRaPSKD8b4@google.com>
-X-ClientProxiedBy: LO4P265CA0255.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:37c::20) To CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:400:1cb::9)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Q2j9gZdG
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a35a60499eso6730455e9.0
+        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 03:52:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795002773; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mlE+DwC+ti/RqC/5vdeY8O+bA/wqmavwU0ICSxFRau+Rn983zS6mIHiSs/1PEXYWaL
+         BAZJy/KJ3TRv+L5jvjSuYyP2V94rWWoXW6kJcqWnNLz/zAxuGAsBOL7UA9fnjWRTWWT0
+         xr3AtbZL4agHepQ6M0OYeAHHf6cCzVOEw+iOY8bTtShuxKCC/FElvv/BZvXvh/76tUNs
+         qKdQPpYCLF+Nx/UAiT3CDg1md6eKfWkzo/eHhQ7+S7FQOj3ZstJicZd1SXCdzWi2PwoW
+         UTX20sxb7M2qMthM74gCPwgSlBj7rNeEmPo86/wTvnlSfwR89ZnRQgs7n+fG/146IsSU
+         vjdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=fuiSGVlrKGpkb2IYU7v/zhYyv1xq0dvV6f+0akTmk4E=;
+        fh=1LQDMAjSLcy3qCc2H6IyiS2YOnkdMZUZgVGtJh+J5Iw=;
+        b=JPuIzmNQZRRhOQfYpr/MK8h7a11mCeECG+rql1EWqzZlRfMjluBQIPLT2HfeUEbbmu
+         DHYSqRhr46BfPPQZVop5x7k68Dd2uDF0xoC8Ke5dgPMUsKabhdTLoh5aCD/G3CFQE15U
+         yByXdekYQYzbTQFKN6ZP4EJ+3nIDJ0P6w37Mnb29+fAXHP9FEigE8wpbfwsXLfdty9pS
+         j4EzWpjoayCTs9BoLZvzfDEp5uk0SLKOJP3XMVJoib+2HAv9WnEm9ei9UHsbGRES6Z5s
+         99XXWwU5H9bi17CXkD24zamQWXBOYK0K2esWQ8Mzcxmxm866xtwQHX5ENGRj1J00oGpA
+         HDGw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795002773; x=1795607573; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fuiSGVlrKGpkb2IYU7v/zhYyv1xq0dvV6f+0akTmk4E=;
+        b=Q2j9gZdGRS73vgn/SYZy5x2TLwWny1kaGtjHoj2H4RyJmin/JQXC405BTZ1w25/Xr2
+         Tf1Qh9AKWKuFsDW/jN5wmrscCriXctlwqYCNVFB4/C9Z+sHBdFlXDUIjEgVqHzcnFBz8
+         J+Pn3ee7JB+Ayx7vBzLkhe6a7ykZZRDqvrWIFYc2mG/o0FQQVcEzrF+xM4Rxnl+sDZ39
+         IU3XYVr6rJ4oa+6ZfJ/dJh0LpiqRKKRf+r+RuPUarBJPx3taPI9ed8WfkGci1ib95Grg
+         9bV0OG+/VUcGzmt9iKCROO+ifLp0IupYf2EjZaqS3w+d1SaY5NqVBOdhwVwDncefttn5
+         KfcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795002773; x=1795607573;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fuiSGVlrKGpkb2IYU7v/zhYyv1xq0dvV6f+0akTmk4E=;
+        b=hvYLISaKwp3pyrYcRIjzn5/Y/c5nDg4byW2oYBnxQaHsdLTWqIuN7qoLxk4bAzDPz8
+         hkuBz0IUKgikvjT3lYVEps9ilfC8vZwZrYCRRzHXaVqN91bj9xL4MfZNN46Hyy0CrEwU
+         HjdlgjvieQPWGcuX6IuM2Qj2JHlVlkSclENUllRyDUD/3OhPO1ZAj25qJv1NhlckpyS/
+         V+9Ue7SZ6ofjvH9V1hC4Nv/ukHIoscrQESTjsYgX7LEfpmib9dijvNsjhnIimj0LbdCL
+         1JsZckMXpvW8+eBeYHPxtVR1JIIV0BABN1xSMEHOLFjHCEWXrIu6Ab9mzPO4DrVp4uCu
+         pYjg==
+X-Forwarded-Encrypted: i=1; AL+hErHbGQFNdLGYjaaag5CrHNsUrSqvZbifXiwdykVx7UnyH5PAv+GJJKr7GqAosd4XaaXHOL1O@lists.linux.dev
+X-Gm-Message-State: APuU4Z88N8Y3dW5FtWmi2o33HcLEL7cKwxgPboiUfWz3zjdpkn+RGkqa
+	It1stwT++FUq3mdbEForQ8gQfZUjN1Zm5seq+XLrLMJH4ZkcYCq76Pc2lyt44QU3ZJ5uFQXOMD5
+	iplfVPUROB7ksgUc37T2S30xNRlvm1j/ddrm2j2kX
+X-Gm-Gg: AYBFou0ZZ1DhcvWH4phR/Cd/ePqSbR57sCbBRWneQjGQh3ydV6oU74lF2SdjLMw2rIX
+	lhHjMiq/FICr7mFhwMNmVVeyD8B47qKwxOyR/E3U8EHMus11dYEhII6kH5aXmto2+d7X03ltuvk
+	O7C9qc9BriKpNYgYZnj2l8nJXvJyN/CRupD6Fizd4uLQsZw1X8A4zl/1kzL2GoHMTGQv/ootFZJ
+	6zJU8kh4RvzHFCC9UiGmPkO0PLDIT9iGmD/w8PkgGw10w6GpBFJvVGYMMtjB1GCzutjlm+FfV0v
+	5V7sjOmBUON2DnypChyJSEAWTqn5oLLpsUBr5KMn4WOS0r2C/lczhaIywCURvH+a0/e65oOYEFf
+	wL106uxqr8SczpaHfhiqRV1LgJOswZ2ULDOoJXAtuS0gVGNwdhMIPGLkXF6g8NJGTFxmLdmQX9Y
+	qubXzNi3MRxas8kq8pdT+TrRFSaw1xJjlk0ImvcqdW7KyM0PKop/DUXfEph1ExjwCgtQ==
+X-Received: by 2002:a05:600c:a303:b0:4a2:84c:52f3 with SMTP id
+ 5b1f17b1804b1-4bb7da13acdmr37565995e9.6.1795002772260; Wed, 18 Nov 2026
+ 03:52:52 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -113,109 +105,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP265MB6051:EE_|LOCP265MB8642:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2535ec25-1ea4-4dbf-1679-08df4566b124
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|7416014|376014|1800799024|10070799003|6133799003|22082099003|18002099003|261009223027099003|56012099006|10067099003|4143699003|261102123227099003|261026140227099003|261026121527099003|261028144727099003|261022105027099003|261021121427099003;
-X-Microsoft-Antispam-Message-Info:
-	UCeY1fxXpzZlyd8FjC5Kc/m3vP1ovefySc61ZJhUmD5w9aExjC2iVDANm3ruWrAC8oTZR1bS6mF0HzJxxcGVMV4B/TlP1/7fgneWfxrLDCvwpn68U8f77vTp8HwcVXeadTWVVVhZeHmp6Owf0IUtQyk2KfPSlb39xq5CkCoKxuVl3NL7riuKxm2AgmDa2AkPUpLyraxADL2ucz9L+vXsVmFC7aB01F8bP8t9Rfh7s1KApriLk9h+wYjaMSrq+RbQ3UnUNkLPIzlxrtyhMU5Bnlno4sIy1oIb8AGtqRx31jetf9s2HMinfNzWwm6HuJGQRLx09/iH1L4Tr6MD3wsfRgikrz4LkB6H+V5UpE7QAe9tocl6ZRRmC1w2P/duuiMhzrGxT7nL5dO7VP6w6t920/AatIKIOT/FRVo0MB8kuVLdclXbHcs3H3O2+IrFC1oNwzTityLEYBu02VvN9nIOquyrJ7I6G+DRwa2i4vnobEP5kqfHfPGyrQOSeuOhO0lc5LndaBB09FRgYyJxbsmJjQRgy16nGy2O+UHuROr5rqu1geihe7HJ3v+V4bNCJQ6EbC6QrzbsygagM5QrjSkwUyuEwjPi6hO5EV3Wd8hYAt6W4mQE0MEnT6DklImSo/Nzd09p5cQw4VTxM+LIAxeK4YEfo9DIzotrhljMlED2x08=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(7416014)(376014)(1800799024)(10070799003)(6133799003)(22082099003)(18002099003)(261009223027099003)(56012099006)(10067099003)(4143699003)(261102123227099003)(261026140227099003)(261026121527099003)(261028144727099003)(261022105027099003)(261021121427099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VGRiY2prT2ZEK1dJbllrZ0FRS2xPK0JRTWpPakQ0NzhMMFFsT1E4OXMxdldO?=
- =?utf-8?B?dmx4bFFLMkJiRExzLzFXcXNlc2dZTWhVdzZBTjl0UXlpNDF2cHVGUjRJTVlK?=
- =?utf-8?B?SjRtUUNuL1pFTGlnV29KaHdoWkw5OUNDUFpBenNDY1lvWEdZaXR3bDFSYWhq?=
- =?utf-8?B?M3BsdzE2WUZHMDkxdjlTbGtaSG4vYTJwVmdhYllqVmRTTVdQVzZEWjRzRmJq?=
- =?utf-8?B?OVpJbjBjOHBXT3I3SEY0MXNVa3lVTmRZVTRJL0x5YUVFbHkzMldHTFQzZzlk?=
- =?utf-8?B?dDRTSlg3eWNXeXFhekhPZUpQck1uZ2dheTI4WktaNkJCTUxiUmtlbEY5TzZz?=
- =?utf-8?B?TVVaY0NqSnIyblZlQjNnWFQzL3gxcXliN1JpZ2JXTERMZUtZdDF4NjJSbCtt?=
- =?utf-8?B?b1ZiYUptV0FWMlh5elhIYklkRTBTZmdaK3QvUUJNaXJ5ZXJFZk5aNEYycXhP?=
- =?utf-8?B?MjllM1ZQazhoMHcxSkdrVTFldThGRVpGenZoREN1a3Frb3k2L0pNbHVMd3Y0?=
- =?utf-8?B?cEJ2RnowSkhtalpSVzRKNTdnODlLMStQVTF5ai9rM1FadFdrRFFyOVhLNFg3?=
- =?utf-8?B?eUJEWlFHU2doWkpNemhZU1ZWL1V3aS9uRUhsT2ZUQ2lRU29SYVFCYk1CeHhr?=
- =?utf-8?B?VC9GWjRjMnY2QlBsajBPZWJsMXBFcGhEUktiVXBTWjF5Y3lrb0V4SkJQc1Iv?=
- =?utf-8?B?aHBEUU0vaDBhNWpJMUtMeVplM3BQbTJCOWJBZU1DODN4WEI4MlNHK2UydkYz?=
- =?utf-8?B?WjVzdzFKR3BTaGhLc3hndzVQeUtRaVBERGtqYVk3TXJvR3o2NnNHQXduV3lo?=
- =?utf-8?B?NHhFaU5DdTYvOFpwZkRJRCtZL0kvYnRlN08xekNLQWp5U2dmWTdaL2hYVXpX?=
- =?utf-8?B?Uk1WRXdOaXpyQk82a2ZnTFlsNDh3SDgwVzl5YlJjcnNqaHNTSitFQVgyeFRz?=
- =?utf-8?B?dG8xcDJjWDRMalpwdWFkUkYwWGlYRWduRGJ4d2U4b2wzTklqZnZOd2pxbEtQ?=
- =?utf-8?B?UUNPMEFESGpraTlLL1F2R3JYbWNBdCtjaHNocEV3THZrbUMwMWptbkcvNFRh?=
- =?utf-8?B?SXlDQmI2SVJZcWhiRWkxdU9HSHQwT2QvZllmcXpPOGpROXc5OEcweVJ3UlRp?=
- =?utf-8?B?cjlVN1ZqLzU4L2czcHRaeHlNN2x2Q1BtRjNYUjVvanA5NkZrSWhISkdNNkxB?=
- =?utf-8?B?WEM4NGpPMlk5K3M2QkFHVW5IZkdidGdsUUFSSXlSbmovUFRJZnVGRHl1OHAy?=
- =?utf-8?B?b3dBQkFvMGxFSlFTVzN4UlIzSURjUGZpcTJmdzh5TDFFbkpTY0Y0Y0xLaE5Q?=
- =?utf-8?B?R0JIWWZSR0U2SDBhcW5lSzNtNUZKczdpalluS25qc3c1Q0NyTGw1aDFuOUll?=
- =?utf-8?B?NDF1QnpLTDNoTDBCT1poWVB1Rjh4Y3A2ZTBNaEtVL3ZPYVlWdGttbkFRRXBR?=
- =?utf-8?B?VkFKODI3cGNyV0FlL2NTQTNrZG5LR0F5YXY0NWI1U04xMEUrZnQxMmdHaUJT?=
- =?utf-8?B?ZzhLajRkOWJWRkxwWENXYmZoQUd2KzhvY3MwZlgxM0RoYkZTa0JYMG5odG5P?=
- =?utf-8?B?TDdrNTFyMDkrZDNpeW1YaFlGZTZGcTJlQTFGbmZlc2JVc3V3Z09oaXpuVUps?=
- =?utf-8?B?OFVadVdOOTBnMitialVTWmFSSkFGWmlXanhTUHlJOFRSa29xd1hkMWFXNXdI?=
- =?utf-8?B?TEdaKyt1QTZEU01oa2NxY2g5dXdOZGlNWG1relM5UTk5MkdtRmMxL3RUSDVk?=
- =?utf-8?B?SHdwQkRmclJpeGM2cTFxU25RS01WRGpRQXdVaTZWRXI4elVTRnpXbWM3SjdK?=
- =?utf-8?B?YnJZY2g1WjRKSkJWdEJqWU11UlRBQ1N4V0p6bjhNeG8wSDZPZ0plRCt1REFv?=
- =?utf-8?B?VlQzTlFManVtaUxGL0Q1Q0dkYlNKNC9mdXB3S0JSTnlzM282OEN4d0lyNktv?=
- =?utf-8?B?ckVvMG55bFQxcUhOekM3VUVNOXlNcGV6UkVQSSt5Z3BlSGQ4emZTd2VRQmto?=
- =?utf-8?B?a0MvYitMeTVpWTJSTXFOR3Z5K3Nndk52RjI0ditPNy9pQ0F4dzRCSjZPSnpS?=
- =?utf-8?B?Ly9mTDg1SWFyU2tOcU9mRGxjSyt6ZklkdzNwSzR2RXlmRVFDekFSeVJUZHM2?=
- =?utf-8?B?MXgvVmVQUFZxVTRiazd0clhXaEUxRk9LMFVvSU5PRDN6R0drcWtKdTVkNzB0?=
- =?utf-8?B?L0lmV0ZCd3crcHRmRHdtS0xEMnhFOVJhSXZUNWZUQjA1cjN3bFg2SGVoQWJC?=
- =?utf-8?B?MU9YSThLV1diL0w4UlB1ZFByZmpROEdGOW1XREdmUG9SUnIveDc5NlMwTFBx?=
- =?utf-8?B?TEhVbnA2VHVFLytrL3ZyQ0N1d09JeXVZWnNJUUFQZXpkVHY3Tm01UT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2535ec25-1ea4-4dbf-1679-08df4566b124
-X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 11:25:47.2080
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pmsTIrgM3K3dDjD/UUVKcbZohTf/weWO2bJCV5ZsgAeKCr1ZvPwwrROxPbZxE9xXlTKqVhHh1g8abP/ZD3JLsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOCP265MB8642
+References: <20260820135733.37121-1-gary@kernel.org> <DKTW8F3C5TC1.BE0JLOWMZCTX@garyguo.net>
+ <CABCJKueCgEZ9XePNnJhbxbOP=v5X6-PvFg4poRfo=j6htovJFw@mail.gmail.com>
+ <CANiq72m9v0V5Nnc_E1LUt24ofUUGxbRZdUC-UBz2NEbY_MA=Rg@mail.gmail.com>
+ <avy_9SPRaPSKD8b4@google.com> <DMYASURCURHG.2Z417FHDGBR5F@garyguo.net>
+In-Reply-To: <DMYASURCURHG.2Z417FHDGBR5F@garyguo.net>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Wed, 18 Nov 2026 12:52:39 +0100
+X-Gm-Features: Aa3M54rk28vpmTCa3HDqQLECd8XwI0zPt6LHL51Y7EEk1gBPhG59tDP6nvzdrww
+Message-ID: <CAH5fLggQ=N5D3DyCHJyLMB11XEyJF2eVBndYwwktLVeVfyOJpA@mail.gmail.com>
+Subject: Re: [PATCH] rust: cfi: disable function merging if CFI is enabled
+To: Gary Guo <gary@garyguo.net>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel test robot <yi1.lai@intel.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue Nov 17, 2026 at 8:58 PM GMT, Alice Ryhl wrote:
-> On Fri, Aug 21, 2026 at 11:20:18AM +0200, Miguel Ojeda wrote:
->> On Fri, Aug 21, 2026 at 1:43=E2=80=AFAM Sami Tolvanen <samitolvanen@goog=
-le.com> wrote:
->> >
->> > The LLVM fix itself is trivial, and it looks like a pull request for
->> > it already exists. I assume we'll want to drop this flag for fixed
->> > LLVM versions when they're available.
->>=20
->> I will link it in the commit message when I pick it up soon -- already
->> did in https://github.com/Rust-for-Linux/linux/issues/1132.
->>=20
->> I also added the `-Z` flag to https://github.com/Rust-for-Linux/linux/is=
-sues/2.
->>=20
->> The `-Zmerge-functions` flag is internal but has been there since Rust
->> 1.34.0 in upstream commit:
->>=20
->>   b91d211b4030 ("Add a target option "merge-functions" taking values
->> in ("disabled", "trampolines", or "aliases (the default)) to allow
->> targets to opt out of the MergeFunctions LLVM pass. Also add a
->> corresponding -Z option with the same name and values.")
->>=20
->> so that should be fine, but I will ping upstream Rust so that they are
->> aware we are using it.
->>=20
->> And, yeah, agreed, we probably should remove the flag conditionally
->> later on, to confirm the bug is gone etc.
+On Wed, Nov 18, 2026 at 12:25=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
 >
-> Function merging should also be disabled with gendwarfksyms. It causes
-> faux::Registration::as_raw() and Page::as_ptr() to get merged, which
-> incorrectly causes the former to get the CRC of the latter.
+> On Tue Nov 17, 2026 at 8:58 PM GMT, Alice Ryhl wrote:
+> > On Fri, Aug 21, 2026 at 11:20:18AM +0200, Miguel Ojeda wrote:
+> >> On Fri, Aug 21, 2026 at 1:43=E2=80=AFAM Sami Tolvanen <samitolvanen@go=
+ogle.com> wrote:
+> >> >
+> >> > The LLVM fix itself is trivial, and it looks like a pull request for
+> >> > it already exists. I assume we'll want to drop this flag for fixed
+> >> > LLVM versions when they're available.
+> >>
+> >> I will link it in the commit message when I pick it up soon -- already
+> >> did in https://github.com/Rust-for-Linux/linux/issues/1132.
+> >>
+> >> I also added the `-Z` flag to https://github.com/Rust-for-Linux/linux/=
+issues/2.
+> >>
+> >> The `-Zmerge-functions` flag is internal but has been there since Rust
+> >> 1.34.0 in upstream commit:
+> >>
+> >>   b91d211b4030 ("Add a target option "merge-functions" taking values
+> >> in ("disabled", "trampolines", or "aliases (the default)) to allow
+> >> targets to opt out of the MergeFunctions LLVM pass. Also add a
+> >> corresponding -Z option with the same name and values.")
+> >>
+> >> so that should be fine, but I will ping upstream Rust so that they are
+> >> aware we are using it.
+> >>
+> >> And, yeah, agreed, we probably should remove the flag conditionally
+> >> later on, to confirm the bug is gone etc.
+> >
+> > Function merging should also be disabled with gendwarfksyms. It causes
+> > faux::Registration::as_raw() and Page::as_ptr() to get merged, which
+> > incorrectly causes the former to get the CRC of the latter.
+>
+> Do we not want merging at all, or only when the types are not going to ma=
+tch up?
+> If somehow the KCFI type metadata is always emitted, will two functions w=
+ith the
+> same KCFI type metadata be mergeable for gendwarfksyms purpose?
 
-Do we not want merging at all, or only when the types are not going to matc=
-h up?
-If somehow the KCFI type metadata is always emitted, will two functions wit=
-h the
-same KCFI type metadata be mergeable for gendwarfksyms purpose?
+In principle merging would be ok if the gendwarfksyms CRCs are the
+same. I think that if KCFI hashes match, then the gendwarfksyms CRCs
+are quite likely to be the same too, but I don't think it's a hard
+guarantee.
 
-Best,
-Gary
+After all, for a pointer to struct argument, the KCFI hash depends
+only on the struct name, whereas gendwarfksym CRC also looks at its
+fields.
 
+
+Alice
