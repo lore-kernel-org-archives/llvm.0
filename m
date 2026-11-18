@@ -1,96 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795018059;
-	b=oQs2VzwYPl4ji4Iec8PivH5L9VKW8Qf1HyRdLQCgIxlvK0QUWHobVXs8B/Gb5FY7GcfR
-	 jcAEx8vUiBbZyY6qTvULxmH/tP2zcX+r0vTzdgxHcCIJs1DnpTLGFLKI/X6TEHCk9Yeb4
-	 P1WIYlgqRVtj6zZVtsl/4qfWoosn8euBLfxXVSAflu+mv2m7DO8Jfm8L8lg6GloDmvsDI
-	 kQwuEUOyAWKXe1Ez2SVKmpdkmFo7SspA4l6/cheDraSQmfQ1guVHAXew0g+Fqx47j86Ke
-	 /+KnhCQqjBiZ8JGfeweuPU8X9LCVQFmxGyVAUb+QQ2g/1wQAStEb4o12m7j5CTg6U6A==
+	t=1795026427;
+	b=IFQcpqb/xUkKDtpeM84IWpnZZkCbHrW3fxF8GhL8/WgYeS66VhNBlyAsG0QjhtjJx4Jt
+	 u+vpo3KeQAccC6tUjn43PuEs08p6gNrxCzMJMN/13qAVDeWT1Gf0u/MooT5MmDqlTBZxK
+	 3dGgaqqSMHT9aWKy6RKOdkotkEAwOD+D3bWpuqa2ASgVuapHykIs/0Q3KFGpHwfhAGAqD
+	 fROYLTuzWWZvOmikA+GuJFW50E+B/TWInuKA8qe5JhQ9DboSaFLOOV4D/foCOUCLGtJHx
+	 TNJvquybCx/lQh35GVtYGAtPz69FqNNUwuKy7pf+Y1PGoko9FEp64y7Ho26t+79J8NQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795018059;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
-	bh=CV7oamrSYXfpp3NnleoEpP5E6f5lbD9kU3nbbqKEnc8=;
-	b=WqML0/IY12ELo+Tf9LyAx7MY7pDD93hPGP4x7iRBmln2CSQrTakJDBj85hWGyQDRblgn
-	 QyRyk9mrluP/wyxGKDdhzSL26K+I9/PTa9RsC46edyqOPsCFmP6OVG38/QHq1d06vPy6l
-	 32K3jvMAq+NCoKZOSHAYgG73YcYj18gfTcTC2EoiTdPx+LhZbvOqkcRLjjRunAoiYUTxU
-	 BVYzVN2z0sEX0n6SR96v29bpBxNa33aTxvvDuv7lJZsDEPxPi/TKI/CzUPA8BE0ujBpUw
-	 224P0VCVgKJban8Al8fHeXuRxbioeDQwDWZE+/k/2RInPjxN8vKSL2d45aemZPz/iJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795026427;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Z/lgf/GnvODHH2kSfd1ioOa/KiKtGaKkOea+zkHk+YI=;
+	b=HWHQPnxgfQFTiSq+XlJIkGOWp+Rv3ExHikvuHG9Foht3UI1sOr9Gn2yH2YPljKyY6ubE
+	 JcXEAX9Ii7HTLAD3UsMbvthbajSpVYL5ACQTkg5B+07DcYGaQ5YZK3B7D7eRQX1W4vJzo
+	 FijzPgwcV/dAsQRYVayXnIoQJemggPBnIcI3iOKGb7rfQax8mIuil++q/I3c83+TahAyB
+	 oz+L1P1XWlFvIFLsf2KFgbRMkEwCGL3sKOb8NGJCYsc1NE6MBrVr7cRTK9GELnu3gX3Fi
+	 81dGlGhZCgaFiwf+rW8Loa+Cdnf4VkAfNKNhXG4tbhyOO3zvEMuGiV4h1u23D36AH4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=frso8ZDI;
-	arc=none smtp.remote-ip=209.85.160.48
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31DB606A31C
-	for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 16:07:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B31DB606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=OdFPmX7Z;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8E1606A332
+	for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 18:27:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA8E1606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=frso8ZDI
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-49429181ce9so771193fac.0
-        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 08:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1795018057; x=1795622857; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CV7oamrSYXfpp3NnleoEpP5E6f5lbD9kU3nbbqKEnc8=;
-        b=frso8ZDIPM0fVorlI0ZNzCcRzovcseE6Jq9VQ+hhT5waDb7rCVo/Re3uBFac2xoB3Z
-         M0Rjrhgcfy10tM602AiKYwoKZf/6kmqgT5zN6MgFKa857+VsU7NXDwoFYpwOQmnwSJOQ
-         tnJjqZrLDTi3SC/7gqLLmak7up/eqL6Al3ES+Ujd/LJ0Azn+FpL6hqIqkCclG+3C3sr9
-         51ZQikHmGW+uYpDFwWJL0ceC0zrjC6h6DM8CHaUbamdQ8frnlxse+l1Oa5b8V1p2CVdv
-         hboQhLym7prL7jDVMcAYlFvpt/NhXZxhIrlcsbzoSYvXib5GEnBa3bL2NNBQlB1yWKZN
-         PUaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795018057; x=1795622857;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CV7oamrSYXfpp3NnleoEpP5E6f5lbD9kU3nbbqKEnc8=;
-        b=n1X4eUtvJX3Sd7CjIktPqJ8ggkSS4+ng6que2Vk3lfC+M/FdDcCre9JWpe9Pal2I71
-         Q5ZE4mUL5xr9RcRueQiKLhsH7oZ+Zx+kieDdRmKO36nZsGqJCDE+twd5PeM841VILoQ2
-         xEYmFkhkhsAWQZPQ77/66ZvJsu/sVyVP7UmOC1UT8uuEf22dgOHnU9T2Of9TNyyGfgbf
-         UhSs5MsId2X9u7zL26uBTd2zkYqdIQaVoytcJsuF9Lh+9bLJ0mh/T3ylVO1g+UXZ7+1x
-         Q2ZbM6XRTDFPtRkU4wOMZJLFnPXqprmJDECyCPbo+nJIPY3nsm/KZV0FrJ4owtQhMdUM
-         uVuA==
-X-Forwarded-Encrypted: i=1; AL+hErF5niFLYYhHNUmWnSiQzpUqCmP3mIQLSV52gfMkF2k4HnOyypPmrrMIcr2NtCq9SWFCIGM6@lists.linux.dev
-X-Gm-Message-State: APuU4Z/aomjFuHs3wqOafMmJ0HBYa7V62qLMYTM4QnP6gRHqqm4PQj2X
-	6ZApxK+9RvwtNqbMgwA2lqsEGCsP5EtQzRPDWiWv+njfHIyBWMNnhFaGsT6j++4smMM=
-X-Gm-Gg: AYBFou381MFQs9o0+ut03cxsxHHppa/cwnS/sO5gpFPqSPWmIKnIGonlaRv9ALSampo
-	Ek+72gILXmAUr0ph1pmgsOyLcyzfvyGhRLiEtaIQALn4vWOHsk8wKIjYodeWl5XjnLQxTdtgfiz
-	5crwzfP/3zfoatN+s6lUAeJTN5W94JJc0aRjOOvX8afn2grb/EC1oqwpvZ02/xMZJxuu5KIOhCy
-	5Jdqq4hkdK6S3PnaHlpJgtQnPLuHk5rdJEu3D39l1oiTRwaHRJvhiobKX9qws/E1ADIjTQPQmhk
-	ul4waXTsm7BgVWTP2zx8aJ9qibN9L9IlM6VkQW3dIMja0MFIKFAn7G0GwRK4HKk4lcw2Tw62nsJ
-	ChbSRW2FsjJyggMqSlIHiYxqfcMfm0BR/W6KPqLA+TVnZQGKTD7fshcyv4O9zarE0j2OgPB64Z1
-	r8xNZkepqPcs+rRlGggE0MaWNLv82ODcoTHcjZL8gFm+rhsw7Rs0nH5VyPV6dU1vs184mGT0KqB
-	/BtV5pSWtGyndM7GtG12pCty31mbWWzyxqtR4dZXWw7ujMdhRy8LLKV+hijkeXgQamEgusqGF38
-	nIVCOgELXm4d1/zygi80jBrS4gulgRcy01P5OZnumHpA8Rs9c7r95AK97tKuuTcdyBrqjFB5eAF
-	aRRZdjJ6RQ79vWKGfKU4B2E7EPOIpYb5watLVSNwo7Ns3D07HmFM=
-X-Received: by 2002:a05:6870:d285:b0:4ad:5a7a:f7e9 with SMTP id 586e51a60fabf-4b7613c52femr2613744fac.34.1795018057354;
-        Wed, 18 Nov 2026 08:07:37 -0800 (PST)
-Received: from [192.168.11.112] ([96.43.243.130])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4b743721fe9sm2624231fac.6.2026.11.18.08.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 08:07:36 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
- Nathan Chancellor <nathan@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-block@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
-In-Reply-To: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
-References: <20261115-blk-throttle-wunsequenced-v2-1-1d297c891b82@kernel.org>
-Subject: Re: [PATCH v2] blk-throttle: Avoid unsequenced accesses to jiffies
- in throtl_schedule_pending_timer()
-Message-Id: <179501805630.17649.245726738544852847.b4-ty@b4>
-Date: Wed, 18 Nov 2026 09:07:36 -0700
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=OdFPmX7Z
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E52071477;
+	Wed, 18 Nov 2026 10:27:02 -0800 (PST)
+Received: from gaia.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BBFA3F673;
+	Wed, 18 Nov 2026 10:27:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795026425; bh=KD00H1LZROLiORUw7YDn6v/wgRaKM9BnTfzpbzUCeVo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=OdFPmX7Z+SLEjJNH0jSOiiUGQ/J+Aol+4r8E/VTNF6DOQRuVpf4adrDYexah8mmF+
+	 4jDcYK8Wk7NsokRYoqRZ5Qw1H/1WTK2rN/deYIZVtBYReCe+v+Dclr7yWoC3bHHqXq
+	 xX5Rd+MsP0iG6Nw7Zw5AUKcb6i8eo2z7FBvm9dDE=
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Ben Cressey <ben@cressey.dev>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	kexec@lists.infradead.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+	Jeson Gao <jeson.gao@unisoc.com>,
+	stable@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/2] arm64: use typed entries into copied code for kCFI
+Date: Wed, 18 Nov 2026 18:26:38 +0000
+Message-ID: <179502639864.2187887.8685436920018120058.b4-ty@b4>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261111-arm64-kexec-nocfi-v2-0-ddf0c4aa326f@cressey.dev>
+References: <20261111-arm64-kexec-nocfi-v2-0-ddf0c4aa326f@cressey.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -101,33 +76,20 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
 
-
-On Sun, 15 Nov 2026 20:37:57 -0700, Nathan Chancellor wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], two instances appear in
-> throtl_schedule_pending_timer(), which can break the build with
-> CONFIG_WERROR=y / W=e:
-> 
->   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->     469 |                    expires - jiffies, jiffies);
->         |                              ~~~~~~~  ^
->   block/blk-throttle.c:469:25: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->     469 |                    expires - jiffies, jiffies);
->         |                              ~~~~~~~  ^
+On Wed, 11 Nov 2026 15:26:03 -0800, Ben Cressey wrote:
+> An arm64 kernel built with CONFIG_CFI=y oopses after "Bye!" on every
+> kexec that relocates the image. v1 [1] marked machine_kexec() __nocfi.
+> This version types the copied relocation code instead, as Kees Cook
+> suggested [2], and does the same for hibernate, as Mark Rutland asked
+> [3], so that swsusp_arch_resume() loses its __nocfi. Only kexec faults
+> today, and its fix does not depend on the hibernate patch. x86 follows
+> as a separate patch.
 > 
 > [...]
 
-Applied, thanks!
+Applied to arm64 (for-next/fixes), thanks! The second patch is for 7.5.
 
-[1/1] blk-throttle: Avoid unsequenced accesses to jiffies in throtl_schedule_pending_timer()
-      commit: ae1171f38098098e88c13c38e462d27babb50038
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+[1/2] arm64: kexec: use a typed entry to fix kCFI oops
+      https://git.kernel.org/arm64/c/b059e957d07b
