@@ -1,112 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795102176;
-	b=Nok/4VxEKST2cGSOEX4tinMTc0SGwWjcbLmE59OZBI4O1hl44DosnxrX+AWg4VUdqfI0
-	 ow1JO/ipnAfN33KjA0hyHH0y9mze4YSzqqyrni+wv7ZBSt0Sy/8SyfhXSwYoQJ5eaX8M4
-	 +i1MOBIHqFW3mqyeiPsBXpZZmnsDm0XEURz+JuR6XCFbqew1h1WZjj5ljcxWPKn4T+X6M
-	 wFvwnBqwvmIeDxv6XwaigS4kH7Oq3JwVvYaB/aOrOoP0UBa60i75sEpOTCpNF5nHVkB/g
-	 s8qHxLydHkiuLZNMzNveprGIdnpWG7aWz4bDF3BB/eiZ6cxl58q/uxbHLaPwQ1wcx9Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795102176;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=v5cUsGgc+atAsF5stV5tV/fIiIx8O+mmL+wOysOWcic=;
-	b=2sc9HZmCI7ifJCtjHNCNRCcklav/UcdPv/jxVxHiNXwydpkSxcou+GxSO319iW4KlDU1
-	 gCPgzrmixNsd7pEXyHL76poQ1CIBoETcnMzIznUvB0K9vrr0t5f6d5xDl5Mf1kytcavSp
-	 NdAL1WAAyQ8BZ1uhK10n3eQ1hyHGfBMEi6Y3hRtBXDfFtBH2aOaw+nJSXjgxW8XvFvpop
-	 /x1alg1062kAWxDdN4XycTaPQeTlviUzznpj3b1OBCidO9KYngHrTufAGlE1xeLH6ecbm
-	 Hd6xaF5g7L007jTqpCXaCPNyBQHoKVY21JTxC866jXBF9WTrpSqHPLA6iMGJkJitSSw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Mcy8kg0A;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=ffRyz3RF;
-	arc=none smtp.remote-ip=205.220.180.131
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.173
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795106385;
+	b=wus41UsA2fVZkVGLFu5EHYekRskFLEqx5pIemvezQSTqC3OJk7HB7k63LfreQALUnJ/X
+	 WqQjhkregH+byuyShEsEEk3YRCtf8fNMELeyW7GcjJvYdJYaVVRq5bpLvwYzFLsxOA9Ja
+	 ASucDVdbic5p6BXGH7amNO8sT+CU+sGgHYtlpYIQR2YlQIIJKyN2KJb+zImR0Fg74/5Rn
+	 XOJ/udLin/LwJLzfrYQh2pm2FKitEHdbuB2T8ZJfkuAH7uRj+2A3rYBR+0FpKmJ7bDml+
+	 w7Pk9Z8cmrWuM4DT2qtlx3fPiqa7kO1p87iTvYX5Q9RtPXew31GCbun5IBgBMOoIVYQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795106385;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=QZgYvU7eym+6lMDcaT36H7kwBZLKrQ+fCTbEjV93l7A=;
+	b=cYjFrzX2B3MXx4POIjtSX1XUOhoj12bXNKwGrPvrPOzHglHruDIu77tbUKbEReYM2FXM
+	 fcBs4qee0RMjpd8D903TnjleL/+5ZNAAYQTTT6DLWlbIKLXFHiBeXifeimMKTUh8eTxuK
+	 Kga7M3zHtmjUa2BPZvdFY2rQtOMoTbFriNRB2La7DuFIzqOgArDoRrQO8D7aqnISlqSUO
+	 58TtGO0NRAJfXlleVIW2xQzcJQV/+4ucRJFkqy5wswIa25G4Fqvty3eD2o36OErbbh81m
+	 i8ONqKu6yKKtSddVlJvIHnDs48MJaZ7DQKcfrsGtLxhpazJhn5HSUz0EGP/IxMKaVYw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AATiAYs0;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.173
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8C0606A326
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 15:29:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF8C0606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803A6606A333
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 16:39:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 803A6606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Mcy8kg0A;
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=ffRyz3RF
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AJF75dZ525391
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 15:29:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	v5cUsGgc+atAsF5stV5tV/fIiIx8O+mmL+wOysOWcic=; b=Mcy8kg0AvoJ3OPld
-	Ex82XNuYnDZkpq51FRzaSYsHthFTnGXSbbon2T8F7z4rRN4UTNxSt5YSoN/WGNEG
-	iR+8j6IlxUnmDIGH/ZkCAXVHXtRloclejs1HFLJ/Xr51CQsHPv1EZD1bSDkP9LiP
-	vVaAObiYsd+h21SVW1i5HyB6DMjJcFCc0qlcpNQdwX+8trN1b+nygddRgk1GZPmn
-	7o3ncUQsL2uePn7K5v4DV/EVjXmpATLKA2Br27RioiAa/hXvUIbffUpUeCUcSX0F
-	IXavOUXfw6l17o7CXVL1q7We8ckhy3z0k+i9wE8Rom5VpV16IzTwD28yeIUkmLdN
-	93Dq5Q==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4j1vv2sxpj-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 15:29:34 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-55d2bde4c78so39668241cf.1
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 07:29:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AATiAYs0
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-55c7445cf85so347881cf.1
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 08:39:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795106383; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PCZHbP/qAmPn5NVoomvIbiqspfJ1Z0Xm5T0Ko4UaaHNREvvyim47RiqwQGZNH/WKaW
+         LXIqKjmD9nfbIVvUl7VQYPlT4zXCadLVW0gq73Ioy1AZh89DHP2JnHcHdTuMab9rSqY9
+         n8+96HSf78xS54pA5lYPZPlnClGxs5DojatktCMWTI/D9PIZD4j1Yv5hTM4A4NSe+o8O
+         U9IxcKjcLauGQcaeH6qIlIy64EiR0c69qTLl5Km3oVVNQXKIDqvIh0o04aGroX21wG+Q
+         exd9WuxVKN+4tFWuebzBdJWYHnLVCv6eGdAeMsf33bgDEIuQVZgK7fs085036NPVx4Yh
+         rooQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QZgYvU7eym+6lMDcaT36H7kwBZLKrQ+fCTbEjV93l7A=;
+        fh=65ucQ9zr2APxooFQB5Y5zQo9xZEtE4sUZfQVPE3YNIk=;
+        b=HMOAck982LS/akRSW51OheMyqHIX4BV/2DLdqGC3At5amIsGZzh814GC+bGzpmvpVj
+         5sS8sxGf069pdjHMrr4iO60HHbAUCM3DaERAQT1s64lZoVQF1Q2IMWhD0KQpyEWinN2O
+         rDturUWHmdGFM9MnIzQjLoe2zHMbpDtDqKxTm+BBBsSyHhnEikIyZRA/G3LnY2czJ47X
+         3GG13eYd4EjXXz0LT4s9RpvpcIViuEC9Z/hGEoAD4KzrrGRbBpBN8U136L7JVDc5vrdC
+         rqE2i8UCSv8RdIzEpYGq+AzYlNUucIUsnz3TuOVEfwHDo/u9mNzmdb8qAQ25HObpaTM5
+         1z1g==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1795102174; x=1795706974; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=v5cUsGgc+atAsF5stV5tV/fIiIx8O+mmL+wOysOWcic=;
-        b=ffRyz3RFEOjd6nvXfCID1TP/lDGsHAhvI3FCuK7oCHJrJdgfdNOjBXQSnZQdGF+Cl/
-         TokGOYgqkd6W6adYhEJkOr+UD+XBTLChk2uKWwrIKLUd9EeVxfDNlUL9fCOkFgurrlp7
-         Dr5twEQbMrc2BSgbmrauzPcstA7B5vPhBevEZk4EwxyXnOdgix9qcR8nyAuWpA6DWS+m
-         d12S+E5xkq+IuYChLp1noeQYJj+stky2uuqbJCOCyrM23VbRpXvZblaYgzLZxRqdesZk
-         B6B/pP6kZD3ZYaCSxzRyVBGEbGb8AS0ojJM8dJzow5fGABDbk/FL5mpjIkSAlQkAZ+kp
-         lJ3A==
+        d=google.com; s=20260707; t=1795106383; x=1795711183; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QZgYvU7eym+6lMDcaT36H7kwBZLKrQ+fCTbEjV93l7A=;
+        b=AATiAYs07GCM8Iuh6pR7kWZmRhhurjSwUrFj+Fv8JY6d0Zo7NzAxXZb/eQRXq7Ip+q
+         B2rktShvlFuZLErpu77iTUS266DFKFQBcf7epEnF8ZBWaLtMTTTE1ID4yFvvYi/hL77G
+         VOCRWeTQ2lOiX9fKOVZT7LPcZTjxNDz0aR6a6Seachic1jwBC4m8my281uoMEHzH5NDe
+         V0XAgKQBHdv9j3zQ92yVnKEgzRdy4LMcDUvLYM+wz3Byw7xxtBTvfXRE/tCtMrxLUexZ
+         liCLTrAtIoqP85AL/W0m5CsElm8p5xd7dLkA85UO5he4nkNP2myxREQtIrm010nBsKqY
+         c1JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795102174; x=1795706974;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=v5cUsGgc+atAsF5stV5tV/fIiIx8O+mmL+wOysOWcic=;
-        b=b7/MzLpuGeDS4Xs0Wk9qtrQCIPxxgUkS1GdFVpHlJJ7fJ9mlwDcx3pmKbFF2GRRQIz
-         07Sebs+NtLaaR4pa8b46mXQ+3gPzOtSKGTdSxyUwLw4yFYVIAd7ritLkk5OGl1qFTGlj
-         ha8yHcS0dC5uKR5HV6Cunbk6bn2y9zBKqc1fBz4uRwA3E83ExXLzw7N0Wkqc21qxBPcx
-         MAlVfYuivMHrgwPSlZ1qPFGuH5VT0v4GkqgIxF2jNq0950O2XfCHU4v6tMCjVx+l68nx
-         53oLdOFUSe1LlrjsNvhFzvf0X45ZnZCyct3vCEXR0wems2FbRYdmjRDub+tjRc8WFcAH
-         OS8w==
-X-Forwarded-Encrypted: i=1; AL+hErHbA/RRLuY1J8Sbtlpt40njefCjSZ0CkIDWYGz+x4KWG0NVWHDdcBtj9PgFSYYeLTXsGY6Q@lists.linux.dev
-X-Gm-Message-State: APuU4Z/tIfq/QASRDqcdcw31SuBB6FRzHGhnsCw1xtobjRAYQIngjxsb
-	8p8cGPA36Yfd/0hTDkNH/Z9ZqJlNQxK5mbmI9ySckn1SKTD3xqkt4bKzOQaP3xqlVDyagt/R54m
-	mVDqWUc0hQbqeSdAPwUkzeevlDdX6shrFdH+KR3HttmgAhbfWfdmiS/7j
-X-Gm-Gg: AYBFou0XbnenqIXvNcsSKwm0zhxAUFIuJM1EGE6QEaDaZ+tFbJHKFWNDb5N7CPZ4G7k
-	ex7dad+D3HOvXKvqKO9IKYbhXXGmQ4EIHzzZx5W+Mawwm6mCiuLbVH7BZ02byHOB4huriS49CSI
-	tf8Pta7oMlTvCHEvpcOJpK62v/p4lY4xqZoeBDKO9f3dQ/jFHIOdnHvKEd/8qC7JIPmA8mQutjp
-	8hqsqhzQKNP6UD20yqL6NyLKpcYZChsZ6B109XIxOErKPMuzN8kH4H0J4hJOFgwUgS+Q6I0eYSm
-	OvTeGYd9SAtuYExrbo9xhreMQgAm83jojGJEPmnX2nTm1d6qkpGo9Zt/g9/mFHsIp09ChZWGnFP
-	cjQaag3YLD787L8G1AWqEbMJphNhWG6RkUlZl2ITr1dbC6KftzZfllcY3i9Lm2j+z6hlSNfPVxg
-	0nZdQjcfZhAJOu/r/JiehJWtxBbdpx7quJ7vD/hQ==
-X-Received: by 2002:ac8:5d08:0:b0:55b:9d8d:f299 with SMTP id d75a77b69052e-55d769e8964mr4142411cf.21.1795102173809;
-        Thu, 19 Nov 2026 07:29:33 -0800 (PST)
-X-Received: by 2002:ac8:5d08:0:b0:55b:9d8d:f299 with SMTP id d75a77b69052e-55d769e8964mr4141931cf.21.1795102173243;
-        Thu, 19 Nov 2026 07:29:33 -0800 (PST)
-Received: from [10.222.168.147] (Global_NAT1_IAD_FW.qualcomm.com. [129.46.232.65])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-92134048a4csm1356346d6.37.2026.11.19.07.29.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Nov 2026 07:29:32 -0800 (PST)
-Message-ID: <93431e17-4d61-465e-8499-e8270fb03a3d@oss.qualcomm.com>
-Date: Thu, 19 Nov 2026 09:29:28 -0600
+        d=1e100.net; s=20260707; t=1795106383; x=1795711183;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QZgYvU7eym+6lMDcaT36H7kwBZLKrQ+fCTbEjV93l7A=;
+        b=dgcCwxLvuWHgKzU0cm8f8QfO8j2Mb8Zvz++XCEMdwpPZ2JPd5JBDprV1+vw6VJbnnf
+         WZ5bmXK6O4TZ/YkOF1EI5acmEQuTBPuHOEyrH1wk8jlFL0PjLXwXUAY/zkwB/k4OYvX5
+         fNWeVChGaBvexzC6nPisbjiWdGU+LvIMXVxyYZiEGCD0R4qKZUoR5iMKEBSEozr08uPM
+         mHr3kYtv6kekm2n9Ij5sLZtP14n50YqIhfSsgYj7xlGATak5TxzTRCh0uh0O/2mMhaC5
+         J+Naagy77VfoxMJfmFQanmBPgHZ8CLV6lvEFJ7iS52kyioI+KUkAVdNznWOMooPiwDJ8
+         Wsaw==
+X-Forwarded-Encrypted: i=1; AL+hErGM8rIY2K+3R7gR4wAj4PbpdjcS4kuZ5YBPq47XlPagJp2dtUgQ45XQMak2STF7daBzwP6m@lists.linux.dev
+X-Gm-Message-State: APuU4Z8tdL86wDftmoNC8DtUAu+QZ7WZmtRztHHqr9LFRiodOn8lRw3m
+	EAgT+/CELKkYkc7bekO8q+dyOQ4fagB6i+iBIRtAPfB6QprcEyI+sRWtje6XfZCk71m7UFaRzAD
+	hbeqXMb8+hAdbEsLZMVpEkoaxrS3YZmRuu9W8jeTv
+X-Gm-Gg: AYBFou1Vj0KhbqTZqQP1KU5EHGmENb6LZ+XvgxoeH4SFWfiBivJvxQ2HnP6HPewk3gl
+	Wsfz36gEeV9H/l6Xhnoesdj5TDcZodGwmap/CeAPVK8S/8WqJ4Hk4SNbWpY0llun2FZ7oO/kJet
+	qbKI6cjM7BJRHrQ+d9qrb1zf7Qip9JdBGJ61lX7OeXpjwKg528w1Cc4RbsNanZa/vsREYd8JyIC
+	s7yvUa79uoI6SsQRgDzxN5xMwZ13UWuOUiwokcX6DvCg9Ao5UGUGuu7QBKYOo4eg4YRlMFgrlun
+	TixjC/bZ/ICjLq5whMaazZbd3F29wmpI0EZCarmDZWEmLYB49qHTWIYb5DmZC8OA+AEizSR0UJA
+	lHwuZsyOC1rEKNelcCvLVnTgkdoH8YWap58BN5DTVwIo/xj2kZJht28OPxFU=
+X-Received: by 2002:a05:622a:1e95:b0:55b:ab4a:6fad with SMTP id
+ d75a77b69052e-55d6f2ee177mr11384171cf.9.1795106382365; Thu, 19 Nov 2026
+ 08:39:42 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -116,104 +104,280 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: hexagon: allmodconfig does not link with LLVM 17 and 18
-To: Tzu-Ching Yang <shingekinocore@gmail.com>, Brian Cain <bcain@kernel.org>
-Cc: linux-hexagon@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20261119054908.2988120-1-shingekinocore@gmail.com>
-Content-Language: en-US
-From: Brian Cain <brian.cain@oss.qualcomm.com>
-In-Reply-To: <20261119054908.2988120-1-shingekinocore@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: TUEkM_7yhSHmnwTDaoaxlFkOlQgIXApu
-X-Proofpoint-ORIG-GUID: TUEkM_7yhSHmnwTDaoaxlFkOlQgIXApu
-X-Authority-Analysis: v=2.4 cv=ZZWIpcVA c=1 sm=1 tr=0 ts=6aff15de cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=C3Dk8TwHQYyIj7nOf9RCJw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22
- a=pGLkceISAAAA:8 a=aYQzck3Sp6WxtQezg1cA:9 a=QEXdDO2ut3YA:10
- a=a_PwQJl-kcHnX1M80qC6:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE5MDA2MSBTYWx0ZWRfX4FjutAnH+tT8
- jW+nVYc3e0CxOplkW4yQJGuvMH+BcEYEFQ9xBc5wZhok8fTobN6h2W4RvcYtfLuYiVBE/dW/Pqb
- mvRUAJJUO/phss3AgG533X5EiOGmEOw=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE5MDA2MSBTYWx0ZWRfX87E8+BiYHg4J
- muxaWPiHMhq6n1hyQLTy3Arwz3/0crCrnTfAgYEutHCKabYnktJyezWU6sjSy2UH0cf5pQQ3BXE
- Q363MLStv3MjizpDq9VWMEbW0jksfjn5++etKysXWmDSjNQuUn7QnpxXm0IjE+c1rtABLbdKMQZ
- eNuomNrRe5Lvo+ZkiKvA/j9rQaBTsHX20zj5wCqb/UrcBZrb1X9pzXJ3/HVK2UU+qmlk5hda1Ro
- VZlIodGpxe85sic8dLXzTJZn9L5fVefGz1ZYiLxWr3WJuPKq2XqvTosZPWOoNNAtiNRfRgxvnT9
- N2P8c//AZoBaOS3hWzLK7EVHCLLzVG3xA0c4Tu3ukO7BuwVd2vn3bbn4wKVgN7od0Co0d3cI/ef
- 8/Bf3udt6SAqoS1XU46UxWT829K9qYbKc29I8MQNSBkprKspJAWDxzJMJ/Wjm3cuf0/9PffFhXJ
- +biIVO3rX9nu5BW0cOQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-19_04,2026-11-19_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 phishscore=0 bulkscore=0 spamscore=0
- adultscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
- definitions=main-2611190061
+References: <20261113164152.2095566-1-irogers@google.com>
+In-Reply-To: <20261113164152.2095566-1-irogers@google.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 19 Nov 2026 08:39:31 -0800
+X-Gm-Features: Aa3M54oEAtzUo1O6L9OpyLmsaNSRCcj6uhOG4546z35DOIs3DLm5JDdREmZI0CU
+Message-ID: <CAP-5=fXUg_bDxprNnL6x244zRse2UK1OAUVT13Fvg6PWTHWeYw@mail.gmail.com>
+Subject: Re: [PATCH v13 00/21] tools/perf: Adopt kernel compiler-context-analysis.h
+ annotations
+To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
+Cc: adrian.hunter@intel.com, bvanassche@acm.org, elver@google.com, 
+	james.clark@linaro.org, jolsa@kernel.org, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev, mingo@redhat.com, morbo@google.com, nathan@kernel.org, 
+	ndesaulniers@google.com, peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Nov 13, 2026 at 8:41=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
+te:
+>
+> The perf tool previously added Clang thread-safety annotations in
+> tools/perf/util/mutex.h (GUARDED_BY, LOCKABLE, EXCLUSIVE_LOCK_FUNCTION,
+> UNLOCK_FUNCTION, etc.). Since then, the Linux kernel has adopted a
+> unified set of static context analysis macros and attributes in
+> include/linux/compiler-context-analysis.h (context_lock_struct,
+> __guarded_by, __acquires, __releases, __must_hold, etc.).
+>
+> This series makes tools/include/linux/compiler-context-analysis.h
+> functional by synchronizing it and the required compiler_types.h helpers
+> with the kernel headers, converts tools/perf from its custom mutex.h
+> macros to the kernel-style compiler-context-analysis.h annotations, and
+> expands context analysis coverage across comm, dso/dsos, thread/threads,
+> config, intel-tpebs, env, and maps. Along the way, separate preparatory
+> patches fix an unlocked __dsos__add() call and TOCTOU race in
+> __machine__addnew_vdso(), skip BPF and OOL DSOs in
+> dsos__find_kernel_dso(), ensure DSOs created in auxtrace, machine, and
+> symbol helpers belong to a dsos collection, avoid dropping
+> _dso__data_open_lock in dso__list_del() under REFCNT_CHECKING, switch
+> dso__data_open_lock and tpebs_mtx to DEFINE_MUTEX(), add a read-lock
+> fast path to dsos__findnew_id(), fix an unlocked read of
+> tpebs_reader_thread and double-close of tpebs_cmd.out in intel-tpebs,
+> avoid a potential read-to-write deadlock in maps__load_first(), and fix
+> map index lookup fallback and removal in maps.
+>
+> This series was developed and reviewed with assistance from an AI coding
+> agent (Gemini 3.1 Pro) and reviewed with Sashiko.
+>
+> v13:
+>   - Rebase onto perf-tools-next.
+>   - Factor out dso__is_bpf_prog() for dsos__find_kernel_dso_cb() and
+>     check ksym_type =3D=3D PERF_RECORD_KSYMBOL_TYPE_BPF &&
+>     is_bpf_image(event->ksymbol.name) before setting
+>     DSO_BINARY_TYPE__BPF_IMAGE in machine__process_ksymbol_register()
+>     (Namhyung).
+>   - Prioritize build IDs over inode fields in __dso_id__cmp(),
+>     dso__needs_improve_id(), and __dso__improve_id() so an existing DSO
+>     with a defined build ID is not updated with inode metadata
+>     (Namhyung).
+>   - Rewrite patch 15's commit message concisely, fold intel-tpebs lock
+>     annotations (with split control_fd/ack_fd declarations) into patch
+>     16, and split config and env annotations into standalone patches 17
+>     and 18 (Namhyung).
 
-On 11/18/2026 11:49 PM, Tzu-Ching Yang wrote:
-> Hi Brian,
->
-> hexagon allmodconfig does not link with LLVM 17 and 18, on mainline
-> and on stable. Your hexagon-qemu-virt branch has the fix, 09df35bd9d9f
-> ("hexagon: constant-extend head.S calls to out-of-file symbols");
-> could it go to hexagon-fixes, with Cc: stable?
->
-> With CONFIG_WERROR=n, LLVM 17.0.1 (the minimum the kernel supports)
-> and 18.1.8 fail with:
->
->    ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):
->    (.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2242552
->    is not in [-2097152, 2097151]; references '__vmnewmap'
->
-> and the same for the second call to __vmnewmap and for the calls to
-> __vmsetvec and memset. I see it on v7.4-rc1, next-20261113,
-> hexagon-fixes (0304683b4c43) and v7.3.4; v6.18.63 (LTS) fails with
-> LLVM 17.0.1 only. With LLVM 19.1.7 to 23.1.3, v7.4-rc1 links.
->
-> The calls in stext go from .init.text to .text, across the rest of
-> .init.text and the per-CPU data. On v7.4-rc1 with LLVM 17.0.1 that is
-> 2.14 MiB; without CONFIG_LOCK_STAT, whose per-CPU data lies in
-> between, it is 0.76 MiB. ld.lld before 19.1.5 checks R_HEX_B22_PCREL
-> against 2 MiB instead of 8 MiB, which llvm-project 64e3466fd09e fixed.
->
-> 09df35bd9d9f does not apply to the trees above: its context has the
-> "r2 = #VM_TLB_INVALIDATE_TRUE" lines of your series. With its five
-> changes made by hand:
->
-> - allmodconfig links with LLVM 17.0.1 and 18.1.8 on all five trees,
->    and allyesconfig of v7.4-rc1 with LLVM 18.1.8, which failed too;
-> - where v7.4-rc1 linked before (defconfig with LLVM 17.0.1 to 23.1.3,
->    allmodconfig with LLVM 19.1.7 to 23.1.3), vmlinux differs only in
->    the code of stext, in the address of one local label and in the
->    build ID.
->
-> Those trees do not boot in QEMU, so I boot-tested your branch
-> (dc370baa041d, v7.3-rc1 plus 24 patches), with 3 MiB of test-only
-> padding at the end of head.S to make the extended calls span over
-> 3 MiB: qemu_defconfig built with LLVM 17.0.1 and 23.1.3 boots to a
-> shell on a buildroot root filesystem under qualcomm/qemu hex-next with
-> -M virt,hvm=on. I have no hexagon hardware.
->
-> Rebased onto hexagon-fixes, 09df35bd9d9f applies to v7.3.4 and
-> v6.18.63 unchanged; I can send the rebased patch if that is easier.
+It would be nice to land this series as it touches multiple places in
+the code. The series has no Sashiko reported issues:
+https://sashiko.dev/#/patchset/20261117184844.99889-1-irogers%40google.com
+It has also caught some real bugs, and the bulk of it has been pretty
+constant. v1 was sent on 10/13/2026.
 
-If you would do that, that would be great - thanks.
+Thanks,
+Ian
 
-
-> If it helps:
+> v12:
+>   - Rebase onto perf-tools-next.
+>   - Newline-terminate control commands in tpebs_send_record_cmd() so
+>     consecutive writes cannot coalesce in evlist__ctlfd_recv(), send
+>     SIGTERM in tpebs_stop() if ENABLE had not completed (tpebs_enabled,
+>     annotated __guarded_by(&tpebs_mtx) in patch 17) or sending STOP
+>     fails, and ignore late samples in process_sample_event() once
+>     tpebs_stopping is set.
 >
-> Tested-by: Tzu-Ching Yang <shingekinocore@gmail.com>
+> v11:
+>   - Rebase onto perf-tools-next.
+>   - Add Fixes tags to patches 7, 15, and 18.
+>   - Serialize tpebs_send_record_cmd() with teardown via
+>     tpebs_cmd_in_flight and tpebs_cmd_cond, check
+>     check_if_command_finished(&tpebs_cmd) under tpebs_mtx only when not
+>     stopping, guard evsel__tpebs_open() against a concurrent tpebs_stop()
+>     with a generation counter (tpebs_gen) and tpebs_stopping across
+>     closing the fds and finish_command(), and annotate tpebs_cmd,
+>     control_fd, ack_fd, tpebs_stopping, tpebs_cmd_in_flight, and
+>     tpebs_gen with __guarded_by(&tpebs_mtx) in patch 17.
 >
-> Nathan, once the fix is merged, the ClangBuiltLinux CI could build
-> hexagon allmodconfig with LLVM 17 and 18 again (disabled in
-> continuous-integration2 d9d773a8859c).
+> v10:
+>   - Split the maps__load_first() lock inversion fix (patch 18) from the
+>     maps index lookup and removal fixes (patch 19).
+>   - Fall back to the linear pointer scan in maps__by_address_index() and
+>     maps__by_name_index() when bsearch() returns NULL, check
+>     map__start(prev) < map__start(new) in __maps__insert(), factor out
+>     __maps__remove_at() so maps__remove_maps() removes at index i
+>     directly without risking an infinite loop, guard against -1 index
+>     wraparound in maps__find_next_entry(), refresh sort invariants in
+>     maps__fixup_end() and machine__create_kernel_maps(), and add a unit
+>     test in tests/maps.c.
 >
-> Thanks,
-> Tzu-Ching
+> v9:
+>   - Rebase onto perf-tools-next (resolving the conflict in
+>     tools/include/linux/compiler.h with ASSERT_STATIC_STORAGE() and
+>     converting the newly added dso__set_symsrc_filename() lock
+>     annotation in tools/perf/util/dso.h).
+>   - Move __must_hold_shared(&dsos->lock) on __dsos__find() from patch 13
+>     into patch 7 where __dsos__find() is introduced so every commit in
+>     the series builds cleanly with -Wthread-safety.
+>
+> v8:
+>   - Set DSO_BINARY_TYPE__BPF_IMAGE for non-OOL ksymbol DSOs in
+>     machine__process_ksymbol_register() and skip
+>     DSO_BINARY_TYPE__BPF_PROG_INFO, DSO_BINARY_TYPE__BPF_IMAGE, and
+>     DSO_BINARY_TYPE__OOL in dsos__find_kernel_dso_cb() so that
+>     dsos__find_kernel_dso() does not match ksymbol DSOs in
+>     machine->dsos (patch 8).
+>   - Split the dsos__add() additions in auxtrace, machine, and symbol into
+>     a standalone patch (patch 9) before "perf dso: Pass dso_data to
+>     close_data_fd() and dso__list_del()" (patch 10).
+>
+> v7:
+>   - Add newly created DSOs in machine__process_ksymbol_register() and
+>     dso__split_kallsyms() to machine->dsos so assert(dso__dsos(dso)) in
+>     dso__list_add() always holds.
+>   - Add __guarded_by(&config_mutex) to function-local static parser
+>     buffers in parse_value() and perf_parse_file().
+>   - Remove from maps_by_name before calling
+>     map__put(maps_by_address[address_idx]) in __maps__remove() so
+>     callers such as maps__remove_maps() that pass maps_by_address[i] as
+>     map do not use a freed handle in maps__by_name_index() under
+>     REFCNT_CHECKING.
+>
+> v6:
+>   - Rebase onto perf-tools-next.
+>
+> v5:
+>   - Hold machine->dsos.lock in write mode across machine->vdso_info
+>     initialization and temporary file creation in
+>     machine__findnew_vdso() and __machine__findnew_compat(), and
+>     annotate __machine__addnew_vdso() with
+>     __must_hold(&machine->dsos.lock).
+>   - Reset tpebs_cmd.pid =3D 0 and return early without setting
+>     t->started =3D true if start_command() fails in
+>     evsel__tpebs_start_perf_record().
+>
+> v4:
+>   - Place the DSO loaded in addr_filter__resolve_syms() into a dsos
+>     collection so dso__dsos(dso) is populated.
+>   - Join tpebs_reader_thread on error in evsel__tpebs_open(), document
+>     why tpebs_cmd.pid is cleared before pthread_join() in tpebs_stop(),
+>     and include <pthread.h> and <signal.h> in util/intel-tpebs.c.
+>   - Include <string.h> in util/maps.c.
+>
+> v3:
+>   - Rebase onto perf-tools-next (converting the newly added
+>     dso__find_binary_type() lock annotations in util/dso.c).
+>   - Separate bug fixes, DEFINE_MUTEX() cleanups, and improvements (vdso,
+>     dso_data, dso__data_open_lock, dsos__findnew_id, intel-tpebs,
+>     tpebs_mtx, maps) from the annotation patches.
+>   - Move AI coding assistant attribution to the cover letter and drop
+>     per-commit Assisted-by tags per linux-next
+>     Documentation/process/coding-assistants.rst.
+>   - Add Marco Elver's Reviewed-by to patch 1.
+>   - Define __diag_clang_23() and Clang ASM_INPUT_G/ASM_INPUT_RM/
+>     ASM_OUTPUT_RM overrides in tools/include/linux/compiler-gcc.h.
+>   - Probe for -Wthread-safety-pointer/-Wthread-safety-beta in
+>     Makefile.config.
+>   - Pass write_locked to __dsos__find().
+>   - Pass struct dso_data * to close_data_fd() and dso__list_del() to
+>     remove the REFCNT_CHECKING dso pointer from struct dso_data and
+>     avoid dropping dso__data_open_lock in dso__list_del(), and include
+>     <assert.h> in util/dso.c.
+>   - Re-validate DSO lookup under the write lock in dsos__findnew_id()
+>     via __dsos__findnew_id(), and handle NULL dso_id in
+>     dso__needs_improve_id(), __dso__improve_id(), and dso_id__cmp().
+>   - Reset tpebs_cmd.out =3D -1 if start_command() fails and include
+>     <stdint.h>, <stdlib.h>, <string.h>, and <unistd.h> in
+>     util/intel-tpebs.c.
+>   - Bounds-check the index in __maps__remove() (freeing maps_by_name if
+>     out of bounds).
+>
+> v2:
+>   - Use -c rather than -E when probing for
+>     -fexperimental-late-parse-attributes in Makefile.config to avoid
+>     -Werror,-Wunused-command-line-argument.
+>   - Acquire machine->dsos.lock in write mode across duplicate checking,
+>     dso__set_long_name(), and __dsos__add() in __machine__addnew_vdso().
+>   - Avoid dropping dso__data_open_lock in dso__list_del() under
+>     REFCNT_CHECKING.
+>   - Pass tpebs_cmd.out directly to __sample_reader() and set
+>     tpebs_cmd.out =3D -1 in evsel__tpebs_open() to avoid a double-close i=
+n
+>     tpebs_stop(), and clarify the config_set_mutex comment.
+>   - Drop maps__lock before calling map__load() in maps__load_first() to
+>     avoid a read-to-write self-deadlock when loading kernel maps inserts
+>     additional trampoline maps.
+>
+> Ian Rogers (21):
+>   compiler-context-analysis: Avoid unused parameter warning in
+>     _context_unsafe_alias()
+>   tools headers compiler: Synchronize compiler_types.h with the kernel
+>     sources
+>   tools headers: Synchronize linux/compiler-context-analysis.h with the
+>     kernel sources
+>   perf mutex: Use kernel style compiler-context-analysis.h annotations
+>   perf build: Enable additional Clang thread-safety flags
+>   perf comm: Add __guarded_by annotations to struct comm_strs
+>   perf vdso: Fix unlocked __dsos__add() and race in
+>     __machine__addnew_vdso()
+>   perf dsos: Skip BPF and OOL DSOs in dsos__find_kernel_dso()
+>   perf dsos: Ensure DSOs in auxtrace, machine, and symbol are in dsos
+>   perf dso: Pass dso_data to close_data_fd() and dso__list_del()
+>   perf dso: Use DEFINE_MUTEX for dso__data_open_lock
+>   perf dsos: Use read lock fast path in dsos__findnew_id()
+>   perf dso: Expand context analysis annotations
+>   perf thread: Expand context analysis annotations to threads and
+>     namespaces_lock
+>   perf intel-tpebs: Fix race in tpebs_stop() and tpebs_cmd.out fd
+>     handling
+>   perf intel-tpebs: Use DEFINE_MUTEX for tpebs_mtx and add lock
+>     annotations
+>   perf config: Add __guarded_by and __must_hold annotations
+>   perf env: Add __guarded_by and __must_hold annotations
+>   perf maps: Fix lock inversion in maps__load_first()
+>   perf maps: Fix map index lookup fallback and removal
+>   perf maps: Add context analysis annotations
+>
+>  include/linux/compiler-context-analysis.h     |   2 +-
+>  .../include/linux/compiler-context-analysis.h | 518 ++++++++++++++++--
+>  tools/include/linux/compiler-gcc.h            |  72 ++-
+>  tools/include/linux/compiler.h                |  50 +-
+>  tools/include/linux/compiler_types.h          | 206 ++++++-
+>  tools/perf/Makefile.config                    |   8 +-
+>  tools/perf/builtin-sched.c                    |  16 +-
+>  tools/perf/builtin-top.c                      |   4 +-
+>  tools/perf/check-headers.sh                   |   1 +
+>  tools/perf/tests/dso-data.c                   |   4 +
+>  tools/perf/tests/maps.c                       | 140 +++++
+>  tools/perf/util/annotate.c                    |   4 +-
+>  tools/perf/util/annotate.h                    |   8 +-
+>  tools/perf/util/auxtrace.c                    |  16 +-
+>  tools/perf/util/bpf-event.h                   |   5 +-
+>  tools/perf/util/comm.c                        |  10 +-
+>  tools/perf/util/config.c                      |  47 +-
+>  tools/perf/util/dso.c                         | 179 +++---
+>  tools/perf/util/dso.h                         |  33 +-
+>  tools/perf/util/dsos.c                        |  34 +-
+>  tools/perf/util/dsos.h                        |  12 +-
+>  tools/perf/util/env.c                         |   1 +
+>  tools/perf/util/env.h                         |  19 +-
+>  tools/perf/util/intel-tpebs.c                 | 226 +++++---
+>  tools/perf/util/libbfd.c                      |   4 +-
+>  tools/perf/util/machine.c                     |  34 +-
+>  tools/perf/util/map.c                         |  14 +-
+>  tools/perf/util/maps.c                        | 216 +++++---
+>  tools/perf/util/mutex.c                       |   4 +-
+>  tools/perf/util/mutex.h                       |  90 +--
+>  tools/perf/util/rwsem.c                       |   8 +-
+>  tools/perf/util/rwsem.h                       |  10 +-
+>  tools/perf/util/symbol.c                      |   4 +
+>  tools/perf/util/thread.c                      |  10 +-
+>  tools/perf/util/thread.h                      |  30 +-
+>  tools/perf/util/threads.c                     |   4 +
+>  tools/perf/util/threads.h                     |   6 +-
+>  tools/perf/util/vdso.c                        |  53 +-
+>  38 files changed, 1531 insertions(+), 571 deletions(-)
+>
+>
+> base-commit: 4af65363b11fc4fe65fcb497f68bbe4f3e3a4d2c
+> --
+> 2.56.1.703.gf848ed807c-goog
+>
