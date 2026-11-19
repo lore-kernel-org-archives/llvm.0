@@ -1,83 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.16
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795109050;
-	b=09zVkgoo9VJMNoFQh6xF/Lmrl/RNUM656bsq96yk/a3GjFLi4JAeYccJMDRnjVufqma0
-	 DbQeJcYq/nkX5I9hxg8GuFAyZRJFvWvIQz8ZySP3mATLBU/UmJHmD0oHAVpj2l31DnAab
-	 oP5Do95AZXiSEv0eAxWPgzhkiXxHt7JHLm8lqQR8SCCWFLMbdROV7j/nhO9/ZzSrNkyVO
-	 vlFLxQSEe36yveSiGu0qoJtiluEKvsB5tLluyxcZD+eIhGfsAAemQEUDhaj4yAy6R2AeZ
-	 n1ODhxMZkZBqGLz+4DOd8m2qCgHRWlDyOxpiGtmuMltN8AglXG21uzot25X16ZQFuTQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795109050;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Subject:
-	 From:To:Cc:Date:In-Reply-To:References:Organization:Content-Type:
-	 Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=qBQSOtzPb5Dyyy7UCfkkm4GoQy/f0qU0XzNeiniP9cA=;
-	b=XiY7c6w4WTGR4AXVS8lzBT5z7OUMi1dM1o5SHOxCXm3impfxJ6TFMYyEVA6tdnzyQH2t
-	 dDaDA9DeIUCTd2eM0aoBE1aHNhrsGycnrBstQd/dCxvRYbjNq0eIRHPHL112D5pTDu76s
-	 qANE0tUHqIKJsf3fs4C2I3E02OMYdI4lEW1RCiaYnb8U3ksqv1k0Cf70kVTWPCQ3R+H6k
-	 NT36f/+FzRch+LWsr/taS+S+eP+PbKPw7Er57N+DPeXoYt+7S1Wd749oR6wIcfjaBSOpH
-	 jvaRU5sN5TSIgh1WNpeebUfuufrqQNRUhQDCVWdGyAQLj/kJN0OvvOx/DJtzXmKWdfg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kfgTh1Wc;
-	arc=none smtp.remote-ip=198.175.65.16
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=81.169.146.167
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795109188;
+	b=cedLm/IpNKl8InSne6GVvU/GGM705EVN6V4kqyJXpXlx6oH73udyZBX3RhLTSpKFsbmv
+	 L7YGsbn2TloOBaBj+XS2zpGbWbnaIEe+fthQihPEcrVC3hwzK9HAuz4Se1aHnXVTSctog
+	 uRDalWdqDQoeTz1CNEbyNPYbx8gyrLXPcw+h9bjkfqi33HpfAMK/jnIl7l8ig0PCNEdmL
+	 d8KawkNWvOQbSFYeDfsVfOBBDt7jBUqS0XmVsG9iylKYJHQlbmQEqFpZVBQGSORJQzk3M
+	 jDsKzhNTOJIFKuwc6RRfOMh1e6GwbJekZM1ugCfdTBdcQyetc5HoglBiLuA8x3T2GYw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795109188;
+	h=DMARC-Filter:X-RZG-CLASS-ID:DKIM-Signature:DKIM-Signature:X-RZG-AUTH:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
+	b=Ckha53jNR2LkKWwfmAnAXeDQlJkRDPJDU5xS5CCdiAYvF5Ca1/b1Fw3qR6KexQYrA1bm
+	 4EaIW/7OjS7BbPNxihnYENNOsLAtscOwau+yRIBDLanvPrAkzxju5UmtlD8c2G6mT8L/P
+	 lLLG1ebcz38i90GSGxKCMho93DXjbhFA4gElxZsrUy8PHtovBOg/h3hVoTMERIm4NM1Wt
+	 gx3nCIPzeBODmsOQ3HpCUKWThLEzXv9QvmHk1dO4wVO8fAxZIMeJZmhwyRkWafnHptCpD
+	 6fQbSU0K/ZUbSlL83LknE4iZ0rGWZlLCuq0S0rwVo4y7VJ4i1StlWBidFT66fR+JUQQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=hartkopp.net;
+	spf=fail smtp.mailfrom=hartkopp.net;
+	dkim=pass header.d=hartkopp.net header.i=@hartkopp.net header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=V3OV9ZTn;
+	dkim=pass header.d=hartkopp.net header.i=@hartkopp.net header.a=ed25519-sha256 header.s=strato-dkim-0003 header.b=GOZEynJw;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=81.169.146.167
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1493606A324
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:24:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1493606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82051606A32A
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:26:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82051606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kfgTh1Wc
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795109049; x=1826645049;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=UQ71sU6zYzd/SSWqHxnzrNKZt+CZBGWiDB4bggmKr3k=;
-  b=kfgTh1WcQwnkrhwKKeVBF3w/WnPUfv3VcQ67Edex+06qexo8m3fVgnXq
-   Wmn5sUKadCZLiepHwf6RY/nD4MWMlTAgCG3Qsiuyyre9KmqtUQx7Chgfp
-   IjNsUPNWjbDvz22faxBYv7ntT5vANwBG6sC4Zg8PkCEuQwMWHN8xJgtp4
-   cIYY7Xv273CnjmgJgD1uE5JsG0MoBytdca02iKXqoumtjqRjeLvI6Wm1G
-   81BEJjnwF+VL6L3PpP3JEAyccF7abo6feI821tE7ESW1XceYKolESnb+2
-   Dva3APf8VD91TaNO6Vhuvvcoedx4SjmTgUrnrzGeQ5n6ILcGsIA+wgnZV
-   g==;
-X-CSE-ConnectionGUID: stYWvjk5SEuK37818veK0Q==
-X-CSE-MsgGUID: KbMua9S+QJijm4BnqRN20w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11971"; a="3960126"
-X-IronPort-AV: E=Sophos;i="6.27,221,1787036400"; 
-   d="scan'208";a="3960126"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2026 09:24:09 -0800
-X-CSE-ConnectionGUID: 2wAT42UiTw2ulVwHCNzVNw==
-X-CSE-MsgGUID: QgwcaKoZQ6qy+oLWx4PU1Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,221,1787036400"; 
-   d="scan'208";a="10871779"
-Received: from amilburn-desk.amilburn-desk (HELO [10.245.245.91]) ([10.245.245.91])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2026 09:24:07 -0800
-Message-ID: <7aa15f50ed768eae3d192312d90568c81956fcb9.camel@linux.intel.com>
-Subject: Re: [PATCH] drm/xe/svm: Initialize xpagemap to NULL in
- xe_svm_get_pagemaps()
-From: Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
-To: Ian Rogers <irogers@google.com>, Matthew Brost
- <matthew.brost@intel.com>,  Rodrigo Vivi <rodrigo.vivi@intel.com>, David
- Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Cc: intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Elkin Cruz
- <elkin@google.com>
-Date: Thu, 19 Nov 2026 18:24:04 +0100
-In-Reply-To: <20261119170716.1523667-1-irogers@google.com>
-References: <20261119170716.1523667-1-irogers@google.com>
-Organization: Intel Sweden AB, Registration Number: 556189-6027
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-2.fc43) 
+	dkim=pass (2048-bit key, unprotected) header.d=hartkopp.net header.i=@hartkopp.net header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=V3OV9ZTn;
+	dkim=pass header.d=hartkopp.net header.i=@hartkopp.net header.a=ed25519-sha256 header.s=strato-dkim-0003 header.b=GOZEynJw
+ARC-Seal: i=1; a=rsa-sha256; t=1795109185; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=b9O8O+Qr5Ga6wW3Ubg1cGcJv9JvKndqeoG3aKLIg/uPvK0ItZWa89DHy8xZFZjxDh1
+    qrRXXFrSpGDG+9sNxc8ifZP8xoxhOGbIUk/BytFsWUXhqrfWS9MUSNaqBginzVpbU3QF
+    CWlqpNQaI1fs5SN4gw8aAlnfN3ivRHPYztiGegbmNAwYgDaNmZFWmqottvjQ/cr1VaJq
+    vjlqsk6lcAS2ctM1/b467G/pvPzPXX1i4l6Uq6HS5OIQqKRo7IsgD7WRrFKt/KR2Suyv
+    retVJ1R7/Mv2xKw1IfL0nAq/NYiJAX7XzBzNvwEVcv2WaknEykkjX+Z4PuXTnh5gc3AP
+    dtDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1795109185;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
+    b=J1/s56WN+h++/bstgBtZ5COV6oNnDzoa4ZTx6vnRqxhj1wxVChjZ01NelO5fe/XQgg
+    UZCF3gulqetlS8GvggtUXLG7vusD/NPQlFOUOuHxkGt7zHRyAAlHbgwzWv5Y4dlRiAql
+    TKOPTHm+TLHTxSzAeBQGdubB0bC09w/DtJsdWEYpPAyw4GzEAfOtgTPJeJaQt6RarAN4
+    qRnltLXywZyuFD3TuKXw/5O7C7xZacHUH+AeOfthjulAjavt9ES9tUa6AiEWLEqiMD8M
+    wp2EkOSIES/JOZjC4GfuWis8RcSwhczxGg+zOU/wrzHJdm4pvMGJwNRURbwpOlDjyM/j
+    MBJA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1795109185;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
+    b=V3OV9ZTnLuY73+rWQWfZBDRdDUTuMppYFvhmdD/j1vZTQ7oBIWTN5cQSl4hKppsBk+
+    xUEgtplK1PkNrCTrzHN9FeAB+qjbmYFpkevkKE2SSDZsUeJPnpFWntaZ2W9FS79wGK5F
+    +DfJumMXYeWfBSgXJZ4tuM4wE+hwSvNAe3yS3m1vZzRNCKm7bYzuJUZMb9llbkKPHEZC
+    FOisFPVEsns5Dn+JtCoi7D7D/i4VLxZjbO8cGY6BPbcJhRHXDAy2KysRpZkNpCFPTC6q
+    TdS2EO8BzajsL/BzVFP9kufKOuurm7qFiBcBKNzKLm4vqXcpm5WTdQFKXunnwUJIhs5K
+    7Q0Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1795109185;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
+    b=GOZEynJwQvFvsJjNS6xKkt45o0Hmm+VfpXKGuxEAXw3ONESUeXbJS9RlF+45KNc1Us
+    ouvz6gEsXEVNVH6YY0AA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bDup0Q=="
+Received: from [IPV6:2a00:6020:4a38:6810::989]
+    by smtp.strato.de (RZmta 55.6.3 AUTH)
+    with ESMTPSA id Kfdf2a2AJHQPMwC
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Thu, 19 Nov 2026 18:26:25 +0100 (CET)
+Message-ID: <b7b1b385-cec0-4828-aff4-d0ab5fd61951@hartkopp.net>
+Date: Thu, 19 Nov 2026 18:26:25 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,55 +95,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] can: softing: lock card->fw.lock unconditionally in
+ softing_card_shutdown()
+To: Ian Rogers <irogers@google.com>, Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
+References: <20261119170722.1524088-1-irogers@google.com>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20261119170722.1524088-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2026-11-19 at 09:07 -0800, Ian Rogers wrote:
-> On integrated Intel Xe GPUs (!IS_DGFX), xe->info.mem_region_mask has
-> no
-> per-tile VRAM bits set, so every iteration of for_each_tile() in
-> xe_svm_get_pagemaps() hits 'continue' without assigning 'xpagemap'.
-> The
-> post-loop IS_ERR(xpagemap) check then evaluates an uninitialized
-> stack
-> pointer on every fault/SVM VM creation.
->=20
-> Initialize 'xpagemap' to NULL so IS_ERR(xpagemap) evaluates false
-> when no
-> VRAM regions exist.
->=20
-> Found via an x86_64 LLVM=3D1 (Clang 21.1.8) allyesconfig audit with
-> -Wconditional-uninitialized enabled; fix and changelog drafted with
-> an AI
-> coding assistant. Build-tested under LLVM=3D1 W=3D1 (-Werror) and
-> -Wconditional-uninitialized; not runtime-tested on Intel Xe hardware.
->=20
-> Fixes: 8a52f4d9b1ef ("drm/xe: Use the drm_pagemap cache and
-> shrinker")
+Hi Ian,
+
+the PCMCIA Softing CANcard2 is discontinued since 2013 and the latest
+Windows drivers date back to Windows 7/8.
+
+The Softing CANcard driver is to be removed as there's no known user and 
+we lack the access to this at least 25 y/o hardware for 10 years now:
+
+https://lore.kernel.org/linux-can/20261118092955.1283165-11-mkl@pengutronix.de/
+
+So thanks for your patch but unfortunately too late.
+
+Btw. beware of Sashiko bot reviews for this obsolete patch that will 
+make you rework the entire driver :-D
+
+Best regards,
+Oliver
+
+
+On 19.11.26 18:07, Ian Rogers wrote:
+> softing_card_shutdown() calls mutex_lock_interruptible(&card->fw.lock)
+> with an empty if-body ('{ /* return -ERESTARTSYS */; }'). Because
+> softing_pdev_remove() invokes softing_card_shutdown() before
+> unregistering netdevs or removing sysfs attributes, a pending signal
+> while card->fw.lock is contended causes mutex_lock_interruptible() to
+> return -EINTR without acquiring the lock. Execution then proceeds unlocked
+> through IRQ and DPRAM teardown and calls mutex_unlock(&card->fw.lock) on a
+> mutex not owned by the current task.
+> 
+> Use mutex_lock(&card->fw.lock) in softing_card_shutdown().
+> 
+> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
+> -Wextra-semi-stmt enabled; fix and changelog drafted with an AI coding
+> assistant. Build-tested under LLVM=1 W=1 (-Werror) and -Wextra-semi-stmt;
+> not tested on Softing CAN hardware.
+> 
+> Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+> Fixes: 47fa0336c1b7 ("can: softing: softing_card_shutdown(): add  braces around empty body in an 'if' statement")
 > Signed-off-by: Ian Rogers <irogers@google.com>
-
-Reviewed-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
-
-Thanks. Will add relevant Ccs from ("dim fixes") and push after CI
-completes.
-
-/Thomas
-
-
 > ---
-> =C2=A0drivers/gpu/drm/xe/xe_svm.c | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/xe/xe_svm.c
-> b/drivers/gpu/drm/xe/xe_svm.c
-> index bc6902b5bf57..22cc7ed19d8a 100644
-> --- a/drivers/gpu/drm/xe/xe_svm.c
-> +++ b/drivers/gpu/drm/xe/xe_svm.c
-> @@ -2055,7 +2055,7 @@ xe_pagemap_find_or_create(struct xe_device *xe,
-> struct drm_pagemap_cache *cache,
-> =C2=A0static int xe_svm_get_pagemaps(struct xe_vm *vm)
-> =C2=A0{
-> =C2=A0	struct xe_device *xe =3D vm->xe;
-> -	struct xe_pagemap *xpagemap;
-> +	struct xe_pagemap *xpagemap =3D NULL;
-> =C2=A0	struct xe_tile *tile;
-> =C2=A0	int id;
-> =C2=A0
+>   drivers/net/can/softing/softing_main.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/can/softing/softing_main.c b/drivers/net/can/softing/softing_main.c
+> index 519ab3097f86..d3dfad4f5321 100644
+> --- a/drivers/net/can/softing/softing_main.c
+> +++ b/drivers/net/can/softing/softing_main.c
+> @@ -448,9 +448,7 @@ static void softing_card_shutdown(struct softing *card)
+>   {
+>   	int fw_up = 0;
+>   
+> -	if (mutex_lock_interruptible(&card->fw.lock)) {
+> -		/* return -ERESTARTSYS */;
+> -	}
+> +	mutex_lock(&card->fw.lock);
+>   	fw_up = card->fw.up;
+>   	card->fw.up = 0;
+>   
+
