@@ -1,72 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108158;
-	b=w9uUPnM/coT04MelukumnVONN2URMACpPmwbPe6mTG8YPA1DUQGtskZ794Uj3cs1vZfh
-	 IAepK+zp6kxfLQIQMOR6/HvsWySdBtjegVSMjm6eccAudu67Oron2QO0LzE9y81P2PFlm
-	 iCVrH3XOdoBE+qjyFSPXYlpeLyZtWdsabv/3vhPgUtcNyQ1Cp6qWsX6UAI/2lx1JPf8FN
-	 qSmOSTj2N1zPFFnJ6q3un1Qcy2j9Ab/a5sPdeaArrtaFG643VhpX1JVmpwwDSaMKgwCGx
-	 V7JX6rGq7XD3ihFBCwryng8ig0DMbhgc+GsginEJKJmukY0EUTTXp0x4e1X/SskaKvA==
+	t=1795108163;
+	b=ij0nMlPjHOyN5dbFmDHL5NhbAUVkrnrRbbCsC45RBmgyNKz3/LZZkxkPiacNGJPAKFfn
+	 Yd/Qd5wCqCb9I0ExsB2FlKV6w2vUWlbgxgUZt8bFRm4quMKSVXROfRefA12fbRuUWY7Om
+	 i5T5E/S8FG/CqW3xmgDtA+WKWJAyPM6KOPnCdxSjaK+fnkxJrNn1HtbZzTgOYR7feVkAN
+	 cMjQffyh1ksMaqlKwYQDoWpiD3OGHPWrC+M7YvKYcmb1n1I1vUuvIw7wZp0RTUNe1z+Zp
+	 fz6ZGWLGDblSpgOe1zzNA1dulBqjAX39Bh9TxU4ntcLObG1BkoiqxUzrWXfAeOBi7fw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108158;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108163;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=reI4hG36wSTlZBZHqaQMIOTRXTTK6qV6ma9NRye/4cg=;
-	b=BrkHgKmWOwgpCdU/6LscIanbmQ62T6yic5OrTtP4M+CFb2rrMiKEsvIYUu21s3wLjFSM
-	 ydrvFdTrVPeux4pobDaJuFOPH4QKeFEXf6HdhtUQp9y6TExjMkS4TJIOgBkYstZBbPD4y
-	 GbE9j7UPsS/fXEAx561r50HJlpg+xPrnkJEE6V6EAQtcyaTNHgntuGv3UnzShvshuQ9g5
-	 dJmRigHToAtDFsQGS8rYbKEJX0ePALA7qfZSZqjuDIUYkxermnUrRGdQ9VhiQiKrJQoot
-	 0OGtpeeXeRgDO98n6HZ5Q17yyR5OMF0TPeoF8xWyn6uaELR259aiVV5YyzyQF7DkGJw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=zp/eWIvAWdcJU6LCqEw8Tba2FtGF8iLEdj4AaHHxWjc=;
+	b=JfB0M3obDrHAaECyUKAkGNPnue++J0HNSu3eqvu1Q52oAHh/NzByc+0Cb7iePMIPXi/r
+	 D12O4b231sdoJy3TaVQLk8B+MwS+4lZrxRIm2TBIiv4pF1V4nCSu0AaZfrI7//Bad/Y1Q
+	 LzPEsvlNozTw74d8IbOc0Bg7CDrlPBj1XScGLhfO/Dy7sjIJs9N3qilCLrEc33R3f5xdS
+	 fuqYlGgoiUHA7oe/tnkQK2f3JH8JkbvvLu3DrSKFGgivh0Z4vRJE2poSVU0cLSp6ODXtQ
+	 PqIB8fy18tN0bmUUUMiw+GzOgwkmYGcozqCsmXfDQ1htqPNTyKGBD4taTCCouAPf8Mg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UEEnzUqC;
-	arc=none smtp.remote-ip=209.85.167.200
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=al3l4iIY;
+	arc=none smtp.remote-ip=74.125.82.197
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D2060A2603
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:09:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89D2060A2603
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B289606A637
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:09:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B289606A637
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UEEnzUqC
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-4e778acdbc6so27674b6e.3
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:09:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=al3l4iIY
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-375bac6bd21so1161568eec.0
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:09:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108157; x=1795712957; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=reI4hG36wSTlZBZHqaQMIOTRXTTK6qV6ma9NRye/4cg=;
-        b=UEEnzUqCWjiQwBHohcmIDjDGG88TcWtDfRMF5sLDyxIe9+wvNP1zf4MkCjb/5xa4iD
-         vbv4iq2Osxq+tdz+eMPkS35LGD0LFWjLC6w80i4tA+n3dLnTH9GWl6bnUA2JsiKDhQxz
-         bd87oUiosIN3i3iUfeJLPIgh0FsF7daDJIadGiTizh/RCR9Ez3d0CIGYwpiP3yZCTx6O
-         qZM4ZQ+zCUeH/2uF3DDjh5qZLz9kJVA4dpaX7h7IvoafaVXNhsilsGir2K+pI9BwbJUX
-         nYPUAppWJXMkGrjmokJXafwR/AJUQXfyUdHR49d6niGufqIrfkCS1UK8MHtqX8yZOkAo
-         Pc3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108157; x=1795712957;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1795108163; x=1795712963; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=reI4hG36wSTlZBZHqaQMIOTRXTTK6qV6ma9NRye/4cg=;
-        b=Olooqr8KJh7xZV/tfUPZuMUrV1BrPbBNb+1JLcg/9VqZHpftGd99UNUapBmkYB2cw3
-         RI9RF+EsaC9CTTlDEVWFRnl9ykx+wgJA4BgHMIMzk/WKjfFkU0hEVjbAZXL2TP4sTnjn
-         +86ZjhLQIJWr5dN6cEU8sCh7ulYhcYL1F3bfvRWcY1/jlX8puAYL8LgrgUpxtertVnTz
-         4+Uuh0p4xofsWZm5P86xg6E4+58UJuzncGjoBRtOoJWrifEsharb5Lmk7mM6xwMbKWyL
-         wHCXYe7TiqHKjCBgv8q6KBGC9fHJ2nfsXLimJn22wluuMgaCDoBe5eWk93gTKf7TX7CU
-         +XQA==
-X-Forwarded-Encrypted: i=1; AL+hErEGdnv3jxTfncR+m1ee4JnkfwWG/H/TVVkHNL9yINl3clIHCct01M3l2aRvIPHnVyaIohHx@lists.linux.dev
-X-Gm-Message-State: APuU4Z9HoOHzjDUYS+HkW+FcLhIl8wXQwu9hRM0OncsIlfCjrxwzEvpv
-	tKInPBDFdF8koH18PngZCb5LscPWsOH9MvxvNGkU5UVOOBbDpWxEaotxOicW4vO6MGKDUflu6D/
-	wB3lYDXyydw==
-X-Received: from ioi25-n2.prod.google.com ([2002:a05:6602:c659:20b0:9e0:f209:1acb])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:14c3:b0:4fa:8d48:3a5a
- with SMTP id 5614622812f47-57a0b44ccfemr598788b6e.38.1795108157215; Thu, 19
- Nov 2026 09:09:17 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:09:09 -0800
+        bh=zp/eWIvAWdcJU6LCqEw8Tba2FtGF8iLEdj4AaHHxWjc=;
+        b=al3l4iIYgXAqMcrMUtEfbNqBL9RTt/xRwXimziwScDuXpEICw1R9Rs7g7mTliaM8U+
+         QKQ/WgVt+ZjlWkOYHRVYFKlkvZBpPqtoPQVUW9ipLFpUf0bhWs+HjVsDDU2546P4aH5a
+         Q2O6cGwVSb62HjkxbBYhX5dlC+cvdyBRUIcMth6Zq3m6bRZ4Ke12YM3LbP1sZZ11J5qc
+         U+Tflpa7N2/XKsGSumGK1piroSxgD8KLBbn1AIwnqxQlt6B6O9ifVkuGPOFfzyJ4ZaFA
+         YdqvAGw0HfgZeIdi3qxkBHbj2bgMNGb3zks6wWexGkxZQYoCiS7bQddLHb0G7EfRmHtp
+         22pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795108163; x=1795712963;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=zp/eWIvAWdcJU6LCqEw8Tba2FtGF8iLEdj4AaHHxWjc=;
+        b=rK4x0sqPiWKIOTNr2VIbpn611lSPwl96i3E8DBTd3y7llD8q3ejsPj42Qy1uopc4JE
+         ylCrpO64VsE+2hAbFaNe5RSw/hVmXPkluXcbsQeZWQTcLcxFHOCfkmNm2KoHN263I0hC
+         pmnD32yF7CVBGHK2+tiDg/pgVgBjRzuQQDxw6wMgyD4oDHs59Yr8S/gikdMQBPtrMRo4
+         iRzE6A0NJq2JD3Gf0gS6BJRP5MiQiDNRftSOM4RJ+CbBt0MoW43T92S/qa3QpWQtFyO5
+         cXESlJsxqeZB650E549KSZdqh/XzpqEMOi2AllSccjKAPJIDsYfj62aM2rc3E6IHZoHO
+         Vpgg==
+X-Forwarded-Encrypted: i=1; AL+hErEjiE4q6dM8mSBZeGd9o6WkH8BI5sG0f6+L6+WJIishHJrwvV7poKHfpLCIArYcbtSbFLNJ@lists.linux.dev
+X-Gm-Message-State: APuU4Z+G0vKANfjuaaW+YssPdmRyLeyjvQhjO9ug3OUkGVvKu3E6Bojm
+	pUKF028thMH75f0+CD7y+wzUc3RTF0X5EM5ZEKvFry7OmHAc/YWmqTvNghEuydlZZ7w2/u7Cq1V
+	HQP4ah11fsg==
+X-Received: from dya17.prod.google.com ([2002:a05:693c:6211:b0:36a:1f25:64f4])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:1403:b0:385:5297:573
+ with SMTP id 5a478bee46e88-3856f25fae8mr252eec.4.1795108162235; Thu, 19 Nov
+ 2026 09:09:22 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:09:10 -0800
+In-Reply-To: <cover.1795106967.git.irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,35 +79,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
+References: <cover.1795106967.git.irogers@google.com>
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <cover.1795106967.git.irogers@google.com>
-Subject: [PATCH 0/2] wifi: mac80211: Two return-value fixes from Clang warning audit
+Message-ID: <97716b88b986cdfd77a6d90cd4c159a79f96b9bd.1795106967.git.irogers@google.com>
+Subject: [PATCH 1/2] wifi: mac80211: Return 0 from ieee80211_reconfig_nan_offload_de()
 From: Ian Rogers <irogers@google.com>
 To: Johannes Berg <johannes@sipsolutions.net>
 Cc: linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Two return-value fixes in mac80211 found while auditing Clang
-warnings (-Wconditional-uninitialized and -Wimplicit-int-enum-cast)
-on an x86_64 allyesconfig build:
+Commit 589c06e8fdee ("wifi: mac80211: add NAN local schedule support")
+factored ieee80211_reconfig_nan_offload_de() out of
+ieee80211_reconfig_nan() and added 'return res;' at the end without
+initializing res.
 
-1. Return 0 instead of uninitialized res at the end of
-   ieee80211_reconfig_nan_offload_de().
-2. Return NEG_TTLM_RES_REJECT instead of -EIO in
-   drv_can_activate_links() when sdata is not in driver.
+When an active NAN interface with offloaded Discovery Engine has no
+registered NAN functions in function_inst_ids, the drv_add_nan_func()
+loop executes zero iterations and returns uninitialized stack memory
+to ieee80211_reconfig_nan(), triggering spurious WARN_ON()s and
+reconfig failures during hardware restart or resume. Moreover,
+per-function drv_add_nan_func() errors are already handled inside the
+loop via ieee80211_nan_func_terminated().
 
-Build-tested with LLVM=1 W=1 (-Werror); not runtime-tested on
-wireless hardware.
+Return 0 after processing the NAN function array, restoring the
+pre-589c06e8fdee behavior.
 
-Ian Rogers (2):
-  wifi: mac80211: Return 0 from ieee80211_reconfig_nan_offload_de()
-  wifi: mac80211: Return NEG_TTLM_RES_REJECT when sdata is not in driver
+Found via Clang -Wconditional-uninitialized on an x86_64 allyesconfig
+build. Verified by building net/mac80211/util.o with LLVM=1 W=1
+(-Werror) and -Wconditional-uninitialized; not runtime-tested on NAN
+hardware.
 
- net/mac80211/driver-ops.h | 2 +-
- net/mac80211/util.c       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes: 589c06e8fdee ("wifi: mac80211: add NAN local schedule support")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ net/mac80211/util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/net/mac80211/util.c b/net/mac80211/util.c
+index 44feb80274c6..9fda135dc112 100644
+--- a/net/mac80211/util.c
++++ b/net/mac80211/util.c
+@@ -1800,7 +1800,7 @@ ieee80211_reconfig_nan_offload_de(struct ieee80211_sub_if_data *sdata)
+ 	}
+ 
+ 	kfree(funcs);
+-	return res;
++	return 0;
+ }
+ 
+ static int ieee80211_reconfig_nan(struct ieee80211_sub_if_data *sdata)
 -- 
 2.56.1.708.g77570a6a1d-goog
 
