@@ -1,72 +1,72 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795107905;
-	b=S6UT+gyKM48QvMsSze1FEh4/fwlAtwCZI9l6YWEYIXqNNsfynPXCsqD96v33yYBw4gjH
-	 rJrpcDM+rkVlUnYmvx1nS7+2thsY4ncqT69bgbFVZEbLTEB6M97rxlX8HO+r8lkz3HWQr
-	 2y017C4Iwp/QXecVdJ8PoUaXGRw2edDPZexg75bbz2M9k5hjdQfQQ4GTdls9PhYKohU/j
-	 PbAdQemfQla6Aa7MfxGgc7n6zkCI91DVapYnVEhP4/XgmHAL0E1uUj6aWynK3j8Pp/4vO
-	 1YK4pBu0H3b0C7afNXi9KH0tbLPC2dQwmgqiVaFmm6O5txAzIMUouUJqmpyIZcq1dlQ==
+	t=1795107910;
+	b=3WjXMy+CKmzgTZ2mz7mI4q3Asc3KTRfsGfWEGzTRY7HbWDB28DP2+IrhOMDnb0Qk/f5t
+	 o3Rvj5fmYAwoHu+Z9Lg8bFIKIW8GTeA11qL/eyWof/GXOi2TTY+VvJ8xwCzNQIzCJzHGB
+	 axrZFFuecyd++KjwjN546PWX/lmQx1xJYzlj6OLSkR6CBy3WO6TgoMdayBx+YInH7XLCw
+	 aXy9bNq74Q7jnRzRZqY2Wx0T3ZVNo8JeiAwzCvWPWcNlJC9fzXOXKFH77Ll72XmqqPmrM
+	 rGEfV3ibJ6oqHCmUsOzO6Y/51589ZcqnhnAqikFR59EMxjHiPjSGlbEMRkZuPFth4Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795107905;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795107910;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=tEWTKd67+sE6hXsJjat4+R5/kfA+hMcRoqTzGHNveW8=;
-	b=4ZBJD6UpiEGydHut7AH2sxYmZBI/ZoytpCqARzRJZkDj41LAae+Ygc6PNw3ijQfQkOam
-	 l0vkDBE/M22I+qNWQ54nxhD1h0X7z50LqdzKbXwpX0I4MrmxuZmyHIrhTVKHV4epCfcos
-	 uczj3OvwbeMgJ8XkV9QB4hDMH37nXgPaC3RtGXmwMgaPR1whxvqDTVhygDGE1eaN0FvIW
-	 BIrsvoejZYztBZ9UowJEAXuCNY40TCICBzxubMP2hNwxgkUiffi6BZVz4s6dSi1af18JW
-	 pV+I0XMWK07Xduvxe8UGbIz4JpDsDUFsojCKh/ZZDI03yWMr3KL8x0GcfYxKT5MSbGA==
+	bh=rx1BIBm+pFF9M2IDaKvF8w7SnrBT54mjfoNt8Z1QDIY=;
+	b=3ok9xG31c8RZ4ruUb6eVlUaT/g1IToAKO1jxi0OoAfgWJdj6m+DivvVk44sLW0Z3qDGx
+	 ceI6V/GVOQ/gG/UcU094iYFEsd1mccxuTNSOciyjIy4FwDOjzLsMJ4B2Y6jhTzsxblFA+
+	 FqlLMBILq+qnccrFn4xDJa7npebb6yjy2SWqiJDUoFq0ssGB7B+wGbOmo+nOoin6vupoc
+	 NMvsYg+8sjwpcRHGYW/ZGpqajBJAyv5I6o3/ksDrKcUUmnBh+hwxskfxArbYC5VH++rAA
+	 D/WoVoSFqT2DCYsV8AynhwjMa0Tbcqxq1JHbE5jxSDYVl2gJQx7YCuImIqtZG06yHEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bXUE2bYN;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VXedeUDX;
 	arc=none smtp.remote-ip=74.125.82.70
 Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF6360A260E
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:05:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4CF6360A260E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FB3606A333
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:05:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1FB3606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bXUE2bYN
-Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-154e9d2d94fso5076171c88.0
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:05:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VXedeUDX
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1a2af4c8cbaso1967273c88.0
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:05:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795107903; x=1795712703; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795107909; x=1795712709; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tEWTKd67+sE6hXsJjat4+R5/kfA+hMcRoqTzGHNveW8=;
-        b=bXUE2bYNt6yjDxk2dgBjDW2jCRetxBGrrbxUdQ6qev+s26OuCUUnb2dRPut9cyUUZf
-         OSDhCdAWKwPoaezg9WuUsAXSGbq1q6OUVTdZoOVQHwdl5EYVyGyHovbX+8SR/AXhIXDW
-         7U8fMvt+s+apsVyzdsEZ3beTMJnafFoGhy6QGgtaDigUIkW9ZC5Nuo1K7rj4AYBOlLYR
-         qBKDNIogD3Z8ot5cgXs8Fh7yoptzk28NHgUHmdoMaIGK3AeVwiCgjtrG9O513D0DT6Uv
-         qxxKhjXAcfcfQhdObbNmf5eCm417ByLRvfIaaNxMEJbNRb9XQozen18uiCaS7J7CCzb/
-         C8UQ==
+        bh=rx1BIBm+pFF9M2IDaKvF8w7SnrBT54mjfoNt8Z1QDIY=;
+        b=VXedeUDXD6dzdJ0PKHZAGiIZ5+ARIju+udY5/h0wKtCpZZUxUzvINAGwjvJTOH0N6M
+         ov+uKyVjOPhBJ6RLwcRJ94HKMn8EndL5HG2UlLAfRdaYtn4nIDcAQrPJnPAZeXh6EP4c
+         AboMCrJl973XYtdyLW1ebpF5YEzarWNJ7SPmWkiWlSTZxWImXrsb24aE4fppD2H4X7OT
+         IzKb8eurz2tJ82/XWu2pn4lVEoIclTZWrRxS07KDJMM3bKzgydwLWLex+oxvMMKTCVPy
+         vs/iKtXAApLWJZUQ2M75DXTXvcGwrQI/u2yHyUO+WMLq9lLTD83qOAD06PR00hmWMM18
+         TFdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795107903; x=1795712703;
+        d=1e100.net; s=20260707; t=1795107909; x=1795712709;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tEWTKd67+sE6hXsJjat4+R5/kfA+hMcRoqTzGHNveW8=;
-        b=aYjRbiSBARJUBuDBw/H2/asG/EmzL6DDp+w0Ql2bEibEjjQ07wZjjJIbrh5iqZtWTW
-         FhQDWd72NHBzfxiu53NZh11ZIV4cTqavryeeKNFgScC2mSNUvrSPlweGPMEvhP5Htcnu
-         NsQuoSN2RWEKmtGBK/WFY+/oaUoAR5aHzFEMorFVdu//MJ6WpQw0W1tG/czjv/YgrRxn
-         yH6xaXfkYabIQqX8ZiPSTUUUf4nzVnf6xARhQ6YygaN9aYDE2W2r3lshBD2+J9ns0hDY
-         0EejV9UMO/v+Sk4PRS9OXIWfr9OyCjgJT0Fqzk91rQPyp58nKxqWOIUvwyjQHsElF3iH
-         Pkzg==
-X-Forwarded-Encrypted: i=1; AL+hErHqJ6/pPI24K0GCluCCLsCW0iWC/YAcuY/LbYIPIp0oh1Lt1cqDDWOAhIwzZ+AikTAt8rcr@lists.linux.dev
-X-Gm-Message-State: APuU4Z/qEQYjqf/Oit7CJPkCZvUvYnvfhqkpIphryl6BE3IJUapNoGGZ
-	aEHjROrmRc3V+tM7yUfpkIJl2hQFB6VnOb9TIwRT2qRVjaC7gL4/7QJlWTCxZa12PHJ8sld/Si/
-	ugEk45BM6VA==
-X-Received: from dlbsw11.prod.google.com ([2002:a05:7022:3a8b:b0:19a:1425:bb9c])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:4204:10b0:1b5:4cbd:ac02
- with SMTP id a92af1059eb24-1b556895b10mr269905c88.15.1795107903109; Thu, 19
- Nov 2026 09:05:03 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:05:00 -0800
+        bh=rx1BIBm+pFF9M2IDaKvF8w7SnrBT54mjfoNt8Z1QDIY=;
+        b=Dmhoy/Vo2zj+NHvbmQXB5TW5597xuI3+kpgPoVo6ZSxsk3wcHMc2N5TDQSp4nlRiyp
+         T0LjYzUDvsWuBPle7Ynt5W+kYftymQBDqyWRI9xWji8vNkM37FYWNwQIEMJkoQ3EsCBU
+         CS6i8bK8XP32aF/SxLriwJNDCXiLCBtR5Jz4x/ksSYP5hbmpMC0LuofVEnZEY/fj6RHb
+         O1Gvmjn3UPAfsmsMybSKzs17ZWAyJAGIlq8byH6zc76XwAhPxRfDAmNEJd5OirBIuasg
+         jrlgmtwTBqcRgrGF9SrvuncAAhKMOQjmRWDWPYgCUol3jMnnAXq4vfj/pT2dPOmef0/5
+         GGcA==
+X-Forwarded-Encrypted: i=1; AL+hErGsJKbU/F+jJrvqvhLlIYFTVwEGEe53U3GOs2SXMN2RGMr7dJF0ub9R2NgkP/IfeKj4BeTN@lists.linux.dev
+X-Gm-Message-State: APuU4Z/h2PdAZT7ChrOAE6lANwaaueB+qWXX1FcRgiFvU8L7YfQ7g8pe
+	1+AF+xWQvJPMwkRsux/CwIqyWoCAyvD5/ND7mrNX7iudXa6nSwkGeo5yjGBIjNW7NIeJ2/fBm1k
+	WT4kOWXEsWw==
+X-Received: from dlbts7-n2.prod.google.com ([2002:a05:7022:b047:20b0:1b5:4b48:ba2f])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:b056:20b0:1b3:ac53:da84
+ with SMTP id a92af1059eb24-1b5568e371bmr272053c88.32.1795107908743; Thu, 19
+ Nov 2026 09:05:08 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:05:05 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,77 +77,74 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170500.1514537-1-irogers@google.com>
-Subject: [PATCH] scsi: lpfc: Fix format string and OOB copy in lpfc_read_object()
+Message-ID: <20261119170505.1515029-1-irogers@google.com>
+Subject: [PATCH] remoteproc: core: Format firmware carveout rsc->name with %.*s
 From: Ian Rogers <irogers@google.com>
-To: Justin Tee <justin.tee@broadcom.com>, Paul Ely <paul.ely@broadcom.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In lpfc_read_object(), rd_object_name is a 26-element u32 array (104
-bytes, LPFC_OBJ_NAME_SZ) populated from rdobject via scnprintf() without a
-"%s" format string, and then copied to the SLI-4 mailbox request with:
+In rproc_handle_carveout(), rsc->name is a 32-byte u8 array inside the
+firmware resource table. It is passed directly as the printf format string
+to both rproc_find_carveout_by_name() and rproc_mem_entry_init() (which
+call vsnprintf() with zero varargs), and printed via "%s" in dev_dbg()
+without verifying NUL termination within sizeof(rsc->name). A malformed or
+corrupt firmware resource table containing '%' specifiers or lacking a NUL
+byte in rsc->name can trigger out-of-bounds reads or invalid vararg stack
+accesses.
 
-	for (j = 0; j < strlen(rdobject); j++)
-		read_object->u.request.rd_object_name[j] =
-			cpu_to_le32(rd_object_name[j]);
-
-Because the loop bound uses strlen(rdobject) (byte count, unbounded) to
-index 32-bit dword arrays of length 26, any object path of 27 bytes or
-longer reads past the end of rd_object_name on the stack and overwrites
-rd_object_cnt, rd_object_hbuf[], and adjacent mailbox memory. Passing
-rdobject directly as the format string also evaluates any '%' characters
-as printf specifiers.
-
-Format rdobject with "%s", capture the bounded byte length returned by
-scnprintf(), and iterate over DIV_ROUND_UP(len, sizeof(u32)) dwords.
+Pass "%.*s" bounded by (int)sizeof(rsc->name) at all three sites in
+rproc_handle_carveout().
 
 Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
 -Wformat-security enabled; fix and changelog drafted with an AI coding
-assistant. Verified with an ASan/UBSan C reproducer for short, '%'-bearing,
-and >104-byte object names, and build-tested with LLVM=1 W=1 and
--Wformat-security; not tested on Emulex Fibre Channel hardware.
+assistant. Verified with an ASan/UBSan C test and build-tested under
+LLVM=1 W=1 and -Wformat-security; not runtime-tested with remoteproc
+firmware images.
 
-Fixes: 72df8a452883 ("scsi: lpfc: Add support for cm enablement buffer")
-Fixes: 59936430e6a6 ("scsi: lpfc: Fix CPU to/from endian warnings introduced by ELS processing")
+Fixes: 72029c901a02 ("remoteproc: add helper function to allocate and init rproc_mem_entry struct")
+Fixes: ffa5f9c84810 ("remoteproc: modify rproc_handle_carveout to support pre-registered region")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/remoteproc/remoteproc_core.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 9173263c87f9..26c9f5721340 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -22259,11 +22259,12 @@ lpfc_read_object(struct lpfc_hba *phba, char *rdobject, uint32_t *datap,
- {
- 	struct lpfc_mbx_read_object *read_object;
- 	LPFC_MBOXQ_t *mbox;
--	int rc, length, eof, j, byte_cnt = 0;
-+	int rc, length, eof, byte_cnt = 0;
- 	uint32_t shdr_status, shdr_add_status;
- 	union lpfc_sli4_cfg_shdr *shdr;
- 	struct lpfc_dmabuf *pcmd;
- 	u32 rd_object_name[LPFC_MBX_OBJECT_NAME_LEN_DW] = {0};
-+	size_t len, j;
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 23f8539a99bd..1b1743093edc 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -837,14 +837,17 @@ static int rproc_handle_carveout(struct rproc *rproc,
+ 		return -EINVAL;
+ 	}
  
- 	mbox = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
- 	if (!mbox)
-@@ -22283,8 +22284,9 @@ lpfc_read_object(struct lpfc_hba *phba, char *rdobject, uint32_t *datap,
+-	dev_dbg(dev, "carveout rsc: name: %s, da 0x%x, pa 0x%x, len 0x%x, flags 0x%x\n",
+-		rsc->name, rsc->da, rsc->pa, rsc->len, rsc->flags);
++	dev_dbg(dev, "carveout rsc: name: %.*s, da 0x%x, pa 0x%x, len 0x%x, flags 0x%x\n",
++		(int)sizeof(rsc->name), rsc->name, rsc->da, rsc->pa, rsc->len,
++		rsc->flags);
  
- 	memset((void *)read_object->u.request.rd_object_name, 0,
- 	       LPFC_OBJ_NAME_SZ);
--	scnprintf((char *)rd_object_name, sizeof(rd_object_name), rdobject);
--	for (j = 0; j < strlen(rdobject); j++)
-+	len = scnprintf((char *)rd_object_name, sizeof(rd_object_name), "%s",
-+			rdobject);
-+	for (j = 0; j < DIV_ROUND_UP(len, sizeof(u32)); j++)
- 		read_object->u.request.rd_object_name[j] =
- 			cpu_to_le32(rd_object_name[j]);
+ 	/*
+ 	 * Check carveout rsc already part of a registered carveout,
+ 	 * Search by name, then check the da and length
+ 	 */
+-	carveout = rproc_find_carveout_by_name(rproc, rsc->name);
++	carveout = rproc_find_carveout_by_name(rproc, "%.*s",
++					       (int)sizeof(rsc->name),
++					       rsc->name);
  
+ 	if (carveout) {
+ 		if (carveout->rsc_offset != FW_RSC_ADDR_ANY) {
+@@ -866,7 +869,8 @@ static int rproc_handle_carveout(struct rproc *rproc,
+ 	/* Register carveout in list */
+ 	carveout = rproc_mem_entry_init(dev, NULL, 0, rsc->len, rsc->da,
+ 					rproc_alloc_carveout,
+-					rproc_release_carveout, rsc->name);
++					rproc_release_carveout, "%.*s",
++					(int)sizeof(rsc->name), rsc->name);
+ 	if (!carveout) {
+ 		dev_err(dev, "Can't allocate memory entry structure\n");
+ 		return -ENOMEM;
 -- 
 2.56.1.708.g77570a6a1d-goog
 
