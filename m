@@ -1,52 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=156.67.10.101
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795117916;
-	b=5gPtxOxkthKFs0hzP4OvehYIRh6obhT5pflQj85J5DUiZhjeukVml2Cl4kLdFwHdhB/M
-	 t4o1SLAEWry6oaFxrh6NVwIHRVOJDi6kM4dJ6JMNW9yAh7+/9R9Qb88m6359feIASjTqy
-	 yH+E/+MLhzFHzFzuQSXcxvGfaAvO3f78Qr9PWaJ2uZL7Jlc2W1sP9jasBMudj9brjatUi
-	 lwjidUEXXcPb7L6jBVyJKinPBoLGr2Ks2KimMQ1f9zEPqGY1bvlH+Nq8TJpPxAaLibXtm
-	 7oQPzkRLlXzj9vkAfrA8JfH0reFXcafDNiJroTHwRsJA3ajjQ7hrjlaAHi9IY8B4eZw==
+	t=1795119324;
+	b=5hVLSkpZyTz/uub6aQKrTVuEiD7z1tJSIA7JmXNMKX7ywshRofvIDKTPazngWzCvr3+o
+	 iWWg/fkHnlR4LtqRzZcyUfnfWWUzZcHQQWDJZkMNhvXonpyFJN9B+RYwH6LZJgSRn9K4n
+	 7aHMxuiTTbI7b3llc/sTH+RV0C6IPFPGasuW+iFoxE5w1YD5oPwQn/Xj+31bo1N4C3y3L
+	 VuRC3yim7jvP+zwlEKi63H0dSIMf1qoZ9YpqLgEJXxq3O87tlN46adzgbgPgmg3Art/AK
+	 OAjPMMR8fwwU4vlJcIUGsGMwoz6w2g0dG0W0eLWkD1gPv4R8IW11xPUIwISxMNGiASw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795117916;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=nchU52RTjWs7KjsoiHeauziNB+V+tmCBpSxonOanMwo=;
-	b=DWjASBp6DkdtXj5mLQFMZPHsaghY3yKD9QV07XRcDVYv+uFvkYdGAxveHyVGBztzKTL6
-	 AJBhn9natysVp+UwhAquGxB+YtfKdMMRuvNLDpvJ2wn0J+lHCGg89ydx6Qf198557R9tg
-	 87o3DZpKZWXd2EvWQpNZS1ePWQMsnlMbKwC9I3eAvULq2F+ZeXgHjjsXzSuy1fDJXzC+/
-	 kshDHscQ/Q1/bYjH/87IC4aPqHK0rN7gKk9kmw4FYtDdsTzRFlp+TMoffKRfejsgV4nzS
-	 dKTwyOFKG51OyVkaMFWMKolUBaEFsruGUpDARK7Qa6rTWBv+mBVOXnDZeKbz/5AGodw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795119324;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=P9e055f8FpXxjQzl7FGm//R08dSOJPOnTIJ1la1axUA=;
+	b=1sVmC/rkPmTFLPIstmshH5k9+s13LsK76kRCV5N1JtdPEuaQ4FVmY91kVghlr6zipnxL
+	 rIOPOw3CdIJJhV7DCrcIbBHAaOQA0S0aJ8sbCdJHEM7u2AUwjGfnxuNvW7pebhQZQIi4G
+	 wXD/iNmOl5XAklChoyOP4YdYyUgzT1opEDTqrVyUMMjv7BreJx4acBvOJryV4K7UTuYLf
+	 VvICEploOwL9OG7j+floEIbnOy/pgSB7fc31UBjlTGzgmz0UqTCEYlHrV8LZx/Q6uk/7e
+	 LZXUK5LU2AGWIiDHIep/DsaamnZKK3yKMFKDRcK8ijKvLM/F0UVLlBLFPIDNpVbp6mA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="VrkBE/oi";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=lunn.ch;
+	spf=pass smtp.mailfrom=lunn.ch;
+	dkim=pass header.d=lunn.ch header.i=@lunn.ch header.a=rsa-sha256 header.s=20171124 header.b=ogf15uQg;
+	arc=none smtp.remote-ip=156.67.10.101
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89460606A32C;
-	Thu, 19 Nov 2026 19:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFA1606A324;
+	Thu, 19 Nov 2026 20:15:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CFA1606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VrkBE/oi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E727C1F000C5;
-	Thu, 19 Nov 2026 19:51:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795117916;
-	bh=nchU52RTjWs7KjsoiHeauziNB+V+tmCBpSxonOanMwo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VrkBE/oiPQZufNJ2RhZ3kJxk4PL0U6ueSEZ0XGbeGMV+H/ViBgrfXJhsXxtiJkn09
-	 6vmMT7yQfCWplX+tFVw/Sxa3TAyTDjqwyjBMbr6wD6Lyvnyf+IYnhGrbP/RJCV4NA9
-	 tG15RHUnMqEUp6/k6Q6S6ttDqaRcp7gY0k00RxIN0pqqjX2oPVxiqRUci5C4AYaZpE
-	 VjkCnhwU6k3DZb3LT81OphXdvCWt3ptXaRK8NSfMx3qYGyQSZjl9tK//6wWx+TK4Ed
-	 5/UMPtgX8eakfk1mun79N0b5EHV1VVxCXxVgaMaAx/Gk2iIwVW5bvrBKbmuqZENiSV
-	 dHFmwGVdnRYzg==
-Date: Thu, 19 Nov 2026 12:51:52 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Tzu-Ching Yang <shingekinocore@gmail.com>
-Cc: Brian Cain <bcain@kernel.org>, linux-hexagon@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: hexagon: allmodconfig does not link with LLVM 17 and 18
-Message-ID: <20261119195152.GD875856@ax162>
-References: <20261119054908.2988120-1-shingekinocore@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=lunn.ch header.i=@lunn.ch header.a=rsa-sha256 header.s=20171124 header.b=ogf15uQg
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=P9e055f8FpXxjQzl7FGm//R08dSOJPOnTIJ1la1axUA=; b=ogf15uQgRPM94ev6Vw00jNxtTu
+	m9k9AqDas+wfj47ZBC7y+u18yATP1jRtfV8PAI3sC7wgzehSU4h4p7Zi6AEe4VNdVbmNW1UZIX4ZH
+	Ob2P5AkRpQepIupR58s9etK+rpUXbpsbMCxGvWgALT3XBBT24vhIoDSw39WqcnHUxmjM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1xU8XK-00077g-Qh; Thu, 19 Nov 2026 21:15:14 +0100
+Date: Thu, 19 Nov 2026 21:15:14 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Ian Rogers <irogers@google.com>
+Cc: Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
+Subject: Re: [PATCH net] tg3: Propagate PHY reset retry failures in
+ tg3_phy_reset_5703_4_5()
+Message-ID: <d925c794-579f-4b7a-9ff9-8502d79b97ca@lunn.ch>
+References: <20261119171021.1535172-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -58,16 +70,21 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261119054908.2988120-1-shingekinocore@gmail.com>
+In-Reply-To: <20261119171021.1535172-1-irogers@google.com>
 
-On Thu, Nov 19, 2026 at 01:49:08PM +0800, Tzu-Ching Yang wrote:
-> Nathan, once the fix is merged, the ClangBuiltLinux CI could build
-> hexagon allmodconfig with LLVM 17 and 18 again (disabled in
-> continuous-integration2 d9d773a8859c).
+On Thu, Nov 19, 2026 at 09:10:21AM -0800, Ian Rogers wrote:
+> In tg3_phy_reset_5703_4_5(), the 10-iteration retry loop discards the
+> return value of both tg3_readphy() calls on continue and never checks
+> err after the loop terminates. If MDIO reads fail across all 10
+> retries,
 
-Thanks for the heads up. I probably won't re-enable them right away
-since we are a little build resource limited right now.
+If it fails 10 times, the hardware is dead, and there is no
+recovery. The best you can do is make the probe fail.
 
--- 
-Cheers,
-Nathan
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+
+This clearly does not bother anybody.
+
+https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+
+	Andrew
