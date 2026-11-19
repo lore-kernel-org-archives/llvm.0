@@ -1,100 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795067159;
-	b=cUUZDdd5UzvbT3eUfEXqy8nGW2rumtxkU9mCPdq3fFxc248khK27seB6MATJmdVfJ1YC
-	 gOniE9BsOtUQ1pqAhwrBfPkGusovP0Mmmv6+ph7sPMrHZFvbdcIhcy0gbplcWZpfPTN/0
-	 K3ipNnNe/CIr28MHxDjK8B/T/vLOF5PA2r6lGLmvYUghcrI+GAN60n5mAgIhY1XiIDJ3B
-	 yfQTUus0l+9nbnwKJuIPMkbERZHtcj7CiLeFhrewE0sxrwkoKEmIoL1/x2Pr8tQMoCfx0
-	 UB7U7NPRlQApwndQ9rxq5lL5apk/p1Zfo33zW1XHcvLeBGtLX6TEduD/W9lSI0Kqi1w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795067159;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795067358;
+	b=GUUa9ALUMh78gF0mVJHvb8OJSEc78CPFW8a2IAthgnNeh4ri8wgiuP255ERIEpJl3bkd
+	 s80jc9MioEc6jT7ZV/J43gqj6+6tjs0An5lDQj+YGRbWcQ51/fjtAojWk4F0D+DV2xHMe
+	 +b/m80xI3d4bndS10DNY15K4SlXLbon6cBIguooZ+YI/AWnRJIu93URZyxEBXZXFUr82u
+	 ehq8DVN69SclZznPptkPEMARNZyrEw1X8fi2rR1grst+/lO1guYBECFAmqRO/apuUYG0B
+	 iY6g5emf/5DgrFWg2zgkHbOV0LK2b2ZosfioUT3japryAq/EhWXTyjfo5edrXL66sGg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795067358;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=cIkoHsOVRZS7gIowPl6xkao6tH+bfcK9X/Z+HF8PGU0=;
-	b=kyGC4NGbRP1MA6wjSSx5Xm2nA1K71ymAr3E/XQxZZNY/iO8iTpKCDtgDucteFRGTEW5S
-	 Io1rU/1WFdtCR3v/yb8LbEFrZb+nwl1ACk1yuafHK5OzRSWAdoIejJaXjji3R94Mo2LGZ
-	 VKyAZPMsovzuWsruyA8K3kmNp2BUo1vDjc0b2adwopI4fB1+6anWk7dL7g3FzzdCC4wdT
-	 neLIGxN6Tc8SLAt/kE3LDjH+SAjYCew3muT+f8/BcGLqbp74RjKleW4fL8wiZEZyvEHN5
-	 iN8Ke4hj40p1i2DoCqZayR71MkrccHVPjXn36lxXcHwWQUjQRRLtLqhfL7NoXAl70PA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JMxj3yB0;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=g3p7m7TkH/7KFsHJqKL1wxqRtKVLah1m/6dsx1ky3KI=;
+	b=lwRgoe8gPRTA+a47lm1lQB9tD5HDLUeJiC7/+qPKiPU2qVPfKwq5msNrF72PmqK6koxd
+	 jNWsup322gVfuZxJVhDol3G147OXf9RPkxxthn3jclP7FBiMTsT5jHIFlYFgdA3knh9hy
+	 1Zh2bTG1gH1wsuUe/wi1QeRGCvhUGfOpvCbNmhkhozEMeG4lXvi8AdYrhjWZRMqnXTDLB
+	 6OsTOBMj/hMsCat8HuPmP2vQ82H9BrI1GkqGmxeuxoe1YAGUu4EaLIrrjhpRwzEopDS6r
+	 hfKXfRuw2eoT6i9CanJYXpVTPjsoP96L29i8dLAuouETom43x0PFQutttQ03LDID5RQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v8WTGNG0;
+	arc=none smtp.remote-ip=209.85.210.177
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16884606A330
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 05:45:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16884606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9202606A339
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 05:49:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9202606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JMxj3yB0
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-55be673e029so117421cf.1
-        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 21:45:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795067158; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Z7GCYHAIQvCasLHWlevLo3N0kHnaizfsO+fvHo50o2oMtVLYomVkKuUZ1EHmEBB/59
-         0mi85l6//ZPLcuhxcXEEYRCMZBcEiuC2y3X7qVXDZFI6DttYstDwQC/SNJAto2H2actr
-         ps6G13KhBw+3rHKEd5U9ULpB+oZu4UHd/+Pl4uVoK0bF/EU+2VRspcrKJsbEWvGuyzZi
-         yEourH3w4UlQlxBNheTmmHJnwDw/JbmWjj+ksUkAp2ZsMjbLEoEoQEjG+QbrJkHjtCZF
-         6hBGD0qtwQ0WEUpm2idPTpuiw4gYGbdkc3OvogHWjn/r8EbQYRm2LagD2hYXzE5qYCGs
-         m3dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=cIkoHsOVRZS7gIowPl6xkao6tH+bfcK9X/Z+HF8PGU0=;
-        fh=0/jXngREDf6am/DBIBE6vCcLAc7lBEgXHtHZfZwviqA=;
-        b=Xi/9fkYcwM9RO16WO3gy0o2xluaSwudWJgQG7wU2ejuAkF3DgO50tCg3N9SmDX8HEf
-         4xsE3rlzdrVkx0Npu/VQDOTEq/zkRSVUTFURS3t7x07tfzsVGnrvN9nF1wG7URocoXXX
-         CsAidx16JadPRu+PeOQ3pAiKzRmnNcmZ+x1avNVpTchffVpsqEbRbmKQlUohrZl0G4vp
-         y5dxkxZiSlmp2sguJK4Ne1qErdruoVnS4HRD+n8OSAHUsdCHhkhn4OeMMOG4ng1OMOVs
-         +uhx0oQr+p6qPfUNtGmHnAie6uOzcRjFe8KZ3wzN6cl3KS5fR9Nmp2t5F/sZiNJv8w3C
-         sLmg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v8WTGNG0
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so1068342b3a.2
+        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 21:49:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795067158; x=1795671958; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=cIkoHsOVRZS7gIowPl6xkao6tH+bfcK9X/Z+HF8PGU0=;
-        b=JMxj3yB0SeAUHokTprfYVnrnmnS+Nxo3cczjmq3QQAOfFY6+gBYpfkzGSioGQ8MaaT
-         9TcLPVQlTiiyLAcy5HbYgpaobHdwB4yb0nz9em2z5oxEKeLyVSIRtRD7ghLlVQDpESVp
-         lbR5yGUGthueo8blACsDc54Ri2ML+0/lKnEgpTq7abthTw2uTpTi3VjzqOC/LMOvbPLc
-         vbAjnK8Dp4ACS3bC2jUL8Yqi9Ak/QCMLL97O8cXzJ9g0FkzKoTefmYLT07Vmdfj/nSgt
-         nTrKFZhlhf77LIKhdWcpjHZB9XGzJHjtgon1nmhQ5YDlKWjMjgcw0gIACUFXFgewRZLP
-         Kgig==
+        d=gmail.com; s=20260707; t=1795067356; x=1795672156; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=g3p7m7TkH/7KFsHJqKL1wxqRtKVLah1m/6dsx1ky3KI=;
+        b=v8WTGNG03X+mrQLjsvNgJCZBgykwLCL2fstVs87seDkniNV5WJNncAq2GSlle3Mc9d
+         AVK1TaxOlB4U/yaOQRNDyvf0KuNu6p4wayJdthTKKqQAEigoiND9euRmouUzdrKkBCBf
+         loGA3X/eDdHmelLgmpfmDfPgBAKH+BbyL5sz0LIXBkvjrBMAiYw2pRuuRo2qhe35rqCZ
+         I9Mql2c27JbArYlMwABaAAcHJxA+YsyZrZZrtEh/4/7hHFlwe4FW91qJ3mMsZXCF0I3U
+         02grQoMc9asGv5T5giQH+MLXu89uPOCnBatD2TzoZ11FkZZQDNa+ZMn1x5B42aKeelUR
+         MmyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795067158; x=1795671958;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cIkoHsOVRZS7gIowPl6xkao6tH+bfcK9X/Z+HF8PGU0=;
-        b=V+xWkjRFhkpnCK/KUgmCg5l8HiEX6urp35qrW2pevgpoDJUHedYxvvo0up1rDtcb7B
-         dH87ePf4SvSVYEk0Lnlx3omzFQaV/mIOkw6hD9924MUDxnh6o5YZT1yinoxDwdzr0UJ0
-         P59OtqrP8kXk+VIxh671sOowbsKRzTdmTXLS8GlhPWNQKULGbCh1HKkoR69LZth20bDI
-         Ua4m2WfSZNcfelgMo4EWtn3iYWf7sgyVUza4cDFK8Pc7LxmpUlgl6GE58I4nTCgdGd++
-         ZVDCi+8u7yDM+715PrAtTe7nabTOfEWkUi4D+bKOI7qUZvB8qr8ivSOSrn6cJ5etwsK5
-         d8iQ==
-X-Forwarded-Encrypted: i=1; AL+hErE/KYuB/sclL0P28y3nrmapXYt57MPE3tmr/3+1TjKEzVBwkcJgM3B0f53YXZf81jTCaXL6@lists.linux.dev
-X-Gm-Message-State: APuU4Z97C6i6/4gB2eLkoC/fAjn3eW60jKRjJ5gwdP43u70DRuECsvvB
-	cPF5fBPxzf3qvuiZDBTkF+wehGB+XfhYz1Q9Wvt0IClxCf3eDrZhsYc1Y/cC13dpJtOmQ3XtPq2
-	JEgafG3kOu2c5vZGsogZQTFIofxp5vZdg293DbuB4
-X-Gm-Gg: AYBFou0lYsZqBAdqFUjBuQoJr+6jUsck+Wu64yuxDf9m5lx+RfZ8Ifmlt1C2vr8qr8l
-	Y/6D9ZBkIebhV7bnGHds3Pb6wzLLge9uZeh3TUx1ihYygNTzsT1Mlw2BIA+Z9yMy3qBWgj/YSW9
-	omhTAQ3/Uwu5xNoBIez9pW/tAtoC21KM64eDVTeUCxgN1EvTa3OrOLz65s5ng7Eare0h+x7yD0t
-	hMfIoAYHyry3f9YWQgxq7tiZWqXTP+eVzN9Ym2HoVgDXg1hy/6k2RWY6cheCaXtRZIYVdDmc3qF
-	LncyGyXxWXl/GbRIFyV5H50Di1MGUh9aTzYww7viELAcdTjL2m8+flzDFrxI5bpMN4zgrzGTU7U
-	dYKB4bGIdil+ti4qWHTrO1veF+gapoE4f6Rem
-X-Received: by 2002:a05:622a:4808:b0:536:934f:7da2 with SMTP id
- d75a77b69052e-55d6c7995f9mr6557911cf.2.1795067157461; Wed, 18 Nov 2026
- 21:45:57 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795067356; x=1795672156;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=g3p7m7TkH/7KFsHJqKL1wxqRtKVLah1m/6dsx1ky3KI=;
+        b=y/6KJWfs3B3bJQMDrixW4suX5avUiIAn31AhbEAlDH8QjcyJHfm4TdnPf5ygHsJuHD
+         t1MFz/yAzgTk4maPw4+NIzvzmXzN+NFWahQWnY4HqVNhwxArMhQnU8husgAgrC1Aoas6
+         Ceqisex67EGRDn7FDZpULiRiEjIPiOo+xEQ/KNGohDmBKAMYBha5UYG6oLY+d1wRX7m2
+         XeH//yT71AERvveLlhbxq8QpICFJ6xerKWSfz8cqXUnf5feW8XTj5B4J8BshvUCET6sq
+         6tiqcsT5ptk5lPkYlkX9mC2V3oVS2jCMpvR9cG4iXcYiThK160gHObsn4/c6zXLwua/D
+         pocw==
+X-Forwarded-Encrypted: i=1; AL+hErHBPIou+pF63/GZQ3DslNzdzTmz+q70eR+BqoGUCjA7ejPtZ9QEGOfv0lI7MkOSvrCw9yWK@lists.linux.dev
+X-Gm-Message-State: APuU4Z8VJwacOjM8zQpR3HdotmwJGswJ6RDaL5oiWesZCx+pXWqjelB5
+	O+YVK8M2TNnzrARdO2CCyPFcDulCCmjAwUeoX8mc+iFxbLCFI30njTyy
+X-Gm-Gg: AYBFou3cLfPG85t8QaI3WHRMVU6TbEdqnrqvGdp0pV9bANuLcaD+VBDT20qt3O5+TsM
+	M3XkYcdOvgFerSdRqEUvTNE8h0MadZ4NHG8Yv7JyWQhjTO+xqB3dIhkvOS/2cM+7pI32eozZRyH
+	pd+OqN41gteqMaJcOK2lsuqelQutdG6yZAwt9QiPZVR5j4LXM8GYn+UqyYsEqNikDC1SG+JpH02
+	i98eSUm3CTAqh8xyWQr9EYh8CKjZA3xSi6kpF4CPkbOtDJyziVP0IS82OqPHvL1aO3fn5B8y5hu
+	gXbAngvdImrG+3q/JsTz4te6oXFimLTIezPD7Or2akSQI0XHLAfvSGMdAMmsjE7eVvYYjMqnxAJ
+	5GGz5T20IZFUqewLOUh9GTEMIbPWEzu4oBu6JYShGVzORdYt/2sSd2rNIf/RGwBnM/MjW6gR5+s
+	PC/F6tDD/0WwBoq+YvKxUmIPpVj3hNHRqqgy0Uq6Tqf3a5pyLtZirUrM0ijXJnwNQeuzxjz+KnM
+	fEG/vqKpPOwasq/CBS4yqKhBXoePPvY8FjGHwzwXCNVS9ppbSF1FMaS0yLvWR/J/Xuc2LJsNO+7
+	lWWcUD6WQ36eaNlEcuFAFAZGhND7NSuhr5kjLTYH8/flXCuib71A55A=
+X-Received: by 2002:a05:6a00:2888:b0:89f:db59:193c with SMTP id d2e1a72fcca58-8c5d2a738f0mr4157796b3a.9.1795067356199;
+        Wed, 18 Nov 2026 21:49:16 -0800 (PST)
+Received: from arm-a100.. ([140.112.28.118])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5cac8fe3csm2200984b3a.21.2026.11.18.21.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 21:49:15 -0800 (PST)
+From: Tzu-Ching Yang <shingekinocore@gmail.com>
+To: Brian Cain <bcain@kernel.org>
+Cc: linux-hexagon@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: hexagon: allmodconfig does not link with LLVM 17 and 18
+Date: Thu, 19 Nov 2026 13:49:08 +0800
+Message-Id: <20261119054908.2988120-1-shingekinocore@gmail.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,109 +96,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261108223913.3624571-1-irogers@google.com> <20261108223913.3624571-10-irogers@google.com>
- <DMYN979QJFNV.LM3T6O68OHW6@kernel.org>
-In-Reply-To: <DMYN979QJFNV.LM3T6O68OHW6@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 18 Nov 2026 21:45:45 -0800
-X-Gm-Features: Aa3M54p8GzPfKDPQ_HJcPbdLHGq3vwK7n9VGnVvnVB1ODjbFHeHwrlgOfVCaaEo
-Message-ID: <CAP-5=fXrMyfLFXq6CiqwWMSbtYVRNESxuDo-ddqNwDmq5Nm4SA@mail.gmail.com>
-Subject: Re: [PATCH v3 9/9] kobject: Require explicit initialization of struct kobj_type::release
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <chleroy@kernel.org>, Nayna Jain <nayna@linux.ibm.com>, 
-	Srish Srinivasan <ssrish@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Juergen Gross <jgross@suse.com>, 
-	Stefano Stabellini <sstabellini@kernel.org>, 
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>, Alexander Aring <aahringo@redhat.com>, 
-	Felix Kuehling <felix.kuehling@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Sumanth Korikkar <sumanthk@linux.ibm.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, driver-core@lists.linux.dev, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, 
-	linux-s390@vger.kernel.org, gfs2@lists.linux.dev, 
-	xen-devel@lists.xenproject.org, linux-mtd@lists.infradead.org, 
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 18, 2026 at 1:11=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
-wrote:
->
-> On Sun Nov 8, 2026 at 11:39 PM CET, Ian Rogers wrote:
-> >  static const struct kobj_type cpuregs_kobj_type =3D {
-> > +     /*
-> > +      * Pre-existing: info->kobj is embedded in per-CPU cpu_data;
-> > +      * cpuid_cpu_offline() only calls kobject_del().
-> > +      */
->
-> All of these comments carry a =E2=80=9CPre-existing:=E2=80=9D prefix, but=
- that doesn=E2=80=99t
-> distinguish cases with broken lifetime management from those where the st=
-orage
-> remains valid despite the API misuse.
->
-> For example:
->
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_xcp.c b/drivers/gpu/drm/=
-amd/amdgpu/amdgpu_xcp.c
-> > index ab14079d1c42..0847134a1391 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_xcp.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_xcp.c
-> > @@ -797,6 +797,11 @@ static const struct sysfs_ops xcp_cfg_res_sysfs_op=
-s =3D {
-> >  };
-> >
-> >  static const struct kobj_type xcp_cfg_res_sysfs_ktype =3D {
-> > +     /*
-> > +      * Pre-existing: xcp_res is embedded in struct amdgpu_xcp_cfg
-> > +      * rather than freed individually by kobject_put().
-> > +      */
-> > +     .release =3D NULL,
->
-> Being embedded in another structure doesn't explain what guarantees that =
-the
-> enclosing allocation outlives the kobject=E2=80=99s final cleanup.
->
-> Could you please drop the =E2=80=9CPre-existing:=E2=80=9D prefix and make=
- that distinction
-> explicit? For broken cases, describe the lifetime problem and mark it as =
-needing
-> a follow-up fix. For cases where the lifetime is safe, explain what guara=
-ntees
-> that safety, while acknowledging that omitting release() still violates t=
-he
-> documented API contract.
->
-> Also, do you plan to follow up on those cases?
+Hi Brian,
 
-Makes complete sense, thanks Danilo!
+hexagon allmodconfig does not link with LLVM 17 and 18, on mainline
+and on stable. Your hexagon-qemu-virt branch has the fix, 09df35bd9d9f
+("hexagon: constant-extend head.S calls to out-of-file symbols");
+could it go to hexagon-fixes, with Cc: stable?
 
-Auditing all 17 files in patch 9 with that distinction in mind:
-- Only 3 built-in sites (arm64 cpuinfo, ACPI hotplug profiles, and
-s390 sclp_mem) have backing storage that genuinely remains valid for
-the lifetime of the kernel.
-- The other 14 files either free/zero an enclosing dynamic or devm
-allocation without waiting for final kobject cleanup, or are tristate
-modules that unregister static kobjects/ksets on module_exit and can
-unmap module memory before delayed cleanup finishes.
+With CONFIG_WERROR=n, LLVM 17.0.1 (the minimum the kernel supports)
+and 18.1.8 fail with:
 
-I've dropped the "Pre-existing:" prefix, documented the specific
-guarantee or FIXME lifetime hazard at each site in v4, and yes, I plan
-to send follow-up fixes to the respective subsystems once __must_init
-is in place.
+  ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):
+  (.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2242552
+  is not in [-2097152, 2097151]; references '__vmnewmap'
+
+and the same for the second call to __vmnewmap and for the calls to
+__vmsetvec and memset. I see it on v7.4-rc1, next-20261113,
+hexagon-fixes (0304683b4c43) and v7.3.4; v6.18.63 (LTS) fails with
+LLVM 17.0.1 only. With LLVM 19.1.7 to 23.1.3, v7.4-rc1 links.
+
+The calls in stext go from .init.text to .text, across the rest of
+.init.text and the per-CPU data. On v7.4-rc1 with LLVM 17.0.1 that is
+2.14 MiB; without CONFIG_LOCK_STAT, whose per-CPU data lies in
+between, it is 0.76 MiB. ld.lld before 19.1.5 checks R_HEX_B22_PCREL
+against 2 MiB instead of 8 MiB, which llvm-project 64e3466fd09e fixed.
+
+09df35bd9d9f does not apply to the trees above: its context has the
+"r2 = #VM_TLB_INVALIDATE_TRUE" lines of your series. With its five
+changes made by hand:
+
+- allmodconfig links with LLVM 17.0.1 and 18.1.8 on all five trees,
+  and allyesconfig of v7.4-rc1 with LLVM 18.1.8, which failed too;
+- where v7.4-rc1 linked before (defconfig with LLVM 17.0.1 to 23.1.3,
+  allmodconfig with LLVM 19.1.7 to 23.1.3), vmlinux differs only in
+  the code of stext, in the address of one local label and in the
+  build ID.
+
+Those trees do not boot in QEMU, so I boot-tested your branch
+(dc370baa041d, v7.3-rc1 plus 24 patches), with 3 MiB of test-only
+padding at the end of head.S to make the extended calls span over
+3 MiB: qemu_defconfig built with LLVM 17.0.1 and 23.1.3 boots to a
+shell on a buildroot root filesystem under qualcomm/qemu hex-next with
+-M virt,hvm=on. I have no hexagon hardware.
+
+Rebased onto hexagon-fixes, 09df35bd9d9f applies to v7.3.4 and
+v6.18.63 unchanged; I can send the rebased patch if that is easier.
+If it helps:
+
+Tested-by: Tzu-Ching Yang <shingekinocore@gmail.com>
+
+Nathan, once the fix is merged, the ClangBuiltLinux CI could build
+hexagon allmodconfig with LLVM 17 and 18 again (disabled in
+continuous-integration2 d9d773a8859c).
 
 Thanks,
-Ian
-
-> Thanks,
-> Danilo
->
+Tzu-Ching
