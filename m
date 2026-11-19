@@ -1,99 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.28
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795110537;
-	b=b5HsZkL88iQ7gUzKHLW4Wg6fyX94CpQHDUbDTK7zOSYnsjWenHWye/vgBWBA3fPIsMHZ
-	 uEFdkdjSxHvPqJY3jO/2AQResUS2pu0czcLTo0mARq6cMDfUxYgUsFUY3Z4tdqk7uEKEa
-	 +Xj82dOXDqJnrNMVngNvhYyir3+ztI3KxmHBxag4IjApx5JRq+25bnXIoIWRj/YA5bMFy
-	 Pf5clhmDX5iyylnGu5nwDGn4eNMkbSpCMFDf4IHzMDpJOgJ7X4XQUcuR3AtptWdBnZqXY
-	 KuukPke/5jF+r1tZeIgOiDBHIbfxbuqQyjA5WeLFbBUt260Zxu4b6zdYh/ZDdFBufzA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795110537;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=/vLNHmtF9gHz4291MhYGXrrnLDBd8exLtA+zAo12stg=;
-	b=thiO6yBa7wINGfLlvAxGtHLTrfBcvYMiHIbgFmYN1LDe2jbn0w+/PUzi/B/FBHY/Zrdg
-	 m/6WqNX9se4GeuKQZLZFzQ/oYFg3s/xLp8X9vTpwKH0iDhVbquTQ6kQVeJlrlg7hKV3fz
-	 bQiRl96S0rgWwKjx7eX3hQQBKrQT95bOUkAmCCPZWRUD3RdPmzw4M9pst8gNJg2/UEGi2
-	 LP7qeDKK2x7ydiKQuIU+I2qYX4Ljap0Wj92Omn3+FU/U9Csoiy95uoBnkhCvKa6UkykP1
-	 bdmrHXX7HdPjg0gkJSImYK4W4/8RLnARAvR8kOD80yAjGaWaYF87gB48Gw1omFCYf7A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=EOpKKsBT;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.28
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013028.outbound.protection.outlook.com [40.93.196.28])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795111854;
+	b=vY5APFEC1/MEKHCq6hySD5ydylA4xl8z9Atc1v4ZDEiT3faoxf7u/kuc7fhIOwl+SKra
+	 /UmH9Umy07Ne8mYSJWVrTmH3vzRd81ovkM7VpZUtVzAHZiSy5dtx1lBmGcCuwjOJ/DnhN
+	 scmQDQqc6vme4iFyEUK9On8vHC1RVZWLjC+K390qP7wSBCdjHRHf2UTekO783RaNoo48p
+	 NvnR4V5HfX/2JVNMawsugSTaQuKbVCBMoVnetUIjFdQlbah2aCPQn1fA2NpST4mofC+xm
+	 k4w0CN0Mxy4epLmqFUbou3kMSvDbgmB6Xs5sXr3m6pOFM2El42NoBjCB8vIsEozAoig==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795111854;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:User-Agent:MIME-Version:X-Mimecast-Spam-Score:
+	 X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=YeDQdBHpcdwKETThYZXGZ+Cgqf+vlqnxAgT7wTtyXPg=;
+	b=EhfpGRbXslE88EGHLOLzk0nkP5RVYHoJydjvBaqCgL//+b623Bc7FNAS3fQcbk+qojbW
+	 CeY91E9BX5PLmyMLCeT0I01tmiUSKjj+Vi/AXwlAhayZc9oM7IonP2fiJxZE6Tb6gGm3C
+	 DY3oJxE6wFxy2EwIjjQQ7V95I06vfRpddRrAO1TqGGyxxepbEFm54MWDyXoN/veR+cTjy
+	 6UPqxM3IkeSn40v24ayLeup75dvrLZfp8iVZsMwWqZoCf8NIqoCbJuGOhllfhQ+WldGsC
+	 XyfWAu0AyuFXzApcmDWgj/4w8UsJMlzxyXcPHSfVgrUOLWnnDK1zb5cqxgGWy0Srm6A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XP+hbSIZ;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3124E606A33B
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:48:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3124E606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48D0606A324
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 18:10:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B48D0606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=EOpKKsBT
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oDV60xpbpWh6Uzgbm6ggsh93NPieuPw7SR5SsQRHeAWX5UZ6t9H9qnT5Go06icbdt3NrGMTbvgYmmxS4XYYzqUndZ2bvlG5D/V5Q+kEjjeoVlj+NPUwIhQl6oZY5kSTbfDrL+gm0FCquGDeWEa6Y96VG//1Qgr+jdK6Blh1PkGufDDHXKJ5M56A2OZddrNxs+6mrz7lpfgWfwPANVYOltnd3OFLHDij9OJX0Zgm4nwmdt+Lfqcse8lKEH09ELVcBp81WHPCU62jZsr91rlFsHirVQfxAkrWueNSmUui6gquOTkNtu6NbMA1pMyho3tYgxfyyIUYzRJMSOKJD1w/3Pg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/vLNHmtF9gHz4291MhYGXrrnLDBd8exLtA+zAo12stg=;
- b=CfIt0unq+BzKinX08mYRzN9N4ibZ/lr4RjrYcns6Lu9jaVfyKeUWtNRzJfSfx08cfg4uc/rAr1GD5F40dvaQoS/dMn3L4HjUKN4NFe8A1/n4fphD8oSGjPg472W/b/J8IEjuzK5nJtypl8p3t0Bp1arjWagXtqzDLixzcqnh70J8ny8qwYbLhDprpuCEkv87Y+Ss95nj9b6IB4aV6agS8+sEgzZYakEuS+goSapO5LWKct/FJjbFAc26WAC71S7wOWjx3yE07En1dF9U8D77KSjIHY2qJH17B2w5R23fmMCFgVVCkRCICm3jQTZF5qmaaqzISGqvFD/NDGCNPIb1Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/vLNHmtF9gHz4291MhYGXrrnLDBd8exLtA+zAo12stg=;
- b=EOpKKsBTOC5DZYkiMZZCOdfRPA3Ep7g+61ghDRZyTs3uyvcwrZJuzdxywCqibz6g69Is1d5Nrndu2Rv1UnooThBzSxoBVn2+9CMIF58P3ummLcnOwgoz+CjUkk0E8k8I0SWvDx9wjOvqRgpLB8NpkEme7j1lNBd8xuaVY+L1ztyvfESC4yaLs1j6b5mhsKl66IOKfwb/cFR6BZzFWvj1Nl2NVh3k1WgUA5f3u6EiQvz1tKwuqcShkKvXjKwpBYwMOKMLVaiLd0Zb0PHL3UA2reNEO9laa+P8ZlCRHAb6rOBnYryF/zbHiCFp2AK816aAucflzpdrCowfPtnG4p4/rg==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV3PR12MB9356.namprd12.prod.outlook.com (2603:10b6:408:20c::21)
- by CH3PR12MB8581.namprd12.prod.outlook.com (2603:10b6:610:15d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Thu, 19 Nov
- 2026 17:48:51 +0000
-Received: from LV3PR12MB9356.namprd12.prod.outlook.com
- ([fe80::1c36:31b4:c420:6286]) by LV3PR12MB9356.namprd12.prod.outlook.com
- ([fe80::1c36:31b4:c420:6286%4]) with mapi id 15.21.0615.012; Thu, 19 Nov 2026
- 17:48:51 +0000
-Date: Thu, 19 Nov 2026 12:48:48 -0500
-From: Yury Norov <ynorov@nvidia.com>
-To: Brian Cain <brian.cain@oss.qualcomm.com>
-Cc: Tzu-Ching Yang <shingekinocore@gmail.com>,
-	Brian Cain <bcain@kernel.org>, linux-hexagon@vger.kernel.org,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hexagon: bitops: use the compiler builtins for ffs(),
- fls() and ffz()
-Message-ID: <av82gB34yByk1WL5@yury>
-References: <20261117054939.2126980-1-shingekinocore@gmail.com>
- <av3-Nf01tdGw62lh@yury>
- <20261119053249.2098578-1-shingekinocore@gmail.com>
- <7b19010e-54e7-418d-9fdd-bcab69d8a885@oss.qualcomm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b19010e-54e7-418d-9fdd-bcab69d8a885@oss.qualcomm.com>
-X-ClientProxiedBy: SJ0PR03CA0008.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::13) To LV3PR12MB9356.namprd12.prod.outlook.com
- (2603:10b6:408:20c::21)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XP+hbSIZ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795111851;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YeDQdBHpcdwKETThYZXGZ+Cgqf+vlqnxAgT7wTtyXPg=;
+	b=XP+hbSIZPsuMBSqo1G8mBnPDBzrNaFrSom/0DZJG7+1oGZ7TW48j5oOLdKRNaRFaELIvrm
+	jy5w4JNIV9HyBNTFIxdXTG6v57fqr8wbN1YQOcwDkPpHKMaUdNpzVaRMLAo+s3fs+MpDS3
+	wMulZS7wY9lxeMGQ69XMyCkaS6v6OB4=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-568-HcUxkhbiOu6XOf97zrdN7A-1; Thu, 19 Nov 2026 13:10:50 -0500
+X-MC-Unique: HcUxkhbiOu6XOf97zrdN7A-1
+X-Mimecast-MFC-AGG-ID: HcUxkhbiOu6XOf97zrdN7A_1795111849
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-92106c98714so1667996d6.3
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 10:10:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795111849; x=1795716649;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=A7bqVXK9mc0vEANhbyypwW4ZooF+kXFAyHaNlh/JpOQ=;
+        b=PN6d+rnbLMdTfJuK4Jhz1YkbfmhoN4VPKZ29T4SUahiSrzAzQUPix2pB1A7RypyXKY
+         bpZLVQlau+rYmkf3norAdWY9tfAap4mKr3/NG/C0gu522G//H4yAEg1iUnR3pkl3wNMx
+         /U4QHPAiWmEiwennO2Li2BC8DxXdvlSiUaDHsuTFNdeygwP9gefSzl0CFPEb4w2jteWd
+         U8BL8+u2WkhVRNIfPsI4/4Q8/Knzo6Ldi5qYDzX+pL2/T08nu4yuLwDPnvEGirn6B3Yw
+         zfuUXB/gqq6lNXiksZzL224kReXPtAJI4gFujmhe2ttdg+L857aS1ShRkxWFmwrSlQjD
+         J3FQ==
+X-Forwarded-Encrypted: i=1; AL+hErEfgSX+70X3YnQ5soYVdTYP+5WS1YOjdK9vcV64cDKr5rQYXhgTM8weQTkbq0zgn/ngPY4x@lists.linux.dev
+X-Gm-Message-State: APuU4Z/Xbjmb7+mP3+S088sdTBxsfSopxJamZWCpaTpozxrHLB0cvgY7
+	HIkxvh8/MPEyn8Jy7YWTz0EL5mGtx+SQIwriJGAIoSVFiGw2ZEu0sr3LaY5xRPgcoiqFy6pg979
+	Cj8UVdNIp6J/mF8Q7QVTneKmAvPZEOfwwExQjE7d3UkZkB+9uP6Zp12g=
+X-Gm-Gg: AZFdTZfGlgtm9MEuMR3St9hkiUaSprwXmBOAy0aOkha63mPptr2+AXwIgJm85HtjVEW
+	yQgevUmlIq4ehhQAJykW/5FReAdjKTjUAeZeTkIbzDFtjsAYMAZDboGZJtKVJcxC41d4lHClcze
+	ZsFajwutxfT3Z23NvkkTOVC/cTCkOrfzUiI9QDt+i6LaMOqS9GwMGhLKZSXhpOgeoeggeCeI38M
+	NJCLrwz3xjqjR0juF0JNTUgc0ENR76thX+Dw7umGaIZ1gkNve1vVFAvy/bcnUIfukP8x27CGfb4
+	njcYyTGvwxVe9MjSR6Drj+8kd675LR/JYimZTwNiiklihbkkLDbC8xd3wvdy3sPSvsUACQl3djf
+	g2yCM8Vo8gwaSVHpFZ4F+QdkNWR2v5yP65DbqPjnvai3Cxu+R0Xn0wYfbHK7WGE5seENwIsuRMy
+	eFJZuSAqvxjjM9ytg8dB88bjDNqijkbk/hFKeFs7F6Ms1Jop9AVac362rNecanNbiyp1AFbfA=
+X-Received: by 2002:a05:6214:6014:b0:921:2e2d:2a7f with SMTP id 6a1803df08f44-92134aaeb70mr5411536d6.14.1795111848990;
+        Thu, 19 Nov 2026 10:10:48 -0800 (PST)
+X-Received: by 2002:a05:6214:6014:b0:921:2e2d:2a7f with SMTP id 6a1803df08f44-92134aaeb70mr5411016d6.14.1795111848224;
+        Thu, 19 Nov 2026 10:10:48 -0800 (PST)
+Received: from loberman-thinkpadp16gen3.rmtusma.csb ([2600:6c65:2440:d8c:aa2b:ddff:fe88:da74])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-921349f8c34sm5127806d6.32.2026.11.19.10.10.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2026 10:10:47 -0800 (PST)
+Message-ID: <89162d17096ddf7d4ca98a087f1517bcfb935869.camel@redhat.com>
+Subject: Re: [PATCH] scsi: mpi3mr: Fix start_time and error return in
+ mpi3mr_bring_ioc_ready()
+From: Laurence Oberman <loberman@redhat.com>
+To: Ian Rogers <irogers@google.com>, Sathya Prakash Veerichetty	
+ <sathya.prakash@broadcom.com>, Kashyap Desai <kashyap.desai@broadcom.com>, 
+ Sumit Saxena <sumit.saxena@broadcom.com>, Sreekanth Reddy
+ <sreekanth.reddy@broadcom.com>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
+ <mkp@kernel.org>
+Cc: mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Elkin Cruz
+ <elkin@google.com>
+Date: Thu, 19 Nov 2026 13:10:46 -0500
+In-Reply-To: <20261119170900.1530138-1-irogers@google.com>
+References: <20261119170900.1530138-1-irogers@google.com>
+User-Agent: Evolution 3.60.2 (3.60.2-3.fc44)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -103,79 +113,225 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV3PR12MB9356:EE_|CH3PR12MB8581:EE_
-X-MS-Office365-Filtering-Correlation-Id: c84e3a97-e55a-4e50-e1dc-08df46655f31
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|7416014|366016|1800799024|10070799003|10067099003|261028144727099003|11063799006|56012099006|261026140227099003|4143699003|261022105027099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	o3H+BR+tTNMMeBUtOmOO98ZpqNrnCPCcj2S6uYs/mZEbgSui77MV03lWXcSq6llpzs/rF4O3uyoYWNag5RT103s1+NyJLbaAYE0rvNjyDcSrhhaXJs97PTCjcIXnvP8B6tJ+f/ydoG9HL/DpmKdFf+NGwywwsJXd250m+7RBOXsG+29xc+pdZxr+e4al7YNwvD+XjMSodTzm3iaygR5+MKrUEbS+eM/J87D1+1EG5VZSCIjVqOiLMAfMzTktNwqHD09X5XNi2odFEjDZjg0sOEROyNkhoK7wQQELfoCywKvI1OR0LPy8L7L2WQDvbm4/HjiwWaZZXd4LQXu/GGVh/LxA2uBYeISq4WYJ9mDxjqSBesM5vg+uHFJxQd0UoPNJbetGbqt0fvMuMRKu4sxfNbE9dXbBtxiGJQZDbRNnxRZgtr7QG1WHKiTKC0dabNKIonBad1hIqVckrVIwpu3h5oZkIjC/HuN/kLlfWXSx2jh5N7LvNsNbnrUJUbyOgwcSwB3slYIFIn3XC988SLtzBEoWApSaIYdsFDlAs1aBlMSBHjOeUwDzWDehmkOmwWNS4l0ruEPqQ0hAw9TKAf2+HyWuNm73JjHY4AT36A5EPD1pEMXjDgHlbMCPzXaZ08gH3yE1U+m/5ev1s73D4izAEooPv7aKprO9lIge59Czh4w=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR12MB9356.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(366016)(1800799024)(10070799003)(10067099003)(261028144727099003)(11063799006)(56012099006)(261026140227099003)(4143699003)(261022105027099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zsGjqxn0UbbPVVAsCLPh8WdWQX1G5afdAA1IMQDuLqiSjzvzgeeo5f0zxNgh?=
- =?us-ascii?Q?2yG6Mi/wQvIv09hdnBZCPCxZ0sBYHx8lSEh0ROflVYsT2GN8/hazoHeMzxmv?=
- =?us-ascii?Q?KrRKC2nyFSkuHq81wGYZr3BwRQY6RQQxq/9xc9LAxs8i75QC+HQlz5b8e2+E?=
- =?us-ascii?Q?LtZOJrUlM56cOectizX47SWtAh3z7/NKvJ2jDnYtHdXbaggPPv1VmtXWcEH2?=
- =?us-ascii?Q?/P2FxIfWLBq/tyq58HDuaNnBDE+rXEJ4XwYSzAYhe/vVB+MfBjH6H1/z0A77?=
- =?us-ascii?Q?NdfKTCtrEqOGcGqAUaUH//Y4NPc4EEFmwJoftlvMoV5mrAe0tmCvfvW6pZtv?=
- =?us-ascii?Q?+MZy0jjW1pCc4nOQPaWJWvjozsGxRQlDbZw+EE9lTrw4lPmt3JwK/s5MNQ5J?=
- =?us-ascii?Q?j/QCzudfNZ6R/IHYZrDWUK5o31q3AgRVWs6Dh58eXfH+0wu5u1ZtYs1phK6L?=
- =?us-ascii?Q?3TMaxWSGkMqXLflkc0RKOBW7hYfY2HxG19fRCVKtBlMyLEulAvjSSD9AhvoS?=
- =?us-ascii?Q?sZGXdPcGwWq2NhVGpMvH74EXf2uHLyteckzHwjdmHUh2e+osiC8iwuM8/aSh?=
- =?us-ascii?Q?u7li1Xsw5Hn/xvY710/VkV2RjLohr9LYRZOYxN7sLPm5YHPnqpvybqG4xpH3?=
- =?us-ascii?Q?Y1NYwxnA/NYZGk3eZkUygyxjon4obyY2VlktGx9V57yJl0JHCK6Vd7rZfF8n?=
- =?us-ascii?Q?q699c23yq31jRxdEafMU7LEIDt4U4MSoTPkV6PddbhU+OujOZYUcGn4Is8DO?=
- =?us-ascii?Q?7YvelqcK7j7vdad2rzB0rhyL0aJL7D5VPVqg0+1n0Dh9jQSqewqCWjGM6WCg?=
- =?us-ascii?Q?UHv9KBGGWrrpGrJpfBiQWeBEa2uu3VRXOZy9zFl0EcM9WDZNJWoKhrWhAwt3?=
- =?us-ascii?Q?DYrj0wLbmTjBkst1NzPztZaQL4wqUFYIAr4/ZMEgzwuLdtiXVSSaa7rLKos1?=
- =?us-ascii?Q?ctiDA7ktpAMVUtxb9uSVIEftyV+F6zBg/jR8hFR7pD2fc22afTJ7ly89sn5J?=
- =?us-ascii?Q?pusV9iczwCp9rlZa2NoB63/S/xH+BAtPdeuA7MKaTgD+kx7SahhwekzMrKoT?=
- =?us-ascii?Q?0qtAIScVhgs75nzwVQVcIY7fWUu4s1hnFLl71Qgv3rQThPTMzrs+CNrOpzW+?=
- =?us-ascii?Q?evkeuB61+Ruh6iF4ujM5HCSlZtYJvCsj2i4k+AIlDLOW5iBYNvrDsCRDpZUP?=
- =?us-ascii?Q?ytoYvrL+VHNGzmbO7fiCZ7jDGuJoLlcpIF6oxAAnl8fmN7ji0EFZo59XwQDV?=
- =?us-ascii?Q?iIvAQ2+dvQ6Hoky5zKMp92aG84ECvHa6YaYxFxMBrHk1CNRS6zArVr0Wi4O0?=
- =?us-ascii?Q?H3hrnctEUpzchyUfZCHmIxNOwm9Zz9ZST8YrBH6nLEsSjQsERLAdg5NZk494?=
- =?us-ascii?Q?d0r2mLXqzN5A/UkfpfXaomObsF+EWB0I2KaIcTSbqkisdIfd09X3UGSoDtkp?=
- =?us-ascii?Q?1qkDjaB9fcpg+AbquhAfXbiJ0fwAk6AcIoucHU8uNLQ4/I7VD2s+0dqx9yGK?=
- =?us-ascii?Q?/p0xUaQ3zYz1QWz4G0ix06eFejBvjIQx94Pv043QqXHgxYC705TGWGq7OcIE?=
- =?us-ascii?Q?jfE2BC61vr6XX1hXBe8EcO6qVXbJRCoKKAIEMQMY1WJVi59H5rKhOwmlX/Ff?=
- =?us-ascii?Q?huUmqU7XwTrqY2qW4zA+6BHsFSC81MjPMGqeQSg8KMPWra7ouRmnjFFENuTb?=
- =?us-ascii?Q?JekpF/ZNKpReAPSyuiNYOVrBijoe1hwxnzbDtwUrLzafeP5QDowab3dUjr51?=
- =?us-ascii?Q?pXmMLnW7kbRbkBIgpzwbl+h5jSxu2gWCHEsnCrKZzmB+mUKvwgzq?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c84e3a97-e55a-4e50-e1dc-08df46655f31
-X-MS-Exchange-CrossTenant-AuthSource: LV3PR12MB9356.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 17:48:51.4640
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: paUl8sA3FrJgXtNDAvhduKS5XZU4sYRZyDULG44nAjokWvvLvqGQDX2rDzqPYI9QzMLgN5utkxCOqf5IbDT+3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8581
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 3f3ijS5WWG9-1y5iVwnUmu89ZRaVVbP2T2p7ghCRN-0_1795111849
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 18, 2026 at 11:37:07PM -0600, Brian Cain wrote:
-> 
-> On 11/18/2026 11:32 PM, Tzu-Ching Yang wrote:
-> > On Wed, Nov 18, 2026 at 02:36:21PM -0500, Yury Norov wrote:
-> > > Reviewed-by: Yury Norov <ynorov@nvidia.com>
-> > > 
-> > > Would you like me to move it with the other bitops material, or leave
-> > > it to Brian?
-> > Thanks for the review.
-> > 
-> > Either way is fine with me. If Brian has no objection, please take it
-> > with the other bitops patches.
-> > 
-> > Brian, would that be OK with you?
-> 
-> Sure - sounds good to me.
+On Thu, 2026-11-19 at 09:09 -0800, Ian Rogers wrote:
+> mpi3mr_bring_ioc_ready() has three bugs in its failure and retry
+> handling:
+>=20
+> 1. start_time is only assigned after MPI3_SYSIF_IOC_CONFIG_ENABLE_IOC
+> =C2=A0=C2=A0 when retry =3D=3D 0, after three earlier 'goto out_failed' p=
+aths. If
+> =C2=A0=C2=A0 soft reset, reset-state polling, or admin queue setup fails =
+on the
+> =C2=A0=C2=A0 first attempt, out_failed computes elapsed_time_sec from an
+> =C2=A0=C2=A0 uninitialized start_time, and if a retry occurs (retry =3D=
+=3D 1),
+> =C2=A0=C2=A0 start_time remains uninitialized for the ready-polling loop =
+as
+> well.
+>=20
+> 2. In 'elapsed_time_sec < (mrioc->ready_timeout - 60)', ready_timeout
+> =C2=A0=C2=A0 is u32, so values below 60 wrap around in 32-bit unsigned
+> arithmetic
+> =C2=A0=C2=A0 before zero-extending to u64, spuriously retrying past the
+> timeout.
+>=20
+> 3. After mpi3mr_setup_admin_qpair() sets retval =3D 0 (or on entry
+> where
+> =C2=A0=C2=A0 retval is initialized to 0), controller fault/reset-history
+> checks,
+> =C2=A0=C2=A0 ready-state timeouts, and early unrecoverable or device-not-
+> present
+> =C2=A0=C2=A0 exits return retval =3D=3D 0 (success) to mpi3mr_init_ioc() =
+and
+> =C2=A0=C2=A0 mpi3mr_reinit_ioc() even though controller bringup failed.
+>=20
+> Initialize start_time =3D jiffies at function entry for pre-enable
+> failure
+> exits, reset start_time =3D jiffies the first time
+> MPI3_SYSIF_IOC_CONFIG_ENABLE_IOC is written so pre-enable waits do
+> not
+> drain ready_timeout, rewrite the retry window check as
+> 'elapsed_time_sec + 60 < mrioc->ready_timeout', and ensure retval =3D -
+> 1
+> on all failure exits.
+>=20
+> Found via Clang -Wconditional-uninitialized on an x86_64 allyesconfig
+> build. Verified by building drivers/scsi/mpi3mr/mpi3mr_fw.o with
+> LLVM=3D1 W=3D1 (-Werror) and -Wconditional-uninitialized, and with a
+> standalone C logic reproducer under ASan/UBSan; not runtime-tested on
+> physical MPI3 hardware.
+>=20
+> Fixes: 59bd9cfe3fa0 ("scsi: mpi3mr: Code refactor of IOC init -
+> part2")
+> Fixes: 0a319f162949 ("scsi: mpi3mr: Wait for diagnostic save during
+> controller init")
+> Fixes: 9634bb07083c ("scsi: mpi3mr: Enhance the Enable Controller
+> retry logic")
+> Fixes: 4616a4b3cb8a ("scsi: mpi3mr: Improve wait logic while
+> controller transitions to READY state")
+> Fixes: fb6eb98f3965 ("scsi: mpi3mr: Handling of fault code for
+> insufficient power")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+> =C2=A0drivers/scsi/mpi3mr/mpi3mr_fw.c | 14 +++++++++++---
+> =C2=A01 file changed, 11 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c
+> b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+> index f0d3cd398dd0..b92b2467e995 100644
+> --- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
+> +++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+> @@ -1582,8 +1582,9 @@ static int mpi3mr_bring_ioc_ready(struct
+> mpi3mr_ioc *mrioc)
+> =C2=A0=09int retval =3D 0;
+> =C2=A0=09enum mpi3mr_iocstate ioc_state;
+> =C2=A0=09u64 base_info;
+> +=09bool enable_started =3D false;
+> =C2=A0=09u8 retry =3D 0;
+> -=09u64 start_time, elapsed_time_sec;
+> +=09u64 start_time =3D jiffies, elapsed_time_sec;
+> =C2=A0
+> =C2=A0retry_bring_ioc_ready:
+> =C2=A0
+> @@ -1595,6 +1596,7 @@ static int mpi3mr_bring_ioc_ready(struct
+> mpi3mr_ioc *mrioc)
+> =C2=A0
+> =C2=A0=09if (!mpi3mr_is_fault_recoverable(mrioc)) {
+> =C2=A0=09=09mrioc->unrecoverable =3D 1;
+> +=09=09retval =3D -1;
+> =C2=A0=09=09goto out_device_not_present;
+> =C2=A0=09}
+> =C2=A0
+> @@ -1621,6 +1623,7 @@ static int mpi3mr_bring_ioc_ready(struct
+> mpi3mr_ioc *mrioc)
+> =C2=A0=09=09if (!pci_device_is_present(mrioc->pdev)) {
+> =C2=A0=09=09=09mrioc->unrecoverable =3D 1;
+> =C2=A0=09=09=09ioc_err(mrioc, "controller is not present
+> while waiting to reset\n");
+> +=09=09=09retval =3D -1;
+> =C2=A0=09=09=09goto out_device_not_present;
+> =C2=A0=09=09}
+> =C2=A0
+> @@ -1654,6 +1657,7 @@ static int mpi3mr_bring_ioc_ready(struct
+> mpi3mr_ioc *mrioc)
+> =C2=A0=09=09=09=09if (!pci_device_is_present(mrioc-
+> >pdev)) {
+> =C2=A0=09=09=09=09=09mrioc->unrecoverable =3D 1;
+> =C2=A0=09=09=09=09=09ioc_err(mrioc, "controller
+> is not present at the bringup\n");
+> +=09=09=09=09=09retval =3D -1;
+> =C2=A0=09=09=09=09=09goto out_device_not_present;
+> =C2=A0=09=09=09=09}
+> =C2=A0=09=09=09=09msleep(100);
+> @@ -1690,8 +1694,10 @@ static int mpi3mr_bring_ioc_ready(struct
+> mpi3mr_ioc *mrioc)
+> =C2=A0=09ioc_config |=3D MPI3_SYSIF_IOC_CONFIG_ENABLE_IOC;
+> =C2=A0=09writel(ioc_config, &mrioc->sysif_regs->ioc_configuration);
+> =C2=A0
+> -=09if (retry =3D=3D 0)
+> +=09if (!enable_started) {
+> =C2=A0=09=09start_time =3D jiffies;
+> +=09=09enable_started =3D true;
+> +=09}
+> =C2=A0
+> =C2=A0=09timeout =3D mrioc->ready_timeout * 10;
+> =C2=A0=09do {
+> @@ -1731,7 +1737,7 @@ static int mpi3mr_bring_ioc_ready(struct
+> mpi3mr_ioc *mrioc)
+> =C2=A0
+> =C2=A0out_failed:
+> =C2=A0=09elapsed_time_sec =3D jiffies_to_msecs(jiffies -
+> start_time)/1000;
+> -=09if ((retry < 2) && (elapsed_time_sec < (mrioc->ready_timeout
+> - 60))) {
+> +=09if (retry < 2 && elapsed_time_sec + 60 < mrioc-
+> >ready_timeout) {
+> =C2=A0=09=09retry++;
+> =C2=A0
+> =C2=A0=09=09ioc_warn(mrioc, "retrying to bring IOC ready,
+> retry_count:%d\n"
+> @@ -1739,6 +1745,8 @@ static int mpi3mr_bring_ioc_ready(struct
+> mpi3mr_ioc *mrioc)
+> =C2=A0
+> =C2=A0=09=09goto retry_bring_ioc_ready;
+> =C2=A0=09}
+> +=09if (!retval)
+> +=09=09retval =3D -1;
+> =C2=A0=09ioc_state =3D mpi3mr_get_iocstate(mrioc);
+> =C2=A0=09ioc_err(mrioc,
+> =C2=A0=09=C2=A0=C2=A0=C2=A0 "failed to bring to ready state,=C2=A0 curren=
+t state: %s\n",
 
-OK, added in bitmap-for-next.
+Hello Ian
 
-Thanks,
-Yury
+Thanks for this. I checked it against current mainline and all three
+issues are real. Some comments below.
+
+> 3. After mpi3mr_setup_admin_qpair() sets retval =3D 0 (or on entry
+where
+>    retval is initialized to 0), controller fault/reset-history
+checks,
+>    ready-state timeouts, and early unrecoverable or device-not-
+present
+>    exits return retval =3D=3D 0 (success) to mpi3mr_init_ioc() and
+>    mpi3mr_reinit_ioc() even though controller bringup failed.
+
+This is the most serious of the three. Both callers only check
+"if (retval)", so with the !mpi3mr_is_fault_recoverable() exit we can
+set mrioc->unrecoverable =3D 1 and still report success, and init then
+carries on against a dead controller.
+
+> 2. In 'elapsed_time_sec < (mrioc->ready_timeout - 60)', ready_timeout
+>    is u32, so values below 60 wrap around in 32-bit unsigned
+arithmetic
+>    before zero-extending to u64, spuriously retrying past the
+timeout.
+
+Agreed that the arithmetic is wrong, but note the fix changes behavior:
+today any firmware advertising a ready timeout below 60s always gets
+its two retries; after this patch it gets none.
+
+Sathya/Sreekanth, can you confirm whether any shipping MPI3
+firmware reports a ready timeout under 60 seconds, and if so whether
+dropping the retries entirely is the intended behavior?
+
+> Initialize start_time =3D jiffies at function entry for pre-enable
+failure
+> exits, reset start_time =3D jiffies the first time
+> MPI3_SYSIF_IOC_CONFIG_ENABLE_IOC is written so pre-enable waits do
+not
+> drain ready_timeout, rewrite the retry window check as
+> 'elapsed_time_sec + 60 < mrioc->ready_timeout', and ensure retval =3D -
+1
+> on all failure exits.
+
+Would you consider splitting this into three patches, one per issue,
+each with only its own Fixes: tag? The retval fix stands on its own
+and is the one stable and distro kernels will want first; the
+ready_timeout change may need to wait for Broadcom's answer above.
+Five Fixes: tags across different commits on one patch also makes
+backporting harder.
+
+> Found via Clang -Wconditional-uninitialized on an x86_64 allyesconfig
+> build. Verified by building drivers/scsi/mpi3mr/mpi3mr_fw.o with
+> LLVM=3D1 W=3D1 (-Werror) and -Wconditional-uninitialized, and with a
+> standalone C logic reproducer under ASan/UBSan; not runtime-tested on
+> physical MPI3 hardware.
+
+I have access to mpi3mr hardware and can run normal bring-up,
+controller reset and host-reset reinit on a v2 to make sure the good
+path does not regress, and will send a Tested-by.
+
+With the split, for the retval and start_time fixes:
+
+Reviewed-by: Laurence Oberman <loberman@redhat.com>
+
+Regards
+Laurence
+
