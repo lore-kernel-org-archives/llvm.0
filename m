@@ -1,91 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=81.169.146.167
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795109188;
-	b=cedLm/IpNKl8InSne6GVvU/GGM705EVN6V4kqyJXpXlx6oH73udyZBX3RhLTSpKFsbmv
-	 L7YGsbn2TloOBaBj+XS2zpGbWbnaIEe+fthQihPEcrVC3hwzK9HAuz4Se1aHnXVTSctog
-	 uRDalWdqDQoeTz1CNEbyNPYbx8gyrLXPcw+h9bjkfqi33HpfAMK/jnIl7l8ig0PCNEdmL
-	 d8KawkNWvOQbSFYeDfsVfOBBDt7jBUqS0XmVsG9iylKYJHQlbmQEqFpZVBQGSORJQzk3M
-	 jDsKzhNTOJIFKuwc6RRfOMh1e6GwbJekZM1ugCfdTBdcQyetc5HoglBiLuA8x3T2GYw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795109188;
-	h=DMARC-Filter:X-RZG-CLASS-ID:DKIM-Signature:DKIM-Signature:X-RZG-AUTH:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
-	b=Ckha53jNR2LkKWwfmAnAXeDQlJkRDPJDU5xS5CCdiAYvF5Ca1/b1Fw3qR6KexQYrA1bm
-	 4EaIW/7OjS7BbPNxihnYENNOsLAtscOwau+yRIBDLanvPrAkzxju5UmtlD8c2G6mT8L/P
-	 lLLG1ebcz38i90GSGxKCMho93DXjbhFA4gElxZsrUy8PHtovBOg/h3hVoTMERIm4NM1Wt
-	 gx3nCIPzeBODmsOQ3HpCUKWThLEzXv9QvmHk1dO4wVO8fAxZIMeJZmhwyRkWafnHptCpD
-	 6fQbSU0K/ZUbSlL83LknE4iZ0rGWZlLCuq0S0rwVo4y7VJ4i1StlWBidFT66fR+JUQQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=hartkopp.net;
-	spf=fail smtp.mailfrom=hartkopp.net;
-	dkim=pass header.d=hartkopp.net header.i=@hartkopp.net header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=V3OV9ZTn;
-	dkim=pass header.d=hartkopp.net header.i=@hartkopp.net header.a=ed25519-sha256 header.s=strato-dkim-0003 header.b=GOZEynJw;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=81.169.146.167
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795109220;
+	b=m9Pb6ow8TapgknH7j7Y0H6TSK5SCTuRDZocyfxgpsN8edABHuzRACf0+ON5vm+plAr2Y
+	 xXP/i6wvKLgOqP7U2GQq31Gpw1CSg7/UqS7Qa56sWRkY98ufCLXcHy7hdZdPyCcsIyMkV
+	 UDGdjZfVdRS1zfuchFfIU74WTZGOSLZcv6Nt3s0CD9g/aCyKrWm57WBkaW5cu71j8RCRj
+	 FEVmqsXTmKe17AwO4030I6ONxseTWPS97DtDoeK2Lp82mS1pRHgULRW8W4AwmUI3dYFxp
+	 osYrDplPeEMS5zdgYSPGY3oIBg6UEUqrBL8gkZhDSyuVsE0+Wrq6yMMqq6JYJl0vWkA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795109220;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Last-TLS-Session-Version;
+	bh=b161FkFDAsvC3jLoVNbOzXrl68eIJRUz4QoBplXQxk4=;
+	b=sdwblFex9sA0YYe4ZUnv8FqXXU/eXkqlNPmwlxHaZhAQcw4+xBI3dGZVQjC1jKIN0gQg
+	 OP+BvduNk03TktvzZ9oq4IvTReLKEdMsE04e1QlWK10LokXSnNOfY12q2W6xTlHHtdbNm
+	 zxHEcczJe59cE/rgAm3c3MnIORwpiqK7A/CD3zPehl5g1QXTZ6llhjwjpcvxGGhnITKLF
+	 S5/IJFbiVMahMyZxjRrEHrEK7oMTanQTrAy/sVLXiaPTFcVbQ7TMUHmeVSghKx2IH+xEL
+	 oh+hbc6b8gUMAvjF5sQ5cgJs0HflTXATTjQBpakY7m68DOaSUi7ucWZ3FGNqfespMfA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=yJX3ZqxI;
+	arc=none smtp.remote-ip=185.246.85.4
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82051606A32A
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:26:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82051606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E8E606A326
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:26:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7E8E606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=hartkopp.net header.i=@hartkopp.net header.a=rsa-sha256 header.s=strato-dkim-0002 header.b=V3OV9ZTn;
-	dkim=pass header.d=hartkopp.net header.i=@hartkopp.net header.a=ed25519-sha256 header.s=strato-dkim-0003 header.b=GOZEynJw
-ARC-Seal: i=1; a=rsa-sha256; t=1795109185; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=b9O8O+Qr5Ga6wW3Ubg1cGcJv9JvKndqeoG3aKLIg/uPvK0ItZWa89DHy8xZFZjxDh1
-    qrRXXFrSpGDG+9sNxc8ifZP8xoxhOGbIUk/BytFsWUXhqrfWS9MUSNaqBginzVpbU3QF
-    CWlqpNQaI1fs5SN4gw8aAlnfN3ivRHPYztiGegbmNAwYgDaNmZFWmqottvjQ/cr1VaJq
-    vjlqsk6lcAS2ctM1/b467G/pvPzPXX1i4l6Uq6HS5OIQqKRo7IsgD7WRrFKt/KR2Suyv
-    retVJ1R7/Mv2xKw1IfL0nAq/NYiJAX7XzBzNvwEVcv2WaknEykkjX+Z4PuXTnh5gc3AP
-    dtDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1795109185;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
-    b=J1/s56WN+h++/bstgBtZ5COV6oNnDzoa4ZTx6vnRqxhj1wxVChjZ01NelO5fe/XQgg
-    UZCF3gulqetlS8GvggtUXLG7vusD/NPQlFOUOuHxkGt7zHRyAAlHbgwzWv5Y4dlRiAql
-    TKOPTHm+TLHTxSzAeBQGdubB0bC09w/DtJsdWEYpPAyw4GzEAfOtgTPJeJaQt6RarAN4
-    qRnltLXywZyuFD3TuKXw/5O7C7xZacHUH+AeOfthjulAjavt9ES9tUa6AiEWLEqiMD8M
-    wp2EkOSIES/JOZjC4GfuWis8RcSwhczxGg+zOU/wrzHJdm4pvMGJwNRURbwpOlDjyM/j
-    MBJA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1795109185;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
-    b=V3OV9ZTnLuY73+rWQWfZBDRdDUTuMppYFvhmdD/j1vZTQ7oBIWTN5cQSl4hKppsBk+
-    xUEgtplK1PkNrCTrzHN9FeAB+qjbmYFpkevkKE2SSDZsUeJPnpFWntaZ2W9FS79wGK5F
-    +DfJumMXYeWfBSgXJZ4tuM4wE+hwSvNAe3yS3m1vZzRNCKm7bYzuJUZMb9llbkKPHEZC
-    FOisFPVEsns5Dn+JtCoi7D7D/i4VLxZjbO8cGY6BPbcJhRHXDAy2KysRpZkNpCFPTC6q
-    TdS2EO8BzajsL/BzVFP9kufKOuurm7qFiBcBKNzKLm4vqXcpm5WTdQFKXunnwUJIhs5K
-    7Q0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1795109185;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=LxUt5SsYtClWKS+AM0t4bBTS84tiWXWJOLwqB2NwRXE=;
-    b=GOZEynJwQvFvsJjNS6xKkt45o0Hmm+VfpXKGuxEAXw3ONESUeXbJS9RlF+45KNc1Us
-    ouvz6gEsXEVNVH6YY0AA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bDup0Q=="
-Received: from [IPV6:2a00:6020:4a38:6810::989]
-    by smtp.strato.de (RZmta 55.6.3 AUTH)
-    with ESMTPSA id Kfdf2a2AJHQPMwC
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Thu, 19 Nov 2026 18:26:25 +0100 (CET)
-Message-ID: <b7b1b385-cec0-4828-aff4-d0ab5fd61951@hartkopp.net>
-Date: Thu, 19 Nov 2026 18:26:25 +0100
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=yJX3ZqxI
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 2BDBB4E4166B;
+	Thu, 19 Nov 2026 17:26:58 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E43526035B;
+	Thu, 19 Nov 2026 17:26:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4350411BC0C8D;
+	Thu, 19 Nov 2026 18:26:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1795109213; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=b161FkFDAsvC3jLoVNbOzXrl68eIJRUz4QoBplXQxk4=;
+	b=yJX3ZqxIhcynpdAQbXlLlxaOXqSO382sx/sCL/eq8nZVnWspuXBkUexQO4SJFbD6qvS+/L
+	B1BzqyEvReve55MWDIi+O73Cu84NnPpwjXK5m3ndBRj7OAgSXhgNbzFVe5FW8RQx52bX5m
+	OX2LqMC8kg+ZWfHXVDCvZaIjKMZqYa1aaVMJUhU1gC8IozHiarfxPK9BLGUcFQLRWjn27P
+	698Ua4lbIC55S7fNuiGyWkTylUuh0hvEujPegOPzcRLMnpto9PdjKx+1+2CLADPedloe/n
+	to7KeLr9QlS+Wh89octwOv6xzqCZhUOdR0dEkmWfweVwIvJOdOedqLhiPTfntg==
+Message-ID: <f712f16f-dd35-4afc-81db-4e93232846aa@bootlin.com>
+Date: Thu, 19 Nov 2026 18:26:48 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -95,76 +62,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: softing: lock card->fw.lock unconditionally in
- softing_card_shutdown()
-To: Ian Rogers <irogers@google.com>, Marc Kleine-Budde <mkl@pengutronix.de>,
- Vincent Mailhol <mailhol@kernel.org>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+User-Agent: Betterbird (Linux)
+Subject: Re: [PATCH net] net: pse-pd: pd692x0: Return fw_upload_err codes from
+ firmware upload ops
+To: Ian Rogers <irogers@google.com>, Oleksij Rempel
+ <o.rempel@pengutronix.de>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
-References: <20261119170722.1524088-1-irogers@google.com>
+References: <20261119171014.1534691-1-irogers@google.com>
+From: Kory Maincent <kory.maincent@bootlin.com>
 Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20261119170722.1524088-1-irogers@google.com>
+In-Reply-To: <20261119171014.1534691-1-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Hi Ian,
-
-the PCMCIA Softing CANcard2 is discontinued since 2013 and the latest
-Windows drivers date back to Windows 7/8.
-
-The Softing CANcard driver is to be removed as there's no known user and 
-we lack the access to this at least 25 y/o hardware for 10 years now:
-
-https://lore.kernel.org/linux-can/20261118092955.1283165-11-mkl@pengutronix.de/
-
-So thanks for your patch but unfortunately too late.
-
-Btw. beware of Sashiko bot reviews for this obsolete patch that will 
-make you rework the entire driver :-D
-
-Best regards,
-Oliver
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
 
-On 19.11.26 18:07, Ian Rogers wrote:
-> softing_card_shutdown() calls mutex_lock_interruptible(&card->fw.lock)
-> with an empty if-body ('{ /* return -ERESTARTSYS */; }'). Because
-> softing_pdev_remove() invokes softing_card_shutdown() before
-> unregistering netdevs or removing sysfs attributes, a pending signal
-> while card->fw.lock is contended causes mutex_lock_interruptible() to
-> return -EINTR without acquiring the lock. Execution then proceeds unlocked
-> through IRQ and DPRAM teardown and calls mutex_unlock(&card->fw.lock) on a
-> mutex not owned by the current task.
+
+On 11/19/26 18:10, Ian Rogers wrote:
+> pd692x0_fw_reset() and pd692x0_fw_write() return negative errno values
+> from i2c_master_send() directly as enum fw_upload_err instead of
+> FW_UPLOAD_ERR_RW_ERROR, and pd692x0_fw_recv_resp() ignores negative
+> errors from its trailing i2c_master_recv(). When a negative errno is
+> propagated to the firmware upload core, fw_upload_error() rejects it
+> as >= FW_UPLOAD_ERR_MAX, logs an invalid error code message, and
+> reports "unknown-error" instead of "read-write-error" via sysfs.
 > 
-> Use mutex_lock(&card->fw.lock) in softing_card_shutdown().
+> Return FW_UPLOAD_ERR_RW_ERROR on I2C transfer failures and use
+> enum fw_upload_err consistently across the PD692x0 firmware upload
+> helpers.
+
+Please write a readable commit message with human hands.
+
+> Found via Clang -Wimplicit-int-enum-cast on an x86_64 allyesconfig
+> build. Verified by building drivers/net/pse-pd/pd692x0.o with LLVM=1
+> W=1 (-Werror) and -Wimplicit-int-enum-cast, and with a standalone C
+> reproducer; not runtime-tested on PD692x0 hardware.
 > 
-> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
-> -Wextra-semi-stmt enabled; fix and changelog drafted with an AI coding
-> assistant. Build-tested under LLVM=1 W=1 (-Werror) and -Wextra-semi-stmt;
-> not tested on Softing CAN hardware.
-> 
-> Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
-> Fixes: 47fa0336c1b7 ("can: softing: softing_card_shutdown(): add  braces around empty body in an 'if' statement")
+> Fixes: 9a9938451890 ("net: pse-pd: Add PD692x0 PSE controller driver")
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->   drivers/net/can/softing/softing_main.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+>   drivers/net/pse-pd/pd692x0.c | 81 ++++++++++++++++++------------------
+>   1 file changed, 40 insertions(+), 41 deletions(-)
 > 
-> diff --git a/drivers/net/can/softing/softing_main.c b/drivers/net/can/softing/softing_main.c
-> index 519ab3097f86..d3dfad4f5321 100644
-> --- a/drivers/net/can/softing/softing_main.c
-> +++ b/drivers/net/can/softing/softing_main.c
-> @@ -448,9 +448,7 @@ static void softing_card_shutdown(struct softing *card)
+> diff --git a/drivers/net/pse-pd/pd692x0.c b/drivers/net/pse-pd/pd692x0.c
+> index 7958f5741463..94a857eaa3de 100644
+> --- a/drivers/net/pse-pd/pd692x0.c
+> +++ b/drivers/net/pse-pd/pd692x0.c
+> @@ -1455,6 +1455,8 @@ pd692x0_fw_recv_resp(const struct i2c_client *client, unsigned long ms_timeout,
+>   
+>   	/* Read remaining characters */
+>   	ret = i2c_master_recv(client, fw_msg_buf + 1, msg_size - 1);
+> +	if (ret < 0)
+> +		return FW_UPLOAD_ERR_RW_ERROR;
+>   	if (strncmp(fw_msg_buf, msg_ok, msg_size)) {
+
+The error will be catch anyway by the string comparison. If you want to 
+add a check on ret then add another error message.
+This is not a fix.
+
+>   		dev_err(&client->dev,
+>   			"Wrong FW download process answer (%*pE)\n",
+> @@ -1465,9 +1467,10 @@ pd692x0_fw_recv_resp(const struct i2c_client *client, unsigned long ms_timeout,
+>   	return FW_UPLOAD_ERR_NONE;
+>   }
+>   
+> -static int pd692x0_fw_write_line(const struct i2c_client *client,
+> -				 const char line[PD692X0_FW_LINE_MAX_SZ],
+> -				 const bool last_line)
+> +static enum fw_upload_err
+> +pd692x0_fw_write_line(const struct i2c_client *client,
+> +		      const char line[PD692X0_FW_LINE_MAX_SZ],
+> +		      const bool last_line)
 >   {
->   	int fw_up = 0;
+>   	int ret;
 >   
-> -	if (mutex_lock_interruptible(&card->fw.lock)) {
-> -		/* return -ERESTARTSYS */;
+> @@ -1478,19 +1481,12 @@ static int pd692x0_fw_write_line(const struct i2c_client *client,
+>   		line++;
+>   	}
+>   
+> -	if (last_line) {
+> -		ret = pd692x0_fw_recv_resp(client, 100, "TP\r\n",
+> -					   sizeof("TP\r\n") - 1);
+> -		if (ret)
+> -			return ret;
+> -	} else {
+> -		ret = pd692x0_fw_recv_resp(client, 100, "T*\r\n",
+> -					   sizeof("T*\r\n") - 1);
+> -		if (ret)
+> -			return ret;
 > -	}
-> +	mutex_lock(&card->fw.lock);
->   	fw_up = card->fw.up;
->   	card->fw.up = 0;
+> +	if (last_line)
+> +		return pd692x0_fw_recv_resp(client, 100, "TP\r\n",
+> +					    sizeof("TP\r\n") - 1);
 >   
+> -	return FW_UPLOAD_ERR_NONE;
+> +	return pd692x0_fw_recv_resp(client, 100, "T*\r\n",
+> +				    sizeof("T*\r\n") - 1);
+
+This is not a fix, just moving code around.
+
+For the rest, FW_UPLOAD_ERR_NONE is similar to ret = 0 so there is no 
+real issue, only some type mismatch and I am not sure these changes 
+should land as a fix.
+
+Regards
+-- 
+Köry Maincent, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
