@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795107857;
-	b=gYCBS2SPdPgHzsp3LMMuUlDjekZlwDk4mVhEOaJW9SmqlsQZgzFb5Ug+Vvm7/xltkXkE
-	 YMXtFXpH4swXwFQXGt+41mHZdB3xEZ37r37sctlk/ifSd/m34y4ugNV6VdsPJqBMqBOni
-	 X9hBnjkz60ZbrZco5n/R/m18Sistim9ntX7vesGlqtk7CjYJupj7P/h95jLQMEnDOgW92
-	 HmIm2vRo0Mm54+coQBkD26e1ND5UT1DoDWQxE9kr98mbfAlwosI/aa2eo+v7WQ/uPp8Sg
-	 iefk1gxAyLrOVxQ2ChjO7jHzAoFJD6bv5YT/fE673T633MSEmG0Nr/P18Ha+q4QWF2g==
+	t=1795107863;
+	b=eGwL33fsvEcPz+SRSqwMb1GQtZEswNQrhmThiZLloUPzWIcooUkaM2hyxhuO9F9LeHUj
+	 bio3sp4EayCDdvj563QA/MhCBk7uJaGzBifjT0d/kbqRdCPZjW+vDP5UJTxA/qEVYk3hH
+	 hYa/+gpe3OV1OMfhUNsVq612r2eYJ8hcUO0Cc3WdPpmAas0sk/9BYo6EojyUE9Q6sD+ic
+	 Gmd8l4hXTUuCCT2dyhJb1Dp5y33JqOYVwLgTfjvDnwgT9ElNESY9LUlLrCcSz+Br/KgG9
+	 8WJhuEoMXq4lhqkGNFDbIRVTJ3VHIDhNgVBjka5k6d4BCJmBzzJ3nvNV22fuf84CXZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795107857;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795107863;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=kOTTaMiFKsMjsQWe0kVsqaO6Sbtr1FRrysMCgSH4psE=;
-	b=1HrxPzirzDFRDkqGGKU8GIFNIo0ZZV9iR+pi8pf5NGyF7m0a25iM2khSqsgbJSKzDTvR
-	 azl12X8bHu//BwaRdNcNGtARVdnra8TFzoGZS1AhMUifIgd1SeIyUifX0OviQsaKbAQDI
-	 SJDVO/WmcDeiopeUg7/uAAacLncpEI/6q4QXvvTguim8S5zETj5lsDhnwQt4LUYUqGaY+
-	 Ku7DEMFd4CkYWIiq/SB4bUhYiiYuVKKZyBjhjCOPUGOHaKJr04TgqbyY9FqHtXNJUTM25
-	 +sOmQEdxBYJRqZhrNGETD89zx02bBfC42mjNsCvRafanj5VeL7bvvS7i/3IGIiO3rgg==
+	bh=tbGvL9tZ+BYgVAO5FMDS+XSwp11ngMpDyW2424LSejU=;
+	b=WYa/EbBC8poGsRmLBU6nlmbSWKR6IcF4A4xZKf5rDhrSh/t+ToUHTx0bjPl6JRnQ5OSl
+	 PWJ6eWRQD3aksfHrzO4j8hhPyBCHWRmi8N1sHlBGK1WExq+rou1xTeJ8m/A+cPLKSfy6q
+	 EHDeRJWClOnNJCBYhzTdqeED7dsC4UCYqdqYnkzpdevEduXgN6dFynUg4IRE7Zly4kCCM
+	 Kaf02qHkceK+EPhiuXCaS0gjsfQvuO5HYxvWP6zpJrzsJmUOJuJayoqD8TmoeCElfl+2W
+	 hcHu8KBuCQc37tjKSC6DJd5JZqv1xjc9gFzN+S/Uzd/yqj7YNoro46lefGJHC5aZg6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=QKL1rAkL;
-	arc=none smtp.remote-ip=74.125.82.69
-Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ma91w9va;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1EA606A325
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:04:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C1EA606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167B360A262C
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:04:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 167B360A262C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=QKL1rAkL
-Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1383723dfddso2951847c88.0
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:04:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ma91w9va
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-382af5cfc58so6012449eec.0
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:04:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795107856; x=1795712656; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795107862; x=1795712662; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kOTTaMiFKsMjsQWe0kVsqaO6Sbtr1FRrysMCgSH4psE=;
-        b=QKL1rAkLMJuU8QQcOmSXfdV3QCd0SCB/8bshfIOm5RMxPjs00Fi5B50UOTMsN0oBcI
-         uy+ZHvfFXtWqQKd3lN7D8edlJp+qXyLWY3ub1muWnXrMrVa9g1H7xam7QT771zAyPfbu
-         KtJLSWWW2biLHCemaG2s3AsP2tkqZCvFKFZQ2zaM7f//VGyBtZA+dQ3+dfb7zixJ+uug
-         W3YU5A6Zqh8JaqR1usd+OJWCtmp+twWc8041y50c9Ictug56mGePBH/U93V84xESURpk
-         lfJpXwjLu84aPhdcFFalX0q3IanIKwCq7Hkf1Cxo6jqNi9xE71YGSWEF9d3HyEQpSbDd
-         2lHA==
+        bh=tbGvL9tZ+BYgVAO5FMDS+XSwp11ngMpDyW2424LSejU=;
+        b=Ma91w9vajCI5pctGdzSoXolWWnka/q3lqKg8813dnWqUIP+UIbjIeZiCz0fniNMOJO
+         zTaH4kcKEckzgI8uYTCuaZzztTnxAWMMqf+dtWWK7qKo9raiDIG3wcF6uCxmMKsmD7Xx
+         feqVRxnlGvPoYYadxrXF/NRBvADsa9rwErDjTLXOoRveqGax+61hhzxu3VjhkKeiF5b9
+         sp/tQec1Xfn8TlPDP5k7G5qhrV6Gi64ifk4DT1r2EYpYk/Ff0yCXzww7Ungg4JCUT+/9
+         B4jtxLFD+aoOCPEY4AM4j6sXLL9IiWaZ6tLJJeSdPq/DK1qMGADH/roMyomIPsorTMLG
+         Ye9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795107856; x=1795712656;
+        d=1e100.net; s=20260707; t=1795107862; x=1795712662;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kOTTaMiFKsMjsQWe0kVsqaO6Sbtr1FRrysMCgSH4psE=;
-        b=iJNYD3J99XWTQCu9R25fe/JN6tMSVcudeLXhu5UFOZsUkEimRHjZYJ6riax3H2rFW7
-         oJAEFnQw0NEeW2429Wq4h+42BohbAf0FM+KgZlT8nzyqytnlXNOhAwwJhJ7PnToOTijQ
-         WGmbStLMrJcpE3ZOwW5yEvnrQ1s+peBl5/rK7MxiUl/tAUee3xzrv18Ol6XCRd6Tyex6
-         TOK6iYd4fYU4SlPjK/QCERAYiNaZoIStqUUci88Bw9FpgCnReNJPfFmJ7LhQbQL/J4lE
-         4+/ZkF0YVLK08N2M372wptWnt+FERfvHf+JtdzL/G+CgoCnI3nF2sFjNHVXPqrab6rre
-         Nv/w==
-X-Forwarded-Encrypted: i=1; AL+hErEF8Cd/MBwCty6HqMhbV7a9HC6iMcMJKyvmCt39T3gE7Y8yw0b5xV0QexY2RIERh/3IaP5b@lists.linux.dev
-X-Gm-Message-State: APuU4Z9VneQesNn2Ql+kioRjabP/O81ZswAHxpW9lPAui4xS9CbByG6A
-	Em8L8ZDxo+NIeaDmDHk8PC8ns3l+av1j838ydOipwjF93mb85rWEB9lKTSGca65y/C4jAl5m7zi
-	Qt1KBkLEw5A==
-X-Received: from dlbsw11.prod.google.com ([2002:a05:7022:3a8b:b0:19a:1425:bb9c])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:2522:b0:1aa:47e7:97e3
- with SMTP id a92af1059eb24-1b5568bc56emr304733c88.15.1795107855617; Thu, 19
- Nov 2026 09:04:15 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:04:12 -0800
+        bh=tbGvL9tZ+BYgVAO5FMDS+XSwp11ngMpDyW2424LSejU=;
+        b=hOQUVj6zNtmpLNVTr+JXJclhmMZQm30pBROnzyW7jY+FvJOhVs6M7YhLse/oHa7LX/
+         FGF4bk3cBCu2USGqFzG2MUZ0lAvaPn477DudShJOGEMra/CW11LVwaBeiuXn6jHtCmQ3
+         IS7dzDaZVtkA+cVMckdHOLifSghQFi61B9ExaXZ+KLEBvPNB3CI92Q79uWkNJcRDR46b
+         zDrE7xxE9S+6zBe3mP9NdCc20GycaFHYkEENryPwrldqyGYSk6V2//psW9EwzEaGxLXG
+         dm/R1vxIrnOj1Tiv+0yxATBzy7eWVEzW3R5yUkP0Gc5h3mUozK7wAEnTO6+zBr3xclIh
+         HATA==
+X-Forwarded-Encrypted: i=1; AL+hErFq5TEztKe+nodaorucDvEChtA/Ct/3kQSNkQJ39X4LI2pMfpf1n7BdczClRogPaVU0/pbJ@lists.linux.dev
+X-Gm-Message-State: APuU4Z+NIE3scA9LIqtufS6SIXZJPCS3337D3Lekv9TSgJ1sZcu0ez2K
+	t2fNDIcAFy9lw1BEfLcuLEk8a8R+YI1Sq2a6iXn6NGG0YCTBbUo6+D1cSY6VOAXriEdvkWI0Kni
+	mZnPl26/Nuw==
+X-Received: from dlev7.prod.google.com ([2002:a05:701b:4647:b0:1b5:330f:621d])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:4584:b0:1ac:9da7:e86e
+ with SMTP id a92af1059eb24-1b556908c17mr230062c88.30.1795107861814; Thu, 19
+ Nov 2026 09:04:21 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:04:18 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,57 +77,49 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170412.1511344-1-irogers@google.com>
-Subject: [PATCH net] qed: Fix missing bar_id comparison in qed_hw_bar_size()
+Message-ID: <20261119170418.1511770-1-irogers@google.com>
+Subject: [PATCH] HID: lenovo-go: Fix reset_tx_dongle sysfs attribute to be write-only
 From: Ian Rogers <irogers@google.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: "Derek J. Clark" <derekjohn.clark@gmail.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When PGLUE_B_REG_PF_BAR{0,1}_SIZE reads back as 0 on older management
-firmware with multi-hwfn devices, qed_hw_bar_size() logs that it assumes
-256 KiB for GRC (BAR_ID_0) and 512 KiB for DB (BAR_ID_1), but evaluates:
+reset_tx_dongle is defined with LEGO_DEVICE_ATTR_RO(), whereas all other
+FEATURE_RESET_GAMEPAD attributes in hid-lenovo-go.c (reset_mcu,
+reset_left, and reset_right) use LEGO_DEVICE_ATTR_WO().
 
-  return BAR_ID_0 ? 256 * 1024 : 512 * 1024;
+Because feature_status_show() has no case for FEATURE_RESET_GAMEPAD
+(which is only handled in feature_status_store()), exposing tx_dongle's
+reset attribute as read-only makes reading it always fail with -EINVAL
+while preventing userspace from writing to it to reset the TX dongle.
 
-Because BAR_ID_0 is enum constant 0, the ternary condition is always
-false and qed_hw_bar_size() unconditionally returns 512 KiB even for
-BAR_ID_0, doubling the computed GRC BAR offset for the second hardware
-function.
+Change reset_tx_dongle to LEGO_DEVICE_ATTR_WO().
 
-Compare bar_id == BAR_ID_0 as intended (matching the bar_reg selection
-at the top of qed_hw_bar_size()).
+Found by enabling Clang's -Wswitch-enum on an x86_64 allyesconfig build,
+with AI coding assistant help to audit the warning and prepare the fix.
+Build-tested with Clang; not runtime-tested on Lenovo Legion Go hardware.
 
-Found by enabling Clang's -Wunreachable-code on an x86_64 allyesconfig
-build, with AI coding assistant help to audit the warning and prepare
-the fix. Build-tested with Clang; not runtime-tested on QLogic hardware.
-
-Fixes: c2035eea3e9e ("qed: Correct BAR sizes for older MFW")
+Fixes: 82cd9bc866e1 ("HID: hid-lenovo-go: Add Feature Status Attributes")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/net/ethernet/qlogic/qed/qed_dev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hid/hid-lenovo-go.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-index dd75c47758e1..3e84f53dfb50 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-@@ -1264,11 +1264,11 @@ static u32 qed_hw_bar_size(struct qed_hwfn *p_hwfn,
- 	if (p_hwfn->cdev->num_hwfns > 1) {
- 		DP_INFO(p_hwfn,
- 			"BAR size not configured. Assuming BAR size of 256kB for GRC and 512kB for DB\n");
--			return BAR_ID_0 ? 256 * 1024 : 512 * 1024;
-+		return bar_id == BAR_ID_0 ? 256 * 1024 : 512 * 1024;
- 	} else {
- 		DP_INFO(p_hwfn,
- 			"BAR size not configured. Assuming BAR size of 512kB for GRC and 512kB for DB\n");
--			return 512 * 1024;
-+		return 512 * 1024;
- 	}
- }
+diff --git a/drivers/hid/hid-lenovo-go.c b/drivers/hid/hid-lenovo-go.c
+index 318b1152ff8b..8a2aa2b4825d 100644
+--- a/drivers/hid/hid-lenovo-go.c
++++ b/drivers/hid/hid-lenovo-go.c
+@@ -1848,7 +1848,7 @@ static struct go_cfg_attr version_gen_tx_dongle = { HARDWARE_GENERATION };
+ LEGO_DEVICE_ATTR_RO(version_gen_tx_dongle, "hardware_generation", TX_DONGLE, version);
  
+ static struct go_cfg_attr reset_tx_dongle = { FEATURE_RESET_GAMEPAD };
+-LEGO_DEVICE_ATTR_RO(reset_tx_dongle, "reset", TX_DONGLE, feature_status);
++LEGO_DEVICE_ATTR_WO(reset_tx_dongle, "reset", TX_DONGLE, feature_status);
+ 
+ static struct attribute *tx_dongle_attrs[] = {
+ 	&dev_attr_reset_tx_dongle.attr,
 -- 
 2.56.1.708.g77570a6a1d-goog
 
