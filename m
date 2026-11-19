@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795107822;
-	b=p+GjBJfV+82Egk9jT5QCPXDuXpvF8Z5+5m8hsfYg3zv49TFq9XCm12rXR4j8mWH+R/w7
-	 m2E0vu/Uqb2Nepnjs4wyQCEt1/vQFJq5rStwuuxa9SeWEo6/XzjsOOgyy16uJ1ltuSJZE
-	 XQeJyhAho9kTXk6EAeAS3nu5JQu+JfOXeU6FxKkAbdxLsdYFx7rUGXEmkp5oT94IgdLSE
-	 +qQqZAElUKK/1z63EpLmOkjPwbhY+UGTgOFVQr6FISVe+92TrF853FtTetvPohPUgk2Hk
-	 uhbOat8JqMlEyVNTo7kvvL9WJPRQQKrcbXIQIhPMArqjhQES+uxcevTksKmcow+8yow==
+	t=1795107827;
+	b=iyJ7nZOLLxLYgEwQdEc4bEWR0Ql0M8+kYFWjbafYXn+XROW4HyRILXn7UEJ2Jg1Ybi1k
+	 ARFasswm9UL1iYTdDwDsyIcRZTNTT/4hg0PAPjCmdRNXmwsVA9+IwTRgdnHyDBBhg8tRd
+	 KGxPh+oQc203DZ0HwMW1KHLUPcQtFoYz+I+N03nlKrTcaEBRN1u5JIKLENihVaosP/cN+
+	 tA78Z+hMTs2Na9lS35RSt3DGGUx5qr+5AeJ8QHwlA4thWq1QfohV6Ezd8M5Q0eUCeH9Qe
+	 A2ee9jJc8iGZ5/BbL+L6RCY8q1InVl39ACzk3XxKzY66Z50EFEfjN9r3ExciwN0N41A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795107822;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795107827;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=Qy2irnGqx6K+sOHQKn/6LJjKtvMxLRwvuq6H13mT8VU=;
-	b=iQuCG+vbtIfWh0PO+nrliZLZKt2+sQovf1VAUpQlRvcPVXeaxqZa40lLlZZ50Hr5ng3A
-	 fE7frzYA9GmCEpKslTZ3DT8Z51/TVvTJNq3+EtdApCI2x1AwB1yzeXKk/LFrpkCC46ETF
-	 VstzWD2PVDcKgDZ/GUUCd87hxc96t5EE2VDaoBhNHBbYkOBwbd3GRmSpMg3NwW6kPrMvY
-	 iunmUxEh8FNWHAE/11v5yukT4+p/Wn7ifhObhssCoc65SJlviR+QDKGZV/i/ze2aFIAFa
-	 QcQTJEF+fP8SGMGFGVz3yG1mMWF+kaBvHGR4vQl5j75ffA4+h69q2tSVbMteGjK3EeA==
+	bh=RoORXzLb277Rdk0jDhn23CA3scGInU/7CE/j8ILPC2U=;
+	b=qhp2VSmPadV/JCKlXh3/hc9HqjnfMa57V+l63oK/siAa6rNyucZYHiJISN4w6Cphbq63
+	 cWI5Q/dGSa+1IBnFnWJS3Qf4ZqrDJ/hLuvH5QvzgOPc3dPVueow2u2WBcha9SAMmm+4+N
+	 TRke+d7ZIDGFHhSMK2Ei2krc5Sx6K526WEM4Yrgtyb1vRxkfamgFAsCb8QMi19zMbwp3f
+	 bz7QhdfbPFgApvfB4Fgumypz1nwHmX6veq4qb+x7QgnWkrk45tWngj+7oCRo/D34m2QM9
+	 WV8vbX89pBNK2xNLtZpThwxAVfut8Askat+jo8M2PPz2oRJ0AwiEyuYrv8RuKt7TLcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bIXfaBJc;
-	arc=none smtp.remote-ip=209.85.210.71
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lIaqNmAI;
+	arc=none smtp.remote-ip=74.125.82.70
+Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69013606A325
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:03:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69013606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A10606A326
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:03:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4A10606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bIXfaBJc
-Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-847e2926d94so2145a34.0
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:03:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lIaqNmAI
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1b29df78132so2585006c88.1
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:03:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795107820; x=1795712620; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795107826; x=1795712626; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Qy2irnGqx6K+sOHQKn/6LJjKtvMxLRwvuq6H13mT8VU=;
-        b=bIXfaBJc8Pzk784USFXmNAV1YPk9PHz+orJHUyA3zhtsaKjbhu46s2DhdD8YX0s+XI
-         S4zUNwFpY3fQoVGmt/p8couL3fUZfB7UiDr7DYXRhtWEhtY9+ZMdMVIm6K0CJHLKbA5r
-         8GUTOISMIWPi4SjERiSWuAHc8atVH5zqjwE2wxljWBrLqewA1pTI/1t0JsJWSYP74rnf
-         4QizrVZoCI6dbzpEdkxn7vlJsYGofSEOfOszqghatxoV3R0ZH3o6ABlqI4JjQH0otmUe
-         0mWo9lxEtEFnYwja3lx7PzgFV+NvSsdJxgpJaWyfuvY+LAEVSTaplmVTcuxJjI1BzgrD
-         ZFAQ==
+        bh=RoORXzLb277Rdk0jDhn23CA3scGInU/7CE/j8ILPC2U=;
+        b=lIaqNmAIK+gIEJCMe7kzOpqUcyvWCRqczlfb9ySqMwlNTLufU0QkQDc+dTugLSSK7G
+         3KzN142GJZI0CAFsXgFd286s7ObIez9X9y1QY6A63j8X8TRG3JuyJE/NUxb7Q+7XbJgv
+         U/On2b1ww0klzcH+JH3dTPD0UuKbUJqkANR/Zzg/34thl0mdaCssCgpptg2ie6juSzTr
+         4SkQO+6VCo3uI0ejPgMI0PaYT4mWXg+rdzkou3bR1zvo2vuWYCtEqf10tXBCIutO01O/
+         dZ/uYcIuQULnScOo8MYOq2XJZMe/vYllbZEFJvyLFx0qtid4mknTGbWijUb+QwPF2SpY
+         zUow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795107820; x=1795712620;
+        d=1e100.net; s=20260707; t=1795107826; x=1795712626;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Qy2irnGqx6K+sOHQKn/6LJjKtvMxLRwvuq6H13mT8VU=;
-        b=eRygWn4LlNUlKXnQsEItG2NsIdT1d0Okbk6M4aKx+OZYfMz9oMhl6DfrrMsngQWfGM
-         QTwnEIJdqnHVFhQDQ8sKmewIPHpHdU07qVGrVUGhsPbmDUWy3IUw0bYcehbIVX7pJNEv
-         DGykjGNx00iCtNvMD+JdzY0rJHvHyGNYHfEDNKZAJ4T4q0H19E1jG4fXP7WZ4RM5xfpQ
-         +xixNYMZTc2xtLuobXwN/v+xs/WdlqPzDgJanef717+Htii9oMA5u7RAI6zLA2tDSxP/
-         EA7JmuwR2s/rWZY+X6hX2z23LuIpHXTHoDjnbC6ukt0JWOsp/CVKghYkAWW9k8UlCZaw
-         jE6A==
-X-Forwarded-Encrypted: i=1; AL+hErFerMIQ1A14Y1esygEDeWTy0tNlaV/mWivD5bPcCC6Z7hfsD9WI+9DQMZSz4FgKur7g/XVX@lists.linux.dev
-X-Gm-Message-State: APuU4Z/9TOI+6c68OlFbGB/BdCZf8//YiGpTcS4OY3m6rpm3D3yoz/EL
-	0uIqrHQGECDcw0I/7b79hQTv2vSRFItimEiRJDWCSZCrkxvLARufWH9AbAR76AjaxIjUipWNg55
-	I3uUqGJu7wA==
-X-Received: from iojj7.prod.google.com ([2002:a05:6602:8207:b0:9e3:4940:4cc3])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:1814:b0:567:ba0d:a565
- with SMTP id 5614622812f47-57a0df4586bmr501975b6e.68.1795107819855; Thu, 19
- Nov 2026 09:03:39 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:03:34 -0800
+        bh=RoORXzLb277Rdk0jDhn23CA3scGInU/7CE/j8ILPC2U=;
+        b=zgPHy9l7g339y2tbde7TuJlrtXP0PYZ9buOCqTyDNoY8ovhFHJPAyk+PiwM/xrVnyk
+         lfgVZAvtsMN7ZzUj8TUtJz3QN83YbaDSiztKtRqWM9M4cc5lKoXOKt4r+mBusW26Cuy0
+         NQn+UsGDCyVeTIyLdx2Kdu5n4DlJ6vvyanVZQMCy4r9Y8Fg1VNe5bSWwbImMmmTUqrnS
+         0l0QeWoKl8MJG/n/5X/s71L3PYCUZgs49an1vheUZUDenBc7cG8TCgUfDnMeObAAi1Wc
+         s5FomDMm3xRbA81NvEo8TKpZZHCdhrp/aqhkR4auvkTaOz1e7aiW9CoZTIKymLi7ORit
+         x8Mg==
+X-Forwarded-Encrypted: i=1; AL+hErGtZ4eMU3UIVOqGBOwgWdAlKJY3X4aYysKuwDlghEsJGxo1tF2NCJjQdgcn8EpOpmQDqlwA@lists.linux.dev
+X-Gm-Message-State: APuU4Z/lX6WfTpZBUGuNt0N75ea5WJeKjR+XXM43Cp+Ff40XRIoXlO5U
+	D+m04bVp0CxveidSnNsBMklMiOijIWXVlY31eHblYHu649GwREL2TKmMfbM4IUtIpGqOeErwSq/
+	sp7rZqPMWZw==
+X-Received: from dldyq18-n1.prod.google.com ([2002:a05:701b:4552:10b0:195:d59a:94bc])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:2083:10b0:164:4e36:f956
+ with SMTP id a92af1059eb24-1b5568b47a4mr238242c88.16.1795107825531; Thu, 19
+ Nov 2026 09:03:45 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:03:42 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,657 +77,148 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170335.1508386-1-irogers@google.com>
-Subject: [PATCH] drm/amd/pm: Fix SMU_FEATURE_BIT_INIT overwriting feature bits
+Message-ID: <20261119170342.1508789-1-irogers@google.com>
+Subject: [PATCH net] sctp: initialize new_value in custom proc_dointvec sysctl handlers
 From: Ian Rogers <irogers@google.com>
-To: Kenneth Feng <kenneth.feng@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+To: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
 	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-SMU_FEATURE_BIT_INIT(bit) expands to a designated array initializer:
+proc_sctp_do_rto_min(), proc_sctp_do_rto_max(), proc_sctp_do_auth(),
+proc_sctp_do_udp_port(), and proc_sctp_do_probe_interval() point
+tbl.data at an uninitialized stack variable new_value on writes before
+calling proc_dointvec().
 
-  [bit / BITS_PER_LONG] = (1UL << (bit % BITS_PER_LONG))
+proc_dointvec() can return 0 without writing to tbl.data, for example on
+a zero-length write (*lenp == 0) or on a write at a non-zero file offset
+ignored by proc_first_pos_non_zero_ignore() (such as pwrite(fd, "1\n",
+2, 1) or a split write where the trailing newline is written separately).
 
-In C, listing multiple designated initializers for the same array index
-within an initializer list overwrites the previous value for that index
-instead of ORing the bits together. Because amdgpu's Makefile passes
--Wno-override-init, these collisions went unnoticed at build time.
+When that happens:
+- proc_sctp_do_auth() unconditionally stores the uninitialized stack int
+  into net->sctp.auth_enable and sctp_sk(sk)->ep->auth_enable, both
+  corrupting SCTP authentication state and leaking 4 bytes of kernel
+  stack memory back on subsequent sysctl reads.
+- proc_sctp_do_rto_min(), proc_sctp_do_rto_max(),
+  proc_sctp_do_udp_port(), and proc_sctp_do_probe_interval() validate
+  the uninitialized value and overwrite the netns setting whenever stack
+  bytes happen to fall within range.
+- proc_sctp_do_udp_port() also stops and restarts the UDP encapsulation
+  socket even when the port number did not change.
 
-Across all 17 *_dpm_features tables in swsmu, every DPM feature bit in
-each unsigned long word except the last one listed was silently dropped
-from the static bitmap (for example, 10 of 11 feature bits in
-smu_v14_0_0_dpm_features and smu_v15_0_0_dpm_features were zeroed). As
-a result, *_is_dpm_running() only tested at most one feature bit per
-word and could falsely report DPM as disabled when other listed DPM
-features were active.
+Initialize new_value to the current netns setting before calling
+proc_dointvec() (matching proc_dobool()), and skip tearing down and
+restarting the UDP encapsulation socket in proc_sctp_do_udp_port() when
+new_value equals net->sctp.udp_port.
 
-Replace SMU_FEATURE_BIT_INIT() with a variadic SMU_FEATURE_BITS_INIT()
-macro that ORs the requested feature bits into the two 64-bit halves of
-the 128-bit bitmap at compile time (with compile-time range checks
-against SMU_FEATURE_MAX) and emits the words via BITMAP_FROM_U64() so
-both 64-bit and 32-bit little/big-endian targets are handled properly.
-Update all 17 *_dpm_features definitions to use SMU_FEATURE_BITS_INIT().
-
-Found by enabling Clang's -Winitializer-overrides on an x86_64
+Found by enabling Clang's -Wconditional-uninitialized on an x86_64
 allyesconfig build, with AI coding assistant help to audit the warning
-and prepare the fix. Verified with a standalone C bitmap test and
-incremental Clang builds; not runtime-tested on AMD GPU hardware.
+and prepare the fix. Build-tested with Clang; not runtime-tested.
 
-Fixes: e37fb0f81838 ("drm/amd/pm: Use feature bits data structure")
-Fixes: 7b88453a476c ("drm/amd/pm: Change get_enabled_mask signature")
-Fixes: 2beedc3a92b7 ("drm/amd/pm: Add initial support for smu v15_0_8")
+Fixes: 4f3fdf3bc59c ("sctp: add check rto_min and rto_max in sysctl")
+Fixes: b14878ccb7fa ("net: sctp: cache auth_enable per endpoint")
+Fixes: 046c052b475e ("sctp: enable udp tunneling socks")
+Fixes: d1e462a7a5f3 ("sctp: add probe_interval in sysctl and sock/asoc/transport")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h | 47 +++++++++++++------
- .../gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c | 17 ++++---
- .../amd/pm/swsmu/smu11/cyan_skillfish_ppt.c   | 11 ++---
- .../gpu/drm/amd/pm/swsmu/smu11/navi10_ppt.c   | 21 ++++-----
- .../amd/pm/swsmu/smu11/sienna_cichlid_ppt.c   | 21 ++++-----
- .../gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c  | 23 ++++-----
- .../drm/amd/pm/swsmu/smu13/aldebaran_ppt.c    | 21 ++++-----
- .../drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c  | 17 +++----
- .../drm/amd/pm/swsmu/smu13/smu_v13_0_12_ppt.c | 11 ++---
- .../drm/amd/pm/swsmu/smu13/smu_v13_0_4_ppt.c  | 27 +++++------
- .../drm/amd/pm/swsmu/smu13/smu_v13_0_5_ppt.c  | 23 ++++-----
- .../drm/amd/pm/swsmu/smu13/smu_v13_0_6_ppt.c  | 21 ++++-----
- .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  | 17 +++----
- .../drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c  | 23 ++++-----
- .../drm/amd/pm/swsmu/smu14/smu_v14_0_0_ppt.c  | 27 +++++------
- .../drm/amd/pm/swsmu/smu14/smu_v14_0_2_ppt.c  | 13 +++--
- .../drm/amd/pm/swsmu/smu15/smu_v15_0_0_ppt.c  | 27 +++++------
- .../drm/amd/pm/swsmu/smu15/smu_v15_0_8_ppt.c  | 13 +++--
- 18 files changed, 177 insertions(+), 203 deletions(-)
+ net/sctp/sysctl.c | 39 +++++++++++++++++++++++----------------
+ 1 file changed, 23 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h b/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h
-index 9d47d2ab1b49..51c799192f00 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h
-@@ -23,6 +23,9 @@
- #define __AMDGPU_SMU_H__
+diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+index 2b94c211427d..0c33f05fa532 100644
+--- a/net/sctp/sysctl.c
++++ b/net/sctp/sysctl.c
+@@ -425,8 +425,9 @@ static int proc_sctp_do_rto_min(const struct ctl_table *ctl, int write,
+ 	struct net *net = container_of(ctl->data, struct net, sctp.rto_min);
+ 	unsigned int min = *(unsigned int *) ctl->extra1;
+ 	unsigned int max = *(unsigned int *) ctl->extra2;
++	int new_value = net->sctp.rto_min;
+ 	struct ctl_table tbl;
+-	int ret, new_value;
++	int ret;
  
- #include <linux/acpi_amd_wbrf.h>
-+#include <linux/args.h>
-+#include <linux/bitmap.h>
-+#include <linux/build_bug.h>
- #include <linux/units.h>
+ 	memset(&tbl, 0, sizeof(struct ctl_table));
+ 	tbl.maxlen = sizeof(unsigned int);
+@@ -453,8 +454,9 @@ static int proc_sctp_do_rto_max(const struct ctl_table *ctl, int write,
+ 	struct net *net = container_of(ctl->data, struct net, sctp.rto_max);
+ 	unsigned int min = *(unsigned int *) ctl->extra1;
+ 	unsigned int max = *(unsigned int *) ctl->extra2;
++	int new_value = net->sctp.rto_max;
+ 	struct ctl_table tbl;
+-	int ret, new_value;
++	int ret;
  
- #include "amdgpu.h"
-@@ -499,21 +502,37 @@ struct smu_feature_bits {
- };
+ 	memset(&tbl, 0, sizeof(struct ctl_table));
+ 	tbl.maxlen = sizeof(unsigned int);
+@@ -489,8 +491,9 @@ static int proc_sctp_do_auth(const struct ctl_table *ctl, int write,
+ 			     void *buffer, size_t *lenp, loff_t *ppos)
+ {
+ 	struct net *net = container_of(ctl->data, struct net, sctp.auth_enable);
++	int new_value = net->sctp.auth_enable;
+ 	struct ctl_table tbl;
+-	int new_value, ret;
++	int ret;
  
- /*
-- * Helpers for initializing smu_feature_bits statically.
-- * Use SMU_FEATURE_BIT_INIT() which automatically handles array indexing:
-- *   static const struct smu_feature_bits example = {
-- *       .bits = {
-- *           SMU_FEATURE_BIT_INIT(5),
-- *           SMU_FEATURE_BIT_INIT(10),
-- *           SMU_FEATURE_BIT_INIT(65),
-- *           SMU_FEATURE_BIT_INIT(100)
-- *       }
-- *   };
-+ * Helpers for initializing smu_feature_bits statically:
-+ *   static const struct smu_feature_bits example =
-+ *       SMU_FEATURE_BITS_INIT(5, 10, 65, 100);
-  */
--#define SMU_FEATURE_BITS_ELEM(bit) ((bit) / BITS_PER_LONG)
--#define SMU_FEATURE_BITS_POS(bit) ((bit) % BITS_PER_LONG)
--#define SMU_FEATURE_BIT_INIT(bit) \
--	[SMU_FEATURE_BITS_ELEM(bit)] = (1UL << SMU_FEATURE_BITS_POS(bit))
-+static_assert(SMU_FEATURE_MAX == 128);
-+#define __SMU_FEAT_U64(w, b) \
-+	(BUILD_BUG_ON_ZERO((unsigned int)(b) >= SMU_FEATURE_MAX) + \
-+	 (((b) / 64 == (w)) ? BIT_ULL((b) % 64) : 0ULL))
-+#define __SMU_FEAT_OR_1(w, b)		__SMU_FEAT_U64(w, b)
-+#define __SMU_FEAT_OR_2(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_1(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_3(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_2(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_4(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_3(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_5(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_4(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_6(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_5(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_7(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_6(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_8(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_7(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_9(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_8(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_10(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_9(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_11(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_10(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_12(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_11(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_13(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_12(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_14(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_13(w, __VA_ARGS__))
-+#define __SMU_FEAT_OR_15(w, b, ...)	(__SMU_FEAT_U64(w, b) | __SMU_FEAT_OR_14(w, __VA_ARGS__))
-+#define __SMU_FEAT_WORD(w, ...) \
-+	(CONCATENATE(__SMU_FEAT_OR_, COUNT_ARGS(__VA_ARGS__))(w, __VA_ARGS__))
-+#define SMU_FEATURE_BITS_INIT(...) { \
-+	.bits = { \
-+		BITMAP_FROM_U64(__SMU_FEAT_WORD(0, __VA_ARGS__)), \
-+		BITMAP_FROM_U64(__SMU_FEAT_WORD(1, __VA_ARGS__)), \
-+	} \
-+}
+ 	memset(&tbl, 0, sizeof(struct ctl_table));
+ 	tbl.maxlen = sizeof(unsigned int);
+@@ -522,8 +525,9 @@ static int proc_sctp_do_udp_port(const struct ctl_table *ctl, int write,
+ 	struct net *net = container_of(ctl->data, struct net, sctp.udp_port);
+ 	unsigned int min = *(unsigned int *)ctl->extra1;
+ 	unsigned int max = *(unsigned int *)ctl->extra2;
++	int new_value = net->sctp.udp_port;
+ 	struct ctl_table tbl;
+-	int ret, new_value;
++	int ret;
  
- enum smu_feature_list {
- 	SMU_FEATURE_LIST_SUPPORTED,
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-index edb0393505ba..770717356780 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-@@ -69,15 +69,14 @@
+ 	memset(&tbl, 0, sizeof(struct ctl_table));
+ 	tbl.maxlen = sizeof(unsigned int);
+@@ -541,18 +545,20 @@ static int proc_sctp_do_udp_port(const struct ctl_table *ctl, int write,
+ 			return -EINVAL;
  
- static int arcturus_init_ppt_limits(struct smu_context *smu);
+ 		mutex_lock(&sctp_sysctl_mutex);
+-		net->sctp.udp_port = new_value;
+-		sctp_udp_sock_stop(net);
+-		if (new_value) {
+-			ret = sctp_udp_sock_start(net);
+-			if (ret)
+-				net->sctp.udp_port = 0;
++		if (new_value != net->sctp.udp_port) {
++			net->sctp.udp_port = new_value;
++			sctp_udp_sock_stop(net);
++			if (new_value) {
++				ret = sctp_udp_sock_start(net);
++				if (ret)
++					net->sctp.udp_port = 0;
++			}
++
++			/* Update the value in the control socket */
++			lock_sock(sk);
++			sctp_sk(sk)->udp_port = htons(net->sctp.udp_port);
++			release_sock(sk);
+ 		}
+-
+-		/* Update the value in the control socket */
+-		lock_sock(sk);
+-		sctp_sk(sk)->udp_port = htons(net->sctp.udp_port);
+-		release_sock(sk);
+ 		mutex_unlock(&sctp_sysctl_mutex);
+ 	}
  
--static const struct smu_feature_bits arcturus_dpm_features = {
--	.bits = { SMU_FEATURE_BIT_INIT(FEATURE_DPM_PREFETCHER_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_MP0CLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_XGMI_BIT) }
--};
-+static const struct smu_feature_bits arcturus_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DPM_PREFETCHER_BIT,
-+			      FEATURE_DPM_GFXCLK_BIT,
-+			      FEATURE_DPM_UCLK_BIT,
-+			      FEATURE_DPM_SOCCLK_BIT,
-+			      FEATURE_DPM_MP0CLK_BIT,
-+			      FEATURE_DPM_FCLK_BIT,
-+			      FEATURE_DPM_XGMI_BIT);
+@@ -564,8 +570,9 @@ static int proc_sctp_do_probe_interval(const struct ctl_table *ctl, int write,
+ {
+ 	struct net *net = container_of(ctl->data, struct net,
+ 				       sctp.probe_interval);
++	int new_value = net->sctp.probe_interval;
+ 	struct ctl_table tbl;
+-	int ret, new_value;
++	int ret;
  
- #define smnPCIE_ESM_CTRL			0x111003D0
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/cyan_skillfish_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/cyan_skillfish_ppt.c
-index bb9620666dae..693ae98f7b17 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/cyan_skillfish_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/cyan_skillfish_ppt.c
-@@ -60,13 +60,10 @@ static struct gfx_user_settings {
- 
- static uint32_t cyan_skillfish_sclk_default;
- 
--static const struct smu_feature_bits cyan_skillfish_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_FCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SOC_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_GFX_DPM_BIT)
--	}
--};
-+static const struct smu_feature_bits cyan_skillfish_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_FCLK_DPM_BIT,
-+			      FEATURE_SOC_DPM_BIT,
-+			      FEATURE_GFX_DPM_BIT);
- 
- static struct cmn2asic_msg_mapping cyan_skillfish_message_map[SMU_MSG_MAX_COUNT] = {
- 	MSG_MAP(TestMessage,                    PPSMC_MSG_TestMessage,			0),
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/navi10_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/navi10_ppt.c
-index f8ca5eb9adc6..886b4f053d43 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/navi10_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/navi10_ppt.c
-@@ -60,18 +60,15 @@
- 
- static int navi10_init_ppt_limits(struct smu_context *smu);
- 
--static const struct smu_feature_bits navi10_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_PREFETCHER_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFX_PACE_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_MP0CLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_LINK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_DCEFCLK_BIT)
--	}
--};
-+static const struct smu_feature_bits navi10_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DPM_PREFETCHER_BIT,
-+			      FEATURE_DPM_GFXCLK_BIT,
-+			      FEATURE_DPM_GFX_PACE_BIT,
-+			      FEATURE_DPM_UCLK_BIT,
-+			      FEATURE_DPM_SOCCLK_BIT,
-+			      FEATURE_DPM_MP0CLK_BIT,
-+			      FEATURE_DPM_LINK_BIT,
-+			      FEATURE_DPM_DCEFCLK_BIT);
- 
- #define SMU_11_0_GFX_BUSY_THRESHOLD 15
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-index b42897e7c066..12ff3f7468d1 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-@@ -62,18 +62,15 @@
- 
- static int sienna_cichlid_init_ppt_limits(struct smu_context *smu);
- 
--static const struct smu_feature_bits sienna_cichlid_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_PREFETCHER_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_LINK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_DCEFCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_MP0CLK_BIT)
--	}
--};
-+static const struct smu_feature_bits sienna_cichlid_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DPM_PREFETCHER_BIT,
-+			      FEATURE_DPM_GFXCLK_BIT,
-+			      FEATURE_DPM_UCLK_BIT,
-+			      FEATURE_DPM_LINK_BIT,
-+			      FEATURE_DPM_SOCCLK_BIT,
-+			      FEATURE_DPM_FCLK_BIT,
-+			      FEATURE_DPM_DCEFCLK_BIT,
-+			      FEATURE_DPM_MP0CLK_BIT);
- 
- #define SMU_11_0_7_GFX_BUSY_THRESHOLD 15
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-index b38bc49c43dd..09ceed17a83a 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
-@@ -60,19 +60,16 @@
- 
- static int vangogh_init_ppt_limits(struct smu_context *smu);
- 
--static const struct smu_feature_bits vangogh_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_CCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VCN_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_FCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SOCCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_MP0CLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_LCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SHUBCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DCFCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_GFX_DPM_BIT)
--	}
--};
-+static const struct smu_feature_bits vangogh_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_CCLK_DPM_BIT,
-+			      FEATURE_VCN_DPM_BIT,
-+			      FEATURE_FCLK_DPM_BIT,
-+			      FEATURE_SOCCLK_DPM_BIT,
-+			      FEATURE_MP0CLK_DPM_BIT,
-+			      FEATURE_LCLK_DPM_BIT,
-+			      FEATURE_SHUBCLK_DPM_BIT,
-+			      FEATURE_DCFCLK_DPM_BIT,
-+			      FEATURE_GFX_DPM_BIT);
- 
- /*
-  * SMU support new GFXOFF residency log interface since version 4.63.62.00,
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-index 1b1ffe19d002..771d5e37a064 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-@@ -64,18 +64,15 @@
- 
- static int aldebaran_init_ppt_limits(struct smu_context *smu);
- 
--static const struct smu_feature_bits aldebaran_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_DATA_CALCULATIONS),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_LCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_XGMI_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_VCN_BIT)
--	}
--};
-+static const struct smu_feature_bits aldebaran_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DATA_CALCULATIONS,
-+			      FEATURE_DPM_GFXCLK_BIT,
-+			      FEATURE_DPM_UCLK_BIT,
-+			      FEATURE_DPM_SOCCLK_BIT,
-+			      FEATURE_DPM_FCLK_BIT,
-+			      FEATURE_DPM_LCLK_BIT,
-+			      FEATURE_DPM_XGMI_BIT,
-+			      FEATURE_DPM_VCN_BIT);
- 
- #define smnPCIE_ESM_CTRL			0x111003D0
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-index e80087e35e19..377ab8ca62fb 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-@@ -67,16 +67,13 @@ static int
- smu_v13_0_0_upload_overdrive_table(struct smu_context *smu,
- 				   OverDriveTableExternal_t *od_table);
- 
--static const struct smu_feature_bits smu_v13_0_0_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_LINK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_MP0CLK_BIT)
--	}
--};
-+static const struct smu_feature_bits smu_v13_0_0_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DPM_GFXCLK_BIT,
-+			      FEATURE_DPM_UCLK_BIT,
-+			      FEATURE_DPM_LINK_BIT,
-+			      FEATURE_DPM_SOCCLK_BIT,
-+			      FEATURE_DPM_FCLK_BIT,
-+			      FEATURE_DPM_MP0CLK_BIT);
- 
- #define MP0_MP1_DATA_REGION_SIZE_COMBOPPTABLE	0x4000
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_12_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_12_ppt.c
-index 1691a0be4f7d..de4112cce046 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_12_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_12_ppt.c
-@@ -60,13 +60,10 @@
- #define SMU_13_0_12_FEA_MAP(smu_feature, smu_13_0_12_feature)                    \
- 	[smu_feature] = { 1, (smu_13_0_12_feature) }
- 
--static const struct smu_feature_bits smu_v13_0_12_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_DATA_CALCULATION),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK)
--	}
--};
-+static const struct smu_feature_bits smu_v13_0_12_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DATA_CALCULATION,
-+			      FEATURE_DPM_GFXCLK,
-+			      FEATURE_DPM_FCLK);
- 
- #define NUM_JPEG_RINGS_FW	10
- #define NUM_JPEG_RINGS_GPU_METRICS(gpu_metrics) \
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_4_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_4_ppt.c
-index a9d558f5b739..f893b82ba109 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_4_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_4_ppt.c
-@@ -56,21 +56,18 @@
- #define SMU_13_0_4_UMD_PSTATE_SOCCLK			938
- #define SMU_13_0_4_UMD_PSTATE_FCLK			1875
- 
--static const struct smu_feature_bits smu_v13_0_4_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_CCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VCN_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_FCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SOCCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_MP0CLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_LCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SHUBCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DCFCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_ISP_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_IPU_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_GFX_DPM_BIT)
--	}
--};
-+static const struct smu_feature_bits smu_v13_0_4_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_CCLK_DPM_BIT,
-+			      FEATURE_VCN_DPM_BIT,
-+			      FEATURE_FCLK_DPM_BIT,
-+			      FEATURE_SOCCLK_DPM_BIT,
-+			      FEATURE_MP0CLK_DPM_BIT,
-+			      FEATURE_LCLK_DPM_BIT,
-+			      FEATURE_SHUBCLK_DPM_BIT,
-+			      FEATURE_DCFCLK_DPM_BIT,
-+			      FEATURE_ISP_DPM_BIT,
-+			      FEATURE_IPU_DPM_BIT,
-+			      FEATURE_GFX_DPM_BIT);
- 
- static struct cmn2asic_msg_mapping smu_v13_0_4_message_map[SMU_MSG_MAX_COUNT] = {
- 	MSG_MAP(TestMessage,                    PPSMC_MSG_TestMessage,			1),
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_5_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_5_ppt.c
-index f95b15af436d..56be6daeb9f8 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_5_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_5_ppt.c
-@@ -51,19 +51,16 @@
- #define mmMP1_C2PMSG_33                                                                                (0xbee261 + 0xb00000 / 4)
- #define mmMP1_C2PMSG_33_BASE_IDX                                                                   0
- 
--static const struct smu_feature_bits smu_v13_0_5_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_CCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_FCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_LCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_GFX_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VCN_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DCFCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SOCCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_MP0CLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SHUBCLK_DPM_BIT)
--	}
--};
-+static const struct smu_feature_bits smu_v13_0_5_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_CCLK_DPM_BIT,
-+			      FEATURE_FCLK_DPM_BIT,
-+			      FEATURE_LCLK_DPM_BIT,
-+			      FEATURE_GFX_DPM_BIT,
-+			      FEATURE_VCN_DPM_BIT,
-+			      FEATURE_DCFCLK_DPM_BIT,
-+			      FEATURE_SOCCLK_DPM_BIT,
-+			      FEATURE_MP0CLK_DPM_BIT,
-+			      FEATURE_SHUBCLK_DPM_BIT);
- 
- static struct cmn2asic_msg_mapping smu_v13_0_5_message_map[SMU_MSG_MAX_COUNT] = {
- 	MSG_MAP(TestMessage,                    PPSMC_MSG_TestMessage,			1),
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_6_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_6_ppt.c
-index 95e288327e45..560909cee9ed 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_6_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_6_ppt.c
-@@ -78,18 +78,15 @@ MODULE_FIRMWARE("amdgpu/smu_13_0_14.bin");
- 
- static int smu_v13_0_6_init_ppt_limits(struct smu_context *smu);
- 
--static const struct smu_feature_bits smu_v13_0_6_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_DATA_CALCULATION),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_LCLK),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_XGMI),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_VCN)
--	}
--};
-+static const struct smu_feature_bits smu_v13_0_6_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DATA_CALCULATION,
-+			      FEATURE_DPM_GFXCLK,
-+			      FEATURE_DPM_UCLK,
-+			      FEATURE_DPM_SOCCLK,
-+			      FEATURE_DPM_FCLK,
-+			      FEATURE_DPM_LCLK,
-+			      FEATURE_DPM_XGMI,
-+			      FEATURE_DPM_VCN);
- 
- #define smnPCIE_ESM_CTRL 0x93D0
- #define smnPCIE_LC_LINK_WIDTH_CNTL 0x1a340288
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
-index 13e7e33fa0eb..693e3987ccf8 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
-@@ -67,16 +67,13 @@ static int
- smu_v13_0_7_upload_overdrive_table(struct smu_context *smu,
- 				   OverDriveTableExternal_t *od_table);
- 
--static const struct smu_feature_bits smu_v13_0_7_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_LINK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DPM_MP0CLK_BIT)
--	}
--};
-+static const struct smu_feature_bits smu_v13_0_7_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DPM_GFXCLK_BIT,
-+			      FEATURE_DPM_UCLK_BIT,
-+			      FEATURE_DPM_LINK_BIT,
-+			      FEATURE_DPM_SOCCLK_BIT,
-+			      FEATURE_DPM_FCLK_BIT,
-+			      FEATURE_DPM_MP0CLK_BIT);
- 
- #define smnMP1_FIRMWARE_FLAGS_SMU_13_0_7   0x3b10028
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-index edc3fedca9f8..18f379a13efa 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-@@ -55,19 +55,16 @@
- #define SMU_13_0_1_UMD_PSTATE_SOCCLK		              678
- #define SMU_13_0_1_UMD_PSTATE_FCLK			          1800
- 
--static const struct smu_feature_bits yellow_carp_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_CCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VCN_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_FCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SOCCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_MP0CLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_LCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SHUBCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DCFCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_GFX_DPM_BIT)
--	}
--};
-+static const struct smu_feature_bits yellow_carp_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_CCLK_DPM_BIT,
-+			      FEATURE_VCN_DPM_BIT,
-+			      FEATURE_FCLK_DPM_BIT,
-+			      FEATURE_SOCCLK_DPM_BIT,
-+			      FEATURE_MP0CLK_DPM_BIT,
-+			      FEATURE_LCLK_DPM_BIT,
-+			      FEATURE_SHUBCLK_DPM_BIT,
-+			      FEATURE_DCFCLK_DPM_BIT,
-+			      FEATURE_GFX_DPM_BIT);
- 
- static struct cmn2asic_msg_mapping yellow_carp_message_map[SMU_MSG_MAX_COUNT] = {
- 	MSG_MAP(TestMessage,                    PPSMC_MSG_TestMessage,			1),
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_0_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_0_ppt.c
-index c83c58d5a2e2..5b4aaf58ac55 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_0_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_0_ppt.c
-@@ -75,21 +75,18 @@
- #define SMU_14_0_4_UMD_PSTATE_GFXCLK			938
- #define SMU_14_0_4_UMD_PSTATE_SOCCLK			938
- 
--static const struct smu_feature_bits smu_v14_0_0_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_CCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VCN_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_FCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SOCCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_LCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SHUBCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DCFCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_ISP_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_IPU_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_GFX_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VPE_DPM_BIT)
--	}
--};
-+static const struct smu_feature_bits smu_v14_0_0_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_CCLK_DPM_BIT,
-+			      FEATURE_VCN_DPM_BIT,
-+			      FEATURE_FCLK_DPM_BIT,
-+			      FEATURE_SOCCLK_DPM_BIT,
-+			      FEATURE_LCLK_DPM_BIT,
-+			      FEATURE_SHUBCLK_DPM_BIT,
-+			      FEATURE_DCFCLK_DPM_BIT,
-+			      FEATURE_ISP_DPM_BIT,
-+			      FEATURE_IPU_DPM_BIT,
-+			      FEATURE_GFX_DPM_BIT,
-+			      FEATURE_VPE_DPM_BIT);
- 
- enum smu_mall_pg_config {
- 	SMU_MALL_PG_CONFIG_PMFW_CONTROL = 0,
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_2_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_2_ppt.c
-index 6a12d6f8c9dd..20aea7b748ed 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_2_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu14/smu_v14_0_2_ppt.c
-@@ -63,13 +63,12 @@ static int smu_v14_0_2_init_ppt_limits(struct smu_context *smu);
- static int smu_v14_0_2_get_overdrive_table(struct smu_context *smu,
- 					   OverDriveTableExternal_t *od_table);
- 
--static const struct smu_feature_bits smu_v14_0_2_dpm_features = {
--	.bits = { SMU_FEATURE_BIT_INIT(FEATURE_DPM_GFXCLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_UCLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_LINK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_SOCCLK_BIT),
--		  SMU_FEATURE_BIT_INIT(FEATURE_DPM_FCLK_BIT) }
--};
-+static const struct smu_feature_bits smu_v14_0_2_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_DPM_GFXCLK_BIT,
-+			      FEATURE_DPM_UCLK_BIT,
-+			      FEATURE_DPM_LINK_BIT,
-+			      FEATURE_DPM_SOCCLK_BIT,
-+			      FEATURE_DPM_FCLK_BIT);
- 
- #define SMU14_DRIVER_IF_VERSION_SMU_V14_0_2 0x2E
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_0_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_0_ppt.c
-index 6e875787434e..14b5cfbec736 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_0_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_0_ppt.c
-@@ -66,21 +66,18 @@
- #define SMU_15_0_UMD_PSTATE_FCLK 1800
- 
- 
--static const struct smu_feature_bits smu_v15_0_0_dpm_features = {
--	.bits = {
--		SMU_FEATURE_BIT_INIT(FEATURE_CCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VCN_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_FCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SOCCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_LCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_SHUBCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_DCFCLK_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_ISP_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_NPU_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_GFX_DPM_BIT),
--		SMU_FEATURE_BIT_INIT(FEATURE_VPE_DPM_BIT)
--	}
--};
-+static const struct smu_feature_bits smu_v15_0_0_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_CCLK_DPM_BIT,
-+			      FEATURE_VCN_DPM_BIT,
-+			      FEATURE_FCLK_DPM_BIT,
-+			      FEATURE_SOCCLK_DPM_BIT,
-+			      FEATURE_LCLK_DPM_BIT,
-+			      FEATURE_SHUBCLK_DPM_BIT,
-+			      FEATURE_DCFCLK_DPM_BIT,
-+			      FEATURE_ISP_DPM_BIT,
-+			      FEATURE_NPU_DPM_BIT,
-+			      FEATURE_GFX_DPM_BIT,
-+			      FEATURE_VPE_DPM_BIT);
- 
- enum smu_mall_pg_config {
- 	SMU_MALL_PG_CONFIG_PMFW_CONTROL = 0,
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_8_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_8_ppt.c
-index 520317453053..3fc2675fa3fd 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_8_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu15/smu_v15_0_8_ppt.c
-@@ -85,13 +85,12 @@
- 
- static int smu_v15_0_8_init_ppt_limits(struct smu_context *smu);
- 
--static const struct smu_feature_bits smu_v15_0_8_dpm_features = {
--	.bits = { SMU_FEATURE_BIT_INIT(FEATURE_ID_DATA_CALCULATION),
--		  SMU_FEATURE_BIT_INIT(FEATURE_ID_DPM_GFXCLK),
--		  SMU_FEATURE_BIT_INIT(FEATURE_ID_DPM_UCLK),
--		  SMU_FEATURE_BIT_INIT(FEATURE_ID_DPM_FCLK),
--		  SMU_FEATURE_BIT_INIT(FEATURE_ID_DPM_GL2CLK) }
--};
-+static const struct smu_feature_bits smu_v15_0_8_dpm_features =
-+	SMU_FEATURE_BITS_INIT(FEATURE_ID_DATA_CALCULATION,
-+			      FEATURE_ID_DPM_GFXCLK,
-+			      FEATURE_ID_DPM_UCLK,
-+			      FEATURE_ID_DPM_FCLK,
-+			      FEATURE_ID_DPM_GL2CLK);
- 
- static const struct cmn2asic_msg_mapping smu_v15_0_8_message_map[SMU_MSG_MAX_COUNT] = {
- 	MSG_MAP(TestMessage,			     PPSMC_MSG_TestMessage,			0),
+ 	memset(&tbl, 0, sizeof(struct ctl_table));
+ 	tbl.maxlen = sizeof(unsigned int);
 -- 
 2.56.1.708.g77570a6a1d-goog
 
