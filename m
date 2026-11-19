@@ -1,64 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795119324;
-	b=5hVLSkpZyTz/uub6aQKrTVuEiD7z1tJSIA7JmXNMKX7ywshRofvIDKTPazngWzCvr3+o
-	 iWWg/fkHnlR4LtqRzZcyUfnfWWUzZcHQQWDJZkMNhvXonpyFJN9B+RYwH6LZJgSRn9K4n
-	 7aHMxuiTTbI7b3llc/sTH+RV0C6IPFPGasuW+iFoxE5w1YD5oPwQn/Xj+31bo1N4C3y3L
-	 VuRC3yim7jvP+zwlEKi63H0dSIMf1qoZ9YpqLgEJXxq3O87tlN46adzgbgPgmg3Art/AK
-	 OAjPMMR8fwwU4vlJcIUGsGMwoz6w2g0dG0W0eLWkD1gPv4R8IW11xPUIwISxMNGiASw==
+	t=1795123914;
+	b=0uTblMHofH+EIVLi19+yIIBREXbs9/G+JCoFOQ5nQZlE3CQCvqGf9Ydh4PSWQKBoFXp9
+	 8TRJ3Oq7FUfc1+I74OeF6gVzhRcgiYWntaPfDYlQ5jOEmNfOwMQJzmPemD0I7etvFD00l
+	 +2KfSTaPmJsHUeVIuWkD8KeNlZkEckZByQgSTFEnvWcHCxyjPz+IMiUYiUp6lFdn/D4X5
+	 /mc70+hiQCGZWbmjoOXE3LI+3IuTGaIiI1pFkrUnFVPEDdc2SUWyhLgzxF7opt0soCfED
+	 JAqrgJEDdNveUvRdnRbanB3bILlfpukiF2E1tfUbVAgg8hOb9TC79ye2QrZl8770zQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795119324;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=P9e055f8FpXxjQzl7FGm//R08dSOJPOnTIJ1la1axUA=;
-	b=1sVmC/rkPmTFLPIstmshH5k9+s13LsK76kRCV5N1JtdPEuaQ4FVmY91kVghlr6zipnxL
-	 rIOPOw3CdIJJhV7DCrcIbBHAaOQA0S0aJ8sbCdJHEM7u2AUwjGfnxuNvW7pebhQZQIi4G
-	 wXD/iNmOl5XAklChoyOP4YdYyUgzT1opEDTqrVyUMMjv7BreJx4acBvOJryV4K7UTuYLf
-	 VvICEploOwL9OG7j+floEIbnOy/pgSB7fc31UBjlTGzgmz0UqTCEYlHrV8LZx/Q6uk/7e
-	 LZXUK5LU2AGWIiDHIep/DsaamnZKK3yKMFKDRcK8ijKvLM/F0UVLlBLFPIDNpVbp6mA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795123914;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=dQz21Aw4+aAA80ySXmQcgJRTmMnpZE5b7/pXJb+9Veo=;
+	b=2GFzA0SutrkZjKL7Fnn872gfDZk32cMZ7zHUslVkGzbjf7BuUpaVWZMNXdMo+nqhkRZT
+	 9de5WvoH5Ng2RU6boPx9MxWCyEOuqxqZ7hhH1SDGdGUhd7vzLJznzEzdZ1NMpVi4pAVIu
+	 Mx84rLk5JHPUbb3uImkZQazmV+Tk5dX6/UQvk2RRA2szKtzz5yLactw8AbdCzkZCgurG1
+	 AF28UC78RNuNBj56GANn9HKnfr8Yi/jTjrifkF/075kJ99kr5iHb5g8nteSRYz3rpx/hF
+	 q4h+YuroKck+b2llCsVtcoibs76WAPKmKdBBCtZlwmaPlyc1o+7NhJ2lNLjj8rSSv8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=lunn.ch;
-	spf=pass smtp.mailfrom=lunn.ch;
-	dkim=pass header.d=lunn.ch header.i=@lunn.ch header.a=rsa-sha256 header.s=20171124 header.b=ogf15uQg;
-	arc=none smtp.remote-ip=156.67.10.101
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eAxy9vGD;
+	arc=none smtp.remote-ip=91.218.175.116
+Received: from mta0.migadu.com (out-116.mta0.migadu.com [91.218.175.116])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFA1606A324;
-	Thu, 19 Nov 2026 20:15:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CFA1606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50EF606A338
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 21:31:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E50EF606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=lunn.ch header.i=@lunn.ch header.a=rsa-sha256 header.s=20171124 header.b=ogf15uQg
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=P9e055f8FpXxjQzl7FGm//R08dSOJPOnTIJ1la1axUA=; b=ogf15uQgRPM94ev6Vw00jNxtTu
-	m9k9AqDas+wfj47ZBC7y+u18yATP1jRtfV8PAI3sC7wgzehSU4h4p7Zi6AEe4VNdVbmNW1UZIX4ZH
-	Ob2P5AkRpQepIupR58s9etK+rpUXbpsbMCxGvWgALT3XBBT24vhIoDSw39WqcnHUxmjM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1xU8XK-00077g-Qh; Thu, 19 Nov 2026 21:15:14 +0100
-Date: Thu, 19 Nov 2026 21:15:14 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Ian Rogers <irogers@google.com>
-Cc: Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
-Subject: Re: [PATCH net] tg3: Propagate PHY reset retry failures in
- tg3_phy_reset_5703_4_5()
-Message-ID: <d925c794-579f-4b7a-9ff9-8502d79b97ca@lunn.ch>
-References: <20261119171021.1535172-1-irogers@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eAxy9vGD
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=3JL7T3LbQWO+ElSkWVtEQZdOEEkcR0/m7CwfXfyLAvo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795123911; v=1; x=1795728711;
+ b=eAxy9vGDabS7cR5Dv+e+Cm40CiOB/qDr1Xjs99phEVmzTLCNQEU/SgDkeQc9EWyJXgyw9BjX
+ XCGxQOxZVSvvz2EMhmME+rm4RZ3UMPjWPV45yZVm/8NQsaDj8KW8B1BvwgHt5TYPCpEoeWJL4eQ
+ ku5hUskJIy83Ba4N9dKlTuO0=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by mta12.migadu.com with ESMTPS id 8e9d3d94edded809;
+	Thu, 19 Nov 2026 21:31:50 +0000
+X-Mizu-Trace-ID: 8e9d3d94edded809
+X-Migadu-Flow: FLOW_OUT
+From: Usama Arif <usama.arif@linux.dev>
+To: tglx@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	kees@kernel.org
+Cc: hpa@zytor.com,
+	gustavoars@kernel.org,
+	ardb@kernel.org,
+	hca@linux.ibm.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	riel@surriel.com,
+	shakeel.butt@linux.dev,
+	kernel-team@meta.com,
+	rkeilty@meta.com,
+	atish.patra@linux.dev,
+	dgreid@meta.com,
+	Usama Arif <usama.arif@linux.dev>
+Subject: [PATCH 0/2] x86/kstack_erase: Faster stack poisoning, plus a startup build fix
+Date: Thu, 19 Nov 2026 13:31:06 -0800
+Message-ID: <20261119213147.1094488-1-usama.arif@linux.dev>
+X-Mailer: git-send-email 2.53.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -68,23 +84,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261119171021.1535172-1-irogers@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 19, 2026 at 09:10:21AM -0800, Ian Rogers wrote:
-> In tg3_phy_reset_5703_4_5(), the 10-iteration retry loop discards the
-> return value of both tg3_readphy() calls on continue and never checks
-> err after the loop terminates. If MDIO reads fail across all 10
-> retries,
+With KSTACK_ERASE, every return to user space poisons the part of the
+task stack used since the previous return, one 8-byte store at a time.
+On Meta hosts running many small VMs, that loop costs about 1.5% of
+non-idle host kernel cycles. Most of it is on the way out of futex,
+epoll, procfs and socket syscalls that go 1-2 KiB deep.
 
-If it fails 10 times, the hardware is dead, and there is no
-recovery. The best you can do is make the probe fail.
+Patch 2 makes x86-64 use REP STOSQ for spans above 512 bytes, through
+the arch hook that s390 already uses. Shorter spans keep the loop, and
+the range and value written do not change.
 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Patch 1 is an independent build fix I found while testing patch 2 with a
+small KSTACK_ERASE_TRACK_MIN_SIZE. The startup code still uses the
+pre-rename DISABLE_STACKLEAK_PLUGIN, so with Clang, AMD memory
+encryption and a tracking minimum below about 90 bytes, vmlinux fails
+to link. It can be applied on its own.
 
-This clearly does not bother anybody.
+Zen 5c KVM guest, one vCPU, before -> after:
 
-https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+  stackleak_erase() per return to user       71 ns -> 46 ns
+  futex wake/wait ping-pong                  5-7% faster
+  Unix socket sendmsg()/recvmsg() ping-pong  5-8% faster
+  open+read+close of /proc/self/stat         6-8% faster
+  getppid() (spans below 512 bytes)          within 2%
+ 
+Usama Arif (2):
+  x86/boot/startup: Disable kernel stack depth tracking
+  x86/kstack_erase: Use REP STOSQ for large stack fills
 
-	Andrew
+ arch/x86/boot/startup/Makefile   |  2 +-
+ arch/x86/include/asm/processor.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+-- 
+2.53.1-Meta
+
