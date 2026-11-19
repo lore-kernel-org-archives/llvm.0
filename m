@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108066;
-	b=yj4Pua7yojHRC4OzNDAHhg2KZSyBBcRTzsnEjUnS8PypG1gNlWUaudynnWTQWMksHDf1
-	 THo9Pg+XLfw07lvbwkzW7f11E0V8Dioigw0PAAN3NN4eDNwFmrRCSlZlGh+xR84Xec8dz
-	 OuN7cGmS5wFeWTq/+kltQOUI8VdTx8KK7l6nYFFyyV8ZVyOXePn2YjDK4G5+jCkN8tgVt
-	 ncZKXrux0w6IsasTKIhbkOJ3+rxio7Q9zWZ3tTOWkeFfGZG0HTfvxiRBqWug0hqpigTXg
-	 gGRj050QgH0DzeuUPYXFGAx2ZlDfYPO23EzN+eiVYJ+aztBWVqBvuDa/VgE6JI/Q+PA==
+	t=1795108072;
+	b=FHzvWUh3eq9Gr2KGkanRW9XGa1vjIzmTJw06wY7eP+9OxIHDL8nJy+PcIcger7expson
+	 Cxox8P7jjWprzWikmOGuyHLsdz8XCflS1hn4oqbdtXR8JSWERAq8OymJtPTYtLliiSBNF
+	 8Z6bK26DbGdnMgRID5uCv/gZ0ie6/+o3mo1I1zbA1tgK8pbPziRyE0y4IvVQrjvNTuV/0
+	 hF2AIpI4Qx4wuHrmEJeOFyIRLYl96sD5VfnTcTq43zZ1OjGA1u5kO8hsXfdE1+D9oWG0+
+	 envcOVt2EI414v5ijr/8WvwtMUAQUhkPI7sBTMUdTXas3GzqwpOpmlSVgUpWD9T1Yiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108066;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108072;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=2o0ILC3keCwMhrgGZ6aMyUvzYh9D8kgarIcL8NMwQRU=;
-	b=1drUeKlOH/qrMSF+ofvnOsXkDG2jyPR+ak7OqoZWp65CnPfROsrYjaNW7Ijr10Zlml06
-	 nR8rNrapBUoG37++E1dCcRunacvZt37h5R4LZX2scC1J1DNv4VsaU5JKDrcoXzGtWQ7DK
-	 6hUnzdAs/E/RxaNMs2iNcdhs73ZCxemUZle0QtsMvhXX6Mj5MnhzKjhS10l0DUiIdzFvO
-	 O8N0C87VdE+e6Rj2nRMEpA0V8h3AsEl1gQlXU98eGhimSjzKPvFsKM/rF/L2JY2aXfPtr
-	 vT0SwuvThwT1Axkp1mfLLlHJQ6SuCSWjldbHu7bV7qpzcDvuhE7JKCox85QKqoYUBUw==
+	bh=EVZQarvm50DIsaAompovSYSGFvXZlkJfKw1ZreJ7g0U=;
+	b=xLFVAQAWSoPTAjBPLDWW7h8lDYHWlHNwQv0c9tUA4pTyjpQ+ydQzSePhkOSmlSAgOI3T
+	 lHAjLb/+mTCxld4I4+iLt3Hqq4zlayGHCma4DuIkwciUf7ZAh8tuq72ybBNrliTVuVLou
+	 DtCwPi0FWAiulnRxSIOBceGJmFKJMdEwuf6VcSrdcRbINgtCuiwItRrlFlzMLttKdgQKJ
+	 DTHbwub6/mjPePz90w2PfLSLaF8+okACUOETb4HeEJW316ylGnPc4zfjFSFiaZ1VMgf4Z
+	 uzDm+tV2D6jxREIZNJ9rUJLsp6v/x8+gEGIu9RovkDt2eXtJqvYQpssmbICr65LPR4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aKEXxAkm;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TCRh1ATI;
+	arc=none smtp.remote-ip=74.125.82.69
+Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07F2606A320
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:07:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C07F2606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB3B606A33A
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:07:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BB3B606A33A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aKEXxAkm
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-3724667bc16so872451eec.1
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:07:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TCRh1ATI
+Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1b53bfc9534so896348c88.0
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108065; x=1795712865; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795108071; x=1795712871; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2o0ILC3keCwMhrgGZ6aMyUvzYh9D8kgarIcL8NMwQRU=;
-        b=aKEXxAkmF3ynPBI/CJWqKlJF0ZrpSR5cQiUEIOpKRWMsqK9ss+CaHaDmEfddtRj2eO
-         +mT8zExnaBUpS2XvvmNqdTEVID00Qi4gYcJc0JRzlnWeTSZd/SlgVvQkswZL5uAIrjHi
-         ztLQyx6mSBZgcngbXgTYr/IFWLEfrWRAWKaPk4rLAdSCff0M7IFUGoTjEmBQc+2CjDGe
-         Dd+bZaasCaPB3tClHfPuJIwhydX4H3NF9ylRVEQQ2nuCiw5ltJDWxsHYIzsN4UA8R5Gw
-         6zuKVCe9KgAmSPs12RNmNkxEV3p/9iMSN+qmzqdfxGui20xYUPCIveIqn2aCEaKQQ9lG
-         yTLw==
+        bh=EVZQarvm50DIsaAompovSYSGFvXZlkJfKw1ZreJ7g0U=;
+        b=TCRh1ATIc6J15j7ZjbVSz+LO/s0iogTmsk0o7Kr79+rnUnQuC/xKGhjy10VBgwsvyF
+         xrMQYnVZHKJltSQFFxyTDr9ZxWnxOtPt5r7GmD80JyBNRWYmKJ22AEP3JYG2zpw/nx9b
+         Hc9GGHeIRLEV+ty+S7udJXfsFB4qdHDzoqS0ZHR2nTn4Xo63J5XKr4/3x4i5HV1GO+hG
+         i/jDlmT40oRvu/hpOZiEfMNhzsoAsn/9jHHdh4GpIxdgEZR7k6v+kscqMcUyNM8pvnJa
+         YPXEqWGfSEwr5FTGuxZOVsOakau8xlzquBK3Bu0W3O2BETmofgJNP02jAR44kfxV+veI
+         XIKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108065; x=1795712865;
+        d=1e100.net; s=20260707; t=1795108071; x=1795712871;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2o0ILC3keCwMhrgGZ6aMyUvzYh9D8kgarIcL8NMwQRU=;
-        b=HF16eK7S2Zmf3Rco3ziy+KbScBhtHn9lKdRbPXge/nlsCLx4oqoIJDnquSNlBgfn+P
-         aJnPuV/HuPe9ffpodK48Demrvv39kcSO3R4z18W0g7tdPji5RepZLyXY4js10GASIelM
-         AHf7nLydi3B2jNG8hLb9rdOQhcUe0wW3A/RT7f4xhwmFBIfvODGQyuTotQwxeE31/CZS
-         NMpVn2eYI4EFA6eUr+pvW0gsVJg6k95oiVYmxuFhxImHeiVQORWUvjYYqCpSPc40yEzP
-         q9MKwdxR50UCT50ka1S7ccqz3RlBS+70QMpo/sMfqOZAt9pneGvQKdnoPi75k+2uNxzH
-         NObg==
-X-Forwarded-Encrypted: i=1; AL+hErGV5X3iqVwWvq5usee18JR2fp/1c+L1iTdXAdXW0yEcTzY8DFlaLp7EQe/1hHrKKbUVkO/P@lists.linux.dev
-X-Gm-Message-State: APuU4Z8cte04W3iPi/XNdzkN3XQYeZkOm+CXqI6atnyWcTCaGYJ3yn0U
-	NnLq9JrnXD8mQjBaiIBkBCps3kXUZKImUlhbUIYu1D/SL8qLvWrjL7F7eEEjczZ6xZzgPwlKval
-	7iyKcvpBarw==
-X-Received: from dyr9.prod.google.com ([2002:a05:693c:4009:b0:385:23b2:bccf])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:51d4:b0:384:fef7:5876
- with SMTP id 5a478bee46e88-384fef75c78mr1005650eec.24.1795108064646; Thu, 19
- Nov 2026 09:07:44 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:07:41 -0800
+        bh=EVZQarvm50DIsaAompovSYSGFvXZlkJfKw1ZreJ7g0U=;
+        b=mG5ZCWQBScEsfcY/xjyj4GYeTGp3pRUTttvFF3R0AMmMczRAKAbAe/nTPsSsYOxvkw
+         v3iXcv5mx0RcdlxfE6BNfu4wkmAPmOQ+dZaP9ua9d3Cul7711+njmvQpT6c/jbJ7r5iK
+         FFePpTylZzrk8n3RGP/E6KTxmHsAXv6xY+v5LhRNphtVWVk2sraLmgm4M60Y2WsAyPvM
+         CT2A2b7MVAMMZWRL3q+PZ5USsTghMLCwBZOGdEweG/j/TjVhJzYuz5Flwqc2kDFAVE3X
+         VieLtQZwxk366M7K5MVq3vipHNluKI/NjLHGvGoHnEtYb14cwB6sizLXcfbhwCedu4SO
+         TvQg==
+X-Forwarded-Encrypted: i=1; AL+hErEHikxmoSqItcRY92W6cHHzcmqZfapYQUc28EaVvcLASL/x0wqv6Kx8ZIBW6aerSfbdCV95@lists.linux.dev
+X-Gm-Message-State: APuU4Z9n817fLfK8W+0HNENv3W1AAOnugOX0KYfSTccGOVgXyjQU13kK
+	lDC1D1hczomW1M9pc0hjJgzz9Ri3fz2FKDnS5lTfhcKrcFqMbd4Hrq/AuklH1LfhWW3ZhwELPah
+	i/9+VaqxYBQ==
+X-Received: from dleh8.prod.google.com ([2002:a05:701b:4348:b0:1b0:166c:6a91])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:428a:10b0:190:da74:2c89
+ with SMTP id a92af1059eb24-1b5568a287cmr273840c88.21.1795108071104; Thu, 19
+ Nov 2026 09:07:51 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:07:47 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,63 +77,55 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170741.1525395-1-irogers@google.com>
-Subject: [PATCH iwl-net] i40e: ensure owner VSI is found before dereferencing
- in i40e_veb_release()
+Message-ID: <20261119170747.1525767-1-irogers@google.com>
+Subject: [PATCH] firewire: core: widen fw_node max_depth and max_hops to u8
 From: Ian Rogers <irogers@google.com>
-To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc: linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-i40e_veb_release() counts all VSIs attached to veb->seid in 'n', but only
-assigns 'vsi' when I40E_VSI_FLAG_VEB_OWNER is set. If a non-floating VEB
-has a single remaining VSI without I40E_VSI_FLAG_VEB_OWNER (for example
-if the owner VSI was moved or cleared via debugfs switch operations),
-n == 1 passes the 'n != 1' check while 'vsi' remains uninitialized on the
-stack and is immediately dereferenced.
+In bm_work(), FireWire bus management checks
+'root_node->max_hops < ARRAY_SIZE(gap_count_table)' (16) so that IEEE 1394
+topologies with 16 or more hops (up to 63 nodes / 62 hops per IEEE 1394a)
+fall back to expected_gap_count = 63. However, struct fw_node declares
+max_depth and max_hops as 4-bit unsigned bitfields (0..15). On topologies
+with >= 16 hops, update_hop_count() truncates max_depth and max_hops
+modulo 16 (for example 19 hops wraps to 3), causing bm_work() to program a
+too-small gap count (8 instead of 63) and trigger arbitration failures.
 
-Initialize 'vsi' to NULL and refuse to release a non-floating VEB unless
-both n == 1 and vsi != NULL.
+Change max_depth and max_hops from 4-bit bitfields to u8. Because both
+fields occupy existing alignment padding ahead of struct kref in
+struct fw_node, sizeof(struct fw_node) is unchanged.
 
 Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
--Wconditional-uninitialized enabled; fix and changelog drafted with an AI
-coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
--Wconditional-uninitialized; not tested on Intel XL710/X722 hardware.
+-Wtautological-value-range-compare enabled; fix and changelog drafted with
+an AI coding assistant. Verified with an ASan/UBSan C struct-size and
+19-hop topology test, and build-tested under LLVM=1 W=1 (-Werror) and
+-Wtautological-value-range-compare; not tested on physical IEEE 1394
+hardware.
 
-Fixes: 08cdde310e22 ("i40e: Fix broken support for floating VEBs")
+Fixes: 83db801ce8c6 ("firewire: Implement gap count optimization.")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/firewire/core.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index abbc71e815ae..8d4213b7dd92 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -14718,7 +14718,7 @@ static void i40e_veb_clear(struct i40e_veb *veb)
-  **/
- void i40e_veb_release(struct i40e_veb *veb)
- {
--	struct i40e_vsi *vsi, *vsi_it;
-+	struct i40e_vsi *vsi = NULL, *vsi_it;
- 	struct i40e_pf *pf;
- 	int i, n = 0;
+diff --git a/drivers/firewire/core.h b/drivers/firewire/core.h
+index 8b49d7480c37..ca2150f75174 100644
+--- a/drivers/firewire/core.h
++++ b/drivers/firewire/core.h
+@@ -207,8 +207,8 @@ struct fw_node {
+ 	u8 phy_speed:2;	/* As in the self ID packet. */
+ 	u8 max_speed:2;	/* Minimum of all phy-speeds on the path from the
+ 			 * local node to this node. */
+-	u8 max_depth:4;	/* Maximum depth to any leaf node */
+-	u8 max_hops:4;	/* Max hops in this sub tree */
++	u8 max_depth;	/* Maximum depth to any leaf node */
++	u8 max_hops;	/* Max hops in this sub tree */
  
-@@ -14735,7 +14735,8 @@ void i40e_veb_release(struct i40e_veb *veb)
- 	/* Floating VEB has to be empty and regular one must have
- 	 * single owner VSI.
- 	 */
--	if ((veb->uplink_seid && n != 1) || (!veb->uplink_seid && n != 0)) {
-+	if ((veb->uplink_seid && (n != 1 || !vsi)) ||
-+	    (!veb->uplink_seid && n != 0)) {
- 		dev_info(&pf->pdev->dev,
- 			 "can't remove VEB %d with %d VSIs left\n",
- 			 veb->seid, n);
+ 	struct kref kref;
+ 
 -- 
 2.56.1.708.g77570a6a1d-goog
 
