@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795107973;
-	b=02kxh6u8Nhkt0b1ctW7koXFSO2MIhi1e30hdvsL/vMMwFygDQ5/KX9V1k/1gv99SUURF
-	 uKuvVEIiLWI5wXlIZFbL2dE+yijTJSfQ9Yp8nfB1o2evwbPJQqryjEjSP1fFEjS3M90ox
-	 CSZl5X4C+LV03LUPD6U3uHGUn1yyyQydacy/YeCXjAof5fIAkqVdxfmpdFA63iSKzAtR1
-	 DGZPvKFQnjj/jNQcMxNDf0GD85Y6ahGFugwIbVucWxc+rHjPyIbTZ5wJH85R2j/XpB1Ho
-	 GX9g3Ceqko/yhDjEFU/dj/qtPGU53MprQ6JYJBNgz5z408pzmJ2E/wD55hzJ1brrZ8A==
+	t=1795107982;
+	b=I8TIBE0rH5YdiRP1rWP/PXnjiDiEf6D9ZuVGsK4/fWD05l3Zp1wC0BEiFUEjYMMFrtOp
+	 yI8eFbKgWh3Q+3yvZ7D05XXAKGGLqXc4uqH2KYWcarAoYRjpgvpAimaQc09KcJuICMqvH
+	 vX7QXaaPiymC8MIGpOoOOEQUexAvvGm+znmYFAhP4E1/aGD6Pg5D23sCYEN7kKMzGFHI1
+	 4zgTxDG0wWHGkUdAeRb7bbJ+eNYk/zth5UrWTh3c8SRR8LbY5ypFHldnTE2FZ4kojG8jj
+	 f/Ip6SIc734Ko9Y+XmRqampo/3Wja/UMZ0Y/Eb4iPP5b4PGqqI9X3WfaiIJdc6xk68g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795107973;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795107982;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=cnk+S66UzyDHe3QGPtEeIJhvpws/OJ1mh8yUxrgOPRo=;
-	b=TwdFJLBMUUNzY36sV7np9jEXMpO7M8xSc5npbrjG5j1fuDwXE42Ln3SMATAZcbKFo9ki
-	 cSNfEwUCvq6VxnmyqehdYAFPCB/QS7qyWWApEWv9t08+4RNzUGpp7UtseVAOnH2UiiPTu
-	 gI3nMkMIwGjsjBGGJzOJP3GsgjZBa6vqwj+EixnUPMJboe7NBOfIL1DJp27WE9m/43SOx
-	 psXCXA/IJzfYetiWogxCngJQI86HWL8/tEHAYPjYDRDrylR43HRXzIzEPVNMncFBOqrHl
-	 MgevlkAk814qf+oba5dn9NERH4Zc6eqvm2OtqxAiAxSYPAxy3nypqcSCrq6qyRe3cdA==
+	bh=bLopLnqT37BG2OvCBZ1zm5sa3WM/aEFFGJMu/II3YXU=;
+	b=sdVOdU5CzTqiOiYu1g8f4m279Vs4TOj7aD6hQZ9YljvoA1fv5+gjdcQ/yS/O3iqkzxsK
+	 kX5BfTdqifChwM0bLl+U6hLUk0Mg7tt9BU9EjpggesOpCfOeV0KVpSFKz88Rfuh8giVLz
+	 654/e/tA8+P17GOdtGNokyomWwfJQ0fItBgkSUhXZMPvcs6dTRdW7GRAUI1smAaSNxEkY
+	 wbhkH0MhYi6OnjaINLcQZbDR2BkENP+9fR8N0VB9rzgQ8fB9/E7F6lFo+agXAX0EYPfDc
+	 SLwwX7KMH+veBZbMq0+GproHNauogHoOsfMDYVF4HaAOOoAFPq5P9wRtIY01NZDot5g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=md2QTAca;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="iOF/Oeo7";
+	arc=none smtp.remote-ip=209.85.161.69
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A2B606A33D
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:06:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34A2B606A33D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83360606A324
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:06:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83360606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=md2QTAca
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-384c78aa0dbso767834eec.0
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:06:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iOF/Oeo7
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-70273936138so2274742eaf.2
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:06:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795107971; x=1795712771; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795107981; x=1795712781; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cnk+S66UzyDHe3QGPtEeIJhvpws/OJ1mh8yUxrgOPRo=;
-        b=md2QTAcaf4a4qxztTIEQKqzQ0m1FhsS+o6nhHdCPwWqjgujeLwoRTT22H1oidQc7Mj
-         +VszQ8N+U7DIuoU8FXJ9rx4RkSC7s/pD2jp7wYlvivswbhBhX9Nh7rsm/ucTzAs5v1hA
-         5wAUIezIoPX3xVQ0oS/WOIGrfMAqYOT5uozKgFBt4jAhW9KvVhhCgaw4JfAw3yIE3xcT
-         qDywsrxx0nujpLeWS3JhfWkfGS3X1bbs+vEPvlpE16Zqhs4GVrz6QXdNfueV+w63Z7Wo
-         fTdHemkRSUPXUaO1EMr2f6ZRNyum4Xag/NCzYbqTOoI/LySixHcXLA41XV0r6krMrE4A
-         FBrg==
+        bh=bLopLnqT37BG2OvCBZ1zm5sa3WM/aEFFGJMu/II3YXU=;
+        b=iOF/Oeo7Sg3iB8gE3lrEdXwNVIWIBDVvZf41KmTv5fdOtoOT7WwmE5o6OJJzcmbx/J
+         xNX+U4Yhiv3hEvBzNbfqtX7A2d0I7yCVurgu7v+rblq2i1U65jX7tpAHDSX47dt26Z9M
+         hK66H2DWTUPCnoFWitBLAPzE0Zk8pR39MnZrp05ditKaMGDkRar65m5UyonSoX6bBFoS
+         Y1lTKOExxVNzPftMkT3dDQ6JFfF5hDQAYJo87lvkpkkKVbR6Rjf4taLhzfZzvnyRJMpg
+         oH7cZafiIgSX51JUMEagKwAjnSB16KQDpJEAKdyj4Zm/Bo4985F06W0IwM4ODql03UkG
+         YX1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795107971; x=1795712771;
+        d=1e100.net; s=20260707; t=1795107981; x=1795712781;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cnk+S66UzyDHe3QGPtEeIJhvpws/OJ1mh8yUxrgOPRo=;
-        b=EzKYxA3/BxS407mouKEGl5mt+89ApBeEJcJmdG2hpbgYZHtWoHcKLpRpBmEXxIbXeF
-         ZenbMnenFGsoSpBIq+ImETQyagnJPC3tTMXC4zwQiDGlCOmH/tRTeWM6YU7ZLAHm/1Wu
-         hbSel3PDWGklm7Ya1khDLR6qsUp96KKJcRyXXZiaJRpIH0CXuNavYI5WPQfNjon1d7us
-         vEdNTmWjq3x62VlM3Do7AWKISUryX6mmiur7RpmV93Ehub6fM4cjKl+UTRZdMWtdiwvn
-         MEZlu1bXr/bM6vScuzrJFzhOMG2oEmdjqwp3yuBkBZW2hgmqoM91EjdTmP/mR4+TCLR/
-         B4QQ==
-X-Forwarded-Encrypted: i=1; AL+hErFueNbOemrHnkUw3EHbZkByPzCRA85kUasCS+uGNa0GFcOkd97fC9a8umsgCFgG3fn7U2Ez@lists.linux.dev
-X-Gm-Message-State: APuU4Z8imL25vozRe6W3L2a2SKysJypR8BsS7aJDiDMWeOjbqhB9AJSm
-	Sfi1cngm+4fiGlP+PQn+10Z6vaGqZgJpQFb57LgF7pqa0fVgBmDxMwPQrwsgAB2JbaWN9qKkqvD
-	EQD9jUoZhzw==
-X-Received: from dycns21.prod.google.com ([2002:a05:7300:f795:b0:382:8cee:3808])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:648f:b0:380:c3e7:7814
- with SMTP id 5a478bee46e88-3827ff819f7mr6396707eec.7.1795107971055; Thu, 19
- Nov 2026 09:06:11 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:06:05 -0800
+        bh=bLopLnqT37BG2OvCBZ1zm5sa3WM/aEFFGJMu/II3YXU=;
+        b=tkAD/YBoUZ9VR+3yDH2S1yAcrvogD3LukCOdN9DSRoD5iUzfmrdTapdJtG7//9/ErO
+         bzBp7yiNlDyaS7kITVlLAMJWjL/iZEiIM1cu87BMBJNzJ6RNoVbh6WYbnmEkmguRZ8Qo
+         OmvEj3b/6BCFJyC+arYxgJBR0+KDm/ZnzCACu5Pw7eS0ustN3SBFe7hzTMtWNLimQzvZ
+         8CRb8kOBsqSbZIRotLSfbJZjN4K24vuc9JcwGwVFRLf2VzN8a2Jb9MNUTxQFSUWuFGbo
+         zwYWvoxxyr35iq6biZSwtZlky4os+2ZgObuQVE9MFtKHYBmZWHeFLeHZLKXYZ6fNiCjw
+         w1Xg==
+X-Forwarded-Encrypted: i=1; AL+hErEXzoAxRTcBhDXCCwDwGAnHrMBkXKUdEpLxZSsFtab1rEQKYoZeM2XD3LAH7uEo+RvZbohz@lists.linux.dev
+X-Gm-Message-State: APuU4Z8J5tgUnlwNBmoTfH2J/x8Ym/xf2Pkm9HRYJPiYWpsjTJ42jaxp
+	wjo1F+biHhc78ZMPi0nWz1sRtn1EPjHuZ1l2t3ZvqCWNZE5ssh6nsWeTGKuJsu1z3sa8oxziuSm
+	VqlhZc4HB5w==
+X-Received: from oaccw5.prod.google.com ([2002:a05:687c:2705:b0:4ad:bde3:7f14])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6820:1620:b0:716:d2b4:f895
+ with SMTP id 006d021491bc7-71b395258b4mr197475eaf.62.1795107981165; Thu, 19
+ Nov 2026 09:06:21 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:06:13 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,53 +77,82 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170605.1518761-1-irogers@google.com>
-Subject: [PATCH] scsi: aic7xxx: Check ahc->flags instead of ahc->features for AHC_SCB_BTT
+Message-ID: <20261119170613.1519353-1-irogers@google.com>
+Subject: [PATCH net] eth: funeth: Include FEC stats in fun_free_stats_area()
+ DMA free size
 From: Ian Rogers <irogers@google.com>
-To: Hannes Reinecke <hare@suse.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: Dimitris Michailidis <dmichail@fungible.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In ahc_linux_run_command(), the untagged queue throttling check tests
-'(ahc->features & AHC_SCB_BTT) == 0'. However, AHC_SCB_BTT (0x40000) is
-an ahc_flag bit stored in ahc->flags (and tested via ahc->flags at all
-17 other sites across aic7xxx), whereas ahc->features has type
-ahc_feature where bit 0x40000 is AHC_MULTIROLE, which is never set on
-any controller.
+fun_init_stats_area() allocates coherent DMA memory for
+(PORT_MAC_RX_STATS_MAX + PORT_MAC_TX_STATS_MAX + PORT_MAC_FEC_STATS_MAX)
+64-bit counters (632 bytes), whereas fun_free_stats_area() omits
+PORT_MAC_FEC_STATS_MAX and passes 616 bytes to dma_free_coherent(),
+triggering DMA-API debug size-mismatch warnings on teardown.
 
-As a result, the condition is always true even when SCB-space busy-target
-tables are active, needlessly serializing untagged commands per target and
-mismatching the untagged_queues accounting elsewhere in the driver.
-
-Test ahc->flags instead of ahc->features.
+Extract a shared fun_stats_area_size() helper used by both allocation and
+deallocation paths, and cast the leading enum constant to unsigned int to
+avoid cross-enum arithmetic.
 
 Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
 -Wenum-enum-conversion enabled; fix and changelog drafted with an AI
-coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
--Wenum-enum-conversion; not tested on Adaptec Parallel SCSI hardware.
+coding assistant. Build-tested under LLVM=1 W=1 and
+-Wenum-enum-conversion; not tested on Fungible Ethernet hardware.
 
-Fixes: e4e360c325c9 ("[SCSI] remove aic7xxx busyq")
+Fixes: ee6373ddf3a9 ("net/funeth: probing and netdev ops")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/scsi/aic7xxx/aic7xxx_osm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../ethernet/fungible/funeth/funeth_main.c    | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-index d93b522695eb..e12ee18a18d5 100644
---- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
-+++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-@@ -1432,7 +1432,7 @@ ahc_linux_run_command(struct ahc_softc *ahc, struct ahc_linux_device *dev,
- 	 * table in SCB space.
- 	 */
- 	if (!(cmd->flags & SCMD_TAGGED)
--	    && (ahc->features & AHC_SCB_BTT) == 0) {
-+	    && (ahc->flags & AHC_SCB_BTT) == 0) {
- 		int target_offset;
+diff --git a/drivers/net/ethernet/fungible/funeth/funeth_main.c b/drivers/net/ethernet/fungible/funeth/funeth_main.c
+index bad8276d26b0..e0d4e69abfa4 100644
+--- a/drivers/net/ethernet/fungible/funeth/funeth_main.c
++++ b/drivers/net/ethernet/fungible/funeth/funeth_main.c
+@@ -1457,17 +1457,20 @@ void fun_set_ring_count(struct net_device *netdev, unsigned int ntx,
+ 	}
+ }
  
- 		target_offset = cmd->device->id + cmd->device->channel * 8;
+-static int fun_init_stats_area(struct funeth_priv *fp)
++static size_t fun_stats_area_size(void)
+ {
+-	unsigned int nstats;
++	unsigned int nstats = (unsigned int)PORT_MAC_RX_STATS_MAX +
++			      PORT_MAC_TX_STATS_MAX + PORT_MAC_FEC_STATS_MAX;
++
++	return nstats * sizeof(u64);
++}
+ 
++static int fun_init_stats_area(struct funeth_priv *fp)
++{
+ 	if (!(fp->port_caps & FUN_PORT_CAP_STATS))
+ 		return 0;
+ 
+-	nstats = PORT_MAC_RX_STATS_MAX + PORT_MAC_TX_STATS_MAX +
+-		 PORT_MAC_FEC_STATS_MAX;
+-
+-	fp->stats = dma_alloc_coherent(&fp->pdev->dev, nstats * sizeof(u64),
++	fp->stats = dma_alloc_coherent(&fp->pdev->dev, fun_stats_area_size(),
+ 				       &fp->stats_dma_addr, GFP_KERNEL);
+ 	if (!fp->stats)
+ 		return -ENOMEM;
+@@ -1476,11 +1479,8 @@ static int fun_init_stats_area(struct funeth_priv *fp)
+ 
+ static void fun_free_stats_area(struct funeth_priv *fp)
+ {
+-	unsigned int nstats;
+-
+ 	if (fp->stats) {
+-		nstats = PORT_MAC_RX_STATS_MAX + PORT_MAC_TX_STATS_MAX;
+-		dma_free_coherent(&fp->pdev->dev, nstats * sizeof(u64),
++		dma_free_coherent(&fp->pdev->dev, fun_stats_area_size(),
+ 				  fp->stats, fp->stats_dma_addr);
+ 		fp->stats = NULL;
+ 	}
 -- 
 2.56.1.708.g77570a6a1d-goog
 
