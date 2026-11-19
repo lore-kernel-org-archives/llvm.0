@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108245;
-	b=vVdznOVaWOs5VbA2oq4fDgabi43CfcsQo2ojvSdi6E1ggt0yse9nMbg7Jp2OW6YFmCnW
-	 aejwUoum8t3D94vRici9JoOR0g6Aa1aC3vxw0kqmIII2VS1p2YVBivAs2ESnArI87IuXR
-	 Q44eo0yvWyaZhSpZPPXfXNhG5RSFhDHC2rfZSngzzhs2y4UeiEfN8M3Hk/C6L2lAvkP3c
-	 +TiaCIhMSgg8NhyWYVxu08IX3Ak5Sr5RCcKn4y0gObaM8nfThC8Ds66zgfchgTNvY3+1/
-	 K+hcDVUUEeJyE3QN1Vd0OSRmknRiPc4gxQHAWDyJHJc+jMyPAs2JWBBUuaOra4d6ILQ==
+	t=1795108253;
+	b=lLJQBhurMCkKBxXa+PESzb95nHYGKf9KffESG9Tz489E+UIvAiVlKmiucRjlo+LCLrkA
+	 8B8olG3KilUTdGlGxeLO8OYShNRNKS9ETBWIjmHjOHMWDMvaMoibDeFYVDPviuH+io2Nk
+	 eeNXQ2GWmHaHJdCTOHpqrWIHFNyVJ10umlGomsdKLz5bBbQ9voXy8GkloxcHxmt86zO06
+	 e+Hv7JRTS3ArMsiafrwe6jsdCFxHzm7DjnTwoWoj3L71NrVm2k9pXgR1ANS1ZkDj1SC0y
+	 aSamoUQX9TZJr1PqYd4f6tpH+h15n5SGVDvhitgFx7qyUF9n1TQHOBppXexVMuKhRRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108245;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108253;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=Wf/5Oq5mchrTyiDMKcWORLhQhELf6w7llq5mVEibG3E=;
-	b=MKprYOJSMUJ6xyX21euCUlcxRddFLpEa9Pgbrie4RI07WnAf0KvAW/oe1+ukVvPFFR8w
-	 C8G4VwL1aVfJ8pmhEzxcwD3OOrnZUxdjy0N8OHnn0VeIvtS5vKrpOUziBTU1oyxu1GlyG
-	 cDmlx91Bn0tK9ykIWh39KXaHNw3HCwp4zPtpZuLF1q12zjBkLdecqkUQyLPZb4mBNqchb
-	 vlrscyd1tK9xFmfuV7csxhlWmjgDtxfzWvLSZIFVvsUxARoWMrl6t7UF25RBSs0XPHA9i
-	 J2IjXctPvyzXLCw4WVc2ybm1TMvD1TYxWROuiF+Z411N9ZVjy3PzbsoDVhMfkW0E1/g==
+	bh=UgCYURNKZXvnpxT2x6kH2Yd3H2eYME7sOBjpX93BA1E=;
+	b=nIORytBcZ+S3xQstqb3PdywaSHwzf0jIMrUmf1zElKWkaHv1iH3PKviHYhSGtdERpjjs
+	 8OwxPiEM6ANTNkrQXEjpDIbf78Yrc+Yp0uBq0LaS2Sf5j2iwnR9UEHyH+TAi3eRBW1pA0
+	 aiV3FhfzGr1YWHnWSCNEY26pUrY2XlLQyEd1J/6VTXtm8y2vtHhfHQmz/PTLS0xr0k8rf
+	 U76+vUkZO2Swski9h0DLE3/m39BTaDFrrnsJ2bSjHHFAZP9tRzuDrxrY8zkpEwUnJ1moG
+	 MUloJae5BbwCiwEgy30dyoj3nyHNVQ9qV6ja1CSNJnr1xDjLtna/d/4Sd/B7u0n3/0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YvAkXEp1;
-	arc=none smtp.remote-ip=209.85.216.71
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IrN5guVh;
+	arc=none smtp.remote-ip=209.85.160.71
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E62460A3827
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:10:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E62460A3827
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DDA606A624
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:10:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99DDA606A624
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YvAkXEp1
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3b41333cb47so41299a91.0
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:10:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IrN5guVh
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-45e83fd0663so36306fac.1
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:10:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108245; x=1795713045; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795108251; x=1795713051; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Wf/5Oq5mchrTyiDMKcWORLhQhELf6w7llq5mVEibG3E=;
-        b=YvAkXEp1Ks+S1PbJRtZVppZe9y3lzwPy4gC98KolMuHkdmh9/jVrznE5MOKuwteoAG
-         tSUdVchg0Yotto2AqB6MqIvmF4Ob2Yw1QoVrJnuR/j50Ps3BcNL5Mvn42qyVmI4zWIYO
-         yhsq1Stje5cd/+Wj4Wk/RM6RowbUbKaDjNKidT5bxjM7YeLT93tC4xFS8aimFEax3YLK
-         zgO0o6ddPN2vjoq66nOETwwfaFRLzgwhVrusrl0k5Po85d9h4ER1qf7OX41O6LlFnyUP
-         mOiCS4UdHLRodISypDADisinpTaUqYddHCt2rTUx535ZS59FHjRwwdH6FN6psiS0YMM1
-         rW+g==
+        bh=UgCYURNKZXvnpxT2x6kH2Yd3H2eYME7sOBjpX93BA1E=;
+        b=IrN5guVhPH9oE9WgiH4BeQLBHQASliap1vAynBQXb1d1W6TcSXSj+GOr/0sbaHjiDJ
+         9/1yexWJiSLltHAxxjVFd/Uvu4a2yTVjEKT+hU0tOPl8FEheSFMB17jQwm8i32Q5MnQe
+         NqJAWOr0U/Tgh5hCRTapeeIHsOLzKerUTFhIHEWdtA8jJEBo5eYAZNggO5lgm/r51quq
+         eEtNAVgzsYXfYFsxc7pa34duXhkN6sgtzfNSs5coXj1Kgw4/lV8G1qCZeJE+vdtmtCr+
+         DffRvKfX9Ozb4Qudzadoyt+9mxb3ueTyR73foBzmM4+oZwYsXbETNedLAhgp4vwPvdkc
+         5f7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108245; x=1795713045;
+        d=1e100.net; s=20260707; t=1795108251; x=1795713051;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Wf/5Oq5mchrTyiDMKcWORLhQhELf6w7llq5mVEibG3E=;
-        b=bm3XEmZb5W5Kj9/XV/BHbILc/isFyUIMfihZIRNsG5rxy8Jzlbca/M67xvrMRm13vi
-         eUaK+V4puCsJN/SuCb3wXxOd+YgZkqza2FTdD8tDTRHdLS7SIGplDHdr+NsOzcwsrUht
-         y0S3iJCtgc4AgcbuvMzHnx88KHusprmpKD0ac4hpriuGuT55r5ExCYcLQQmB0jTDAE+i
-         21rbCCaZVfu3LW3anZ16Ey4d9gJX4lcDQUtQCP8J+0gHX3gSJyW4DG0syC7PXgDn9zLJ
-         qcNJ+ZiYjro03rhRFyIbsGM1KEILEsq0xw/GukH5ZhnVzH19cPFW/EQE/tNiU5f6WTtO
-         WP/A==
-X-Forwarded-Encrypted: i=1; AL+hErH9hDP5mQBOOGBTu95hl7BxoYPbJvPsoF9WT+mI8dSX5cNyPlfgsbGoihIWs10pGARwWX3t@lists.linux.dev
-X-Gm-Message-State: APuU4Z/2fKxYsAO6qN/A2GIeNRgiHWYHf4CzuX5xjs8GgFxVf62jselC
-	5Q2KfA2gmS01uAqXe4fC6JqR0SzIecKhpxlzW7OHlANaNvsoYgN9oEE5ck9NM2LoIUSU8bxn+Ju
-	kfcDmDduTJg==
-X-Received: from pgfv9-n1.prod.google.com ([2002:a05:6a02:8749:10b0:cd8:5a84:95f])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4d10:b0:3ac:a1c7:20fd
- with SMTP id 98e67ed59e1d1-3b41c7ac351mr40117a91.4.1795108244548; Thu, 19 Nov
- 2026 09:10:44 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:10:41 -0800
+        bh=UgCYURNKZXvnpxT2x6kH2Yd3H2eYME7sOBjpX93BA1E=;
+        b=J2Rh4CPVpXjKcpIBc/I4cenWsla265oFt9RQ9jFm3giGVChDvEvHZcSttn6/3bc62s
+         YjxkMW0LrI77BC7tjAYHBROu0EHhLBY5VhtcghdrHg4NCt/mO9PqqwMhyh55MtxLt8RS
+         Y4ypuR53MyKvQDwnqXYSOPdztrNS+nz9uMQ7QJmKKKgpVuk4bVZAdVYb5vS6UApGObct
+         7RO/SxEms6134vgpPLG+tJTnHzlTfBXf3YixG7xUs1yK8rRjVryJYf/46wFVgdUWcSPE
+         bzT6qLg0Qa5xENUYv6gdlEAhAU2doAUBhLkwoVtIJ7WdRrvrng4TEBuO/QhQz0o7/NIR
+         sAkA==
+X-Forwarded-Encrypted: i=1; AL+hErFx9UGEhpbpkpRJLqYNKOpb3bB6suzYG5v+SECWqL5rToUhP83YY9QVp9OOwuLRzKcUPJjr@lists.linux.dev
+X-Gm-Message-State: APuU4Z9QpjJWAyzdnlceKc7gC01IojQ2mB5ABt9GvJqlSiuZqOFZ/BVu
+	OwsR/cOVAfVMx8eam1z/0lBnLXLvzhQ/YnPXsoEQ8+ZrUPJXUMGWiODZ/F3b+gBPEMs8HngbBMa
+	jbWxAfaQ/iw==
+X-Received: from oadxh9-n1.prod.google.com ([2002:a05:6871:ed09:10b0:4a7:1cc1:e72])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6870:b14d:b0:4a2:47f6:3cbf
+ with SMTP id 586e51a60fabf-4bc7d56ee04mr238017fac.8.1795108251216; Thu, 19
+ Nov 2026 09:10:51 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:10:46 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,52 +77,67 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119171041.1536322-1-irogers@google.com>
-Subject: [PATCH] drm/tidss: Return drm_mode_status values from tidss_oldi_mode_valid()
+Message-ID: <20261119171046.1536673-1-irogers@google.com>
+Subject: [PATCH] drm/msm/dp: Return MODE_BAD instead of -EINVAL from
+ mode_valid callbacks
 From: Ian Rogers <irogers@google.com>
-To: Jyri Sarha <jyri.sarha@iki.fi>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+To: Rob Clark <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov <lumag@kernel.org>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: Abhinav Kumar <abhinav.kumar@linux.dev>, Jessica Zhang <jesszhan0024@gmail.com>, 
+	Sean Paul <sean@poorly.run>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-tidss_oldi_mode_valid() has return type enum drm_mode_status, but
-returns -EINVAL (-22) when the rounded serial clock differs by more
-than 5% and 0 otherwise. When drm_mode_prune_invalid() logs rejected
-modes via drm_get_mode_status_name(), status == -22 computes a
-negative table index (-19) and triggers a WARN_ON().
+msm_dp_display_mode_valid() and msm_edp_bridge_mode_valid() have
+return type enum drm_mode_status, but return -EINVAL (-22) when dp,
+dp->connector, or mode->clock is zero/NULL. If a mode with zero pixel
+clock is validated and pruned, passing -22 to
+drm_get_mode_status_name() computes a negative array index and fires
+WARN_ON().
 
-Return MODE_CLOCK_RANGE and MODE_OK instead, matching
-dispc_vp_mode_valid().
+Return MODE_BAD instead of -EINVAL in both callbacks.
 
-Found via Clang -Wimplicit-int-enum-cast on an x86_64 allyesconfig
-build. Verified by building drivers/gpu/drm/tidss/tidss_oldi.o with
-LLVM=1 W=1 (-Werror) and -Wimplicit-int-enum-cast, and with a
-standalone C reproducer; not runtime-tested on TI DSS OLDI hardware.
+Found via Clang -Wassign-enum on an x86_64 allyesconfig build.
+Verified by building drivers/gpu/drm/msm/dp/dp_display.o and dp_drm.o
+with LLVM=1 W=1 (-Werror) and -Wassign-enum; not runtime-tested on
+Qualcomm Snapdragon DP/eDP hardware.
 
-Fixes: 86db652fc22f ("drm/tidss: Move OLDI mode validation to OLDI bridge mode_valid hook")
+Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
+Fixes: 05d001352733 ("drm/msm/dp: use the eDP bridge ops to validate eDP modes")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/gpu/drm/tidss/tidss_oldi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
+ drivers/gpu/drm/msm/dp/dp_drm.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/tidss/tidss_oldi.c b/drivers/gpu/drm/tidss/tidss_oldi.c
-index 62c9780f7855..3b5046628642 100644
---- a/drivers/gpu/drm/tidss/tidss_oldi.c
-+++ b/drivers/gpu/drm/tidss/tidss_oldi.c
-@@ -322,9 +322,9 @@ tidss_oldi_mode_valid(struct drm_bridge *bridge,
- 	 * we use the same 5% check here.
- 	 */
- 	if (dispc_pclk_diff(mode->clock * 7 * 1000, round_clock) > 5)
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index c0c150e2c575..51649b584573 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -759,7 +759,7 @@ enum drm_mode_status msm_dp_display_mode_valid(struct msm_dp *dp,
+ 
+ 	if (!dp || !mode_pclk_khz || !dp->connector) {
+ 		DRM_ERROR("invalid params\n");
 -		return -EINVAL;
-+		return MODE_CLOCK_RANGE;
++		return MODE_BAD;
+ 	}
  
--	return 0;
-+	return MODE_OK;
- }
+ 	msm_dp_display = container_of(dp, struct msm_dp_display_private, msm_dp_display);
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index c1e4147bfef1..dd4e8426cfe0 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -251,7 +251,7 @@ static enum drm_mode_status msm_edp_bridge_mode_valid(struct drm_bridge *bridge,
  
- static const struct drm_bridge_funcs tidss_oldi_bridge_funcs = {
+ 	if (!dp || !mode_pclk_khz || !dp->connector) {
+ 		DRM_ERROR("invalid params\n");
+-		return -EINVAL;
++		return MODE_BAD;
+ 	}
+ 
+ 	if (msm_dp_wide_bus_available(dp))
 -- 
 2.56.1.708.g77570a6a1d-goog
 
