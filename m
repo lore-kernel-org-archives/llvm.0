@@ -1,75 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108166;
-	b=wehDVBTOVSkIwpKey40EPxw5TNQGhKRGQvIAoYzFH0PPRPZTOd5z1GhoMNLVHVsG66rb
-	 mR1uyilx594xvRzRslrjq2y8IWQyM9tlQ2kZR/C6uQFzxGpXokPyf8B4nXf7Cil+fuQkd
-	 ISBFLhz5KFcxP38io0XbNMWqUa1w6ZeuTKLmuM9Oat3BIKF+86cJ/vU0tT0c8UVh8RbPI
-	 8Vw31Yz6haoK7YJamFJmk9VIn1Er/Ih4xTEOY2ZP09726fLIZfr7nk3HHSW0da3wIlFNl
-	 QRJKzgBgPgCBA9jRBiJXGw5xm9arfHoYwLMpVQ7VeqSkAafvdkJctiwa7ucx75Tc8VA==
+	t=1795108209;
+	b=k+D41GpLNeJZbRgpkK4Ae5RE/q7hdzmX2WY45hv/IArjq0tX+Y+XNQeXW8WksYLJrE0Q
+	 hAERSID5xtxc4DBr1MCke2GPwRFXsbpmRJw09dSIbD7KaM4v2NlpzvQajvnp3v3hQG1rk
+	 JaNoZwo98g4ml6GWa7J7eBcv70dU/7B7HF4ggM92P/5/wl/24lsouo/SVJXrIwy0D4Q45
+	 0q9czP9aBcv9yUhwoNK3C8guTqybLiliTfat8JEKvDUjj1DPoASguJxol88drX+UN+Mxw
+	 SjrkI1O1qsnl9QbzcmNz4uxWwP4G17hJrmUEQ/PjYksGKYL96p2xZekvs9uXhGmNr+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108166;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108209;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=9KvSqe4fcu2QYKtWaojecEyNvEdCRD/7r6L6KTVA3BY=;
-	b=pZaSQOooY0uEBxJ7Kjw7Sq3VlC42bsb8J88pk9qMycxKVqxiDhTd7zVJzK2xM1SInwkq
-	 4gKZ5p031iktzXBhKl43hvwDTiaMIfspqB2FmsbQgDOvNqYCYE1vPY2YgsW7S1eNbT4B+
-	 kT00Exhj/X3sBlpJHrupig5v9HxGjVZs9c5GV5wwJnsQidu0qR3iPY7lS1cgrMKKJh31+
-	 RzhzkwZUD6wLssqL58pIxVfs3CgDnIq3QVqZlnUotxql0DGhq83sUjqHaAf89kWnIsBSW
-	 Ip6our8/s6ZgKhSS2Exlt3T2Uf+LrIK4RX2fsagiaLvtA6MOAsxFtko1PXQdXllLyaw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=7rjsvuE5Z5xtUgwxRQYW4DMUqOYVY8VlBsT0TOMfduE=;
+	b=YBetwyx6W7NKh8z0KKihAMmpPl9Q4JUMdpWuK5zmKXOi+QoWY9cI4HHQhNSY/SQArmjI
+	 0fSQUh1gIPAANJ+mqLXxpxYp51UF6rh6VP7j1eKORn5nxB4rEXf8j2JRmh5nz0gpcbHHy
+	 OW7GTSlXQUofFOZLNgnJyfBRTEFABdTuiILQQbNQ5ikxAhOfJ8N3N4h2Iygvz+7jdOucQ
+	 GIQBmIHsgIpIXwoa2heknPWhcaRUYsPMpr2t7w+BIK+ec8e3GoKeGosQ0lJMXCcl50nLn
+	 EM4lqK3G0uiOary95L8GxuvelI6SNAaK3PgJLx6GRFfLOyyz/n3tsi3PepfBcksqyIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UDsLz9um;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cPK1OoKt;
+	arc=none smtp.remote-ip=74.125.82.200
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F2C60A262A
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:09:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 13F2C60A262A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED28606A326
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:10:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4ED28606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UDsLz9um
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1b25d977b91so2527120c88.1
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:09:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cPK1OoKt
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-383ec96a7deso1422445eec.1
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:10:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108165; x=1795712965; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9KvSqe4fcu2QYKtWaojecEyNvEdCRD/7r6L6KTVA3BY=;
-        b=UDsLz9umPemFalMNjHjzjMC0qyB2weAKB9aidTmStpKbuVVqP+L7TZB9TdJCqRdOya
-         WrELOtvxglOXrskZr5poXMlswsq9mGqYdw922Pd6u6q5x4nsiLmbO4bU+lIxcsKbyV9Y
-         yzx+zimC0BfAhzdAj3lrmA/9+TV5ESbeTeBt1ITBHbXbbZevnRpf8uzlm6F5uWCgt6iq
-         UAopPO0Yb0kQmkTEkvb51CSvb/sByOkzCPUb7TfFvyqdt1AjWSwLcSBpvIbzO2JghoH4
-         IeFDMuDiale84XmOjdLzNlKJjRPFuBhbd5JHpZwu74X9Hc3NMHa2y/OZI1sboNrchCyz
-         yLfA==
+        d=google.com; s=20260707; t=1795108207; x=1795713007; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7rjsvuE5Z5xtUgwxRQYW4DMUqOYVY8VlBsT0TOMfduE=;
+        b=cPK1OoKt3asKI6XDVZVU1KtcQPsd2kS6rfileqo8K+EgFLRYu2KXSHO20WvzQyWzdx
+         M5Wz2frtUqfS6mw2dy66ImDPztkrUGnaBkmXDSxrORqYI+yL6DZzrC9Ar897WPDPwYbf
+         v9qkYAmLn5rInk3LDKwla58J+nyA1gXmBWhSQOAfYksEM6PWE2OBSFGe6AoR6Gx6LMS5
+         /dO0TpOvATXsCEEf3StGIiNaHy7ZfZQYRlXaMn4vAc5N1+sAgiqyJF0wrYeYI6ArCyRC
+         zjOpw3XydmaID1pv+MzojpEXKaELKB2rzwchyj1aVtf+gCSFk2c0ygJTFtqBzil3agb7
+         rkOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108165; x=1795712965;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9KvSqe4fcu2QYKtWaojecEyNvEdCRD/7r6L6KTVA3BY=;
-        b=WxuXAW35W4D7j22BuLVs4JeBUpPjOVBAnVWnqSNySvQhITtBItLuYkRWG5WT1YY+Vc
-         4KYJYBbmilDn0SyloMYocaeXrU72PcIepXIYfQTSoKsVipGdyOg20ZtdyaGSGfxX/iLX
-         cDOb9sHZ/8JW5m96UE1m2xvNvJoz9SFPoVPqJqlaWWSh85FlrtemBSe+Fbx697XR3Naa
-         Y6+uGISxheLE/WBzEcZ3Sjfy2Nf9o3EwVGP9FNsptLDVPE+QsdMH/OAhM2T50QwYl8bE
-         ZUAoxY0ghTWnPPiomjgqAMWDHof85945soxm58Mu6K+K7M7WlkhkpZAvgRSX1IWYR+E7
-         MUPw==
-X-Forwarded-Encrypted: i=1; AL+hErFELtSSL7gWo5a/Menv97ukNXcoCUVMILJLSyZUQTEIdY1qilif15wMLhWZcX9hxf048xpb@lists.linux.dev
-X-Gm-Message-State: APuU4Z+EejnF4HQ5DauMY/3XF5ShCLPW1/aapQCuBDOdMfmqMIY6x/cP
-	1bjMF4cqlw4llgP3HtJfRcEH4U+yMRf3YvY2C4hY4rD0Jwj+8MnkMQFQKjAeEdf0+feL9ixD3Mf
-	tqQ/45QPEFQ==
-X-Received: from dli28-n2.prod.google.com ([2002:a05:7022:29c:20b0:1b5:3561:2fe9])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:e80a:b0:1b5:4b48:b9fb
- with SMTP id a92af1059eb24-1b5567c0ea6mr264480c88.5.1795108164835; Thu, 19
- Nov 2026 09:09:24 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:09:11 -0800
-In-Reply-To: <cover.1795106967.git.irogers@google.com>
+        d=1e100.net; s=20260707; t=1795108207; x=1795713007;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7rjsvuE5Z5xtUgwxRQYW4DMUqOYVY8VlBsT0TOMfduE=;
+        b=FZKHLayS2zxu15Ckle+q8WydUv6phF1E6XVSq+PJGVLdOLWAFXInMoMZB1Tv8XTktZ
+         JKxeExYhcxPg4orpIT60M9GNQT9L9lXeO/Xh/0HgJjwG9KQB18wmz0fmX/0hF4m0Jz+E
+         MDflL2NM7NgHG7Nz8PNaSnCE9F6NMWmQYN8+Pf/G8ZwU/fXYKcxffp1OSQFbGEp/+55V
+         +9HHAjfv8AzJYuAzF/DS4baaLzmzKkXa7xE57Y4guy2wRvoqWak14kKuHh7I9/NA6snO
+         SttflIlXHgylcMdugpAx/TLH5UHylrR0KYMzI6UX0HwHuTE1onPAonDy3nko77m6RKJ7
+         qtXQ==
+X-Forwarded-Encrypted: i=1; AL+hErFpDpAA1Qwdek4E+YqDvCQtlDuxLdu3pb7bZ3gOsAvRhxoh2x+fOzkAT7GghsgWj/Lpsxp2@lists.linux.dev
+X-Gm-Message-State: APuU4Z9G4ZwhKWN/LkRVQBklppSZ4EAugBB3PCNwTLV4uNzaasRkIoGY
+	UgVvUUiPpj7FAPIdqEOGesPHd7buG/OFes0ndtJtCkwl0nc27hsSa77hinFqscpzQgfQ323VWAp
+	h2a96T+h+mQ==
+X-Received: from dycuc2.prod.google.com ([2002:a05:693c:3f02:b0:385:6092:b1e0])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:8288:b0:384:6487:b155
+ with SMTP id 5a478bee46e88-3846487bba9mr2183037eec.29.1795108207046; Thu, 19
+ Nov 2026 09:10:07 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:09:27 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,52 +76,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
-References: <cover.1795106967.git.irogers@google.com>
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <ae02ab481b5ce8259a22135255de5864777e37d9.1795106967.git.irogers@google.com>
-Subject: [PATCH 2/2] wifi: mac80211: Return NEG_TTLM_RES_REJECT when sdata is
- not in driver
+Message-ID: <20261119170927.1532076-1-irogers@google.com>
+Subject: [PATCH] wifi: mt76: mt7925: Initialize err in mt7925_set_key()
 From: Ian Rogers <irogers@google.com>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
+To: Felix Fietkau <nbd@nbd.name>, Lorenzo Bianconi <lorenzo@kernel.org>, Ryder Lee <ryder.lee@mediatek.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Shayne Chen <shayne.chen@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, 
+	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
 	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-drv_can_neg_ttlm() returns enum ieee80211_neg_ttlm_res and initializes
-res to NEG_TTLM_RES_REJECT, but returns -EIO if
-!check_sdata_in_driver(sdata).
+In mt7925_set_key(), when configuring a key on an MLD interface with
+key->link_id == -1 and msta->valid_links == 0 (for example during link
+teardown or key removal), for_each_set_bit() executes zero iterations
+and mt7925_set_key() returns an uninitialized stack variable err.
 
-In ieee80211_process_neg_ttlm_req(), any return value other than
-NEG_TTLM_RES_ACCEPT is passed to ieee80211_send_neg_ttlm_res(), where
-an out-of-range -EIO value hits 'default: WARN_ON(1); return;'.
+Initialize err to 0, matching mt7996_set_key().
 
-Return NEG_TTLM_RES_REJECT instead of -EIO when sdata is not in the
-driver.
+Found via Clang -Wconditional-uninitialized on an x86_64 allyesconfig
+build. Verified by building drivers/net/wireless/mediatek/mt76/mt7925/
+with LLVM=1 W=1 (-Werror) and -Wconditional-uninitialized; not
+runtime-tested on MT7925 hardware.
 
-Found via Clang -Wimplicit-int-enum-cast on an x86_64 allyesconfig
-build. Verified by building net/mac80211/mlme.o with LLVM=1 W=1
-(-Werror) and -Wimplicit-int-enum-cast; not runtime-tested on MLO
-hardware.
-
-Fixes: 8f500fbc6c65 ("wifi: mac80211: process and save negotiated TID to Link mapping request")
+Fixes: 3e758e9f777c ("wifi: mt76: mt7925: add link handling in mt7925_set_key")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- net/mac80211/driver-ops.h | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt7925/main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mac80211/driver-ops.h b/net/mac80211/driver-ops.h
-index 9aefa55cbdfd..0558ba58f3fc 100644
---- a/net/mac80211/driver-ops.h
-+++ b/net/mac80211/driver-ops.h
-@@ -1740,7 +1740,7 @@ drv_can_neg_ttlm(struct ieee80211_local *local,
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7925/main.c b/drivers/net/wireless/mediatek/mt76/mt7925/main.c
+index 8d591f265260..e39e4674e26d 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7925/main.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7925/main.c
+@@ -735,7 +735,7 @@ static int mt7925_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
+ 	struct mt792x_sta *msta = sta ? (struct mt792x_sta *)sta->drv_priv :
+ 				  &mvif->sta;
+ 	struct mt792x_link_sta *mlink;
+-	int err;
++	int err = 0;
  
- 	might_sleep();
- 	if (!check_sdata_in_driver(sdata))
--		return -EIO;
-+		return NEG_TTLM_RES_REJECT;
- 
- 	trace_drv_can_neg_ttlm(local, sdata, neg_ttlm);
- 	if (local->ops->can_neg_ttlm)
+ 	/* The hardware does not support per-STA RX GTK, fallback
+ 	 * to software mode for these.
 -- 
 2.56.1.708.g77570a6a1d-goog
 
