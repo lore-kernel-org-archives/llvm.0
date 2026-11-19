@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108062;
-	b=QtO/KPZZE7ypBHzUIPqNt5vBfUjY2S2wPN7K8lGLjpNXgsusQWqdtKobiaixWer0mVJp
-	 Jn5T0ITpDLxio7mrFEa4phGOxfCffZq0a6ZnKs41g3ZVxQULs8AqfDMOoy4az6WV1GTAN
-	 Xr5vvpXyFH0Jvav55bTl93OA8H6gz49MqGfUSqr8ki+VOPpKRtDnNYN8YVJF0moJbeK5S
-	 zJIeLktnavbFLYM5KwjrqOxZHPFv2Urucm2kP7UuEBR1R+zEeN2uol/1H8cG/F0sg/TZJ
-	 kKAkmLJFLKhqy1ZPsMkYnlc1KQhUuAtfuX7br6hpP1SDK1OdVXZUZT2+TyfrI6bVH2Q==
+	t=1795108066;
+	b=yj4Pua7yojHRC4OzNDAHhg2KZSyBBcRTzsnEjUnS8PypG1gNlWUaudynnWTQWMksHDf1
+	 THo9Pg+XLfw07lvbwkzW7f11E0V8Dioigw0PAAN3NN4eDNwFmrRCSlZlGh+xR84Xec8dz
+	 OuN7cGmS5wFeWTq/+kltQOUI8VdTx8KK7l6nYFFyyV8ZVyOXePn2YjDK4G5+jCkN8tgVt
+	 ncZKXrux0w6IsasTKIhbkOJ3+rxio7Q9zWZ3tTOWkeFfGZG0HTfvxiRBqWug0hqpigTXg
+	 gGRj050QgH0DzeuUPYXFGAx2ZlDfYPO23EzN+eiVYJ+aztBWVqBvuDa/VgE6JI/Q+PA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108062;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108066;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=40uF70Y8a7Zl+4wCt7nPsMMR0NTjvrY903p4D0/j04w=;
-	b=RjojhcJrfD3U3S6capT7I+K0vL2T30Y5sDE/bd5s3MIc9cXgqLd4CHljlERZ4ir3paGB
-	 qQUOapv2m1MOX4yg9qfmH/ShqRG9WNszNmGtzDrvM9eky3KSKisOz7QWdsLn3xokOcTBr
-	 rsYNbkveD9or78fjWmAyZEHxdBROXGimrBuPdTGwe72E+WGtu94IdZHKCWcOC0BNFwN6z
-	 i9u7Q+lopHZ+eKu0Yrar7Zcy19mmpfjEZjBVMJ9TifIK1uUlUNoTpUx0nGM7OoBFlQAge
-	 Tlp0GPWchtE1Ev0csNTY88APiX+o+7/l1mbdVHs6cc1VCchOm8cYHCxBtWHapEfBExg==
+	bh=2o0ILC3keCwMhrgGZ6aMyUvzYh9D8kgarIcL8NMwQRU=;
+	b=1drUeKlOH/qrMSF+ofvnOsXkDG2jyPR+ak7OqoZWp65CnPfROsrYjaNW7Ijr10Zlml06
+	 nR8rNrapBUoG37++E1dCcRunacvZt37h5R4LZX2scC1J1DNv4VsaU5JKDrcoXzGtWQ7DK
+	 6hUnzdAs/E/RxaNMs2iNcdhs73ZCxemUZle0QtsMvhXX6Mj5MnhzKjhS10l0DUiIdzFvO
+	 O8N0C87VdE+e6Rj2nRMEpA0V8h3AsEl1gQlXU98eGhimSjzKPvFsKM/rF/L2JY2aXfPtr
+	 vT0SwuvThwT1Axkp1mfLLlHJQ6SuCSWjldbHu7bV7qpzcDvuhE7JKCox85QKqoYUBUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cVEZKd98;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aKEXxAkm;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CEB60A260D
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:07:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28CEB60A260D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07F2606A320
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:07:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C07F2606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cVEZKd98
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-341eff9e381so3660831eec.1
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:07:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aKEXxAkm
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-3724667bc16so872451eec.1
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:07:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108059; x=1795712859; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795108065; x=1795712865; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=40uF70Y8a7Zl+4wCt7nPsMMR0NTjvrY903p4D0/j04w=;
-        b=cVEZKd98GBwtvT6hzgYIYbU+xz6itatjUDIG5fQxFIKg6z9rKJ1wHHh1NrjCrAr0T+
-         aU7eSTePhsmF0UYuapT+USMNz3GElpWcdpywTry7STrHU0Yij24iTQGImhSce1Chwg8a
-         yBFOeWIOuyeMv9glhBwIpSSh+8ov3yLH4O+My0oV+BBp8/UK3rM3t1czotfaFPgD45Hm
-         szXD7IWCJL1ati1EkBfWNSz8U9nOmtwwfWDVmCfdcrJ+lLgU6EOz4x/h6a5qnzrLiwKL
-         KOkwb2qdxYVqUxOEFYpnWkXXGYILiADKFHFxhQbaV4QN3zIcp3j/n99q8SHKOqtUZ91Y
-         1pPQ==
+        bh=2o0ILC3keCwMhrgGZ6aMyUvzYh9D8kgarIcL8NMwQRU=;
+        b=aKEXxAkmF3ynPBI/CJWqKlJF0ZrpSR5cQiUEIOpKRWMsqK9ss+CaHaDmEfddtRj2eO
+         +mT8zExnaBUpS2XvvmNqdTEVID00Qi4gYcJc0JRzlnWeTSZd/SlgVvQkswZL5uAIrjHi
+         ztLQyx6mSBZgcngbXgTYr/IFWLEfrWRAWKaPk4rLAdSCff0M7IFUGoTjEmBQc+2CjDGe
+         Dd+bZaasCaPB3tClHfPuJIwhydX4H3NF9ylRVEQQ2nuCiw5ltJDWxsHYIzsN4UA8R5Gw
+         6zuKVCe9KgAmSPs12RNmNkxEV3p/9iMSN+qmzqdfxGui20xYUPCIveIqn2aCEaKQQ9lG
+         yTLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108059; x=1795712859;
+        d=1e100.net; s=20260707; t=1795108065; x=1795712865;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=40uF70Y8a7Zl+4wCt7nPsMMR0NTjvrY903p4D0/j04w=;
-        b=chuVLxmosp1RGaxm4hKc04XeQczDlSYf+vS+Lt7SWt8177/ZhhJTDThtn8nFJN02He
-         Gfz3cxah2oH/iCwP7ZT/4hoYVfO8TAw2mcGIViUOpZNQbtQS6I4fdARRB2hnKqszeb4L
-         kltDI8uupBqEkbpeNwvhFAIcRuarrqULn5ZE/sENDsLFwLMTVsvsHWz67JnrIz+hPbSl
-         xIhfFUpAQPXW80gzKXY0CNiDPBVdkigxi0kxlsItXxZrlHCireO29U9HSRGRcsVwAodl
-         zlEC5uaFfpqtxZGk7GIrxYICw7y8F8KvDu+aI/wzCVJJ8A7Pu/8fy2ytQTptKawA2qZm
-         /pyA==
-X-Forwarded-Encrypted: i=1; AL+hErFZk7CRZ2hXfaHnRJj/ZFoYttZjlTIOF4b1tQYL0yACtn4l6O81WXlnojnf3n7bLXCs+BAU@lists.linux.dev
-X-Gm-Message-State: APuU4Z/M9ckVdKOJKnn5wtA62uO4pcP+LtOLjZw6taeCAqaKTCCevquv
-	GLD6boIljMkMB9/VJyHF7uO2xiAwPk3u6RU+Ve+RE+8d3KxxdEHLv1DkKYhX4ReUBCgbfNTBGpS
-	htO5FHsOYbA==
-X-Received: from dybhc28.prod.google.com ([2002:a05:7301:29c:b0:36a:de0:d28a])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:3f16:b0:36e:a321:5353
- with SMTP id 5a478bee46e88-3856c5b5615mr22305eec.2.1795108058821; Thu, 19 Nov
- 2026 09:07:38 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:07:35 -0800
+        bh=2o0ILC3keCwMhrgGZ6aMyUvzYh9D8kgarIcL8NMwQRU=;
+        b=HF16eK7S2Zmf3Rco3ziy+KbScBhtHn9lKdRbPXge/nlsCLx4oqoIJDnquSNlBgfn+P
+         aJnPuV/HuPe9ffpodK48Demrvv39kcSO3R4z18W0g7tdPji5RepZLyXY4js10GASIelM
+         AHf7nLydi3B2jNG8hLb9rdOQhcUe0wW3A/RT7f4xhwmFBIfvODGQyuTotQwxeE31/CZS
+         NMpVn2eYI4EFA6eUr+pvW0gsVJg6k95oiVYmxuFhxImHeiVQORWUvjYYqCpSPc40yEzP
+         q9MKwdxR50UCT50ka1S7ccqz3RlBS+70QMpo/sMfqOZAt9pneGvQKdnoPi75k+2uNxzH
+         NObg==
+X-Forwarded-Encrypted: i=1; AL+hErGV5X3iqVwWvq5usee18JR2fp/1c+L1iTdXAdXW0yEcTzY8DFlaLp7EQe/1hHrKKbUVkO/P@lists.linux.dev
+X-Gm-Message-State: APuU4Z8cte04W3iPi/XNdzkN3XQYeZkOm+CXqI6atnyWcTCaGYJ3yn0U
+	NnLq9JrnXD8mQjBaiIBkBCps3kXUZKImUlhbUIYu1D/SL8qLvWrjL7F7eEEjczZ6xZzgPwlKval
+	7iyKcvpBarw==
+X-Received: from dyr9.prod.google.com ([2002:a05:693c:4009:b0:385:23b2:bccf])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:51d4:b0:384:fef7:5876
+ with SMTP id 5a478bee46e88-384fef75c78mr1005650eec.24.1795108064646; Thu, 19
+ Nov 2026 09:07:44 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:07:41 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,105 +77,63 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170735.1524873-1-irogers@google.com>
-Subject: [PATCH] wifi: wilc1000: Fix skb leaks and return types in wilc_wfi_mon_xmit()
+Message-ID: <20261119170741.1525395-1-irogers@google.com>
+Subject: [PATCH iwl-net] i40e: ensure owner VSI is found before dereferencing
+ in i40e_veb_release()
 From: Ian Rogers <irogers@google.com>
-To: Ajay Singh <ajay.kathat@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-wilc_wfi_mon_xmit() is an .ndo_start_xmit handler returning netdev_tx_t,
-where negative return codes (< NET_XMIT_MASK) are treated by
-dev_xmit_complete() as packets already consumed by the driver:
+i40e_veb_release() counts all VSIs attached to veb->seid in 'n', but only
+assigns 'vsi' when I40E_VSI_FLAG_VEB_OWNER is set. If a non-floating VEB
+has a single remaining VSI without I40E_VSI_FLAG_VEB_OWNER (for example
+if the owner VSI was moved or cleared via debugfs switch operations),
+n == 1 passes the 'n != 1' check while 'vsi' remains uninitialized on the
+stack and is immediately dereferenced.
 
-1. On the broadcast deauthentication path, if dev_alloc_skb() fails it
-   returns -ENOMEM without freeing skb; if dev_alloc_skb() succeeds, it
-   copies skb->data into skb2, passes skb2 to netif_rx(), and returns 0
-   without ever freeing the original skb.
-2. On the management frame path, mon_mgmt_tx() returns a negative errno on
-   allocation failure, which was stored in u32 'ret' and returned as
-   netdev_tx_t after freeing skb.
-
-Free skb via 'goto drop' on skb2 allocation failure, consume skb with
-dev_consume_skb_any() after cloning into skb2, remove the impossible
-!netdev_priv(dev) check, and return explicit netdev_tx_t values across all
-paths.
+Initialize 'vsi' to NULL and refuse to release a non-floating VEB unless
+both n == 1 and vsi != NULL.
 
 Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
--Wassign-enum enabled; fix and changelog drafted with an AI coding
-assistant. Build-tested under LLVM=1 W=1 (-Werror), -Wassign-enum, and
--Wimplicit-int-enum-cast; not tested on Microchip WILC1000 hardware.
+-Wconditional-uninitialized enabled; fix and changelog drafted with an AI
+coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
+-Wconditional-uninitialized; not tested on Intel XL710/X722 hardware.
 
-Fixes: 5625f965d764 ("wilc1000: move wilc driver out of staging")
+Fixes: 08cdde310e22 ("i40e: Fix broken support for floating VEBs")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/net/wireless/microchip/wilc1000/mon.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/mon.c b/drivers/net/wireless/microchip/wilc1000/mon.c
-index 9b8c083b403d..8bee46651c61 100644
---- a/drivers/net/wireless/microchip/wilc1000/mon.c
-+++ b/drivers/net/wireless/microchip/wilc1000/mon.c
-@@ -145,16 +145,15 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
- 	struct ieee80211_radiotap_header_fixed *rtap_hdr;
- 	struct ieee80211_hdr_3addr *hdr;
- 	unsigned int hdr_len;
--	u32 rtap_len, ret = 0;
-+	u32 rtap_len;
- 	struct wilc_wfi_mon_priv  *mon_priv;
- 	struct sk_buff *skb2;
- 	struct wilc_wfi_radiotap_cb_hdr *cb_hdr;
- 	u8 srcadd[ETH_ALEN];
- 	u8 bssid[ETH_ALEN];
-+	int err;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+index abbc71e815ae..8d4213b7dd92 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -14718,7 +14718,7 @@ static void i40e_veb_clear(struct i40e_veb *veb)
+  **/
+ void i40e_veb_release(struct i40e_veb *veb)
+ {
+-	struct i40e_vsi *vsi, *vsi_it;
++	struct i40e_vsi *vsi = NULL, *vsi_it;
+ 	struct i40e_pf *pf;
+ 	int i, n = 0;
  
- 	mon_priv = netdev_priv(dev);
--	if (!mon_priv)
--		return -EFAULT;
- 
- 	if (skb->len < sizeof(*rtap_hdr))
- 		goto drop;
-@@ -178,7 +177,7 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
- 	    is_broadcast_ether_addr(hdr->addr1)) {
- 		skb2 = dev_alloc_skb(skb->len + sizeof(*cb_hdr));
- 		if (!skb2)
--			return -ENOMEM;
-+			goto drop;
- 
- 		skb_put_data(skb2, skb->data, skb->len);
- 
-@@ -202,8 +201,9 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
- 		memset(skb2->cb, 0, sizeof(skb2->cb));
- 
- 		netif_rx(skb2);
-+		dev_consume_skb_any(skb);
- 
--		return 0;
-+		return NETDEV_TX_OK;
- 	}
- 	skb->dev = mon_priv->real_ndev;
- 
-@@ -214,15 +214,14 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
- 	 * fields are equal send it to mgmt frames handler
+@@ -14735,7 +14735,8 @@ void i40e_veb_release(struct i40e_veb *veb)
+ 	/* Floating VEB has to be empty and regular one must have
+ 	 * single owner VSI.
  	 */
- 	if (!(memcmp(srcadd, bssid, 6))) {
--		ret = mon_mgmt_tx(mon_priv->real_ndev, skb->data, skb->len);
--		if (ret)
-+		err = mon_mgmt_tx(mon_priv->real_ndev, skb->data, skb->len);
-+		if (err)
- 			netdev_err(dev, "fail to mgmt tx\n");
- 		dev_kfree_skb(skb);
--	} else {
--		ret = wilc_mac_xmit(skb, mon_priv->real_ndev);
-+		return NETDEV_TX_OK;
- 	}
- 
--	return ret;
-+	return wilc_mac_xmit(skb, mon_priv->real_ndev);
- 
- drop:
- 	dev_kfree_skb(skb);
+-	if ((veb->uplink_seid && n != 1) || (!veb->uplink_seid && n != 0)) {
++	if ((veb->uplink_seid && (n != 1 || !vsi)) ||
++	    (!veb->uplink_seid && n != 0)) {
+ 		dev_info(&pf->pdev->dev,
+ 			 "can't remove VEB %d with %d VSIs left\n",
+ 			 veb->seid, n);
 -- 
 2.56.1.708.g77570a6a1d-goog
 
