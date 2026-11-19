@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108054;
-	b=vX5HNPFuzLrCzoqjGp7gPKAxoyBDWJ6x8cN6GyNs7yTiZGi3dyFCu2AsWAq63xHU4CAg
-	 6HhXo9Osvi7PfXnPeMtu1phYvNY0uoCO6IHe6YiDObaYG9pvbGnKZREzLrJWw6Y+ukfKJ
-	 R2f26/0hlCXDPUEu5gG03w9lM/tWPMKiA5J4ozKUC9KX6VJFUXgNuegsOug7PodeqtvAF
-	 kABK4QkZdgXNCGjIH8+ygIaLMiSfTEjI+HJxTcvY9I83C7v6ytCl4f8qj1gaEvvtKG3rq
-	 JW19OvmwJCK+P5v8AzPmqulGeU/ef6buepCCQUUsDtNAh0lPpQ/n+zGkrm7YydCpnzg==
+	t=1795108062;
+	b=QtO/KPZZE7ypBHzUIPqNt5vBfUjY2S2wPN7K8lGLjpNXgsusQWqdtKobiaixWer0mVJp
+	 Jn5T0ITpDLxio7mrFEa4phGOxfCffZq0a6ZnKs41g3ZVxQULs8AqfDMOoy4az6WV1GTAN
+	 Xr5vvpXyFH0Jvav55bTl93OA8H6gz49MqGfUSqr8ki+VOPpKRtDnNYN8YVJF0moJbeK5S
+	 zJIeLktnavbFLYM5KwjrqOxZHPFv2Urucm2kP7UuEBR1R+zEeN2uol/1H8cG/F0sg/TZJ
+	 kKAkmLJFLKhqy1ZPsMkYnlc1KQhUuAtfuX7br6hpP1SDK1OdVXZUZT2+TyfrI6bVH2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108054;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108062;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=9+uLL4ZhO+yAS7HHcBHeUoXpu6CmB8jc9UKkI8rB82w=;
-	b=v3c+cUTtmnKPIC/PKi1IaMVjA9EV+ZE4NxY63TyRQjedYLD/mACeoUhjLpxfnradpawo
-	 OuZ0ip6jjdO2yL+ZJJCQMjNxEoOKP3Rlu7/ITiISrxiSUffL9QZUuzm1N3cQIPu4nCzOS
-	 Zkl70VIfKZXYO7sgAVji6Ed8G8iFBFpKVF+cC0Eq3Nvj0dXZ7Kh6fOUrhzx+frG+I8Lkl
-	 reyeJce0xDraRzY4pw3EFhS7ABx3dXQ+yekofeIekqCY+5lqwGMR3qLvYmV4bZE89KFfu
-	 CZDTE8aHOl/STm2evANBVQK+7+9LGjGG/wwwUXjBs/sab++9O1bJkh0I4duB3ZQ0Fcw==
+	bh=40uF70Y8a7Zl+4wCt7nPsMMR0NTjvrY903p4D0/j04w=;
+	b=RjojhcJrfD3U3S6capT7I+K0vL2T30Y5sDE/bd5s3MIc9cXgqLd4CHljlERZ4ir3paGB
+	 qQUOapv2m1MOX4yg9qfmH/ShqRG9WNszNmGtzDrvM9eky3KSKisOz7QWdsLn3xokOcTBr
+	 rsYNbkveD9or78fjWmAyZEHxdBROXGimrBuPdTGwe72E+WGtu94IdZHKCWcOC0BNFwN6z
+	 i9u7Q+lopHZ+eKu0Yrar7Zcy19mmpfjEZjBVMJ9TifIK1uUlUNoTpUx0nGM7OoBFlQAge
+	 Tlp0GPWchtE1Ev0csNTY88APiX+o+7/l1mbdVHs6cc1VCchOm8cYHCxBtWHapEfBExg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ShYdipjC;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cVEZKd98;
+	arc=none smtp.remote-ip=74.125.82.197
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AF560A2601
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:07:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68AF560A2601
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CEB60A260D
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:07:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28CEB60A260D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ShYdipjC
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1a5005fd0f8so4492921c88.0
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:07:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cVEZKd98
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-341eff9e381so3660831eec.1
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:07:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108054; x=1795712854; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795108059; x=1795712859; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9+uLL4ZhO+yAS7HHcBHeUoXpu6CmB8jc9UKkI8rB82w=;
-        b=ShYdipjCllKZDMAq0vSBQ4UgJAewFlLZyoa75EKzbfX27nPZsACBaZgG8YNm7m9xjw
-         SyFa1lzxqD2Wk0E6IhxdFAC1hkdC++6gadkj8mDkHcUuSs/jFavuOrE9SRbkCO5txABT
-         9wdP0ijhvDGx2sk5dbE4MVMJ12pA2pBYx5tDx8tJD+83AJhr2HlQ+Xrl8hOGtOQn4vpr
-         +AaTEKOS6QxoRFO33hEYOtdIFejAt06tdWlhrCXCy192hnm/tszmnrrxQ8aYM0KqZcts
-         W0GHXezoSNuVf8BA+u+6UYCsQa+XnZzpg2sZ2+BkSgcze7mYrXaQDOQ5ZQsbqRv8JdjR
-         U+3w==
+        bh=40uF70Y8a7Zl+4wCt7nPsMMR0NTjvrY903p4D0/j04w=;
+        b=cVEZKd98GBwtvT6hzgYIYbU+xz6itatjUDIG5fQxFIKg6z9rKJ1wHHh1NrjCrAr0T+
+         aU7eSTePhsmF0UYuapT+USMNz3GElpWcdpywTry7STrHU0Yij24iTQGImhSce1Chwg8a
+         yBFOeWIOuyeMv9glhBwIpSSh+8ov3yLH4O+My0oV+BBp8/UK3rM3t1czotfaFPgD45Hm
+         szXD7IWCJL1ati1EkBfWNSz8U9nOmtwwfWDVmCfdcrJ+lLgU6EOz4x/h6a5qnzrLiwKL
+         KOkwb2qdxYVqUxOEFYpnWkXXGYILiADKFHFxhQbaV4QN3zIcp3j/n99q8SHKOqtUZ91Y
+         1pPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108054; x=1795712854;
+        d=1e100.net; s=20260707; t=1795108059; x=1795712859;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9+uLL4ZhO+yAS7HHcBHeUoXpu6CmB8jc9UKkI8rB82w=;
-        b=W5KPtyHg8ahE9xFZO3umHjyBPwvigYSQJAApbk6hkO/28U7mp0ZpuSagbqYIuSev+U
-         MA+KFyU5iyyMCZav4Slk/5WC7bOnmQDImYnXizCldRiDwlITGsB2kuFcezmkU7l/FC49
-         ajZAZWyWo4JqOvpa/SD5h4cNf5jG7/h0I181Vt940fzv6q3v1KOLjTUYnuQRvMgUt8xd
-         SILMBZyIFDlaFzJY1Z8wXHjcxJStv0nK2bIwtJqgAIfkVPH6QDrU2yioW3E5A2UEiGlw
-         Cf57vemjzLr5JEDGX7O+FD6JAbT94z5GYN0qGy9kKBn69aw4X8CfkfB+wRshoIlEkuB2
-         U0aA==
-X-Forwarded-Encrypted: i=1; AL+hErHiTd8Nyo+4t4jSImmJNALsWSSuOCd6UQDivEw0DY0O6rLkdsWzWjZbW7NJktXLqBksnsR0@lists.linux.dev
-X-Gm-Message-State: APuU4Z8GzWUVoMa+1PzXwM1zvouvEBIMyzU18r6kWp+Gwl5Tv5uEvxAg
-	q+qFUSjjXIIFyQMBwFAdag30ZP79b+hL3BUgO8Khpt11uIdWVYbZsan2dWIhg/KoeoVtg+s/As9
-	9wIRJGznzsQ==
-X-Received: from dlaj28.prod.google.com ([2002:a05:701b:281c:b0:1b5:345d:ed30])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:b0c8:b0:1b2:6855:998a
- with SMTP id a92af1059eb24-1b556911007mr233836c88.34.1795108053230; Thu, 19
- Nov 2026 09:07:33 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:07:29 -0800
+        bh=40uF70Y8a7Zl+4wCt7nPsMMR0NTjvrY903p4D0/j04w=;
+        b=chuVLxmosp1RGaxm4hKc04XeQczDlSYf+vS+Lt7SWt8177/ZhhJTDThtn8nFJN02He
+         Gfz3cxah2oH/iCwP7ZT/4hoYVfO8TAw2mcGIViUOpZNQbtQS6I4fdARRB2hnKqszeb4L
+         kltDI8uupBqEkbpeNwvhFAIcRuarrqULn5ZE/sENDsLFwLMTVsvsHWz67JnrIz+hPbSl
+         xIhfFUpAQPXW80gzKXY0CNiDPBVdkigxi0kxlsItXxZrlHCireO29U9HSRGRcsVwAodl
+         zlEC5uaFfpqtxZGk7GIrxYICw7y8F8KvDu+aI/wzCVJJ8A7Pu/8fy2ytQTptKawA2qZm
+         /pyA==
+X-Forwarded-Encrypted: i=1; AL+hErFZk7CRZ2hXfaHnRJj/ZFoYttZjlTIOF4b1tQYL0yACtn4l6O81WXlnojnf3n7bLXCs+BAU@lists.linux.dev
+X-Gm-Message-State: APuU4Z/M9ckVdKOJKnn5wtA62uO4pcP+LtOLjZw6taeCAqaKTCCevquv
+	GLD6boIljMkMB9/VJyHF7uO2xiAwPk3u6RU+Ve+RE+8d3KxxdEHLv1DkKYhX4ReUBCgbfNTBGpS
+	htO5FHsOYbA==
+X-Received: from dybhc28.prod.google.com ([2002:a05:7301:29c:b0:36a:de0:d28a])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:3f16:b0:36e:a321:5353
+ with SMTP id 5a478bee46e88-3856c5b5615mr22305eec.2.1795108058821; Thu, 19 Nov
+ 2026 09:07:38 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:07:35 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,82 +77,105 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170729.1524516-1-irogers@google.com>
-Subject: [PATCH net] net: lan966x: Free skb when PTP TX timestamp request
- fails in xmit
+Message-ID: <20261119170735.1524873-1-irogers@google.com>
+Subject: [PATCH] wifi: wilc1000: Fix skb leaks and return types in wilc_wfi_mon_xmit()
 From: Ian Rogers <irogers@google.com>
-To: Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: Ajay Singh <ajay.kathat@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When all LAN966X_MAX_PTP_ID timestamp slots are in flight,
-lan966x_ptp_txtstamp_request() returns -EBUSY without queuing or freeing
-skb, and lan966x_port_xmit() returns that negative errno directly from
-.ndo_start_xmit. Because dev_xmit_complete() treats negative return codes
-(< NET_XMIT_MASK) as packets already consumed by the driver, skb is never
-freed or requeued, permanently leaking the sk_buff and its socket
-sk_wmem_alloc accounting.
+wilc_wfi_mon_xmit() is an .ndo_start_xmit handler returning netdev_tx_t,
+where negative return codes (< NET_XMIT_MASK) are treated by
+dev_xmit_complete() as packets already consumed by the driver:
 
-Free skb with dev_kfree_skb_any(), increment tx_dropped, and return
-NETDEV_TX_OK when lan966x_ptp_txtstamp_request() fails.
+1. On the broadcast deauthentication path, if dev_alloc_skb() fails it
+   returns -ENOMEM without freeing skb; if dev_alloc_skb() succeeds, it
+   copies skb->data into skb2, passes skb2 to netif_rx(), and returns 0
+   without ever freeing the original skb.
+2. On the management frame path, mon_mgmt_tx() returns a negative errno on
+   allocation failure, which was stored in u32 'ret' and returned as
+   netdev_tx_t after freeing skb.
+
+Free skb via 'goto drop' on skb2 allocation failure, consume skb with
+dev_consume_skb_any() after cloning into skb2, remove the impossible
+!netdev_priv(dev) check, and return explicit netdev_tx_t values across all
+paths.
 
 Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
--Wimplicit-int-enum-cast enabled; fix and changelog drafted with an AI
-coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
--Wimplicit-int-enum-cast; not tested on Microchip LAN966x hardware.
+-Wassign-enum enabled; fix and changelog drafted with an AI coding
+assistant. Build-tested under LLVM=1 W=1 (-Werror), -Wassign-enum, and
+-Wimplicit-int-enum-cast; not tested on Microchip WILC1000 hardware.
 
-Fixes: 77eecf25bd9d ("net: lan966x: Update extraction/injection for timestamping")
+Fixes: 5625f965d764 ("wilc1000: move wilc driver out of staging")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../net/ethernet/microchip/lan966x/lan966x_main.c  | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/net/wireless/microchip/wilc1000/mon.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index b8696fc7e9b9..9c722d23e0bb 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -392,6 +392,7 @@ static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
- 	struct lan966x_port *port = netdev_priv(dev);
- 	struct lan966x *lan966x = port->lan966x;
- 	__be32 ifh[IFH_LEN];
-+	netdev_tx_t ret;
- 	int err;
+diff --git a/drivers/net/wireless/microchip/wilc1000/mon.c b/drivers/net/wireless/microchip/wilc1000/mon.c
+index 9b8c083b403d..8bee46651c61 100644
+--- a/drivers/net/wireless/microchip/wilc1000/mon.c
++++ b/drivers/net/wireless/microchip/wilc1000/mon.c
+@@ -145,16 +145,15 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
+ 	struct ieee80211_radiotap_header_fixed *rtap_hdr;
+ 	struct ieee80211_hdr_3addr *hdr;
+ 	unsigned int hdr_len;
+-	u32 rtap_len, ret = 0;
++	u32 rtap_len;
+ 	struct wilc_wfi_mon_priv  *mon_priv;
+ 	struct sk_buff *skb2;
+ 	struct wilc_wfi_radiotap_cb_hdr *cb_hdr;
+ 	u8 srcadd[ETH_ALEN];
+ 	u8 bssid[ETH_ALEN];
++	int err;
  
- 	memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
-@@ -404,8 +405,11 @@ static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
+ 	mon_priv = netdev_priv(dev);
+-	if (!mon_priv)
+-		return -EFAULT;
  
- 	if (port->lan966x->ptp && skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) {
- 		err = lan966x_ptp_txtstamp_request(port, skb);
--		if (err)
--			return err;
-+		if (err) {
-+			dev_kfree_skb_any(skb);
-+			dev->stats.tx_dropped++;
-+			return NETDEV_TX_OK;
-+		}
+ 	if (skb->len < sizeof(*rtap_hdr))
+ 		goto drop;
+@@ -178,7 +177,7 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
+ 	    is_broadcast_ether_addr(hdr->addr1)) {
+ 		skb2 = dev_alloc_skb(skb->len + sizeof(*cb_hdr));
+ 		if (!skb2)
+-			return -ENOMEM;
++			goto drop;
  
- 		lan966x_ifh_set_rew_op(ifh, LAN966X_SKB_CB(skb)->rew_op);
- 		lan966x_ifh_set_oam_type(ifh, LAN966X_SKB_CB(skb)->pdu_type);
-@@ -414,12 +418,12 @@ static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
+ 		skb_put_data(skb2, skb->data, skb->len);
  
- 	spin_lock(&lan966x->tx_lock);
- 	if (port->lan966x->fdma)
--		err = lan966x->ops->fdma_xmit(skb, ifh, dev);
-+		ret = lan966x->ops->fdma_xmit(skb, ifh, dev);
- 	else
--		err = lan966x_port_ifh_xmit(skb, ifh, dev);
-+		ret = lan966x_port_ifh_xmit(skb, ifh, dev);
- 	spin_unlock(&lan966x->tx_lock);
+@@ -202,8 +201,9 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
+ 		memset(skb2->cb, 0, sizeof(skb2->cb));
  
--	return err;
-+	return ret;
- }
+ 		netif_rx(skb2);
++		dev_consume_skb_any(skb);
  
- static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
+-		return 0;
++		return NETDEV_TX_OK;
+ 	}
+ 	skb->dev = mon_priv->real_ndev;
+ 
+@@ -214,15 +214,14 @@ static netdev_tx_t wilc_wfi_mon_xmit(struct sk_buff *skb,
+ 	 * fields are equal send it to mgmt frames handler
+ 	 */
+ 	if (!(memcmp(srcadd, bssid, 6))) {
+-		ret = mon_mgmt_tx(mon_priv->real_ndev, skb->data, skb->len);
+-		if (ret)
++		err = mon_mgmt_tx(mon_priv->real_ndev, skb->data, skb->len);
++		if (err)
+ 			netdev_err(dev, "fail to mgmt tx\n");
+ 		dev_kfree_skb(skb);
+-	} else {
+-		ret = wilc_mac_xmit(skb, mon_priv->real_ndev);
++		return NETDEV_TX_OK;
+ 	}
+ 
+-	return ret;
++	return wilc_mac_xmit(skb, mon_priv->real_ndev);
+ 
+ drop:
+ 	dev_kfree_skb(skb);
 -- 
 2.56.1.708.g77570a6a1d-goog
 
