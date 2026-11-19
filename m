@@ -1,92 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795067358;
-	b=GUUa9ALUMh78gF0mVJHvb8OJSEc78CPFW8a2IAthgnNeh4ri8wgiuP255ERIEpJl3bkd
-	 s80jc9MioEc6jT7ZV/J43gqj6+6tjs0An5lDQj+YGRbWcQ51/fjtAojWk4F0D+DV2xHMe
-	 +b/m80xI3d4bndS10DNY15K4SlXLbon6cBIguooZ+YI/AWnRJIu93URZyxEBXZXFUr82u
-	 ehq8DVN69SclZznPptkPEMARNZyrEw1X8fi2rR1grst+/lO1guYBECFAmqRO/apuUYG0B
-	 iY6g5emf/5DgrFWg2zgkHbOV0LK2b2ZosfioUT3japryAq/EhWXTyjfo5edrXL66sGg==
+	t=1795068340;
+	b=BoTyzfUoKiBT0XIAr06G1x7V+k1niL0zsLLjPDR1YGGXEdGjF7TGuEjZ1pWFdD16RFUW
+	 5931EsgBFRmU1r49b347r3RCimTqNtKJ26R97BqOIhiWLH30fyxlHLQo6URaQ81etGgxF
+	 07/0Ujw3zfsvMVv15pCEObUypZh0E6pvpxkuaHz2bLjkibfQ7T2Lc2mWFPT6e0HR2o2Of
+	 D8w+QrjUbsOmYCcDgKgfufwo27cxKYvuvS7PTP1mfwjoDhnzZuHawyPSLTl1zp8AihBjD
+	 UixTDworOz0XEngmGUuBpL/bTd3/dy61W4KhFj6sdssiYr1QdSUP2jh20fIL1buMvww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795067358;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795068340;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=g3p7m7TkH/7KFsHJqKL1wxqRtKVLah1m/6dsx1ky3KI=;
-	b=lwRgoe8gPRTA+a47lm1lQB9tD5HDLUeJiC7/+qPKiPU2qVPfKwq5msNrF72PmqK6koxd
-	 jNWsup322gVfuZxJVhDol3G147OXf9RPkxxthn3jclP7FBiMTsT5jHIFlYFgdA3knh9hy
-	 1Zh2bTG1gH1wsuUe/wi1QeRGCvhUGfOpvCbNmhkhozEMeG4lXvi8AdYrhjWZRMqnXTDLB
-	 6OsTOBMj/hMsCat8HuPmP2vQ82H9BrI1GkqGmxeuxoe1YAGUu4EaLIrrjhpRwzEopDS6r
-	 hfKXfRuw2eoT6i9CanJYXpVTPjsoP96L29i8dLAuouETom43x0PFQutttQ03LDID5RQ==
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=vMc4aruOSkVK8zcMilxIlqFWJpw0QUrvo9/nbFQ3Vc4=;
+	b=zYMyrJLvhEBM69cxQOMh2Ir25k3X483htNS5+lYBoClm3CoG6qhZa3hHDQ2sw4r4S3ik
+	 XXJKyZzSgfKz2E42Vmq4uJaW9XJ29IbWRk2RwhK6NfwRK2/Uiu1+w8zV0y8zyl6TABbeq
+	 zzVfvgF8mU6XgdS+euM/nPC1lto4Z8ug4S4tim1K27RXTLk4IY+Awt2eQOcQClykP2qt4
+	 Jnd1ppZUhVdOKe1XoS0+f5QeWKmegOJX3R+ZZa4cPrlZzq2rPW52inTrRfEhTAXGLxtW1
+	 PoXJf0r36v+myPUzPuVW4Ce8dnaGfQoIu172ZfAxAH0axy0iAOB9zGgNw9aILcJYUwg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v8WTGNG0;
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rXgYYzsT;
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9202606A339
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 05:49:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9202606A339
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D6A606A326
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 06:05:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93D6A606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=v8WTGNG0
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so1068342b3a.2
-        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 21:49:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rXgYYzsT
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4bb5b8ef642so15591185e9.1
+        for <llvm@lists.linux.dev>; Wed, 18 Nov 2026 22:05:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795067356; x=1795672156; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=g3p7m7TkH/7KFsHJqKL1wxqRtKVLah1m/6dsx1ky3KI=;
-        b=v8WTGNG03X+mrQLjsvNgJCZBgykwLCL2fstVs87seDkniNV5WJNncAq2GSlle3Mc9d
-         AVK1TaxOlB4U/yaOQRNDyvf0KuNu6p4wayJdthTKKqQAEigoiND9euRmouUzdrKkBCBf
-         loGA3X/eDdHmelLgmpfmDfPgBAKH+BbyL5sz0LIXBkvjrBMAiYw2pRuuRo2qhe35rqCZ
-         I9Mql2c27JbArYlMwABaAAcHJxA+YsyZrZZrtEh/4/7hHFlwe4FW91qJ3mMsZXCF0I3U
-         02grQoMc9asGv5T5giQH+MLXu89uPOCnBatD2TzoZ11FkZZQDNa+ZMn1x5B42aKeelUR
-         MmyA==
+        d=gmail.com; s=20260707; t=1795068338; x=1795673138; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vMc4aruOSkVK8zcMilxIlqFWJpw0QUrvo9/nbFQ3Vc4=;
+        b=rXgYYzsT4egivFlkWMF1w8SVra6QYt8udMReGTFpi94RCRI896LRQcyXCLTTPLjfpT
+         lgLg9F/k3pa7GRtvuJSbmKKMu8N3oqwLm8zHP/o6YeNH6yVGsKF/dQ7JnBD1FBiHJCfd
+         v2DpGbwNLKPGDQLGSKz8CePUxl6U1B6rU+sXo0VDIrIf/EZSvMXNc9Ec/+DwdIHtDEFJ
+         hpF69rRbza9OlrPWiJgxkKmGeUxR5CTUYuq0N7HKhCOz0GK3g0gINn8u9ZRt3TT013an
+         QqcwFGoaWAxQ3JMy+8zbMWFxvsT6mK1Y/ZZd/8bek/UD5w/FeoXtwVNuZQdFi7eYFDdo
+         Yr+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795067356; x=1795672156;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=g3p7m7TkH/7KFsHJqKL1wxqRtKVLah1m/6dsx1ky3KI=;
-        b=y/6KJWfs3B3bJQMDrixW4suX5avUiIAn31AhbEAlDH8QjcyJHfm4TdnPf5ygHsJuHD
-         t1MFz/yAzgTk4maPw4+NIzvzmXzN+NFWahQWnY4HqVNhwxArMhQnU8husgAgrC1Aoas6
-         Ceqisex67EGRDn7FDZpULiRiEjIPiOo+xEQ/KNGohDmBKAMYBha5UYG6oLY+d1wRX7m2
-         XeH//yT71AERvveLlhbxq8QpICFJ6xerKWSfz8cqXUnf5feW8XTj5B4J8BshvUCET6sq
-         6tiqcsT5ptk5lPkYlkX9mC2V3oVS2jCMpvR9cG4iXcYiThK160gHObsn4/c6zXLwua/D
-         pocw==
-X-Forwarded-Encrypted: i=1; AL+hErHBPIou+pF63/GZQ3DslNzdzTmz+q70eR+BqoGUCjA7ejPtZ9QEGOfv0lI7MkOSvrCw9yWK@lists.linux.dev
-X-Gm-Message-State: APuU4Z8VJwacOjM8zQpR3HdotmwJGswJ6RDaL5oiWesZCx+pXWqjelB5
-	O+YVK8M2TNnzrARdO2CCyPFcDulCCmjAwUeoX8mc+iFxbLCFI30njTyy
-X-Gm-Gg: AYBFou3cLfPG85t8QaI3WHRMVU6TbEdqnrqvGdp0pV9bANuLcaD+VBDT20qt3O5+TsM
-	M3XkYcdOvgFerSdRqEUvTNE8h0MadZ4NHG8Yv7JyWQhjTO+xqB3dIhkvOS/2cM+7pI32eozZRyH
-	pd+OqN41gteqMaJcOK2lsuqelQutdG6yZAwt9QiPZVR5j4LXM8GYn+UqyYsEqNikDC1SG+JpH02
-	i98eSUm3CTAqh8xyWQr9EYh8CKjZA3xSi6kpF4CPkbOtDJyziVP0IS82OqPHvL1aO3fn5B8y5hu
-	gXbAngvdImrG+3q/JsTz4te6oXFimLTIezPD7Or2akSQI0XHLAfvSGMdAMmsjE7eVvYYjMqnxAJ
-	5GGz5T20IZFUqewLOUh9GTEMIbPWEzu4oBu6JYShGVzORdYt/2sSd2rNIf/RGwBnM/MjW6gR5+s
-	PC/F6tDD/0WwBoq+YvKxUmIPpVj3hNHRqqgy0Uq6Tqf3a5pyLtZirUrM0ijXJnwNQeuzxjz+KnM
-	fEG/vqKpPOwasq/CBS4yqKhBXoePPvY8FjGHwzwXCNVS9ppbSF1FMaS0yLvWR/J/Xuc2LJsNO+7
-	lWWcUD6WQ36eaNlEcuFAFAZGhND7NSuhr5kjLTYH8/flXCuib71A55A=
-X-Received: by 2002:a05:6a00:2888:b0:89f:db59:193c with SMTP id d2e1a72fcca58-8c5d2a738f0mr4157796b3a.9.1795067356199;
-        Wed, 18 Nov 2026 21:49:16 -0800 (PST)
-Received: from arm-a100.. ([140.112.28.118])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c5cac8fe3csm2200984b3a.21.2026.11.18.21.49.14
+        d=1e100.net; s=20260707; t=1795068338; x=1795673138;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vMc4aruOSkVK8zcMilxIlqFWJpw0QUrvo9/nbFQ3Vc4=;
+        b=wJOgivQdi5ZmXpFymPxpGs08jKU6SczHJxdtaS1LdUowXMX7+OiggOZA0zYTw/Y18K
+         Silj5vkc/i9dMD+pvBfvX9LgoJ3u6BUdKSVfhlelHoO3mznSGTnzn1JUjwRBzwspy6vR
+         CygpVfK4bnhlsOKCpFGxZiH195i4tkNz71V/cgYcsfU22CQkhbbeVzkiLHcQDUc5cvjb
+         0VfcAPdd75VA+gk2GUoPC3j4HqAfSbk0cDiiPHh4A/ltmmsmMn6cBlsAiYtoWa+rLI63
+         It9PcCgZSpUMvcaRRKOEU70bKNsEzdurzwJ7UTElxSLtqfcWFyfWvXs3mmpkLuJTWEkS
+         wZDw==
+X-Forwarded-Encrypted: i=1; AL+hErEk8QxPAgQyUhqVWFbG+WyjpJJb0Bioc3yZqi1HQOeEsRL7t2z+q1IDmzfSDMj6mit8UVBQ@lists.linux.dev
+X-Gm-Message-State: APuU4Z/IlmnK7b6BWtSDGsVHZv3GfZ1dJHMbw5Oe7vSyAZpTS37Q0fMz
+	heF2QjdKwKxxxStIDO8+a03Ae3W87DeH0J86iZX/FsakOZ0N+3phzVBd
+X-Gm-Gg: AYBFou32PY3AgC6khfeGQwQ1adhSZx+MD2r9QeBiSAaHPYE42VhJu6hoYikLUSbPtEi
+	xca/JLkv7d6BYfHnYaToPh4ZaXhQAJo8iDnHcxdSQ4fAXue/t6/KMvIbAR5DSyNnSfHGIAEueye
+	ovY4BOZPYprU74rsQyIO0fZ5cpbApC3cV1k6JV1eNcb3aYzc4gC5Z/+6/X9MFZ0ZA7h2Qq8Vwqm
+	bHydR/E191/DDwAQ973CT8zptyXxv3DKzWkpkdmVkgts+54z+wabn2vLhOYauOkucwtB8763MVb
+	u9VrGEx/3HspTLAoSq8NTITm/T5FEbEmL4v/TtbgJ2FDBCcE5zjHc0v1nMV69IOE10owTdF+Bf5
+	5VHtMPU5e2Db69Q6vO+UR3uoOObS12R0H8mjEH5jIqdYwm8dbJDWoe3g1nNDk60dj8NLK4IIA9V
+	hoeWC6TH8mr131S0ionJKJnFhKWfZkW04XSA22+hIleXBMrw7T9WfE1cKYURSxNSwr2+LwPrJ5f
+	F0RgLqK7RlTq8PJT9XLFiwvwa3WisByf0HxiCHfO+HcYIv/9P0nu63GQTl0O8MOEZuNqpJDFxsR
+	KIXgy0GLSolrI6QVISLDCoP2IA7rLaCiICjoUfVbzbIYHmuyHy5x1u6et2ELQ/AUWERAjgpA0sC
+	5G4iGMA/1+g==
+X-Received: by 2002:a05:600c:1f84:b0:4af:c210:5b3f with SMTP id 5b1f17b1804b1-4bb7da236c3mr89793525e9.24.1795068337735;
+        Wed, 18 Nov 2026 22:05:37 -0800 (PST)
+Received: from localhost ([77.237.186.139])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4a650d2ecd0sm9324322f8f.8.2026.11.18.22.05.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 21:49:15 -0800 (PST)
-From: Tzu-Ching Yang <shingekinocore@gmail.com>
-To: Brian Cain <bcain@kernel.org>
-Cc: linux-hexagon@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: hexagon: allmodconfig does not link with LLVM 17 and 18
-Date: Thu, 19 Nov 2026 13:49:08 +0800
-Message-Id: <20261119054908.2988120-1-shingekinocore@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 18 Nov 2026 22:05:37 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:35:30 +0330
+From: Ali Nasrollahi <a.nasrolahi01@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kees@kernel.org, nathan@kernel.org
+Subject: Re: [PATCH] x86/cfi: mark cfi_debug as __maybe_unused
+Message-ID: <av6OwOx3psCYzS4L@zephyr>
+References: <20261116173027.229752-1-A.Nasrolahi01@gmail.com>
+ <20261117183505.GL1813469@noisy.programming.kicks-ass.net>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -96,60 +98,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261117183505.GL1813469@noisy.programming.kicks-ass.net>
 
-Hi Brian,
+On 26/11/17 07:35PM, Peter Zijlstra wrote:
+> On Mon, Nov 16, 2026 at 09:00:27PM +0330, Ali Nasrollahi wrote:
+> >     When CONFIG_FINEIBT is disabled, cfi_debug is never read, but
+> >     alternative_instructions() still resets it after calling
+> >     __apply_fineibt(). Clang 23 diagnoses this as -Wunused-but-set-global
+> >     with W=1, causing a build failure when CONFIG_WERROR=y. Mark cfi_debug
+> >     as __maybe_unused to account for configurations without FineIBT.
+> > 
+> > Signed-off-by: Ali Nasrollahi <A.Nasrolahi01@gmail.com>
+> 
+> Does something like so also work?
+> 
+> ---
+> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> index efbc11f8c336..9bfc36566e17 100644
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -1195,9 +1195,9 @@ void __init_or_module apply_seal_endbr(s32 *start, s32 *end) { }
+>  #endif
+>  
+>  enum cfi_mode cfi_mode __ro_after_init = __CFI_DEFAULT;
+> -static bool cfi_debug __ro_after_init;
+>  
+>  #ifdef CONFIG_FINEIBT_BHI
+> +static bool cfi_debug __ro_after_init;
+>  bool cfi_bhi __ro_after_init = false;
+>  #endif
+>  
+> @@ -1894,6 +1894,7 @@ static void __init_or_module __apply_fineibt(s32 *start_retpoline, s32 *end_retp
+>  		break;
+>  	}
+>  
+> +	cfi_debug = false;
+>  err:
+>  	pr_err("Something went horribly wrong trying to rewrite the CFI implementation.\n");
+>  }
+> @@ -2281,7 +2282,6 @@ void __init alternative_instructions(void)
+>  
+>  	__apply_fineibt(__retpoline_sites, __retpoline_sites_end,
+>  			__cfi_sites, __cfi_sites_end, true);
+> -	cfi_debug = false;
+>  
+>  	/*
+>  	 * Rewrite the retpolines, must be done before alternatives since
 
-hexagon allmodconfig does not link with LLVM 17 and 18, on mainline
-and on stable. Your hexagon-qemu-virt branch has the fix, 09df35bd9d9f
-("hexagon: constant-extend head.S calls to out-of-file symbols");
-could it go to hexagon-fixes, with Cc: stable?
+Thank you for your review.
 
-With CONFIG_WERROR=n, LLVM 17.0.1 (the minimum the kernel supports)
-and 18.1.8 fail with:
+Regarding this:
 
-  ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):
-  (.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2242552
-  is not in [-2097152, 2097151]; references '__vmnewmap'
+>  #ifdef CONFIG_FINEIBT_BHI
+> +static bool cfi_debug __ro_after_init;
+>  bool cfi_bhi __ro_after_init = false;
+>  #endif
 
-and the same for the second call to __vmnewmap and for the calls to
-__vmsetvec and memset. I see it on v7.4-rc1, next-20261113,
-hexagon-fixes (0304683b4c43) and v7.3.4; v6.18.63 (LTS) fails with
-LLVM 17.0.1 only. With LLVM 19.1.7 to 23.1.3, v7.4-rc1 links.
+FINEIBT can be enabled while FINEIBT_BHI is disabled, for example when
+rust is enabled. In that case, the declaration is compiled out while
+the uses remain, which naturally caused my build to fail with an
+undeclared cfi_debug. Maybe you meant to put it under under
+CONFIG_FINEIBT instead?
 
-The calls in stext go from .init.text to .text, across the rest of
-.init.text and the per-CPU data. On v7.4-rc1 with LLVM 17.0.1 that is
-2.14 MiB; without CONFIG_LOCK_STAT, whose per-CPU data lies in
-between, it is 0.76 MiB. ld.lld before 19.1.5 checks R_HEX_B22_PCREL
-against 2 MiB instead of 8 MiB, which llvm-project 64e3466fd09e fixed.
+Additionally, I kept my original patch limited to the warning fix
+because I wasn't sure about the effects of changing the reset. With your
+change the CFI_OFF, CFI_KCFI and CFI_FINEIBT cases return before
+reaching the new assignment. Wouldn't this change the behviour? or
+perhaps that is expected.
 
-09df35bd9d9f does not apply to the trees above: its context has the
-"r2 = #VM_TLB_INVALIDATE_TRUE" lines of your series. With its five
-changes made by hand:
-
-- allmodconfig links with LLVM 17.0.1 and 18.1.8 on all five trees,
-  and allyesconfig of v7.4-rc1 with LLVM 18.1.8, which failed too;
-- where v7.4-rc1 linked before (defconfig with LLVM 17.0.1 to 23.1.3,
-  allmodconfig with LLVM 19.1.7 to 23.1.3), vmlinux differs only in
-  the code of stext, in the address of one local label and in the
-  build ID.
-
-Those trees do not boot in QEMU, so I boot-tested your branch
-(dc370baa041d, v7.3-rc1 plus 24 patches), with 3 MiB of test-only
-padding at the end of head.S to make the extended calls span over
-3 MiB: qemu_defconfig built with LLVM 17.0.1 and 23.1.3 boots to a
-shell on a buildroot root filesystem under qualcomm/qemu hex-next with
--M virt,hvm=on. I have no hexagon hardware.
-
-Rebased onto hexagon-fixes, 09df35bd9d9f applies to v7.3.4 and
-v6.18.63 unchanged; I can send the rebased patch if that is easier.
-If it helps:
-
-Tested-by: Tzu-Ching Yang <shingekinocore@gmail.com>
-
-Nathan, once the fix is merged, the ClangBuiltLinux CI could build
-hexagon allmodconfig with LLVM 17 and 18 again (disabled in
-continuous-integration2 d9d773a8859c).
-
-Thanks,
-Tzu-Ching
+Cheers,
+    -- Ali
