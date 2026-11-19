@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108232;
-	b=2tPVAonllzuOYgywvxed7FUXy3uG6n7s5/F5YV6UgTf2GieUk9T5SLUsv4hYEhwjeSxM
-	 sCpKjU26+xTByuC3HOxKHENEeuGYW7SvJ2PoLd4F2sDP6Pq+MV9z9Kmc6Glo9nGG0iGG0
-	 ogtQ7a3WCOgYvS6GNRjjyhIFqm9K0Xiapwi6OuktFMy0qRP8J0Eka7w+p9cio5wj8QLxA
-	 aV/XnIVvb/LupLAAZiBAjliiWlGbpTAFzogUhHiULbe8s/D/thWHPZ6zrF7B9s5rP9YvK
-	 dOlNalS/tvAcNwCOrz2IWAaA5LXttTRkPqD8i0UBBxX4Mr6bi5DPdhKBrzFvnULZDXw==
+	t=1795108240;
+	b=ZAjvs50GupNzSa8LpGeV7X3jdttGDyGVPSY56qgWnCeF3xKhBD8lyKXaX3PYjir8t2IP
+	 q/jUOy83L2rBNYROdTfBkhio9z/prD+sZtp7yPLWmQXP+nNMMWkzjBk0zFoFrDZt2TzPw
+	 TqCLLuEUCnpr1wV/K/c4MLl7MzWvFykAmCiVttLHuk7B7I2QVyFRrdFv+jX9cQNsChkbq
+	 glrLYdg+vJObjy+/Xw0ofdCCBuaIAUR6Y1iyuiMOI0q5KUbbTvlqWNAGT4HQkhN6Uussy
+	 vAxXqL70PedLkBRTamNrJWqqRZV3e2wPpOQgVZ2iIVG9TsnyXRHK22NMUMIvwzrfrtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108232;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795108240;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=J8wemuSg+wTBYN0mejqZk6NbTrVxXdYsEZvmaE6mIAE=;
-	b=0LD/WjGxfuHMvGzHX2ZCdQrubhGclcAf7zgkYuXW99tM0EqwAGt7kXMTmGL0OzRjIiHA
-	 DEML4WRiEAczFi4VmV1zqcYo0FaJItGlupiLt2hXUkkODOFzAV2QN/pA5RCDEjwTALIIC
-	 Ds454GhyRGCokJw2i88tb1pZCLWnaR74x/8lJRwbh7YEz6LxJHiBEEvFjhxT07R4Mlc1T
-	 M01knvdQkMWuKZOms4LYB6qn9MhD+SWIFWJsf4EhfoItqEanojyeNOlJc+u2N37+HVsa5
-	 xkpJwctsTZmG65HW0z1HCdOsh6LHgQgolsfVUrZlxsZM9hnQz2UmUs2N5TnFI4K0MIA==
+	bh=o0YFHDsV85WusBxLlbw3gy7XlrMAOreRvj1T3GhoBqY=;
+	b=UXJ90RKRkRAl3/6+bksqDVHhO4+YswEp+Z/xtEhqa4EhN8e/ZoCiChsre+x1E4qcQYza
+	 GAa6jHqTSdGxC/Z1PSH5eXQ2/MD+cuxcOCss/P6D7zxyyAHfFsw2sifqNJ5H/N/1Zb9VC
+	 79uKtNyQf3Y/l4dW2cDv1BY7DdJrYQLvXDy8BMAtw603opANun4jVkp/49hKwaDSV6uul
+	 a2wcSKS4aWyAgWPdAJkOzuZPnx3u5Yjn7+uCmCIz/ciyZ5Kb2wCd7M0pMHM1f86MTNa0R
+	 G6jdqkg/SpQl4X3zQQVIqWKiVQ8lgMZWdeX/NCyJ9nMpABKdm2tcXax4tBvsul75QHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=f47K6C83;
-	arc=none smtp.remote-ip=74.125.82.69
-Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="KYa2/FWj";
+	arc=none smtp.remote-ip=209.85.167.197
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800BE606A324
-	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:10:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 800BE606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1771F606A600
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 17:10:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1771F606A600
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=f47K6C83
-Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1b3a348a6dbso1516685c88.1
-        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:10:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KYa2/FWj
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-5641cd2cc13so72703b6e.0
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 09:10:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108232; x=1795713032; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795108239; x=1795713039; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=J8wemuSg+wTBYN0mejqZk6NbTrVxXdYsEZvmaE6mIAE=;
-        b=f47K6C836/elQ5gTnKvSWwM7PDJY+9hIS7hHmCVQmLgu4U+ttPs3Ei7ZzJG9SFAMFh
-         O1DS/8Ne4RnnhF2JjQJ2rAmUq2lTgcGfg8WU5+dsuPmwly+4niKMw2LJB12841j1Qdpa
-         33++8gM2C9eE+g0P0ggmDZiIL9Ma3o5ZH3waHulNEJaidAgVuF2ja2eE6Dh8h9IXdV4t
-         kUzIX8P7jzkxNSQoe8wW4hjGpugfu41s0gVihfQ/hF/WZ79YY0Cztil8ZzL6Bt+2VmHh
-         YDVVeNl62Lq0wiopRvqTnEz29OnR3zpnB4urPoUmb/3+ixJSFKkmY/khJzd2tp0sSG7E
-         fg4Q==
+        bh=o0YFHDsV85WusBxLlbw3gy7XlrMAOreRvj1T3GhoBqY=;
+        b=KYa2/FWjQvfGmB8yKpdQxa/lM/DS7cg9bedSDSy5Gr3efutlF+eYgSfW1WLeU70lMO
+         gBQYN9z9yvRkzaQ/+CyclkE/7pGlVlsJXQhYVukx4nY/QcU9QFnrWnZqKJw7OMorMR9x
+         /XEoeJrZL+bMuvkyTf20oC9iiIM/rcsb+hcD4qlcMzX7QeWG/AlnBNVWRk7/YQ4L9j13
+         2Klmc67CcEKPH15OzpY6XVSlL6jk2/0z88Yq/mftop2ZB+Yh6p3vDgKFHI74eDLP/UAs
+         07XiK/3++yLsWRaWjsejDmrPoqUULqVCjuo4o/LK0byEc/vYmjW5URNDAy+SYvHkqUwN
+         zEig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108232; x=1795713032;
+        d=1e100.net; s=20260707; t=1795108239; x=1795713039;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=J8wemuSg+wTBYN0mejqZk6NbTrVxXdYsEZvmaE6mIAE=;
-        b=AhciEioCCzkdSCRqxRGQfKZhhvscVhzU3eOacpwAV8wU342KF9jzFDkKE1X0nxs2kn
-         1NyTzIyHCCK1cOQemjd3JYYIYvMcm8Na3KeoRhXTYykI0S9fL9Dlb9wwhz01Gdcyz0+P
-         IK6qEzVEpGMbM8bP+Sji0Q+AOBWhGwV2j2Ru/sto9xiWulEpdQDFeYqhXoz4V3Sv5vId
-         5E1W3LhGNXit2fQnR4QQn8K7LPM9oCtZ9rDzTQnYUdr3d9GoP74kh2mBRhCp2pD9EjpW
-         49FnuhMZlfzVjzS+lC2oatLg/yjuUSKMRbJldZIr+wSypMl7L3yC6SCHvwXKJDZ/2f0A
-         ConA==
-X-Forwarded-Encrypted: i=1; AL+hErEI4r1lPfqadsDUbsp5ezXDzmdi9l5TQDaMy2mBa/iK1hMzF2aw0X1pTl06tPUrApCiVOtl@lists.linux.dev
-X-Gm-Message-State: APuU4Z+Xen3F6dNgr1ykujJiKFqDONAiuYZUUpxSAvl32Tlum6KyfynC
-	LGQFYEozIrG7MBLpIRVrKzu99PBROpNygZAvbg60vNJrKYCjf3QWxcv8pt8czYVflBBB3FP/+1G
-	qvmE5zrw4HQ==
-X-Received: from dlai4.prod.google.com ([2002:a05:701b:2704:b0:1b3:ba1e:2c7])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:1702:b0:1b4:f5cb:ebe3
- with SMTP id a92af1059eb24-1b5568b45f6mr233091c88.16.1795108231268; Thu, 19
- Nov 2026 09:10:31 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:10:26 -0800
+        bh=o0YFHDsV85WusBxLlbw3gy7XlrMAOreRvj1T3GhoBqY=;
+        b=mwJnKD+gocEEOxK4mOn+Mcc+V4POwKCEiYi/yZXOIb0XKG64rjV4dAwMsubz6AoqPL
+         bJUXUJG4nFyXGwaWJGiDA8WLu0h6Uzmh7K1p2pdrESNxf+x56REpiC8GY/S7vdEbQqJa
+         p2SWoGfjo+gpAbcMzfSM7cOBqzPw3bcIwhYtGfztMmG1fEAPwSgvASEjHFNDejUjt+79
+         yXdp155deS/2qUz2syq6rUUHaEhSAKT0H5HxFPTaatmPaJRrYWVTto0Igr+ttY1Uq1QX
+         RpD7OgBriksW6PcJn5YfIAEj7HDbMBtBRHBPxKhKENNT3tJonbHivoBF1yYAoYEI0ZqY
+         CPzQ==
+X-Forwarded-Encrypted: i=1; AL+hErFwlR2ncrsfvXgaT633w53TxIjKJSUsCdqDeekpJnsU8B2KrZTnzLXRkYZLcetmYB9GOJXY@lists.linux.dev
+X-Gm-Message-State: APuU4Z+ky2PRiWqIe9l6zaGZZueLYZG7goTfLirBUW6HDrVH113jKFWN
+	rQthEhNKA0hYd8zBCETujJf5P81EpmwXTD1ugDg7bKZCpKDi7/mWk5XJaGOs1wyIeIjOezButtu
+	ALg2BW6dZPg==
+X-Received: from oiju13.prod.google.com ([2002:a05:6808:116d:b0:4f5:740:2bcf])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:e8c:b0:577:2255:61b5
+ with SMTP id 5614622812f47-57a0b03bd9amr687021b6e.30.1795108238778; Thu, 19
+ Nov 2026 09:10:38 -0800 (PST)
+Date: Thu, 19 Nov 2026 09:10:33 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,71 +77,75 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119171026.1535538-1-irogers@google.com>
-Subject: [PATCH] rapidio/rio_cm: Check rio_add_outb_message() return value in
- TX paths
+Message-ID: <20261119171033.1535923-1-irogers@google.com>
+Subject: [PATCH] platform/x86/intel/pmc: Fix mode check in pmc_core_lpm_latch_mode_write()
 From: Ian Rogers <irogers@google.com>
-To: Matt Porter <mporter@kernel.crashing.org>, Alexandre Bounine <alex.bou9@gmail.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>, Xi Pardee <xi.pardee@linux.intel.com>, 
+	Hans de Goede <hansg@kernel.org>, 
+	"=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ilpo.jarvinen@linux.intel.com>
+Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Both rio_txcq_handler() and riocm_post_send() call
-rio_add_outb_message() and unconditionally record cm->tx_buf[tx_slot]
-and increment cm->tx_cnt and cm->tx_slot even when queuing fails
-(rc != 0). Because no outbound message was queued to the mport
-hardware, no TX completion event will ever arrive for that slot,
-permanently leaking a TX ring entry in cm->tx_cnt (and leaving a freed
-req->buffer pointer in cm->tx_buf[] in rio_txcq_handler()).
+In pmc_core_lpm_latch_mode_write(), when pmc->num_lpm_modes is 0 (all
+S0ix substates disabled), pmc_for_each_mode(m, pmc) terminates without
+assigning m. The subsequent 'if (mode != m || mode < 0)' check then
+reads uninitialized stack memory for m; under zero stack
+initialization (m == 0), writing "S0i2.0" (mode == 0) evaluates
+'0 != 0' as false and latches a disabled substate.
 
-Only update cm->tx_buf[], cm->tx_cnt, and cm->tx_slot when
-rio_add_outb_message() succeeds, and clear cm->tx_buf[tx_slot] to NULL
-in rio_txcq_handler() since req->buffer is immediately freed.
+Track whether mode matched an enabled substate with an explicit
+boolean instead of comparing against m after the loop.
 
-Found via Clang -Wunused-but-set-variable on an x86_64 allyesconfig
-build. Verified by building drivers/rapidio/rio_cm.o with LLVM=1 W=1
-(-Werror) and -Wunused-but-set-variable, and with a standalone C
-reproducer under ASan/UBSan; not runtime-tested on RapidIO hardware.
+Found via Clang -Wconditional-uninitialized on an x86_64 allyesconfig
+build. Verified by building drivers/platform/x86/intel/pmc/core.o with
+LLVM=1 W=1 (-Werror) and -Wconditional-uninitialized, and with a
+standalone C reproducer under ASan/UBSan; not runtime-tested on Intel
+PMC hardware with disabled LPM substates.
 
-Fixes: b6e8d4aa1110 ("rapidio: add RapidIO channelized messaging driver")
+Fixes: 8074a79fad2e ("platform/x86: intel_pmc_core: Add option to set/clear LPM mode")
+Fixes: e35ee8ee498d ("platform/x86: intel/pmc: Remove unused param idx from pmc_for_each_mode()")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/rapidio/rio_cm.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/platform/x86/intel/pmc/core.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/rapidio/rio_cm.c b/drivers/rapidio/rio_cm.c
-index c55af5924da2..5b88df79ff53 100644
---- a/drivers/rapidio/rio_cm.c
-+++ b/drivers/rapidio/rio_cm.c
-@@ -670,12 +670,14 @@ static void rio_txcq_handler(struct cm_dev *cm, int slot)
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index 47759b2a8012..7e12990d45a2 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -1147,6 +1147,7 @@ static ssize_t pmc_core_lpm_latch_mode_write(struct file *file,
+ 	struct pmc_dev *pmcdev = s->private;
+ 	struct pmc *pmc = pmcdev->pmcs[PMC_IDX_MAIN];
+ 	bool clear = false, c10 = false;
++	bool matched = false;
+ 	unsigned char buf[8];
+ 	int mode;
+ 	u32 reg;
+@@ -1165,13 +1166,17 @@ static ssize_t pmc_core_lpm_latch_mode_write(struct file *file,
+ 	 *	'clear'
+ 	 */
+ 	mode = sysfs_match_string(pmc_lpm_modes, buf);
++	if (mode >= 0) {
++		/* Check string matches enabled mode */
++		pmc_for_each_mode(m, pmc) {
++			if (mode == m) {
++				matched = true;
++				break;
++			}
++		}
++	}
  
- 		list_for_each_entry_safe(req, _req, &cm->tx_reqs, node) {
- 			list_del(&req->node);
--			cm->tx_buf[cm->tx_slot] = req->buffer;
- 			rc = rio_add_outb_message(cm->mport, req->rdev, cmbox,
- 						  req->buffer, req->len);
- 			kfree(req->buffer);
- 			kfree(req);
-+			if (rc)
-+				continue;
- 
-+			cm->tx_buf[cm->tx_slot] = NULL;
- 			++cm->tx_cnt;
- 			++cm->tx_slot;
- 			cm->tx_slot &= (RIOCM_TX_RING_SIZE - 1);
-@@ -745,8 +747,11 @@ static int riocm_post_send(struct cm_dev *cm, struct rio_dev *rdev,
- 		goto err_out;
- 	}
- 
--	cm->tx_buf[cm->tx_slot] = buffer;
- 	rc = rio_add_outb_message(cm->mport, rdev, cmbox, buffer, len);
-+	if (rc)
-+		goto err_out;
-+
-+	cm->tx_buf[cm->tx_slot] = buffer;
- 
- 	riocm_debug(TX, "Add buf@%p destid=%x tx_slot=%d tx_cnt=%d",
- 		 buffer, rdev->destid, cm->tx_slot, cm->tx_cnt);
+-	/* Check string matches enabled mode */
+-	pmc_for_each_mode(m, pmc)
+-		if (mode == m)
+-			break;
+-
+-	if (mode != m || mode < 0) {
++	if (!matched) {
+ 		if (sysfs_streq(buf, "clear"))
+ 			clear = true;
+ 		else if (sysfs_streq(buf, "c10"))
 -- 
 2.56.1.708.g77570a6a1d-goog
 
