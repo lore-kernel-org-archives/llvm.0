@@ -1,82 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795083465;
-	b=IyD69qmtYYsBFItGWLYO68wM7+iu8i/aJKVPOMYwNUPufoHJAHSIoDp3Vl82464H+v3v
-	 7nyf03BjJUnOxz5b4RB27ZZwSS2mABnoA6ZwKFUPUFnJoGV17/16SKsYB0ZQu3goIfz5Y
-	 +Mw83+QcYhJh+Slr0koc0z/zsccfvhua9t9QAG0kbyx9l05oA/ZiJDvVBv+/csePakixR
-	 LYu1QdlU6Uro0trcKQ+IAs0bECAo2r/D7rfUKZFJNT7CZ2wYx/MQOOVvUzsBHC1JNNQsd
-	 KouPLqrJjyv+NZKZdfegrfKn+90291PO4EBRZtvud6KLWnuzOdOSQLGbikk7MmG0IXQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795083465;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=YLbvNwXomZ1kjJ/SjFYvxqjXtTddAASHXNo4m3c9M6c=;
-	b=GDhb0ZL9vG9w/p3M5iJAnttxJVk2GuRFZwPpO2CvJDIwgmgT8+Wr6I4jnprdJ0rl4iWI
-	 CLI+FtZ9GuEkeynoXtlU76cIfG6glgXz7nqy7XvSjmbUZ/ZwueRnpY2Zm0uREmrZDhBtG
-	 4lZTINFKnLOoPgG6U8YIOITKnJaZHeEvPHXQ7qfVPmVSd/nioPlSxE8h0DBOG02p/7EcV
-	 xBY6WU4z0+nTzsbUGN8I/nF/yiQlOJimt3IA6+tgtj0oUJYI4iCDcJQ0TdkJdvWLV51dB
-	 VymwlKk82prL00D/pvznLMzncE2VyW3k6SR+YzHxTF5qSebmBnTpPmxhDFlNcqmYmOA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TReKLBWA;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795084555;
+	b=PkT91b6GY9+Fw97a3gslj7PxzifyuGvR47+SE+J7WnVG6XLLBTHRFPFudYf4A2SkK37S
+	 W1ioJ0FEaFL6RBWMPREjM7VwAAug0LEy32Xl6IjMQNX/ARQy/v84Scum8g74Up7y4RpTm
+	 aIwDpNPP8tGjVmrG6EcOv46l0QV6gUcEFB7puZY3jENGwhqlaah20sIt7xWrCWBaDoB8f
+	 nFnF7OQN7PJUp9nQ5vhlTK9L++Ql0+ecBcWbxaIE+abTgzzC7hEWCxtGvKhx8Ol77iHfX
+	 5dT0VNcGxX/ICfShyi/gvC6GKeYsinQiNRFqPn4JNAcOz908zO+zDXa1RlFm5OE31Lw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795084555;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=VSgqe+2+NVZ79+o9y80nGA+xBFTNkQAJQWULoWfKhj4=;
+	b=BLM46ah/bbKJUsgayV7joKn9lwQnh+j7A5swRO8l+1cjxifh6cAsINN1Lx3tik5kqvuU
+	 WSb1Bc3K04PTTgorI7JToPLlLY6TxNbsxM2sa2l5fWe2dTzD13oTzO9btQBGZqzgCoCoG
+	 GnTBHAwxNSNGmN8zOD9YCfd000DQVh5/hxKtItbL+I4+7Yldo3p4gczLQo2R/m0Q/Ddyl
+	 Zybipvw6Atf4iw6NmijtycmuaY0ci4AToLzcBX7JTlDVCI7T0OMHxUir0mfnh0nQ5w6Yb
+	 oDUrbiCR/tOtmGZzCtza13DWxrbkXHvcBKIP8nlrbpczuuTzlLgx97OQUOxeXq4WTZA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fCoV6Jvi;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.43
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED81606A325;
-	Thu, 19 Nov 2026 10:17:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0ED81606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E90C606A325
+	for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 10:35:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E90C606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TReKLBWA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795083465; x=1826619465;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pglddyPb0xpIoawjV4nwgjwEKnfIEBybfDmilNLNYx8=;
-  b=TReKLBWAf0lJxWmadmMNoj6QlENoC3qdQflgXmvKgTEOFEiapE0sCOha
-   st/MDjWKnEuXGweVPk4LGBKyFi/b+B9oEu5MSflLgnwzJQBhQc8Y0EsJn
-   kiy93SLLgCe3mXcvQgAmXMrgfH/4MPLakVkYNApwaGPnga0/dKHmdzqZS
-   jvc2VieH3JYFmCNan1Ue+FFqJX4e9XuKaQWzBlGfRc7xDkYChi0fvUNjK
-   S6X5E9wv1raCHf9FMdA/bY5jIKfEnV3g1CJZgG3IiTB0j/5Os8/mHKd5m
-   gHnPbBpi+VoxmDXN/Z2gbBhSEfwHniGIISA9OB/lpKxzVGMn2K4ui76Br
-   Q==;
-X-CSE-ConnectionGUID: eQNhoqtBRECWTKNSATqM8A==
-X-CSE-MsgGUID: gqgOveqBT3qVrs5unMM6pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11970"; a="3933695"
-X-IronPort-AV: E=Sophos;i="6.27,220,1787036400"; 
-   d="scan'208";a="3933695"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2026 02:17:44 -0800
-X-CSE-ConnectionGUID: jc+EjIA1RY+Jsl+CIkVdYg==
-X-CSE-MsgGUID: zsPt8qBYQdC27rssbK7aXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,220,1787036400"; 
-   d="scan'208";a="10437221"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 19 Nov 2026 02:17:42 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xTzD1-00000001FcQ-3D5l;
-	Thu, 19 Nov 2026 10:17:39 +0000
-Date: Thu, 19 Nov 2026 18:16:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rong Xu <xur@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>
-Subject: vmlinux.o: warning: objtool:
- =?us-ascii?Q?=5FRINvXs=5FNtNtNtCsjYlAz7NZ3Sw=5F4core4iter8adapters5chain?=
- =?us-ascii?Q?INtB5=5F5ChainINtNtNtB9=5F7sources4once4OnceONtNtBb=5F3ffi?=
- =?us-ascii?Q?6c=5FvoidEINtNtB15=5F7from=5Ffn6FromFnNCNvMNtCsbuTvttuFvbr?=
- =?us-ascii?Q?=5F6kernel6xarrayINtB2f=5F6XArrayINtNtNtB2h=5F5alloc4kbox3?=
- =?us-ascii?Q?BoxlNtNtB32=5F9allo...?=
-Message-ID: <202611191706.LTrVZMWY-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fCoV6Jvi
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5c09e2ed679so91931e87.3
+        for <llvm@lists.linux.dev>; Thu, 19 Nov 2026 02:35:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795084553; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WVL81+PRhbrnHnV62/SoL+jlOwqiyNmiEUJU95tYard8qbyRlHC8nSW+rBIttOYdRu
+         RyZtR/GCocKqz/dgfHyS0io4cx7RkvZ4dD2g16FLOT83TalwjDONnVlmcNQUVwQxo1Xc
+         doWMM4PAOC7dBJcAxxojE604X8PjCt+R5Mw71Lc21BREc0ysVeyIZ4T4KkCZEvdRdPQN
+         ydnGKgVNlGAy46UnJLUlK1r4R5kbCUfP5PgdfGKGBB3dRSIRBhpuw/Tif0kp26EWtKpJ
+         674lnRbzUE9Xhpk/d9PZyM1OXqIJRU4P/yth23pF0Hhrg1XXZXpXJ+KFKT+w1RBAVLUu
+         0tMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VSgqe+2+NVZ79+o9y80nGA+xBFTNkQAJQWULoWfKhj4=;
+        fh=1E84Lq8s3rIUdrRKxFsVTYzzKk41aDuB6AFwscoNNXQ=;
+        b=m9XhwTB1wR/TqxrbYAz01t2a9XnK9zSRksHNStYlfUS9M3hOiyZCWaHKESLA4GIXBQ
+         UPXKqNPtsVGLAqRmXS9j2K+PqhapDLBHMoZloOig43fnY+n5+0JELMb21qm0SDWzjVIs
+         DoCRi4/ghK1xDNXLWAkWQNHI+qZshW4tXgftoHhN3h49xTe+ILrjwmkfySiT7hZ4wlpf
+         cqjQUHCFz4LP4hdNoNdKOsCkESc9w+QkO7ce4z0NKZ2xdJEgheEucKdaMhsserb79cUY
+         L5gKCT80e0nQYH8C2X0c8EFF5QuLdQQ6CgD+DsJmcC9usdRk0TsFBjaLzpVTW5v9Zfz/
+         7M1Q==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795084553; x=1795689353; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VSgqe+2+NVZ79+o9y80nGA+xBFTNkQAJQWULoWfKhj4=;
+        b=fCoV6Jvi1GceEI3FDkCkI6fZtJe1yhPkX6a6YYwH8IIVWspTDhgkB/mvVcRtEEAebt
+         fYk5pqQRnqkF3PcRRTEKaKizkxNWNBeWE7X1tYvx9+daARnUsgFSz3gj+HPa5m3XpaSP
+         PGAVQm1LIOUo8N7HbMWqWlOolLXfLu1HnR3n4nPn6Wt27dgh0RTUmkEO3kaOqB8hL7Rn
+         OH11Rhq6J1uqjna7O1OR6qqTaiqCa9uttcuDmMsK3pzJKRMXwFkmuhhg5nEXzbdIhQOv
+         3AbGU2O9tf05xOTBH1r8Iak7OKxq1gXYD0XvXkARz/8Bdf0hJkBIow5p0w1HyJtViy3m
+         tgIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795084553; x=1795689353;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VSgqe+2+NVZ79+o9y80nGA+xBFTNkQAJQWULoWfKhj4=;
+        b=lW8uH3TspBukHpmy2WVfJvyqG0fDY5TtcetTwvU9NfF2u9J9aiuQQP+DejStB8HvLI
+         XOqEQ0Vs3ZdlLOarFuOCBGA1GtLdHrXvEPhG8s3jFXZtY++JiTi3IhYyh5MNsksJ5zHZ
+         ytZg3pwGxps6O868LAVintNFZdCcHGcdDb3SIr4daOUtjEEjzecpgGYRNFsMIewCL6tE
+         EUiGUPzXNi/a+XytVJ2FhgrRrXtNMD7MOrWcY3oHm2VG1rJLg7JJwRlLIVnEXU38moOl
+         7SfFgXfL6krtCkdNrseYBEmc7AwzjU5XmnzfemvS+XF4tdATn+oCQkgOaLFtqV4YmWjI
+         uINw==
+X-Forwarded-Encrypted: i=1; AL+hErFf0XHKGzFoj+BvM+PLzEXKl7Sj7uGmx/Y1RBX7yK96TqRfSHCTArWcJgRRuXVomm5DCaqf@lists.linux.dev
+X-Gm-Message-State: APuU4Z8uI+pCo9FVO92VbBYWFuWgpJpdWDguDQjP5bmWLif9KpYGxx9U
+	5t50OhySh8080WF03UDsn1ZHkW9RRWh382s6Q2S2tguJakp3Rj2o7khb2pjO4ZThjUvAyv2EqgG
+	GspBlPrCi1O/RK6n1c1igOQoZFmGyijegymSN
+X-Gm-Gg: AYBFou16GXWvgycbkAMUpq8p5jp732s5cBfKump9qsVUMhiKRMSslkQdAamT7QWXaLR
+	vtvt3Ah3G7/CWIgmha4ikIw3POH+wJoCv1yHEuDMp++IKgvmsLYPoQdyJ/wtYabtjQrKvZWPKyA
+	CkSt4/UADQEzLfjRIRxrhdp09gh3U6Y4siXlgje1CzMYAympK62hFf7AOC6lD71K/o/Ps6DSOKZ
+	9MFbbf31JSq2BdhrCaXkvrOYXoP/tBbTWPxKxj5Dwbdp5Rw+Bi9/4MtIG+XA8kmzzwMA6xJCcWY
+	DtjgscPan30nOLtBganIKVPbSGp4q9EQnIgdhsaM6QN1nSGRkj23GWpnywVFy8L2uZUs1e2DMjZ
+	x7mk5o6TrGP6KEphWwfNhtld+61MbArFernvPBGeLk1SlIJUgQ21kQHuCN4n0CiKqOzLp1ZkFeW
+	lo2zKov9rSAaGcMyQXEZUodXbVQlObtkWJPrhr1aXjB1Q3o+JsdFxtBWTY5LumabP2MyCWbJdu1
+	icuVrbdpDLJx0/09iy7QWV7d9wV/eOLYsYOdo8Tw1AkvxVhRhXY+qRp/v+wP4fP0K0uiCyd
+X-Received: by 2002:a05:6512:6201:b0:5c0:465:3fc6 with SMTP id
+ 2adb3069b0e04-5c1aa04086amr2064153e87.4.1795084553237; Thu, 19 Nov 2026
+ 02:35:53 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -86,50 +106,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+References: <20261118-rust-merge-functions-v1-1-fe86126522b9@google.com>
+In-Reply-To: <20261118-rust-merge-functions-v1-1-fe86126522b9@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 19 Nov 2026 11:35:41 +0100
+X-Gm-Features: Aa3M54oL5-b8rD0ZNwQf4CmOodKRTjORBepmsgS7qWBa91ie7LuuwJN18wbz1S0
+Message-ID: <CANiq72m0uZRVWG=SwzUUzHo1nPX=2Q3npz-9jU_ORBSdcoAGeA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: rust: disable function merging unconditionally
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Matthew Maurer <mmaurer@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   63fdb511c27afcebce797e3db580b3534ddfa639
-commit: 9f2aee8f7d1842be08da860e45265d30dba0d1f7 kbuild: distributed build support for Clang ThinLTO
-date:   6 months ago
-config: x86_64-buildonly-randconfig-1004-20261119 (https://download.01.org/0day-ci/archive/20261119/202611191706.LTrVZMWY-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261119/202611191706.LTrVZMWY-lkp@intel.com/reproduce)
+On Wed, Nov 18, 2026 at 2:09=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> Function merging causes various different issues:
+>
+> * For CONFIG_CFI there's an LLVM bug causing functions with different
+>   CFI hashes to get merged. This can lead to crashes at runtime.
+> * For gendwarfksyms it causes functions with different CRCs to get
+>   merged. This leads to broken MODVERSIONS information if the function
+>   changes in the future so that it can no longer be merged.
+> * Wrong backtraces when a crash occurs in a merged function.
+> * Possibly also issues with pahole/BTF as the merged function's debug
+>   info is lost.
+>
+> These issues are new to Rust because in clang, function merging is off
+> by default, so these things have never come up before. Because of this,
+> turn this option off for all configurations.
+>
+> Link: https://lore.kernel.org/all/avy_9SPRaPSKD8b4@google.com/
+> Fixes: ac61506bf2d1 ("rust: Use gendwarfksyms + extended modversions for =
+CONFIG_MODVERSIONS")
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Fixes: 9f2aee8f7d18 ("kbuild: distributed build support for Clang ThinLTO")
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611191706.LTrVZMWY-lkp@intel.com/
+Applied to `rust-fixes` -- thanks everyone!
 
-All warnings (new ones prefixed by >>):
+I also added Cc: stable@
 
-   vmlinux.o: warning: objtool: _RINvMs0_NvNtNtCsbuTvttuFvbr_6kernel4sync4lock1__INtB6_12___ThePinDataNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated35rust_doctest_kernel_alloc_kbox_rs_34main45__doctest_main_rust_kernel_alloc_kbox_rs_276_05InnerNtNtB8_8spinlock15SpinLockBackendE5stateNtNtCsjYlAz7NZ3Sw_4core7convert10InfallibleINtNtCsdamrQDJyPhn_8pin_init10___internal11InitClosureNCINvMs5_NtBc_5typesINtB5M_6OpaqueNtNtCsfEUfFhcFrsI_8bindings12bindings_raw8spinlockE8ffi_initNCNCINvMs0_B8_INtB8_4LockB15_B3q_E3newB15_E00E0B5X_B44_EEB1d_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvMs0_NvNtNtCsbuTvttuFvbr_6kernel4sync4lock1__INtB6_12___ThePinDataNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated43rust_doctest_kernel_sync_lock_spinlock_rs_04main52__doctest_main_rust_kernel_sync_lock_spinlock_rs_34_05InnerNtNtB8_8spinlock15SpinLockBackendE5stateNtNtCsjYlAz7NZ3Sw_4core7convert10InfallibleINtNtCsdamrQDJyPhn_8pin_init10___internal11InitClosureNCINvMs5_NtBc_5typesINtB61_6OpaqueNtNtCsfEUfFhcFrsI_8bindings12bindings_raw8spinlockE8ffi_initNCNCINvMs0_B8_INtB8_4LockB15_B3F_E3newB15_E00E0B6c_B4j_EEB1d_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvMs0_NvNtNtCsbuTvttuFvbr_6kernel4sync4lock1__INtB6_12___ThePinDataNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated40rust_doctest_kernel_sync_lock_mutex_rs_04main49__doctest_main_rust_kernel_sync_lock_mutex_rs_36_05InnerNtNtB8_5mutex12MutexBackendE5stateNtNtCsjYlAz7NZ3Sw_4core7convert10InfallibleINtNtCsdamrQDJyPhn_8pin_init10___internal11InitClosureNCINvMs5_NtBc_5typesINtB5P_6OpaqueNtNtCsfEUfFhcFrsI_8bindings12bindings_raw5mutexE8ffi_initNCNCINvMs0_B8_INtB8_4LockB15_B3z_E3newB15_E00E0B60_B47_EEB1d_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtBa_7debugfs4FileINtNtNtBa_4sync6atomic6AtomicmEEENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB36_10___internal11InitClosureNCINvYIBH_B1L_B2D_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleIB4m_NCINvMB1O_NtB1O_3Dir11create_fileB26_B5R_B26_Es0_0B1L_B5R_EE0B1L_B42_EECsdPKRummocL6_25doctests_kernel_generated: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtBa_9revocable9RevocableNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated34rust_doctest_kernel_revocable_rs_04main43__doctest_main_rust_kernel_revocable_rs_25_07ExampleEENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB52_10___internal11InitClosureNCINvYIBH_B1L_B4z_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleIB6i_NCINvMs0_B1O_B1L_3newB7N_B2d_Es_0B1L_B7N_EE0B1L_B5Y_EEB2l_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtBa_9revocable9RevocableNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated34rust_doctest_kernel_revocable_rs_14main43__doctest_main_rust_kernel_revocable_rs_46_07ExampleEENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB52_10___internal11InitClosureNCINvYIBH_B1L_B4z_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleIB6i_NCINvMs0_B1O_B1L_3newB7N_B2d_Es_0B1L_B7N_EE0B1L_B5Y_EEB2l_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtNtBa_4sync3arc8ArcInnerIBR_INtNtNtNtBa_5block2mq7tag_set6TagSetNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated33rust_doctest_kernel_block_mq_rs_04main42__doctest_main_rust_kernel_block_mq_rs_58_011MyBlkDeviceEEEENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E10write_initNtB8_10AllocErrorINtNtB5L_10___internal11InitClosureNCNvMsj_B1O_INtB1O_9UniqueArcB2h_E10new_uninits_0B1L_B6D_EEB2Z_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtNtBa_4sync3arc8ArcInnerIBR_NtNvNvNvCsdPKRummocL6_25doctests_kernel_generated37rust_doctest_kernel_time_hrtimer_rs_04main47__doctest_main_rust_kernel_time_hrtimer_rs_167_019ArcIntrusiveHrTimerEEENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E10write_initNtB8_10AllocErrorINtNtB5r_10___internal11InitClosureNCNvMsj_B1O_INtB1O_9UniqueArcB2h_E10new_uninits_0B1L_B6j_EEB2p_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated37rust_doctest_kernel_time_hrtimer_rs_34main46__doctest_main_rust_kernel_time_hrtimer_rs_78_019BoxIntrusiveHrTimerENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB4S_10___internal11InitClosureNCINvYIBH_B1L_B4p_EINtNtBa_4init11InPlaceInitB1L_E8pin_initB5O_IB68_NCNvMs_B1N_B1L_3news_0B1L_B5O_EE0B1L_B5O_EEB1T_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated40rust_doctest_kernel_sync_lock_mutex_rs_04main49__doctest_main_rust_kernel_sync_lock_mutex_rs_36_07ExampleENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB4L_10___internal11InitClosureNCINvYIBH_B1L_B4i_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleIB61_NCNvMB1N_B1L_3news_0B1L_B7w_EE0B1L_B5H_EEB1T_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated43rust_doctest_kernel_sync_lock_spinlock_rs_04main52__doctest_main_rust_kernel_sync_lock_spinlock_rs_34_07ExampleENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB4R_10___internal11InitClosureNCINvYIBH_B1L_B4o_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleIB67_NCNvMB1N_B1L_3news_0B1L_B7C_EE0B1L_B5N_EEB1T_: symbol name too long, can't create __pfx_ symbol
->> vmlinux.o: warning: objtool: _RINvXs_NtNtNtCsjYlAz7NZ3Sw_4core4iter8adapters5chainINtB5_5ChainINtNtNtB9_7sources4once4OnceONtNtBb_3ffi6c_voidEINtNtB15_7from_fn6FromFnNCNvMNtCsbuTvttuFvbr_6kernel6xarrayINtB2f_6XArrayINtNtNtB2h_5alloc4kbox3BoxlNtNtB32_9allocator7KmallocEE4iter0EENtNtNtB9_6traits8iterator8Iterator8try_folduNCINvXs0_NtB7_9map_whileINtB4P_8MapWhileBO_NCB2c_s_0EB3Y_8try_folduNCINvMs0_NtNtBb_3ops9try_traitINtB5U_17NeverShortCircuituE10wrap_mut_2uINtNtNtBb_3ptr8non_null7NonNullB1t_ENCINvNvB3Y_8for_each4callB6U_NCNvXs5_B2f_B2J_NtCsdamrQDJyPhn_8pin_init10PinnedDrop4drop0E0E0B6f_E0INtNtB5W_12control_flow11ControlFlowB6f_EECsdPKRummocL6_25doctests_kernel_generated: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtNtNtBa_5block2mq7tag_set6TagSetNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated33rust_doctest_kernel_block_mq_rs_04main42__doctest_main_rust_kernel_block_mq_rs_58_011MyBlkDeviceEEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4S_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initB5O_IB68_NCNvMB1S_B1P_3news1_0B1P_B5O_EE0B1P_B5O_EEB2x_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated34rust_doctest_kernel_workqueue_rs_04main44__doctest_main_rust_kernel_workqueue_rs_136_08MyStructEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4g_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initNtNtB11_7convert10InfallibleIB5w_NCNvMB1R_B1P_3news_0B1P_B73_EE0B1P_B5c_EEB1X_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated34rust_doctest_kernel_workqueue_rs_14main43__doctest_main_rust_kernel_workqueue_rs_35_08MyStructEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4f_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initNtNtB11_7convert10InfallibleIB5v_NCNvMB1R_B1P_3news_0B1P_B72_EE0B1P_B5b_EEB1X_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated34rust_doctest_kernel_workqueue_rs_54main43__doctest_main_rust_kernel_workqueue_rs_77_08MyStructEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4f_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initNtNtB11_7convert10InfallibleIB5v_NCNvMB1R_B1P_3news_0B1P_B72_EE0B1P_B5b_EEB1X_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated37rust_doctest_kernel_time_hrtimer_rs_04main47__doctest_main_rust_kernel_time_hrtimer_rs_167_019ArcIntrusiveHrTimerEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4y_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initNtNtB11_7convert10InfallibleIB5O_NCNvMB1R_B1P_3news_0B1P_B7l_EE0B1P_B5u_EEB1X_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated37rust_doctest_kernel_time_hrtimer_rs_24main47__doctest_main_rust_kernel_time_hrtimer_rs_315_06SharedEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4k_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initNtNtB11_7convert10InfallibleIB5A_NCNvMB1R_B1P_3news_0B1P_B77_EE0B1P_B5g_EEB1X_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated37rust_doctest_kernel_time_hrtimer_rs_34main46__doctest_main_rust_kernel_time_hrtimer_rs_78_06SharedEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4j_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initNtNtB11_7convert10InfallibleIB5z_NCNvMB1R_B1P_3news_0B1P_B76_EE0B1P_B5f_EEB1X_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXsi_NtNtCsbuTvttuFvbr_6kernel4sync3arcINtB6_9UniqueArcINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitNtNvNvNvCsdPKRummocL6_25doctests_kernel_generated40rust_doctest_kernel_sync_completion_rs_04main49__doctest_main_rust_kernel_sync_completion_rs_18_06MyTaskEEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1P_E14write_pin_initNtNtBa_5error5ErrorINtNtB4p_10___internal11InitClosureNCINvYINtB6_3ArcB1P_EINtNtBa_4init11InPlaceInitB1P_E8pin_initNtNtB11_7convert10InfallibleIB5F_NCNvMB1R_B1P_3news_0B1P_B7c_EE0B1P_B5l_EEB1X_: symbol name too long, can't create __pfx_ symbol
->> vmlinux.o: warning: objtool: _RNvXs1_NtNtNtCsjYlAz7NZ3Sw_4core3ops8function5implsQNCINvXs0_NtNtNtBb_4iter8adapters9map_whileINtBX_8MapWhileINtNtBZ_5chain5ChainINtNtNtB11_7sources4once4OnceONtNtBb_3ffi6c_voidEINtNtB28_7from_fn6FromFnNCNvMNtCsbuTvttuFvbr_6kernel6xarrayINtB3j_6XArrayINtNtNtB3l_5alloc4kbox3BoxlNtNtB46_9allocator7KmallocEE4iter0EENCB3g_s_0ENtNtNtB11_6traits8iterator8Iterator8try_folduNCINvMs0_NtB9_9try_traitINtB64_17NeverShortCircuituE10wrap_mut_2uINtNtNtBb_3ptr8non_null7NonNullB2x_ENCINvNvB5c_8for_each4callB6Y_NCNvXs5_B3j_B3N_NtCsdamrQDJyPhn_8pin_init10PinnedDrop4drop0E0E0B6j_E0INtB7_5FnMutTuB2w_EE8call_mutCsdPKRummocL6_25doctests_kernel_generated: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvMs0_NvNtNtCsbuTvttuFvbr_6kernel4sync4lock1__INtB6_12___ThePinDataINtNtNtBc_5alloc4kvec3VecINtNtCsjYlAz7NZ3Sw_4core3pin3PinINtNtB1a_4kbox3BoxINtNtBc_7debugfs5ScopeNtCs6vhAHS3kb6q_19rust_debugfs_scoped10DeviceDataENtNtB1a_9allocator7KmallocEEB3s_ENtNtB8_5mutex12MutexBackendE5stateNtNtB1z_7convert10InfallibleINtNtCsdamrQDJyPhn_8pin_init10___internal11InitClosureNCINvMs5_NtBc_5typesINtB60_6OpaqueNtNtCsfEUfFhcFrsI_8bindings12bindings_raw5mutexE8ffi_initNCNCINvMs0_B8_INtB8_4LockB15_B3Z_E3newB15_E00E0B6b_B4x_EEB2G_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtBa_7debugfs5ScopeNtCs6vhAHS3kb6q_19rust_debugfs_scoped10DeviceDataEENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB3p_10___internal11InitClosureNCINvYIBH_B1L_B2W_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleINtB3p_12ChainPinInitIB4F_NCINvMs_B1O_B1L_3newB6a_NCINvMB1O_NtB1O_3Dir5scopeB27_B6a_NCNvB29_17create_file_writes0_0B27_E0B27_Es0_0B1L_B6a_ENCB73_0B1L_B6a_EE0B1L_B4l_EEB29_: symbol name too long, can't create __pfx_ symbol
-   vmlinux.o: warning: objtool: _RINvXs5_NtNtCsbuTvttuFvbr_6kernel5alloc4kboxINtB6_3BoxINtNtNtCsjYlAz7NZ3Sw_4core3mem12maybe_uninit11MaybeUninitINtNtBa_7debugfs5ScopeNtCs6vhAHS3kb6q_19rust_debugfs_scoped10ModuleDataEENtNtB8_9allocator7KmallocEINtCsdamrQDJyPhn_8pin_init12InPlaceWriteB1L_E14write_pin_initNtNtBa_5error5ErrorINtNtB3p_10___internal11InitClosureNCINvYIBH_B1L_B2W_EINtNtBa_4init11InPlaceInitB1L_E8pin_initNtNtBX_7convert10InfallibleINtB3p_12ChainPinInitIB4F_NCINvMs_B1O_B1L_3newB6a_NCINvMB1O_NtB1O_3Dir5scopeB27_B6a_NCNvB29_12init_control0IB4F_NCNvMB29_B27_4inits_0B27_B6a_EE0B8k_Es0_0B1L_B6a_ENCB73_0B1L_B6a_EE0B1L_B4l_EEB29_: symbol name too long, can't create __pfx_ symbol
+    [ The LLVM bug is tracked at [1]. Nick asked what function merging
+      refers to here, and Alice writes [2]:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        No, this isn't linker ICF. rustc doesn't pass --icf, and in any cas=
+e
+        kbuild invokes rustc with --emit=3Dobj and does the final link itse=
+lf, so
+        rustc's linker arguments never come into play.
+
+        What I'm referring to is LLVM's MergeFunctions IR pass
+        (llvm/lib/Transforms/IPO/MergeFunctions.cpp). It runs as part of th=
+e
+        optimization pipeline, within a single codegen unit, before any obj=
+ect
+        file is emitted. Clang only enables it with the cc1-only flag
+        -fmerge-functions, which the kernel never passes, so C code in the
+        kernel never sees it.
+
+        rustc, however, enables it by default whenever optimizing for speed=
+ or
+        size (opt-level 2, 3, s or z), which covers both kernel configurati=
+ons.
+        It uses the "aliases" mode: when two functions have identical bodie=
+s,
+        one is deleted and its symbol becomes a GlobalAlias to the other. Y=
+ou
+        can turn it off with -Zmerge-functions=3Ddisabled.
+
+          - Miguel ]
+
+Cheers,
+Miguel
