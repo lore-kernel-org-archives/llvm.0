@@ -1,60 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795197958;
-	b=AbfNP1IpjfexkpiKdgajNhLk3krtV2ndN8kvtBqk/6ya95hdFoDOyEnqFXKpjZxR3wbw
-	 z/Lqa6upVOLU/rfs9VHnXQQ9NTMNR+7bcmXH1w3Za+ftvQ4zjoSTiBFiiDvs9HB/8dyTY
-	 y0S62fpugg6C8twEiyuB4XU5yqyQqmvF0b/dczWjZOVT2IeNmHZB1xrxvMB6RJmDSrtO+
-	 O0zDa+LOv0PdZ0WFHqQ8PpYK3iM5IsJk6bE68z9uep4OtX1DGhOyogDNHfxYMrh7r9ACD
-	 SIEmPpe7vHXktsMpSS56kHhtIneGhy/tBznZQGTO3e+yXGPhR/ngaIzOSVMyzgnIQJw==
+	t=1795200223;
+	b=hOwKeWOghSYWY5TdyR0wxkL9QIs2VO+a3yfaUs+1TbQZbAeXi0ZzFr8k+cDoTd9HTEgD
+	 iXCaWbHQCL9fgHvMiwPvYZOBj1RH17m9HyRd5x+gAUMzayTODZxtUJkEW3t0JU6ZJu0Xc
+	 /RfWEupH/uFRILhBterVjhRbMT6oTPYIMQDeDFmzqw+lgqn5R2ut4JT3Duv5uJ0l4Sy5f
+	 fpgSn2U1C7GUYFBhTpPints+DCMECwnVLIafWfYdgE2fcpBynuzvX+SP4jIqq5Hh4B9Ht
+	 OaDF/4nUyQMWHtshHQSeWhpfCAGoudjYBuuzzmsobrfdRHXwO0m8faogRT7KYXIhamA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795197958;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Last-TLS-Session-Version;
-	bh=+EMsf2c2qqJIRiJJyIlB1EE6oKKSu/Z9h3cl2M5rqi0=;
-	b=xgOhLUppNP7HSbnS7hCU69HV/4XdYvWRWbh8BE3/0TzIGc1/4KlRneqz95kGDK5AlXlb
-	 KTBLtFP1k3QFtQ4yUj4J2dt3qQv77YU/xIdOHwudIVq45UaGkYUji6g8ZRNYOBMRGden4
-	 pFAL9djywYI9DgoW1+eFAwWx23HPCBRbVc3ovQQ0ZGcpieZS9ofL3tKg8fKGDZU9rmsaY
-	 gnp+xWtxkQXoLqel9VBZFOG43ARCN+MEEx3k+IBJyuM033m6JzVLvG8LTg699KhYf6J3S
-	 9f4Pc46bcZY78iay+X3jFpsZFtu5xso1LOeTVqOGni+Agxde7o7uDj9mUbJewojczDQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795200223;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=IMJq8Im5jvUubCjaXWzkBzQ8ky3UlCewww95Sx3qer4=;
+	b=D0SWIX32Ed/KEIr9fHYXoZNfJQzeesf2yfNz6/3jDE+eLxCxCQkVdqjvbSunWub8Bt72
+	 vuAsY/A+IyhIoJhkwpmrKFG11jNLyvgOc4j78qdJDDLeeaw0QR9aGs89h5Hc4MaCKnN4E
+	 ZAUekNhVtcaEvvoPQ0IRounjiiE5ekziwVS8d/gVmjxfHF/FTAYlYU/HagkgaRSYc4g5a
+	 c7CbyqWRqzHXNOJdykxTsYldRO+h9HrGCvU5NbRSxZkzQDW4pWVqOCqgQ3N+6Pcl9SC80
+	 0P2YJWo5YeW4C4aHBy26GpV5XEASiB1MoCMo92D6BBCZS2MpkC7VrY2C5VgwkFgXdtA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=DqkDbP1X;
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NIGqwzcq;
+	arc=none smtp.remote-ip=95.215.58.178
+Received: from mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F4260A381C
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:05:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86F4260A381C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D03260A2614
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:43:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D03260A2614
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=DqkDbP1X
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 36D474E41692;
-	Fri, 20 Nov 2026 18:05:50 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 09F7A601B9;
-	Fri, 20 Nov 2026 18:05:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9989511BC0990;
-	Fri, 20 Nov 2026 19:05:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795197948; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=+EMsf2c2qqJIRiJJyIlB1EE6oKKSu/Z9h3cl2M5rqi0=;
-	b=DqkDbP1X5T4DTcno7pJh81OsSo9xGdxq0bjBCjvMr5MoBz9GLcrpeRQNa/+NR5LM+iWYzv
-	DBLX/eZZM98EbE0QJsIbqKCnpvHPKl5qeje+wTphVlATchEwnVTyB4ptGJKsQlUGtJlfvC
-	JyQalAP69lJ+1e71Mocdo3OKwDOpFa8yQY0FrzQZWdVgtt1RiSgB+Ryd9hRVXt7UBmBqnv
-	cq60tzC7S6FOwSsVaPfaH9WMo1cCHJWozbl303SV2wp9EG+JrssAN6qia4kHlvAEKlSsVB
-	Td91FKgnX3O3XZ9vPIRA3g087wC9X5shVYrVAkeJs88vPKVQbPli+h6cRCFWaQ==
-From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Fri, 20 Nov 2026 18:59:17 +0100
-Subject: [PATCH v6 35/43] drm/vkms: Introduce config for connector
- supported colorspace
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NIGqwzcq
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=h2XsgNE9NNIRa2pO1XoeMNvVdBFBn17o1mxzypbSArw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795200219; v=1; x=1795805019;
+ b=NIGqwzcqsBbGBirPSnXcqypOpVK/y9EN4QIbMMgiREDGf1I4HXaxR5zosOecCUT9r93U3Vok
+ ScuTNlkZG+xFEIr8MqupcNQyZoxIX1GgHdUlLxGw60/LpE4hTc6yEoLVjc9y1DGTPrXi0WTZXdL
+ Iv4Cka+ju4W7nM5e1rtuUOZU=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 6fc50e7af3291122;
+	Fri, 20 Nov 2026 18:43:38 +0000
+X-Mizu-Trace-ID: 6fc50e7af3291122
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <bad389b1-f4a6-43d4-9531-54b75e067c7a@linux.dev>
+Date: Fri, 20 Nov 2026 18:43:38 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,276 +58,282 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] x86/kstack_erase: Use REP STOSQ for large stack fills
+To: Peter Zijlstra <peterz@infradead.org>, ndesaulniers@google.com,
+ David Laight <david.laight.linux@gmail.com>
+Cc: tglx@kernel.org, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org, hpa@zytor.com,
+ gustavoars@kernel.org, ardb@kernel.org, hca@linux.ibm.com,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org, riel@surriel.com,
+ shakeel.butt@linux.dev, kernel-team@meta.com, rkeilty@meta.com,
+ atish.patra@linux.dev, dgreid@meta.com
+References: <20261119213147.1094488-1-usama.arif@linux.dev>
+ <20261119213147.1094488-3-usama.arif@linux.dev>
+ <20261120104534.GO2668564@noisy.programming.kicks-ass.net>
+ <20261120122635.GJ2669272@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: Usama Arif <usama.arif@linux.dev>
+In-Reply-To: <20261120122635.GJ2669272@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261120-vkms-all-config-v6-35-78ace90f4fc1@bootlin.com>
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
-In-Reply-To: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
-To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Melissa Wen <melissa.srw@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com, 
- Jonathan Corbet <corbet@lwn.net>, Oarora Etimis <oaroraetimis@gmail.com>, 
- Harry Wentland <harry.wentland@amd.com>, 
- Lucas De Marchi <demarchi@kernel.org>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>, 
- Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Kory Maincent <kory.maincent@bootlin.com>, sebastian.wick@redhat.com, 
- victoria@system76.com, thomas.petazzoni@bootlin.com, 
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, Simona Vetter <simona.vetter@ffwll.ch>, 
- llvm@lists.linux.dev
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8738;
- i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=TrCXpuamax9LWCBRPOQBJ1+srnasha3RWanRdfumjyw=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBrAIsCP6ggarFZPvl7EQupjcS4NRGjfE4uOl/FY
- IvKsCj2mH2JAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCawCLAhsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOKm9g//bsadM1LQ+sfi8f+Ju5nU4oH7QItrYZ/
- 2evlLnPFpbEhYA/70FeKpNIxG9v2BGo31LIYRfbnXfcaX0BZtHkPEnCD0rFqENMDYzrCbf6JLj2
- v7MLK8K+9lArXENN0kpj+ntBga00NqcnG3o1UB0uCCFPAWsfI/kAPwGKOxzERpf7p5gSOh4j8LH
- EcDyGRdMzCW2xjQUkNQQk8Uzy8DRfw7FwlOU2c7aUSh5nnWaiQe9iKTR9WW/gt2Kg/R0S/kYGvr
- NA4Z8pYEVCkDknhYxfkk7Bl2th3yzeCAa3FfRRpjndy9asCIKqkZ0s/gqQdcQiVLQstmgVdfyoY
- lP8K6wR5/+3dtO+T/YQegO9z5vMgcVUMsfymr7szvv/M0UMibFWnTbhN1xqx9mj0OcE/LXqCc1n
- 2GGlD0sWfpuutMgVPa0D4Vui2DnPbmxjjEcK2YjTl/I/omhI8FGvwZ86nvF7z02N5GZ72XqJMvU
- eLAlm0mkWagQpOA6tz+tTnIyFIXcAiC2A/hEoANxrg+C/ciRrnBiND7xui/yfB7OI+0XmR8IfNc
- rfW9rVEQt8ck+nbSzTcSg8kerDK0eNysYXptuBE2OQ3tBbkzK3h9vVcoaPqQs0nxZ1I0UzPsMT0
- CrEWjv6y+5kNDo+Y8a48Plve/0kXi3MqvVVwHyg+4ALwo+6Grh0U=
-X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
- fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
-X-Last-TLS-Session-Version: TLSv1.3
 
-To emulate some HDR features of displays, it is required to expose some
-properties on HDMI, eDP and DP connectors.
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
----
- drivers/gpu/drm/vkms/tests/vkms_config_test.c |  3 ++
- drivers/gpu/drm/vkms/vkms_config.c            | 40 +++++++++++++++++++++
- drivers/gpu/drm/vkms/vkms_config.h            | 30 ++++++++++++++++
- drivers/gpu/drm/vkms/vkms_connector.c         | 51 +++++++++++++++++++++++++++
- 4 files changed, 124 insertions(+)
 
-diff --git a/drivers/gpu/drm/vkms/tests/vkms_config_test.c b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-index 257ba0342034..1c54d6f9828d 100644
---- a/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-+++ b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-@@ -215,6 +215,9 @@ static void vkms_config_test_default_config(struct kunit *test)
- 	vkms_config_for_each_connector(config, connector_cfg) {
- 		KUNIT_EXPECT_EQ(test, vkms_config_connector_get_type(connector_cfg),
- 				DRM_MODE_CONNECTOR_VIRTUAL);
-+		KUNIT_EXPECT_EQ(test,
-+				vkms_config_connector_get_supported_colorspaces(connector_cfg),
-+				0);
- 	}
- 
- 	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
-diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-index 291c0330bc56..6c7110e6859b 100644
---- a/drivers/gpu/drm/vkms/vkms_config.c
-+++ b/drivers/gpu/drm/vkms/vkms_config.c
-@@ -470,6 +470,38 @@ static bool valid_connector_possible_encoders(const struct vkms_config *config)
- 	return true;
+On 20/11/2026 04:26, Peter Zijlstra wrote:
+> On Fri, Nov 20, 2026 at 11:45:34AM +0100, Peter Zijlstra wrote:
+>> On Thu, Nov 19, 2026 at 01:31:08PM -0800, Usama Arif wrote:
+>>> +#ifdef CONFIG_X86_64
+>>> +#define __stackleak_poison __stackleak_poison
+>>> +static __always_inline void __stackleak_poison(unsigned long erase_low,
+>>> +					       unsigned long erase_high,
+>>> +					       unsigned long poison)
+>>> +{
+>>> +	unsigned long count;
+>>> +
+>>> +	/* Short spans do not amortize the startup cost of REP STOSQ. */
+>>> +	if (erase_high <= erase_low + 512) {
+>>> +		while (erase_low < erase_high) {
+>>> +			*(unsigned long *)erase_low = poison;
+>>> +			erase_low += sizeof(unsigned long);
+>>> +		}
+>>> +		return;
+>>> +	}
+>>> +
+>>> +	count = (erase_high - erase_low) / sizeof(unsigned long);
+>>> +	asm volatile("rep stosq"
+>>> +		     : "+D" (erase_low), "+c" (count)
+>>> +		     : "a" (poison)
+>>> +		     : "memory");
+>>> +}
+>>> +#endif
+>>
+>> Gemini seems to suggest 16-32 words would be sufficient to amortize the
+>> REP STOS setup. It was also adamant I try and unroll that earlier loop.
+>>
+>> How about something like so, does that make sense? Also, I suppose we
+>> should make memset64() __always_inline if we use it here. I'm not at all
+>> sold on the unroll here, the asm is pretty horrid for what it does.
+> 
+> This one is much improved:
+> 
+> --- a/arch/x86/include/asm/processor.h
+> +++ b/arch/x86/include/asm/processor.h
+> @@ -28,6 +28,7 @@ struct vm86;
+>  #include <asm/vmxfeatures.h>
+>  #include <asm/vdso/processor.h>
+>  #include <asm/shstk.h>
+> +#include <asm/string.h>
+>  
+>  #include <linux/personality.h>
+>  #include <linux/cache.h>
+> @@ -580,6 +581,35 @@ static __always_inline bool on_thread_st
+>  			       current_stack_pointer) < THREAD_SIZE;
+>  }
+>  
+> +#ifdef CONFIG_X86_64
+> +#define __stackleak_poison __stackleak_poison
+> +static __always_inline void __stackleak_poison(unsigned long erase_low,
+> +					       unsigned long erase_high,
+> +					       unsigned long poison)
+> +{
+> +	unsigned long count = (erase_high - erase_low) / sizeof(unsigned long);
+> +
+> +	/* Amortize the startup cost of REP STOSQ. */
+> +	if (count < 32) {
+> +		unsigned long *ptr = (unsigned long *)erase_low;
+> +
+> +		while (count) {
+> +			unsigned long mod = (count-1) % 4;
+> +			count -= mod+1;
+> +			switch (mod) {
+> +			case 3: ptr[count+3] = poison; fallthrough;
+> +			case 2: ptr[count+2] = poison; fallthrough;
+> +			case 1: ptr[count+1] = poison; fallthrough;
+> +			case 0: ptr[count+0] = poison; break;
+> +			}
+> +		}
+> +		return;
+> +	}
+> +
+
+Hello Nick, Peter and David,
+
+Thanks for the reviews! I should have used memset64 from the get go :)
+
+I have tested 2 possible revisions now as well as this one from Peter,
+have added both of them at the end of the reply.
+
+- v2.1 where you loop upto 512B and then memset
+- v2.2: 4 stores per loop up to 512 B, then 64-byte aligned memset64()
+
+I timed stackleak_erase() in a Zen 5c guest over a futex/epoll/procfs/unix
+syscall:
+
+  No patch                             68.3 ns per erase
+  v1 (loop up to 512 B, then REP)           46.6 ns
+  v2.1 (loop up to 512 B, memset64())       46.6 ns
+  this version                              46.4 ns
+  v2.2 (4 stores/iteration, aligned REP)    43.7 ns
+
+
+The switch doesn't seem to help.
+
+Either way I kept 512 bytes: REP STOSQ only wins from ~430 bytes on Zen
+5c against the plain loop (~850 against the unrolled one), and from ~320
+on Cooper Lake.
+
+
+My personal preference is v2.1, as its much simpler code and the difference
+in performance between v2.1 and v2.2 isn't actually that much. But if there is
+a stronger preference for v2.2, I can send that as it is faster.
+
+
+v2.1:
+
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 77488ff5eb8c7c..3d205ae8566114 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -28,6 +28,7 @@ struct vm86;
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
+ #include <asm/shstk.h>
++#include <asm/string.h>
+
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+@@ -580,6 +581,26 @@ static __always_inline bool on_thread_stack(void)
+                               current_stack_pointer) < THREAD_SIZE;
  }
- 
-+static bool valid_connector_colorspaces(const struct vkms_config *config)
+
++#if defined(CONFIG_X86_64) && !defined(CONFIG_KMSAN)
++#define __stackleak_poison __stackleak_poison
++static __always_inline void __stackleak_poison(unsigned long erase_low,
++                                              unsigned long erase_high,
++                                              unsigned long poison)
 +{
-+	struct drm_device *dev = config->dev ? &config->dev->drm : NULL;
-+	struct vkms_config_connector *connector_cfg;
++       /* Short spans do not amortize the startup cost of REP STOSQ. */
++       if (erase_high <= erase_low + 512) {
++               while (erase_low < erase_high) {
++                       *(unsigned long *)erase_low = poison;
++                       erase_low += sizeof(unsigned long);
++               }
++               return;
++       }
 +
-+	vkms_config_for_each_connector(config, connector_cfg) {
-+		u32 colorspaces = vkms_config_connector_get_supported_colorspaces(connector_cfg);
-+
-+		if (!colorspaces)
-+			continue;
-+
-+		switch (connector_cfg->type) {
-+		case DRM_MODE_CONNECTOR_HDMIA:
-+		case DRM_MODE_CONNECTOR_HDMIB:
-+		case DRM_MODE_CONNECTOR_DisplayPort:
-+		case DRM_MODE_CONNECTOR_eDP:
-+			break;
-+		default:
-+			drm_info(dev,
-+				 "Colorspaces are only supported on HDMI, DisplayPort and eDP connectors\n");
-+			return false;
-+		}
-+
-+		if (colorspaces & ~(BIT(DRM_MODE_COLORIMETRY_COUNT) - 1)) {
-+			drm_info(dev, "Colorspace value contains invalid bits\n");
-+			return false;
-+		}
-+	}
-+
-+	return true;
++       memset64((u64 *)erase_low, poison,
++                (erase_high - erase_low) / sizeof(u64));
 +}
++#endif
 +
- bool vkms_config_is_valid(const struct vkms_config *config)
+ #ifdef CONFIG_PARAVIRT_XXL
+ #include <asm/paravirt.h>
+ #else
+diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
+index 2dae70c2b01465..73cc91254b1381 100644
+--- a/arch/x86/include/asm/string_64.h
++++ b/arch/x86/include/asm/string_64.h
+@@ -54,7 +54,7 @@ static inline void *memset32(uint32_t *s, uint32_t v, size_t n)
+ }
+
+ #define __HAVE_ARCH_MEMSET64
+-static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
++static __always_inline void *memset64(uint64_t *s, uint64_t v, size_t n)
  {
- 	struct drm_device *dev = config->dev ? &config->dev->drm : NULL;
-@@ -547,6 +579,9 @@ bool vkms_config_is_valid(const struct vkms_config *config)
- 	if (!valid_connector_possible_encoders(config))
- 		return false;
- 
-+	if (!valid_connector_colorspaces(config))
-+		return false;
-+
- 	return true;
- }
- EXPORT_SYMBOL_IF_KUNIT(vkms_config_is_valid);
-@@ -653,6 +688,10 @@ static int vkms_config_show(struct seq_file *m, void *data)
- 				   vkms_config_connector_get_status(connector_cfg)));
- 		seq_printf(m, "\ttype=%s\n",
- 			   drm_get_connector_type_name(vkms_config_connector_get_type(connector_cfg)));
-+		seq_puts(m, "\tsupported colorspaces=");
-+		show_bitfield(m, vkms_config_connector_get_supported_colorspaces(connector_cfg),
-+			      drm_get_colorspace_name);
-+		seq_puts(m, "\n");
- 	}
- 
- 	return 0;
-@@ -987,6 +1026,7 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
- 	connector_cfg->config = config;
- 	connector_cfg->status = connector_status_connected;
- 	vkms_config_connector_set_type(connector_cfg, DRM_MODE_CONNECTOR_VIRTUAL);
-+	vkms_config_connector_set_supported_colorspaces(connector_cfg, 0);
- 	xa_init_flags(&connector_cfg->possible_encoders, XA_FLAGS_ALLOC);
- 	kref_init(&connector_cfg->refcnt);
- 
-diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-index 88429e01089b..c9fab0ba9f63 100644
---- a/drivers/gpu/drm/vkms/vkms_config.h
-+++ b/drivers/gpu/drm/vkms/vkms_config.h
-@@ -141,6 +141,10 @@ struct vkms_config_encoder {
-  * @type: Store the type of connector using DRM_MODE_CONNECTOR_* values
-  * @config: The vkms_config this connector belongs to
-  * @status: Status (connected, disconnected...) of the connector
-+ * @supported_colorspaces: Bitmask of all the supported colorspaces. Values
-+ *                         are the sames as ones accepted by
-+ *                         drm_mode_create_hdmi_colorspace_property() and
-+ *                         drm_mode_create_dp_colorspace_property()
-  * @possible_encoders: Array of encoders that can be used with this connector
-  * @connector: Internal usage. This pointer should never be considered as valid.
-  *             It can be used to store a temporary reference to a VKMS connector
-@@ -153,6 +157,7 @@ struct vkms_config_connector {
- 
- 	int type;
- 	enum drm_connector_status status;
-+	u32 supported_colorspaces;
- 	struct xarray possible_encoders;
- 
- 	/* Internal usage */
-@@ -271,6 +276,31 @@ DEFINE_FREE(vkms_config_put, struct vkms_config *, if (_T) vkms_config_put(_T));
-  */
- void vkms_config_destroy(struct vkms_config *config);
- 
-+/**
-+ * vkms_config_connector_set_supported_colorspaces() - Set the supported colorspaces for a connector
-+ * @connector_cfg: Connector configuration to modify
-+ * @supported_colorspaces: Bitmask of supported colorspaces (DRM_MODE_COLORIMETRY_*)
-+ */
-+static inline void
-+vkms_config_connector_set_supported_colorspaces(struct vkms_config_connector *connector_cfg,
-+						u32 supported_colorspaces)
-+{
-+	connector_cfg->supported_colorspaces = supported_colorspaces;
-+}
-+
-+/**
-+ * vkms_config_connector_get_supported_colorspaces() - Get the supported colorspaces for a connector
-+ * @connector_cfg: Connector configuration to query
-+ *
-+ * Returns:
-+ * Bitmask of supported colorspaces (DRM_MODE_COLORIMETRY_*)
-+ */
-+static inline u32
-+vkms_config_connector_get_supported_colorspaces(const struct vkms_config_connector *connector_cfg)
-+{
-+	return connector_cfg->supported_colorspaces;
-+}
-+
- /**
-  * vkms_config_get_device_name() - Return the name of the device
-  * @config: Configuration to get the device name from
-diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
-index 64d79b778551..2e6925ba50b8 100644
---- a/drivers/gpu/drm/vkms/vkms_connector.c
-+++ b/drivers/gpu/drm/vkms/vkms_connector.c
-@@ -75,6 +75,53 @@ static void vkms_connector_static_cfg_release(struct drm_device *dev, void *res)
- 	vkms_config_connector_put(connector->cfg);
- }
- 
-+/**
-+ * vkms_connector_init - Common initialization for all vkms connectors
-+ *
-+ * @connector - Already allocated connector
-+ * @connector_cfg - Configuration to apply
-+ *
-+ * Returns: 0 on success, errno on error;
-+ */
-+static int __must_check vkms_connector_init(struct vkms_connector *connector,
-+					    struct vkms_config_connector *connector_cfg)
-+{
-+	int ret = 0;
-+
-+	if (vkms_config_connector_get_supported_colorspaces(connector_cfg)) {
-+		if (connector_cfg->type == DRM_MODE_CONNECTOR_HDMIA ||
-+		    connector_cfg->type == DRM_MODE_CONNECTOR_HDMIB) {
-+			ret = drm_mode_create_hdmi_colorspace_property(
-+				&connector->base,
-+				vkms_config_connector_get_supported_colorspaces(connector_cfg));
-+			if (ret)
-+				return ret;
-+		} else if (connector_cfg->type == DRM_MODE_CONNECTOR_DisplayPort ||
-+			   connector_cfg->type == DRM_MODE_CONNECTOR_eDP) {
-+			ret = drm_mode_create_dp_colorspace_property(
-+				&connector->base,
-+				vkms_config_connector_get_supported_colorspaces(connector_cfg));
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (connector_cfg->type == DRM_MODE_CONNECTOR_HDMIA ||
-+		    connector_cfg->type == DRM_MODE_CONNECTOR_HDMIB ||
-+		    connector_cfg->type == DRM_MODE_CONNECTOR_DisplayPort ||
-+		    connector_cfg->type == DRM_MODE_CONNECTOR_eDP) {
-+			ret = drm_connector_attach_colorspace_property(&connector->base);
-+			if (ret) {
-+				drm_property_destroy(connector->base.dev,
-+						     connector->base.colorspace_property);
-+				return ret;
-+			}
-+			drm_connector_attach_hdr_output_metadata_property(&connector->base);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- struct vkms_connector *vkms_connector_init_static(struct vkms_device *vkmsdev,
- 						  struct vkms_config_connector *connector_cfg)
- {
-@@ -91,6 +138,10 @@ struct vkms_connector *vkms_connector_init_static(struct vkms_device *vkmsdev,
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-+	ret = vkms_connector_init(connector, connector_cfg);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
- 	drm_connector_helper_add(&connector->base, &vkms_conn_helper_funcs);
- 
- 	connector->cfg = connector_cfg;
+        const auto s0 = s;
+        asm volatile (
 
--- 
-2.56.0
+
+
+
+
+v2.2:
+
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 77488ff5eb8c7c..5e76e1140908d7 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -28,7 +28,9 @@ struct vm86;
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
+ #include <asm/shstk.h>
++#include <asm/string.h>
+
++#include <linux/align.h>
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+ #include <linux/threads.h>
+@@ -580,6 +582,48 @@ static __always_inline bool on_thread_stack(void)
+                               current_stack_pointer) < THREAD_SIZE;
+ }
+
++#if defined(CONFIG_X86_64) && !defined(CONFIG_KMSAN)
++#define __stackleak_poison __stackleak_poison
++static __always_inline void __stackleak_poison(unsigned long erase_low,
++                                              unsigned long erase_high,
++                                              unsigned long poison)
++{
++       unsigned long *p = (unsigned long *)erase_low;
++       unsigned long *end = (unsigned long *)erase_high;
++       unsigned long i;
++
++       /* Fewer than four words, or nothing to do. */
++       if (erase_high < erase_low + 4 * sizeof(*p)) {
++               while (p < end)
++                       *p++ = poison;
++               return;
++       }
++
++       /* Four stores per iteration; the last four may overlap. */
++       if (erase_high - erase_low <= 512) {
++               end -= 4;
++               while (p < end) {
++                       p[0] = poison;
++                       p[1] = poison;
++                       p[2] = poison;
++                       p[3] = poison;
++                       p += 4;
++               }
++               end[0] = poison;
++               end[1] = poison;
++               end[2] = poison;
++               end[3] = poison;
++               return;
++       }
++
++       /* REP STOSQ is faster from a 64-byte aligned destination. */
++       for (i = 0; i < 8; i++)
++               p[i] = poison;
++       p = (unsigned long *)ALIGN(erase_low + 1, 64);
++       memset64((u64 *)p, poison, end - p);
++}
++#endif
++
+ #ifdef CONFIG_PARAVIRT_XXL
+ #include <asm/paravirt.h>
+ #else
+diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
+index 2dae70c2b01465..73cc91254b1381 100644
+--- a/arch/x86/include/asm/string_64.h
++++ b/arch/x86/include/asm/string_64.h
+@@ -54,7 +54,7 @@ static inline void *memset32(uint32_t *s, uint32_t v, size_t n)
+ }
+
+ #define __HAVE_ARCH_MEMSET64
+-static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
++static __always_inline void *memset64(uint64_t *s, uint64_t v, size_t n)
+ {
+        const auto s0 = s;
+        asm volatile (
+
+> +	memset64((void *)erase_low, poison, count);
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_PARAVIRT_XXL
+>  #include <asm/paravirt.h>
+>  #else
 
