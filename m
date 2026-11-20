@@ -1,100 +1,100 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795195898;
-	b=TASNwh/eAGMsI4RmPpW08ZamHnaFYExnTdTl+GxBz2sp79ot1oDJH5irnyK7bo+zaQk6
-	 cOhHxQP7KdmZ21b2N3xx3MhZK+orTl4ccKOqp/xWoAITLYjRK+IlYIOW5oX+6ej5z847D
-	 8wBiPy9tRSjlvhauFr32Nk5wqzJVASXKlteaJbGuqySo9RLRTSEDMpCXITSxctbSUVn7v
-	 64dQTEKj3Bg3w9k6BnMRwAqahSUuqoiz5zanly/hJB/7YP5aiCCFTm3MbljFo/92cAQz7
-	 oSbBKzr7KHyekyTn/vhJH2p02iqONetySKEs+8kJOheDgnwJxV+aslmihvDVsTzOBDw==
+	t=1795196136;
+	b=ZtqVZxve+4yHUF/LFyoMb3G6A09s/vtWqpv09qFIOnoHUUDH9VJSQ7YWSqAjKcbIdS8P
+	 ndsP4hABSs/LQ7hpZ8YIl+V/5CuNpZdOlJso3BFm/R6copGJxmwXljnJUbN+yHPwoZwUt
+	 9ATy2MI0RmFpSLjIC6XB+81zxJ1/Vr/5M6ONUWE4Y09rkdEkIkHUyeU2kCP64qsfreQzm
+	 Xgu4UlQYoBI15ApIJ6f7y2lVp7NqoAGvQgHs3RkKMMEEARzDQSbBa9JW0PekSolD7RsXj
+	 zuvrXqlzyFH4RPIHFz892sFNZD7qa+6ERAfog5kOK1/8V7wbHuadqAKFAR2z6HPCKaA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795195898;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795196136;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=TI7DZVXU6YK/vkfYgR8KztTLGwad0zi129B1pm8/11Q=;
-	b=0qZB2nTfMLkhRExL9X0KG8ecPXgl2fdpUSzUerldnvmFTsO939k2/PgZAGhNciT1nGj2
-	 1xNDRlfrkxX55VwMDxjqsb9BF6VOn0mXzwFheyjKYjGpiCsHwb2CQKf4YvFdfqf4SUWDp
-	 4cpXEogf0hP20CwQbkxkv7SKX6UTeXE0pntRF0CSQ4v/orjqB/qGct+a0VvtuQFvDCcvo
-	 U2jcmdcjPWYMRBqZA0KpnlhQgf6zJ2XoOmYrRKD84nme2b1eoyLJpOz36em83Uat3o17x
-	 b+Z4x222npu/HymL0U5E+90xzsa+718hyKPTZ+K5kuzgWX4WgMJtrMEGk0yEqbqO4Pw==
+	bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
+	b=zJf3x52ST1PIZ6VrUlzOil5tekoPQTgvqp2n4dmtzHVME+sypfBMkceHa7Z6HrJIo1nh
+	 dxK1xc+Nj7uoWFaBdh+3qPbL0jm6/5iPzYtJ1KeSSNo0cd/B4ag+QJ02ucxQ9QXPJOyO6
+	 WCla0OghQ+1cm9y/sPCJYc9rTBsgnzrM4H1PFddwhpoJYnsrb7PkuJX/DwOn68nW+sLxA
+	 Wz5IOWXC2c/JVVtF8cBXNifK0WUy0/kZHd/TZxtAewwcuSvPp/fJdRH9E7Z2gZ/MuTqKm
+	 X0SVjPsmqyg0nhPJ2lrRdF1eCmoIh0QnoWUf/O/7nP37NKbX13jd1GGPBz779+ysI9w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=biS2M5u5;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JsFGCc5a;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
 Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB572606A33F
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 17:31:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB572606A33F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EFC60A2630
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 17:35:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39EFC60A2630
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=biS2M5u5
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-533202fe429so372891cf.0
-        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 09:31:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795195896; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JsFGCc5a
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-55be673e029so308661cf.1
+        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 09:35:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795196134; cv=none;
         d=google.com; s=arc-20260327;
-        b=T0KYx4mi6mi+t6Ujr4AqOIT8mHXuybHDO/nY0hghGloGf0M4bpB4Zlw2JCs1QLSszM
-         dgOAdOBTmgY9YPHwpqwF346X6vMpeutTRaRp2VfHqG6AgOWP9DKXb/Ho1mEOrG3VwNLI
-         a85Sg2dgGAu+VFarKx1dvMYYJ2bMXzLFle/cCIMGRvzHNFS6YpmTczmLyd5aSaSfx8OF
-         rmZ0udbRawBVGnVEzuJWKpzVx31Hc9hLPPbsKJbGbbT1YP+1O3tJdGleEdYnvfy00JEh
-         saESb5CaRTlKmNTLcLFGCWrXRyTUifcYkszJlrCbpV8Qe9WEes71P32WIfRyY+6fNEZJ
-         EF4g==
+        b=kzk8dnZOasCggp2xkDB5NWQBI4NK8lirQhtRA1Tdx5LVSY30IIuNPjZPpG/IjEOibE
+         MrNUjDuHZrTedJ+MRJ+FyLQ+3YeJZr59GF8O0adCTow58W8nQo4CG4N8/WzFAeDfdKSV
+         8VT0W5RcxCYKMmtX6PKuXwjQMXRbupeyPKQbo+sFLHvIdjzobpos5FZ07VyjNHlQM4fc
+         Oi4h+IUlFHaYXOYbpNuDzqgDclu3AoWAiUEMSwZaf60HlM3WJ9/Mw4kkkkYA4wQ2gb4Y
+         D//hCGV3JkKHS2UzQExqBeqOqXDrBy+KeiuZfwns2g4ZONM0WvHRAzf3A8sQoaKCwsmb
+         XEQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=TI7DZVXU6YK/vkfYgR8KztTLGwad0zi129B1pm8/11Q=;
-        fh=WNsuqDUHNJgYKOsVvCjOqf9P32i7JbbHBf/xsEmLZ2o=;
-        b=DT4GzQZuoxXoNzRpBl4AVnf69arJJ2XPfYsVoQ1jpGkrC0PHp6yu83T03EKxoEzhLy
-         QLHfK64zOp1C8RX22Dqy3p3eQVM+2Qj8VM1SHG67CI7k9QBVGxm8UHV4vGsfBsKofeFx
-         GCJJVE24eFNxEjcMZ0RMMhRkhrPzKkYqnSY8oaBynr1TsLb7NzimBc+tv9cWrOsMq8cI
-         t6DmOSSsn/zqtJH7wi69tl6Ggll9XH4yvRIW8DL8kql+as7YBzVJzHralt9GzsoyUtN8
-         fLvXiIM4LFcyxkjfE9Kqq+3eYctOR/v1ff+5TYaj/KBNmGBaTm4E5ZuAORfeNcCvvGYE
-         AJfw==;
+        bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
+        fh=E3qlk57KmyDhtjveNuYQiRYn2/Nfctzz/rw2EXfYqo4=;
+        b=QMjgAYXfjXDFBOBAD2ixW9WvtYQFV8qK751FBkftRaGPjQbRsz/mTFaOk+R3j1YlfC
+         oLz2bYBttr9obSOGlU9ROQRm5jLjdMnh2kG4EUf0qXKs3NcOKaWlL6cfdEsE/1yG5IxL
+         9eaOs6I2V7dHGJ3mZwbZHZhJdpkEhMQM6PVg7Ii7QdhwgJFsV1BHa8W4jph8RsN4BQgf
+         D1dcvCtOO32imDKH/64tLcGu1LAebpT9l79vkqEAqyzXiyMkT9DTMjlFrTH36UpBtsdB
+         c2hQqwSizgbhwfPwBCIfHtFVlRXfPK4RLgznU6aZaJunudS7PaLXRX3QVbhycbg88Pxg
+         NZjg==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795195896; x=1795800696; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795196134; x=1795800934; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=TI7DZVXU6YK/vkfYgR8KztTLGwad0zi129B1pm8/11Q=;
-        b=biS2M5u5zuRwsc3cWs6yeFNNHNa4g5LB7ctww7DlvhiZbzloc0pRCWqS0ytXHhACr4
-         knvxls9gNcA7ApNt3pDBEe4CDbPUr+iqC/4KCbv+KmphJgCNUWeu7rdpcEt32JnPkrVQ
-         hp6g0jFB3M3O5V2PcQjW9A9MVUclTNw71uWiO7DwcZkjgTtqfeN9BJsE0kQnnNFjHXtQ
-         oTo7fww9vRC7bGJR8JRd+PLcXnIA4xI2k9DrPsayO9yqzERShrLoPdRofTNUE7tk1r7B
-         PfoRQ2Qh4Qk9IMKWBeTjtedd89dd2MkLfMU5E8rkWk/WZMIG4l/+mv2zpKm0ZhNgOLiv
-         tc5w==
+        bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
+        b=JsFGCc5atOxsgyd+jaYwxTXG8ItYIfsg2XMDHeHKLbPkrrV+f5h5dobGch4OsJ17AO
+         xhgWIS6lwv36L+XIZUkQ+RU2ZzblIEMaP9CexrI+GDy/sVO5/id6U9nMqCgTI0BSl6TV
+         PYPodCuRSuEsIMUrE3y8V/yg3VGqRvD5nRfjiMbmNXdr/gbkDyZs6/H8HR94hlfktgJ8
+         m3YXEjxtYrdi1KkrYW9zBPifbJ0EQo1RA5G8+yVWJFb0l/LQSPT1RzqqUdxhQdAMNkIx
+         X3W++wbOBxLEVBCp2LvuKHUJeDSccfmODb7iYoNISoPJmH8wy1QcgjAwwRL4b2fSmQpk
+         2yVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795195896; x=1795800696;
+        d=1e100.net; s=20260707; t=1795196134; x=1795800934;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TI7DZVXU6YK/vkfYgR8KztTLGwad0zi129B1pm8/11Q=;
-        b=jDDFi7euwTfmR9kV3PcrOIZD3yDx1jY12neQZeepO05BKUIe8fBmzvpFyxkScUzz4/
-         //o2EKcbzFjw+Pz+29jpplgA0bILBgpy8hf+fgkqKh+oJ1kqOok5ZjufW/MpmEAqp/Zt
-         f/XNNVfyzjvNcVOA1rzhxCW4yceCm4NqTn6sBsBwpBHGoW5ab1pPUQvhO1h6RglMc+9j
-         X7eIjfqtB2TVMYBmCgKrnQEIWrplhr3DLOFl+vWdVm2Ld/0EwHrwFUyi74SCxO2dHo8d
-         oeG9ldFGoQn0NxLDLI3hSZAv/six7trHnzqIYCZCBCLogwYEvE9C4HbSdYVg5HM2hRDV
-         6w3w==
-X-Forwarded-Encrypted: i=1; AL+hErGleUn6N9aIODIdmOkebt2humZbIy8YlBxItrs5Gg5+Kzil+lRPotCqD6aO+k5oj+seTfNs@lists.linux.dev
-X-Gm-Message-State: APuU4Z9toWCRCOB+hEgCHnNJmbjunqo3BsC8kcHSfl0IqetIbAsr5ygV
-	rJZEDTIsa/aohxsLDg0wa0juHKu3j52bow71zY6LMINxAebDUCzye7riUZdBXgkpy7zIGgZa2KD
-	c9jaY0COeUe/cGGyX+HcKfI/6DltM9zjqhHTp64W1v/YE1HXXX8fPDSfNpZg=
-X-Gm-Gg: AZFdTZdbSh/mteM//bPelvbUC6oEO03Wry0IiuH+LTAim70IfoEbo4LWTwxHaLXAaN3
-	cpS/GDpfCfwcwAl5A3Z2g6LAK7OLJI9voC/IrOV1kJiqVTXCU3SinOx6LNPWzK2URNoQr0irle3
-	rRqpIQF2C4Fxxrag4ZC2vftHwIiDON+8puhygZIRfJCBvGnOxiOAFtobvE6wQb077ttl97shD2Y
-	wiRE+EMPZVq4hPAdmLumO8qyr3Zz4gQDzmBkN48JpPcHejBCjnS9b8R33kacp34d/AjLhwEB41C
-	/+5sjSqlbPQviBfjSxZPayf3dMSaESuoZHHqM/ddRfYBp0tACDD5qwj3WstF1saIeHoWa6sO7bB
-	l3X8ZhGv2VLTp9tAFnrKlPoFlfPsUXpxKXAj8
-X-Received: by 2002:ac8:6102:0:b0:546:92f2:7830 with SMTP id
- d75a77b69052e-55d7914f377mr24289241cf.6.1795195895205; Fri, 20 Nov 2026
- 09:31:35 -0800 (PST)
+        bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
+        b=FKvbMt4RAHq0Tu/t0ZRPBbVGugSR8+un2gThdJYlL/sL27e44qOeeJNO/kc1pHFqxa
+         cU1U4t0/qC6GCP3LCTJMM0VihQybTjyscquF3xvcAQB7smuwa6lUETVGsHdqCXWlhBxg
+         pTUP9C3W+Sf0RfB+sITnAO41YOdgDzGPaIPLAbzqDBLbnn9m6hJ789aele21PUxZD9x3
+         3eriKNUM21thezuftht+SlKbyk+ORVCW3ydEWpL7H1CkG7X0XlYWo4zwnmXr1fQg0G5Y
+         AHoffi18JJgVep5OSA04AS9RMFYIpH+80VcSCNw3Icz2JVYtIJgHbHqb3AMx6nGMxhpW
+         J4EQ==
+X-Forwarded-Encrypted: i=1; AL+hErFMgp3FnfG7t+Tr9HP1z0TYp6XYIIyJcMZ6h0cYC6IWDwp+kXH9BdB72Bsgp3GP8GPORGj9@lists.linux.dev
+X-Gm-Message-State: APuU4Z8yoSHqVpGCPSNLZW3bYUIbL/6qWJ3OXTUW57qTg3gg7YXCvW1V
+	3pfL8LQUy80WPzD0x6pgAPhGut6VQ92mSTLWRL8e9ZaDqHoYAaKwJSzTE1boXssAcdSj0LDYfH9
+	4052KA4ceZRsp6lKRQ+WQisXhE0JtwhWmZenyYd5h
+X-Gm-Gg: AZFdTZdFeAfkNDZSr8RUHogX3ccv9EdUF3hrMLTaJv54ixPM5bqFBqfSiDWwWVhOk5K
+	URHhHZcwPmagpliiPufiMexQdvWvGVcR3rqqkNUq4aO8Upw3sv2DUmPtBoDndvmzhBzIUS+t8B3
+	X6GERiClZk2FmCgKh+qHL9q41J7GvkgeRLt/fr308Ff17x+GSAZpt+vZDIx9pLDb1ZgrwyW3/Ik
+	McAHn8ghmvTX/xnNKFxdBnZuekiDMOvNOhLmfV2at1GjWvBZIYX8iVAUUHnlS4iE3lZkUqZnhRx
+	ZYl27sYVsu1rX4d63dutIe3hrueyztskjvp7KxMJcWYWj29V6BFQF5sNEGhN/nu9Ck08vlLRAUX
+	hWQNBGzUNQvvK9prThxS/8aFZoyTp7q2ymbVm
+X-Received: by 2002:ac8:5c8b:0:b0:535:30a:76c7 with SMTP id
+ d75a77b69052e-55d790b2edemr23784471cf.3.1795196133385; Fri, 20 Nov 2026
+ 09:35:33 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,76 +104,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1795106955.git.irogers@google.com> <6fcb1e5c7545f8bcfee9ac9a3abd296c475aa1b7.1795106955.git.irogers@google.com>
- <dc491d12-68f0-4297-acda-f122fec00288@amd.com>
-In-Reply-To: <dc491d12-68f0-4297-acda-f122fec00288@amd.com>
+References: <20261119171014.1534691-1-irogers@google.com> <f712f16f-dd35-4afc-81db-4e93232846aa@bootlin.com>
+In-Reply-To: <f712f16f-dd35-4afc-81db-4e93232846aa@bootlin.com>
 From: Ian Rogers <irogers@google.com>
-Date: Fri, 20 Nov 2026 09:31:24 -0800
-X-Gm-Features: Aa3M54pYUkUhv-1L_RAm3wzkZJVptY38X_B1tSpjk2kKiiLF52OLhk9KXrZQJlk
-Message-ID: <CAP-5=fWN3zHAtixPSbaNwXn9WWTcxd1+XJO6uUb-S-FgNzrUtg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/amdgpu: initialize r in amdgpu_ttm_clear_buffer()
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
+Date: Fri, 20 Nov 2026 09:35:20 -0800
+X-Gm-Features: Aa3M54rHxE2SNl4cgtQPI_-lngqTQPH9-vUoYkTGGDewMSKBXdmwHC7t9x76wtU
+Message-ID: <CAP-5=fUPWc5GH6BQsN-+Di=LVb=dYcUu5Mo04Rp2ugsMzjYFEg@mail.gmail.com>
+Subject: Re: [PATCH net] net: pse-pd: pd692x0: Return fw_upload_err codes from
+ firmware upload ops
+To: Kory Maincent <kory.maincent@bootlin.com>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Elkin Cruz <elkin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 20, 2026 at 4:12=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
+On Thu, Nov 19, 2026 at 9:26=E2=80=AFAM Kory Maincent <kory.maincent@bootli=
+n.com> wrote:
 >
 >
 >
-> On 11/19/26 18:07, Ian Rogers wrote:
-> > In amdgpu_ttm_clear_buffer(), 'r' is declared uninitialized. When
-> > consider_clear_status is true (such as AMDGPU_GEM_CREATE_VRAM_CLEARED
-> > allocations) and all backing buddy blocks already have DRM_BUDDY_CLEARE=
-D
-> > set, every iteration of the cursor loop hits 'continue' without assigni=
-ng
-> > 'r', returning uninitialized stack memory to amdgpu_bo_create().
+> On 11/19/26 18:10, Ian Rogers wrote:
+> > pd692x0_fw_reset() and pd692x0_fw_write() return negative errno values
+> > from i2c_master_send() directly as enum fw_upload_err instead of
+> > FW_UPLOAD_ERR_RW_ERROR, and pd692x0_fw_recv_resp() ignores negative
+> > errors from its trailing i2c_master_recv(). When a negative errno is
+> > propagated to the firmware upload core, fw_upload_error() rejects it
+> > as >=3D FW_UPLOAD_ERR_MAX, logs an invalid error code message, and
+> > reports "unknown-error" instead of "read-write-error" via sysfs.
 > >
-> > Initialize 'r' to 0.
+> > Return FW_UPLOAD_ERR_RW_ERROR on I2C transfer failures and use
+> > enum fw_upload_err consistently across the PD692x0 firmware upload
+> > helpers.
+>
+> Please write a readable commit message with human hands.
+>
+> > Found via Clang -Wimplicit-int-enum-cast on an x86_64 allyesconfig
+> > build. Verified by building drivers/net/pse-pd/pd692x0.o with LLVM=3D1
+> > W=3D1 (-Werror) and -Wimplicit-int-enum-cast, and with a standalone C
+> > reproducer; not runtime-tested on PD692x0 hardware.
 > >
-> > Found via an x86_64 LLVM=3D1 (Clang 21.1.8) allyesconfig audit with
-> > -Wconditional-uninitialized enabled; fix and changelog drafted with an =
-AI
-> > coding assistant. Build-tested under LLVM=3D1 W=3D1 (-Werror) and
-> > -Wconditional-uninitialized; not runtime-tested on AMD GPU hardware.
-> >
-> > Fixes: 23bd7e67961e ("drm/amdgpu: get rid of amdgpu_ttm_clear_buffer")
+> > Fixes: 9a9938451890 ("net: pse-pd: Add PD692x0 PSE controller driver")
 > > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> >  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >   drivers/net/pse-pd/pd692x0.c | 81 ++++++++++++++++++-----------------=
+-
+> >   1 file changed, 40 insertions(+), 41 deletions(-)
 > >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/=
-amd/amdgpu/amdgpu_ttm.c
-> > index 0f86777250fc..280fcdfb9cca 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> > @@ -2675,7 +2675,7 @@ int amdgpu_ttm_clear_buffer(struct amdgpu_ttm_buf=
-fer_entity *entity,
-> >       struct dma_fence *fence =3D NULL;
-> >       struct amdgpu_res_cursor dst;
-> >       bool vm_needs_flush =3D false;
-> > -     int r;
-> > +     int r =3D 0;
+> > diff --git a/drivers/net/pse-pd/pd692x0.c b/drivers/net/pse-pd/pd692x0.=
+c
+> > index 7958f5741463..94a857eaa3de 100644
+> > --- a/drivers/net/pse-pd/pd692x0.c
+> > +++ b/drivers/net/pse-pd/pd692x0.c
+> > @@ -1455,6 +1455,8 @@ pd692x0_fw_recv_resp(const struct i2c_client *cli=
+ent, unsigned long ms_timeout,
+> >
+> >       /* Read remaining characters */
+> >       ret =3D i2c_master_recv(client, fw_msg_buf + 1, msg_size - 1);
+> > +     if (ret < 0)
+> > +             return FW_UPLOAD_ERR_RW_ERROR;
+> >       if (strncmp(fw_msg_buf, msg_ok, msg_size)) {
 >
-> Please initialize r directly before the error label, apart from that look=
-s good to me.
+> The error will be catch anyway by the string comparison. If you want to
+> add a check on ret then add another error message.
+> This is not a fix.
+>
+> >               dev_err(&client->dev,
+> >                       "Wrong FW download process answer (%*pE)\n",
+> > @@ -1465,9 +1467,10 @@ pd692x0_fw_recv_resp(const struct i2c_client *cl=
+ient, unsigned long ms_timeout,
+> >       return FW_UPLOAD_ERR_NONE;
+> >   }
+> >
+> > -static int pd692x0_fw_write_line(const struct i2c_client *client,
+> > -                              const char line[PD692X0_FW_LINE_MAX_SZ],
+> > -                              const bool last_line)
+> > +static enum fw_upload_err
+> > +pd692x0_fw_write_line(const struct i2c_client *client,
+> > +                   const char line[PD692X0_FW_LINE_MAX_SZ],
+> > +                   const bool last_line)
+> >   {
+> >       int ret;
+> >
+> > @@ -1478,19 +1481,12 @@ static int pd692x0_fw_write_line(const struct i=
+2c_client *client,
+> >               line++;
+> >       }
+> >
+> > -     if (last_line) {
+> > -             ret =3D pd692x0_fw_recv_resp(client, 100, "TP\r\n",
+> > -                                        sizeof("TP\r\n") - 1);
+> > -             if (ret)
+> > -                     return ret;
+> > -     } else {
+> > -             ret =3D pd692x0_fw_recv_resp(client, 100, "T*\r\n",
+> > -                                        sizeof("T*\r\n") - 1);
+> > -             if (ret)
+> > -                     return ret;
+> > -     }
+> > +     if (last_line)
+> > +             return pd692x0_fw_recv_resp(client, 100, "TP\r\n",
+> > +                                         sizeof("TP\r\n") - 1);
+> >
+> > -     return FW_UPLOAD_ERR_NONE;
+> > +     return pd692x0_fw_recv_resp(client, 100, "T*\r\n",
+> > +                                 sizeof("T*\r\n") - 1);
+>
+> This is not a fix, just moving code around.
+>
+> For the rest, FW_UPLOAD_ERR_NONE is similar to ret =3D 0 so there is no
+> real issue, only some type mismatch and I am not sure these changes
+> should land as a fix.
 
-Will do - I'll move 'r =3D 0;' to right after the while loop directly
-before the 'error:' label in v2.
+Sorry for the noisy diff and dense commit message - you are right that
+pd692x0_fw_recv_resp() (where fw_msg_buf is zero-initialized) and
+pd692x0_fw_write_line() didn't need touching, and all that type churn
+buried the actual change.
+
+The only two lines that return a negative errno (-EIO) as an enum
+fw_upload_err instead of FW_UPLOAD_ERR_RW_ERROR are:
+  1. pd692x0_fw_reset(): 'return ret;' when sending "RST" fails
+  2. pd692x0_fw_write(): 'return ret;' when sending 'P' fails (whereas
+sending 'E' right above it already returns FW_UPLOAD_ERR_RW_ERROR)
+
+Would you welcome a minimal 2-line patch for net-next (without Fixes:)
+just changing those two returns to FW_UPLOAD_ERR_RW_ERROR, or would
+you prefer leaving it as-is?
 
 Thanks,
 Ian
 
-> Regards,
-> Christian.
->
-> >
-> >       if (!entity)
-> >               return -EINVAL;
+> Regards
+> --
+> K=C3=B6ry Maincent, Bootlin
+> Embedded Linux and kernel engineering
+> https://bootlin.com
 >
