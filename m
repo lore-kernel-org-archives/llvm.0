@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795202458;
-	b=fHfSzLl5Pwz6y3wIOHKaFqt72IbtkykCnWKY7YhymZAvjSA8MRfTCiIGVLfzQaPZuBuA
-	 P8EosEi7X9TGF6iNWQz6BAgxWFOGnzYrheNRg6nUyfPHdLH7n3ePtUp+MLOGWkqQHtdoW
-	 i+l4FUK4a+W698XPQF9FbG6eX2gMF6Rzrihjei0omhVgRhKws+DsXZqdmip6ddLFWk6j5
-	 uCLqZhQHqg0Brm7syiE8LjGretfvRSiFvju/samkV6mRTvAuj7NppH2YKifULla1SveTs
-	 2kJj30APzebsoYL6unoSMOA6QOf0+xF4OVZ31AVDpOmvRiz8xAB7ZqeJw6rt7uUx6OQ==
+	t=1795202513;
+	b=RWb8LSOAzPmDst/itPQlEDTShPAEHEkjyybKeAn065DY0QvyoaKZCfBYRAkYTxeGEkrb
+	 IoS41vJb+bsraVljSdlRCJbKSOkXChVZ2+UDlkPcEVo5oW6tIjZfdWbSOh0PjwkeRqUEU
+	 /Yl23o10CuL1Mu2giN/NVqk+Ba9ARJQT5bZLGKjtfbhBTsSY/q0HOfUMlB4aUTyLC5iSg
+	 G1aPs5jEBJ6SHbVgAaCvam0nXxRnuoRRg/xAxj3gHE28C11XD8nkw7FaYN3Gr5XwjeZ3Y
+	 U2cpbXT/u+0TPKkSepUaonbaeC0Kio5/IdBCxP42NPgbKTldrKSabqBSL5sC9CYTt9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795202458;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795202513;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=VoMTvxJbGh646Nyuw7EioeCVLIy7B/MUtUFhIYdjyc0=;
-	b=3+iRgxeUPosyiJkVxCA4dlOFFUmnpi0lJOSsB4Wl57kwYz+LPfcDM/JtWs6QBJA8MdV7
-	 +PNhvhiOlwPumqxenVz07N6JKWbs4jL5X/kB03EMd0SKze7r0NNtcuVoKnQ9CDAPR1xo9
-	 l3BieivIhWq5GB+zQozQHksGrzsfIsPZEjW/KWo4DsGBcBBcQF2rUl+BX1b5h9gJ+axSH
-	 xYz1YgqisetyhxaTicXVzJX7wSGVjkSTkQnyx2kWsm2RbK/Ho4Xcfgb4tEIQEa01+Wmfj
-	 5qzZ+yxKirCfgH3AS3bI3W2kGjP4SJjkEpOVtVGYxqdW8Di+CCrwt3eBbS8BRYH8DCw==
+	bh=DNVNmDF5dVzvlnQ4zjX9N+gfP3FXX+TLZ7yfkqU1zlQ=;
+	b=boBcQPAfmAjdasEbV1ueywxGb6o0/Vn4RvVA7u5tb4QmHRqhJejIbwk56dSuTyuBC61q
+	 1OxWIBQ2E3qSy5lIjzjP/7IrAhOic31pLhOXsYLpaoTtLn8YburfEg9jhnTT7TUyZAmVa
+	 5LMOPzw5Ed0pN3/4/qilWXk6df7exyARAz/NepMXRo1dwkpsYGb4E6r5EDkwQoUh2j+Kg
+	 mbBEIwyXoj3As4m3gXe01wxOHljbHmM7oQ5TTLgUP5tpBj3jM5BNuz1tg4m1VsQiKBhuC
+	 ua+ZSnI18/s2LhYoc0oqOfpLlU60Mz31e02WA7JvPMpWZXzT7R0WOeA5KHvzJ/EX97w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UOH+xEwL;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DBljP7yT;
+	arc=none smtp.remote-ip=74.125.82.197
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304A9606A6E1
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 19:20:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 304A9606A6E1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A16E606A6FC
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 19:21:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A16E606A6FC
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UOH+xEwL
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1af203073e0so1389138c88.1
-        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 11:20:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DBljP7yT
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-3846d5f54c1so1568069eec.1
+        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 11:21:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795202450; x=1795807250; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795202507; x=1795807307; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VoMTvxJbGh646Nyuw7EioeCVLIy7B/MUtUFhIYdjyc0=;
-        b=UOH+xEwL9dvxFlwkb5uBIgJi0uNOX7klGYzLlu4eibknN2SNQ+XOcYP6mV/eBRskr0
-         0FVQm3SpEIx5LN8uA/jRfTUcOX33FKdIOHF9N4TRdUHVdJ9pSi/Xr4DsLHt1WmgRyvW5
-         kIP76PeLCKIcmkD6RrJrpp9LU8cYNve2UD9sp92lyKAUVuD4EzRn2b9mhysseDkONoG5
-         HjSq5BLiZ/AQgBLibbEyS7vidJKKPPGbxbEK/+Sd76qDVe0jA82aGdqfJsjNsw+/sSXh
-         rmPXOiC/vZU5Dd5yQWhI1rOzp2ZyMcTOcSEfdj1pLc7NmOdT3u2o1KCroVblQLcKbyXv
-         RBYw==
+        bh=DNVNmDF5dVzvlnQ4zjX9N+gfP3FXX+TLZ7yfkqU1zlQ=;
+        b=DBljP7yTVqxCbgZgwWq5nEg+LN13+9T3CeEZ3A4c3rZC5UeGua8hRlH+Op0kxquR6h
+         WR8/+GePbqd76E9GFcGb4VIeom8iftQDKbpUweO7eDu1Rbsj2vh04RolSrLD/cgvEas7
+         SpWOSXkZ+Z2KWwStQQcSYa5v6KVYltgXyv7X8Xlgo0KRiQev0WsueYQuQz1Os06W8yhG
+         CoDFYeF4KVzwsskVLt9i3hWdgYKYRQWhTityQC13Op0rSQuGd+9esvBPYLHb7EmEU7Ne
+         B2Nbdp/FZZaTvUY6Cdh76vqzR1Dg95CseGu6PDx8dEdlTLsQc8FB7ffq0JVP0YpJnGfq
+         Og9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795202450; x=1795807250;
+        d=1e100.net; s=20260707; t=1795202507; x=1795807307;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VoMTvxJbGh646Nyuw7EioeCVLIy7B/MUtUFhIYdjyc0=;
-        b=YvtKoyMYT7Wf50H6PAJlN+2FYg61Xv5Cd+B4Qw+lXxwaCdOf9ejoydxB9vdMGfUb8n
-         dx6b5soaaxkVaLb+6RjngSlaGYhmdIPY6uvaWU4d9SSD/E7pn7jkzkmZXYM1PNQOp49u
-         zoKvXudmqpAiL2LQC8Bh7TZHJuoMXXwgnw2T+e1TZV4NYioFN8zGtmOWcKVZSkNAMC5G
-         ck6HYbsUQSYJVSCzTyWJz1TZfMShoJV9+rqIdqDkgFPirrWGiG0VWATXWldWoS0fRrk/
-         piv7J4YIRb5RqPwtMtwBM6cv26DgugfB3OUTsUOYqGvjjMeDUoXlx13Hg57FEcYueJUj
-         Cz4A==
-X-Forwarded-Encrypted: i=1; AL+hErE7UJczCltf2CVc79n9Su6YwReMPJfEYN0tyTsMvo5RE69VSQHeSryTR88hRqFR4iUj663u@lists.linux.dev
-X-Gm-Message-State: APuU4Z9z3xYUph+pA+EtgkfggYfNKtKyax3gv8/MiQLJL7ZL6Xbh1Axe
-	zy7L167d6bH1jO/A6501nHJKtzMkA/sFw/ni3trI0c/zFK9pMGrwEg7sNgbC41zGtXBWZoES74b
-	4cg==
-X-Received: from dldz14-n1.prod.google.com ([2002:a05:701b:418e:10b0:1a1:ce17:436b])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701a:8457:20b0:1b2:42e3:e5f0
- with SMTP id a92af1059eb24-1b55689edb4mr3489816c88.12.1795202450046; Fri, 20
- Nov 2026 11:20:50 -0800 (PST)
-Date: Fri, 20 Nov 2026 19:20:31 +0000
+        bh=DNVNmDF5dVzvlnQ4zjX9N+gfP3FXX+TLZ7yfkqU1zlQ=;
+        b=kzCwJed3UjkAqHtegk7j0RvC1YITeR25hdEHf0kgD5yEKOHX/sitEC+pxeo8aKKSOr
+         e7ATisIxz6IvqEM8R04cBskKMEyLKq8kSaZMPVGlgMt9RC88mZxQUtSOywcYZLkzduqp
+         Ly0v79Zor57LvBXBw1iJQxSyn+PQrB5GCRU7MlThh24XLxcPW+T/zH+z3cINRYcCpEMn
+         Csj6xGfO8tu8CPfba4KrKkq8OUvp+8stBnVyjAvCsbEHGxVDXNa4Z8w49HgloZ0QBnKo
+         K1aBGusq7h0Ga2L0hkCm15tc32Cat7P8j4t6/IoDObZudKj3Q7SHCG/7yNM79H8T8pet
+         p0fw==
+X-Forwarded-Encrypted: i=1; AL+hErFT6y5+vOHRvtIlijdVeXreLDS8S/xqCHpomuXqgxsLXo44rVMpxaaLCpeNlJjFfzrMH6VR@lists.linux.dev
+X-Gm-Message-State: APuU4Z+cqi/LrDVDj9lanhZWGKhU/xalqDRH+dDjYp6xbhm/VRJUqFr0
+	EoD8NJAh+qfU/ILyUZ3cdhBZLZDjXjVZRdSDczcHT7NN8vEjOmxwz6WGtkZP8iGOaxo9C/ZXVHx
+	9pQ==
+X-Received: from dycqw15-n1.prod.google.com ([2002:a05:7300:c00f:10b0:36f:5688:8a11])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:ff48:b0:385:3595:5e87
+ with SMTP id 5a478bee46e88-3856fd5b5damr3386093eec.16.1795202506690; Fri, 20
+ Nov 2026 11:21:46 -0800 (PST)
+Date: Fri, 20 Nov 2026 19:20:50 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,22 +77,29 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261120192031.2868216-1-elkin@google.com>
-Subject: [PATCH] remoteproc: qcom_wcnss: fix NULL check on devm_ioremap_wc()
+Message-ID: <20261120192050.2868566-1-elkin@google.com>
+Subject: [PATCH] drm/xe: clear backup ERR_PTR before retrying in xe_bo_evict_pinned()
 From: Elkin Cruz <elkin@google.com>
-To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+To: Matthew Brost <matthew.brost@intel.com>, 
+	"=?UTF-8?q?Thomas=20Hellstr=C3=B6m?=" <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com, 
 	Elkin Cruz <elkin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-devm_ioremap_wc() returns NULL on mapping failure rather than an
-ERR_PTR(). Checking IS_ERR(wcnss->mem_region) lets NULL slip through as
-success and would return 0 via PTR_ERR(NULL) even if triggered.
+In xe_bo_evict_pinned(), backup is initialized to bo->backup_obj (NULL)
+outside xe_validation_guard(). When xe_bo_init_locked() returns an
+ERR_PTR on lock contention (-EDEADLK) or OOM (-ENOMEM),
+drm_exec_retry_on_contention(&exec) or
+xe_validation_retry_on_oom(&ctx, &ret) restarts the loop while backup
+still holds the ERR_PTR. On the retried iteration, "if (!backup)" is
+false, passing the ERR_PTR directly to xe_bo_evict_pinned_copy().
 
-Check !wcnss->mem_region and return -ENOMEM on failure.
+Extract ret = PTR_ERR(backup) and reset backup to NULL before
+retrying.
 
-Fixes: f9b888599418 ("remoteproc: qcom_wcnss: Fix reserved region mapping failure")
+Fixes: 844150c255c9 ("drm/xe: Convert pinned suspend eviction for exhaustive eviction")
 Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
 I am trying out a new Clang static analysis linter for ERR_PTR/NULL
@@ -103,25 +110,24 @@ runtime-tested on hardware).
 Thanks,
 Elkin
 
- drivers/remoteproc/qcom_wcnss.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/xe/xe_bo.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-index 02f38fe29f20..abe0ab320d03 100644
---- a/drivers/remoteproc/qcom_wcnss.c
-+++ b/drivers/remoteproc/qcom_wcnss.c
-@@ -541,9 +541,9 @@ static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
- 	wcnss->mem_phys = wcnss->mem_reloc = res.start;
- 	wcnss->mem_size = resource_size(&res);
- 	wcnss->mem_region = devm_ioremap_wc(wcnss->dev, wcnss->mem_phys, wcnss->mem_size);
--	if (IS_ERR(wcnss->mem_region)) {
-+	if (!wcnss->mem_region) {
- 		dev_err(wcnss->dev, "unable to map memory region: %pR\n", &res);
--		return PTR_ERR(wcnss->mem_region);
-+		return -ENOMEM;
- 	}
- 
- 	return 0;
+diff --git a/drivers/gpu/drm/xe/xe_bo.c b/drivers/gpu/drm/xe/xe_bo.c
+index 353ac1e9a9d6..ae6fd20304ce 100644
+--- a/drivers/gpu/drm/xe/xe_bo.c
++++ b/drivers/gpu/drm/xe/xe_bo.c
+@@ -1680,8 +1680,9 @@ int xe_bo_evict_pinned(struct xe_bo *bo)
+ 						   XE_BO_FLAG_SYSTEM | XE_BO_FLAG_NEEDS_CPU_ACCESS |
+ 						   XE_BO_FLAG_PINNED, NULL, &exec);
+ 			if (IS_ERR(backup)) {
+-				drm_exec_retry_on_contention(&exec);
+ 				ret = PTR_ERR(backup);
++				backup = NULL;
++				drm_exec_retry_on_contention(&exec);
+ 				xe_validation_retry_on_oom(&ctx, &ret);
+ 				break;
+ 			}
 -- 
 2.56.1.750.gf70dc682cf-goog
 
