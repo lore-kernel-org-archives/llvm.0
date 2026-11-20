@@ -1,78 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795187178;
-	b=dWTn9yIItpY5BGKuT9TGG9Ajs3M+XV/HZnxW6fxFTafesn+iOXod5J+h/wWkS+WBh08P
-	 KPfmGz48FMozuu0D6nCyER8Qyi7uqqpHc33LcLsjYrxEL7pwde+J15XteE7c19eluVWcW
-	 Ihslwb0VVnJgeQJfUG9evKf2JirXqWKlLSuWkdp4wDskw8Qga7zphis76lUZYcFsFzovv
-	 EmLZob7w0FwOkr1vPMrhjvsFmLHm0j+jdOcHnn23N2Hep7kcd7r0p5DgC1uHZONEqaiOH
-	 GikVT6uHfafDQ4KHuGPaOnMes5MuiPRSFlYWEv7Xr15CGRBzcEgHKpE6xddxY1QYicA==
+	t=1795187290;
+	b=mKLRLOb/LoGUzVM9FjJzcqmNXbxPAUSWSEAghGW3bUoJKJ8jMdhZb1N02DvYUIiE8K95
+	 go6Ak2rXWSR8bYYiUFWhVX8r2hneIcNp5EDetN4wYBJjFMV7swzWQ4brHoqjmw1v+s2z0
+	 h/ceXip6mwCE3EuNcodpM1gcXSPNcIhG1XGLSyc+AISoC57aLbIYfgrq1Dp+//rcew7q/
+	 UwFsAU3s0H5LNZs7b4AkELrwi0188x8++3ISTe8GzRprLh7FF9aAhyV33yMYB0IroR+Gg
+	 s43/GkJZinXlrTn8JQ/X00EVmFmvLUfBOivUvFmiuM9nhMH1BbG5XaARJu+4niJKTzA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795187178;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795187290;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=EAuWYfFjbXXdRKGkMUFxtHe0TJlcXwp3sYIp4VPcpKc=;
-	b=Ko/szu3cIj+mrpybF/xzMSkbqnRj5aYXm2l5lxjY0qcNcgiHbSQnaJGRFHdrtF4nQzFX
-	 7gjNKhMXOUgk0VBis2s/swxbexyfdCmtzxRA51rKjlUBM8tLfj12KRIGx6recL/jw02EK
-	 8MxL5iG106beQ7FOEDhCmtmOKEERCZbtxZN0rlZ+HwuAMZl1kQeTXbyPyxYcCaxfM78Au
-	 P1ivdUR8/x9+6lq3q4hD2huzvToyWSYF+Hc1x4Us0JGpCDbfke7sp4DhQT29PcK7fS9IB
-	 qDbOf64u6kpDPTNSo7ylzLEb2w2p8m+lm4Uvj4kIQsdTVOzS8oryYoTa6v8R7D1qlZw==
+	bh=0rrE4PahKjZtrWlnoYgsDKaA50KKzlmoDKZo+9+qI8w=;
+	b=yuThgSaPI8fTBuLtPVBKgvtVFZDcxfV6k8/PK4ZGVfrHhZnCuuyBIawcem/DLNmTAzmC
+	 elt5SDSB5Lhp2sioU2+5NGwZ+x0m9m62nhVz2MUIxib1nXSYS//0/b5RycpXhK8fWScw4
+	 lx4xfxdr/3JvZBTCvt3eQfJffqDEOGA5y1mp+xtdhL/2aygRNwJ3eO5C+bzjgINP4v8nV
+	 l1OBE7hWPD0UiDeglxA/fHrOtKPVGsnuWWiyco4KyIzIT0kO+FWP2n6d0MncC3eaMdS11
+	 U1Z0Pj3DynnI1Abbx9rqavIGHjxm1bAaOR/pZ/fFkQZSiwgywlIT4eD5rdBmwURj8GA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.intel.com;
 	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=S2Kkd8fx;
-	arc=none smtp.remote-ip=198.175.65.20
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Z/FqioCu";
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EF9606A325
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 15:06:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6EF9606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B746E606A32A
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 15:08:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B746E606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=S2Kkd8fx
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Z/FqioCu
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795187177; x=1826723177;
+  t=1795187289; x=1826723289;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HF/fhKFXWR+yqPn0rejXIeI42zfVDMjdRvsE+UApABE=;
-  b=S2Kkd8fxBU0KtIhDO3CKvXe3DT8E4xoste2tlrFin8K5NxKrQUTOCJLj
-   yYeE806AvW/xaDz0oYhi2RSUZkk/jQZBzpq/4dNU3Tq43RgaBdRLwAZVa
-   iEYdWT/uWOJkFg4kvQY9YgsOiaoyGGn01+FlWJKgkcJGL4lPw9rg9vmNJ
-   9ZPKJcWBqv54mfkjis2wfMuaJ6cCujzbenoBeHzKOX3E+uiYVtsAWOPYz
-   Svpj2aj0F97JyNs2TNke1vS6NU/eCC6CD+7kngCPnpeQiM6AX7PdFKXND
-   OghTOYPMICTrJvAEqahfZZfATEVEiKwjNQIepzWtbHthgbkzQSeQ6r8v5
-   g==;
-X-CSE-ConnectionGUID: 1JTmg0J5SGGtu4rAYw9LxA==
-X-CSE-MsgGUID: Hcn0MI5+TTSPmCL8eregpA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4108600"
+  bh=Joi7ljOpyNUOHj0kjn9+KmYWPueeoVlKk14XtGNF+3M=;
+  b=Z/FqioCuqLoynpzhiuazq7MHrOg4aseaakOGH23qh8iej/R6f03uHnVf
+   zxd++g4SXMrURpvOM/wWqQeFDiadRjehMERSBbwInOAn+u5msHFeHLafF
+   4ekhZ1GX4ip6yPHz0UrhCk6Dit7QQFI7i7VnZhsYYfliWG+Qzq9OwZmPP
+   9OqYL1snDHQiM9flehl9kpgS+ZO2iYD6FXzLEO4PeAz49giFEwWUnWrcL
+   /b0OT5H2+cj8XQTflhn0dShfPzH1xKn8hnGPlvFX+vPTGGPzxFCtgQoIg
+   FQsgiPsIB0S5Cbxf9ylfultfLSzk0uRYjkUHODHCZ+MhpOAN5+ItkzFjI
+   w==;
+X-CSE-ConnectionGUID: B42lLBruTNGODPBJl26pIA==
+X-CSE-MsgGUID: TF2ykeFaRSysJYjm18wu3Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4109928"
 X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
-   d="scan'208";a="4108600"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 07:06:17 -0800
-X-CSE-ConnectionGUID: QBC5tPAkRS2xjJdTSVRM9Q==
-X-CSE-MsgGUID: QHE77ujPRVq+PEwtDmHPtg==
+   d="scan'208";a="4109928"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 07:07:51 -0800
+X-CSE-ConnectionGUID: RFBtQqFOSuqKfSctIZ+rYw==
+X-CSE-MsgGUID: +FpWI1IdRCa64TkVQ4ZQIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
-   d="scan'208";a="11050941"
+   d="scan'208";a="10702529"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Nov 2026 07:06:15 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 20 Nov 2026 07:07:49 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1008)
-	id 7A0DA99; Fri, 20 Nov 2026 16:06:14 +0100 (CET)
-Date: Fri, 20 Nov 2026 16:06:14 +0100
+	id C85A799; Fri, 20 Nov 2026 16:07:47 +0100 (CET)
+Date: Fri, 20 Nov 2026 16:07:47 +0100
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Ian Rogers <irogers@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
-Subject: Re: [PATCH] usb: typec: hd3ss3220: Propagate regmap_read() errors
- from attached-state check
-Message-ID: <awBh5m0bWIgf_eVO@black.igk.intel.com>
-References: <20261119170650.1521609-1-irogers@google.com>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Elkin Cruz <elkin@google.com>
+Subject: Re: [PATCH] usb: typec: qcom-pmic-typec: Avoid reading uninitialized
+ state on error paths
+Message-ID: <awBiQ0S1hYnm-ngo@black.igk.intel.com>
+References: <20261119170853.1529676-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,106 +86,123 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261119170650.1521609-1-irogers@google.com>
+In-Reply-To: <20261119170853.1529676-1-irogers@google.com>
 
-On Thu, Nov 19, 2026 at 09:06:49AM -0800, Ian Rogers wrote:
-> hd3ss3220_get_attached_state() has return type 'enum usb_role' (an
-> unsigned enum) yet returns negative regmap_read() error codes directly.
-> Neither hd3ss3220_set_role() nor output_poll_execute() checks for errors;
-> on a transient I2C failure (such as -EIO, cast to 0xfffffffb),
-> hd3ss3220_set_role() passes the bogus value to usb_role_switch_set_role()
-> and disables VBUS power. On role-switch providers without a .get callback
-> (where sw->role caches the value passed to usb_role_switch_set_role()),
-> reading /sys/class/usb_role/*/role subsequently indexes usb_roles[role]
-> out-of-bounds.
+On Thu, Nov 19, 2026 at 09:08:53AM -0800, Ian Rogers wrote:
+> In qcom_pmic_typec_port_set_cc(), error paths from regmap_read() and the
+> default switch branch jump to 'done:', which logs 'currsrc', 'mode', and
+> 'misc' via dev_dbg() and passes uninitialized 'currsrc' into
+> rp_sel_to_name(), indexing rp_sel_name[] out-of-bounds when dynamic debug
+> is enabled. Similarly, early error paths in qcom_pmic_typec_port_get_cc()
+> jump to 'done:' before 'misc', 'attached', '*cc1', and '*cc2' are
+> initialized.
 > 
-> Return an int status from hd3ss3220_get_attached_state(), pass the
-> resolved enum usb_role via an output pointer, and leave the current role
-> and VBUS state unchanged on I2C read errors.
+> Return early on error paths in both functions instead of jumping to the
+> post-success dev_dbg() trace.
 > 
 > Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
-> -Wimplicit-int-enum-cast enabled; fix and changelog drafted with an AI
+> -Wconditional-uninitialized enabled; fix and changelog drafted with an AI
 > coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
-> -Wimplicit-int-enum-cast; not tested on TI HD3SS3220 hardware.
+> -Wconditional-uninitialized; not tested on Qualcomm PMIC Type-C hardware.
 > 
-> Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
+> Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
 > Signed-off-by: Ian Rogers <irogers@google.com>
 
-LGTM, but no stable?
+No stable here either?
 
 Thanks,
 
 > ---
->  drivers/usb/typec/hd3ss3220.c | 22 +++++++++++++---------
->  1 file changed, 13 insertions(+), 9 deletions(-)
+>  .../typec/tcpm/qcom/qcom_pmic_typec_port.c    | 25 +++++++++----------
+>  1 file changed, 12 insertions(+), 13 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 60d6de9ba339..212c3624961c 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -163,10 +163,10 @@ static int hd3ss3220_set_source_pref(struct hd3ss3220 *hd3ss3220, int prefer_rol
->  				  src_pref);
->  }
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
+> index b2ad31e85b5e..a1595b8b53e7 100644
+> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c
+> @@ -372,14 +372,12 @@ static int qcom_pmic_typec_port_get_cc(struct tcpc_dev *tcpc,
+>  	ret = regmap_read(pmic_typec_port->regmap,
+>  			  pmic_typec_port->base + TYPEC_MISC_STATUS_REG, &misc);
+>  	if (ret)
+> -		goto done;
+> +		return ret;
 >  
-> -static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
-> +static int hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220,
-> +					enum usb_role *attached_state)
->  {
->  	unsigned int reg_val;
-> -	enum usb_role attached_state;
->  	int ret;
+>  	attached = !!(misc & CC_ATTACHED);
 >  
->  	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL,
-> @@ -176,17 +176,17 @@ static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
+> -	if (pmic_typec_port->debouncing_cc) {
+> -		ret = -EBUSY;
+> -		goto done;
+> -	}
+> +	if (pmic_typec_port->debouncing_cc)
+> +		return -EBUSY;
 >  
->  	switch (reg_val & HD3SS3220_REG_CN_STAT_CTRL_ATTACHED_STATE_MASK) {
->  	case HD3SS3220_REG_CN_STAT_CTRL_AS_DFP:
-> -		attached_state = USB_ROLE_HOST;
-> +		*attached_state = USB_ROLE_HOST;
->  		break;
->  	case HD3SS3220_REG_CN_STAT_CTRL_AS_UFP:
-> -		attached_state = USB_ROLE_DEVICE;
-> +		*attached_state = USB_ROLE_DEVICE;
->  		break;
+>  	*cc1 = TYPEC_CC_OPEN;
+>  	*cc2 = TYPEC_CC_OPEN;
+> @@ -392,7 +390,7 @@ static int qcom_pmic_typec_port_get_cc(struct tcpc_dev *tcpc,
+>  				  pmic_typec_port->base + TYPEC_SRC_STATUS_REG,
+>  				  &val);
+>  		if (ret)
+> -			goto done;
+> +			return ret;
+>  		switch (val & DETECTED_SRC_TYPE_MASK) {
+>  		case AUDIO_ACCESS_RA_RA:
+>  			val = TYPEC_CC_RA;
+> @@ -417,7 +415,7 @@ static int qcom_pmic_typec_port_get_cc(struct tcpc_dev *tcpc,
+>  				  pmic_typec_port->base + TYPEC_SNK_STATUS_REG,
+>  				  &val);
+>  		if (ret)
+> -			goto done;
+> +			return ret;
+>  		switch (val & DETECTED_SNK_TYPE_MASK) {
+>  		case SNK_RP_STD:
+>  			val = TYPEC_CC_RP_DEF;
+> @@ -472,7 +470,7 @@ static int qcom_pmic_typec_port_set_cc(struct tcpc_dev *tcpc,
+>  			  pmic_typec_port->base + TYPEC_MISC_STATUS_REG,
+>  			  &misc);
+>  	if (ret)
+> -		goto done;
+> +		goto err_unlock;
+>  
+>  	mode = EN_SRC_ONLY;
+>  
+> @@ -496,7 +494,7 @@ static int qcom_pmic_typec_port_set_cc(struct tcpc_dev *tcpc,
 >  	default:
-> -		attached_state = USB_ROLE_NONE;
-> +		*attached_state = USB_ROLE_NONE;
->  		break;
+>  		dev_warn(dev, "unexpected set_cc %d\n", cc);
+>  		ret = -EINVAL;
+> -		goto done;
+> +		goto err_unlock;
 >  	}
 >  
-> -	return attached_state;
+>  	if (mode == EN_SRC_ONLY) {
+> @@ -504,14 +502,11 @@ static int qcom_pmic_typec_port_set_cc(struct tcpc_dev *tcpc,
+>  				   pmic_typec_port->base + TYPEC_CURRSRC_CFG_REG,
+>  				   currsrc);
+>  		if (ret)
+> -			goto done;
+> +			goto err_unlock;
+>  	}
+>  
+>  	pmic_typec_port->cc = cc;
+>  	qcom_pmic_set_cc_debounce(pmic_typec_port);
+> -	ret = 0;
+> -
+> -done:
+>  	spin_unlock_irqrestore(&pmic_typec_port->lock, flags);
+>  
+>  	dev_dbg(dev, "set_cc: currsrc=%x %s mode %s debounce %d attached %d cc=%s\n",
+> @@ -520,6 +515,10 @@ static int qcom_pmic_typec_port_set_cc(struct tcpc_dev *tcpc,
+>  		pmic_typec_port->debouncing_cc, !!(misc & CC_ATTACHED),
+>  		misc_to_cc(misc));
+>  
 > +	return 0;
+> +
+> +err_unlock:
+> +	spin_unlock_irqrestore(&pmic_typec_port->lock, flags);
+>  	return ret;
 >  }
 >  
->  static int hd3ss3220_try_role(struct typec_port *port, int role)
-> @@ -231,7 +231,10 @@ static void hd3ss3220_regulator_control(struct hd3ss3220 *hd3ss3220, bool on)
->  
->  static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
->  {
-> -	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
-> +	enum usb_role role_state;
-> +
-> +	if (hd3ss3220_get_attached_state(hd3ss3220, &role_state) < 0)
-> +		return;
->  
->  	usb_role_switch_set_role(hd3ss3220->role_sw, role_state);
->  
-> @@ -258,9 +261,10 @@ static void output_poll_execute(struct work_struct *work)
->  	struct hd3ss3220 *hd3ss3220 = container_of(delayed_work,
->  						   struct hd3ss3220,
->  						   output_poll_work);
-> -	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
-> +	enum usb_role role_state;
->  
-> -	if (hd3ss3220->role_state != role_state)
-> +	if (hd3ss3220_get_attached_state(hd3ss3220, &role_state) == 0 &&
-> +	    hd3ss3220->role_state != role_state)
->  		hd3ss3220_set_role(hd3ss3220);
->  
->  	schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
 > -- 
 > 2.56.1.708.g77570a6a1d-goog
-> 
 
 -- 
 heikki
