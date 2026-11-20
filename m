@@ -1,60 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795197833;
-	b=I9ZV+a48G48QQzwPtc6yWzn6OEjGWi3ypEp4B0VBJeTyedUxrT1kf7dMbFT4o6oW/sUn
-	 eFLuTOh+DakzD9WACHWNtH4/d28FIGtTortBoRMT69JcMaLKC53JnLIo0aH/woVTTm6+I
-	 Hlu8a8GD/mBa4p30SwvD+7RvaR/DXhEzZ1llalcHE61StcCQpe+0xSPH9pm9z3ARiHB5o
-	 ApnHfgtHwRPqevzrnpKqgSFtpZJWI2RxXT9GqUsCmsDk7uIsZBOi/Ku6Vq1mWYF8duv/M
-	 31NcsNSizA90goOvYWLWHifgPfCU2ymim1n9nGMS6ZvFRrDwx6KZoou+4QJxT9T2xiQ==
+	t=1795197847;
+	b=nhEjVdRhi45o8myu4yOqt4CRf1fkz446aiYidsbqlF0SVe8305GL80g9OvJWnyJ8MQPK
+	 mxC2addJB/X8lBHcPiq/C3k1zfOAmOKe/VuZeKvJaI01xqf6agrYm2JFe4NJA2zaOgLEG
+	 ReIfg8X7ge29Ag7ZH8K0GE/VBabzOKHRVxACzATPEU2KTq5O8ir26/KpUlc1RfehNxOtO
+	 wRy9iru7/noi2PkKzN8Kq35TgF2gqWDFALxT4THZurship+4FXkwDTfN21AlTzpD/2v+v
+	 MLExNSjcBnQnDtCj8QjcqFQecHdMfJETzf0Z9LuKGuH0h8ChDy8kHfyZORM+MqJ8hlQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795197833;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795197847;
 	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Last-TLS-Session-Version;
-	bh=DwiRSRh5gEtvlqW0dzzCs/Wk8GHTeI9BSIT2uTN6bJs=;
-	b=UOy20X4tWjXJWKGq+BH5VFpTdmxl/TJ2i19RJiCV/cgTDPmBxG3UH3AtJulzXElX1G3S
-	 mSjNxg/6fVC+D/QWzplu5Me1r9HuNBlwke2IWQNhTZTcbqzWXlGUcQkDZ/F0ol8bgXF5s
-	 O/znLMNbaJjms3slQ7O1XPQoKNX0UnIt64dW/OAkv/req9nG37bR89LCgFkXhmKom9Y9W
-	 e43Qv+oQnPzkGndwU4J+Dz8H9sJGj+iokTpJWZjuACkBvyMm7HWLPwhijL4wa7ABpCW9t
-	 0k+TVkpW063tZDsEq+ZYzKhnvu8TsDM1iofuPCztgtF3YcgoIIQJtmFpvc9TIkHAeOw==
+	bh=EWvTyJ0GKSZ0OW9hy14bottUtec95h3CpCl/9rBJjxg=;
+	b=d2jkLC3dM1wtA0mqrOnhxr20g0PmwBLzDYvrlm/NU+JdNygmlvnNIIp8wWFN7oK4hUfN
+	 VQVSHo3ibGNhFp5HJQKZnXnY+aRwuXKjtES9AkulS8tsfAbqfJtaDYV+hxMdC+8MpK7VS
+	 C5r7BUovlOv34MW9u6ewcgEYlb9oKFAexJDkaXdJZ1R6WqBWWxK6BOro/u1MjOZq/5Du1
+	 8dlR1YWCeG/Q7ENaqWA6RHO95h1MiMx+dTZctNIjtVsGBsoWo7tWJQWyNlempBLx65vcv
+	 NjRKYH0vrmVAMpRINnyJ6/DGKEbPbhdzULH5u4z1FE4wr4IVSuFr+MchUrbwHq7hhjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bootlin.com;
 	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=jT5uK86M;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=P9W9WMta;
+	arc=none smtp.remote-ip=185.246.85.4
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF72F606A33D
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:03:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF72F606A33D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF1660A2633
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:04:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BF1660A2633
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=jT5uK86M
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=P9W9WMta
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 435F5C62225;
-	Fri, 20 Nov 2026 18:03:53 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 263AE4E4168E;
+	Fri, 20 Nov 2026 18:04:02 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 75942601B9;
-	Fri, 20 Nov 2026 18:03:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 14C3F11BC08D7;
-	Fri, 20 Nov 2026 19:03:36 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id EDB65601B9;
+	Fri, 20 Nov 2026 18:04:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A801111BC09FC;
+	Fri, 20 Nov 2026 19:03:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795197821; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1795197839; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=DwiRSRh5gEtvlqW0dzzCs/Wk8GHTeI9BSIT2uTN6bJs=;
-	b=jT5uK86Me8Ae4QyvVeZKWBG7N93n0ytgWC1TMrfvatyrtERW71aCOlLAfXBum6JMhitE9t
-	6fSDEqzTxDbd4VIOAl7oHGGY4RfJa031usTZKkLlLXIMpc/JscB8sjsDlxQTVDXOxIpyHj
-	8DkkPk+rvHflgr6euv19Ax1p/LVJLTcMWO4y65l+bYNMioGkAiZVoQ8gl8qAB4ghLpvpx9
-	BLRFAfIrY7XXXHjSTzk+RUy3cRgpwpHeE1hKyNsHisA6FxJ7DUfpjQ4K+nXwXj4M1dJS4O
-	mDkr01mNq6js5Gffg/c27bKBlbPkajDHRSbc4lv/K1fZwnd/scj2cpkLFxScIQ==
+	bh=EWvTyJ0GKSZ0OW9hy14bottUtec95h3CpCl/9rBJjxg=;
+	b=P9W9WMtas5JI8irOOHVzjhnj5lJfAPEKbVtuVoaGThNK6KVLDad5IAlQJAe/4b7xGt0v6f
+	lfP72nsjnXgbZSbKkaYsL8HZLdjam4OAdrxRAMEECA+m8t5cFvbfSaIul/0hFggs5Hg8M6
+	Ck9PEgHBaW80dgQyY+BSU6P+R4CB1Ashft35xsRgkHdgZlngBYEwh8KjSpuAtz0MhOuCfR
+	RQ1cINtZicmfYQoy+SPwPWE4EsFEEwV0MvT5cOkUpSAkLpuTLrcDAnioYIQp24/d+IVtcB
+	53Btq5083RoDtjNndmsO/NZfItr1VR4V12G+TNM68gQGAyqzKQ5ttb1SN6D7gQ==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Fri, 20 Nov 2026 18:58:54 +0100
-Subject: [PATCH v6 12/43] drm/vkms: Reference-count vkms_config and
- vkms_config_connector
+Date: Fri, 20 Nov 2026 18:58:56 +0100
+Subject: [PATCH v6 14/43] drm/vkms: Add error handling in plane config
+ creation
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -66,7 +66,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261120-vkms-all-config-v6-12-78ace90f4fc1@bootlin.com>
+Message-Id: <20261120-vkms-all-config-v6-14-78ace90f4fc1@bootlin.com>
 References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
 In-Reply-To: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -92,304 +92,81 @@ Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
  linux-doc@vger.kernel.org, Simona Vetter <simona.vetter@ffwll.ch>, 
  llvm@lists.linux.dev
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10009;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2118;
  i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=fqjFoGMeqtYdyCoYfsEAUeEHOhGs+X+8/vNwSXbius0=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBrAIr+DWgnEZc6vdDJcRWVIOGv/7aW9QOyxI2bm
- AAAiiEmPz6JAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCawCK/hsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOLkFhAAgaALNjm0qBvo/M2LjwHbEjtzW1YNXZz
- GxJRa0WBjRXbSvH6TrpY7/7eOg/2xIszGkPwZt+livhMdWlqUlbxM0wxaYI0T7qU7EBDek9X+lb
- wDxmexToVuqMHunfAdDQV7NmsQ8Ztb5vbySxp0O77AVG3qBy/56RPS96NmTVY4xC+Tdum1Vigqx
- Dt/IXe6++jO1u8MFlc4X0Rf39wHS7Sf3oq8MIz7wHEMfsPfT3EZnJShw7+KLHaQ2v4BvI6isszt
- jv7EoZLisZ2pEcw5XLwyEpjScOoDtR5DN5ZbJZkCPALxbVHVr/MYMZQ1Q1xoVd2xLwLvQyKjXLn
- hQFNg6ncIIDGhwBHsXcAsNhqBwu+pHZ0xhqWsRz2hiHf3FCsXlCgfKWodpUb7jkPvoc0ZBxxmJN
- l7vfyFgJaRmko4VgIOJbBGbmgKdnv67LPooSd/ErVGGjhGdgibX1hiE7YAnSePNxvuyw3TgZZPt
- 6sQoRgfHTpfmu4HCsQGRskLxEsQOQUAd9Ij7MZ6HKLd7Sgx8AiOs/SYcVe/J6iHKd3Dypp1j4vg
- m1Q43/6KT9HayYfO15qf6kzk9jlwW5A+7jh6xfoutRx/vlw806sqH/O+zJB3tLRcsA/OEFmRjve
- TVbEFp/gSSzKx2pjOWNnZb4WXf3scYG9gQDKPetbgt2au+Ue7UTo=
+ bh=tJ6CmTl8tZxoxLjfFVZLDN6OYWoWi2kn4tyF5DKaWI0=;
+ b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBrAIr/M5fxgGdZQwxOEDXjpj2q9XdrXZF3dhvDi
+ VTjE3JoX6CJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCawCK/xsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOLzBBAAtQUiY8IycgCKZvm2cEsLaGPaRAacj5U
+ 24hdcs3OtVaNAAvcSZOrCQ9wVivgqDbNU8cQSKNn4AXqyhKhkS6GcgSAHvlLPZ61NsRhoha8X65
+ gCmADE3pgA5I7oXkJocjSwsaxGVPcvfVEo904PC3OBgBOAC/k4C48bHPcS5AMf4Z6KCtjGKtGRl
+ N3Di6sie6PwpkTbk/RlYGMz8OB1JoL9LHLDx58AXGGY9sf3bZX/rCtpDrDwN5WWfsITv28W22bX
+ 7sE4GImBld5nod5ggGidCNWOtxw+I/vMHoN5fAEKrYsXyEmkLw0LBR/Hp/armvQsnr/wdJ9MY64
+ rI0wk7M+fPVBldJQtIltd2aTaBmz3/nzbdnPYMa0wJvmIb1u2yFUwcL8Dmzp1vScG00qen7eyMy
+ 2Hwj3CZJ7TbOsiRjqTYtXgMmq7Otk5J0DKF5No6iBx6kO3G0Ou/qmeoom3FoMTCA4fhriAY0f6A
+ 5N4sizlLkfi0Sq4tJktPTOj6Ix9gAN5k5c0mK9q3ebv9q3pH92ETgIRTOzFr3x+dmKZEbSxx71h
+ RYiQqUrG5Lxs6m7CB0Zf6cdkvoXeep47hU15YiJnD5oVY6SBLxD3Egq6Ouart9d6eMpEI6gelH6
+ R5wDR7sa5U+FCGeyDuy57+pJvC/wd4L2oDGHLq/v0mRAnq2y0s5A=
 X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
  fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
 X-Last-TLS-Session-Version: TLSv1.3
 
-The configuration objects are referenced from places with independent
-lifetimes: connectors keep a pointer to their vkms_config_connector, the
-DRM device outlives the configfs view, and userspace can delete a
-configfs directory while the device is still running. Freeing a
-configuration when its configfs representation disappears can therefore
-lead to use-after-free.
-
-Add explicit get/put references to vkms_config and vkms_config_connector:
-a configuration destroyed while still referenced is detached and kept
-alive until its last reference is dropped.
+Properly route the error path of vkms_config_create_plane() through a
+fail label to simplify future work.
 
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- drivers/gpu/drm/vkms/vkms_config.c | 88 +++++++++++++++++++++++++++++++++++---
- drivers/gpu/drm/vkms/vkms_config.h | 41 +++++++++++++++++-
- drivers/gpu/drm/vkms/vkms_drv.c    |  7 ++-
- 3 files changed, 128 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/vkms/vkms_config.c | 12 +++++++++---
+ drivers/gpu/drm/vkms/vkms_config.h |  2 +-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-index 71877651cb00..50cde689f482 100644
+index 50cde689f482..03f2d0f0e327 100644
 --- a/drivers/gpu/drm/vkms/vkms_config.c
 +++ b/drivers/gpu/drm/vkms/vkms_config.c
-@@ -9,6 +9,8 @@
- 
- #include "vkms_config.h"
- 
-+static void vkms_config_connector_release(struct kref *ref);
-+
- struct vkms_config *vkms_config_create(const char *dev_name)
- {
- 	struct vkms_config *config;
-@@ -27,6 +29,7 @@ struct vkms_config *vkms_config_create(const char *dev_name)
- 	INIT_LIST_HEAD(&config->crtcs);
- 	INIT_LIST_HEAD(&config->encoders);
- 	INIT_LIST_HEAD(&config->connectors);
-+	kref_init(&config->refcnt);
- 	mutex_init(&config->lock);
- 
- 	return config;
-@@ -112,8 +115,9 @@ struct vkms_config *vkms_config_default_create(bool enable_cursor,
+@@ -424,13 +424,16 @@ void vkms_config_register_debugfs(struct vkms_device *vkms_device)
+ 			      ARRAY_SIZE(vkms_config_debugfs_list));
  }
- EXPORT_SYMBOL_IF_KUNIT(vkms_config_default_create);
  
--void vkms_config_destroy(struct vkms_config *config)
-+static void vkms_config_release(struct kref *ref)
+-struct vkms_config_plane *vkms_config_create_plane(struct vkms_config *config)
++struct vkms_config_plane __must_check *vkms_config_create_plane(struct vkms_config *config)
  {
-+	struct vkms_config *config = container_of(ref, struct vkms_config, refcnt);
- 	struct vkms_config_plane *plane_cfg, *plane_tmp;
- 	struct vkms_config_crtc *crtc_cfg, *crtc_tmp;
- 	struct vkms_config_encoder *encoder_cfg, *encoder_tmp;
-@@ -128,13 +132,37 @@ void vkms_config_destroy(struct vkms_config *config)
- 	list_for_each_entry_safe(encoder_cfg, encoder_tmp, &config->encoders, link)
- 		vkms_config_destroy_encoder(config, encoder_cfg);
+ 	struct vkms_config_plane *plane_cfg;
++	int ret;
  
--	list_for_each_entry_safe(connector_cfg, connector_tmp, &config->connectors, link)
--		vkms_config_destroy_connector(connector_cfg);
-+	list_for_each_entry_safe(connector_cfg, connector_tmp, &config->connectors, link) {
-+		/*
-+		 * The configuration is already being released and cannot be
-+		 * pinned anymore: drop the initial reference directly. The
-+		 * connector is still linked, so its release only unlinks it
-+		 * without touching the configuration.
-+		 */
-+		vkms_config_connector_put(connector_cfg);
+ 	plane_cfg = kzalloc_obj(*plane_cfg);
+-	if (!plane_cfg)
+-		return ERR_PTR(-ENOMEM);
++	if (!plane_cfg) {
++		ret = -ENOMEM;
++		goto fail;
 +	}
  
- 	mutex_destroy(&config->lock);
- 	kfree_const(config->dev_name);
- 	kfree(config);
+ 	plane_cfg->config = config;
+ 	plane_cfg->default_pipeline = false;
+@@ -440,6 +443,9 @@ struct vkms_config_plane *vkms_config_create_plane(struct vkms_config *config)
+ 	list_add_tail(&plane_cfg->link, &config->planes);
+ 
+ 	return plane_cfg;
++
++fail:
++	return ERR_PTR(ret);
  }
-+
-+void vkms_config_get(struct vkms_config *config)
-+{
-+	kref_get(&config->refcnt);
-+}
-+EXPORT_SYMBOL_IF_KUNIT(vkms_config_get);
-+
-+void vkms_config_put(struct vkms_config *config)
-+{
-+	kref_put(&config->refcnt, vkms_config_release);
-+}
-+EXPORT_SYMBOL_IF_KUNIT(vkms_config_put);
-+
-+void vkms_config_destroy(struct vkms_config *config)
-+{
-+	vkms_config_put(config);
-+}
- EXPORT_SYMBOL_IF_KUNIT(vkms_config_destroy);
+ EXPORT_SYMBOL_IF_KUNIT(vkms_config_create_plane);
  
- static bool valid_plane_number(const struct vkms_config *config)
-@@ -610,6 +638,7 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
- 	connector_cfg->config = config;
- 	connector_cfg->status = connector_status_connected;
- 	xa_init_flags(&connector_cfg->possible_encoders, XA_FLAGS_ALLOC);
-+	kref_init(&connector_cfg->refcnt);
- 
- 	list_add_tail(&connector_cfg->link, &config->connectors);
- 
-@@ -617,12 +646,61 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
- }
- EXPORT_SYMBOL_IF_KUNIT(vkms_config_create_connector);
- 
--void vkms_config_destroy_connector(struct vkms_config_connector *connector_cfg)
-+static void vkms_config_connector_release(struct kref *ref)
- {
-+	struct vkms_config_connector *connector_cfg =
-+		container_of(ref, struct vkms_config_connector, refcnt);
- 	xa_destroy(&connector_cfg->possible_encoders);
--	list_del(&connector_cfg->link);
-+	if (list_empty(&connector_cfg->link)) {
-+		/*
-+		 * The connector was detached from the configuration by
-+		 * vkms_config_destroy_connector() before its final put,
-+		 * and that call pinned the configuration to keep it alive
-+		 * while the connector still points to it; drop that
-+		 * reference now that the last connector reference is gone.
-+		 */
-+		vkms_config_put(connector_cfg->config);
-+	} else {
-+		/*
-+		 * The configuration is already being released and cannot be
-+		 * pinned anymore: unlink the connector without touching the
-+		 * configuration.
-+		 */
-+		list_del(&connector_cfg->link);
-+	}
- 	kfree(connector_cfg);
- }
-+
-+struct vkms_config_connector *vkms_config_connector_get(struct vkms_config_connector *connector_cfg)
-+{
-+	kref_get(&connector_cfg->refcnt);
-+	return connector_cfg;
-+}
-+EXPORT_SYMBOL_IF_KUNIT(vkms_config_connector_get);
-+
-+void vkms_config_connector_put(struct vkms_config_connector *connector_cfg)
-+{
-+	kref_put(&connector_cfg->refcnt, vkms_config_connector_release);
-+}
-+EXPORT_SYMBOL_IF_KUNIT(vkms_config_connector_put);
-+
-+void vkms_config_destroy_connector(struct vkms_config_connector *connector_cfg)
-+{
-+	/*
-+	 * Pin the configuration and detach the connector before dropping
-+	 * the initial reference: the release callback runs inside the put
-+	 * when it is the last one, and would otherwise mutate the
-+	 * configuration lists without holding config->lock, or free the
-+	 * configuration while this call and its configfs caller still use
-+	 * both. The pin is dropped again by the release when the connector
-+	 * dies here; if it survives, it keeps the configuration alive until
-+	 * the connector's final put.
-+	 */
-+	vkms_config_get(connector_cfg->config);
-+	list_del_init(&connector_cfg->link);
-+
-+	vkms_config_connector_put(connector_cfg);
-+}
- EXPORT_SYMBOL_IF_KUNIT(vkms_config_destroy_connector);
- 
- int __must_check vkms_config_connector_attach_encoder(struct vkms_config_connector *connector_cfg,
 diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-index 10604f7f37e1..de6a89819daf 100644
+index de6a89819daf..49510a0957c7 100644
 --- a/drivers/gpu/drm/vkms/vkms_config.h
 +++ b/drivers/gpu/drm/vkms/vkms_config.h
-@@ -3,8 +3,12 @@
- #ifndef _VKMS_CONFIG_H_
- #define _VKMS_CONFIG_H_
- 
--#include <linux/list.h>
-+#include <linux/cleanup.h>
-+#include <linux/kref.h>
- #include <linux/mutex.h>
-+#include <linux/rcupdate.h>
-+#include <linux/string.h>
-+#include <linux/list.h>
- #include <linux/types.h>
- #include <linux/xarray.h>
- 
-@@ -32,6 +36,7 @@ struct vkms_config {
- 	struct list_head connectors;
- 	struct mutex lock;
- 	struct vkms_device *dev;
-+	struct kref refcnt;
- };
- 
- /**
-@@ -122,6 +127,8 @@ struct vkms_config_connector {
- 
- 	/* Internal usage */
- 	struct vkms_connector *connector;
-+
-+	struct kref refcnt;
- };
- 
- /**
-@@ -211,6 +218,23 @@ struct vkms_config *vkms_config_default_create(bool enable_cursor,
- 					       bool enable_overlay,
- 					       bool enable_plane_pipeline);
- 
-+/**
-+ * vkms_config_get() - Acquire a reference to a VKMS configuration
-+ * @config: vkms_config to acquire a reference to
-+ */
-+void vkms_config_get(struct vkms_config *config);
-+
-+/**
-+ * vkms_config_put() - Release a reference to a VKMS configuration
-+ * @config: vkms_config to release the reference from
-+ *
-+ * When the last reference is released, the configuration and all its
-+ * sub-components are freed.
-+ */
-+void vkms_config_put(struct vkms_config *config);
-+
-+DEFINE_FREE(vkms_config_put, struct vkms_config *, if (_T) vkms_config_put(_T));
-+
- /**
-  * vkms_config_destroy() - Free a VKMS configuration
-  * @config: vkms_config to free
-@@ -446,6 +470,21 @@ void vkms_config_encoder_detach_crtc(struct vkms_config_encoder *encoder_cfg,
+@@ -288,7 +288,7 @@ void vkms_config_register_debugfs(struct vkms_device *vkms_device);
+  * The new plane configuration or an error. Call vkms_config_destroy_plane() to
+  * free the returned plane configuration.
   */
- struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *config);
+-struct vkms_config_plane *vkms_config_create_plane(struct vkms_config *config);
++struct vkms_config_plane __must_check *vkms_config_create_plane(struct vkms_config *config);
  
-+/**
-+ * vkms_config_connector_get() - Acquire a reference to a connector configuration
-+ * @connector_cfg: Connector configuration to acquire a reference to
-+ */
-+struct vkms_config_connector *
-+vkms_config_connector_get(struct vkms_config_connector *connector_cfg);
-+
-+/**
-+ * vkms_config_connector_put() - Release a reference to a connector configuration
-+ * @connector_cfg: Connector configuration to release the reference from
-+ *
-+ * When the last reference is released, the connector configuration is freed.
-+ */
-+void vkms_config_connector_put(struct vkms_config_connector *connector_cfg);
-+
  /**
-  * vkms_config_destroy_connector() - Remove and free a connector configuration
-  * @connector_cfg: Connector configuration to destroy
-diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-index 5a640b531d88..64c75b038869 100644
---- a/drivers/gpu/drm/vkms/vkms_drv.c
-+++ b/drivers/gpu/drm/vkms/vkms_drv.c
-@@ -163,6 +163,9 @@ int vkms_create(struct vkms_config *config)
- 	struct faux_device *fdev;
- 	struct vkms_device *vkms_device;
- 	const char *dev_name;
-+	struct vkms_config *cfg __free(vkms_config_put) = config;
-+
-+	vkms_config_get(cfg);
- 
- 	dev_name = vkms_config_get_device_name(config);
- 	fdev = faux_device_create(dev_name, NULL, NULL);
-@@ -210,11 +213,11 @@ int vkms_create(struct vkms_config *config)
- 		goto out_devres;
- 
- 	drm_client_setup(&vkms_device->drm, NULL);
--
- 	return 0;
- 
- out_devres:
- 	devres_release_group(&fdev->dev, NULL);
-+	config->dev = NULL;
- out_unregister:
- 	faux_device_destroy(fdev);
- 	return ret;
-@@ -275,7 +278,7 @@ static void __exit vkms_exit(void)
- 		return;
- 
- 	vkms_destroy(default_config);
--	vkms_config_destroy(default_config);
-+	vkms_config_put(default_config);
- }
- 
- module_init(vkms_init);
+  * vkms_config_destroy_plane() - Remove and free a plane configuration
 
 -- 
 2.56.0
