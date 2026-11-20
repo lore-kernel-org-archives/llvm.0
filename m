@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795202513;
-	b=RWb8LSOAzPmDst/itPQlEDTShPAEHEkjyybKeAn065DY0QvyoaKZCfBYRAkYTxeGEkrb
-	 IoS41vJb+bsraVljSdlRCJbKSOkXChVZ2+UDlkPcEVo5oW6tIjZfdWbSOh0PjwkeRqUEU
-	 /Yl23o10CuL1Mu2giN/NVqk+Ba9ARJQT5bZLGKjtfbhBTsSY/q0HOfUMlB4aUTyLC5iSg
-	 G1aPs5jEBJ6SHbVgAaCvam0nXxRnuoRRg/xAxj3gHE28C11XD8nkw7FaYN3Gr5XwjeZ3Y
-	 U2cpbXT/u+0TPKkSepUaonbaeC0Kio5/IdBCxP42NPgbKTldrKSabqBSL5sC9CYTt9g==
+	t=1795202560;
+	b=wIO+ZKUwzqAx3SVTpVADQTEV12vs6VcJk3boN77P50NKNaD+zfGiIYQDKuBeh4jcSU7q
+	 DzRm/9uC9RsOYuIbqOnY/82EKrjFQcK/rt8foGv/lU+YQX/rnfy0DHV8XUvxDlwiA0qjL
+	 0CRH6/zIMeqdjRmI+zVa1/5P+C3UBipnw1vu+YiWWNFDzfYPG+SDO77n3bcT8qU47B3oh
+	 sdRFpF+R2GQdgNPw8cWBOLzZbMdruMH18j0P85BwFeka0+r3mVcw8Y6dFS03fH81nFdSc
+	 n2Ij8JFs6eFUHphPKQEkUk43PmC91mjQT/KmY48nw2KMqkzCtxAdrx4FQzp3XtAGd3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795202513;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795202560;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=DNVNmDF5dVzvlnQ4zjX9N+gfP3FXX+TLZ7yfkqU1zlQ=;
-	b=boBcQPAfmAjdasEbV1ueywxGb6o0/Vn4RvVA7u5tb4QmHRqhJejIbwk56dSuTyuBC61q
-	 1OxWIBQ2E3qSy5lIjzjP/7IrAhOic31pLhOXsYLpaoTtLn8YburfEg9jhnTT7TUyZAmVa
-	 5LMOPzw5Ed0pN3/4/qilWXk6df7exyARAz/NepMXRo1dwkpsYGb4E6r5EDkwQoUh2j+Kg
-	 mbBEIwyXoj3As4m3gXe01wxOHljbHmM7oQ5TTLgUP5tpBj3jM5BNuz1tg4m1VsQiKBhuC
-	 ua+ZSnI18/s2LhYoc0oqOfpLlU60Mz31e02WA7JvPMpWZXzT7R0WOeA5KHvzJ/EX97w==
+	bh=3fTBwITHRCHhMTw7Dj5LKL4SBycn9eq+C/BpvV4iDsE=;
+	b=0KWSS1TNZaCbsDdliRk+yZXGPOFpKmPr6wBo+kY9gML+l2VVRBHPoUVHwiJMYxpwmuOO
+	 p2PAvGD9W+Fsym09Np0MtZf/mrK0S/lzgj9EILC3FGCft3MXLZAt8q5OhGPxenjwNvsdk
+	 ZeY70KPav9TjWzbCQkV7pJ50BxxScWsYJ2bOON3/iAJZIEqxB4LFTwHZfVUaXLQdNCj0U
+	 vcfxPy0bF2sQPv/o+qS6IZFBDjzVocuoCO0B7vEZKE+R1E+ADuu5ZY0mvpLvvMdzIw/Ta
+	 WvtMn+Mf9RZTWJqRt+SF4VRUiXqtbrF1smm7bm9vIJomIwA3yhSrmqTzJzwKzXkkj8A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DBljP7yT;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ga3WFCeU;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A16E606A6FC
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 19:21:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A16E606A6FC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AECD606A6E2
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 19:22:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AECD606A6E2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DBljP7yT
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-3846d5f54c1so1568069eec.1
-        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 11:21:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ga3WFCeU
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-382af5cfc58so3400823eec.0
+        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 11:22:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795202507; x=1795807307; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795202557; x=1795807357; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DNVNmDF5dVzvlnQ4zjX9N+gfP3FXX+TLZ7yfkqU1zlQ=;
-        b=DBljP7yTVqxCbgZgwWq5nEg+LN13+9T3CeEZ3A4c3rZC5UeGua8hRlH+Op0kxquR6h
-         WR8/+GePbqd76E9GFcGb4VIeom8iftQDKbpUweO7eDu1Rbsj2vh04RolSrLD/cgvEas7
-         SpWOSXkZ+Z2KWwStQQcSYa5v6KVYltgXyv7X8Xlgo0KRiQev0WsueYQuQz1Os06W8yhG
-         CoDFYeF4KVzwsskVLt9i3hWdgYKYRQWhTityQC13Op0rSQuGd+9esvBPYLHb7EmEU7Ne
-         B2Nbdp/FZZaTvUY6Cdh76vqzR1Dg95CseGu6PDx8dEdlTLsQc8FB7ffq0JVP0YpJnGfq
-         Og9A==
+        bh=3fTBwITHRCHhMTw7Dj5LKL4SBycn9eq+C/BpvV4iDsE=;
+        b=Ga3WFCeUG//eYK9QLmiZabYCJSuY+/3OR0g68LAQelSvLyrJ3UIoeEjNatTSFGaAtA
+         wMiczplEKSNPOGAwrDYJlg5rJxQssAdK2hDawujTjSkXL290+YEbpS5fm5zajj5KVLmq
+         sr0nVXZmbldH0sUB77F9+auY/lzoK4rtQyNz5lOwVH7WkT4R41d0/BfuDxWpqr5AQdRw
+         74vQ+fsu2xuH6wrxCzfMr24NATN0Qm8v9e5yiv0O5N00/EWDTVEoPuKE7oUyUQ9wcF8R
+         XdQMWMT+cQdR0O4yzO6zJbSeahGm3tR8ZBtYoMC26EfFWCtcYYtVGAqyqpsEqF3roxK4
+         jMWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795202507; x=1795807307;
+        d=1e100.net; s=20260707; t=1795202557; x=1795807357;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DNVNmDF5dVzvlnQ4zjX9N+gfP3FXX+TLZ7yfkqU1zlQ=;
-        b=kzCwJed3UjkAqHtegk7j0RvC1YITeR25hdEHf0kgD5yEKOHX/sitEC+pxeo8aKKSOr
-         e7ATisIxz6IvqEM8R04cBskKMEyLKq8kSaZMPVGlgMt9RC88mZxQUtSOywcYZLkzduqp
-         Ly0v79Zor57LvBXBw1iJQxSyn+PQrB5GCRU7MlThh24XLxcPW+T/zH+z3cINRYcCpEMn
-         Csj6xGfO8tu8CPfba4KrKkq8OUvp+8stBnVyjAvCsbEHGxVDXNa4Z8w49HgloZ0QBnKo
-         K1aBGusq7h0Ga2L0hkCm15tc32Cat7P8j4t6/IoDObZudKj3Q7SHCG/7yNM79H8T8pet
-         p0fw==
-X-Forwarded-Encrypted: i=1; AL+hErFT6y5+vOHRvtIlijdVeXreLDS8S/xqCHpomuXqgxsLXo44rVMpxaaLCpeNlJjFfzrMH6VR@lists.linux.dev
-X-Gm-Message-State: APuU4Z+cqi/LrDVDj9lanhZWGKhU/xalqDRH+dDjYp6xbhm/VRJUqFr0
-	EoD8NJAh+qfU/ILyUZ3cdhBZLZDjXjVZRdSDczcHT7NN8vEjOmxwz6WGtkZP8iGOaxo9C/ZXVHx
-	9pQ==
-X-Received: from dycqw15-n1.prod.google.com ([2002:a05:7300:c00f:10b0:36f:5688:8a11])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:ff48:b0:385:3595:5e87
- with SMTP id 5a478bee46e88-3856fd5b5damr3386093eec.16.1795202506690; Fri, 20
- Nov 2026 11:21:46 -0800 (PST)
-Date: Fri, 20 Nov 2026 19:20:50 +0000
+        bh=3fTBwITHRCHhMTw7Dj5LKL4SBycn9eq+C/BpvV4iDsE=;
+        b=JQrwbhAOxK0dElV9M1Y9+bKP+uPm4P7FbdAuhnrTAgdIicdIvg0hIzoStf4rom3Hcd
+         ECXMWnPrrn2QnGrnI0YMAhtjzO68YlIL18p7EeMyY9uHD3hOUXWhxQZ5BRnzSwlZSAWp
+         kaQCwd1fvg4F5hH6HROxeJspVb3Zwf+pAbUEUaSPzOm2OSKec1qn8csIudijn8TB6Xbd
+         1v+F4viu0jrhQkwTEs0iD3+FlZ13XU2y6jseXNoDib3K0h8SijR/lnLGHRC2APrYbknA
+         mXcGiXTk/6J0K2GehAHNmhTJrde2KH3p9VqKCn7xPgd7qiokXzUkFLKePDVKnZWFF0yc
+         izxg==
+X-Forwarded-Encrypted: i=1; AL+hErFHTzHG9zpv18HIkXrSRrqOGqWwSKFdtwKkkaO6RoVQw1sG27cTht1YXFGDpqFYT1sIAHVO@lists.linux.dev
+X-Gm-Message-State: APuU4Z8J6elz483TgubMhju3LFwtjAvRTgtHAp8lwirKvLToxB9Er4OI
+	vYHzhT9CAUDYqUWzgg/umXohn6kANGIx72oe4na6TlnZfo4cR1YxMwmx7uWrhWVTZV8ryOhsMe4
+	JGg==
+X-Received: from dyba14.prod.google.com ([2002:a05:693c:63ce:b0:381:935d:2548])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:805a:b0:376:a6d7:8f51
+ with SMTP id 5a478bee46e88-3856e63bbe9mr4561064eec.12.1795202557046; Fri, 20
+ Nov 2026 11:22:37 -0800 (PST)
+Date: Fri, 20 Nov 2026 19:21:47 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,29 +77,24 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261120192050.2868566-1-elkin@google.com>
-Subject: [PATCH] drm/xe: clear backup ERR_PTR before retrying in xe_bo_evict_pinned()
+Message-ID: <20261120192147.2869595-1-elkin@google.com>
+Subject: [PATCH] serial: 8250_exar: check IS_ERR() on __xr17v35x_register_gpio()
 From: Elkin Cruz <elkin@google.com>
-To: Matthew Brost <matthew.brost@intel.com>, 
-	"=?UTF-8?q?Thomas=20Hellstr=C3=B6m?=" <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Cc: intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com, 
-	Elkin Cruz <elkin@google.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	llvm@lists.linux.dev, irogers@google.com, Elkin Cruz <elkin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-In xe_bo_evict_pinned(), backup is initialized to bo->backup_obj (NULL)
-outside xe_validation_guard(). When xe_bo_init_locked() returns an
-ERR_PTR on lock contention (-EDEADLK) or OOM (-ENOMEM),
-drm_exec_retry_on_contention(&exec) or
-xe_validation_retry_on_oom(&ctx, &ret) restarts the loop while backup
-still holds the ERR_PTR. On the retried iteration, "if (!backup)" is
-false, passing the ERR_PTR directly to xe_bo_evict_pinned_copy().
+__xr17v35x_register_gpio() calls platform_device_register_full(), which
+returns an ERR_PTR() on failure rather than NULL. Both
+xr17v35x_register_gpio() and iot2040_register_gpio() store the return
+value directly into priv->gpio without checking IS_ERR() and return 0;
+xr17v35x_unregister_gpio() later tests only if (priv->gpio) and
+dereferences the error pointer via __xr17v35x_unregister_gpio().
 
-Extract ret = PTR_ERR(backup) and reset backup to NULL before
-retrying.
+Check IS_ERR(pdev) and propagate PTR_ERR(pdev) in both callers.
 
-Fixes: 844150c255c9 ("drm/xe: Convert pinned suspend eviction for exhaustive eviction")
+Fixes: 1145d1a0703f ("serial: 8250_exar: use platform_device_register_full()")
 Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
 I am trying out a new Clang static analysis linter for ERR_PTR/NULL
@@ -110,24 +105,49 @@ runtime-tested on hardware).
 Thanks,
 Elkin
 
- drivers/gpu/drm/xe/xe_bo.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_exar.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/xe/xe_bo.c b/drivers/gpu/drm/xe/xe_bo.c
-index 353ac1e9a9d6..ae6fd20304ce 100644
---- a/drivers/gpu/drm/xe/xe_bo.c
-+++ b/drivers/gpu/drm/xe/xe_bo.c
-@@ -1680,8 +1680,9 @@ int xe_bo_evict_pinned(struct xe_bo *bo)
- 						   XE_BO_FLAG_SYSTEM | XE_BO_FLAG_NEEDS_CPU_ACCESS |
- 						   XE_BO_FLAG_PINNED, NULL, &exec);
- 			if (IS_ERR(backup)) {
--				drm_exec_retry_on_contention(&exec);
- 				ret = PTR_ERR(backup);
-+				backup = NULL;
-+				drm_exec_retry_on_contention(&exec);
- 				xe_validation_retry_on_oom(&ctx, &ret);
- 				break;
- 			}
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index 42e55a8f8c69..66858e383afc 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -1173,8 +1173,14 @@ static const struct software_node exar_gpio_node = {
+ static int xr17v35x_register_gpio(struct exar8250 *priv, struct pci_dev *pcidev,
+ 				  struct uart_8250_port *port)
+ {
+-	if (pcidev->vendor == PCI_VENDOR_ID_EXAR)
+-		priv->gpio = __xr17v35x_register_gpio(pcidev, &exar_gpio_node);
++	if (pcidev->vendor == PCI_VENDOR_ID_EXAR) {
++		struct platform_device *pdev;
++
++		pdev = __xr17v35x_register_gpio(pcidev, &exar_gpio_node);
++		if (IS_ERR(pdev))
++			return PTR_ERR(pdev);
++		priv->gpio = pdev;
++	}
+ 
+ 	return 0;
+ }
+@@ -1286,13 +1292,17 @@ static int iot2040_register_gpio(struct exar8250 *priv,
+ 				 struct uart_8250_port *port)
+ {
+ 	u8 __iomem *p = port->port.membase;
++	struct platform_device *pdev;
+ 
+ 	writeb(IOT2040_UARTS_DEFAULT_MODE, p + UART_EXAR_MPIOLVL_7_0);
+ 	writeb(IOT2040_UARTS_GPIO_LO_MODE, p + UART_EXAR_MPIOSEL_7_0);
+ 	writeb(IOT2040_UARTS_ENABLE, p + UART_EXAR_MPIOLVL_15_8);
+ 	writeb(IOT2040_UARTS_GPIO_HI_MODE, p + UART_EXAR_MPIOSEL_15_8);
+ 
+-	priv->gpio = __xr17v35x_register_gpio(pcidev, &iot2040_gpio_node);
++	pdev = __xr17v35x_register_gpio(pcidev, &iot2040_gpio_node);
++	if (IS_ERR(pdev))
++		return PTR_ERR(pdev);
++	priv->gpio = pdev;
+ 
+ 	return 0;
+ }
 -- 
 2.56.1.750.gf70dc682cf-goog
 
