@@ -1,103 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.20
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795183325;
-	b=M+KD6LHY0+WeSY9g57xitKPsDN6bk2GxN+LhejWLv6AlmmNKeq6cBhGrTkb7vPlv1A2S
-	 LhSGjbf1SKnpO7z3LUxRrvcDTWdZIPm/FmVy+1uhTmrIF6cliWZ85Pg6n2EUNfLlzPMRl
-	 9t38Wclkyuql7viqK3owGTYFb0Pg72DuNm0qoyBnSh6Svb3zPXc0RNTtnReFqCC3AxoDj
-	 025S51UoL/csEknLgF+zg/jdT3XCUeBWhI6V82QERke6qDSMR2hWaEjjN5yMk/YkKb6zj
-	 CeMpspph9l9uTpQG0IcahN+w6r0cLbKkB3nwjhWnafRFun5IA+JzYX+W/ng9nsWnLxA==
+	t=1795187178;
+	b=dWTn9yIItpY5BGKuT9TGG9Ajs3M+XV/HZnxW6fxFTafesn+iOXod5J+h/wWkS+WBh08P
+	 KPfmGz48FMozuu0D6nCyER8Qyi7uqqpHc33LcLsjYrxEL7pwde+J15XteE7c19eluVWcW
+	 Ihslwb0VVnJgeQJfUG9evKf2JirXqWKlLSuWkdp4wDskw8Qga7zphis76lUZYcFsFzovv
+	 EmLZob7w0FwOkr1vPMrhjvsFmLHm0j+jdOcHnn23N2Hep7kcd7r0p5DgC1uHZONEqaiOH
+	 GikVT6uHfafDQ4KHuGPaOnMes5MuiPRSFlYWEv7Xr15CGRBzcEgHKpE6xddxY1QYicA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795183325;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=qjFQvOSN/xEWYiaNWNXazpqWkeGzMcxSM7MbYU6r+yA=;
-	b=Mrcf3gvLpr8Y/P3K0f4iQbcfZ14oNlUIRmQb9Dpx2Mc9DljN7gqHH9oOVFi/UYSLrHrr
-	 0KU8m5NcwDAQhS2zgv3lw944HDgR0RDpPNhYhmE9acZTMZANcd+lFmKtSjatsBHtp4X8C
-	 KMxMt76+6vcab3aadd/v2pYOYbCttqA71Zw6zV9xpQ5YjykKkygEY0ULMZCbp1w4uRRbX
-	 97EWivhYA3c/z7B6F2nk/0LUZMLVW34pwUdYh8EVCnwkq4gckj+4YUtBua4SMygrAhCNq
-	 HYQRHOmzYTWkINbVOTDzMhLoPrWcVhLm3oaBI4RJCxSKCbBLbEFa4dnR6A2bjGlfhbg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795187178;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=EAuWYfFjbXXdRKGkMUFxtHe0TJlcXwp3sYIp4VPcpKc=;
+	b=Ko/szu3cIj+mrpybF/xzMSkbqnRj5aYXm2l5lxjY0qcNcgiHbSQnaJGRFHdrtF4nQzFX
+	 7gjNKhMXOUgk0VBis2s/swxbexyfdCmtzxRA51rKjlUBM8tLfj12KRIGx6recL/jw02EK
+	 8MxL5iG106beQ7FOEDhCmtmOKEERCZbtxZN0rlZ+HwuAMZl1kQeTXbyPyxYcCaxfM78Au
+	 P1ivdUR8/x9+6lq3q4hD2huzvToyWSYF+Hc1x4Us0JGpCDbfke7sp4DhQT29PcK7fS9IB
+	 qDbOf64u6kpDPTNSo7ylzLEb2w2p8m+lm4Uvj4kIQsdTVOzS8oryYoTa6v8R7D1qlZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="lhXAp/JL";
-	arc=none smtp.remote-ip=209.85.128.41
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=S2Kkd8fx;
+	arc=none smtp.remote-ip=198.175.65.20
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C939F606A33C
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 14:02:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C939F606A33C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EF9606A325
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 15:06:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6EF9606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lhXAp/JL
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4bb6ba3b244so8216295e9.3
-        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 06:02:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795183323; x=1795788123; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qjFQvOSN/xEWYiaNWNXazpqWkeGzMcxSM7MbYU6r+yA=;
-        b=lhXAp/JL8zBx9/K/mjgVzORwaWvw4UvGKNp4g9XF+LuUTRWGI6qx4OFeOlzrR+LhwB
-         aCKBc3onisJAr5tDXyePsrPW2wCT3+Ww0gpvejrw5wFHy5osDVESN0WZrQJjFJ2mIl3m
-         xVZb6tjPlIPeYkq6pcR6NMHoSUTy3vUpcdR8mKN66fuOE1XNwNCHaNVBYuFdMbIrkWiw
-         Xi4vp/6vkgZ3Tkuoy1S6M0+jRDq1kdYBrbKtF1lM3ubzYuhuLTXWw/ZfuMG0ukjlH8Ee
-         E3HC8cc0ekjGrhzTRaY3VEctzu+SJR9Kg2QA0K/N8XqBtl0unjqNSkIzuAaFj3m/GVT9
-         sLMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795183323; x=1795788123;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qjFQvOSN/xEWYiaNWNXazpqWkeGzMcxSM7MbYU6r+yA=;
-        b=aKGnyX0a/zl7AsWGYJt7Gp9q0gV4iH1wS6+pkQHu7gQ4bfHAm84iPgqtQ7YaDMkntA
-         xnLFEG/U+m/44sXJ/Hcq08VQsUrt6v2KuJ608GxxUwGFA9ccPDQtrEUzSbH7rf0mEeRj
-         xhhNAwtjnhYcCNQIeZ4TGOu8mP4dXKewCjJoRw+mWZVHFbSQiQlqP1FSk/C+1y4Jury5
-         W5jp5iLjBQgeNydpsc6CHEnaXcdKSC6OWHXNqTJpKQffjr+3SeiNmbQCwDE+D1+zXhYN
-         cbubqnbWV27LQT9ovslMuXPVDSke1wra4wz7GOTJ0FSfLKy+ZW6fZnRIa2DeqxP+1ZZI
-         KGjw==
-X-Forwarded-Encrypted: i=1; AL+hErGL5AyR+Lo90VeGVEelytkLs5ZqXYwYj2Z8183pq2twlhBuV0cCcoiZnKrrPHsSfyzmTWZf@lists.linux.dev
-X-Gm-Message-State: APuU4Z9Wz/8ywGtjIq0MMNgxTSeGrsZkfw426Uise9PblFezBHDhVaQT
-	egdeWRsLBBfGiybAsQTLH6f9c0+2zufmYLXoUJTUkdmrEyT3wBcE7akt
-X-Gm-Gg: AYBFou2FsK6creQ1fHYYBxuQ4uHl/rZMCrIFexX+EJI9lp7PmyXOgHbcVa1+sS7lyBw
-	EPRnxBVSHxTeKalxIQvXdmVITK8bjzy5SkC99h9I2MfFEtSLqwNAOtFsMGgW5YR/daPVMhN155W
-	uRqoqEo5X1VSXbvHwIf4hZPSOPbFM4h41UMP1tq23A9aJvhjZvFRhyMy7J0wg2L4FSY7Kve48jN
-	+BihOjSBVks/nVo71e3Z7lwfsOqlUCOxZMwq4mgtitbhhmgS1eK/bwziQSYetmVtM8eoltN0Xpa
-	da58g6TzeFr5T04nDwGxtJSWx1adZsIdDHfQtieaN2FVCgbE1FwYwRGBrHE37m39jK1nKcs+GsN
-	nOJdpojEeGvLnNj9S4C7lVXnUcPyHB3pnG+S6/quCrE6vFbiFdRcbiy89i5VbIE5pPr4X6NYbm3
-	nwwcPJXXzqjGgN/5RB4cyTmMzMe+nTAaMchsgO+Kyhoe4kVLFpRVSp9aP5sfGUYq22w6g3cEnLY
-	5MHZXek8nCA9wc+iPFzfxeqQwR90k5dfoeiWM4uWjD7bsolLF2lfmXk5h5VdeEyCoCM+iG8DgG6
-	xd1igifgcYvyvvG8nd/tIP4mYiOkC7OFzcndCLI20f/ro1SzM8tLVyxJGVGIiMwfGA==
-X-Received: by 2002:a05:600c:b8a:b0:4bb:7007:4a5a with SMTP id 5b1f17b1804b1-4bb88817772mr71755705e9.23.1795183322969;
-        Fri, 20 Nov 2026 06:02:02 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6c248b75sm6021278f8f.54.2026.11.20.06.02.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 06:02:02 -0800 (PST)
-Date: Fri, 20 Nov 2026 14:02:00 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Usama Arif <usama.arif@linux.dev>, tglx@kernel.org, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org,
- hpa@zytor.com, gustavoars@kernel.org, ardb@kernel.org, hca@linux.ibm.com,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org, riel@surriel.com,
- shakeel.butt@linux.dev, kernel-team@meta.com, rkeilty@meta.com,
- atish.patra@linux.dev, dgreid@meta.com
-Subject: Re: [PATCH 2/2] x86/kstack_erase: Use REP STOSQ for large stack
- fills
-Message-ID: <20261120140200.53ec2557@pumpkin>
-In-Reply-To: <20261120104534.GO2668564@noisy.programming.kicks-ass.net>
-References: <20261119213147.1094488-1-usama.arif@linux.dev>
-	<20261119213147.1094488-3-usama.arif@linux.dev>
-	<20261120104534.GO2668564@noisy.programming.kicks-ass.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=S2Kkd8fx
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795187177; x=1826723177;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HF/fhKFXWR+yqPn0rejXIeI42zfVDMjdRvsE+UApABE=;
+  b=S2Kkd8fxBU0KtIhDO3CKvXe3DT8E4xoste2tlrFin8K5NxKrQUTOCJLj
+   yYeE806AvW/xaDz0oYhi2RSUZkk/jQZBzpq/4dNU3Tq43RgaBdRLwAZVa
+   iEYdWT/uWOJkFg4kvQY9YgsOiaoyGGn01+FlWJKgkcJGL4lPw9rg9vmNJ
+   9ZPKJcWBqv54mfkjis2wfMuaJ6cCujzbenoBeHzKOX3E+uiYVtsAWOPYz
+   Svpj2aj0F97JyNs2TNke1vS6NU/eCC6CD+7kngCPnpeQiM6AX7PdFKXND
+   OghTOYPMICTrJvAEqahfZZfATEVEiKwjNQIepzWtbHthgbkzQSeQ6r8v5
+   g==;
+X-CSE-ConnectionGUID: 1JTmg0J5SGGtu4rAYw9LxA==
+X-CSE-MsgGUID: Hcn0MI5+TTSPmCL8eregpA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4108600"
+X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
+   d="scan'208";a="4108600"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 07:06:17 -0800
+X-CSE-ConnectionGUID: QBC5tPAkRS2xjJdTSVRM9Q==
+X-CSE-MsgGUID: QHE77ujPRVq+PEwtDmHPtg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
+   d="scan'208";a="11050941"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa006.fm.intel.com with ESMTP; 20 Nov 2026 07:06:15 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id 7A0DA99; Fri, 20 Nov 2026 16:06:14 +0100 (CET)
+Date: Fri, 20 Nov 2026 16:06:14 +0100
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
+Subject: Re: [PATCH] usb: typec: hd3ss3220: Propagate regmap_read() errors
+ from attached-state check
+Message-ID: <awBh5m0bWIgf_eVO@black.igk.intel.com>
+References: <20261119170650.1521609-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -107,112 +82,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261119170650.1521609-1-irogers@google.com>
 
-On Fri, 20 Nov 2026 11:45:34 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Thu, Nov 19, 2026 at 01:31:08PM -0800, Usama Arif wrote:
-> > +#ifdef CONFIG_X86_64
-> > +#define __stackleak_poison __stackleak_poison
-> > +static __always_inline void __stackleak_poison(unsigned long erase_low,
-> > +					       unsigned long erase_high,
-> > +					       unsigned long poison)
-> > +{
-> > +	unsigned long count;
-> > +
-> > +	/* Short spans do not amortize the startup cost of REP STOSQ. */
-> > +	if (erase_high <= erase_low + 512) {
-> > +		while (erase_low < erase_high) {
-> > +			*(unsigned long *)erase_low = poison;
-> > +			erase_low += sizeof(unsigned long);
-> > +		}
-> > +		return;
-> > +	}
-> > +
-> > +	count = (erase_high - erase_low) / sizeof(unsigned long);
-> > +	asm volatile("rep stosq"
-> > +		     : "+D" (erase_low), "+c" (count)
-> > +		     : "a" (poison)
-> > +		     : "memory");
-> > +}
-> > +#endif  
+On Thu, Nov 19, 2026 at 09:06:49AM -0800, Ian Rogers wrote:
+> hd3ss3220_get_attached_state() has return type 'enum usb_role' (an
+> unsigned enum) yet returns negative regmap_read() error codes directly.
+> Neither hd3ss3220_set_role() nor output_poll_execute() checks for errors;
+> on a transient I2C failure (such as -EIO, cast to 0xfffffffb),
+> hd3ss3220_set_role() passes the bogus value to usb_role_switch_set_role()
+> and disables VBUS power. On role-switch providers without a .get callback
+> (where sw->role caches the value passed to usb_role_switch_set_role()),
+> reading /sys/class/usb_role/*/role subsequently indexes usb_roles[role]
+> out-of-bounds.
 > 
-> Gemini seems to suggest 16-32 words would be sufficient to amortize the
-> REP STOS setup.
-
-That really does sound like wishful thinking.
-Especially if you go back a few generations on the cpu architecture.
-
-> It was also adamant I try and unroll that earlier loop.
+> Return an int status from hd3ss3220_get_attached_state(), pass the
+> resolved enum usb_role via an output pointer, and leave the current role
+> and VBUS state unchanged on I2C read errors.
 > 
-> How about something like so, does that make sense? Also, I suppose we
-> should make memset64() __always_inline if we use it here. I'm not at all
-> sold on the unroll here, the asm is pretty horrid for what it does.
+> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
+> -Wimplicit-int-enum-cast enabled; fix and changelog drafted with an AI
+> coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
+> -Wimplicit-int-enum-cast; not tested on TI HD3SS3220 hardware.
 > 
+> Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+
+LGTM, but no stable?
+
+Thanks,
+
 > ---
-> --- a/arch/x86/include/asm/processor.h
-> +++ b/arch/x86/include/asm/processor.h
-> @@ -28,6 +28,7 @@ struct vm86;
->  #include <asm/vmxfeatures.h>
->  #include <asm/vdso/processor.h>
->  #include <asm/shstk.h>
-> +#include <asm/string.h>
->  
->  #include <linux/personality.h>
->  #include <linux/cache.h>
-> @@ -580,6 +581,33 @@ static __always_inline bool on_thread_st
->  			       current_stack_pointer) < THREAD_SIZE;
+>  drivers/usb/typec/hd3ss3220.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index 60d6de9ba339..212c3624961c 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -163,10 +163,10 @@ static int hd3ss3220_set_source_pref(struct hd3ss3220 *hd3ss3220, int prefer_rol
+>  				  src_pref);
 >  }
 >  
-> +#ifdef CONFIG_X86_64
-> +#define __stackleak_poison __stackleak_poison
-> +static __always_inline void __stackleak_poison(unsigned long erase_low,
-> +					       unsigned long erase_high,
-> +					       unsigned long poison)
-> +{
-> +	unsigned long count = (erase_high - erase_low) / sizeof(unsigned long);
+> -static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
+> +static int hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220,
+> +					enum usb_role *attached_state)
+>  {
+>  	unsigned int reg_val;
+> -	enum usb_role attached_state;
+>  	int ret;
+>  
+>  	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL,
+> @@ -176,17 +176,17 @@ static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
+>  
+>  	switch (reg_val & HD3SS3220_REG_CN_STAT_CTRL_ATTACHED_STATE_MASK) {
+>  	case HD3SS3220_REG_CN_STAT_CTRL_AS_DFP:
+> -		attached_state = USB_ROLE_HOST;
+> +		*attached_state = USB_ROLE_HOST;
+>  		break;
+>  	case HD3SS3220_REG_CN_STAT_CTRL_AS_UFP:
+> -		attached_state = USB_ROLE_DEVICE;
+> +		*attached_state = USB_ROLE_DEVICE;
+>  		break;
+>  	default:
+> -		attached_state = USB_ROLE_NONE;
+> +		*attached_state = USB_ROLE_NONE;
+>  		break;
+>  	}
+>  
+> -	return attached_state;
+> +	return 0;
+>  }
+>  
+>  static int hd3ss3220_try_role(struct typec_port *port, int role)
+> @@ -231,7 +231,10 @@ static void hd3ss3220_regulator_control(struct hd3ss3220 *hd3ss3220, bool on)
+>  
+>  static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+>  {
+> -	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
+> +	enum usb_role role_state;
 > +
-> +	/* Amortize the startup cost of REP STOSQ. */
-> +	if (count < 32) {
-> +		unsigned long *ptr = (unsigned long *)erase_low;
-> +
-> +		while (count) {
-> +			switch ((count-1) % 4) {
-> +			case 3: ptr[--count] = poison; fallthrough;
-> +			case 2: ptr[--count] = poison; fallthrough;
-> +			case 1: ptr[--count] = poison; fallthrough;
-> +			case 0: ptr[--count] = poison; break;
-> +			}
-> +		}
-
-That looks horrid to me.
-You want as few instructions (especially conditionals) inside the
-loop as possible.
-The Intel cpu will execute a two clock loop and the later ones will
-do two writes per clock
-(zen5 will execute a one clock loop and do two writes/clock).
-So you want a loop with just 4 writes and the loop control code.
-The 'pointer add' just needs to execute at the same time as some
-of the stores - to avoid lengthening the register dependency chain.
-
-For this code, can the length be a multiple of 32?
-Also on some cpu the 'rep stos' might be twice as fast (per byte) if
-the destination in 64 byte aligned - true for 'rep movsb'.
-
-David
-
-
+> +	if (hd3ss3220_get_attached_state(hd3ss3220, &role_state) < 0)
 > +		return;
-> +	}
-> +
-> +	memset64((void *)erase_low, poison, count);
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_PARAVIRT_XXL
->  #include <asm/paravirt.h>
->  #else
+>  
+>  	usb_role_switch_set_role(hd3ss3220->role_sw, role_state);
+>  
+> @@ -258,9 +261,10 @@ static void output_poll_execute(struct work_struct *work)
+>  	struct hd3ss3220 *hd3ss3220 = container_of(delayed_work,
+>  						   struct hd3ss3220,
+>  						   output_poll_work);
+> -	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
+> +	enum usb_role role_state;
+>  
+> -	if (hd3ss3220->role_state != role_state)
+> +	if (hd3ss3220_get_attached_state(hd3ss3220, &role_state) == 0 &&
+> +	    hd3ss3220->role_state != role_state)
+>  		hd3ss3220_set_role(hd3ss3220);
+>  
+>  	schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
+> -- 
+> 2.56.1.708.g77570a6a1d-goog
 > 
 
+-- 
+heikki
