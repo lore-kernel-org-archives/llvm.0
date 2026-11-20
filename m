@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.173
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795196472;
-	b=rFJvOmGaILsu5+EjuqD/ZPWC6Fsx4OIeVJT0f2JenGZHgRFrf6aLHMKuiSGadknGxbp/
-	 LzXpRCSw3yKNs+H+i1EHFZ85SD+49sQhcuRmdlG3ycZOF2dFHGAZRBWDmEGYKm9Cm6LEH
-	 saQN15l3eGaoNpHBjqzdSxukIOWE4ODNoeYmUb5jDLQXlvGyglFpIE/Pfw9taN6r0+xrT
-	 umXA5XzYKxwtzJDD5FTKqc0GzVG7gysmTDyOJRR9X2gSTszXjcx7AAKMMBNErnSxpnisX
-	 n7lEfk2KNoxXa54iPiZzt52e+foacmj99pWwo4UaCIaGDnYwBnD3nXAisBF0qlCDgeA==
+	t=1795196526;
+	b=WsPbYiQbaxNwAdJ69ls7BZDmf6B5rD914k1d5DpPFQ8Q9SmoNeahLM+yZ0RYMGiQBsi1
+	 ZgJer2EtOG+RFNox8q+swTAJ2Bf/zHOZWEjXI30lPu0HBc4fhyFR2/QUOU0a3jlh/0lP6
+	 ZsiF1dv4fU/Z9hiabPVjRfLviE3xRzlHYZU7R1eHDfCYQziBD/KCoBPIUSmJAaeTzOga0
+	 Qnt6z0EOleyvNlrxjraWx7rbU+D9PRXDv7WLqTLmj1vIvi1mb4VsGibxddL+0ANBSK7DY
+	 jiG57JVyElt1gh0tOzWr09sWHu5ps4HSNh2UcGnSKO0/7rX0poNn5HLDSkFG2paBwPQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795196472;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795196526;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=NBhJnzU/KValBhhwaOLZ41OrcrxNBBfePnpP/eKtfYY=;
-	b=SNbAzRGjQiKLucRpjFr/HpMkwH9CVxbpBf76JHtVOKxKzVBPNQfhdVBpSR889WtrVKHl
-	 KpW5gKo2OxU1GBqgHkOioSTh+Z5jEsd4l5hmPwRve1Dwf3wr9622XxLhoLeIZZc5bTZc6
-	 bRvtsdmLW4qpRmoM/vHz9+dXE7OCQ2TxANnGc+jisCxFf6wmF4EU2UR3JQfIOC3up1TkK
-	 ec1JhBLsiACLCXNsVrrbYr5YL7vYKgHm7yWcVxs3O1QfXcYbaQy0Vu+tAQjcyZ1cnsIPt
-	 39uzEgjRP8CGbNGZCU+g9REoYfWnzljLnUC61/nV61GuDUyX6tlFGypma0xyJeQs4Vw==
+	bh=uwdDvq8gf/8FaQGY9k5cefpkzPVlUilKxb2tJP1eGzo=;
+	b=OMz/JwREK5HpfG7loaEMU2R2xv2v9nTRAgtoaQpC55Q3geNV1AM638XDewenME8Jveaj
+	 jetrb5dGzvqP+0st9FjMACkZjtDJlro1oX16xnBFZD99HavWLF2MMsFS01o47UK7OuX/j
+	 oBu/8EkMOODxbresE6TGBmpVm9UzAON47JjrhO1k5As5nzsyZn7qMCS927enSaTXTKg/6
+	 n1imhZSiGzJoMZIsDU/PLjwldBHZFkj1QM445KQm9oNLBvzzq1ruFpPDyEHwTC25wGKtw
+	 p3ma+CUQ7tF1oA2iW/JxHIFWju+xgUA3A9VtG0XrGH+DuX5T+VXbmIxBi5w4yvJf+tw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="U/ILQT3L";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.172
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OH58M6p5;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.173
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8108606A330
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 17:41:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8108606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D18606A7C1
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 17:42:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0D18606A7C1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=U/ILQT3L
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-533202fe429so161cf.0
-        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 09:41:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795196470; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OH58M6p5
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-55c7445cf85so321531cf.1
+        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 09:42:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795196525; cv=none;
         d=google.com; s=arc-20260327;
-        b=KmmBfFFrkA3vnkhiFFzVkaDd3xUo8tN2s6sP7TeHQ9/KFDA5phAcf87akXYb3S8Ij5
-         7tXYsDwtHzUzetD78TXO4ErYBSjXY66mZ3ZNgQvh87+m4/iyJORK3gy1FFZYnOzw1CpI
-         ewgGk7KFxkcpDFNPpZicLqxRjWPSdBD+gbeRFP56L0t3KIr3+JA21NCLc1Y1U+lfANXc
-         Ay1zlB0JnEfZDFhimbmfsNoG2yJCdaY/v9uMBEWSvgk1HKcBqy+VHBqLddEkB0Lf8gey
-         YTAlRoukiASMZvfZfikoHBhXymvVjq1NXOpW39TZPgpAE6gzWdGqeyJOei6xUQd6RTi0
-         MIAw==
+        b=eQzd+EGR5w06Mlpranj/bbl2eGFwIuWnYDJjTWQmgPlgMsT4mdi7v8M6kloymCA9Q4
+         sgwY1IERJ3eKlLH8EXi6l6mpuYbekaFauWOJf5xy0rKtSpK7t5gZv4sYwfIOLrpOOr49
+         MPuEU4Rg9dqODv1PXromVqIT+xdRbjHaXBK7o5ywrPzxhF1NYAvIj8NcWNa4SG9QNWwO
+         yOIggHKm0F5pGvytRa6BZ8JiGj4e8KRWM9zSifKUy5YPBsTZBpg7FPooWx8VDtzxcp8Y
+         jJqCZVh69dStfpr/L5cd017OXWkOx+ZB+UxIWt8B3/gSq+ichr16Pk5WBhg8b9Bpsb89
+         71pA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=NBhJnzU/KValBhhwaOLZ41OrcrxNBBfePnpP/eKtfYY=;
-        fh=PDaPOD/xsPgagLt5oNsFVjsF+nx0k/2pZsYc+Eq+kwc=;
-        b=h1biQpGsqOkDd5kbyO1odSqe3JYMdkcBuEXkdFkp2p4NC5CKdjRv6bFnSYOJNEWeaQ
-         rvtVyPooCp0DRPeXDktvOCSlkc2ll+bBPjDd8WmNEVDMBiGXip4hPuquoJNeOWQTvqNG
-         On9UpKKPlRr/GOZAuWkP6u0R/lMR4ajvwtQRlRGHQbvUjGZeAsBcKrRHroFUiWasbExJ
-         sELUHfw0nl9I9bgugTsUXVPEO3Nc2MWD73e9Z5ee6h4a6eLy5NxgEF3LD5U869rDSC1Y
-         BR/FkSVF79IwOm/l0s2Qw3NswmLCTYd+NkfR3V7pjkLjNujDOwy/VOIdv3ftuVN5Czbb
-         N+yA==;
+        bh=uwdDvq8gf/8FaQGY9k5cefpkzPVlUilKxb2tJP1eGzo=;
+        fh=rFs/Xj29kF8ecpa152+j4f4OX2o3Qeg6CvC+5b6JM6E=;
+        b=IN9uBXLrNq/ip3PvyJZhPwPw9CKrc4k9K+IIGjyEcLLRZIzCqqp1dzMia+pi5L+k0R
+         eNkNBP86ruhP66b43MIXP7iVYyaPJA4MSGS+UHu7lPKmkSWuihePiBgyCnk1S3WfdCd3
+         osoc9hgELlvcWr3T1SLZyxMs33T+j2mC20NO5xe/Gd9Ei2xqF+7I6SbNGXP4FK9u9x3m
+         G5a8YOtSx4PRtq7efcPkR2d427SJiEXPYmxZWh7rqndyAgKs8JlqsW2TxaFFVPNW+C6k
+         L8exPXayD4zvq2LQhWtNov5TToDw1OttFzLkKjlpShuPjE93GNWg094S5sBKIqVnUhvg
+         IeGQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795196470; x=1795801270; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795196525; x=1795801325; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NBhJnzU/KValBhhwaOLZ41OrcrxNBBfePnpP/eKtfYY=;
-        b=U/ILQT3LbBKpU1aN37q0D3OaSRyowUopg3BasIsOTw5NYFNOzwF/+b+wJ8dNYX9kef
-         ykyGLu1THiRNvKoFPgyN1Bvq1A0EkKdY6Oq5I0xw8plJVDc297CkdY9WLmjMMFz9VsTn
-         ZWwgQlG31n+7pxErvLJ5yHouIPWEjvJlCjgXoOkT2jJuSJ8GmtAw5VN+tiecX8Y1bN6z
-         MzwoQL/SmYjPxgHZ/vocYG+t3ljt/4MjBhRxkQHPVV6v2YAwSIEcVlFS7SDTAXoxHfJs
-         HUFgFWm3kjSyVobaaNheF/BUVDE502fC1GdZU+TAudqnZ+5JNNcQVrcPTUjjdW1gmrA3
-         9wKQ==
+        bh=uwdDvq8gf/8FaQGY9k5cefpkzPVlUilKxb2tJP1eGzo=;
+        b=OH58M6p5bFNLON5JC9LJO714KU0ZeRqOS6l9uk7NXelDnGO7AGsOWX936lxKRMJGFc
+         wErCKj5xLJMwnO9QbiJsKBxs4B/urj4eiluhVY1/mmWhXp9oUzCtLeJ0N5NoU0Ls8mt/
+         d9t0ml4pi/mjRpESiT37bO44yUOrVhpM5v2u7YFFdOsNg13Mg1hQGnyiIoBL4qtydy6u
+         zDGXu0S9wK3TXeGvy7ExHLlpZ+1UXnZH5Bgi5FSe6EJNaup0v2vf1lg7dvXwAI42qbvR
+         6v7H6ijQZixLJGZS8v4WfpFT/l+xX93tZ9hUYw8lkWTgRmvVuU/LigYsZ78lGYUnKX2+
+         Mleg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795196470; x=1795801270;
+        d=1e100.net; s=20260707; t=1795196525; x=1795801325;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NBhJnzU/KValBhhwaOLZ41OrcrxNBBfePnpP/eKtfYY=;
-        b=jHkS4R2c8Wikb+CKldvlS0ASRjRJW9Z5Wv1a1Rdih6tWPwtrz7VoDSd+ZoxwE4uiAt
-         o5INgbG3Nc1YFU1DH4vIxBtZib9lfdqHCyM13QD/k+1Ctan9PMPFuWGVmJeFFAZzTfpJ
-         L2FfggcwL4g+GJ2yDa0D10jSnknNhT7o73qn5iIfftiUGCxVW7F1m/2W5IA/RK8ENArv
-         S/0R8n/DD7Org3pE6y9QhFM5AvuGLxTm+rY99Zz4/94wRZud1wrETpaigncYvzhx7jQZ
-         mZLNridsSax+grLhJSEStelBvema+naQNth0VmA3g76mSQCD8dR7eyQVSKrHJ5c8nStx
-         dXcg==
-X-Forwarded-Encrypted: i=1; AL+hErEKBJuGejIOQh7z3zSw+Ixl7Lw70ovy0DeK+4Fj9qHdo26/iaMAQAzlD5inQ970gidU6fI9@lists.linux.dev
-X-Gm-Message-State: APuU4Z9dvLD4nTPcZK/rliIanqAmq+kBxyKo99KMajC88iruBpF+3l7C
-	75mRGYMDSsbCRkwW5Kj9E6EF+VFAPAOP0NUB9p4V1pBPVjPA2tm/9iafO+gZjmT6pTf1ObcCoND
-	3t8h9E5XZO+/zf/JOU11DKhnsnBwQX1XUDjFad3cf
-X-Gm-Gg: AYBFou2njAHHgPyY3QqH4TQD7LHZchGWgbqTIFXqPrNMPavxPbZmdrrc/n85TPTLtG4
-	91zGoP9n5ZTGmdzOoC6zz422m9601W1uvPqhh8aIl4ZwgfEZIWjX5U3RFdzbD0h2NPbMKL8dopK
-	6dtAFYeGOwkXB6R62bhtwjZCZtjFNoKWj7kp6TCnCfFEvVTh9NjxiItsDGmaWjMRE891cinwxKN
-	1u4KVukR8YHgU1lrf7k+lva2FjOM+xPu/a7WFe2tu7lV3rBQLy7GhSMzGfqPY1Mj7OLmwGknZ5S
-	LSebntJfOeLHqf5Ug5HjXW1cgw0GN5LCV3g5sxo7BkTXo89TApaj0AU6zKhCTJLBlEInZfXqVC0
-	aUp6zcygV4NT1GLg+y+nH/Jhh8w6W/TYKpKBV
-X-Received: by 2002:a05:622a:58c8:b0:55b:d494:187f with SMTP id
- d75a77b69052e-55d7911a3d1mr23325621cf.5.1795196469202; Fri, 20 Nov 2026
- 09:41:09 -0800 (PST)
+        bh=uwdDvq8gf/8FaQGY9k5cefpkzPVlUilKxb2tJP1eGzo=;
+        b=Ss6FJFvcztUwdM4VDShE94azQ8ITs2V9xR8gYGT52xY1YS8oAI76vV74eVNFPvPvNw
+         vUxvOcjRqdn9v749bMNWpNF7hzojn7ezYKpsT8+lFkFChZIAbK9bMhkm6J4hWp8jLoWi
+         lBpCacOg5vHdKfxjfIKEHHCXYMHYo1h/OPf5DhCLZxgiDOZSc4SKwhnfgHpGFI3HnN5U
+         3FrzER4qCd6QeMxEFdZibquh5H9mYLnHAfd7UxVY+vAX1lOse34l0++Q8a8Uz5O2pdYI
+         vZVwS09Adq3hM9QWAsrks5d0sheKBNYPLtKpNDvlnpYEX3wUsdY9OWtl422X6Yz32QO/
+         FHfQ==
+X-Forwarded-Encrypted: i=1; AL+hErHky+Dl2bSWvOlQhLgWfnpPgN7LLqiKnhdjfXL8UN4OOY+lIPTH8OKf9mNcMwk/Gyv1WCap@lists.linux.dev
+X-Gm-Message-State: APuU4Z+a5PxHXs5Tm7U3n7SOCDoHJJWV01ZRuuMBTeuT+YJAz7bVzrR8
+	GPgU5U3RH+hS4xZhthKqpP3jCjZokPyJfpV+U6nqsvjx4uHiEiTUQULnvd/xf+CHSYnef7zAZG0
+	nF5VpFh9ya6VWKiqYNbH47ed/Mc7M7KDId0FF1Us/
+X-Gm-Gg: AYBFou1Tmu/lzHqmSMbIb5+svWMGerXC6GLwVQqA77SuJVwqh4EN4exJlIpFPAeY3cR
+	IN5mIpLvYVw15rIoWmY8JkExStO0vjqXp8qKqL5AKNnGyu/ycG75w/D/IB8kHFL25XuGERyfIb0
+	8W7lWpr9rvDLKytAgbqiTjZRqx7gCQSAL3rdBrHUZlxyh3mgGq/cKHdYUBt7ElPv3PS0bIQD1qL
+	CXssceGZ11LN4+DO7VeKSoCWOft1vsZNvsxzsH+qKWTzJ4C5cyeiK5OxHdp18zy7/PzpWoIKKT4
+	KYjqXPRx2sAb5ClLlNXFgdVI6fsWO6Dljo6D9XGp+eB7ZEPhE9yzxvFIXV4k21izqlupdUYpsTs
+	RpmozI1Fz1zOOzapl29gHHS/dJpvc4+Do41rH
+X-Received: by 2002:a05:622a:5a17:b0:531:282:6560 with SMTP id
+ d75a77b69052e-55d7a3bb532mr19021551cf.15.1795196523725; Fri, 20 Nov 2026
+ 09:42:03 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,123 +104,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261119170729.1524516-1-irogers@google.com> <20261120095750.njqvupqpfuh443rh@DEN-DL-M70577.microsemi.net>
-In-Reply-To: <20261120095750.njqvupqpfuh443rh@DEN-DL-M70577.microsemi.net>
+References: <20261119170722.1524088-1-irogers@google.com> <20261119-magnificent-ecstatic-alligator-3f4816-mkl@pengutronix.de>
+In-Reply-To: <20261119-magnificent-ecstatic-alligator-3f4816-mkl@pengutronix.de>
 From: Ian Rogers <irogers@google.com>
-Date: Fri, 20 Nov 2026 09:40:57 -0800
-X-Gm-Features: Aa3M54oOzjegUxdpX7VNYBH8UxXyKYAg5jEgHWesrq6ha6qjCQCMQopqRhJhoB8
-Message-ID: <CAP-5=fWXrX+VTWP4r4daZPf8QHEEWEyfWaQ9L+oa80Y3YAZcBA@mail.gmail.com>
-Subject: Re: [PATCH net] net: lan966x: Free skb when PTP TX timestamp request
- fails in xmit
-To: Daniel Machon <daniel.machon@microchip.com>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+Date: Fri, 20 Nov 2026 09:41:50 -0800
+X-Gm-Features: Aa3M54ogoNwKUPyvyvGecVyjPhxTJ1dmEEtQ54WzRJLYnFxgBCjMRa5J1U0aCPg
+Message-ID: <CAP-5=fUxckfL0ZCa9nVf2sOAdinw_HoVkd1CY8PwYnpKFxLWww@mail.gmail.com>
+Subject: Re: [PATCH] can: softing: lock card->fw.lock unconditionally in softing_card_shutdown()
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Vincent Mailhol <mailhol@kernel.org>, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
 	Elkin Cruz <elkin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 20, 2026 at 1:57=E2=80=AFAM Daniel Machon
-<daniel.machon@microchip.com> wrote:
+On Thu, Nov 19, 2026 at 9:27=E2=80=AFAM Marc Kleine-Budde <mkl@pengutronix.=
+de> wrote:
 >
-> > When all LAN966X_MAX_PTP_ID timestamp slots are in flight,
-> > lan966x_ptp_txtstamp_request() returns -EBUSY without queuing or freein=
-g
-> > skb, and lan966x_port_xmit() returns that negative errno directly from
-> > .ndo_start_xmit. Because dev_xmit_complete() treats negative return cod=
-es
-> > (< NET_XMIT_MASK) as packets already consumed by the driver, skb is nev=
-er
-> > freed or requeued, permanently leaking the sk_buff and its socket
-> > sk_wmem_alloc accounting.
+> On 19.11.2026 09:07:22, Ian Rogers wrote:
+> > softing_card_shutdown() calls mutex_lock_interruptible(&card->fw.lock)
+> > with an empty if-body ('{ /* return -ERESTARTSYS */; }'). Because
+> > softing_pdev_remove() invokes softing_card_shutdown() before
+> > unregistering netdevs or removing sysfs attributes, a pending signal
+> > while card->fw.lock is contended causes mutex_lock_interruptible() to
+> > return -EINTR without acquiring the lock. Execution then proceeds unloc=
+ked
+> > through IRQ and DPRAM teardown and calls mutex_unlock(&card->fw.lock) o=
+n a
+> > mutex not owned by the current task.
 > >
-> > Free skb with dev_kfree_skb_any(), increment tx_dropped, and return
-> > NETDEV_TX_OK when lan966x_ptp_txtstamp_request() fails.
+> > Use mutex_lock(&card->fw.lock) in softing_card_shutdown().
 > >
 > > Found via an x86_64 LLVM=3D1 (Clang 21.1.8) allyesconfig audit with
-> > -Wimplicit-int-enum-cast enabled; fix and changelog drafted with an AI
-> > coding assistant. Build-tested under LLVM=3D1 W=3D1 (-Werror) and
-> > -Wimplicit-int-enum-cast; not tested on Microchip LAN966x hardware.
+> > -Wextra-semi-stmt enabled; fix and changelog drafted with an AI coding
+> > assistant. Build-tested under LLVM=3D1 W=3D1 (-Werror) and -Wextra-semi=
+-stmt;
+> > not tested on Softing CAN hardware.
 > >
-> > Fixes: 77eecf25bd9d ("net: lan966x: Update extraction/injection for tim=
-estamping")
+> > Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+> > Fixes: 47fa0336c1b7 ("can: softing: softing_card_shutdown(): add  brace=
+s around empty body in an 'if' statement")
 > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  .../net/ethernet/microchip/lan966x/lan966x_main.c  | 14 +++++++++-----
-> >  1 file changed, 9 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/dr=
-ivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > index b8696fc7e9b9..9c722d23e0bb 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > @@ -392,6 +392,7 @@ static netdev_tx_t lan966x_port_xmit(struct sk_buff=
- *skb,
-> >       struct lan966x_port *port =3D netdev_priv(dev);
-> >       struct lan966x *lan966x =3D port->lan966x;
-> >       __be32 ifh[IFH_LEN];
-> > +     netdev_tx_t ret;
-> >       int err;
-> >
-> >       memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
-> > @@ -404,8 +405,11 @@ static netdev_tx_t lan966x_port_xmit(struct sk_buf=
-f *skb,
-> >
-> >       if (port->lan966x->ptp && skb_shinfo(skb)->tx_flags & SKBTX_HW_TS=
-TAMP) {
-> >               err =3D lan966x_ptp_txtstamp_request(port, skb);
-> > -             if (err)
-> > -                     return err;
-> > +             if (err) {
-> > +                     dev_kfree_skb_any(skb);
-> > +                     dev->stats.tx_dropped++;
-> > +                     return NETDEV_TX_OK;
-> > +             }
-> >
-> >               lan966x_ifh_set_rew_op(ifh, LAN966X_SKB_CB(skb)->rew_op);
-> >               lan966x_ifh_set_oam_type(ifh, LAN966X_SKB_CB(skb)->pdu_ty=
-pe);
-> > @@ -414,12 +418,12 @@ static netdev_tx_t lan966x_port_xmit(struct sk_bu=
-ff *skb,
-> >
-> >       spin_lock(&lan966x->tx_lock);
-> >       if (port->lan966x->fdma)
-> > -             err =3D lan966x->ops->fdma_xmit(skb, ifh, dev);
-> > +             ret =3D lan966x->ops->fdma_xmit(skb, ifh, dev);
-> >       else
-> > -             err =3D lan966x_port_ifh_xmit(skb, ifh, dev);
-> > +             ret =3D lan966x_port_ifh_xmit(skb, ifh, dev);
-> >       spin_unlock(&lan966x->tx_lock);
-> >
-> > -     return err;
-> > +     return ret;
-> >  }
-> >
-> >  static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu=
-)
-> > --
-> > 2.56.1.708.g77570a6a1d-goog
-> >
 >
-> Hi Ian,
+> The driver is being removed in net-next.
 >
-> Thanks for the fix. The issue is real, and also on my backlog of work to
-> upstream.
->
-> Just a heads up, I expect the AI review to flag issues in this area. The =
-lan966x
-> PTP TX path has a number of known problems that I am are going to address=
- in a
-> PTP series soon. I'll go through the findings once the review is in and f=
-ollow
-> up on this one.
+> https://lore.kernel.org/all/20260815103428.117201-1-socketcan@hartkopp.ne=
+t/
 
-Thanks for the heads-up, Daniel! Feel free to fold or supersede this
-in your upcoming PTP series if that's easier than taking it
-standalone.
+Thanks for the heads-up, Oliver and Marc - please ignore this patch!
 
-Thanks,
+Best regards,
 Ian
 
-> /Daniel
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
