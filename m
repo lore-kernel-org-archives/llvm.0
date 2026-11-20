@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.173
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795196136;
-	b=ZtqVZxve+4yHUF/LFyoMb3G6A09s/vtWqpv09qFIOnoHUUDH9VJSQ7YWSqAjKcbIdS8P
-	 ndsP4hABSs/LQ7hpZ8YIl+V/5CuNpZdOlJso3BFm/R6copGJxmwXljnJUbN+yHPwoZwUt
-	 9ATy2MI0RmFpSLjIC6XB+81zxJ1/Vr/5M6ONUWE4Y09rkdEkIkHUyeU2kCP64qsfreQzm
-	 Xgu4UlQYoBI15ApIJ6f7y2lVp7NqoAGvQgHs3RkKMMEEARzDQSbBa9JW0PekSolD7RsXj
-	 zuvrXqlzyFH4RPIHFz892sFNZD7qa+6ERAfog5kOK1/8V7wbHuadqAKFAR2z6HPCKaA==
+	t=1795196253;
+	b=tdkKD3aov78RvuoGLOSG2EC6a27aaETep4S8PrR6DitJmYyJN7/Qi8Gy22N2RRg7t7SK
+	 tdU5sHfKv8p8mHPXg2qLQspzfI1Mpj/udB04SalkD4WVnnyVmethIwUCSByIPP00I0cIT
+	 JRRD80cqgo2JiTadAw+Un6GgQvmc1W3WXVU/OUjw5Nt8aYMmM/HttEOFvQdHFJgMIsG+h
+	 Bss9KbydZSvUzyFk0YxKctXTZ1rI3Yvbx0tWDc4AV9WhpERdYn5BdnQUtShBw8GAaH5tO
+	 Z6aecZT0WuHGNCWdXJptmUVq5+fptbyy1U54DU8pzLgkMjNjLPq1mDL1ewPVMn3d6NQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795196136;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795196253;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
-	b=zJf3x52ST1PIZ6VrUlzOil5tekoPQTgvqp2n4dmtzHVME+sypfBMkceHa7Z6HrJIo1nh
-	 dxK1xc+Nj7uoWFaBdh+3qPbL0jm6/5iPzYtJ1KeSSNo0cd/B4ag+QJ02ucxQ9QXPJOyO6
-	 WCla0OghQ+1cm9y/sPCJYc9rTBsgnzrM4H1PFddwhpoJYnsrb7PkuJX/DwOn68nW+sLxA
-	 Wz5IOWXC2c/JVVtF8cBXNifK0WUy0/kZHd/TZxtAewwcuSvPp/fJdRH9E7Z2gZ/MuTqKm
-	 X0SVjPsmqyg0nhPJ2lrRdF1eCmoIh0QnoWUf/O/7nP37NKbX13jd1GGPBz779+ysI9w==
+	bh=QRKvnlsdzu3jXDaX4UB8D7CCbipvvMVl8tWANK/PyeU=;
+	b=lJkGCsViBRNWO07aN8KpzRxytElg1Mu682SZcsrBDCGjt2ZbpyGHgCwFQtfRVUYwlDH5
+	 v1K57TM+P7nyz6qrjXoipclbDlo3M9nAk05ww++YEtNFpVMVxW3z68X6KW8HGgqduDb8c
+	 ZTBoPUlDBZ4i4shcSYRDi4ScLQtMAOlTeV5+3KiTOROs86i7N94LGZeFJRFDRJXnuy76j
+	 1x8U863p0a/1YwEHocuBE+TOnLKusQyr7tNZzJ4KKuPVS57kXgboEji3IsDfuUHz8otQB
+	 EEGONwNgN6Soyr8116b8+tImsUQyzwlgcmQezEqNNraQs52LbiFmClfkN7rxkB4bDZg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JsFGCc5a;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=J3R05DCR;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.173
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EFC60A2630
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 17:35:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39EFC60A2630
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19FF606A331
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 17:37:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C19FF606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JsFGCc5a
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-55be673e029so308661cf.1
-        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 09:35:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795196134; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=J3R05DCR
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-533202fe429so375191cf.0
+        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 09:37:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795196252; cv=none;
         d=google.com; s=arc-20260327;
-        b=kzk8dnZOasCggp2xkDB5NWQBI4NK8lirQhtRA1Tdx5LVSY30IIuNPjZPpG/IjEOibE
-         MrNUjDuHZrTedJ+MRJ+FyLQ+3YeJZr59GF8O0adCTow58W8nQo4CG4N8/WzFAeDfdKSV
-         8VT0W5RcxCYKMmtX6PKuXwjQMXRbupeyPKQbo+sFLHvIdjzobpos5FZ07VyjNHlQM4fc
-         Oi4h+IUlFHaYXOYbpNuDzqgDclu3AoWAiUEMSwZaf60HlM3WJ9/Mw4kkkkYA4wQ2gb4Y
-         D//hCGV3JkKHS2UzQExqBeqOqXDrBy+KeiuZfwns2g4ZONM0WvHRAzf3A8sQoaKCwsmb
-         XEQw==
+        b=gqhRz9nuKY/KRCpa9KARTExJi2wmyF0lCHDjiqswepHuFLoc9JVxS4MVzoANejZNxJ
+         pK1qpFLFxe7iqgAm6NbS6Q66SsDUNXeo7uuix2yubqNmABPJgtEwagl+1C+cY4PjYFvy
+         CTSitgYf5aurfQihsX+shCWMVvSOoYp94f7CIWI6izubmFvtwQUBsOzxuGud/tJMWpQa
+         eojVS5ue81rAzmPlkFmC3pkFMK43l7C4lu4VZRzkesDJ/hqeeqdLbePxDF5OBN1t7mjN
+         NQuE1wWW99i4i8Px9fDRxZAYXkh8RKrLXoFtdVs7DifKO1Y/U/GUOS8f7C1pq5Wi3eNT
+         SRwg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
-        fh=E3qlk57KmyDhtjveNuYQiRYn2/Nfctzz/rw2EXfYqo4=;
-        b=QMjgAYXfjXDFBOBAD2ixW9WvtYQFV8qK751FBkftRaGPjQbRsz/mTFaOk+R3j1YlfC
-         oLz2bYBttr9obSOGlU9ROQRm5jLjdMnh2kG4EUf0qXKs3NcOKaWlL6cfdEsE/1yG5IxL
-         9eaOs6I2V7dHGJ3mZwbZHZhJdpkEhMQM6PVg7Ii7QdhwgJFsV1BHa8W4jph8RsN4BQgf
-         D1dcvCtOO32imDKH/64tLcGu1LAebpT9l79vkqEAqyzXiyMkT9DTMjlFrTH36UpBtsdB
-         c2hQqwSizgbhwfPwBCIfHtFVlRXfPK4RLgznU6aZaJunudS7PaLXRX3QVbhycbg88Pxg
-         NZjg==;
+        bh=QRKvnlsdzu3jXDaX4UB8D7CCbipvvMVl8tWANK/PyeU=;
+        fh=hRuASEquagY+sT9ccX6ncS1haeLSevzoh3uM7pOhAoE=;
+        b=A8Q5dtpk8jqUt7DEYKRgmJYIuaLvuaKprqi5rXFyfzrQiyKbLWntxVal5jnfwOXonH
+         S5jw2LmhuTObNI51I6U+PEnX9vbWu9SdfXkZxbhcv7rxHDcgjkukS+mUpi5SsSZDqMSk
+         5pTDbdRc2rvNwhl/vEFZMKf21WgD4aAiFMVx7DHJAZrZFGwUqPwAlzkEnYlCYWs1sNg/
+         BxX7DJYHC3ANTiK7G/TmiEz9x1VioFT2bxeSY0+wt1EvNOAeMH7GALljwCCTczXFJVRj
+         MP51XHI8MlAa2yBAmm73luTugjiFvyubkXXBoEhsrcOIm5dBIRIPZquj/nU7S27c5ljx
+         hcVQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795196134; x=1795800934; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795196252; x=1795801052; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
-        b=JsFGCc5atOxsgyd+jaYwxTXG8ItYIfsg2XMDHeHKLbPkrrV+f5h5dobGch4OsJ17AO
-         xhgWIS6lwv36L+XIZUkQ+RU2ZzblIEMaP9CexrI+GDy/sVO5/id6U9nMqCgTI0BSl6TV
-         PYPodCuRSuEsIMUrE3y8V/yg3VGqRvD5nRfjiMbmNXdr/gbkDyZs6/H8HR94hlfktgJ8
-         m3YXEjxtYrdi1KkrYW9zBPifbJ0EQo1RA5G8+yVWJFb0l/LQSPT1RzqqUdxhQdAMNkIx
-         X3W++wbOBxLEVBCp2LvuKHUJeDSccfmODb7iYoNISoPJmH8wy1QcgjAwwRL4b2fSmQpk
-         2yVA==
+        bh=QRKvnlsdzu3jXDaX4UB8D7CCbipvvMVl8tWANK/PyeU=;
+        b=J3R05DCRXGvp80fAhvb4oq7mjilnsYDQmMkzOA0GUN6e+esRUxQPfrw5WjBmU6Axdr
+         spVKRr2zh0zn2FyysBc5b5ATrdUOGizvjyG0bmTjKkap98nNIYrEjGq0S7YotSqLb1aj
+         QjreZGxLdb0hZH2qvMjiP97egyMpw/YmSRH7enYvu5Ep6RVfxTkYHmCbcjWnifhzol6q
+         zrU93PU1Blqx3I/hZwNY+zfmG3iUbiB2LaUoHkh2RUygdSaN76huTKeVsiAicC+80+oc
+         8HcZKC7M3QQDKql6ormQGrNhAMD5vLmEJnS1C3DcCbmZgPjotnrV3rb+tHNj55cdcbgi
+         orAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795196134; x=1795800934;
+        d=1e100.net; s=20260707; t=1795196252; x=1795801052;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Sg9wdreYArJWqO177axMWEVER4eAxW9Ay7LMmq1t6Eo=;
-        b=FKvbMt4RAHq0Tu/t0ZRPBbVGugSR8+un2gThdJYlL/sL27e44qOeeJNO/kc1pHFqxa
-         cU1U4t0/qC6GCP3LCTJMM0VihQybTjyscquF3xvcAQB7smuwa6lUETVGsHdqCXWlhBxg
-         pTUP9C3W+Sf0RfB+sITnAO41YOdgDzGPaIPLAbzqDBLbnn9m6hJ789aele21PUxZD9x3
-         3eriKNUM21thezuftht+SlKbyk+ORVCW3ydEWpL7H1CkG7X0XlYWo4zwnmXr1fQg0G5Y
-         AHoffi18JJgVep5OSA04AS9RMFYIpH+80VcSCNw3Icz2JVYtIJgHbHqb3AMx6nGMxhpW
-         J4EQ==
-X-Forwarded-Encrypted: i=1; AL+hErFMgp3FnfG7t+Tr9HP1z0TYp6XYIIyJcMZ6h0cYC6IWDwp+kXH9BdB72Bsgp3GP8GPORGj9@lists.linux.dev
-X-Gm-Message-State: APuU4Z8yoSHqVpGCPSNLZW3bYUIbL/6qWJ3OXTUW57qTg3gg7YXCvW1V
-	3pfL8LQUy80WPzD0x6pgAPhGut6VQ92mSTLWRL8e9ZaDqHoYAaKwJSzTE1boXssAcdSj0LDYfH9
-	4052KA4ceZRsp6lKRQ+WQisXhE0JtwhWmZenyYd5h
-X-Gm-Gg: AZFdTZdFeAfkNDZSr8RUHogX3ccv9EdUF3hrMLTaJv54ixPM5bqFBqfSiDWwWVhOk5K
-	URHhHZcwPmagpliiPufiMexQdvWvGVcR3rqqkNUq4aO8Upw3sv2DUmPtBoDndvmzhBzIUS+t8B3
-	X6GERiClZk2FmCgKh+qHL9q41J7GvkgeRLt/fr308Ff17x+GSAZpt+vZDIx9pLDb1ZgrwyW3/Ik
-	McAHn8ghmvTX/xnNKFxdBnZuekiDMOvNOhLmfV2at1GjWvBZIYX8iVAUUHnlS4iE3lZkUqZnhRx
-	ZYl27sYVsu1rX4d63dutIe3hrueyztskjvp7KxMJcWYWj29V6BFQF5sNEGhN/nu9Ck08vlLRAUX
-	hWQNBGzUNQvvK9prThxS/8aFZoyTp7q2ymbVm
-X-Received: by 2002:ac8:5c8b:0:b0:535:30a:76c7 with SMTP id
- d75a77b69052e-55d790b2edemr23784471cf.3.1795196133385; Fri, 20 Nov 2026
- 09:35:33 -0800 (PST)
+        bh=QRKvnlsdzu3jXDaX4UB8D7CCbipvvMVl8tWANK/PyeU=;
+        b=HHNAk7IjtANO68NzsBEeikcbmj7uiatlwZAFGt+28W2KrMwg9q/PpjEMXF7hxnnzhq
+         3CaD22fHuZr7cws+RQoFx7l9TFUBPMhz3UwYgro5XIQpCeMfM2WzT2vlxxIZMYSHigXK
+         oRo+v/zrQcpySuK7EFaNuMuN+FaRiVqIBBCEKdBH5A0UdL87M7uuzqi403U+82WuznJw
+         FUoa03mWoOu6V5U/c2+6b/HQlxMl0baZp4Tcqrhrf2pUfw3s17ypLvlux30N2xQIli2Y
+         MNwaoR5NT5eAmlrYVVmTY/bPHZj1t1i2VQCFgTyPx7j5gYH5LtUYajtfN2i3+Rru/tdW
+         xrTw==
+X-Forwarded-Encrypted: i=1; AL+hErEnLRVvYL9LNvQvwSJ/JjSeaoujDkDq0TcplkOO1Qgy3QBzjpMv/q48ONOH/5pGvrqNZ6Zv@lists.linux.dev
+X-Gm-Message-State: APuU4Z+r7casHM3JG8KNlI9lNPMrmeWAXp8ylLAgUFwUGpT2yB5qEu2Q
+	v8+m1tqNqdJhSrM8hKzR4gf4vDgVEVE/HnnVPmGroX5qwnhnowibv/UTEqqol0jW/mNAydaytFG
+	q4Q3DJcgw567PdbN+nHFt0Wvq7IoDSzeh5GMximUv
+X-Gm-Gg: AZFdTZe8f67QnpuBTOta2HI3BwW33w70r7gEM+ouym6t7cHkr3cwZBp6AJAFBtKxNaa
+	P9NOgONOpNPW7LEryiRaMC0zYpXov3M4x9aDCJy81cWTN99GkJPNpkEmO++bm9r356qyx8iu8/o
+	86xJQtU8uaSygSYDklxCnSdObc0+LO/cw6SPIgGBjBiUmsY9Wb13iso3U4KJkvVJjAu+1qrGhCe
+	kJbgetIsqPTSBDbagNDNyI3dlkUzWsivYLwW+vGCgQsPXrgeKIXMrckzjLy7Sc+Hj/+U2Z10L1a
+	I6JginvlWyOvH/Mpqy8z9SqrkAIwotAYUAH4jrlOVaJqidxapBDR4C8V4+tjWjq5UQmLHYB+49X
+	o5+kG4QwuPUCiQCfGD0diycT//X+Nw893Ie/b
+X-Received: by 2002:a05:622a:420a:b0:536:934f:7da2 with SMTP id
+ d75a77b69052e-55d78e6fe63mr22944711cf.2.1795196250681; Fri, 20 Nov 2026
+ 09:37:30 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,141 +104,127 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261119171014.1534691-1-irogers@google.com> <f712f16f-dd35-4afc-81db-4e93232846aa@bootlin.com>
-In-Reply-To: <f712f16f-dd35-4afc-81db-4e93232846aa@bootlin.com>
+References: <20261119170354.1509589-1-irogers@google.com> <BL1PPFB0715B38BE20BB0B4087ABC66BD9EDB792@BL1PPFB0715B38B.namprd18.prod.outlook.com>
+In-Reply-To: <BL1PPFB0715B38BE20BB0B4087ABC66BD9EDB792@BL1PPFB0715B38B.namprd18.prod.outlook.com>
 From: Ian Rogers <irogers@google.com>
-Date: Fri, 20 Nov 2026 09:35:20 -0800
-X-Gm-Features: Aa3M54rHxE2SNl4cgtQPI_-lngqTQPH9-vUoYkTGGDewMSKBXdmwHC7t9x76wtU
-Message-ID: <CAP-5=fUPWc5GH6BQsN-+Di=LVb=dYcUu5Mo04Rp2ugsMzjYFEg@mail.gmail.com>
-Subject: Re: [PATCH net] net: pse-pd: pd692x0: Return fw_upload_err codes from
- firmware upload ops
-To: Kory Maincent <kory.maincent@bootlin.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>
+Date: Fri, 20 Nov 2026 09:37:18 -0800
+X-Gm-Features: Aa3M54r5Jmnt4Ssp-wBby_ZlWdHK7iMTTCVJuGgQMqW36wSMvbgVZ0tFQ-QRjgE
+Message-ID: <CAP-5=fVj+nAvGW9m9L2AxPqzw63PDqCawS=9a6jVh1fc7ob-dw@mail.gmail.com>
+Subject: Re: [EXTERNAL] [PATCH net] net: marvell: prestera: Fix skb leak on
+ error in prestera_rxtx_xmit()
+To: Elad Nachman <enachman@marvell.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Elkin Cruz <elkin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 19, 2026 at 9:26=E2=80=AFAM Kory Maincent <kory.maincent@bootli=
-n.com> wrote:
+On Thu, Nov 19, 2026 at 9:39=E2=80=AFAM Elad Nachman <enachman@marvell.com>=
+ wrote:
 >
->
->
-> On 11/19/26 18:10, Ian Rogers wrote:
-> > pd692x0_fw_reset() and pd692x0_fw_write() return negative errno values
-> > from i2c_master_send() directly as enum fw_upload_err instead of
-> > FW_UPLOAD_ERR_RW_ERROR, and pd692x0_fw_recv_resp() ignores negative
-> > errors from its trailing i2c_master_recv(). When a negative errno is
-> > propagated to the firmware upload core, fw_upload_error() rejects it
-> > as >=3D FW_UPLOAD_ERR_MAX, logs an invalid error code message, and
-> > reports "unknown-error" instead of "read-write-error" via sysfs.
+> > prestera_rxtx_xmit() is invoked directly from prestera_port_xmit(), the
+> > driver's .ndo_start_xmit() callback, whose return type is netdev_tx_t.
+> > When skb_cow_head() or prestera_dsa_build() fails, prestera_rxtx_xmit()
+> > returns NET_XMIT_DROP (0x01, a qdisc congestion code rather than a
+> > netdev_tx_t value) without freeing skb.
 > >
-> > Return FW_UPLOAD_ERR_RW_ERROR on I2C transfer failures and use
-> > enum fw_upload_err consistently across the PD692x0 firmware upload
-> > helpers.
+> > In dev_hard_start_xmit(), any return code other than NETDEV_TX_OK (0x00=
+)
+> > is treated as a busy/requeue condition unless dev_xmit_complete() holds=
+;
+> > for an unrecognized positive value like 0x01, the core neither frees no=
+r
+> > requeues the skb (or hits the unrecognized-return WARN path), leaking
+> > the packet buffer.
 >
-> Please write a readable commit message with human hands.
+> Did you check it yourself or was this sentence AI generated?
 >
-> > Found via Clang -Wimplicit-int-enum-cast on an x86_64 allyesconfig
-> > build. Verified by building drivers/net/pse-pd/pd692x0.o with LLVM=3D1
-> > W=3D1 (-Werror) and -Wimplicit-int-enum-cast, and with a standalone C
-> > reproducer; not runtime-tested on PD692x0 hardware.
+> Please check here:
+> https://elixir.bootlin.com/linux/v7.4-rc1/source/include/linux/netdevice.=
+h#L122
+>
+> and here:
+> https://elixir.bootlin.com/linux/v7.4-rc1/source/include/linux/netdevice.=
+h#L144
+>
+> You indeed need to free the SKB, but as long as rc < 0xf (which is true f=
+or both the
+> NET_XMIT_DROP and the NETDEV_TX_OK cases), the behavior of dev_hard_start=
+_xmit() is the same:
+> https://elixir.bootlin.com/linux/v7.4-rc1/source/net/core/dev.c#L4074
+
+My mistake on that paragraph - you are completely right. Because
+NET_XMIT_DROP (0x01) is < NET_XMIT_MASK (0x0f), dev_xmit_complete()
+returns true and dev_hard_start_xmit() assumes the driver already
+consumed the skb, which is why returning without freeing skb leaks it.
+
 > >
-> > Fixes: 9a9938451890 ("net: pse-pd: Add PD692x0 PSE controller driver")
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > Free the skb with dev_kfree_skb_any(), increment the core tx_dropped
+> > counter via dev_core_stats_tx_dropped_inc() (so .ndo_get_stats64 report=
+s
+> > the software drop), and return NETDEV_TX_OK.
+> >
+> > Found by enabling Clang's -Wassign-enum on an x86_64 allyesconfig build=
+,
+> > with AI coding assistant help to audit the warning and prepare the fix.
+> > Build-tested with Clang; not runtime-tested on Prestera switch hardware=
+.
+> >
+> > Fixes: 501ef3066c89 ("net: marvell: prestera: Add driver for Prestera f=
+amily ASIC devices")
+> > Signed-off-by: Ian Rogers <mailto:irogers@google.com>
 > > ---
-> >   drivers/net/pse-pd/pd692x0.c | 81 ++++++++++++++++++-----------------=
--
-> >   1 file changed, 40 insertions(+), 41 deletions(-)
+> >  drivers/net/ethernet/marvell/prestera/prestera_rxtx.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/drivers/net/pse-pd/pd692x0.c b/drivers/net/pse-pd/pd692x0.=
-c
-> > index 7958f5741463..94a857eaa3de 100644
-> > --- a/drivers/net/pse-pd/pd692x0.c
-> > +++ b/drivers/net/pse-pd/pd692x0.c
-> > @@ -1455,6 +1455,8 @@ pd692x0_fw_recv_resp(const struct i2c_client *cli=
-ent, unsigned long ms_timeout,
+> > diff --git a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c b/dr=
+ivers/net/ethernet/marvell/prestera/prestera_rxtx.c
+> > index c4ea247d2470..7ac9220d33c5 100644
+> > --- a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
+> > +++ b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
+> > @@ -817,13 +817,18 @@ netdev_tx_t prestera_rxtx_xmit(struct prestera_po=
+rt *port, struct sk_buff *skb)
+> >       dsa.port_num =3D port->hw_id;
 > >
-> >       /* Read remaining characters */
-> >       ret =3D i2c_master_recv(client, fw_msg_buf + 1, msg_size - 1);
-> > +     if (ret < 0)
-> > +             return FW_UPLOAD_ERR_RW_ERROR;
-> >       if (strncmp(fw_msg_buf, msg_ok, msg_size)) {
+> >       if (skb_cow_head(skb, PRESTERA_DSA_HLEN) < 0)
+> > -             return NET_XMIT_DROP;
+> > +             goto drop_skb;
+> >
+> >       skb_push(skb, PRESTERA_DSA_HLEN);
+> >       memmove(skb->data, skb->data + PRESTERA_DSA_HLEN, 2 * ETH_ALEN);
+> >
+> >       if (prestera_dsa_build(&dsa, skb->data + 2 * ETH_ALEN) !=3D 0)
+> > -             return NET_XMIT_DROP;
+> > +             goto drop_skb;
+> >
+> >       return prestera_sdma_xmit(&port->sw->rxtx->sdma, skb);
+> > +
+> > +drop_skb:
+> > +     dev_kfree_skb_any(skb);
+> > +     dev_core_stats_tx_dropped_inc(port->dev);
+> > +     return NETDEV_TX_OK;
 >
-> The error will be catch anyway by the string comparison. If you want to
-> add a check on ret then add another error message.
-> This is not a fix.
+> For the sake of clarity I would return here NET_XMIT_DROP . The behavior =
+in dev_hard_start_xmit() would be the same.
+> There are 53 drivers which currently return this value, this is not an is=
+olated case of just the prestera switchdev one:
+> https://elixir.bootlin.com/linux/v7.4-rc1/C/ident/NET_XMIT_DROP
 >
-> >               dev_err(&client->dev,
-> >                       "Wrong FW download process answer (%*pE)\n",
-> > @@ -1465,9 +1467,10 @@ pd692x0_fw_recv_resp(const struct i2c_client *cl=
-ient, unsigned long ms_timeout,
-> >       return FW_UPLOAD_ERR_NONE;
-> >   }
-> >
-> > -static int pd692x0_fw_write_line(const struct i2c_client *client,
-> > -                              const char line[PD692X0_FW_LINE_MAX_SZ],
-> > -                              const bool last_line)
-> > +static enum fw_upload_err
-> > +pd692x0_fw_write_line(const struct i2c_client *client,
-> > +                   const char line[PD692X0_FW_LINE_MAX_SZ],
-> > +                   const bool last_line)
-> >   {
-> >       int ret;
-> >
-> > @@ -1478,19 +1481,12 @@ static int pd692x0_fw_write_line(const struct i=
-2c_client *client,
-> >               line++;
-> >       }
-> >
-> > -     if (last_line) {
-> > -             ret =3D pd692x0_fw_recv_resp(client, 100, "TP\r\n",
-> > -                                        sizeof("TP\r\n") - 1);
-> > -             if (ret)
-> > -                     return ret;
-> > -     } else {
-> > -             ret =3D pd692x0_fw_recv_resp(client, 100, "T*\r\n",
-> > -                                        sizeof("T*\r\n") - 1);
-> > -             if (ret)
-> > -                     return ret;
-> > -     }
-> > +     if (last_line)
-> > +             return pd692x0_fw_recv_resp(client, 100, "TP\r\n",
-> > +                                         sizeof("TP\r\n") - 1);
-> >
-> > -     return FW_UPLOAD_ERR_NONE;
-> > +     return pd692x0_fw_recv_resp(client, 100, "T*\r\n",
-> > +                                 sizeof("T*\r\n") - 1);
->
-> This is not a fix, just moving code around.
->
-> For the rest, FW_UPLOAD_ERR_NONE is similar to ret =3D 0 so there is no
-> real issue, only some type mismatch and I am not sure these changes
-> should land as a fix.
+> The rest of the patch is fine.
 
-Sorry for the noisy diff and dense commit message - you are right that
-pd692x0_fw_recv_resp() (where fw_msg_buf is zero-initialized) and
-pd692x0_fw_write_line() didn't need touching, and all that type churn
-buried the actual change.
-
-The only two lines that return a negative errno (-EIO) as an enum
-fw_upload_err instead of FW_UPLOAD_ERR_RW_ERROR are:
-  1. pd692x0_fw_reset(): 'return ret;' when sending "RST" fails
-  2. pd692x0_fw_write(): 'return ret;' when sending 'P' fails (whereas
-sending 'E' right above it already returns FW_UPLOAD_ERR_RW_ERROR)
-
-Would you welcome a minimal 2-line patch for net-next (without Fixes:)
-just changing those two returns to FW_UPLOAD_ERR_RW_ERROR, or would
-you prefer leaving it as-is?
+Sounds good (I had used NETDEV_TX_OK to match prestera_sdma_xmit()
+just above and avoid Clang's -Wassign-enum on netdev_tx_t, which is
+how I spotted the missing free). I'll send a [PATCH net v2] keeping
+'return NET_XMIT_DROP;' and fixing the commit message.
 
 Thanks,
 Ian
 
-> Regards
-> --
-> K=C3=B6ry Maincent, Bootlin
-> Embedded Linux and kernel engineering
-> https://bootlin.com
+> >  }
+> > --
+> > 2.56.1.708.g77570a6a1d-goog
+> >
 >
+> Elad.
