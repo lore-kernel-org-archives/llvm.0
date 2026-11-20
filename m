@@ -1,96 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.52.56
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795176727;
-	b=M5t5TnA0gMYMSp6lf5bzG91YUpbYP4zdD/Dj/rk93BH3pPaFHCN30Rn3b7OkK3sezwxQ
-	 2+qI4xMOpsv0QC7fDl+pRAa9Ire3kMulQFjieEA8+8kNzdrExpk3xTKrrjZ/W3GiaUzo6
-	 RR+ZvRnuFTpaJuNNBnyPPmuHd2X9clhSMg8pRobbCjlxKqZYtwS6q6mg37PFNGDDMrZGd
-	 vzB3Rw9DIkXmvAQQJzX8LMjhOOR7znfHGjEW8E46Vj7yYtIyafl+awToNNAXk+fJphxvB
-	 tqmHzn1cLJailv9zHYOksTt/WW66U7wfsMP6rdE2hvc4/e4rqIiEQ6gpWa9LnqbuLag==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795176727;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=TBZRq+d7f6hRILWCpDvPDs5MTocCPdzTtlmsRMkpBHI=;
-	b=xxcayASaB0h9/D0OfGTqCAcZAEL45k29PBI5BT+ebQHQ19DjHRbcSIXoa4Fb5A00xT9d
-	 wpX35jFIEJNQFVZ5U6DcseNC386SgaobVkiX6WdU2kr7r8vhlfjLsHmk9FKhNr1ipBQR4
-	 NAMtNmzuP/KKEaYiZEEyBVw9Y9kgmoOVY5AcCYw0dA9f64auKotQk3Qfnu6dLN3K0qBJM
-	 fsjcEW7Oj9T0kUBNEKUNMwZuIaN3poW8CEw2XTuqvYQfd+c+Wb7a9dWzETtz1Cw7oDlXa
-	 8b249tPdN1gcZaA6cgR8fFGcftJpVJfPbrdERtjbGXKPiYEf5WLXBGAQKY4tpRKLAjg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amd.com;
-	spf=fail smtp.mailfrom=amd.com;
-	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=ueUjWWh6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.52.56
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011056.outbound.protection.outlook.com [52.101.52.56])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795177602;
+	b=velYH0SIshU9iiCMQepO/1WVmukI3vOodfY96CJyIRa+bKnJ1x57F3ZY2m4lg0T3p6Nz
+	 QUXV6OsTRpTcVuEFAo3qoy5tH+gT+RQZASm6UQBSq04fyK+28G6eDJc/FxUC6eFGy5yuZ
+	 rHNcsZZLpcLhWY41F/SXDN3BkzbONQ4bWj4F1MuhCWdFaaruEs7WQ6LYhjAY4uGFB8SfS
+	 CDjZyw9cZfd2WDLF5KeL9YVRlf4SMj31SwTC/TEFGoiCaWH82M6QfyRd6cmK8PYTMMvys
+	 3qbktg7swjD4voZR1BXnjoqhVvJGXQ3UWq23QyT4aXzlDVfyLU3UL+NVQDkIuJxxoMw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795177602;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=i+Y/07rXkLFQwfl0rlArIush0x5kOH+nsMNA0F/hQv0=;
+	b=zR0Ae8T6DKDVc4XdhzP1fwoiwLSduQoFLPxdqR7A6I0Pf138g7Y4Bt26F9SyM6Il8BAz
+	 qdhSn6izLfBKbH/dJLeQhBPDDEl1T4jyh4ZgES5GiNpYTEU4937khV1HixsX+8X0t2cEJ
+	 Ipz9cb+Z4piODS2zqztyaHQeFjv5v2ZczyorA1kCr2jftCMn+egmjW+Pj1D9D69N5njqE
+	 f/Lyumgx5b8OPE+z/QMFB5HErKonprk8ernctBVGuq5vpqFheVyX4A6ayyrubPnksltZf
+	 gLFFTWbkQCJ5mjl+sktRpP9fo5FwqW0puTe5N/rRjYD0MKbS/k0adk7Cg/a+kolsIYA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=UwO07ypm;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8800A606A320
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 12:12:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8800A606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57719606A320;
+	Fri, 20 Nov 2026 12:26:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57719606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=ueUjWWh6
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=g/6JlIJU6PqaDPrum+CCX7+bPV090154Htd9um8gUM6zve1p6t/ACr+bG8TkW/GZQEUJ5UaGQxou1iwMIek1NBY55fBGrr3PRl+xjlLgiixr8rQdsYS+S05x9zR9FaXazjA5wHhHMU+vV9C7pwe0PHZ/22wP1U00ClKAmXUE0p4JHExX4JjR7QxD+nZGC/k3wWjC8WHLHZ0neCj1enJZVRVpgaRlbeqAH1aMY0GQRAN+y/4wre+11OxjLyUd97iftOswCm2FsVJEjDy9B1NSrOQIe5JybHMCFpRjbm/GjO5NfY4tbr2Li7iayvk13E+VS0DCf/GtiKIYNPs0aWWi2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TBZRq+d7f6hRILWCpDvPDs5MTocCPdzTtlmsRMkpBHI=;
- b=Ol4/ezGQmjgMBHRdsoCNxSBt/RpiqNXTruw4TDQ8WFsqQ+rC7IIlfBeAvvojKoyLr1VupP3PYASwqDtTpBbSpixgM+Qxdd6J+iSB81t9cyiHp3EhlvXnJHiM7MrRUXc5hbyzKkL+cdvzW1eXdjAcLJhxa/XCQYpIIo3FwGerTlGs3KouXmz53m0pohMiUPeX5da1QU4wgHR3XvW7urnrFqxCt/R6Co/7lellzT09KnbQcuirMDrTop3VkGYUtVxZicmPDcEwuzPUHTUTxXeEmyX3Oo9kSaZagU+UQrhOmPs6qXn1nUDTc8jevDsvwXOL/Hjh8efCUHRl4bW/H2lYHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TBZRq+d7f6hRILWCpDvPDs5MTocCPdzTtlmsRMkpBHI=;
- b=ueUjWWh6rXmIs8CprXrFItDhMVUittnzG1EC/KOH5BypSobO+/G+T2ZePMnrgFrvPWAmZ8A1+cUd1uCnk6OZUokn6g+CdNg1Bho6ziSuVvn4+TkG6yOy74opzSGL2bLy4eXO+GcbafX7J+yCpFZcXhRM5u9phkMStV+3PwPy7Us=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by DM6PR12MB4139.namprd12.prod.outlook.com (2603:10b6:5:214::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Fri, 20 Nov
- 2026 12:12:03 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%3]) with mapi id 15.21.0639.011; Fri, 20 Nov 2026
- 12:12:02 +0000
-Message-ID: <dc491d12-68f0-4297-acda-f122fec00288@amd.com>
-Date: Fri, 20 Nov 2026 13:11:54 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] drm/amdgpu: initialize r in amdgpu_ttm_clear_buffer()
-To: Ian Rogers <irogers@google.com>, Alex Deucher
- <alexander.deucher@amd.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Elkin Cruz <elkin@google.com>
-References: <cover.1795106955.git.irogers@google.com>
- <6fcb1e5c7545f8bcfee9ac9a3abd296c475aa1b7.1795106955.git.irogers@google.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <6fcb1e5c7545f8bcfee9ac9a3abd296c475aa1b7.1795106955.git.irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0070.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4b::22) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=UwO07ypm
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=i+Y/07rXkLFQwfl0rlArIush0x5kOH+nsMNA0F/hQv0=; b=UwO07ypmY2M/3gR5i8DPHfPKi3
+	PekY4u6TyZqu+Ark4E7GE0yFHzhQBRAdLaqvveOPmXt4nGraLYdPQkkxf3ykv6UIyvIAKyW1HbvMn
+	GHuYVRfRfZk+hwfdgiXvac45C/uKYPiZM2KujkYetUl33a2lVG2uwhAjbIrKXaEO4fQYBnm3GXLl9
+	JN0aEYrWw8TAQwuvp7cCfT/BYJaMt6HLYKgRtNCzGg+zM42REBgQmF/SRej2LDxcQniPx5BpnoPPn
+	PX+9kLNybr+OT94kYOGGG1yvoFSNA1UBVuFVOkG9uVhEhPnyPHtDpdlNsjd4q4+9ECT0SbRRLyUAE
+	c1OFTLfQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xUNhN-00000000kfY-1NPt;
+	Fri, 20 Nov 2026 12:26:37 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 53E993008D6; Fri, 20 Nov 2026 13:26:35 +0100 (CET)
+Date: Fri, 20 Nov 2026 13:26:35 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Usama Arif <usama.arif@linux.dev>
+Cc: tglx@kernel.org, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org,
+	hpa@zytor.com, gustavoars@kernel.org, ardb@kernel.org,
+	hca@linux.ibm.com, nathan@kernel.org, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, riel@surriel.com,
+	shakeel.butt@linux.dev, kernel-team@meta.com, rkeilty@meta.com,
+	atish.patra@linux.dev, dgreid@meta.com
+Subject: Re: [PATCH 2/2] x86/kstack_erase: Use REP STOSQ for large stack fills
+Message-ID: <20261120122635.GJ2669272@noisy.programming.kicks-ass.net>
+References: <20261119213147.1094488-1-usama.arif@linux.dev>
+ <20261119213147.1094488-3-usama.arif@linux.dev>
+ <20261120104534.GO2668564@noisy.programming.kicks-ass.net>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -100,109 +75,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|DM6PR12MB4139:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3212435-c334-420d-bbdc-08df46ff7bf6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|376014|1800799024|261021121427099003|261021123027099003|10067099003|4143699003|5023799004|56012099006|11063799006|261022105027099003|261028144727099003|261026140227099003|261102123227099003|261009223027099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	7ZJtQJA2fr1b5jjNrv62mlz1NLhYWqNABuOCj80Th5HGhCzHCCc3BxomCjgocwi2cLFTg2lvOMP7XiljSqI3kVD3ResCK0b15hDj8PilYnHO5mhix6aQv8Wloe0y/cBw1CcpZJDkXuUh81AzZWyiHJRvX9b5nEn+O/eD+Y0rMI9KXRDh2uhSwrsADnpdaUjXeB5+St1OC1RojyYIlPJ4zKOepCDEWnuR7EI1uMmIKMsmpP9Lsw9yYEdK4mGTgS+VjVrGDLzPh30pLZaakt0VrW9JQZ3kpJqSya+DxWXjkbGRPgUx0X/IR1yDHTxCSvpqfZROxC13xDinf+2pFGaAKTU3f+Gxh+SimDzu8cah02QQkbYaeaq3mdGrSk66R2SBsUk6gFtBrG5/gOgvF4agOTabYL+Q/iuPleSJm1CE2oEerb8LAFI4YrLpEtlO6dYeuDtexGC13DmbLfVGIYM+/18wiqSNeaZDCRnV6IO3qR7awHLPsI8umiwkyJYFvFelL1umGn3vG6zBLvuvULFBxW7EWNUFqH/4a6M5cquJqbM8yXL5QmE7FQZXqH1Iv2DhXbQ8oIgUle14theQPES+xeTXK9UO6pHcDk1JT0Ysm0GUO0z5lyzswgAJKnt4VTxzUDAWqRtF7x5ZcQDy5b8aslqyYNLAN6pvmNoD53XTWtY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(1800799024)(261021121427099003)(261021123027099003)(10067099003)(4143699003)(5023799004)(56012099006)(11063799006)(261022105027099003)(261028144727099003)(261026140227099003)(261102123227099003)(261009223027099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?am5oZld0KzRoRjNFQ3M4WDBucVFTMXU1VmZFUHVtTHpLcktwc1ljV1ZmLzg2?=
- =?utf-8?B?cWtsM3RXc2ZKRmNldmxTUDJNQS84ekd5cWtsOGlMOEZycWgzeUQ1S2x2VWZ6?=
- =?utf-8?B?VUZCbFBodG5vMSt6bkpoOVVqN2RSWVdnQk9ZWDFMU2pkck1IaDl0OUhnV2VM?=
- =?utf-8?B?a0pKQ2pPSVBnVWxxNGZnMFlrS3ZlSGErRG1ORHJERVhibkRJVDRMbGxyQURK?=
- =?utf-8?B?WnVzT3NTOTNkZWV0VUM0VFgyVlFkRmRESFdQYkduRkdTb1N5WFdOWDZScE5V?=
- =?utf-8?B?WlpPcUJrdGtZMm5VRVNxTnFHQ1FzY1F2Z3llQ1hPTGhHMVJrd096amwzQ0tN?=
- =?utf-8?B?NXBtZFhGL21iMVN4aTV4UHdsNkkwaFdjUlR2MnhhaTVYVmFmK2krZlhvMjBC?=
- =?utf-8?B?dkZjVlJLZ3pBSmZGb1J1QXRrL2pzYytCMGplSW14REYrbnUxK0NnaW4wWVlV?=
- =?utf-8?B?cTNiaXdqWmh1bXhvYW9hMnVOWGk4Z2hGRzh3Z3EvMThOWWMvS29vZGx5enVM?=
- =?utf-8?B?ZFdaMVN0WktkNDVTMGV4ZnZyNUowRlNCMVk4b1hCSzNiV2NvK3dNeXBmNEU4?=
- =?utf-8?B?ZndXdVJ4Z0hRVHJkZzZlVE85QWk3dkUwTTFxSjhjMUo2bTA5S1Zqd2pTYlgz?=
- =?utf-8?B?SzBwNVlUSEdGZkJHSUY3TCtCanhQU3ZxMWJzNTMrZWViMFJsZ21jUXFHZ3Vr?=
- =?utf-8?B?QW5zZXFqbXd2RHBBUDZiYVQyMzZzMmc0QlpDS1MxMlBmNEhYeFJvdk5ZMWRZ?=
- =?utf-8?B?enc4MnIzZFpXdWExTTBhT3BPdVNpb0l0dDUwN0N2WncvcnRMT09JNXNRS2hJ?=
- =?utf-8?B?ckNYamMwVTRCTTYyc1dvNHU1bU5ObFhqMVZnRVdCRGNoNkI5VXhZTjNybGJ2?=
- =?utf-8?B?UkNVaVAvc0FURmk5Tk00ckxON1ZXVXB1djRBdFJsazl4ME5hM3I0NW5BZklu?=
- =?utf-8?B?aUtzQUNPTHhqNyt6dmwvdTd5eTZuYW5IVFdQaHVLTHp2U0Q0SGtHQ1BrV0lK?=
- =?utf-8?B?UlEyYTZOajAwQjRMTXZ3RHFwSW1OOUVPN1p5VDM2MWp0d2g5a0xNNmZNN0p2?=
- =?utf-8?B?eFhDVlVGcTQ2TEZxSmorNUNST2pMS2lOVjhnMHpwT01SODZUR2dCcGRyZklK?=
- =?utf-8?B?TFl1cGduc0F4V285SFFsQU1oUnk0VFFMYnZKUEl1czMzNERUQmVmZytGTWtk?=
- =?utf-8?B?L2UyQ05mT0l6b0wvdzZGbzhPS1huMW43UCtZbzRwR3JaUDV3aTBWSUo1ZlI0?=
- =?utf-8?B?dStaQ3dEamFZZllPRmV3WDhTbUVxaHozdFV4MTQva0hFRnpUSnVVRDZVNzRU?=
- =?utf-8?B?YmpNaVBTU3h4bVIxZFk1by8rL2xpdGliOEpJOVZ4QkpxWUx5NFJoRnZWN3J4?=
- =?utf-8?B?RVp1SloxbklaRWpUMHVBOHgrd2s2T3BNc3R4bGlpb3NHT3BMeG1vb01zM2t4?=
- =?utf-8?B?M0U0eWJPR1pGV0RrTlg5UWE4am5GMUVpMi9weVk3bkN4QW10ZGRhb2hHYVhi?=
- =?utf-8?B?RCt3QnFKcUhqcGQ0OG1yL0IxUWs0dkVRZk41SVQxMXBrNVNjNUR3c0FUNU1E?=
- =?utf-8?B?Qy81WFdySWNpK09TS1VHa3VSQmJtdTZqMmRxZ2d3NTdEdkE2aEdoNWljQXF2?=
- =?utf-8?B?L1dTRWRJbnVmdjJSczJaUmdxZEpLVitmL2Q0cFNyV0xBVTUreklmT2tsT1Zp?=
- =?utf-8?B?ZEs5ZHJKbElnV0NKSDdEci9SUTl5ZHpvUnNma2JoNXgrYVFwOUdXVEJVZjFY?=
- =?utf-8?B?c3l3TisrZnRLZEtxekZXTWdIZ3U2UU1SdkVnMVFsTTA0VXdySjBySmlvbmY5?=
- =?utf-8?B?QThRRHNUczVEb1lja2dqTGhtcjM4WTQzK1hZMVJOd3d3bUQ2Q1lUYWtuVXpU?=
- =?utf-8?B?TC9xb0FDbUdhdDlFUExHVUF3cEl3cmNnLy9ya21uYXlLRjJHZVRobkg2VDhp?=
- =?utf-8?B?OUdoeVhtbzEzOWhwckIwWTN2Y0JCTFB3OUMxS0RJOXY5dlFxUkM2TXZRYnRI?=
- =?utf-8?B?SFY3WGRIV21oaGVBNmtiU21QT0I0M2pWbEgvQmRKc3ZiWkVVeDludmVScEU3?=
- =?utf-8?B?WEMzNTFZaHRYTFNjQjhyaDFyTkYvbkFrWFBsN2NmazFFZ1dVZnh1QzNuUzZS?=
- =?utf-8?B?RnduODFxWWxWMHJVd0s1UjhiSzlnditKY0kwN2ZEV05mcFdKdzB5ZWZBVEQv?=
- =?utf-8?B?VGVOZ2owYlc0aXdWK3V6SmZwYlJrVXVnVGUxNkRuOFRWZFBUc1Z1S2RJY1JW?=
- =?utf-8?B?NDNWT1dRd3JrNzg0My8wdTFhQWNaNE5pTm50WXJOOXo1bFlFTTROM1BTNkQ3?=
- =?utf-8?Q?Sas0oj+b72U0FluB7x?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3212435-c334-420d-bbdc-08df46ff7bf6
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2026 12:12:02.7112
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1Ei6/KgjPCUeFWjsja+w2WEyxOubUKV7BMFf+/4rQqkpf9Kuuuwern4cBpSkYCQV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4139
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261120104534.GO2668564@noisy.programming.kicks-ass.net>
 
-
-
-On 11/19/26 18:07, Ian Rogers wrote:
-> In amdgpu_ttm_clear_buffer(), 'r' is declared uninitialized. When
-> consider_clear_status is true (such as AMDGPU_GEM_CREATE_VRAM_CLEARED
-> allocations) and all backing buddy blocks already have DRM_BUDDY_CLEARED
-> set, every iteration of the cursor loop hits 'continue' without assigning
-> 'r', returning uninitialized stack memory to amdgpu_bo_create().
+On Fri, Nov 20, 2026 at 11:45:34AM +0100, Peter Zijlstra wrote:
+> On Thu, Nov 19, 2026 at 01:31:08PM -0800, Usama Arif wrote:
+> > +#ifdef CONFIG_X86_64
+> > +#define __stackleak_poison __stackleak_poison
+> > +static __always_inline void __stackleak_poison(unsigned long erase_low,
+> > +					       unsigned long erase_high,
+> > +					       unsigned long poison)
+> > +{
+> > +	unsigned long count;
+> > +
+> > +	/* Short spans do not amortize the startup cost of REP STOSQ. */
+> > +	if (erase_high <= erase_low + 512) {
+> > +		while (erase_low < erase_high) {
+> > +			*(unsigned long *)erase_low = poison;
+> > +			erase_low += sizeof(unsigned long);
+> > +		}
+> > +		return;
+> > +	}
+> > +
+> > +	count = (erase_high - erase_low) / sizeof(unsigned long);
+> > +	asm volatile("rep stosq"
+> > +		     : "+D" (erase_low), "+c" (count)
+> > +		     : "a" (poison)
+> > +		     : "memory");
+> > +}
+> > +#endif
 > 
-> Initialize 'r' to 0.
+> Gemini seems to suggest 16-32 words would be sufficient to amortize the
+> REP STOS setup. It was also adamant I try and unroll that earlier loop.
 > 
-> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
-> -Wconditional-uninitialized enabled; fix and changelog drafted with an AI
-> coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
-> -Wconditional-uninitialized; not runtime-tested on AMD GPU hardware.
-> 
-> Fixes: 23bd7e67961e ("drm/amdgpu: get rid of amdgpu_ttm_clear_buffer")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> index 0f86777250fc..280fcdfb9cca 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> @@ -2675,7 +2675,7 @@ int amdgpu_ttm_clear_buffer(struct amdgpu_ttm_buffer_entity *entity,
->  	struct dma_fence *fence = NULL;
->  	struct amdgpu_res_cursor dst;
->  	bool vm_needs_flush = false;
-> -	int r;
-> +	int r = 0;
+> How about something like so, does that make sense? Also, I suppose we
+> should make memset64() __always_inline if we use it here. I'm not at all
+> sold on the unroll here, the asm is pretty horrid for what it does.
 
-Please initialize r directly before the error label, apart from that looks good to me.
+This one is much improved:
 
-Regards,
-Christian.
-
->  
->  	if (!entity)
->  		return -EINVAL;
-
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -28,6 +28,7 @@ struct vm86;
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
+ #include <asm/shstk.h>
++#include <asm/string.h>
+ 
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+@@ -580,6 +581,35 @@ static __always_inline bool on_thread_st
+ 			       current_stack_pointer) < THREAD_SIZE;
+ }
+ 
++#ifdef CONFIG_X86_64
++#define __stackleak_poison __stackleak_poison
++static __always_inline void __stackleak_poison(unsigned long erase_low,
++					       unsigned long erase_high,
++					       unsigned long poison)
++{
++	unsigned long count = (erase_high - erase_low) / sizeof(unsigned long);
++
++	/* Amortize the startup cost of REP STOSQ. */
++	if (count < 32) {
++		unsigned long *ptr = (unsigned long *)erase_low;
++
++		while (count) {
++			unsigned long mod = (count-1) % 4;
++			count -= mod+1;
++			switch (mod) {
++			case 3: ptr[count+3] = poison; fallthrough;
++			case 2: ptr[count+2] = poison; fallthrough;
++			case 1: ptr[count+1] = poison; fallthrough;
++			case 0: ptr[count+0] = poison; break;
++			}
++		}
++		return;
++	}
++
++	memset64((void *)erase_low, poison, count);
++}
++#endif
++
+ #ifdef CONFIG_PARAVIRT_XXL
+ #include <asm/paravirt.h>
+ #else
