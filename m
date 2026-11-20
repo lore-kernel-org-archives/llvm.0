@@ -1,59 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795197847;
-	b=lul0t6l2EXS99gt619TDoYzXpkGJeC7sIFOGR3tZCf/4RmfotqxDosi4OFZcsBu7/k9I
-	 rnDSeRLsXNwLMsozp+9DXUIkxVCp9qnFLIfpckScyAk0D3x+8QIIK140NYuXF+a6Pe2b5
-	 0mWWcytx7TawS2hW+jujIqJjC4u75PP/SYwirh63hpI0XlK4DzdVBAdlLczXRR9kHIsIi
-	 ddIMhUoZ0II+I3tTdjw7BfXlX1WjxGKFhzXRWQ6deNk7GZXUXKDlV4XqLMOPDJAu+g0O2
-	 rRvMev1zSe4AHTa1jzGfYZ4tkngrALYWA+5lWpt4zJ0+ICDQBLZUIH/5hxI9Ie/EYpw==
+	t=1795197849;
+	b=ILtEHle3I+J80S2B+pFOsBoQxeiS15ebnxUD0wNP42W5jLvo/+dCBWaWszWpecv6a8rE
+	 G86A8DE066pu/th/fUnxfwBl6ovQb7d7tBHsDCHtM31OY/kSNkp9gCnpwTJ3zKqmoKK8b
+	 xubIVfLPz+T9YsSSkb8FdphNzWutcwoKbciOGassSM945ToHT+PM881+4mqO6Nbx4N+qn
+	 34FZkLPs3cTRUE+leZd4xO/2LaE41DvWckCRcMc7pSWZMHN+RQIVRzHhr1SKIGcxk0A8w
+	 GPcSkr//5Wwf4VoWsOIeHKuQp4uMb4/vzG7n8H2XaYvvEe6VGYJ9QplGFJgUdNJe9Ww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795197847;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795197849;
 	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Last-TLS-Session-Version;
-	bh=tbVoHzDu+rifzr3obMkFmU0bXfvQnWpgl13F+BB9d54=;
-	b=WJgiI6ToNIW4Rdx7orfwmzRPE1D88+qeub/JfOofldQ0sK+7Db+nmBWELZe98+evzMiD
-	 1jeVJXzodtHd/6GdRC3Da9QnNu4hIl10NJ2RBVorhCq/tjcmSygQ7OE40Pq6Legzoj9sy
-	 aZioUC0XZ64N/7rmlv8ko8M/TXjXPpNI5yku+SplyqLtaA/pRsciaeTKDZ6SlhD/6rlrw
-	 8FqBWAyy+ex3ICQog05eRHIhPIoW5didJnqOUMT53bGAP55MQctyGuxoBDlCj3pGSrkOV
-	 i2l3Eb/actXM4P5EcufqpFrLyDskh2uRe2JqZVv5UV2qGVmyqg0CA3hvV60FJreIFYQ==
+	bh=cb/Z49GOdF0yhnrGMPBIli0QFaYOE4T0zI22A2vgSV4=;
+	b=0jsHarQKDUmDxYqwqUSYJrOOgV/ZdYZd4jlo+vvmJ74U2p9Gm5Cc2X6iSJmw7bacZlNB
+	 6PbbkTyKa3VW9SsSFkGXlMVy45JRPeBGyOFAs3HncT7sp4ffdXSJ0PSvA22LhZ+OksrrN
+	 yNwBPsRnPGTjjHVJeTB03ziVoeT71d+SaqQ6L0/ddeW2vRCmT7oNjB96M9AP6n6Wo2nph
+	 GdV2vLrhzu9I2P/tVcyJu+sAd3m6/PxvHBgn6+3xX+wrYL2itVOZRg66rdQx+3pZSeCdg
+	 3iy8ppx0Ulzd7sMMzq6yPvomLipTw43DfSa1aZ5l6NAjpLp5G6EDg8CiJdI05oL33aA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bootlin.com;
 	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=ygXJndYc;
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b="NsTyS/Z6";
+	arc=none smtp.remote-ip=185.171.202.116
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED8660A3804
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:03:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7ED8660A3804
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559F960A260B
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:04:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 559F960A260B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=ygXJndYc
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=NsTyS/Z6
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 39CF34E4168F;
-	Fri, 20 Nov 2026 18:03:57 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id A3722C62223;
+	Fri, 20 Nov 2026 18:04:12 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 07438601B9;
-	Fri, 20 Nov 2026 18:03:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 48EDF11BC0997;
-	Fri, 20 Nov 2026 19:03:46 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D84A7601B9;
+	Fri, 20 Nov 2026 18:04:06 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D67A611BC0627;
+	Fri, 20 Nov 2026 19:03:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795197830; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1795197845; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=tbVoHzDu+rifzr3obMkFmU0bXfvQnWpgl13F+BB9d54=;
-	b=ygXJndYciC0Tu8U/AZpu7Xaj/uLJtc6rvRRVUpU8wAd92ydUaBli4zV71BIzFaLGcQ0App
-	N6FyhEliZp6nDJrv6SoadgGv2SX45cpuAxgrDJQYxS8hm7w09X0YTdi7aKx7Qpmq7oK5yB
-	tRTjg1X8DXK2ZH7wAz+4tCNAx/BHfgfI/YlYepkAkW6XpLUac236tmqX1TQbt/+uHho9ls
-	A6iAT8PaFApCoFL3LvOHxDH+9rmOGUIY6gCXZYnri+ksMKKW3bBzeSn5CEQRrFlOcKF6b8
-	oVi9NnplPfmc4yW/7RDQ4OQAXCypdey2MeRIPURiq+seVTXqbWnNnS3tmf26vA==
+	bh=cb/Z49GOdF0yhnrGMPBIli0QFaYOE4T0zI22A2vgSV4=;
+	b=NsTyS/Z672Ga97LeNAcqGw2xk/9+aqknpMHbbFqFJuzj0jYKXyjTT51ndif2xvJIOsJor9
+	EJmvl0xKRWgSgRo0TSHnbm6/eOhYQ9VldDAcsJEZKyQzBZrtLSyAoMwW/4zmYuJNcO4RPb
+	88jj4JOnM8jQY7/JUUgZXXnI2hfuoRaWh2Bs/IUy1MJGdL4aKSUck4J/sFZH/+iQinxeJT
+	6JaIjYClkrsH/k5mqkBL8PEM6zA3I63Fw/4UMyqDfVIJfqCtmcip9OIODgcY8B8m0+YjG0
+	EIXc9BAwuh7b9Dunu3Ha5vYoxY6pJ1BMlp6re3MT+IdH6exrDWQGEbCK9NYq6A==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Fri, 20 Nov 2026 18:58:55 +0100
-Subject: [PATCH v6 13/43] drm/vkms: Add KUnit test for device lifecycle
+Date: Fri, 20 Nov 2026 18:58:57 +0100
+Subject: [PATCH v6 15/43] drm/vkms: Simplify plane_release code
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -65,7 +65,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261120-vkms-all-config-v6-13-78ace90f4fc1@bootlin.com>
+Message-Id: <20261120-vkms-all-config-v6-15-78ace90f4fc1@bootlin.com>
 References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
 In-Reply-To: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -91,363 +91,53 @@ Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
  linux-doc@vger.kernel.org, Simona Vetter <simona.vetter@ffwll.ch>, 
  llvm@lists.linux.dev
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10161;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1030;
  i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=F2AwDvsjIsuT/dCGlAPBtsvdUQaj57QaRLPEDTGT4aI=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBrAIr/4sPyioPF/fL86gTpVUdkY6cVS9MLtPKnP
- +L/oLqyromJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCawCK/xsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOLjzg//RcLUD8j0Ajq64UhOrJ4H+IaosjZg6Cw
- 6an9j79MsZMlMy6WgG7aeqfCNeLGN3Y28nynaJd/xm/+WjimsmPzUe1pJWvEB2byb/A9xAYm7dY
- WTT7XintlGvwAacSnxhybm0UpVU9qDT0PUnd+7ZhauAPaNxmZqj1cv8xX2HPvVvdvJTMEPeseR7
- psWgcOXDm3yAbkP2nJsqKbIiOPB+ojxmG0Xqxr2BNGkEsrv//CrRlcyYk5MSIKxSJuOqMD4gL9K
- Y0hxwSoBw2et9BDRPzaC3kY0FFYWoHCGgG8Q6LhK0eqlGYl+r1+rOedrqt1RBBdI87JgycEaeiR
- M4KHtmRLHMzEu80ZrJrnCM3E4Hxg7vgDX3DfumHUo0/JuJx78rlTE3/2h7ANQPlvLJZGkXxUxXR
- OmFLQ38tcxZ45mekpdx/wCV+ptvetv74wINfSis+Vy7Iixz5RP9R5LHK2voQnDDDb8LU2L4OP1M
- iq9uz4yhpPjc9HP+0nEDTBedVdyi9xNUiQwfCpO4hncFbADha2iA0Nc/M+e9muaPaYxucPNhQHh
- uerx7q2He5sftiRWKGwdyZ3OCPP6lY+dLpcwK/mYvfYHIXYo4VSTnFsO+l0PT2VjapjDOKCGOmU
- Up3uWhAF3xLTQrr0Wf+sell/N8JI4qVSMyaiAGL+9o3N4SI9GNQU=
+ bh=B5PM6W0vulahUUbfuhv5KpB093DKmScfUhoYA1BRCRg=;
+ b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBrAIr/R7PpFpksTfLgK4M1WsKIZ+X/fHJw4Eo3k
+ BptWgtELfSJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCawCK/xsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOLjSA/9G4BWoCRvV7ItG+o3suAYmXVBO3mKIP1
+ 8lGsPLIMnO6rOYDQ+nIenc8oFgVcG987eX7ZNvFRYl3/TIEFOJ6VlKrkS/cy+GKRmZ3Lz7T33uo
+ F1F0N/+wNDrJ5f62JYQSdU3aZhNG5XQ8/vJK5EQBXHQwvq3GavSvdp6hycJpyVoFTG9O3ooqKDL
+ H4spwX4GVBEB1EpTDhRot71sfH2T1mFgJ0/FcLmfvd3FlyZnYHizXbZ8buSbsLQoo4hA2tSx6mH
+ n1JEd0tAaOL5f/LqiqUHWgmGRxgBfIIQWOUbLCsKJwOMcWmgOFHMIKryJqzd8VdA2iiLxMDgfZ6
+ oaod4upZewUA5SQo0cvJMjG7nBebj8B3Hr6rnM9ujrSrHa6tFZPfk2JhUeO1IO3oQLxhSli3n5p
+ Ulk9KKLdJqNoGlvI4riaFBjiCN91fM5EoHKeBArbOo/sJxlYaT11LTv9zOoCBPvuMt3pupyfhkd
+ 0oB6ILATTqGuvvOI6dM2cv3sV3ppJx1F5uceGxHrcRWtUDYhl3IzUryQKrj2AJDEl/Awr7wIFhA
+ XB/8QBVVS3c7m0yExDht+/0Vr/sUzQKHmCJozkfscLc0hJmw1+TN18IIpbST5Dd2XnMywIoJi15
+ k3le8BhyxZ5faMbjkoVpK8kgk6E3MSaQ6NQSONYJBI2VhCcu4jfA=
 X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
  fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
 X-Last-TLS-Session-Version: TLSv1.3
 
-The configuration objects are now reference-counted and their lifetime is
-driven by explicit get/put calls. Add tests aiming to spot UAF and leaks
-using KASAN.
+plane_release  code used multiple intermediate variable, remove those in
+favor of direct access.
 
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- drivers/gpu/drm/vkms/tests/.kunitconfig          |  12 ++
- drivers/gpu/drm/vkms/tests/Makefile              |   3 +-
- drivers/gpu/drm/vkms/tests/vkms_lifecycle_test.c | 259 +++++++++++++++++++++++
- drivers/gpu/drm/vkms/vkms_drv.c                  |   3 +
- 4 files changed, 276 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/vkms/vkms_configfs.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/vkms/tests/.kunitconfig b/drivers/gpu/drm/vkms/tests/.kunitconfig
-index 6a2d87068edc..b72899f06088 100644
---- a/drivers/gpu/drm/vkms/tests/.kunitconfig
-+++ b/drivers/gpu/drm/vkms/tests/.kunitconfig
-@@ -2,3 +2,15 @@ CONFIG_KUNIT=y
- CONFIG_DRM=y
- CONFIG_DRM_VKMS=y
- CONFIG_DRM_VKMS_KUNIT_TEST=y
-+CONFIG_KASAN=y
-+CONFIG_KASAN_INLINE=y
-+CONFIG_KASAN_VMALLOC=y
-+CONFIG_KUNIT_ALL_TESTS=n
-+CONFIG_DEBUG_KMEMLEAK=y
-+CONFIG_DEBUG_OBJECTS=y
-+CONFIG_DEBUG_OBJECTS_FREE=y
-+CONFIG_DEBUG_OBJECTS_TIMERS=y
-+CONFIG_DEBUG_SLAB=y
-+CONFIG_PAGE_POISONING=y
-+CONFIG_PAGE_POISONING_NO_SANITY=n
-+CONFIG_PAGE_POISONING_ZERO=y
-diff --git a/drivers/gpu/drm/vkms/tests/Makefile b/drivers/gpu/drm/vkms/tests/Makefile
-index d4d9ba8d4c54..a7810a12c9c8 100644
---- a/drivers/gpu/drm/vkms/tests/Makefile
-+++ b/drivers/gpu/drm/vkms/tests/Makefile
-@@ -3,6 +3,7 @@
- vkms-kunit-tests-y := \
- 	vkms_config_test.o \
- 	vkms_format_test.o \
--	vkms_color_test.o
-+	vkms_color_test.o \
-+	vkms_lifecycle_test.o \
+diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
+index 5f5aa0a1812b..a7ddcfd4e86e 100644
+--- a/drivers/gpu/drm/vkms/vkms_configfs.c
++++ b/drivers/gpu/drm/vkms/vkms_configfs.c
+@@ -331,13 +331,9 @@ static struct configfs_attribute *plane_item_attrs[] = {
  
- obj-$(CONFIG_DRM_VKMS_KUNIT_TEST) += vkms-kunit-tests.o
-diff --git a/drivers/gpu/drm/vkms/tests/vkms_lifecycle_test.c b/drivers/gpu/drm/vkms/tests/vkms_lifecycle_test.c
-new file mode 100644
-index 000000000000..b319f6424285
---- /dev/null
-+++ b/drivers/gpu/drm/vkms/tests/vkms_lifecycle_test.c
-@@ -0,0 +1,259 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include <kunit/test.h>
-+#include <linux/string.h>
-+
-+#include "../vkms_config.h"
-+#include "../vkms_drv.h"
-+
-+MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
-+
-+#define LIFECYCLE_ITERATIONS 50
-+#define STRESS_ITERATIONS    500
-+
-+static void vkms_lifecycle_test_create_destroy_default(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret, i;
-+
-+	for (i = 0; i < LIFECYCLE_ITERATIONS; i++) {
-+		config = vkms_config_default_create(true, true, false, false);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+		vkms_config_destroy(config);
-+	}
-+}
-+
-+static void vkms_lifecycle_test_create_destroy_with_overlay(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret, i;
-+
-+	for (i = 0; i < LIFECYCLE_ITERATIONS; i++) {
-+		config = vkms_config_default_create(true, true, true, false);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+		vkms_config_destroy(config);
-+	}
-+}
-+
-+static void vkms_lifecycle_test_create_destroy_with_pipeline(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret, i;
-+
-+	for (i = 0; i < LIFECYCLE_ITERATIONS; i++) {
-+		config = vkms_config_default_create(true, true, true, true);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+		vkms_config_destroy(config);
-+	}
-+}
-+
-+static void vkms_lifecycle_test_create_destroy_minimal(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret, i;
-+
-+	for (i = 0; i < LIFECYCLE_ITERATIONS; i++) {
-+		config = vkms_config_default_create(false, false, false, false);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+		vkms_config_destroy(config);
-+	}
-+}
-+
-+static void vkms_lifecycle_test_create_destroy_writeback(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret, i;
-+
-+	for (i = 0; i < LIFECYCLE_ITERATIONS; i++) {
-+		config = vkms_config_default_create(false, true, false, false);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+		vkms_config_destroy(config);
-+	}
-+}
-+
-+static void vkms_lifecycle_test_stress_many_cycles(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret, i;
-+
-+	for (i = 0; i < STRESS_ITERATIONS; i++) {
-+		config = vkms_config_default_create(true, true, true, false);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+		vkms_config_destroy(config);
-+	}
-+}
-+
-+static void vkms_lifecycle_test_interleaved_create_destroy(struct kunit *test)
-+{
-+	struct vkms_config *configs[5];
-+	const char *new_name;
-+	char name[32];
-+	int ret, i, j;
-+
-+	for (j = 0; j < 20; j++) {
-+		for (i = 0; i < 5; i++) {
-+			configs[i] = vkms_config_default_create(i & 1, i & 2, i & 4, false);
-+			KUNIT_ASSERT_NOT_ERR_OR_NULL(test, configs[i]);
-+
-+			snprintf(name, sizeof(name), "vkms-interleaved-%d", i);
-+			new_name = kstrdup_const(name, GFP_KERNEL);
-+			KUNIT_ASSERT_NOT_NULL(test, new_name);
-+			kfree_const(configs[i]->dev_name);
-+			configs[i]->dev_name = new_name;
-+
-+			ret = vkms_create(configs[i]);
-+			KUNIT_ASSERT_EQ(test, ret, 0);
-+		}
-+
-+		for (i = 4; i >= 0; i--) {
-+			vkms_destroy(configs[i]);
-+			vkms_config_destroy(configs[i]);
-+		}
-+	}
-+}
-+
-+static void vkms_lifecycle_test_destroy_uncreated_device(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+
-+	config = vkms_config_default_create(true, true, false, false);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+	KUNIT_ASSERT_NULL(test, config->dev);
-+
-+	vkms_config_destroy(config);
-+}
-+
-+static void vkms_lifecycle_test_double_destroy(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret;
-+
-+	config = vkms_config_default_create(true, true, false, false);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+	ret = vkms_create(config);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	vkms_destroy(config);
-+	KUNIT_ASSERT_NULL(test, config->dev);
-+
-+	vkms_config_destroy(config);
-+}
-+
-+static void vkms_lifecycle_test_create_after_destroy(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+	int ret, i;
-+
-+	for (i = 0; i < 20; i++) {
-+		config = vkms_config_default_create(true, true, false, false);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+
-+		ret = vkms_create(config);
-+		KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+		vkms_destroy(config);
-+		vkms_config_destroy(config);
-+	}
-+}
-+
-+static void vkms_lifecycle_test_connector_ref_outlives_config(struct kunit *test)
-+{
-+	struct vkms_config_connector *connector_cfg;
-+	struct vkms_config *config;
-+
-+	config = vkms_config_default_create(false, false, false, false);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+	KUNIT_ASSERT_FALSE(test, list_empty(&config->connectors));
-+
-+	connector_cfg = list_first_entry(&config->connectors,
-+					 struct vkms_config_connector, link);
-+
-+	/* Simulate the rmdir while DRM hold the device */
-+	vkms_config_connector_get(connector_cfg);
-+	vkms_config_destroy_connector(connector_cfg);
-+	vkms_config_destroy(config);
-+
-+	/* The connector must survive, detached from the configuration. */
-+	KUNIT_EXPECT_EQ(test, kref_read(&connector_cfg->refcnt), 1);
-+	KUNIT_EXPECT_TRUE(test, list_empty(&connector_cfg->link));
-+
-+	/* Last reference: connector and configuration are freed here. */
-+	vkms_config_connector_put(connector_cfg);
-+}
-+
-+static void vkms_lifecycle_test_connector_static_drmm_release(struct kunit *test)
-+{
-+	struct vkms_config *config;
-+
-+	config = vkms_config_default_create(true, true, false, false);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
-+
-+	KUNIT_ASSERT_EQ(test, vkms_create(config), 0);
-+
-+	/* vkms_destroy() runs the drmm action, which frees and detaches the connector. */
-+	vkms_destroy(config);
-+	vkms_config_destroy(config);
-+}
-+
-+static struct kunit_case vkms_lifecycle_test_cases[] = {
-+	KUNIT_CASE(vkms_lifecycle_test_create_destroy_default),
-+	KUNIT_CASE(vkms_lifecycle_test_create_destroy_with_overlay),
-+	KUNIT_CASE(vkms_lifecycle_test_create_destroy_with_pipeline),
-+	KUNIT_CASE(vkms_lifecycle_test_create_destroy_minimal),
-+	KUNIT_CASE(vkms_lifecycle_test_create_destroy_writeback),
-+	KUNIT_CASE(vkms_lifecycle_test_stress_many_cycles),
-+	KUNIT_CASE(vkms_lifecycle_test_interleaved_create_destroy),
-+	KUNIT_CASE(vkms_lifecycle_test_destroy_uncreated_device),
-+	KUNIT_CASE(vkms_lifecycle_test_double_destroy),
-+	KUNIT_CASE(vkms_lifecycle_test_create_after_destroy),
-+	KUNIT_CASE(vkms_lifecycle_test_connector_ref_outlives_config),
-+	KUNIT_CASE(vkms_lifecycle_test_connector_static_drmm_release),
-+	{}
-+};
-+
-+static struct kunit_suite vkms_lifecycle_test_suite = {
-+	.name = "vkms-lifecycle",
-+	.test_cases = vkms_lifecycle_test_cases,
-+};
-+
-+kunit_test_suite(vkms_lifecycle_test_suite);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("KUnit test for VKMS device lifecycle, aiming to catch UAF and memory issues");
-diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-index 64c75b038869..a4bc3d02a6cd 100644
---- a/drivers/gpu/drm/vkms/vkms_drv.c
-+++ b/drivers/gpu/drm/vkms/vkms_drv.c
-@@ -18,6 +18,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_colorop.h>
-+#include <kunit/visibility.h>
- #include <drm/drm_drv.h>
- #include <drm/drm_fbdev_shmem.h>
- #include <drm/drm_file.h>
-@@ -250,6 +251,7 @@ static int __init vkms_init(void)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_IF_KUNIT(vkms_create);
- 
- void vkms_destroy(struct vkms_config *config)
+ static void plane_release(struct config_item *item)
  {
-@@ -269,6 +271,7 @@ void vkms_destroy(struct vkms_config *config)
+-	struct vkms_configfs_plane *plane;
+-	struct mutex *lock;
+-
+-	plane = plane_item_to_vkms_configfs_plane(item);
+-	lock = &plane->dev->config->lock;
++	struct vkms_configfs_plane *plane = plane_item_to_vkms_configfs_plane(item);
  
- 	config->dev = NULL;
- }
-+EXPORT_SYMBOL_IF_KUNIT(vkms_destroy);
- 
- static void __exit vkms_exit(void)
- {
+-	scoped_guard(mutex, lock) {
++	scoped_guard(mutex, &plane->dev->config->lock) {
+ 		vkms_config_destroy_plane(plane->config);
+ 		kfree(plane);
+ 	}
 
 -- 
 2.56.0
