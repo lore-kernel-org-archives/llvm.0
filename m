@@ -1,81 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795205513;
-	b=maQFTlvy3X25nYYXTLX62Ot5sFPDZGi8/jr8Bk2fyaHwjnUHjJ/hl/nGa4YipH5UoWJO
-	 3X9r8OAwln7w2Fg8X6qzDVf3mHcQ42nNgb+iXdNX5HJ7J9OHkl4Bs4KSrjYHevhymKDXp
-	 RkBvxak2ZZ8SbK7+jJTpUwM8ekkRxe8Uc3Ds1KL8li8bY3iCxQJkdT7buO02bJw+6EhOU
-	 j/awtGnom6TuupoeG54kqBZ7El4YPzBE7rj3WvpPMt3s9E97lGhQi13JgtxALQXQLKvKV
-	 V1Pvc25InMZ9Vu6D8/JH9bE/1u4Cp3ygnzX/WT6kv0MUrWdDuuoQpi16BT4fYhog/gA==
+	t=1795206659;
+	b=UKgDlppqjzTM12LsG3S2+ojtGBgHvD7K4jsOrYfh5zun76mYYxM8CO9eOy/a2qEexbhs
+	 OBwqF/kpceOE8iM8UzOLDU/QHakyc6bq0gqSCTTUSJzYKZAaH/oXtTZ8dyd0ky3zFh2w2
+	 UUizOV9c6+N3iEPO5gpO19whE9EzGEeeD0GUsdsqcnT+ATYlm/iLhLOZwlDqmqRO0k2we
+	 rJeoQ2XI0qC6Dkppe3kwNoQMGYnjLSL79FUG80AwAWoZ/aUcXJaJHbtw+QbdKG8mtA1NC
+	 h1EErSTZtUl9D0/lpNnXi2MOUa+tyTTrOJrijpekVQWZNvnKrpeD33dCw6d0Mk770bA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795205513;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=syyZAgghFB2yjz7QtPWEK++I+aqJL7nnvgK0Mbb84ng=;
-	b=k1f28id4jwkX4N9Iywm/TBAj6Orv7L6jGu93Qq+yHAcZd8VcGROVKJ0hi1g8bbWLy2nz
-	 OrKh9kU/GfVSvAoIiwylU6exGnkQp9CPzp7Mh53fGMthNm0yKxcoAzALB9U52colQNeye
-	 0XhQjksrLQH3ZPMvBio/6bXsz9nid9NrvHa3f2C0BZYpOTsE3nH/2mS5k1E9nxGY3yCyY
-	 TXfmzVxz+1T1c41Ygq5NU7KF8rdwDIE1EBxZyufldYestJQEvFU01dpsCLafYFY+glLXV
-	 Qy5XwwxuGrVB8rE9exv/43KI1k5UgoGLSEWZmbm+Y9Nx1w5+a/RzFSMZkP+Mt4rDoyg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795206659;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:User-Agent:MIME-Version:X-Mimecast-Spam-Score:
+	 X-Mimecast-MFC-PROC-ID:X-Mimecast-Originator:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=mx8lv7UCTvTnaJ2WerqoFZH52wwM+hfy6gTfkRrFF10=;
+	b=Qg8CVwWKnA5zey6q9yUNtbVNnaVETNaNAJw2ooGLUC0oVSPHSwbYN2txb5dk2jPWG75z
+	 iUtHpAD3GaczUVyeJWK0fMxMMpS80CZI63NBAs8BSBkQm7ykh8Pfu1DOO12Llj/anbswP
+	 mL3O3/uAxoHhnVpL0s2+8vROfuCHJ4a+n6uWYVStfm+SMo8ZFQi+SqLT0e34jYgoux7yR
+	 Glxm8Eu6347Gy79bySMHXHohQyPEvPXc6MS9uN6AJE+39QmpAPjFBwu2KtFWBw8OYHoXn
+	 yzXVLf4lprNhGLfgKzYP9GDgMsuvSk4LusNd/Oddt/kcMpUHXofmg435kpFbnts11uA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=bq2och5C;
-	arc=none smtp.remote-ip=192.198.163.10
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=L2uoEwzH;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE24B606A6CF;
-	Fri, 20 Nov 2026 20:11:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE24B606A6CF
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BB8606A6FD
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 20:30:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64BB8606A6FD
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=bq2och5C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795205511; x=1826741511;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lRCQ9KCfOnRrOzZOd8tvpwzEbJUwz8+OaC9XkgymjfQ=;
-  b=bq2och5CbOt5tJkZblQQO7beFY/CobrsDFllopZZraur8ipX3xtiop3z
-   If06HnpeUgQ0Lf7q1ksbaSlw7UU2sY/tCiyn27TdX5VX9iZ1lVbWIRqOn
-   mHIS3Bi/qTPFn14ZZxgCMNttWMgfKfXHiXEOtwBkEbqRZlajTgG4jz1QC
-   WUszg1P7WOD8JYrMFRPXqOaRlkgdB1Ysql2N3JGksvv0eOABVBB8+VMy2
-   Q8WLTt4W7iW6Xwm3q9rPJxWv9FYq/4wKrpDuM99VXpv40Lv/aWkBF3i5P
-   D/QsXgBnD+o/QVHhF8Pv88bMl7yq9AB8z5xXnvZFdnlw1sOFozEX/RFSA
-   Q==;
-X-CSE-ConnectionGUID: GBC+CdXwSJS4pYIrl5itFw==
-X-CSE-MsgGUID: CjA4VTx9SKupyBRQV6noTg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="3974428"
-X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
-   d="scan'208";a="3974428"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 12:11:50 -0800
-X-CSE-ConnectionGUID: /kkF4C2URWe94BSTH3GAQw==
-X-CSE-MsgGUID: FsYu6pzwR4i9zVs7DyEr0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,223,1787036400"; 
-   d="scan'208";a="11042550"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Nov 2026 12:11:47 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xUUxU-00000001ISg-2ph0;
-	Fri, 20 Nov 2026 20:11:44 +0000
-Date: Sat, 21 Nov 2026 04:11:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@kernel.org>, Keith Busch <kbusch@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>, Hannes Reinecke <hare@suse.de>,
-	Chaitanya Kulkarni <kch@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/9] nvme-keyring: add 'dhchap' key type
-Message-ID: <202611210348.KYpQPgoE-lkp@intel.com>
-References: <20261120-dhchap-keyring-v4-v4-2-5f8c7d9926ee@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=L2uoEwzH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795206647;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mx8lv7UCTvTnaJ2WerqoFZH52wwM+hfy6gTfkRrFF10=;
+	b=L2uoEwzHjf/t2WhpJEO71ibUbxoEcxEEIxYLwyiTfxZ6qTnO0txlJMIONLr1ccSBKkKSa3
+	+IpUPV5yo9XuY3AG//IuWEO+jrFt7PwudWXSFETSddOul8CbBTurYSGncGv7FnUBFPLCmA
+	RIXaCu3wt4+UvTYUpdjDjoPvRc6Khyw=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-NmFVsZXLNvCgKtwkQz6ejA-1; Fri, 20 Nov 2026 20:30:44 +0000
+X-MC-Unique: NmFVsZXLNvCgKtwkQz6ejA-1
+X-Mimecast-MFC-AGG-ID: NmFVsZXLNvCgKtwkQz6ejA_1795206644
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-544019b1831so26373481cf.0
+        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 12:30:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795206644; x=1795811444;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mx8lv7UCTvTnaJ2WerqoFZH52wwM+hfy6gTfkRrFF10=;
+        b=mplxIzVAUwUjRKyTAIyrxXIj/o/5Z7yehuylLKJVkYm5a6Vg1RU6MRbmrTGI725LI2
+         fBDDirB46/elbfAVSWrbKOk3yHBuiRAFpTXBRajvSWOa0yQJnA2VGwtg+N1NIR0Yfq4k
+         tGXRCtHUe4D3ebVoRmqC6WLjMFB8kUzCvXQFRsjJjIGChXuu88jYagvtpki/6SMMOT8d
+         KoKJ2busWY0DE9z0lCXpqA65oS1qbgNmltNrhO9UZ0MKhU9n318t3VeBfOiBp8yO1wnp
+         qGx7jtjbqiJCAkYBnmVqLFB0ZjrG8Ybh2K6tYshkppmvNb73GvFJmqa0hK05gdoKxNb8
+         kH2Q==
+X-Forwarded-Encrypted: i=1; AL+hErFzlxp933e+DNjVRD87sNagNnjGJjxJ08jUvWXSwlANbK7pDj9goaBnG3KIuxnp0xLkloB6@lists.linux.dev
+X-Gm-Message-State: APuU4Z+hLXjQ3NNyyBMz1dp1Z2JvLGJdIuJWGOX2DBdCzH2KyJPeHekz
+	CKLG66CIRKuORiJJHRDkJ+MQOup4jnavvJTT2jG1pRF2TavypOMgkW0lzPQ22ogpLvivHyhVeOl
+	uy8dfgsT/ddNRNwaNFwkdajCLtV3b8V13eGG4xguP1cpRxzvRDrzDMfE=
+X-Gm-Gg: AYBFou33y0ZtdOO5ykoywhRAHl55KE6sqKmLOLPYKb3s4qMIlXeoVpCav9lIVvTyjXd
+	ruySMgJanVdd37Z1T8wEA3tWrIANohtgxXdbnDwmtcVXdGITJLJvH/9+M2YRq+GFP9SskxmJrWT
+	quOkawF8PxzBrMldouIDArbTArDcDNKIXnyyRLb3YwvxZPqoBwpF1btpHdtFY1gYuCCpxhDcp+p
+	gNTems2CN/oEfS7FsUsfj7VZsCt6RMY/RbXk2BLaaucQCV07Khu0nYKM9Xqav0k5ZMAQscqzwiI
+	q8+2jYQlYhyOv9sJvcjbIroX3JjIMXWGnkDezq10z0/QzvEpS6hI9nhmqRJhxdSE6Qdr/naF32Q
+	HltuMnPRvKjQ2DvXRtwho+gYygGrRLQzMrUieiEpMS0JKHGEOMJI53KCZVZi2g2bmdW2bwrwJCp
+	AxRK+0PiGup2H/6tH51Dvvnm/ojZdExuPrVtaJu09s2+eWmEIohhgXeIoGKFLe124S8a9asfA=
+X-Received: by 2002:a05:622a:4d93:b0:55d:2e93:ffad with SMTP id d75a77b69052e-55d76ac5898mr77806231cf.37.1795206644047;
+        Fri, 20 Nov 2026 12:30:44 -0800 (PST)
+X-Received: by 2002:a05:622a:4d93:b0:55d:2e93:ffad with SMTP id d75a77b69052e-55d76ac5898mr77805261cf.37.1795206643352;
+        Fri, 20 Nov 2026 12:30:43 -0800 (PST)
+Received: from loberman-thinkpadp16gen3.rmtusma.csb ([2600:6c65:2440:d8c:aa2b:ddff:fe88:da74])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-921347a0b6bsm34804246d6.1.2026.11.20.12.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2026 12:30:42 -0800 (PST)
+Message-ID: <4569fb5f7f3d7c65263d4154d7cc3350d9cf8330.camel@redhat.com>
+Subject: Re: [PATCH v2 0/3] scsi: mpi3mr: Fix error return, start_time, and
+ timeout check in mpi3mr_bring_ioc_ready()
+From: Laurence Oberman <loberman@redhat.com>
+To: Ian Rogers <irogers@google.com>, Sathya Prakash Veerichetty	
+ <sathya.prakash@broadcom.com>, Kashyap Desai <kashyap.desai@broadcom.com>, 
+ Sumit Saxena <sumit.saxena@broadcom.com>, Sreekanth Reddy
+ <sreekanth.reddy@broadcom.com>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
+ <mkp@kernel.org>
+Cc: mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Elkin Cruz
+ <elkin@google.com>
+Date: Fri, 20 Nov 2026 15:30:41 -0500
+In-Reply-To: <20261120190031.1587531-1-irogers@google.com>
+References: <20261120190031.1587531-1-irogers@google.com>
+User-Agent: Evolution 3.60.2 (3.60.2-3.fc44)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -85,122 +113,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261120-dhchap-keyring-v4-v4-2-5f8c7d9926ee@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 1YePdFBC1ZCPtSCCyaxiWfutf2ToXQYYoAmDejhLLO4_1795206644
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hannes,
+On Fri, 2026-11-20 at 11:00 -0800, Ian Rogers wrote:
+> Split the mpi3mr_bring_ioc_ready() error-handling and retry fixes
+> into
+> three independent patches with individual Fixes: tags as requested by
+> Laurence Oberman:
+>=20
+> 1. Return -1 instead of 0 on failure exits in
+> mpi3mr_bring_ioc_ready()
+> =C2=A0=C2=A0 when retval is 0 (such as unrecoverable controller faults, h=
+ot-
+> unplug
+> =C2=A0=C2=A0 during reset/diag-save waits, or ready-state faults and time=
+outs
+> =C2=A0=C2=A0 after mpi3mr_setup_admin_qpair() sets retval =3D 0).
+> 2. Initialize start_time =3D jiffies on entry and guard the post-enable
+> =C2=A0=C2=A0 timestamp reset with a boolean flag so pre-enable failures a=
+nd
+> =C2=A0=C2=A0 subsequent retries never read an uninitialized start_time.
+> 3. Rewrite 'elapsed_time_sec < (mrioc->ready_timeout - 60)' as
+> =C2=A0=C2=A0 'elapsed_time_sec + 60 < mrioc->ready_timeout' to avoid 32-b=
+it
+> =C2=A0=C2=A0 unsigned underflow if a controller reports ready_timeout < 6=
+0.
+>=20
+> v2:
+> =C2=A0 - Split v1 into three patches, each with its own Fixes: tag
+> (Laurence
+> =C2=A0=C2=A0=C2=A0 Oberman).
+> =C2=A0 - Move 'if (!retval) retval =3D -1;' to 'out_device_not_present:' =
+in
+> =C2=A0=C2=A0=C2=A0 patch 1 so a single hunk covers both out_failed fallth=
+roughs and
+> =C2=A0=C2=A0=C2=A0 early out_device_not_present jumps cleanly for stable =
+backports.
+> =C2=A0 - Add Laurence's Reviewed-by tag on patches 1 and 2, and note the
+> =C2=A0=C2=A0=C2=A0 510s (570s - 60s) firmware timeout math from commit 96=
+34bb07083c
+> in
+> =C2=A0=C2=A0=C2=A0 patch 3.
+>=20
+> v1:
+> https://lore.kernel.org/r/20261119170900.1530138-1-irogers@google.com
+>=20
+> Ian Rogers (3):
+> =C2=A0 scsi: mpi3mr: Return error on all failure exits in
+> =C2=A0=C2=A0=C2=A0 mpi3mr_bring_ioc_ready()
+> =C2=A0 scsi: mpi3mr: Initialize start_time on all paths in
+> =C2=A0=C2=A0=C2=A0 mpi3mr_bring_ioc_ready()
+> =C2=A0 scsi: mpi3mr: Avoid ready_timeout underflow in
+> =C2=A0=C2=A0=C2=A0 mpi3mr_bring_ioc_ready()
+>=20
+> =C2=A0drivers/scsi/mpi3mr/mpi3mr_fw.c | 11 ++++++++---
+> =C2=A01 file changed, 8 insertions(+), 3 deletions(-)
 
-kernel test robot noticed the following build warnings:
+Hello Ian
 
-[auto build test WARNING on 68099cf27253a8c89d703a282d3d811446d9453b]
+Thanks for the quick v2. Tested the series on 7.4.0-rc1 with a
+Broadcom SAS40xx/41xx (FW 8.5.1.0.0.1), two SAS disks attached.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hannes-Reinecke/nvme-auth-modify-nvme_auth_transform_key-to-return-status/20261120-121400
-base:   68099cf27253a8c89d703a282d3d811446d9453b
-patch link:    https://lore.kernel.org/r/20261120-dhchap-keyring-v4-v4-2-5f8c7d9926ee%40kernel.org
-patch subject: [PATCH v4 2/9] nvme-keyring: add 'dhchap' key type
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20261121/202611210348.KYpQPgoE-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261121/202611210348.KYpQPgoE-lkp@intel.com/reproduce)
+Firmware advertises "ready timeout: 510 seconds" (ioc_info
+0xff000000), before and after the series.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611210348.KYpQPgoE-lkp@intel.com/
+Tests, all with mpi3mr_bring_ioc_ready() reaching ready on the first
+attempt and no "retrying to bring IOC ready" or "failed to bring"
+messages:
 
-All warnings (new ones prefixed by >>):
+ - boot probe
+ - modprobe -r / modprobe (mpi3mr_init_ioc path)
+ - sg_reset -H under fio 4k randread QD32 (mpi3mr_reinit_ioc path);
+   host reset completed in ~45s including diag save and port enable,
+   fio completed with no errors
+ - PCI remove/rescan of the controller
+ - 20 iterations of reload + host reset under fio: 40 successful
+   ready transitions, no retries, no failures, no fio errors
 
->> drivers/nvme/common/keyring.c:348:19: warning: variable 'keylen' is uninitialized when used here [-Wuninitialized]
-     348 |         prep->quotalen = keylen;
-         |                          ^~~~~~
-   drivers/nvme/common/keyring.c:310:40: note: initialize the variable 'keylen' to silence this warning
-     310 |         size_t datalen = prep->datalen, keylen;
-         |                                               ^
-         |                                                = 0
-   1 warning generated.
+The failure paths themselves were not exercised, as they are hard to
+trigger on healthy hardware; this confirms no regression on the good
+path.
 
+Minor, 3/3 changelog: the IOC info timeout field is 8 bits in 2s
+units, so ready_timeout tops out at 510s and the retry window at 450s;
+the "510 seconds" in 9634bb07083c most likely refers to the maximum
+ready timeout rather than the retry cap, so 570s cannot be advertised.
+Doesn't affect the code change. Martin may be able to fix it up on
+apply.
 
-vim +/keylen +348 drivers/nvme/common/keyring.c
+The question to Broadcom on firmware advertising ready_timeout < 60
+is still open for 3/3; on this controller it makes no difference.
 
-   293	
-   294	/**
-   295	 * nvme_dhchap_psk_preparse - prepare DH-HMAC-CHAP key data
-   296	 * @prep: preparsed payload of the key data
-   297	 *
-   298	 * Decode the DH-HMAC-CHAP key data passed in @prep and
-   299	 * store the resulting binary data. The binary data includes
-   300	 * space for the CRC, the version, and the hmac identifier,
-   301	 * but the data length is just the key data without the CRC.
-   302	 * This allows the user to read the key data via the
-   303	 * 'user_read()' function. The additional 'version' ahd 'hmac'
-   304	 * data is used in the ->read() callback to generate the
-   305	 * base64 encoded key.
-   306	 */
-   307	static int nvme_dhchap_psk_preparse(struct key_preparsed_payload *prep)
-   308	{
-   309		struct user_key_payload *upayload;
-   310		size_t datalen = prep->datalen, keylen;
-   311		int ret;
-   312		u32 crc;
-   313		u8 version, hmac;
-   314	
-   315		if (!prep->data) {
-   316			pr_debug("%s: Empty data", __func__);
-   317			prep->payload.data[0] = NULL;
-   318			prep->quotalen = 0;
-   319			return -EINVAL;
-   320		}
-   321	
-   322		if (sscanf(prep->data, "DHHC-%01hhu:%02hhu:%*s",
-   323			   &version, &hmac) != 2) {
-   324			pr_debug("%s: invalid key data '%s'\n", __func__,
-   325				 (char *)prep->data);
-   326			prep->payload.data[0] = NULL;
-   327			prep->quotalen = 0;
-   328			return -EINVAL;
-   329		}
-   330	
-   331		/* skip header and final ':' character */
-   332		datalen -= 11;
-   333	
-   334		/*
-   335		 * payload is < key | version | hmac >
-   336		 * base64 decode will always return less data
-   337		 * than the encoded data, so allocating the size
-   338		 * of the encoded data will be large enough.
-   339		 */
-   340		upayload = kzalloc(sizeof(*upayload) + datalen, GFP_KERNEL);
-   341		if (!upayload) {
-   342			prep->payload.data[0] = NULL;
-   343			prep->quotalen = 0;
-   344			return -ENOMEM;
-   345		}
-   346	
-   347		/* decode the data */
- > 348		prep->quotalen = keylen;
-   349		prep->payload.data[0] = upayload;
-   350		ret = base64_decode(prep->data + 10, datalen, upayload->data,
-   351				    true, BASE64_STD);
-   352		if (ret < 0) {
-   353			pr_debug("%s: Failed to decode key %s\n",
-   354				 __func__, (char *)prep->data + 10);
-   355			return ret;
-   356		}
-   357		ret -= 4;
-   358		crc = ~crc32(~0, upayload->data, ret);
-   359		if (get_unaligned_le32(upayload->data + ret) != crc) {
-   360			pr_debug("%s: CRC mismatch for key\n", __func__);
-   361			/* CRC mismatch */
-   362			return -EKEYREJECTED;
-   363		}
-   364		/* append version and hmac to the payload */
-   365		upayload->data[ret + 4] = version;
-   366		upayload->data[ret + 5] = hmac;
-   367		upayload->datalen = ret;
-   368		return 0;
-   369	}
-   370	
+For the series:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tested-by: Laurence Oberman <loberman@redhat.com>
+
+Regards
+Laurence
+
