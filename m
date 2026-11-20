@@ -1,59 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795197858;
-	b=UMFcq7UemcjRwfKfqWOKGkvlkBClpl6+Q0uza4X5zgq0G9EtrV//8H0emdIQpFaFeJCH
-	 pLBpx25iKtKlRPVmsHXFBHjR1O2Mv2kzempLEaRK9pTaPRedg5t6Bxt7AG570Wd6GMqzC
-	 qBwHSX6JtwNez39iF/0lwLV9C8WSfL2lF7jzTrcCcIzMXqcxJ4MTiPD4d8wPGdRrnk0KL
-	 +9md6kOUMnRl6UrVC+kErq2Ku4vAallBn/+jQVRo1XnxkEpZkpMASe5LuDZuO7ncMASdB
-	 RBvvy72Foheh5SkTZhfKHO+McjihTYfzihZNYMNSjaubihT4DFKotDpw9dovlBISPCQ==
+	t=1795197862;
+	b=OzguVVgL/3IHyiKdjJcuiIID/BGM8svYdy2/bIDX1dd5/YG66aB7p/ts32QMf0XUg7qq
+	 U8mHYpYHAJLg8j5nEdbQFg5ifGA8pBi9XncBFtZlixutg9Emmj3ksyF2od9KHfnYEvr75
+	 zSX3PwOldWcQ6DSLgUXX3H5fGuZpJ5U5FsQO3UxsyTjCFB11jY+FFUXQiNH6BZSspZ2u7
+	 f0wLQRvOe2tln+kbLFQs7MAPLhilFbk3/gcd8sreHaej2DtRYldxfxERpzLnqFnKcASDV
+	 0tvsrBVGR49Aw0yEvpkn7e3AzD38lH0oN1yXmwOfKHT37EoSDCq9wovtyOtyzqh3+eA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795197858;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795197862;
 	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Last-TLS-Session-Version;
-	bh=cg4SfeZItMnv8HhgngTb5Vsme4va1eBtUIIb1SuER0c=;
-	b=18vu+Gi+4BITChcRZcLbzQ7Tc7bAv6t4M9l6ovchW/CGQGr46o4kC/4BH7leu1+Hc0Vm
-	 5x+FI5/TgFyA2edQ3kBpMCQ6auxpDBu6Y6EZm2ZcsP9KR923NO3E3hBNU/He49uODRLxm
-	 eBkiOSbd35H8F62pa0BHuYLJ1UqsvWCO7pon9iHS/jugLjxTs5PlQ5W/xODiBHl6yCzON
-	 8fzscRbG4eErOiVlMkafhNFgr+H7qPrP+0fpBsiQB+gx7YxBISR3mTL5O/u6wqiu7iX2z
-	 glnHzgRiZFkZl9hAxbkWvgnPLje/pFuMRgLvoLPNaiw/ybQyHzgklMaST/psPtUUy5Q==
+	bh=tbl7KbbWqbfMj9Je7A0HPDYmT/fmrxkKs/AK6iFXtPU=;
+	b=FHnlo21UKAd9uPWtP3lpBT5CYuqg1nAdAtpdY5qgkOJn25sDhU4AGVVLEAs9DYOtktwZ
+	 qbIlQ38QXRJ0weuPfFQax8kyPKd2pIxm0p/YzSMGm8zbwlhUx7FoAJMMq+QlMCu7xovuM
+	 ILqQ0QJYUPfNLDqBUTbTTyT82T9/H9u2F2yaYVrezmwBLqTcJIsBGdEodOY7Ks8TWc7L/
+	 1C9E5lEBXZj3pRi/hw1kDyDGS6z5TVjCeV/3nAoXvNmD75bAu36OfQ5GhcEv1EUzlragA
+	 O13esSHgkCB3gddgQpSWk0AcPKKZ3U63DhhHEFCPYVDd2sdNMQUQISAGznX/WlBdugw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bootlin.com;
 	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=bny3Ld8P;
-	arc=none smtp.remote-ip=185.246.84.56
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=gzmRpfKy;
+	arc=none smtp.remote-ip=185.246.85.4
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9C260A2619
-	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:04:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F9C260A2619
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF65D60A263A
+	for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 18:04:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF65D60A263A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=bny3Ld8P
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=gzmRpfKy
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id DE2051A1755;
-	Fri, 20 Nov 2026 18:04:11 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 892074E41692;
+	Fri, 20 Nov 2026 18:04:16 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B0259601B9;
-	Fri, 20 Nov 2026 18:04:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6C13611BC08D7;
-	Fri, 20 Nov 2026 19:04:05 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 554DC601B9;
+	Fri, 20 Nov 2026 18:04:16 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 04F7A11BC0627;
+	Fri, 20 Nov 2026 19:04:09 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795197849; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1795197854; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=cg4SfeZItMnv8HhgngTb5Vsme4va1eBtUIIb1SuER0c=;
-	b=bny3Ld8PCNi2bhC13Bit9PeNDNo3pHX+IvACs1Pv68A8f7+pl1h4tep+WXfXYR+AvZXir0
-	+lLShyNoSlEvQ0tS9pko8PgDMy7cD5nGyOowFUwMXzx2kbckZH9f9dzymPIe0ut8LaFJMI
-	M33l/WBQOa+y/nikQn1czYbXVVL0cgM8DwhZ0cOg4HpVzooM3AAsj85OtG1Mrw6WgcB16z
-	HIMyIOIHckrMeH3toueciTgPjVGFINLts9QEirM6OXzYokHo7m0XluDGevAuHCLlxwl5F5
-	ha+E2ZQo5iIOG/1oDLNBHhylGtcgdfmGq67U+sIdqp5lH+3flgvBOcVkv9p0Yw==
+	bh=tbl7KbbWqbfMj9Je7A0HPDYmT/fmrxkKs/AK6iFXtPU=;
+	b=gzmRpfKy1Cjr1LkvGCUqP92ZEUvjeLQi8ln4r6Wjkj9+v9w9pqKkbQgtMr+QLZdb7lo/ji
+	ZCZpCuyqiRNU6LBfrn+5NAQWNCX5uZV02OsUwENSovQD/lNZf60Hkxd+6a+a2vuahfW88T
+	kzGQJIVzqnGTAI7vJqhgs0m8w8YpHy8ouPeZvjSkPHaZ8RNTQXmdSVZxLLHPbSt28hSNIF
+	es/psjgSF3Kkz1m0ZJLRvB5hy16DfgpBi7OYuGzAlprjz+AGnOs207CbMLE25bhNHKtQEl
+	vC/HQJJWwMOGS/8l4XS7B+FlyY4zcpgpe9mGdLK5ecm1oSgfjOutjaQiPnAhmw==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Fri, 20 Nov 2026 18:58:58 +0100
-Subject: [PATCH v6 16/43] drm/vkms: Explicitly display plane type
+Date: Fri, 20 Nov 2026 18:58:59 +0100
+Subject: [PATCH v6 17/43] drm/vkms: Use enabled/disabled instead of 1/0 for
+ debug
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -65,7 +66,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261120-vkms-all-config-v6-16-78ace90f4fc1@bootlin.com>
+Message-Id: <20261120-vkms-all-config-v6-17-78ace90f4fc1@bootlin.com>
 References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
 In-Reply-To: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -92,50 +93,58 @@ Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
  llvm@lists.linux.dev, 
  =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito@redhat.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1010;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1209;
  i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=OAT05TwafSaZUI5qNR1+4cNJLCVDeclk80tgkB9t9UE=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBrAIr/msYT0QdyVhfbV0U4NHdJjqrfOBvoj8t3u
- FPi5WcMWVeJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCawCK/xsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOJznxAAoYFxM6AbCctXt4iA+4F8VKUlZSnJ+gE
- C9TvSC8ntVCv9JeUUiC4ksrCIz2H6R0QKhRBNlBy7YuB4IXBZv7McMTSxdY5P4w5M2b081XLf/3
- nhjwcZqS03uacEP7jVLZ7IE5NjGxqVzu1twTVmgv//7PEbl8ZVSUKo+4sKSKrM7BRXPoYEqTh3/
- 9MuDH3L4ejztoPU79lcaUuuVvhqT5Mf4o26BRA30UtaLxVZXUwhhBLZeQh5nR29lOGYrVNmo+R0
- mCv7W6huF9cO+NJL/v05g8WEkgdAA9gwJSw+fXwUfM8Sj5uZ81hWiploMG8zRCt+KnKn580f4Ac
- DZSG0PNiSyxfQWCEkFa79Y4lVxR0auF8xmTPy3zshL6GZj6FGMycWItKYUu6X1URYwLS1XaED5a
- D/69XFQ7GuUo3hdGffpEta+hkGnau+ZGeJhP1wP43dSWtgeHHYKpzWFX2s8QF4VvslhAIzmAwEa
- SFtAGgwaloi0s1mfQ2U/++m9ILW5Gvq8Te1I/gmleC6lfk2V+mxz8os1u9osvdgerbs+Vd/v8uk
- uPWLsRpEwswJAAuvwFruIs/n3ZiqhdDCjU+4EhPcGkNtcrP8zP4IwwBjuCKj4OK8U/ZM+1E0hAD
- YzaOi0qLuxYzYKocLrZsRZe3Mf+FYc32eYGs1BT34+Tggdh/PsTE=
+ bh=FuLxv4IS8t2OQ5v1HuAk78riDXjuPDUEQbNHD3ODm3Y=;
+ b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBrAIr/Hsg3FddplCIKcqug0I7EdumRSe4lf/48B
+ qkjemsQq4GJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCawCK/xsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOJPoxAA021lc8DnTStnlAZWYd5TyVyTIS3Shax
+ 26CLO8CrwR4KPHH9sPBz+mUc1wbkTjpXv6qHrg20lIokU2JQqpRfuVTIpOePS4SZ260XEAeAgFO
+ UcVNldCpSGb7bnVfl0OVrnpnjL5LUniHXyA9Zsm2C06VmEUaGHEQiUo3f5ZSydKB3SoYz+AW4Oj
+ Ok7bgjMD1AMCJtJxTgFpp2JkJ1h8Z15nAeFCypCtfenQAXvM/9e6k8kSeJ/9ckeYHJOe4aeAvXY
+ JKh6n2ybpZXAQC0y0jl3B44WWy0ti9wRa8JX8ifrjFGSKbtJQ/1OTuemR2PFyf2NPNlced6TXcJ
+ seDS5OlCcn1S1O4MEeuFkMBjrxDGZb/n7cB+vcm3Yel1ogRgii5XA42MZL6hWIEduK4ZJQgKyns
+ Nx6xN27slWcCVk6ehjPPQXO4blYkgxlKrlaH+4jaZHQwIFOuxgKPGR/Claz8FiC4h/pTTrD3t28
+ yto5Tdp85ITP6iwyuDQxqn9Erwk1E6AGiQapKpm9QeiUw0Tf79/D0xKdcLKAmEiv733ncY0Zijc
+ HdjBe1fOpM6VMyJmAjcz+TqiCdATexgULvF24wf4k3dYwuYpsgzyRV6QGduq5y9LKHai7Z6HLly
+ QGlMzq3LvblNCMzVxbiQ8h87H3Ux6fF7HLKW/WI6q7pBz1f/muzg=
 X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
  fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
 X-Last-TLS-Session-Version: TLSv1.3
 
-Debug information are mainly read by human, so use full name instead
-of values.
+Debug information are mainly read by human, so display human
+readable values.
 
 Reviewed-by: José Expósito <jose.exposito@redhat.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- drivers/gpu/drm/vkms/vkms_config.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vkms/vkms_config.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-index 03f2d0f0e327..44ded8a86a6e 100644
+index 44ded8a86a6e..4127fb176a87 100644
 --- a/drivers/gpu/drm/vkms/vkms_config.c
 +++ b/drivers/gpu/drm/vkms/vkms_config.c
-@@ -391,8 +391,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0+
  
- 	vkms_config_for_each_plane(vkmsdev->config, plane_cfg) {
- 		seq_puts(m, "plane:\n");
--		seq_printf(m, "\ttype=%d\n",
--			   vkms_config_plane_get_type(plane_cfg));
-+		seq_printf(m, "\ttype=%s\n",
-+			   drm_get_plane_type_name(vkms_config_plane_get_type(plane_cfg)));
- 	}
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ 
+ #include <drm/drm_connector.h>
+ #include <drm/drm_print.h>
+@@ -397,8 +398,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
  
  	vkms_config_for_each_crtc(vkmsdev->config, crtc_cfg) {
+ 		seq_puts(m, "crtc:\n");
+-		seq_printf(m, "\twriteback=%d\n",
+-			   vkms_config_crtc_get_writeback(crtc_cfg));
++		seq_printf(m, "\twriteback=%s\n",
++			   str_enabled_disabled(vkms_config_crtc_get_writeback(crtc_cfg)));
+ 	}
+ 
+ 	vkms_config_for_each_encoder(vkmsdev->config, encoder_cfg)
 
 -- 
 2.56.0
