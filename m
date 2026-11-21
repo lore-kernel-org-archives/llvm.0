@@ -1,79 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795302779;
-	b=irfZ7KzInC9JVKTsrQLdmmVHZKN0GiheP5stq4XFesUWM7YgwR6mN0AAY89FmY2rXL7Q
-	 /MZsYu5MyNJDybTxDqWESoyMEVLpe7Xs5F9L0zCfisDQrKZ22XxFjT6ux9fLtuTEvsyJW
-	 WUbODj9ll2A6mOba4XTdF2y/iX/C1mJ5u1tRS9KzQL3i2bGJRuyF1gIgM0G0HE+djxWQa
-	 ESxTYSUGiSJqRpE9EA+xsG3/SGLULwt6f+cps4gA0tUyP+sR3bFLdFS+zg7ZLkjKRLiYB
-	 DRu9kZ2YDychyHC2ru8h4lus4TCCB4Xt8hN//RPlqj0y2w8213JCVuXsOFRKde9gZ4w==
+	t=1795303603;
+	b=n2+AZyS2eViO/Z+cm4TxfuOGKMKqVlMcI6jcR0TkeEVQdUxVzuefs8MADjNRvQS3V2cx
+	 QZBkeEFAhVZzHHLqITzdc7PhxRdtcMDLbs0p7dI5wTAu0lnD3wP4snsF9PNk9FD5bt0D2
+	 jd6uEP37OURnJHcz2z/b09UIzpnUgVh7hSgIfP4LwqoHBb1SZVi0Y7prueebfz8ZxKCq+
+	 G2W9lT+Viw5gV/jjBu3ibgz9dtHOIE97iKofhjC4/nF035mVcHC3H9JtyRACWICGHa9MS
+	 Lo2rQ+6OYuDvFI88ZzbJMa9Ml2kUSDne6gcm+6MIlbWX0rZCRSLVBdCiytrlE+68H7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795302779;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=vwMSBReu/Bf7JM5qsY+T+HiRJ7jmx8jYYQc1ZkNTqBA=;
-	b=Y5stWH96tobRrx3r2allfFk4Ax+vQBD60JJ0/C8m0C+VvsF3bRMX0FX0US8aNCCPpH+o
-	 DA0MWXuklHyMjwuBzgjC37Axj81Nqq5tolCZ5ZtlXm0tHFG8LNLrBrAS9p+0dvabE/2AU
-	 7uAyrseF/oqwx1lS4UKoLohF7K0T7sGjlsOQV0QnSK6V+ch7c6Qv76qCZtrPS1flNVdkU
-	 JarcAroBoBpm6lprSNG8cD85fCfoPOg6+iPHWMkIVdX/7zf1nSfYxT0b8n4SpKO4cZjaa
-	 jvDX3EJfW31zN8CqTBqi2UFNFpOFOizEnHHfkPHmzFpoDdq2YhScjSKnyS09UWbyXiQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795303603;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=swVWLdIORzAn0CH5DXvzx6L8MBh1Ls3/BIBJUSCbZaw=;
+	b=vYztEnYjbU35fX1SyY9e6zXFZ5GkCrAVuiIIyRjOC3D7F1TXvK5dBN9s6bXgZrECbTWj
+	 CDk4g4yiI1Fh0g60wf4Sa64Bb3V0UgarkWcaZGHIkB6cKb/wB1Dal0fTRl7nyRTt/3xY9
+	 qRJ2wCcbeJoTiRqSH6vGPxtRKUp+mFXdfe4xL6BK+eNfgFBTR7TrY1yEJUb6RDrXgbFBf
+	 r4on5o82wrFPG2aJHGMQ9XjyPwgW+FwSWGP6UhkUXOsTa3UWlyPHp96F45428rC9+XQyd
+	 UUU1FNETnxbDzqPuz2J/+AObTcoPikIVdEpv4guVImSpKNzkdfFtOx3Ix3ESdoeuoNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QYJZkYTw;
-	arc=none smtp.remote-ip=198.175.65.13
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jvdDXah3;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4520B606A320;
-	Sat, 21 Nov 2026 23:12:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4520B606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B33D606A320;
+	Sat, 21 Nov 2026 23:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QYJZkYTw
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795302778; x=1826838778;
-  h=date:from:to:cc:subject:message-id;
-  bh=Xa/DVIU0dfCyM34fK8E5Dt2Y638mDLq8d863Pfq7GIs=;
-  b=QYJZkYTwrPlp/+yRW7TYsEc+AViulSeqKnVjmzkCXIVAr/HLLWgidtkc
-   eSmf6nELQYfbEy4ErFmRTs3EyCtzN7mDiPRiB/YUEc5mFgsmPAxdylZZi
-   0ZnhIvRgqfTcequZD80Pv/NsMN3p8dNmFxmzgxK8JB9WeV/ehhlYHd79t
-   xfa72TiebFt0IzkfTWAOiZe3rccMgiisGhVkvu3sIIJy7XiXlh9Od9UtX
-   9TyzhpIs9IW9N5IqYKdIqV9kO5frysoe/mhDFu8Fdg8EuuvKNnrVNPN2d
-   RlOo9dsd/qYJI3fbmX7ubWygsg562LLMLvGKvD9FVwpPuLSpW1BouM5ed
-   A==;
-X-CSE-ConnectionGUID: wzIX7NVHQ0G/u7GtkvSQLA==
-X-CSE-MsgGUID: fMhOb0JGSGCSAvAtlZ3MkA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11973"; a="4042803"
-X-IronPort-AV: E=Sophos;i="6.27,225,1787036400"; 
-   d="scan'208";a="4042803"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2026 15:12:58 -0800
-X-CSE-ConnectionGUID: Ut5ODoiXR/eh+BIJ9K/npw==
-X-CSE-MsgGUID: rVhrMwJMSVK3/cxmTtfZkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,225,1787036400"; 
-   d="scan'208";a="11066251"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 21 Nov 2026 15:12:56 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xUuGM-00000001Kjr-0RwZ;
-	Sat, 21 Nov 2026 23:12:54 +0000
-Date: Sun, 22 Nov 2026 07:12:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Jones <andrew.jones@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_trace_support_v6 52/105]
- drivers/iommu/riscv/iommu.c:1374:16: error: call to undeclared function
- 'virt_to_pfn'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202611220733.xV4aOPf6-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jvdDXah3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CDA1F000C4;
+	Sat, 21 Nov 2026 23:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795303603;
+	bh=swVWLdIORzAn0CH5DXvzx6L8MBh1Ls3/BIBJUSCbZaw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=jvdDXah3Hd6doiFD8BxoHgq35Lk519EEEBXbpMJuqFLib6fkIPhQTywtVl4OuKslw
+	 +z9zD5VdozW41LO6u3zqgi8IdR40bMhuiAJt9ktLYmCNDyq1v+NNUXq0O2GECARiKh
+	 4J9jaPjF7JEaqSm1T0ZS5589PUyWa3pyglLtMj68yNyglQJa14hA4yVuxTwxli2amE
+	 L8hs4kF2pKQaEpSHLRxzS+poH9iska0Tl/BgHO5TQxPzeQ1b6UzMstZJOjEEiQIuw6
+	 jMW6GKRhahuSfwVOj5S1iTYosoY/h7W2gO/aXoeqxWiIKGQaEwXn5Hc3asD9TmMvTD
+	 0NIpotgHAqCgg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: ansuelsmth@gmail.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	horms@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	rdunlap@infradead.org,
+	lorenzo@kernel.org,
+	hkallweit1@gmail.com,
+	linux@armlinux.org.uk,
+	maxime.chevallier@bootlin.com,
+	p.zabel@pengutronix.de,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	rmk+kernel@armlinux.org.uk,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	llvm@lists.linux.dev,
+	zhengping.zhang@airoha.com
+Subject: Re: [PATCH net-next v22 01/15] net: phylink: make PCS phylink instance access RCU protected
+Date: Sat, 21 Nov 2026 15:26:40 -0800
+Message-ID: <20261121232640.1365293-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261117123956.11981-2-ansuelsmth@gmail.com>
+References: <20261117123956.11981-2-ansuelsmth@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,59 +85,105 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/avpatel/linux.git riscv_trace_support_v6
-head:   5d559f35c311939a912dec052dd62819d2d39c70
-commit: 27d7999789fe4bde5b3d8f8815fb9cbdf7efb76f [52/105] iommu/riscv: Prepare MSI table updates for interrupt remapping
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20261122/202611220733.xV4aOPf6-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261122/202611220733.xV4aOPf6-lkp@intel.com/reproduce)
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+net: phylink: make PCS phylink instance access RCU protected
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611220733.xV4aOPf6-lkp@intel.com/
+This commit makes the phylink back-pointer in struct phylink_pcs RCU
+protected and reads it under rcu_read_lock() in phylink_pcs_change().
+phylink_destroy() now clears that pointer and calls synchronize_rcu(), so
+a concurrent phylink_pcs_change() should not run on a freed phylink
+instance.
 
-All errors (new ones prefixed by >>):
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index e7734e45376cd..d9d0ace2042e5 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
 
-   In file included from drivers/iommu/riscv/iommu.c:18:
-   In file included from include/linux/crash_dump.h:5:
-   In file included from include/linux/kexec.h:20:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/iommu/riscv/iommu.c:1374:16: error: call to undeclared function 'virt_to_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1374 |                 dc->msiptp = virt_to_pfn(msi_table->root) |
-         |                              ^
-   drivers/iommu/riscv/iommu.c:1374:16: note: did you mean 'virt_to_pte'?
-   arch/um/include/asm/pgtable.h:291:15: note: 'virt_to_pte' declared here
-     291 | extern pte_t *virt_to_pte(struct mm_struct *mm, unsigned long addr);
-         |               ^
-   1 warning and 1 error generated.
+[ ... ]
 
+> @@ -1295,10 +1296,10 @@ static void phylink_major_config(struct phylink *pl, bool restart,
+>  		phylink_pcs_disable(pl->pcs);
+>  
+>  		if (pl->pcs)
+> -			pl->pcs->phylink = NULL;
+> +			rcu_assign_pointer(pl->pcs->phylink, NULL);
+>  
+>  		if (pcs)
+> -			pcs->phylink = pl;
+> +			rcu_assign_pointer(pcs->phylink, pl);
+>  
+>  		pl->pcs = pcs;
+>  	}
 
-vim +/virt_to_pfn +1374 drivers/iommu/riscv/iommu.c
+[ ... ]
 
-  1369	
-  1370	static void riscv_iommu_msi_table_set_dc(struct riscv_iommu_msi_table *msi_table,
-  1371						 struct riscv_iommu_dc *dc, bool activate)
-  1372	{
-  1373		if (activate) {
-> 1374			dc->msiptp = virt_to_pfn(msi_table->root) |
-  1375				     FIELD_PREP(RISCV_IOMMU_DC_MSIPTP_MODE,
-  1376						RISCV_IOMMU_DC_MSIPTP_MODE_FLAT);
-  1377			dc->msi_addr_mask = msi_table->msi_addr_mask;
-  1378			dc->msi_addr_pattern = msi_table->msi_addr_pattern;
-  1379		} else {
-  1380			dc->msiptp = 0;
-  1381			dc->msi_addr_mask = 0;
-  1382			dc->msi_addr_pattern = 0;
-  1383		}
-  1384	}
-  1385	
+> @@ -2137,6 +2138,11 @@ void phylink_destroy(struct phylink *pl)
+>  	if (pl->link_gpio)
+>  		gpiod_put(pl->link_gpio);
+>  
+> +	if (pl->pcs) {
+> +		rcu_assign_pointer(pl->pcs->phylink, NULL);
+> +		synchronize_rcu();
+> +	}
+> +
+>  	cancel_work_sync(&pl->resolve);
+>  	kfree(pl);
+>  }
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[Severity: High]
+Can phylink_pcs_change() still use pl after kfree(pl) here?
+
+phylink_destroy() only waits for a grace period when pl->pcs is non-NULL.
+pl->pcs can be NULL at this point if an earlier phylink_major_config()
+switched to a NULL PCS. That happens when mac_select_pcs() returns NULL
+for the new interface, for example in the default case of
+mv88e639x_pcs_select().
+
+In that case phylink_major_config() cleared old_pcs->phylink and set
+pl->pcs to NULL without waiting for a grace period. A sequence like this
+looks possible:
+
+PCS driver threaded IRQ handler:
+phylink_pcs_change(old_pcs)
+    rcu_read_lock();
+    pl = rcu_dereference(pcs->phylink);
+    <preempted>
+
+Resolve worker:
+phylink_major_config()
+    rcu_assign_pointer(pl->pcs->phylink, NULL);
+    pl->pcs = pcs;    /* pcs == NULL */
+
+Driver teardown:
+phylink_stop()
+phylink_destroy()
+    if (pl->pcs) { ... }    /* skipped, no synchronize_rcu() */
+    cancel_work_sync(&pl->resolve);
+    kfree(pl);
+
+IRQ handler resumes:
+    phylink_link_changed(pl, up, "pcs");
+        /* writes pl->link_failed, may queue_work(&pl->resolve) */
+
+phylink_stop() does not seem to close this window. It only handles
+phylink's own link_poll timer, link_irq and resolve work, and the
+phylink_pcs_disable(pl->pcs) call gets a NULL PCS here. The mv88e6xxx PCS
+drivers use request_threaded_irq(), so with CONFIG_PREEMPT_RCU the reader
+can be preempted inside its RCU section.
+
+The commit message says the change will "syncronyze RCU to catch an
+execution of phylink_pcs_change()". This case still seems to be open at
+the end of the series. phylink_detach_pcss() only sets rcu_sync when
+pcs_list is non-empty or pl->pcs is non-NULL, and pcs_list stays empty for
+mac_select_pcs() drivers. The later READ_ONCE(pl->pcs) == pcs check in
+phylink_pcs_change() also dereferences the possibly freed pl.
+
+Would it make sense to call synchronize_rcu() unconditionally in
+phylink_destroy() (and later in phylink_detach_pcss())? Another option is
+to wait for a grace period whenever phylink_major_config() detaches the
+old PCS.
