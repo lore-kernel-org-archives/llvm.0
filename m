@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795244364;
-	b=cgJegjcikfqpADm81EuGn7tE9zZ48yWVlqtSThmsHAkGP2ydPF7Jdmz2i6JVv53AUKH6
-	 vMgnRqkUlY/bbF4PuB2i9pYpPoFG1Jv33n51gTTlMWgGxif0gkvmNGdr4QjAuH2SW5SAN
-	 g9ODgzXLBZJfreF0ap17pDuartOxZcM5lMnTuQBixEbLKMgritzoxLQJyf0aIgqkzQ/Ha
-	 dnux/SWB+OGU+LyaBukA+Z4gRA0S0djDa/Z6OxL+B8RW2iw52nohcC0sBPRfrYUvMQOs4
-	 DNvLDDxNw/BXNxLz0liAVRszobMPCnK/YR7wt/q/WRZlZMJCNxIjIpRgkYN965r852g==
+	t=1795244365;
+	b=022+5dwjdp+E7oQFrxv3fQJnTHgP9UmNuSE1BoYc8AxMODtmrFvtXwvOfaJ0UQ/X14Dk
+	 xFLcF0qoKJg8SFzvUx2hjv1aFF7KEBe+AzfxQVvxNEuNRICyADAzr4+Hxft/jPU4Ofi0I
+	 J3Nw6QgiTmTfI9K/wHNc+CeIoG9lj/pberu9MJLBDNt6bH5gIXBuvzCdZVwlZ0d/udbz9
+	 aVVmzjV/GKqH24RCm6hci1cFmgkFwC+f+berjrHjagI7/RCbpOFPDp2j22fkQ9ffLID5v
+	 +GIVyqwzbs2oDaYDGaIGRquvuw57NGYoNd6ClgOEV7zbU8zIfwM2EYf/tnFlxbcJB/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795244364;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795244365;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=d95iHTNdtf/y8c1gOlDmpA5GClWqrzVm2GjHbOzts1E=;
-	b=M1RuQnwKkpHBVnw2r+Zkkab95Q0MmOi2xz4IxDsVy07Y+jr47t2VAJvFoFGzzGmNZv5/
-	 syhNMZCP1NgoGvG61KYwWTfedRc8dd0cHHHdoTya3rSvH+EaI/DMHLMb31+fE8NxWUiFX
-	 hCc2JgB+Gu4quj2k8dHTKUYhyCbNUFJ+X6kS36JJeNHwUEspER70amdKJ00doGnG5L5N5
-	 QpfpodMsak4CG/Pk/rOWu7gbGtIw7EpGSuwsn/jhJAWcIBSDwd2Uu7oeKRy8DHGfdqUPk
-	 5BuqsHg/U2GsIat7w1H2QoSb1WGaiKR6+I2l3nKSLe93nUuXrk9VOI4DL8mmi261bvw==
+	bh=bn9XTrmwtYq+QmrClFz+UoIdH7NFwaTpUsTqvt8FAI8=;
+	b=K77clvX7bzTkfNjWXatz1TBeyPco5O/7Cjq/RwZasrI+KF7rj+aoBuQmLv+ybXcjWxmN
+	 7ieNwgHZOPOUZfaVwl8sVAEUlB+Cl2+Z8MDCxdhp2djOl12RbGlzOfZIAIP/t+3ncnFFu
+	 C4q1z4jSE9uUAHXxj3trwt6pH12U2SFkPVWp5ftNd1ofrLO64/M6sBk/rO0Aqq9aCwA1R
+	 mXvB18Ur4sWRkB+G3Eb7wUebn8qHDZH8zJkB88kblk83eTDMTqK2x/8RHkP2BUL2nulTU
+	 ieIAPSucI7xhH/6o87JtDDnD5AzmNKnHPiKrv4gAQzBqShPpkatUMtwr1tg6WYU9WPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G0UIgTZ0;
-	arc=none smtp.remote-ip=209.85.167.198
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EpGf1Fpn;
+	arc=none smtp.remote-ip=74.125.82.71
+Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E581606A339
-	for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 06:59:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E581606A339
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0C5606A33C
+	for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 06:59:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A0C5606A33C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G0UIgTZ0
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-4ab8b4887d4so1309959b6e.1
-        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 22:59:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EpGf1Fpn
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-1b3b5b49cabso1543249c88.0
+        for <llvm@lists.linux.dev>; Fri, 20 Nov 2026 22:59:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795244362; x=1795849162; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795244364; x=1795849164; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=d95iHTNdtf/y8c1gOlDmpA5GClWqrzVm2GjHbOzts1E=;
-        b=G0UIgTZ0BLQa6cDTKF7HrYD54DebrFWAv/BuKEZ+JBOpfLOuAqFbriKVjGPe7t4JVB
-         rYWQdrD3BHWWhuXeJIioA1Y0F1n0bSxAUoSPjBsoZXCn7bDR47OLFq4mqj57MWmSUcmB
-         2s1S0DJbQVI1TXQD3nzRdisNOzRjlM7A5uJKL+m+hq76Ndyhwg/XkxwLwpt1hZkEzL43
-         1fmKt36Ir9kbSSxV9sjYgh14vsRtvbQwjMpCdgb69WdtGlVuEtullLBkSRG4mgph+ywt
-         wgOzYbwc8uBDIOBH7Yu7GM80JS4DGiBM1VxDBTWYQl2s1pNshwZX8+gh2RMrFLwr4qGv
-         I3AA==
+        bh=bn9XTrmwtYq+QmrClFz+UoIdH7NFwaTpUsTqvt8FAI8=;
+        b=EpGf1Fpn+VdxyJ2dzoHIUTNCO6TudTt9/uGLJJGp3/v6zE9NuTi/c5MNa/jNraeVDc
+         heIJfX7V+nDNFUJeFUBpra5QBr1aGXmmDop9vBp7YBCxV39KQyi+86vZpKyIawD2WcQz
+         dieGLuVeQsAz2xp0GTgWnmS6YfZI95B2I8gw7z2gZrLxCtrL9LYi6gBj6mvDiVsRao0X
+         tR7fOY4IxB3QU0aFNIm2hnGg6xZ5J86eCojtYQp3E6jNp+oZkhuEgf9wXd/QUYMses2+
+         dC3iMTaH1kFFpRR+3LZjJqbiCZBAsO2TcCgzPdQZoVQ+V9GYGxAfYYmzyUDloszJJcbe
+         pG0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795244362; x=1795849162;
+        d=1e100.net; s=20260707; t=1795244364; x=1795849164;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=d95iHTNdtf/y8c1gOlDmpA5GClWqrzVm2GjHbOzts1E=;
-        b=eMkx38pXy3g+ELomht2ss1ROoxsVpFn6jRPPtQ4BGj79FqpWxsYQp3hTmtP2/jSRc5
-         2R2NJYS8jXduyEarKHzNSkLKAd6yFwNH+zdTOaBFo4F5A/+yDmcMjuee5imVfjp/50Pe
-         lhW+JF8JbonLUQ060svsc2KsXp7nO6PoIRJA7uW58nYijBafHZrkDTdewxe6uj4A7Rrt
-         84wX7S+7/O65nH9u4XSF0C2YdUaMbydgDOgmxcs/TeYYEEtsVL5P0XFcWSRvquTsy6bk
-         cGGfXS6JrCWMUQ+qHe/aot3e3AEVVn0KUHkxmvpMDfzs69m8Soz6qmi2fsgoXSRL+ib7
-         18YA==
-X-Forwarded-Encrypted: i=1; AL+hErEyE+BHzcBpCwuLNpVOaJhf0vxHHzaJf4N1WfrxGR02P61kQw0L91o9ZnKGwkq574sOOJY3@lists.linux.dev
-X-Gm-Message-State: APuU4Z+iKtAi4VvYyxnXYtQDZcqcjD14ube/qw4VBExfp1fvdffAUHzR
-	PK78/NXSoJxuD96ACDKwt1wh6sAdRogrnTzUaqhZQUGVy4vBff9Hg4BxeiY2ANEip3z4izWoPvc
-	TOrbZf+ldWA==
-X-Received: from ioi20-n1.prod.google.com ([2002:a05:6602:c654:10b0:9c7:66cc:b115])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:f13:b0:567:f784:f939
- with SMTP id 5614622812f47-57a0bb54177mr5310815b6e.51.1795244361845; Fri, 20
- Nov 2026 22:59:21 -0800 (PST)
-Date: Fri, 20 Nov 2026 22:58:04 -0800
+        bh=bn9XTrmwtYq+QmrClFz+UoIdH7NFwaTpUsTqvt8FAI8=;
+        b=lDd8JXdlEpN2exsunT5DvLQE0HT0+ruMgOr/G/kGiwZEDAMnV7T8A+RIUXGkbCdqGr
+         BFIQqlszpI/qf59qjk1fDDYpUsKperm6gb7U16J/6YNy82lpvrj+zcQp1iWXes0WnkQo
+         Ppe0je24cBotJ7T/I+bGn3T+lTm8wcHZL0Gxok4/OkodEbXx7mixlaYs+xAKH1T1aXPS
+         Kqozw0jTcskOXa0Wr4vS9D49P4iMOJFX+fJ7eU89uF3V6cSyfLN7Wsvk1rnX6bKaRg2g
+         rGUMOKUC1EI8VSosLyjNyqReeS5Tf/UD7qCwfmJeAL133Jvkpe7PTduR9js3ANAzNOWK
+         p5Sg==
+X-Forwarded-Encrypted: i=1; AL+hErERdXNeZsP4GoTTJpIQ8TxOAPDYl81j1J8G8tdDjTHBODRQCwYlbm9LUcznxnyHZ35AZovu@lists.linux.dev
+X-Gm-Message-State: APuU4Z+DYDg/5TkWSCFjttm82jNjAEqrCvEI7W8VUD/u4g53QJirsfQ7
+	v/1v2Ohi+WsdVyb6TkXZx3KB2jmXh0TPGxHvMSAu512DFTM9Mm+vP/N4kPBLt63WF35v2daAt45
+	60ezDwppz6Q==
+X-Received: from dlaj23.prod.google.com ([2002:a05:701b:2817:b0:1b2:4c55:e320])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:f516:b0:1b5:4aba:b087
+ with SMTP id a92af1059eb24-1b5567c0c01mr4607989c88.3.1795244363879; Fri, 20
+ Nov 2026 22:59:23 -0800 (PST)
+Date: Fri, 20 Nov 2026 22:58:05 -0800
 In-Reply-To: <20261121065813.4143649-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261121065813.4143649-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261121065813.4143649-16-irogers@google.com>
-Subject: [PATCH v15 15/23] perf intel-tpebs: Fix race in tpebs_stop() and
- tpebs_cmd.out fd handling
+Message-ID: <20261121065813.4143649-17-irogers@google.com>
+Subject: [PATCH v15 16/23] perf intel-tpebs: Use DEFINE_MUTEX for tpebs_mtx
+ and add lock annotations
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>
@@ -96,486 +96,340 @@ Cc: Bart Van Assche <bvanassche@acm.org>, Jiri Olsa <jolsa@kernel.org>,
 	Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-intel-tpebs has two lifecycle bugs around the background 'perf record'
-process and sample reader thread:
-1. tpebs_cmd.out is read without tpebs_mtx and closed by both
-   perf_session__delete() in __sample_reader() and tpebs_stop() (or
-   leaked if perf_session__new() fails).
-2. tpebs_stop() reads tpebs_reader_thread after unlocking tpebs_mtx, and
-   tpebs_send_record_cmd() drops tpebs_mtx while writing undelimited
-   control strings and polling ack_fd, allowing concurrent open/close
-   calls to coalesce commands or race to close pipes, join the reader
-   thread, and reap tpebs_cmd twice.
+Replace tpebs_mtx_get() and its pthread_once() initialization helper
+tpebs_init() with DEFINE_MUTEX(tpebs_mtx) and static initializers for
+control_fd and ack_fd, and add __guarded_by(&tpebs_mtx) and
+__must_hold(&tpebs_mtx) annotations to the TPEBS state.
 
-Fix (1) by initializing tpebs_cmd.out = -1, passing it to
-__sample_reader(), and resetting tpebs_cmd.out = -1 once ownership is
-transferred (and on start_command() failure). Fix (2) by preparing
-events under tpebs_mtx, reading tpebs_reader_thread under tpebs_mtx,
-newline-terminating control commands, serializing open,
-tpebs_send_record_cmd(), and teardown via a condition variable and
-generation counter, and ignoring late samples while stopping. Add
-explicit header includes used by the file.
-
-Fixes: 8db5cabcf1b6 ("perf stat: Fork and launch 'perf record' when 'perf stat' needs to get retire latency value for a metric.")
-Fixes: bded0398ac19 ("perf tpebs: Fix concurrent stop races and PID reuse hazards in tpebs_stop")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/intel-tpebs.c | 243 +++++++++++++++++++++++++---------
- 1 file changed, 184 insertions(+), 59 deletions(-)
+ tools/perf/util/intel-tpebs.c | 109 +++++++++++++++-------------------
+ 1 file changed, 48 insertions(+), 61 deletions(-)
 
 diff --git a/tools/perf/util/intel-tpebs.c b/tools/perf/util/intel-tpebs.c
-index 7c0b8b15bd10..23d1e8bb678c 100644
+index 23d1e8bb678c..2f3231bab61c 100644
 --- a/tools/perf/util/intel-tpebs.c
 +++ b/tools/perf/util/intel-tpebs.c
-@@ -27,6 +27,12 @@
- #include <errno.h>
- #include <poll.h>
- #include <math.h>
-+#include <pthread.h>
-+#include <signal.h>
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
+@@ -38,19 +38,20 @@
  
- #define PERF_DATA		"-"
- 
-@@ -34,10 +40,17 @@ bool tpebs_recording;
+ bool tpebs_recording;
  enum tpebs_mode tpebs_mode;
- static LIST_HEAD(tpebs_results);
- static pthread_t tpebs_reader_thread;
--static struct child_process tpebs_cmd;
-+static struct child_process tpebs_cmd = {
-+	.out = -1,
-+};
- static int control_fd[2], ack_fd[2];
- static struct mutex tpebs_mtx;
-+static struct cond tpebs_cmd_cond = { .cond = PTHREAD_COND_INITIALIZER };
- static bool tpebs_stopping;
-+static bool tpebs_starting;
-+static bool tpebs_enabled;
-+static bool tpebs_cmd_in_flight;
-+static uint64_t tpebs_gen;
+-static LIST_HEAD(tpebs_results);
+-static pthread_t tpebs_reader_thread;
+-static struct child_process tpebs_cmd = {
++static DEFINE_MUTEX(tpebs_mtx);
++static struct list_head tpebs_results __guarded_by(&tpebs_mtx) = LIST_HEAD_INIT(tpebs_results);
++static pthread_t tpebs_reader_thread __guarded_by(&tpebs_mtx);
++static struct child_process tpebs_cmd __guarded_by(&tpebs_mtx) = {
+ 	.out = -1,
+ };
+-static int control_fd[2], ack_fd[2];
+-static struct mutex tpebs_mtx;
+ static struct cond tpebs_cmd_cond = { .cond = PTHREAD_COND_INITIALIZER };
+-static bool tpebs_stopping;
+-static bool tpebs_starting;
+-static bool tpebs_enabled;
+-static bool tpebs_cmd_in_flight;
+-static uint64_t tpebs_gen;
++static int control_fd[2] __guarded_by(&tpebs_mtx) = { -1, -1 };
++static int ack_fd[2] __guarded_by(&tpebs_mtx) = { -1, -1 };
++static bool tpebs_stopping __guarded_by(&tpebs_mtx);
++static bool tpebs_starting __guarded_by(&tpebs_mtx);
++static bool tpebs_enabled __guarded_by(&tpebs_mtx);
++static bool tpebs_cmd_in_flight __guarded_by(&tpebs_mtx);
++static uint64_t tpebs_gen __guarded_by(&tpebs_mtx);
  
  struct tpebs_retire_lat {
  	struct list_head nd;
-@@ -120,10 +133,15 @@ static int evsel__tpebs_start_perf_record(struct evsel *evsel)
- 	tpebs_cmd.out = -1;
- 	ret = start_command(&tpebs_cmd);
- 	zfree(&tpebs_cmd.argv);
-+	if (ret) {
-+		tpebs_cmd.pid = 0;
-+		tpebs_cmd.out = -1;
-+		return ret;
-+	}
- 	list_for_each_entry(t, &tpebs_results, nd)
- 		t->started = true;
+@@ -66,25 +67,11 @@ struct tpebs_retire_lat {
+ 	bool started;
+ };
  
--	return ret;
-+	return 0;
- }
+-static void tpebs_init(void)
+-{
+-	mutex_init(&tpebs_mtx);
+-	control_fd[0] = control_fd[1] = -1;
+-	ack_fd[0] = ack_fd[1] = -1;
+-}
+-
+-static struct mutex *tpebs_mtx_get(void)
+-{
+-	static pthread_once_t tpebs_once = PTHREAD_ONCE_INIT;
+-
+-	pthread_once(&tpebs_once, tpebs_init);
+-	return &tpebs_mtx;
+-}
+-
+ static struct tpebs_retire_lat *tpebs_retire_lat__find(struct evsel *evsel)
+-	__must_hold(tpebs_mtx_get());
++	__must_hold(&tpebs_mtx);
  
- static bool is_child_pid(pid_t parent, pid_t child)
-@@ -195,8 +213,8 @@ static int process_sample_event(const struct perf_tool *tool __maybe_unused,
+ static int evsel__tpebs_start_perf_record(struct evsel *evsel)
++	__must_hold(&tpebs_mtx)
+ {
+ 	const char **record_argv;
+ 	int tpebs_event_size = 0, i = 0, ret;
+@@ -212,19 +199,19 @@ static int process_sample_event(const struct perf_tool *tool __maybe_unused,
+ {
  	struct tpebs_retire_lat *t;
  
- 	mutex_lock(tpebs_mtx_get());
--	if (tpebs_cmd.pid == 0) {
--		/* Record has terminated. */
-+	if (tpebs_stopping || tpebs_cmd.pid == 0) {
-+		/* Record is stopping or has terminated. */
- 		mutex_unlock(tpebs_mtx_get());
+-	mutex_lock(tpebs_mtx_get());
++	mutex_lock(&tpebs_mtx);
+ 	if (tpebs_stopping || tpebs_cmd.pid == 0) {
+ 		/* Record is stopping or has terminated. */
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
  		return 0;
  	}
-@@ -220,13 +238,13 @@ static int process_sample_event(const struct perf_tool *tool __maybe_unused,
+ 	t = tpebs_retire_lat__find(sample->evsel);
+ 	if (!t) {
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
+ 		return -EINVAL;
+ 	}
+ 	if (should_ignore_sample(sample, t)) {
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
+ 		return 0;
+ 	}
+ 	/*
+@@ -234,7 +221,7 @@ static int process_sample_event(const struct perf_tool *tool __maybe_unused,
+ 	 */
+ 	t->last = sample->weight3;
+ 	update_stats(&t->stats, sample->weight3);
+-	mutex_unlock(tpebs_mtx_get());
++	mutex_unlock(&tpebs_mtx);
  	return 0;
  }
  
--static void *__sample_reader(void *arg __maybe_unused)
-+static void *__sample_reader(void *arg)
- {
- 	struct perf_session *session;
- 	struct perf_data data = {
- 		.mode = PERF_DATA_MODE_READ,
- 		.path = PERF_DATA,
--		.file.fd = tpebs_cmd.out,
-+		.file.fd = (int)(intptr_t)arg,
- 	};
- 	struct perf_tool tool;
- 
-@@ -236,8 +254,10 @@ static void *__sample_reader(void *arg __maybe_unused)
- 	tool.attr = perf_event__process_attr;
- 
- 	session = perf_session__new(&data, &tool);
--	if (IS_ERR(session))
-+	if (IS_ERR(session)) {
-+		close(data.file.fd);
- 		return NULL;
-+	}
- 	perf_session__process_events(session);
- 	perf_session__delete(session);
- 
-@@ -247,35 +267,49 @@ static void *__sample_reader(void *arg __maybe_unused)
- static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
- {
- 	struct pollfd pollfd = { .events = POLLIN, };
--	int ret, len, retries = 0;
-+	bool is_stop = !strcmp(msg, EVLIST_CTL_CMD_STOP_TAG);
-+	int ret, len, retries = 0, ctrl_fd, resp_fd;
-+	char cmd_buf[EVLIST_CTL_CMD_MAX_LEN];
- 	char ack_buf[8];
- 
-+	while (tpebs_cmd_in_flight) {
-+		if (!is_stop && tpebs_stopping)
-+			return -EBUSY;
-+		cond_wait(&tpebs_cmd_cond, tpebs_mtx_get());
-+	}
-+	if (!is_stop && tpebs_stopping)
-+		return -EBUSY;
-+
- 	/* Check if the command exited before the send, done with the lock held. */
- 	if (tpebs_cmd.pid == 0)
- 		return 0;
- 
-+	ctrl_fd = control_fd[1];
-+	resp_fd = ack_fd[0];
-+	tpebs_cmd_in_flight = true;
-+
- 	/*
- 	 * Let go of the lock while sending/receiving as blocking can starve the
- 	 * sample reading thread.
- 	 */
- 	mutex_unlock(tpebs_mtx_get());
- 
--	/* Send perf record command.*/
--	len = strlen(msg);
--	ret = write(control_fd[1], msg, len);
-+	/* Send perf record command. */
-+	len = scnprintf(cmd_buf, sizeof(cmd_buf), "%s\n", msg);
-+	ret = write(ctrl_fd, cmd_buf, len);
- 	if (ret != len) {
- 		pr_err("perf record control write control message '%s' failed\n", msg);
- 		ret = -EPIPE;
- 		goto out;
- 	}
- 
--	if (!strcmp(msg, EVLIST_CTL_CMD_STOP_TAG)) {
-+	if (is_stop) {
- 		ret = 0;
- 		goto out;
- 	}
- 
- 	/* Wait for an ack. */
--	pollfd.fd = ack_fd[0];
-+	pollfd.fd = resp_fd;
- 
- 	/*
- 	 * We need this poll to ensure the ack_fd PIPE will not hang
-@@ -284,7 +318,17 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
- 	 */
- again:
- 	if (!poll(&pollfd, 1, 500)) {
--		if (check_if_command_finished(&tpebs_cmd)) {
-+		bool stopping, finished;
-+
-+		mutex_lock(tpebs_mtx_get());
-+		stopping = tpebs_stopping;
-+		finished = !stopping && check_if_command_finished(&tpebs_cmd);
-+		mutex_unlock(tpebs_mtx_get());
-+		if (stopping) {
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+		if (finished) {
- 			ret = 0;
- 			goto out;
- 		}
-@@ -297,7 +341,17 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
- 	}
- 
- 	if (!(pollfd.revents & POLLIN)) {
--		if (check_if_command_finished(&tpebs_cmd)) {
-+		bool stopping, finished;
-+
-+		mutex_lock(tpebs_mtx_get());
-+		stopping = tpebs_stopping;
-+		finished = !stopping && check_if_command_finished(&tpebs_cmd);
-+		mutex_unlock(tpebs_mtx_get());
-+		if (stopping) {
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+		if (finished) {
- 			ret = 0;
- 			goto out;
- 		}
-@@ -307,7 +361,7 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
- 		goto out;
- 	}
- 
--	ret = read(ack_fd[0], ack_buf, sizeof(ack_buf));
-+	ret = read(resp_fd, ack_buf, sizeof(ack_buf));
- 	if (ret > 0)
- 		ret = strcmp(ack_buf, EVLIST_CTL_CMD_ACK_TAG);
- 	else
-@@ -315,6 +369,8 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
- out:
- 	/* Re-take lock as expected by caller. */
- 	mutex_lock(tpebs_mtx_get());
-+	tpebs_cmd_in_flight = false;
-+	cond_broadcast(&tpebs_cmd_cond);
- 	return ret;
- }
- 
-@@ -331,12 +387,25 @@ static int tpebs_stop(void) __must_hold(tpebs_mtx_get())
- 	/* Like tpebs_start, we should only run tpebs_end once. */
- 	if (tpebs_cmd.pid != 0) {
- 		pid_t actual_pid = tpebs_cmd.pid;
-+		bool enabled = tpebs_enabled;
-+		pthread_t reader_thread;
- 
- 		tpebs_stopping = true;
--		tpebs_send_record_cmd(EVLIST_CTL_CMD_STOP_TAG);
-+		tpebs_starting = false;
-+		tpebs_enabled = false;
-+		tpebs_gen++;
-+		cond_broadcast(&tpebs_cmd_cond);
-+		if ((tpebs_send_record_cmd(EVLIST_CTL_CMD_STOP_TAG) || !enabled) &&
-+		    !tpebs_cmd.finished)
-+			kill(actual_pid, SIGTERM);
-+		/*
-+		 * tpebs_results is empty when stopping; clear pid before
-+		 * releasing tpebs_mtx to join the reader thread.
-+		 */
- 		tpebs_cmd.pid = 0;
-+		reader_thread = tpebs_reader_thread;
- 		mutex_unlock(tpebs_mtx_get());
--		pthread_join(tpebs_reader_thread, NULL);
-+		pthread_join(reader_thread, NULL);
- 		mutex_lock(tpebs_mtx_get());
- 		if (control_fd[0] >= 0) {
- 			close(control_fd[0]);
-@@ -464,41 +533,53 @@ static struct tpebs_retire_lat *tpebs_retire_lat__find(struct evsel *evsel)
+@@ -264,7 +251,7 @@ static void *__sample_reader(void *arg)
  	return NULL;
  }
  
--/**
-- * evsel__tpebs_prepare - create tpebs data structures ready for opening.
-- * @evsel: retire_latency evsel, all evsels on its list will be prepared.
-- */
--static int evsel__tpebs_prepare(struct evsel *evsel)
-+static void tpebs_results__delete(void) __must_hold(tpebs_mtx_get())
-+{
-+	struct tpebs_retire_lat *t, *tmp;
-+
-+	list_for_each_entry_safe(t, tmp, &tpebs_results, nd) {
-+		list_del_init(&t->nd);
-+		tpebs_retire_lat__delete(t);
-+	}
-+}
-+
-+static int evsel__tpebs_prepare_one(struct evsel *evsel) __must_hold(tpebs_mtx_get())
+-static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
++static int tpebs_send_record_cmd(const char *msg) __must_hold(&tpebs_mtx)
  {
--	struct evsel *pos;
+ 	struct pollfd pollfd = { .events = POLLIN, };
+ 	bool is_stop = !strcmp(msg, EVLIST_CTL_CMD_STOP_TAG);
+@@ -275,7 +262,7 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
+ 	while (tpebs_cmd_in_flight) {
+ 		if (!is_stop && tpebs_stopping)
+ 			return -EBUSY;
+-		cond_wait(&tpebs_cmd_cond, tpebs_mtx_get());
++		cond_wait(&tpebs_cmd_cond, &tpebs_mtx);
+ 	}
+ 	if (!is_stop && tpebs_stopping)
+ 		return -EBUSY;
+@@ -292,7 +279,7 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
+ 	 * Let go of the lock while sending/receiving as blocking can starve the
+ 	 * sample reading thread.
+ 	 */
+-	mutex_unlock(tpebs_mtx_get());
++	mutex_unlock(&tpebs_mtx);
+ 
+ 	/* Send perf record command. */
+ 	len = scnprintf(cmd_buf, sizeof(cmd_buf), "%s\n", msg);
+@@ -320,10 +307,10 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
+ 	if (!poll(&pollfd, 1, 500)) {
+ 		bool stopping, finished;
+ 
+-		mutex_lock(tpebs_mtx_get());
++		mutex_lock(&tpebs_mtx);
+ 		stopping = tpebs_stopping;
+ 		finished = !stopping && check_if_command_finished(&tpebs_cmd);
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
+ 		if (stopping) {
+ 			ret = -EBUSY;
+ 			goto out;
+@@ -343,10 +330,10 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
+ 	if (!(pollfd.revents & POLLIN)) {
+ 		bool stopping, finished;
+ 
+-		mutex_lock(tpebs_mtx_get());
++		mutex_lock(&tpebs_mtx);
+ 		stopping = tpebs_stopping;
+ 		finished = !stopping && check_if_command_finished(&tpebs_cmd);
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
+ 		if (stopping) {
+ 			ret = -EBUSY;
+ 			goto out;
+@@ -368,7 +355,7 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
+ 		pr_err("tpebs: perf record control ack failed\n");
+ out:
+ 	/* Re-take lock as expected by caller. */
+-	mutex_lock(tpebs_mtx_get());
++	mutex_lock(&tpebs_mtx);
+ 	tpebs_cmd_in_flight = false;
+ 	cond_broadcast(&tpebs_cmd_cond);
+ 	return ret;
+@@ -377,7 +364,7 @@ static int tpebs_send_record_cmd(const char *msg) __must_hold(tpebs_mtx_get())
+ /*
+  * tpebs_stop - stop the sample data read thread and the perf record process.
+  */
+-static int tpebs_stop(void) __must_hold(tpebs_mtx_get())
++static int tpebs_stop(void) __must_hold(&tpebs_mtx)
+ {
+ 	int ret = 0;
+ 
+@@ -404,9 +391,9 @@ static int tpebs_stop(void) __must_hold(tpebs_mtx_get())
+ 		 */
+ 		tpebs_cmd.pid = 0;
+ 		reader_thread = tpebs_reader_thread;
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
+ 		pthread_join(reader_thread, NULL);
+-		mutex_lock(tpebs_mtx_get());
++		mutex_lock(&tpebs_mtx);
+ 		if (control_fd[0] >= 0) {
+ 			close(control_fd[0]);
+ 			control_fd[0] = -1;
+@@ -533,7 +520,7 @@ static struct tpebs_retire_lat *tpebs_retire_lat__find(struct evsel *evsel)
+ 	return NULL;
+ }
+ 
+-static void tpebs_results__delete(void) __must_hold(tpebs_mtx_get())
++static void tpebs_results__delete(void) __must_hold(&tpebs_mtx)
+ {
+ 	struct tpebs_retire_lat *t, *tmp;
+ 
+@@ -543,7 +530,7 @@ static void tpebs_results__delete(void) __must_hold(tpebs_mtx_get())
+ 	}
+ }
+ 
+-static int evsel__tpebs_prepare_one(struct evsel *evsel) __must_hold(tpebs_mtx_get())
++static int evsel__tpebs_prepare_one(struct evsel *evsel) __must_hold(&tpebs_mtx)
+ {
  	struct tpebs_retire_lat *tpebs_event;
  
--	mutex_lock(tpebs_mtx_get());
--	tpebs_event = tpebs_retire_lat__find(evsel);
--	if (tpebs_event) {
--		/* evsel, or an identically named one, was already prepared. */
--		mutex_unlock(tpebs_mtx_get());
-+	if (tpebs_retire_lat__find(evsel))
- 		return 0;
--	}
-+
- 	tpebs_event = tpebs_retire_lat__new(evsel);
--	if (!tpebs_event) {
--		mutex_unlock(tpebs_mtx_get());
-+	if (!tpebs_event)
- 		return -ENOMEM;
--	}
-+
- 	list_add_tail(&tpebs_event->nd, &tpebs_results);
--	mutex_unlock(tpebs_mtx_get());
-+	return 0;
-+}
-+
-+/**
-+ * evsel__tpebs_prepare - create tpebs data structures ready for opening.
-+ * @evsel: retire_latency evsel, all evsels on its list will be prepared.
-+ */
-+static int evsel__tpebs_prepare(struct evsel *evsel) __must_hold(tpebs_mtx_get())
-+{
-+	struct evsel *pos;
-+	int ret;
-+
-+	ret = evsel__tpebs_prepare_one(evsel);
-+	if (ret)
-+		return ret;
- 
- 	/*
- 	 * Eagerly prepare all other evsels on the list to try to ensure that by
- 	 * open they are all known.
- 	 */
- 	evlist__for_each_entry(evsel->evlist, pos) {
--		int ret;
--
- 		if (pos == evsel || !pos->retire_lat)
- 			continue;
- 
--		ret = evsel__tpebs_prepare(pos);
-+		ret = evsel__tpebs_prepare_one(pos);
- 		if (ret)
- 			return ret;
- 	}
-@@ -515,12 +596,26 @@ int evsel__tpebs_open(struct evsel *evsel)
+@@ -562,7 +549,7 @@ static int evsel__tpebs_prepare_one(struct evsel *evsel) __must_hold(tpebs_mtx_g
+  * evsel__tpebs_prepare - create tpebs data structures ready for opening.
+  * @evsel: retire_latency evsel, all evsels on its list will be prepared.
+  */
+-static int evsel__tpebs_prepare(struct evsel *evsel) __must_hold(tpebs_mtx_get())
++static int evsel__tpebs_prepare(struct evsel *evsel) __must_hold(&tpebs_mtx)
+ {
+ 	struct evsel *pos;
  	int ret;
- 	bool tpebs_empty;
- 	bool started_process = false;
-+	bool started_thread = false;
-+	uint64_t open_gen = 0;
- 
- 	/* We should only run tpebs_start when tpebs_recording is enabled. */
+@@ -603,21 +590,21 @@ int evsel__tpebs_open(struct evsel *evsel)
  	if (!tpebs_recording)
  		return 0;
  
- 	mutex_lock(tpebs_mtx_get());
-+	if (tpebs_starting) {
-+		uint64_t wait_gen = tpebs_gen;
-+
-+		while (tpebs_starting && tpebs_gen == wait_gen)
-+			cond_wait(&tpebs_cmd_cond, tpebs_mtx_get());
-+
-+		if (tpebs_gen != wait_gen) {
-+			mutex_unlock(tpebs_mtx_get());
-+			return -EBUSY;
-+		}
-+	}
-+
+-	mutex_lock(tpebs_mtx_get());
++	mutex_lock(&tpebs_mtx);
+ 	if (tpebs_starting) {
+ 		uint64_t wait_gen = tpebs_gen;
+ 
+ 		while (tpebs_starting && tpebs_gen == wait_gen)
+-			cond_wait(&tpebs_cmd_cond, tpebs_mtx_get());
++			cond_wait(&tpebs_cmd_cond, &tpebs_mtx);
+ 
+ 		if (tpebs_gen != wait_gen) {
+-			mutex_unlock(tpebs_mtx_get());
++			mutex_unlock(&tpebs_mtx);
+ 			return -EBUSY;
+ 		}
+ 	}
+ 
  	if (tpebs_stopping) {
- 		mutex_unlock(tpebs_mtx_get());
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
  		return -EBUSY;
-@@ -531,25 +626,24 @@ int evsel__tpebs_open(struct evsel *evsel)
- 		bool valid;
+ 	}
+ 	/* Only start the events once. */
+@@ -627,7 +614,7 @@ int evsel__tpebs_open(struct evsel *evsel)
  
  		t = tpebs_retire_lat__find(evsel);
--		valid = t && t->started;
-+		valid = t && t->started && tpebs_enabled;
- 		mutex_unlock(tpebs_mtx_get());
+ 		valid = t && t->started && tpebs_enabled;
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
  		/* May fail as the event wasn't started. */
  		return valid ? 0 : -EBUSY;
  	}
--	mutex_unlock(tpebs_mtx_get());
- 
+@@ -635,7 +622,7 @@ int evsel__tpebs_open(struct evsel *evsel)
  	ret = evsel__tpebs_prepare(evsel);
--	if (ret)
-+	if (ret) {
-+		tpebs_results__delete();
-+		mutex_unlock(tpebs_mtx_get());
+ 	if (ret) {
+ 		tpebs_results__delete();
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
  		return ret;
--
--	mutex_lock(tpebs_mtx_get());
--	if (tpebs_stopping || tpebs_cmd.pid != 0) {
--		ret = -EBUSY;
--		goto out;
  	}
-+
- 	tpebs_empty = list_empty(&tpebs_results);
- 	if (!tpebs_empty) {
- 		started_process = true;
-+		tpebs_enabled = false;
-+		open_gen = ++tpebs_gen;
- 		/*Create control and ack fd for --control*/
- 		if (pipe(control_fd) < 0) {
- 			pr_err("tpebs: Failed to create control fifo");
-@@ -567,28 +661,50 @@ int evsel__tpebs_open(struct evsel *evsel)
- 			goto out;
  
- 		if (pthread_create(&tpebs_reader_thread, /*attr=*/NULL, __sample_reader,
--				   /*arg=*/NULL)) {
--			kill(tpebs_cmd.pid, SIGTERM);
-+				   (void *)(intptr_t)tpebs_cmd.out)) {
- 			pr_err("Could not create thread to process sample data.\n");
- 			ret = -1;
- 			goto out;
- 		}
-+		/* __sample_reader now owns and closes the output fd. */
-+		tpebs_cmd.out = -1;
-+		started_thread = true;
-+		tpebs_starting = true;
- 		ret = tpebs_send_record_cmd(EVLIST_CTL_CMD_ENABLE_TAG);
-+		if (!ret) {
-+			if (tpebs_gen != open_gen) {
-+				ret = -EBUSY;
-+			} else {
-+				tpebs_enabled = true;
-+				if (!tpebs_retire_lat__find(evsel))
-+					ret = -EBUSY;
-+			}
-+		}
- 	}
- out:
--	if (ret) {
--		struct tpebs_retire_lat *t = tpebs_retire_lat__find(evsel);
--
--		if (t) {
--			list_del_init(&t->nd);
--			tpebs_retire_lat__delete(t);
--		}
--
--		if (started_process) {
--			if (tpebs_cmd.pid > 0) {
--				kill(tpebs_cmd.pid, SIGTERM);
--				finish_command(&tpebs_cmd);
-+	if (started_process && tpebs_gen == open_gen) {
-+		tpebs_starting = false;
-+		if (ret) {
-+			pid_t actual_pid = tpebs_cmd.pid;
-+
-+			tpebs_stopping = true;
-+			tpebs_enabled = false;
-+			tpebs_gen++;
-+			tpebs_results__delete();
-+			cond_broadcast(&tpebs_cmd_cond);
-+			if (actual_pid > 0) {
-+				if (!tpebs_cmd.finished)
-+					kill(actual_pid, SIGTERM);
-+				while (tpebs_cmd_in_flight)
-+					cond_wait(&tpebs_cmd_cond, tpebs_mtx_get());
+@@ -696,14 +683,14 @@ int evsel__tpebs_open(struct evsel *evsel)
+ 				if (!tpebs_cmd.finished)
+ 					kill(actual_pid, SIGTERM);
+ 				while (tpebs_cmd_in_flight)
+-					cond_wait(&tpebs_cmd_cond, tpebs_mtx_get());
++					cond_wait(&tpebs_cmd_cond, &tpebs_mtx);
  				tpebs_cmd.pid = 0;
-+				if (started_thread) {
-+					pthread_t reader_thread = tpebs_reader_thread;
-+
-+					mutex_unlock(tpebs_mtx_get());
-+					pthread_join(reader_thread, NULL);
-+					mutex_lock(tpebs_mtx_get());
-+				}
+ 				if (started_thread) {
+ 					pthread_t reader_thread = tpebs_reader_thread;
+ 
+-					mutex_unlock(tpebs_mtx_get());
++					mutex_unlock(&tpebs_mtx);
+ 					pthread_join(reader_thread, NULL);
+-					mutex_lock(tpebs_mtx_get());
++					mutex_lock(&tpebs_mtx);
+ 				}
  			}
  			if (tpebs_cmd.out >= 0) {
- 				close(tpebs_cmd.out);
-@@ -610,6 +726,14 @@ int evsel__tpebs_open(struct evsel *evsel)
- 				close(ack_fd[1]);
- 				ack_fd[1] = -1;
- 			}
-+			if (actual_pid > 0) {
-+				tpebs_cmd.pid = actual_pid;
-+				finish_command(&tpebs_cmd);
-+				tpebs_cmd.pid = 0;
-+			}
-+			tpebs_stopping = false;
-+		} else {
-+			cond_broadcast(&tpebs_cmd_cond);
+@@ -736,7 +723,7 @@ int evsel__tpebs_open(struct evsel *evsel)
+ 			cond_broadcast(&tpebs_cmd_cond);
  		}
  	}
- 	mutex_unlock(tpebs_mtx_get());
-@@ -645,6 +769,7 @@ int evsel__tpebs_read(struct evsel *evsel, int cpu_map_idx, int thread)
+-	mutex_unlock(tpebs_mtx_get());
++	mutex_unlock(&tpebs_mtx);
+ 	return ret;
+ }
+ 
+@@ -756,7 +743,7 @@ int evsel__tpebs_read(struct evsel *evsel, int cpu_map_idx, int thread)
+ 
+ 	count = perf_counts(evsel->counts, cpu_map_idx, thread);
+ 
+-	mutex_lock(tpebs_mtx_get());
++	mutex_lock(&tpebs_mtx);
+ 	t = tpebs_retire_lat__find(evsel);
+ 	/*
+ 	 * If reading the first tpebs result, send a ping to the record
+@@ -765,10 +752,10 @@ int evsel__tpebs_read(struct evsel *evsel, int cpu_map_idx, int thread)
+ 	 */
+ 	if (t && &t->nd == tpebs_results.next) {
+ 		ret = tpebs_send_record_cmd(EVLIST_CTL_CMD_PING_TAG);
+-		mutex_unlock(tpebs_mtx_get());
++		mutex_unlock(&tpebs_mtx);
  		if (ret)
  			return ret;
- 		mutex_lock(tpebs_mtx_get());
-+		t = tpebs_retire_lat__find(evsel);
+-		mutex_lock(tpebs_mtx_get());
++		mutex_lock(&tpebs_mtx);
+ 		t = tpebs_retire_lat__find(evsel);
  	}
  	if (t == NULL || t->stats.n == 0) {
- 		/* No sample data, use default. */
+@@ -808,7 +795,7 @@ int evsel__tpebs_read(struct evsel *evsel, int cpu_map_idx, int thread)
+ 			break;
+ 		}
+ 	}
+-	mutex_unlock(tpebs_mtx_get());
++	mutex_unlock(&tpebs_mtx);
+ 
+ 	if (old_count) {
+ 		count->val = old_count->val + val;
+@@ -833,7 +820,7 @@ void evsel__tpebs_close(struct evsel *evsel)
+ {
+ 	struct tpebs_retire_lat *t;
+ 
+-	mutex_lock(tpebs_mtx_get());
++	mutex_lock(&tpebs_mtx);
+ 	t = tpebs_retire_lat__find(evsel);
+ 	if (t) {
+ 		list_del_init(&t->nd);
+@@ -842,5 +829,5 @@ void evsel__tpebs_close(struct evsel *evsel)
+ 		if (list_empty(&tpebs_results))
+ 			tpebs_stop();
+ 	}
+-	mutex_unlock(tpebs_mtx_get());
++	mutex_unlock(&tpebs_mtx);
+ }
 -- 
 2.56.1.750.gf70dc682cf-goog
 
