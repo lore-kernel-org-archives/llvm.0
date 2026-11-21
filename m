@@ -1,100 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795255315;
-	b=EEugr9okBRLEp/mjqE7BiLIiUr5B4EEPIJJ/TAU64C/o8TCe4XDjwN+kO1Cr6fSI9F6e
-	 DCx19rzWYvBo3sDzJd60+8pLLm57Wg8qe/LHDU8b+4G0n+eq4f6A2ss0FnHqZ83qVfVVv
-	 8GvowAQK8Z1s+xvNWMoaOTn5NdKIdpFMg62Vo2sd+OOncmyoZQcZoTc7fr/Xg6HwQVGZU
-	 qJibXJ8+0w9G+/D7zbfZOcf3hp4C/oOxmSNZNz9e3za3NDpBJ1tiJ+vkccsL82GH9U6/2
-	 MhsXKfGrqFDBbPwUfznMMKDN86EYPCxMr0XydnAuTDQcJ885gVMjP/PKeyz6RUiwohg==
+	t=1795258647;
+	b=esjH6z+ginWoKcw07U5ZN8+6e6GP2siPg+jKbZ4VpKjJRgdUoAGY8QU7FnQy/JF1rSIL
+	 9NG1I1/1IXZ0JluE3EFjctWfbH63U8i79qA3Iybnww/IavJXeeeinksqRvv/fSfMKe+PK
+	 3WdagohW84nfvRtxECz40ZD6zyuvUjEC9OJmzbB9GKPIrnDVcWfVtFFZnINvDziz1UxDc
+	 04rvvJ7AkUAJ0PJdZZd9oRgkj9OPL/Tat2+7y3MUfkoNwQmZV2Wv1/f4qJRA12tAr5GC8
+	 9FzlIBsfos0bBIL++WxKU5NsduwSY1D09GKq+2gmyEyaGigJ/+5gOuQKnaL0nzIrOyg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795255315;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=0iLrgKiBXYhJ0kV7UEcjVMICphmvwPVOu/R+vQ1ryRw=;
-	b=jZtik+CayHZW3U+x7YpBZoHC4hxEc6KJQfu+IVD9E0NH4Qn9V56WIkQhkbSf8sgjK1aO
-	 qhUasBesQWrTkdMxyFAFzuLS02epgDG7TxAdcBT9Ql2D4TGEoZ8ckW1kswkpgzHWHIv/j
-	 1o0jQoMj6VYobdH64ePjFVIJnT2DhxZA3wmDWjqiLMvikvcV2zzF5X+23Qp3ZXVpH1j0c
-	 hYBU6vAtOp/D5YPFHdHexcPaVSuYxwkSGQ8uFDtHQqNamVf+k17P4jhlzcO86Hk4zpFvb
-	 +zfM6ib/I6YIhbmjRwg6Y5EAr60lq2IERu3xJ/Kr55SvESpM4fdoA0omH46Ii15j+jQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795258647;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=s6L/5zARcCLel44kQYhmt6hmNx9yE54W+X6j7p6+kLI=;
+	b=IobZTFPGlR3cTmSNhBr6k84v85p5sox8N2n2EZU84RqdRyzSxn/x/1qTBEk2NfSwf+dn
+	 LANYr6Wm5L26sdxN6K4j+lbplBjO3kYogdj2vKWFSt2zSyJheL2HYt1PaWJv14qMOtnsb
+	 TsLGTALFRqaYB27RrxUdpicFTdDQyXxq/oFXaKyqNLjmW5atx5rhpAJKV41pimKeFKP9G
+	 /rHtgeVNYh6dqdeo7sHwHWWjsecaMgPxgaQvsoRM3fD1xQKuEiJk3O2vCOPOOcooDDWc4
+	 Z4io432mzYPjMr6e/NnjwB2DjnMR6d3gPRP03iv+CudG+2Qgsxzu1s/5bND7vAs3FKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=k9f1iayA;
-	arc=none smtp.remote-ip=192.198.163.9
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eLrPJH73;
+	arc=none smtp.remote-ip=209.85.128.44
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2F9606A682;
-	Sat, 21 Nov 2026 10:01:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C2F9606A682
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC43606A32A
+	for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 10:57:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3CC43606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=k9f1iayA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795255312; x=1826791312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qoUwdqVJuskEKxFdpm9I3StToR1r1PnxXAishHwsR+0=;
-  b=k9f1iayAQpPZOnH+1V4iEbUHkBCI+VXH1xkBtmPrGo2v1p8j0Rj3AhOF
-   bc5brAa6yU+H+b9/U32/Oqij71Sq5TKXMl/MBi6B9w9/LiIbuGIk9JJ8d
-   z3pHXaFM9SibDCfzSVcCyrPGlw+rXdf2stntPhkL4f0C2Zx8Y1zwRcp2L
-   m8ZqGzWZhdMf8+t7wEha8dRaUuH8bZZ6NMs5sO+fqUAOCppj0CoFr5ka/
-   /CnZ06yozczv0YxApFL5r5qKU5W53KYBFcb/xgSEVvkG6jQY7YRGuyO7i
-   c5ssuOMeQbxxwqbi3nLNB9R5LkV1+9MBetoalj/ocEudsap/B6mIEJQ3w
-   w==;
-X-CSE-ConnectionGUID: Rk1/OljXRtyux2gT+x3SrQ==
-X-CSE-MsgGUID: e5pwnR+TSeOuAvBGZmM2kQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4011153"
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="4011153"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2026 02:01:51 -0800
-X-CSE-ConnectionGUID: eQ+V7i+5Tga8Bp3IPgcd0A==
-X-CSE-MsgGUID: F2pB6URmS36jLm6RP/ridw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="11161179"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Nov 2026 02:01:44 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xUhue-00000001JsJ-2qXj;
-	Sat, 21 Nov 2026 10:01:40 +0000
-Date: Sat, 21 Nov 2026 18:01:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ridong Chen <ridong.chen@linux.dev>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH-next 1/3] tick/sched: Make tick_nohz_full_mask and
- HK_TYPE_KERNEL_NOISE cpumask consistent
-Message-ID: <202611211717.qIDq0wIX-lkp@intel.com>
-References: <20261121031329.240177-2-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eLrPJH73
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a214c5c4c0so16171775e9.3
+        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 02:57:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795258645; x=1795863445; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=s6L/5zARcCLel44kQYhmt6hmNx9yE54W+X6j7p6+kLI=;
+        b=eLrPJH73NBV1h2VcQuTE2gBHjdB7+sej1Zas9YmTTvzzdCvhGSJsyHFmXY6SRSXEFj
+         U8e9obaNMIEyJ1+bCaINYtgl3kX3QTUJRwZRoz7Kr9as6eRnzkH+w4ws2pzisZRJwwho
+         lN9wBUKAK9iibnzNxIL4ZGYlPyh4gIumvI0nnFtMoEJSCKyaZ6PNhs6SHO1TAevycs05
+         Iq46/GBX8nuDcgwOMpJxslzYUGx7NEqeUNnNUlz5ltEkUBRxFHDxmgQwoHRIBzBc5q+0
+         IR63yQxSrp1oA1VNJbxF7gCyXatNq68jd3oY1Hf1Wu/MyN5x5Ypl2mT0YBVF//Mj6WVS
+         qSKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795258645; x=1795863445;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=s6L/5zARcCLel44kQYhmt6hmNx9yE54W+X6j7p6+kLI=;
+        b=quFWgQ9NRZxYsoh8MbTcemQLrzBkQHWkQeQb0en5jmwLwSSWg5TXE2ckIRKlvjGSTp
+         P5aqwHvQFT3p/Yodr/zaGpJysZ5FND1kt4/MxSpF7m6zW8BUrTg+rRw6EfafeKH9RhMR
+         mss59x2GyW9+EsoZLrhbuChHtNGmZ8CQ1Uw7rwjj0EYpvvnPdw20BH21n2BDtVisxEDF
+         YqffMJZknJF7Ddnscy29qGxYvj1fIKVjMou4WUCXl5HX5KDKK0usW+dTnqwZbmEjEhcw
+         OraPwzernbLwB4eRrt0WDHCJWZfU60t4ezuAQy1QoeLBB1HbGdY4+HWDxAOjE0ZhthYq
+         73NQ==
+X-Forwarded-Encrypted: i=1; AL+hErHVF37xwpE6kNbqJPrn2gKmsTO++5r+JalRulodAStg096Cp2yqufL15ZZcOdw1FhMDQtzb@lists.linux.dev
+X-Gm-Message-State: APuU4Z87cUKjFwep8WmxQlLMXm04yUmUNbsgD0oeMh/WbfD5t+WxJkIF
+	Rd652jWGl6i/atw/2J9tX1Wp8NTbTsc9jIA8PeUCL8L3ZiGNw41IP+be
+X-Gm-Gg: AZFdTZfjYG3/tqaIkGtkRAR9nJKtj7az2DGtKNz88XvmCrcDqz59TCBIoeRtcrBRzzZ
+	dcLRy1l/q8bRqjtiVffY0t7quqJ51DZw0HA5a7rZYZXTvXCxy1g7LwsPIrIXrHxyabAtWR/HOVC
+	jiu6kLYsxedGuRTXabZ3VM8KkBIHB1IGe3iCPdjq2Oy0wyFGnC1cCMUJwmSBFvQdDoeVdauzRn6
+	c2bvVs6KKHEztSt+UQ76C5y19W3L4NcMGhIwEGrir7XL3PQ5/DXJ2hPtov0CjJZneInsxjkd50k
+	iSGKdXHbbjZXerjpyjOPA17yr1yZX5Ob00cuQ8JkKyW9BkBBzUz9JY+10DWFlgN/sjiAo1RJK7O
+	o9v8QX+2B5XsgjS2OJu1kgBtaf+xKoKeU5Shkm43GHqTznhaBB/mwqvOMpQBtCDr8cGClEq+4fl
+	SNOOYimPxNybxM6Gk6p+BMBpHi10R/xcDU0Rh+A9oMCmy9B/NwiX0Q1wRCf5fmEA53uYLbuG3lv
+	sACBJrck5lx/3ufCvMOX2Pbdn/kcGapU8tolwuAW2AXRToHCiU1F02BXzdCJsU0pC8isFwysgcH
+	GvVvByOlV/HJiSJROOfyQvjjv8BoBCEMjYv3CJu9eUi+wr/Ys5jt1pJtZkkFLs4fFP8Wt+qCVXk
+	p0JY=
+X-Received: by 2002:a05:600c:46cc:b0:4bb:69b3:2b42 with SMTP id 5b1f17b1804b1-4bb888277b3mr133199515e9.16.1795258645328;
+        Sat, 21 Nov 2026 02:57:25 -0800 (PST)
+Received: from ?IPV6:240e:47e:5028:61b2:a372:4c2:dce1:98eb? ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8849247asm163775135e9.7.2026.11.21.02.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 Nov 2026 02:57:24 -0800 (PST)
+Message-ID: <9b43c3b6-02aa-498a-9287-b1c9d9027460@gmail.com>
+Date: Sat, 21 Nov 2026 11:57:09 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,37 +93,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261121031329.240177-2-longman@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 01/43] drm/vkms: Explicitly display connector status
+To: Louis Chauvet <louis.chauvet@bootlin.com>,
+ Haneen Mohammed <hamohammed.sa@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Melissa Wen <melissa.srw@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com,
+ Jonathan Corbet <corbet@lwn.net>, Harry Wentland <harry.wentland@amd.com>,
+ Lucas De Marchi <demarchi@kernel.org>,
+ =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, sebastian.wick@redhat.com,
+ victoria@system76.com, thomas.petazzoni@bootlin.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, Simona Vetter <simona.vetter@ffwll.ch>,
+ llvm@lists.linux.dev, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?=
+ <jose.exposito@redhat.com>
+References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
+ <20261120-vkms-all-config-v6-1-78ace90f4fc1@bootlin.com>
+Content-Language: en-US
+From: Oarora Etimis <oaroraetimis@gmail.com>
+In-Reply-To: <20261120-vkms-all-config-v6-1-78ace90f4fc1@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Waiman,
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tj-cgroup/for-next]
-[also build test WARNING on tip/sched/core tip/timers/nohz linus/master v7.4-rc3 next-20261119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/tick-sched-Make-tick_nohz_full_mask-and-HK_TYPE_KERNEL_NOISE-cpumask-consistent/20261120-221327
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
-patch link:    https://lore.kernel.org/r/20261121031329.240177-2-longman%40redhat.com
-patch subject: [PATCH-next 1/3] tick/sched: Make tick_nohz_full_mask and HK_TYPE_KERNEL_NOISE cpumask consistent
-config: powerpc-akebono_defconfig (https://download.01.org/0day-ci/archive/20261121/202611211717.qIDq0wIX-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 3b14d7c370558b46e5f0c6494a05c492e59bf32c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261121/202611211717.qIDq0wIX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611211717.qIDq0wIX-lkp@intel.com/
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux: EXPORT_SYMBOL used for init symbol 'housekeeping_set_cpu'. Remove __init or EXPORT_SYMBOL.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 11/20/26 6:58 PM, Louis Chauvet wrote:
+> Debug information are mainly read by human, so use full name instead
+> of raw values for connector status.
+>
+> Reviewed-by: José Expósito <jose.exposito@redhat.com>
+> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> ---
+>   drivers/gpu/drm/vkms/vkms_config.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
+> index 5a654d6dead8..48c60930302f 100644
+> --- a/drivers/gpu/drm/vkms/vkms_config.c
+> +++ b/drivers/gpu/drm/vkms/vkms_config.c
+> @@ -2,6 +2,7 @@
+>   
+>   #include <linux/slab.h>
+>   
+> +#include <drm/drm_connector.h>
+>   #include <drm/drm_print.h>
+>   #include <drm/drm_debugfs.h>
+>   #include <kunit/visibility.h>
+> @@ -367,8 +368,9 @@ static int vkms_config_show(struct seq_file *m, void *data)
+>   
+>   	vkms_config_for_each_connector(vkmsdev->config, connector_cfg) {
+>   		seq_puts(m, "connector:\n");
+> -		seq_printf(m, "\tstatus=%d\n",
+> -			   vkms_config_connector_get_status(connector_cfg));
+> +		seq_printf(m, "\tstatus=%s\n",
+> +			   drm_get_connector_status_name(
+> +				   vkms_config_connector_get_status(connector_cfg)));
+>   	}
+>   
+>   	return 0;
+Reviewed-by: Oarora Etimis <oaroraetimis@gmail.com>
