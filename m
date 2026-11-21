@@ -1,85 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.205
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795266998;
-	b=AzNbGvHHy1ehSFjcmkYJI6J220L/ZTJ+0SRP13j87L3UjO/V8YLcigQcLzpds0wpdlSY
-	 UaxdwytEU4nf++sDl3xEcaiGO01JjE2VTu3HhoK6MyOPz1UQq4eLehy/W/x6UI6J6z68J
-	 pq7BfFaQsB3v/niVOs0t1FNIdI9+fT6XbdDmIc10h7yW1rAjbvCSSm7nQxyahvdzK0/Yv
-	 8kYtSOv4maITplIF6ZhBk8eEPsHP3vIJOrx6xLWC8iyxth3tcyI05+bmOLLByLXw+coPl
-	 pKhbVh3Acn6v5qcgSObHzcumc77PVONxnpUIxhAkQgN4xC2H4YPBJ/4wP0XF8CSAABg==
+	t=1795269465;
+	b=PsgcfoDfA0JdOhNYJgUp91gvYLMRJ2ldoAEHDfqHZX1ZSwd6B17hN76pdvGmZABW6cig
+	 w8N042SG1zVTgZ+lk5Z+glRsgVyFHxqQmesGRSF5Zk9+NRadK4aiEnZJE4mNrLc11dItU
+	 qqIMJmVnTSXgnIyN48BemDGtUHJ0Pv1bSAmBLsqVaqYg34vq5dwEzQEygZim4FrMgOnqd
+	 pt0xPHdg1UypDTnsOmNg3rJyYJsqANlHLLcCNsaLKrlL79FotAEZyHMc17SCTDZzJWnRR
+	 sNQ1job4C0PLSnySG4PHzW4HtADnlurRRuJyToGwyb61sWnUYcBdccnt6mM69O7HvnQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795266998;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 Mail-Followup-To:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=TxW/RAptOpxLkind6FtvVROcaKbdd/cBMgMOKwStZeM=;
-	b=U3NkHpsa4qmmNgUoA1YsEvU/t4ZJL/1SaCrn3ACeq3Sxoi4J6NEwaQQmEpfCRvpWT0/P
-	 oBWHWR8mpxXCeZdCAUH/6H96dg6apN1nnPdKzk8JimjZJuFc8FMOHD8KBR22NaWX3egzF
-	 XBHgEwViFkiY8JcalCYdNicDMOLST997JAVwLSoy0eLyfq1OMw2/Or60lj16lL+rH+u47
-	 fXRiMXm4MKMjFEhWygN610iTsy08a5H2bGtw/fM3YUCbQnS4u1SKogBzaMNLDQp8DSMpT
-	 zb6ObHBgkBHAWSs6/Z3IHd1apupBTIGgbsBpEA0LgF/ZJy7hSO0+IjMF1toS7S3aEgA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795269465;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=18/Vs9GqpUyKpNSmHJAMt/cDQkuDqfrI75+lCyBsTo0=;
+	b=t0pqzW7xHAPTZExpSWgrPkVW8CeXc+CyviiGtwnfRgNpjD0nW+6qkRSLrmC3tR3TOVNU
+	 d+Nk2Yso0LrDmyjxg9cHu1vOpX59CUXB95iywOn6qHtRbMtHIiuA3RSL0/iUjPJhpN2XS
+	 LukVX9XwWzSqZmXrWFvSour2UPX6ZFVsfIgISJYbxN7psT8olGKJ0JtwTxEypQlRv+SRq
+	 rTOv3tJHTjhtnNgtPaAOK+dLwsLFwSWdpCT0JmHYknopF2tfEaEQQnwbA9Dxp7rO1tbEn
+	 Sr0mM49rXbj0EPJf4trex8wXC3ehmewAHdEw3lemjEXcMippricNJiDOit4ZjU+1pvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bPAShBr7;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="w/uS1uJG";
+	arc=none smtp.remote-ip=95.215.58.205
+Received: from mta1.migadu.com (out-205.mta1.migadu.com [95.215.58.205])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 77793606A32C;
-	Sat, 21 Nov 2026 13:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECF3606A32A
+	for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 13:57:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5ECF3606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bPAShBr7
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 930CA1F000C0;
-	Sat, 21 Nov 2026 13:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795266998;
-	bh=TxW/RAptOpxLkind6FtvVROcaKbdd/cBMgMOKwStZeM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=bPAShBr7KOOGPBKH+XTeVXkgXBPFn40auFQSlE9hM8FDZmc2VPBT8Pq0gw83FDHHz
-	 puDG/SloQy85d6f6pt40euCNXoB9KNLlbgkAg8nEZEwPv26NTv12dnjuIX1/hEkd7F
-	 Y+v34WLQW/heaHEZxlua+xB+3xcxWtK887Hdmb/5Kj5r/xUU7kORPO2reS/uCP5scj
-	 28VUcr02GlWxQzAWdy5DXSsAacKGZplfY7yTt8sxZ31jBcV/4+tI3snCWxj+0uAVEJ
-	 Hbjv/Gkh1sBmM/osurXObPF/vRMcavLbYjGrfmTZo2LL7YmOjGy/E0D83NqUxvDb/r
-	 +CjTnZ4TPRP7g==
-Date: Sat, 21 Nov 2026 13:51:44 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sasha Levin <sashal@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Harald Freudenberger <freude@linux.ibm.com>,
-	Holger Dengler <dengler@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kbuild@vger.kernel.org, linux-s390@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>
-Subject: Re: [PATCH] Move struct cpu_feature to a
- <linux/device-id/cpu_feature.h>
-Message-ID: <awGT4AhwcFcLsW0c@levanger>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sasha Levin <sashal@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Harald Freudenberger <freude@linux.ibm.com>,
-	Holger Dengler <dengler@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kbuild@vger.kernel.org, linux-s390@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>
-References: <20261120202712.3377691-1-nsc@kernel.org>
- <202611211941.G0rlpNpN-lkp@intel.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=w/uS1uJG
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=2dvE1j/J7GOZSLNpwQfYKuzbzCKoIpTpgn7v4dkyvXc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795269461; v=1; x=1795874261;
+ b=w/uS1uJGXlgVzwAbgvs47kIIknHR2IigKYDN9/OMhSBKszCBKBoajtWDm00P4Fjt/scwk1fc
+ LrEXhsgGwTvaCgGVXqOjNa78PcB9tyeS48yy9BVZPoU/VpQqAqgqVoCXRshDpOPhjI92u2DvzAu
+ gWRt25czL6xEtmRYJanz/PME=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 2e59e907da1d8a68;
+	Sat, 21 Nov 2026 13:57:41 +0000
+X-Mizu-Trace-ID: 2e59e907da1d8a68
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ee4847f9-53ba-4f0a-9297-7ca8b6408f7f@linux.dev>
+Date: Sat, 21 Nov 2026 13:57:39 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -89,57 +58,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202611211941.G0rlpNpN-lkp@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] x86/kstack_erase: Use REP STOSQ for large stack fills
+To: David Laight <david.laight.linux@gmail.com>
+Cc: tglx@kernel.org, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org, hpa@zytor.com,
+ gustavoars@kernel.org, ardb@kernel.org, hca@linux.ibm.com,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org, riel@surriel.com,
+ shakeel.butt@linux.dev, kernel-team@meta.com, rkeilty@meta.com,
+ atish.patra@linux.dev, dgreid@meta.com
+References: <20261119213147.1094488-1-usama.arif@linux.dev>
+ <20261119213147.1094488-3-usama.arif@linux.dev>
+ <20261120185513.0445f0b1@pumpkin>
+Content-Language: en-US
+From: Usama Arif <usama.arif@linux.dev>
+In-Reply-To: <20261120185513.0445f0b1@pumpkin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Nov 21, 2026 at 08:01:20PM +0800, kernel test robot wrote:
-> Hi Nicolas,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on kvm/queue]
-> [also build test ERROR on kvm/next linus/master v7.4-rc3]
-> [cannot apply to kvm/linux-next next-20261119]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Nicolas-Schier/Move-struct-cpu_feature-to-a-linux-device-id-cpu_feature-h/20261120-212711
-> base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-> patch link:    https://lore.kernel.org/r/20261120202712.3377691-1-nsc%40kernel.org
-> patch subject: [PATCH] Move struct cpu_feature to a <linux/device-id/cpu_feature.h>
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261121/202611211941.G0rlpNpN-lkp@intel.com/config)
-> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 3b14d7c370558b46e5f0c6494a05c492e59bf32c)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261121/202611211941.G0rlpNpN-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202611211941.G0rlpNpN-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/s390/crypto/pkey_cca.c:22:45: error: array has incomplete element type 'struct ap_device_id'
->       22 | static struct ap_device_id pkey_cca_card_ids[] = {
->          |                                             ^
->    drivers/s390/crypto/ap_bus.h:158:9: note: forward declaration of 'struct ap_device_id'
->      158 |         struct ap_device_id *ids;
->          |                ^
->    1 error generated.
-> --
-> >> drivers/s390/crypto/pkey_ep11.c:23:46: error: array has incomplete element type 'struct ap_device_id'
->       23 | static struct ap_device_id pkey_ep11_card_ids[] = {
->          |                                              ^
->    drivers/s390/crypto/ap_bus.h:158:9: note: forward declaration of 'struct ap_device_id'
->      158 |         struct ap_device_id *ids;
->          |                ^
->    1 error generated.
 
-That is fixed by [1] which is to be applied before the patch referenced
-above.
 
-[1]: https://lore.kernel.org/linux-kbuild/66e4ee9c7f9b4bc48fcee92a94b6bb6d92fe1ad2.1794233316.git.sashal@kernel.org/
+On 20/11/2026 10:55, David Laight wrote:
+> On Thu, 19 Nov 2026 13:31:08 -0800
+> Usama Arif <usama.arif@linux.dev> wrote:
+> 
+>> With KSTACK_ERASE, every return to user space poisons the part of the
+>> task stack that was used since the previous return. The generic
+>> __stackleak_poison() does that one word per loop iteration, so a syscall
+>> that went 1-2 KiB deep pays for 128-256 separate stores. On Meta hosts
+>> running many small VMs, stackleak_erase() accounts for about 1.5% of
+>> non-idle host kernel cycles.
+>>
+>> Override __stackleak_poison() on x86-64, as s390 already does, through
+>> the hook added by commit 491a78663e03 ("stackleak: allow to specify arch
+>> specific stackleak poison function"). Fill spans larger than 512 bytes
+>> with REP STOSQ and keep the word loop for shorter ones, where the fixed
+>> startup cost of REP STOSQ does not pay off. REP STOSQ starts to win at
+>> about 300-400 bytes on Zen 5c and Cooper Lake, so on both no span gets
+>> slower.
+> 
+> As a matter of interest (and separately from the exact code) how did you
+> measure the performance to get the 300-400 byte gain point?
+> 
 
--- 
-Nicolas
+With a userspace benchmark pinned to one CPU. Each sample is one fill of
+a stack buffer straight after a getppid() syscall, with
+lfence;rdtsc;lfence around the fill only, an empty call subtracted, and
+the mean of 15 times taken. The size stayed fixed for a whole run,
+so the branches were well predicted. The plain loop and REP STOSQ
+cost the same at about 430 bytes on Zen 5c and 320 bytes on
+Cooper Lake.
+
+> If the count is variable - likely in real life, you'll get a branch
+> misprediction penalty (about 20 clocks on zen5) every time you change
+> between the two choices.
+> The copy loop will have another mispredict penalty for the loop itself.
+> 
+> So you are likely to get an overall improvement if you use 'rep stos'
+> for all lengths - even the ones for with it is slightly slower.
+> Unless, that is, you know at compile time that most of the length
+> will be short.
+
+
+I timed every stackleak_erase() in a Zen 5c guest running a
+futex, epoll, procfs and unix socket mix, with the variants switchable
+at runtime and alternated over 15 rounds:
+
+  Unpatched                     68.3 ns per erase
+  REP STOSQ for all lengths     47.3 ns
+  v1 / v2.1 (loop up to 512 B)  46.6 ns
+  v2.2 (4 stores/iteration)     43.7 ns
+
+The spans aren't random. Unix socket and /proc/self/stat exits were over
+1 KiB every time, while getppid(), epoll_wait(), read() and write() exits
+were under 128 bytes almost everytime.
+
+My preference still is v2.1 because of the simplicity.
+
+> 
+> David
+> 
+>>
+>> The fill is inline asm, so the noinstr function still makes no calls.
+>> memset64() would be the same instruction, but it is only static inline,
+>> and with KMSAN it is an out-of-line function.
+>>
+>> In a Zen 5c KVM guest, stackleak_erase() got about 35% cheaper per return
+>> to user space (71 ns to 46 ns, scan included) over a futex, epoll, procfs
+>> and Unix socket syscall mix. Same-vCPU futex wake/wait and Unix socket
+>> sendmsg()/recvmsg() ping-pong round trips got 5-8% faster.
+>>
+>> Signed-off-by: Usama Arif <usama.arif@linux.dev>
+>> ---
+>>  arch/x86/include/asm/processor.h | 25 +++++++++++++++++++++++++
+>>  1 file changed, 25 insertions(+)
+>>
+>> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+>> index 77488ff5eb8c7c..049231d484ad0e 100644
+>> --- a/arch/x86/include/asm/processor.h
+>> +++ b/arch/x86/include/asm/processor.h
+>> @@ -580,6 +580,31 @@ static __always_inline bool on_thread_stack(void)
+>>  			       current_stack_pointer) < THREAD_SIZE;
+>>  }
+>>  
+>> +#ifdef CONFIG_X86_64
+>> +#define __stackleak_poison __stackleak_poison
+>> +static __always_inline void __stackleak_poison(unsigned long erase_low,
+>> +					       unsigned long erase_high,
+>> +					       unsigned long poison)
+>> +{
+>> +	unsigned long count;
+>> +
+>> +	/* Short spans do not amortize the startup cost of REP STOSQ. */
+>> +	if (erase_high <= erase_low + 512) {
+>> +		while (erase_low < erase_high) {
+>> +			*(unsigned long *)erase_low = poison;
+>> +			erase_low += sizeof(unsigned long);
+>> +		}
+>> +		return;
+>> +	}
+>> +
+>> +	count = (erase_high - erase_low) / sizeof(unsigned long);
+>> +	asm volatile("rep stosq"
+>> +		     : "+D" (erase_low), "+c" (count)
+>> +		     : "a" (poison)
+>> +		     : "memory");
+>> +}
+>> +#endif
+>> +
+>>  #ifdef CONFIG_PARAVIRT_XXL
+>>  #include <asm/paravirt.h>
+>>  #else
+> 
+
