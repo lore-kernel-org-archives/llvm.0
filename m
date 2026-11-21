@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795303603;
-	b=n2+AZyS2eViO/Z+cm4TxfuOGKMKqVlMcI6jcR0TkeEVQdUxVzuefs8MADjNRvQS3V2cx
-	 QZBkeEFAhVZzHHLqITzdc7PhxRdtcMDLbs0p7dI5wTAu0lnD3wP4snsF9PNk9FD5bt0D2
-	 jd6uEP37OURnJHcz2z/b09UIzpnUgVh7hSgIfP4LwqoHBb1SZVi0Y7prueebfz8ZxKCq+
-	 G2W9lT+Viw5gV/jjBu3ibgz9dtHOIE97iKofhjC4/nF035mVcHC3H9JtyRACWICGHa9MS
-	 Lo2rQ+6OYuDvFI88ZzbJMa9Ml2kUSDne6gcm+6MIlbWX0rZCRSLVBdCiytrlE+68H7w==
+	t=1795303607;
+	b=MF8xrYXaHroHzA+TIv6pDT3aM3gv+syCVvHtQr8JnLoaUJ3iyFUVDM8Jsd7KVIbRKYKs
+	 OGbqW8j5MyoMaGsaQSV+lbmRzWd4yl5DsRrD2DEw/oPTgv8RJtysr6DhPnOF23uAY6aMV
+	 lRGur7WXnwTMZ60wNXvO0TeefRECNtUDNFYOqpeafso3wjMWe6Hxb0LJw+pee7X0FXlGz
+	 8u4HFrrbYLilB+HyqiaEtCLnL+pJVjsdtH45Agr0JwpHVl4/eyTINSLApWByf4TgeqmR5
+	 UJdZu7Q/28Jz02SxgqZX8wjSt4N3ow/5QwKdkY/zU5h/taojmWcTMzXC8wAkMs8vd6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795303603;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795303607;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=swVWLdIORzAn0CH5DXvzx6L8MBh1Ls3/BIBJUSCbZaw=;
-	b=vYztEnYjbU35fX1SyY9e6zXFZ5GkCrAVuiIIyRjOC3D7F1TXvK5dBN9s6bXgZrECbTWj
-	 CDk4g4yiI1Fh0g60wf4Sa64Bb3V0UgarkWcaZGHIkB6cKb/wB1Dal0fTRl7nyRTt/3xY9
-	 qRJ2wCcbeJoTiRqSH6vGPxtRKUp+mFXdfe4xL6BK+eNfgFBTR7TrY1yEJUb6RDrXgbFBf
-	 r4on5o82wrFPG2aJHGMQ9XjyPwgW+FwSWGP6UhkUXOsTa3UWlyPHp96F45428rC9+XQyd
-	 UUU1FNETnxbDzqPuz2J/+AObTcoPikIVdEpv4guVImSpKNzkdfFtOx3Ix3ESdoeuoNA==
+	bh=fM/qA6/4U7l7719+XpQdyjrMAl2GxPV3Jko7fpcHllc=;
+	b=oK5BnQptaXWlh4nG8E4wldbJopC20bHN56ufrjJiuTNlY5AQYdNszDHWV3m9tB+i3mAx
+	 SG/eqtF1vQqPGfB+si7NHH511Ia58SqWIFxbQ1nNLEIe8ByACj3gkxPZrZk8kB+JkwlmQ
+	 Dhvq775a+gkw4BnSmbBO25yLqDN8Jxd6WYWPuGOqTmgBP1RGla+LcPFUrsoQ/w8Vb0Rfn
+	 EsGrDCIvVPKdKWWLP4IHSflYbW4qyWMYiwE1F8jMmKCCazkTsj/Stq057273n9OvjydUq
+	 ZYoiaoOVCnGhALkAadv1Ni7ajcvQE+BY3q8gvHYseLr4lXb/A2bblCOZhKellwNjQow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jvdDXah3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Igh8pVAZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B33D606A320;
-	Sat, 21 Nov 2026 23:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7615606A330;
+	Sat, 21 Nov 2026 23:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jvdDXah3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CDA1F000C4;
-	Sat, 21 Nov 2026 23:26:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Igh8pVAZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BC71F000CF;
+	Sat, 21 Nov 2026 23:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795303603;
-	bh=swVWLdIORzAn0CH5DXvzx6L8MBh1Ls3/BIBJUSCbZaw=;
+	s=k20260515; t=1795303607;
+	bh=fM/qA6/4U7l7719+XpQdyjrMAl2GxPV3Jko7fpcHllc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=jvdDXah3Hd6doiFD8BxoHgq35Lk519EEEBXbpMJuqFLib6fkIPhQTywtVl4OuKslw
-	 +z9zD5VdozW41LO6u3zqgi8IdR40bMhuiAJt9ktLYmCNDyq1v+NNUXq0O2GECARiKh
-	 4J9jaPjF7JEaqSm1T0ZS5589PUyWa3pyglLtMj68yNyglQJa14hA4yVuxTwxli2amE
-	 L8hs4kF2pKQaEpSHLRxzS+poH9iska0Tl/BgHO5TQxPzeQ1b6UzMstZJOjEEiQIuw6
-	 jMW6GKRhahuSfwVOj5S1iTYosoY/h7W2gO/aXoeqxWiIKGQaEwXn5Hc3asD9TmMvTD
-	 0NIpotgHAqCgg==
+	b=Igh8pVAZZm5rdiOR9KwRNVyTpTIf0iPk/SmyuhzdzS4PWrLqcA4mf3lAshs0dGXv4
+	 qIEG3zxFmac4IuESiWfOEn+zL0CljFNxEzdokWeoAbHw+8cBg/L1UmXkcVytlSNlZx
+	 BM4/D5qEE2lQ8JFXHAn3RiCgB/jCjiH8Eks08ia3CVIJ5AmjiZdul+z14sew2TSeRI
+	 u5jwPAPgIu8hOfBv2MfNHUqj4NGh/Rpu8kCiJqPW/wLXxTr1cigP+jVZ0Pk6KWR7Jv
+	 RcN/y6ydFTxOWS4aLEJ5lZVhZ6TGB6JiggF7croio+2iH6td/ULJduKBQ/DC+aDrWE
+	 ytQdfaAjIOCPA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: ansuelsmth@gmail.com
 Cc: Jakub Kicinski <kuba@kernel.org>,
@@ -71,12 +71,12 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	linux-mediatek@lists.infradead.org,
 	llvm@lists.linux.dev,
 	zhengping.zhang@airoha.com
-Subject: Re: [PATCH net-next v22 01/15] net: phylink: make PCS phylink instance access RCU protected
-Date: Sat, 21 Nov 2026 15:26:40 -0800
-Message-ID: <20261121232640.1365293-1-kuba@kernel.org>
+Subject: Re: [PATCH net-next v22 03/15] net: phylink: introduce internal phylink PCS handling
+Date: Sat, 21 Nov 2026 15:26:43 -0800
+Message-ID: <20261121232643.1365333-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261117123956.11981-2-ansuelsmth@gmail.com>
-References: <20261117123956.11981-2-ansuelsmth@gmail.com>
+In-Reply-To: <20261117123956.11981-4-ansuelsmth@gmail.com>
+References: <20261117123956.11981-4-ansuelsmth@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -91,99 +91,114 @@ Content-Transfer-Encoding: 8bit
 This is an AI-generated review of your patch. The human sending this
 email has considered the AI review valid, or at least plausible.
 ---
-net: phylink: make PCS phylink instance access RCU protected
+net: phylink: introduce internal phylink PCS handling
 
-This commit makes the phylink back-pointer in struct phylink_pcs RCU
-protected and reads it under rcu_read_lock() in phylink_pcs_change().
-phylink_destroy() now clears that pointer and calls synchronize_rcu(), so
-a concurrent phylink_pcs_change() should not run on a freed phylink
-instance.
+This adds an alternative to .mac_select_pcs. The MAC hands phylink a list
+of PCS through .fill_available_pcs and .num_possible_pcs, and phylink
+picks a PCS by matching the interface against each PCS's
+supported_interfaces. A new pcs_interfaces mask in phylink_config marks
+the modes that need a dedicated PCS, and phylink_create() widens
+pl->supported_interfaces with the supported_interfaces of every listed
+PCS.
 
 > diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index e7734e45376cd..d9d0ace2042e5 100644
+> index f482dc6088102..e8ba906cfba68 100644
 > --- a/drivers/net/phy/phylink.c
 > +++ b/drivers/net/phy/phylink.c
 
 [ ... ]
 
-> @@ -1295,10 +1296,10 @@ static void phylink_major_config(struct phylink *pl, bool restart,
->  		phylink_pcs_disable(pl->pcs);
+> @@ -2096,16 +2220,31 @@ struct phylink *phylink_create(struct phylink_config *config,
+>  	__set_bit(PHYLINK_DISABLE_STOPPED, &pl->phylink_disable_state);
+>  	timer_setup(&pl->link_poll, phylink_fixed_poll, 0);
 >  
->  		if (pl->pcs)
-> -			pl->pcs->phylink = NULL;
-> +			rcu_assign_pointer(pl->pcs->phylink, NULL);
->  
->  		if (pcs)
-> -			pcs->phylink = pl;
-> +			rcu_assign_pointer(pcs->phylink, pl);
->  
->  		pl->pcs = pcs;
->  	}
-
-[ ... ]
-
-> @@ -2137,6 +2138,11 @@ void phylink_destroy(struct phylink *pl)
->  	if (pl->link_gpio)
->  		gpiod_put(pl->link_gpio);
->  
-> +	if (pl->pcs) {
-> +		rcu_assign_pointer(pl->pcs->phylink, NULL);
-> +		synchronize_rcu();
-> +	}
+> +	/* Fill the PCS list with available PCS from phylink config */
+> +	ret = phylink_fill_available_pcs(pl, config);
+> +	if (ret < 0)
+> +		goto free_pl;
 > +
->  	cancel_work_sync(&pl->resolve);
->  	kfree(pl);
->  }
+> +	/* Link available PCS to phylink */
+> +	list_for_each_entry(pcs, &pl->pcs_list, list)
+> +		rcu_assign_pointer(pcs->phylink, pl);
+> +
+>  	phy_interface_copy(pl->supported_interfaces,
+>  			   pl->config->supported_interfaces);
+>  
+> +	/* Update supported interfaces */
+> +	list_for_each_entry(pcs, &pl->pcs_list, list)
+> +		phy_interface_or(pl->supported_interfaces,
+> +				 pl->supported_interfaces,
+> +				 pcs->supported_interfaces);
+> +
 
-[Severity: High]
-Can phylink_pcs_change() still use pl after kfree(pl) here?
+[Severity: Medium]
 
-phylink_destroy() only waits for a grace period when pl->pcs is non-NULL.
-pl->pcs can be NULL at this point if an earlier phylink_major_config()
-switched to a NULL PCS. That happens when mac_select_pcs() returns NULL
-for the new interface, for example in the default case of
-mv88e639x_pcs_select().
+Can this OR put modes into pl->supported_interfaces that phylink will
+never select a PCS for?
 
-In that case phylink_major_config() cleared old_pcs->phylink and set
-pl->pcs to NULL without waiting for a grace period. A sequence like this
-looks possible:
+The PCS modes are not masked with config->pcs_interfaces. However, the
+PCS lookup this patch adds only runs when the interface is in
+pcs_interfaces. The check in phylink_validate_mac_and_pcs(),
+phylink_inband_caps() and phylink_major_config() is:
 
-PCS driver threaded IRQ handler:
-phylink_pcs_change(old_pcs)
-    rcu_read_lock();
-    pl = rcu_dereference(pcs->phylink);
-    <preempted>
+	} else if (test_bit(state->interface, pl->config->pcs_interfaces)) {
 
-Resolve worker:
-phylink_major_config()
-    rcu_assign_pointer(pl->pcs->phylink, NULL);
-    pl->pcs = pcs;    /* pcs == NULL */
+Suppose a listed PCS advertises a mode that is not in pcs_interfaces.
+__phylink_validate() accepts that mode after checking only the MAC
+capabilities.
 
-Driver teardown:
-phylink_stop()
-phylink_destroy()
-    if (pl->pcs) { ... }    /* skipped, no synchronize_rcu() */
-    cancel_work_sync(&pl->resolve);
-    kfree(pl);
+SFP interface selection uses the same widened mask. It also ends up in
+the SFP PHY's host_interfaces through phylink_sfp_connect_phy():
 
-IRQ handler resumes:
-    phylink_link_changed(pl, up, "pcs");
-        /* writes pl->link_failed, may queue_work(&pl->resolve) */
+	phy_interface_and(phy->host_interfaces, phylink_sfp_interfaces,
+			  pl->supported_interfaces);
 
-phylink_stop() does not seem to close this window. It only handles
-phylink's own link_poll timer, link_irq and resolve work, and the
-phylink_pcs_disable(pl->pcs) call gets a NULL PCS here. The mv88e6xxx PCS
-drivers use request_threaded_irq(), so with CONFIG_PREEMPT_RCU the reader
-can be preempted inside its RCU section.
+If that mode is then picked, phylink_major_config() skips the PCS list
+branch and pcs stays NULL:
 
-The commit message says the change will "syncronyze RCU to catch an
-execution of phylink_pcs_change()". This case still seems to be open at
-the end of the series. phylink_detach_pcss() only sets rcu_sync when
-pcs_list is non-empty or pl->pcs is non-NULL, and pcs_list stays empty for
-mac_select_pcs() drivers. The later READ_ONCE(pl->pcs) == pcs check in
-phylink_pcs_change() also dereferences the possibly freed pl.
+	pcs_changed = pl->pcs != pcs;
+	...
+	if (pcs_changed) {
+		phylink_pcs_disable(pl->pcs);
+		...
+		WRITE_ONCE(pl->pcs, pcs);
+	}
 
-Would it make sense to call synchronize_rcu() unconditionally in
-phylink_destroy() (and later in phylink_detach_pcss())? Another option is
-to wait for a grace period whenever phylink_major_config() detaches the
-old PCS.
+So the active PCS is disabled and pl->pcs becomes NULL. mac_config() is
+then called for a mode the MAC never listed in
+config->supported_interfaces. No PCS is programmed for that mode.
+
+The "couldn't find a PCS for %s" error is not printed either, because it
+is only reached inside the pcs_interfaces branch.
+
+The Documentation/networking/pcs.rst added later in the series describes
+supported_interfaces as holding every MAC mode. It describes
+pcs_interfaces as the subset that needs a PCS ("PCS required only for
+USXGMII").
+
+Under that model the OR either adds nothing new, or it adds modes outside
+pcs_interfaces that never get a PCS. One example is a USXGMII PCS that
+also supports 10GBASER, 2500BASEX and 1000BASEX, such as the Airoha PCS
+added later in the series.
+
+The airoha user in the series does not hit this, because it copies
+supported_interfaces into pcs_interfaces. The final state of the series
+still has the unmasked OR in both phylink_create() and
+pcs_provider_notify().
+
+Should the OR be limited to config->pcs_interfaces? Alternatively, should
+phylink_create() reject a PCS mode that is not in pcs_interfaces?
+
+phylink_create() also does not check that the new fields are consistent:
+
+- It accepts num_possible_pcs with an empty pcs_interfaces. In that case
+  the listed PCS are never selected.
+- It accepts pcs_interfaces together with .mac_select_pcs. In that case
+  pcs_interfaces is silently ignored.
+
+Would it make sense to reject these combinations here?
+
+Separately, the kernel-doc for @supported_interfaces ("supported by the
+MAC/PCS") and @pcs_interfaces ("dedicated PCS is required") in
+include/linux/phylink.h does not match how phylink combines the two
+masks.
