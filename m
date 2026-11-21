@@ -1,54 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.120
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795271928;
-	b=KOcQMBFxNtJULWQ2ou7otHbetP5Haubjt6uVAXjG70smbMEw7keUlLFgx8D7qhvJ/Zsx
-	 HkptHbeuKXAmkccy9MBiu7vSlhv7fS7cVJrjlzg5osC8D6dr0aiLDtJ3ys5+2aX08ilMT
-	 0Y2uZErLDq5KeaE9v2v+ETDgQgp1G7IUcPBd0K8pdOsZD6nF0KRYv9xa2bCRASS+dCYWz
-	 xmaZz2rsVxB4JOCmGZHWlRl2D8FrB/q4bNCpM8bv7SPpAu3W4B/3K5OQsSx7Z9B0RuTvv
-	 0yo5R6h1KUF6HhrCVGUg1JIiXPZ/DUNUbNTJCRpSZrL+aC6SWCZIOi8vFWxudRSBMew==
+	t=1795283851;
+	b=V2ymZtYryPySLyA2ChAbrz4Duh7sY4uXLc3RYok+6pDoULRODFkQkf4iK7cmNStJGZVO
+	 R3hUoivFrWZ6EDdwGEYzrVJQQAtkPT8grMY2dTynjt5gP5JzwHx0kIKaxRzI+tzq689bS
+	 yvUBiVa2w2Nbhhynq0YbSx+Pt45ZrO16DPv3GJ3y9MkNv5OHmXskvv/RHRaQCY2ZSeebO
+	 osxYekyEVYad2hKaTKwMhJcso7L+PP8mISlFmFImIPf/g7f4kRv/2SHkOTgaBcXWH3KWm
+	 zDEt7D11u8mOGJIRAp8sA8ofuIMh+Shb3OiwaSGI+XZCqAiMgbu5YGvxlNvWPlHCSQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795271928;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=kwfbDfUYC3HmLJKxPLVjYyrlsbi80iQOjcAuKR3mfsI=;
-	b=se6lolbrpevWGfsPOrAMek9lWlwjnXGV3MY0vZ5jzDK2YlKamFd/1iq5qmDtlgMt4V7D
-	 mw7T8DEojJk7G3LrGO+mZSCG6FyCUJ5ZsveJcdT7Zvk+GqbIAE5aJjHtGvgg7nMAU1Sxc
-	 2l81pdpZ2MEXHFFIWY0vbe/Byenl+C6gfJTdfVkvqMYNrCle+Nda3k3T5T58wHhcD86XS
-	 Sqj59t35g1Gj3yHlOJ6t60G4jNQFm7n9dmYlKtk3tZoTUY+rWeOI1pGAaFOJK5iU/ZteH
-	 pJU55+S5YBKg8Us/t4WmEGIRjc4FR4wL4mapOOVsjli2KC5o0YC2y+xEae97L6iVDJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795283851;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=xbFVZQIEMkfn+DHU4bD6nq+/GyfOhkBuMR4xGVWfzAM=;
+	b=Bom6v1NYXk7DMBbLVAbLIBNEviV4nP1mI9cQXuUIRjccWOxuqYYwonQgL2ypfnKc/3kH
+	 iXedUk6YGYWL8CZViRwWkj3TXyxVliyrY+rN5LR6zy2YhAtxIcIDd+2oLIwKZX/mjyNZX
+	 2gF9KWKvtHU1TjAJXw81b1y191FzN6PGPcYJT1j2w5M0Ceuv4UxR9LPY4SIZCFackE6ix
+	 rhPgOE0d36s5V6lbMscpzahKTtHyaqgcm5A9jL/RLC1VZ8yGn9S3H7HcDvP71Jbg5RL+u
+	 pB9kP5aoUXQDfS2wbzJQQtDSTH+a64zgwZQM+wnmD9o5UUjjK4M3bDSc5FpVyFhU9Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HGFauasM;
-	arc=none smtp.remote-ip=95.215.58.120
-Received: from mta1.migadu.com (out-120.mta1.migadu.com [95.215.58.120])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Eq75YtR8;
+	arc=none smtp.remote-ip=192.198.163.8
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AEC606A32C
-	for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 14:38:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04AEC606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11364606A320;
+	Sat, 21 Nov 2026 17:57:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11364606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HGFauasM
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=DJoNk6njaXjd07iLpBiMNljDnSHhT0VPJ3gnJrq+Kp4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795271925; v=1; x=1795876725;
- b=HGFauasMg5n8tb4cVc/hMGwHYkX1k9ONST2Y7F+pYF3KAkx8cVgyxxOA8eNcMVqZ7OXBA7Zb
- wXR/VkxRq/LtRS1pH2WWHPPWuLeirr3xuyBakf/FDMoNZRcgwGAGvKr7Z308mKGXytDMlK/Qoec
- +xvoNrWf0rh26wewcxudLsKk=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 169e1c4f87af6751;
-	Sat, 21 Nov 2026 14:38:44 +0000
-X-Mizu-Trace-ID: 169e1c4f87af6751
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <75903c49-841e-4957-b32a-802e107a3f34@linux.dev>
-Date: Sat, 21 Nov 2026 14:38:44 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Eq75YtR8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795283849; x=1826819849;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xbUHg34GuIgDdkp+pcQBfO7fh1frELeeNajnf0i1cLk=;
+  b=Eq75YtR8KU0jDJKWdpXFeKozdQdwPu5RS6Capg7Cc0/l+PsuQ/FuoKkL
+   YbiRJHqLFvjP6Y0svIly+bPlmT3o4aLEFadupTUPx1vWJuPAYNHomWECO
+   HHpeI+iyTYJmIe4urkf+kaOWMdrWwPE9x253fBiEmeyuzYhnd+24HXnwu
+   Nm6lX4sjKMr5pAwRwbAulrRIP2Fv/m4aa8jrF7UDHewHi/gIvbS+NNcZK
+   GVfGXPLNzq7Z6XCXLcf7diL+e1QGr7Mdvbp2O6EXtez/k9g/0HefsMorC
+   hWdHvaX4ZCRw/EJbZZcvBpK734EIloQUgAlM5ieVzyr8h4Z6pG9KL7njH
+   Q==;
+X-CSE-ConnectionGUID: QALJ/KUYR2q1ro6F6FtLbQ==
+X-CSE-MsgGUID: CNBUnDNoSF6ADn/UM6+KHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11973"; a="4038896"
+X-IronPort-AV: E=Sophos;i="6.27,225,1787036400"; 
+   d="scan'208";a="4038896"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2026 09:57:28 -0800
+X-CSE-ConnectionGUID: /IJb+ANwRJmrssPyKMkcwQ==
+X-CSE-MsgGUID: wZ6TWN78Q0qCOWBzjJOFMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,225,1787036400"; 
+   d="scan'208";a="11153815"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 21 Nov 2026 09:57:25 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xUpL0-00000001KOt-0yWP;
+	Sat, 21 Nov 2026 17:57:22 +0000
+Date: Sun, 22 Nov 2026 01:56:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Habil Eren =?iso-8859-1?Q?T=FCrker?= <habilerenturker@hotmail.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	"andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Habil Eren =?iso-8859-1?Q?T=FCrker?= <habilerenturker@hotmail.com>
+Subject: Re: [PATCH] PCI: Convert pci.c to pci_power_t helpers
+Message-ID: <202611220152.DcrSGe3C-lkp@intel.com>
+References: <20261121125811.50315-3-habilerenturker@hotmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -58,343 +91,328 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] x86/kstack_erase: Use REP STOSQ for large stack fills
-To: David Laight <david.laight.linux@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: ndesaulniers@google.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, kees@kernel.org, hpa@zytor.com,
- gustavoars@kernel.org, ardb@kernel.org, hca@linux.ibm.com,
- nathan@kernel.org, morbo@google.com, justinstitt@google.com,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org, riel@surriel.com, shakeel.butt@linux.dev,
- kernel-team@meta.com, rkeilty@meta.com, atish.patra@linux.dev,
- dgreid@meta.com
-References: <20261119213147.1094488-1-usama.arif@linux.dev>
- <20261119213147.1094488-3-usama.arif@linux.dev>
- <20261120104534.GO2668564@noisy.programming.kicks-ass.net>
- <20261120122635.GJ2669272@noisy.programming.kicks-ass.net>
- <bad389b1-f4a6-43d4-9531-54b75e067c7a@linux.dev>
- <20261120222211.2f0d5cbc@pumpkin>
-Content-Language: en-US
-From: Usama Arif <usama.arif@linux.dev>
-In-Reply-To: <20261120222211.2f0d5cbc@pumpkin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261121125811.50315-3-habilerenturker@hotmail.com>
+
+Hi Habil,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master v7.4-rc3 next-20261119]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Habil-Eren-T-rker/PCI-Convert-pci-c-to-pci_power_t-helpers/20261121-125915
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20261121125811.50315-3-habilerenturker%40hotmail.com
+patch subject: [PATCH] PCI: Convert pci.c to pci_power_t helpers
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20261122/202611220152.DcrSGe3C-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261122/202611220152.DcrSGe3C-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611220152.DcrSGe3C-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/pci.c:1174:24: error: call to undeclared function 'pci_power_t_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1174 |                 dev->current_state = pci_power_t_get(pmcsr);
+         |                                      ^
+   drivers/pci/pci.c:1174:24: note: did you mean 'pci_power_name'?
+   include/linux/pci.h:198:27: note: 'pci_power_name' declared here
+     198 | static inline const char *pci_power_name(pci_power_t state)
+         |                           ^
+>> drivers/pci/pci.c:1372:5: error: call to undeclared function 'pci_power_t_eq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1372 |                         (pci_power_t_eq(pci_power_t_get(pmcsr), PCI_D3hot) ||
+         |                          ^
+   drivers/pci/pci.c:1372:20: error: call to undeclared function 'pci_power_t_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1372 |                         (pci_power_t_eq(pci_power_t_get(pmcsr), PCI_D3hot) ||
+         |                                         ^
+   drivers/pci/pci.c:1434:23: error: call to undeclared function 'pci_power_t_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1434 |         dev->current_state = pci_power_t_get(pmcsr);
+         |                              ^
+>> drivers/pci/pci.c:1548:2: error: call to undeclared function 'pci_power_t_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1548 |         pci_power_t_set(&pmcsr, state);
+         |         ^
+   drivers/pci/pci.c:1548:2: note: did you mean 'pci_power_name'?
+   include/linux/pci.h:198:27: note: 'pci_power_name' declared here
+     198 | static inline const char *pci_power_name(pci_power_t state)
+         |                           ^
+   drivers/pci/pci.c:1560:23: error: call to undeclared function 'pci_power_t_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1560 |         dev->current_state = pci_power_t_get(pmcsr);
+         |                              ^
+   drivers/pci/pci.c:4595:2: error: call to undeclared function 'pci_power_t_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4595 |         pci_power_t_set(&csr, PCI_D3hot);
+         |         ^
+   7 errors generated.
 
 
+vim +/pci_power_t_get +1174 drivers/pci/pci.c
 
-On 20/11/2026 14:22, David Laight wrote:
-> On Fri, 20 Nov 2026 18:43:38 +0000
-> Usama Arif <usama.arif@linux.dev> wrote:
-> 
->> On 20/11/2026 04:26, Peter Zijlstra wrote:
->>> On Fri, Nov 20, 2026 at 11:45:34AM +0100, Peter Zijlstra wrote:  
->>>> On Thu, Nov 19, 2026 at 01:31:08PM -0800, Usama Arif wrote:  
->>>>> +#ifdef CONFIG_X86_64
->>>>> +#define __stackleak_poison __stackleak_poison
->>>>> +static __always_inline void __stackleak_poison(unsigned long erase_low,
->>>>> +					       unsigned long erase_high,
->>>>> +					       unsigned long poison)
->>>>> +{
->>>>> +	unsigned long count;
->>>>> +
->>>>> +	/* Short spans do not amortize the startup cost of REP STOSQ. */
->>>>> +	if (erase_high <= erase_low + 512) {
->>>>> +		while (erase_low < erase_high) {
->>>>> +			*(unsigned long *)erase_low = poison;
->>>>> +			erase_low += sizeof(unsigned long);
->>>>> +		}
->>>>> +		return;
->>>>> +	}
->>>>> +
->>>>> +	count = (erase_high - erase_low) / sizeof(unsigned long);
->>>>> +	asm volatile("rep stosq"
->>>>> +		     : "+D" (erase_low), "+c" (count)
->>>>> +		     : "a" (poison)
->>>>> +		     : "memory");
->>>>> +}
->>>>> +#endif  
->>>>
->>>> Gemini seems to suggest 16-32 words would be sufficient to amortize the
->>>> REP STOS setup. It was also adamant I try and unroll that earlier loop.
->>>>
->>>> How about something like so, does that make sense? Also, I suppose we
->>>> should make memset64() __always_inline if we use it here. I'm not at all
->>>> sold on the unroll here, the asm is pretty horrid for what it does.  
->>>
->>> This one is much improved:
->>>
->>> --- a/arch/x86/include/asm/processor.h
->>> +++ b/arch/x86/include/asm/processor.h
->>> @@ -28,6 +28,7 @@ struct vm86;
->>>  #include <asm/vmxfeatures.h>
->>>  #include <asm/vdso/processor.h>
->>>  #include <asm/shstk.h>
->>> +#include <asm/string.h>
->>>  
->>>  #include <linux/personality.h>
->>>  #include <linux/cache.h>
->>> @@ -580,6 +581,35 @@ static __always_inline bool on_thread_st
->>>  			       current_stack_pointer) < THREAD_SIZE;
->>>  }
->>>  
->>> +#ifdef CONFIG_X86_64
->>> +#define __stackleak_poison __stackleak_poison
->>> +static __always_inline void __stackleak_poison(unsigned long erase_low,
->>> +					       unsigned long erase_high,
->>> +					       unsigned long poison)
->>> +{
->>> +	unsigned long count = (erase_high - erase_low) / sizeof(unsigned long);
->>> +
->>> +	/* Amortize the startup cost of REP STOSQ. */
->>> +	if (count < 32) {
->>> +		unsigned long *ptr = (unsigned long *)erase_low;
->>> +
->>> +		while (count) {
->>> +			unsigned long mod = (count-1) % 4;
->>> +			count -= mod+1;
->>> +			switch (mod) {
->>> +			case 3: ptr[count+3] = poison; fallthrough;
->>> +			case 2: ptr[count+2] = poison; fallthrough;
->>> +			case 1: ptr[count+1] = poison; fallthrough;
->>> +			case 0: ptr[count+0] = poison; break;
->>> +			}
->>> +		}
->>> +		return;
->>> +	}
->>> +  
->>
->> Hello Nick, Peter and David,
->>
->> Thanks for the reviews! I should have used memset64 from the get go :)
->>
->> I have tested 2 possible revisions now as well as this one from Peter,
->> have added both of them at the end of the reply.
->>
->> - v2.1 where you loop upto 512B and then memset
->> - v2.2: 4 stores per loop up to 512 B, then 64-byte aligned memset64()
->>
->> I timed stackleak_erase() in a Zen 5c guest over a futex/epoll/procfs/unix
->> syscall:
->>
->>   No patch                             68.3 ns per erase
->>   v1 (loop up to 512 B, then REP)           46.6 ns
->>   v2.1 (loop up to 512 B, memset64())       46.6 ns
->>   this version                              46.4 ns
->>   v2.2 (4 stores/iteration, aligned REP)    43.7 ns
-> 
-> What are the lengths of those erases?
+  1149	
+  1150	/**
+  1151	 * pci_update_current_state - Read power state of given device and cache it
+  1152	 * @dev: PCI device to handle.
+  1153	 * @state: State to cache in case the device doesn't have the PM capability
+  1154	 *
+  1155	 * The power state is read from the PMCSR register, which however is
+  1156	 * inaccessible in D3cold.  The platform firmware is therefore queried first
+  1157	 * to detect accessibility of the register.  In case the platform firmware
+  1158	 * reports an incorrect state or the device isn't power manageable by the
+  1159	 * platform at all, we try to detect D3cold by testing accessibility of the
+  1160	 * vendor ID in config space.
+  1161	 */
+  1162	void pci_update_current_state(struct pci_dev *dev, pci_power_t state)
+  1163	{
+  1164		if (platform_pci_get_power_state(dev) == PCI_D3cold) {
+  1165			dev->current_state = PCI_D3cold;
+  1166		} else if (dev->pm_cap) {
+  1167			u16 pmcsr;
+  1168	
+  1169			pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+  1170			if (PCI_POSSIBLE_ERROR(pmcsr)) {
+  1171				dev->current_state = PCI_D3cold;
+  1172				return;
+  1173			}
+> 1174			dev->current_state = pci_power_t_get(pmcsr);
+  1175		} else {
+  1176			dev->current_state = state;
+  1177		}
+  1178	}
+  1179	
+  1180	/**
+  1181	 * pci_refresh_power_state - Refresh the given device's power state data
+  1182	 * @dev: Target PCI device.
+  1183	 *
+  1184	 * Ask the platform to refresh the devices power state information and invoke
+  1185	 * pci_update_current_state() to update its current PCI power state.
+  1186	 */
+  1187	void pci_refresh_power_state(struct pci_dev *dev)
+  1188	{
+  1189		platform_pci_refresh_power_state(dev);
+  1190		pci_update_current_state(dev, dev->current_state);
+  1191	}
+  1192	
+  1193	/**
+  1194	 * pci_platform_power_transition - Use platform to change device power state
+  1195	 * @dev: PCI device to handle.
+  1196	 * @state: State to put the device into.
+  1197	 */
+  1198	int pci_platform_power_transition(struct pci_dev *dev, pci_power_t state)
+  1199	{
+  1200		int error;
+  1201	
+  1202		error = platform_pci_set_power_state(dev, state);
+  1203		if (!error)
+  1204			pci_update_current_state(dev, state);
+  1205		else if (!dev->pm_cap) /* Fall back to PCI_D0 */
+  1206			dev->current_state = PCI_D0;
+  1207	
+  1208		return error;
+  1209	}
+  1210	EXPORT_SYMBOL_GPL(pci_platform_power_transition);
+  1211	
+  1212	static int pci_resume_one(struct pci_dev *pci_dev, void *ign)
+  1213	{
+  1214		pm_request_resume(&pci_dev->dev);
+  1215		return 0;
+  1216	}
+  1217	
+  1218	/**
+  1219	 * pci_resume_bus - Walk given bus and runtime resume devices on it
+  1220	 * @bus: Top bus of the subtree to walk.
+  1221	 */
+  1222	void pci_resume_bus(struct pci_bus *bus)
+  1223	{
+  1224		if (bus)
+  1225			pci_walk_bus(bus, pci_resume_one, NULL);
+  1226	}
+  1227	
+  1228	static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
+  1229	{
+  1230		int delay = 1;
+  1231		bool retrain = false;
+  1232		struct pci_dev *root, *bridge;
+  1233	
+  1234		root = pcie_find_root_port(dev);
+  1235	
+  1236		if (pci_is_pcie(dev)) {
+  1237			bridge = pci_upstream_bridge(dev);
+  1238			if (bridge)
+  1239				retrain = true;
+  1240		}
+  1241	
+  1242		/*
+  1243		 * The caller has already waited long enough after a reset that the
+  1244		 * device should respond to config requests, but it may respond
+  1245		 * with Request Retry Status (RRS) if it needs more time to
+  1246		 * initialize.
+  1247		 *
+  1248		 * If the device is below a Root Port with Configuration RRS
+  1249		 * Software Visibility enabled, reading the Vendor ID may return a
+  1250		 * special data value if the device responded with RRS.  Read the
+  1251		 * Vendor ID until we get non-RRS status and something other than
+  1252		 * ~0.  The Vendor ID of VFs reads ~0, so check their Command
+  1253		 * register instead.
+  1254		 *
+  1255		 * If there's no Root Port or Configuration RRS Software Visibility
+  1256		 * is not enabled, the device may still respond with RRS, but
+  1257		 * hardware may retry the config request.  If no retries receive
+  1258		 * Successful Completion, hardware generally synthesizes ~0
+  1259		 * (PCI_ERROR_RESPONSE) data to complete the read.  Reading Vendor
+  1260		 * ID for VFs and non-existent devices also returns ~0, so read the
+  1261		 * Command register until it returns something other than ~0.
+  1262		 */
+  1263		for (;;) {
+  1264			u32 id;
+  1265	
+  1266			if (pci_dev_is_disconnected(dev)) {
+  1267				pci_dbg(dev, "disconnected; not waiting\n");
+  1268				return -ENOTTY;
+  1269			}
+  1270	
+  1271			if (root && root->config_rrs_sv) {
+  1272				pci_read_config_dword(dev, PCI_VENDOR_ID, &id);
+  1273				if (!pci_bus_rrs_vendor_id(id)) {
+  1274					if (PCI_POSSIBLE_ERROR(id) && dev->is_virtfn)
+  1275						pci_read_config_dword(dev, PCI_COMMAND,
+  1276								      &id);
+  1277					if (!PCI_POSSIBLE_ERROR(id))
+  1278						break;
+  1279				}
+  1280			} else {
+  1281				pci_read_config_dword(dev, PCI_COMMAND, &id);
+  1282				if (!PCI_POSSIBLE_ERROR(id))
+  1283					break;
+  1284			}
+  1285	
+  1286			if (delay > timeout) {
+  1287				pci_err(dev, "not ready %dms after %s; giving up\n",
+  1288					delay - 1, reset_type);
+  1289				return -ENOTTY;
+  1290			}
+  1291	
+  1292			if (delay > PCI_RESET_WAIT) {
+  1293				if (retrain) {
+  1294					retrain = false;
+  1295					if (pcie_failed_link_retrain(bridge) == 0) {
+  1296						delay = 1;
+  1297						continue;
+  1298					}
+  1299				}
+  1300				pci_info(dev, "not ready %dms after %s; waiting\n",
+  1301					 delay - 1, reset_type);
+  1302			}
+  1303	
+  1304			msleep(delay);
+  1305			delay *= 2;
+  1306		}
+  1307	
+  1308		if (delay > PCI_RESET_WAIT)
+  1309			pci_info(dev, "ready %dms after %s\n", delay - 1,
+  1310				 reset_type);
+  1311		else
+  1312			pci_dbg(dev, "ready %dms after %s\n", delay - 1,
+  1313				reset_type);
+  1314	
+  1315		return 0;
+  1316	}
+  1317	
+  1318	/**
+  1319	 * pci_power_up - Put the given device into D0
+  1320	 * @dev: PCI device to power up
+  1321	 *
+  1322	 * On success, return 0 or 1, depending on whether or not it is necessary to
+  1323	 * restore the device's BARs subsequently (1 is returned in that case).
+  1324	 *
+  1325	 * On failure, return a negative error code.  Always return failure if @dev
+  1326	 * lacks a Power Management Capability, even if the platform was able to
+  1327	 * put the device in D0 via non-PCI means.
+  1328	 */
+  1329	int pci_power_up(struct pci_dev *dev)
+  1330	{
+  1331		bool need_restore;
+  1332		pci_power_t state;
+  1333		u16 pmcsr;
+  1334		int ret;
+  1335	
+  1336		/*
+  1337		 * When setting power state to D0, platform_pci_set_power_state()
+  1338		 * ensures main power is on.  If it puts the device in D0, it also
+  1339		 * completes any required delays after the transition; if it leaves
+  1340		 * the device in D1, D2, or D3hot, we use the PM Capability to
+  1341		 * transition to D0.
+  1342		 *
+  1343		 * In all cases, the device is either Configuration-Ready or
+  1344		 * inaccessible upon return.
+  1345		 */
+  1346		platform_pci_set_power_state(dev, PCI_D0);
+  1347	
+  1348		if (!dev->pm_cap) {
+  1349			state = platform_pci_get_power_state(dev);
+  1350			if (state == PCI_UNKNOWN)
+  1351				dev->current_state = PCI_D0;
+  1352			else
+  1353				dev->current_state = state;
+  1354	
+  1355			return -EIO;
+  1356		}
+  1357	
+  1358		if (pci_dev_is_disconnected(dev)) {
+  1359			dev->current_state = PCI_D3cold;
+  1360			return -EIO;
+  1361		}
+  1362	
+  1363		pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+  1364		if (PCI_POSSIBLE_ERROR(pmcsr)) {
+  1365			pci_err(dev, "Unable to change power state from %s to D0, device inaccessible\n",
+  1366				pci_power_name(dev->current_state));
+  1367			dev->current_state = PCI_D3cold;
+  1368			return -EIO;
+  1369		}
+  1370	
+  1371		need_restore = !(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET) &&
+> 1372				(pci_power_t_eq(pci_power_t_get(pmcsr), PCI_D3hot) ||
+  1373				dev->current_state >= PCI_D3hot);
+  1374	
+  1375		if (pci_power_t_eq(pci_power_t_get(pmcsr), PCI_D0))
+  1376			goto end;
+  1377	
+  1378		/*
+  1379		 * Force the entire word to 0. This doesn't affect PME_Status, disables
+  1380		 * PME_En, and sets PowerState to 0.
+  1381		 */
+  1382		pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
+  1383	
+  1384		/* Mandatory transition delays; see PCI PM 1.2. */
+  1385		if (pci_power_t_eq(pci_power_t_get(pmcsr), PCI_D3hot)) {
+  1386			pci_dev_d3_sleep(dev);
+  1387			if (!(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET)) {
+  1388				ret = pci_dev_wait(dev, "power up D3hot->D0uninitialized",
+  1389						   PCIE_RESET_READY_POLL_MS);
+  1390				if (ret) {
+  1391					dev->current_state = PCI_D3cold;
+  1392					return -EIO;
+  1393				}
+  1394			}
+  1395		} else if (pci_power_t_eq(pci_power_t_get(pmcsr), PCI_D2)) {
+  1396			udelay(PCI_PM_D2_DELAY);
+  1397		}
+  1398	
+  1399	end:
+  1400		dev->current_state = PCI_D0;
+  1401		if (need_restore)
+  1402			return 1;
+  1403	
+  1404		return 0;
+  1405	}
+  1406	
 
-Its a mixture of lengths, coming from getppid(), read(), write(),
-futex(), unix socket send(), receive(). I asked LLM to come up
-with a benchmark with a mixture of syscalls that would target
-a real world usecase and it came up with this which I found
-to be quite good.
-
-> (and where does the 46ns come from??)
-
-It's the whole stackleak_erase(), the search for the poison plus the
-fill, timed with rdtsc_ordered() in the kernel on every return to user,
-minus an empty timed region, and averaged over all of the above.
-
-> I'd definitely time 'just the code loop  - various loops' and
-> 'just rep stos'.
-> 
->> The switch doesn't seem to help.
-> 
-> To many conditions in the loop.
-> You could do it this way:
-> 	switch (count & 3) {
-> 	case 0: do { *ptr++ = poison;
-> 	case 3:      *ptr++ = poison;
-> 	case 2:      *ptr++ = poison;
-> 	case 1:      *ptr++ = poison;
-> 		} while ((count -= 4) > 0);
-> 	}
-> (give or take some off-by-one here and there).
-> But I suspect that using Duff's device is frowned up.
-> 
->> Either way I kept 512 bytes: REP STOSQ only wins from ~430 bytes on Zen
->> 5c against the plain loop (~850 against the unrolled one),
-> 
-> For zen5 you should only need to unroll the loop once (two writes per iteration).
-> In my experiments it can execute a loop in one clock.
-> Unless the compiler unrolled it for you (and got it right!) the original
-> loop would be half the speed 
-> 
->> and from ~320 on Cooper Lake.
-> 
-> I'd also try some older Intel cpu.
-> The setup costs are likely to be higher with FRMS and friends.
-> 
-
-It will be difficult for me to get access to CPUs older than Cooper Lake
-which is 6 years old. I think if we try and profile and fit for every CPU,
-this patch wont go anywhere. As seen in [1], the differences between the
-the different optimizations are small, IMHO, we should just go for the most
-maintainable approach, which I think is you loop upto 512B and then memset.
-
-
-[1] https://lore.kernel.org/all/bad389b1-f4a6-43d4-9531-54b75e067c7a@linux.dev/
-
-
-
-> David
-> 
->>
->>
->> My personal preference is v2.1, as its much simpler code and the difference
->> in performance between v2.1 and v2.2 isn't actually that much. But if there is
->> a stronger preference for v2.2, I can send that as it is faster.
->>
->>
->> v2.1:
->>
->> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
->> index 77488ff5eb8c7c..3d205ae8566114 100644
->> --- a/arch/x86/include/asm/processor.h
->> +++ b/arch/x86/include/asm/processor.h
->> @@ -28,6 +28,7 @@ struct vm86;
->>  #include <asm/vmxfeatures.h>
->>  #include <asm/vdso/processor.h>
->>  #include <asm/shstk.h>
->> +#include <asm/string.h>
->>
->>  #include <linux/personality.h>
->>  #include <linux/cache.h>
->> @@ -580,6 +581,26 @@ static __always_inline bool on_thread_stack(void)
->>                                current_stack_pointer) < THREAD_SIZE;
->>  }
->>
->> +#if defined(CONFIG_X86_64) && !defined(CONFIG_KMSAN)
->> +#define __stackleak_poison __stackleak_poison
->> +static __always_inline void __stackleak_poison(unsigned long erase_low,
->> +                                              unsigned long erase_high,
->> +                                              unsigned long poison)
->> +{
->> +       /* Short spans do not amortize the startup cost of REP STOSQ. */
->> +       if (erase_high <= erase_low + 512) {
->> +               while (erase_low < erase_high) {
->> +                       *(unsigned long *)erase_low = poison;
->> +                       erase_low += sizeof(unsigned long);
->> +               }
->> +               return;
->> +       }
->> +
->> +       memset64((u64 *)erase_low, poison,
->> +                (erase_high - erase_low) / sizeof(u64));
->> +}
->> +#endif
->> +
->>  #ifdef CONFIG_PARAVIRT_XXL
->>  #include <asm/paravirt.h>
->>  #else
->> diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
->> index 2dae70c2b01465..73cc91254b1381 100644
->> --- a/arch/x86/include/asm/string_64.h
->> +++ b/arch/x86/include/asm/string_64.h
->> @@ -54,7 +54,7 @@ static inline void *memset32(uint32_t *s, uint32_t v, size_t n)
->>  }
->>
->>  #define __HAVE_ARCH_MEMSET64
->> -static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
->> +static __always_inline void *memset64(uint64_t *s, uint64_t v, size_t n)
->>  {
->>         const auto s0 = s;
->>         asm volatile (
->>
->>
->>
->>
->>
->> v2.2:
->>
->> diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
->> index 77488ff5eb8c7c..5e76e1140908d7 100644
->> --- a/arch/x86/include/asm/processor.h
->> +++ b/arch/x86/include/asm/processor.h
->> @@ -28,7 +28,9 @@ struct vm86;
->>  #include <asm/vmxfeatures.h>
->>  #include <asm/vdso/processor.h>
->>  #include <asm/shstk.h>
->> +#include <asm/string.h>
->>
->> +#include <linux/align.h>
->>  #include <linux/personality.h>
->>  #include <linux/cache.h>
->>  #include <linux/threads.h>
->> @@ -580,6 +582,48 @@ static __always_inline bool on_thread_stack(void)
->>                                current_stack_pointer) < THREAD_SIZE;
->>  }
->>
->> +#if defined(CONFIG_X86_64) && !defined(CONFIG_KMSAN)
->> +#define __stackleak_poison __stackleak_poison
->> +static __always_inline void __stackleak_poison(unsigned long erase_low,
->> +                                              unsigned long erase_high,
->> +                                              unsigned long poison)
->> +{
->> +       unsigned long *p = (unsigned long *)erase_low;
->> +       unsigned long *end = (unsigned long *)erase_high;
->> +       unsigned long i;
->> +
->> +       /* Fewer than four words, or nothing to do. */
->> +       if (erase_high < erase_low + 4 * sizeof(*p)) {
->> +               while (p < end)
->> +                       *p++ = poison;
->> +               return;
->> +       }
->> +
->> +       /* Four stores per iteration; the last four may overlap. */
->> +       if (erase_high - erase_low <= 512) {
->> +               end -= 4;
->> +               while (p < end) {
->> +                       p[0] = poison;
->> +                       p[1] = poison;
->> +                       p[2] = poison;
->> +                       p[3] = poison;
->> +                       p += 4;
->> +               }
->> +               end[0] = poison;
->> +               end[1] = poison;
->> +               end[2] = poison;
->> +               end[3] = poison;
->> +               return;
->> +       }
->> +
->> +       /* REP STOSQ is faster from a 64-byte aligned destination. */
->> +       for (i = 0; i < 8; i++)
->> +               p[i] = poison;
->> +       p = (unsigned long *)ALIGN(erase_low + 1, 64);
->> +       memset64((u64 *)p, poison, end - p);
->> +}
->> +#endif
->> +
->>  #ifdef CONFIG_PARAVIRT_XXL
->>  #include <asm/paravirt.h>
->>  #else
->> diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
->> index 2dae70c2b01465..73cc91254b1381 100644
->> --- a/arch/x86/include/asm/string_64.h
->> +++ b/arch/x86/include/asm/string_64.h
->> @@ -54,7 +54,7 @@ static inline void *memset32(uint32_t *s, uint32_t v, size_t n)
->>  }
->>
->>  #define __HAVE_ARCH_MEMSET64
->> -static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
->> +static __always_inline void *memset64(uint64_t *s, uint64_t v, size_t n)
->>  {
->>         const auto s0 = s;
->>         asm volatile (
->>
->>> +	memset64((void *)erase_low, poison, count);
->>> +}
->>> +#endif
->>> +
->>>  #ifdef CONFIG_PARAVIRT_XXL
->>>  #include <asm/paravirt.h>
->>>  #else  
->>
->>
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
