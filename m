@@ -1,93 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795262545;
-	b=bGMQmyMgETMwC67c/QQA5VEzppGsXBV2DpuNVeB18vp2K411Ba/29Im5gZ+hd6+ANPCt
-	 Z4im3U7Q/GjlU5z8wiSsdTAwazf0vN40C3m8TMsre3AJP+52AQ6XPC4M3Yhr7ajcCUN8E
-	 meZ1MJI1Ff/t3CpM2lI6EoGygxS2aksPjHdsjL0X/x5qSXbNeTF8JcTyqPrEVU5nuC+au
-	 ZMMxct0/rX56t9NJhJZeilyy4FnOg0gDir68YU4DDi6SeXxfzLqVtxoYoyEZDf2Bep+xx
-	 cJlxqVpXiH18CRjEcpH5ApvZFn+59oo9gVNVjmVQexA7MzopLVDxscbUJapU3LuFuaw==
+	t=1795264100;
+	b=QWlBOfwnbmAiWjNlDreFdPpzw0wDQCGVashedCmUwU8arRLVz2TdFyKDIWqJBpo/CiP0
+	 dmsA1JHaB1YpNsp1HXloNn5445SfNJ9f8wcZ/svaRDkf3e1yTCAiqEhLWcOFBtm2PJI1V
+	 /BnPpbVuH22yl80rj+Ekb58dG+dNEanbSSPWINoDIvcuI2DlCCV0gdhdgAgk+j8RR329w
+	 7m3fqVLxD+HqrxE9R730jq905xD/gQs++LsnscJDD+7NUwMo50u0RArz5KRClbs6ESYbk
+	 G57f3Gd4VwrkxDJqHk0caKVvcC0W3zIA8lHNqpp2R8jfQzXNuIFitRyDi80qZnygcQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795262545;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=PbAv1us9HdouZq9hBUL7raj+IUgCOfT9Bkr5fu4RIiw=;
-	b=OgtRzUsTP6ZF4LpHZ4gxppRR/WpYR/WyR+Y7FAvlPmLQcd0NOVIvi1O4qqA9wlhQw+3D
-	 9DihUpHsavMvZp8VJ9DHjFSEv5O8wOgvktARAOsDrgDGsy7g/NU5IgWUn8o5HROO+0A0L
-	 SEnxYY1OPXrppZndSKRqnwZPQFslNVK5UeHbgz0SgvoDtGSvUocNJ5sb8AwKv73weRrmz
-	 LaTFqiCbyQYlG+3vKNQAPriaWNT3E6uVNNKsrauCobacw1kbtyvJyWTji48UogaHuewGo
-	 yzZzgrw6XGUXCT8qmPiALgAbJNmvjf21DL7kDsi2mcQOsvfW2GmUSYERbJIkvfIznCg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795264100;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=7H6yTJgiXVjurwuVwDh2bU2c+2wm8uECQPTv4Fe2SXA=;
+	b=fmxgws+/NLKIOAC4YhPc9nxBat99vY524jJmvVgbQWJirb4KzfK+a2BWWlR/SA1wUL8H
+	 iWU8xxLyJyCQVOGmqFXtGMemyhZSIAMSSJfpluIJqfFlOVIkLCFvvLH8QiiHvW6UlME8v
+	 hq3E1Bahy4tEDftw/IMLRmYDL/WDezvpTFA1/TsH/JukgW0FilvAgO4bRcN1pV9OdYnmr
+	 V2VebIOVp/Nu1GqwMrfA+WFmtwK164yJpSv5PzKO9iC3vG9bXmkCcSMfZ+Rha5RbOE+4W
+	 3MOUagaD/6Q5BvI8k1TvjIeZsdwGKuT6GM2fX6vTH9F5kbrIsAq6YcUQNcj5APgqjfw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=DXlRolMH;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FwLhBHfu;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2349606A32C;
-	Sat, 21 Nov 2026 12:02:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2349606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24329606A320;
+	Sat, 21 Nov 2026 12:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=DXlRolMH
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795262545; x=1826798545;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YCdP8OB2HvkWl/omwLPrcGPAcUnRnZ92M0pgI5LSpjA=;
-  b=DXlRolMHGqhrCByB60yqC9nHecudUo9JFF/Y9gqq/D1AGK1tBwfNpV+H
-   iYUZ/5bHZ0pidJ3JhwLjRbh6eC9ZaLXF9+DaegnfIMXEC5he1QnmNLWWu
-   byvOBv7v5CbWHPxL9BfUEs1xkznLogRB3pCFQRyYq9Dweqz4UtfmjCzfR
-   SJNbyGdieszf6elumzQ8DdNGGc96+1fFLmZa9/L06/aEazIqzG448rIhd
-   We41NTUJCCqJ6IkUHSlKVVW7BANIgYS+vnsZimiFOsP/DiUou93IhBmfQ
-   xzuxV+8xGzFFna0ZBWe2ZUkjTvKlvYvJZjVo8R3YflpS0Cg0ylShZPKwN
-   A==;
-X-CSE-ConnectionGUID: kyeF+05NS5mieb3Er0Jv+g==
-X-CSE-MsgGUID: JysrmL4iQaWoKp3mW1vfIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4118800"
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="4118800"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2026 04:02:09 -0800
-X-CSE-ConnectionGUID: PcmNyewOSt6LniGQD01MiQ==
-X-CSE-MsgGUID: +pivHS+iSOWajqfhEPoMtw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="11199182"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 21 Nov 2026 04:02:03 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xUjn6-00000001Jzr-1GYu;
-	Sat, 21 Nov 2026 12:02:00 +0000
-Date: Sat, 21 Nov 2026 20:01:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nicolas Schier <nsc@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sasha Levin <sashal@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nicolas Schier <nsc@kernel.org>,
-	Harald Freudenberger <freude@linux.ibm.com>,
-	Holger Dengler <dengler@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kbuild@vger.kernel.org, linux-s390@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>
-Subject: Re: [PATCH] Move struct cpu_feature to a
- <linux/device-id/cpu_feature.h>
-Message-ID: <202611211941.G0rlpNpN-lkp@intel.com>
-References: <20261120202712.3377691-1-nsc@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FwLhBHfu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8C5C1F000C4;
+	Sat, 21 Nov 2026 12:28:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795264099;
+	bh=7H6yTJgiXVjurwuVwDh2bU2c+2wm8uECQPTv4Fe2SXA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=FwLhBHfufqwXZeNQ6Ov4B6OaGsVBAJ7XCHmXMbe+iEf3NnGJNqugTCNnCqhTQoYAb
+	 BBJp9SNsbW6yhDKVEJ6/M/hBR73MRngtUM1/NljbzqQvRj6n7crSDUsPfgMX/4eVTK
+	 jV7+LrLJwBAe4skUxuniF7o5VLOvOgLLlBO6ViiFZsG+hhgRLcpEFHLKBUjSQDDmGk
+	 L4Fh3bTgM354j6HGyg4U40vIUnu0IGVPRJ4Fs9vivT+LojFuv7a/Ff82Olf3RxtMKF
+	 ts2RqWuYnMTRfEfKclwTJSoFxVWJ1701Bek1Vgt8Uz1SODFtG4+KtBrH9xBQyD6p18
+	 BfLyZtdUxyjIA==
+Date: Sat, 21 Nov 2026 13:28:16 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Madhavan Ganesan <madhavan.ganesan@oss.qualcomm.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jeff Johnson <jjohnson@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-wireless@vger.kernel.org, devicetree@vger.kernel.org, ath12k@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH ath-next v3 15/15] wifi: ath12k: add Wi-Fi 8 PCI driver
+ scaffolding for QCN9575
+Message-ID: <20261121-astute-calculating-hippogriff-69ecfc@quoll>
+References: <20261118-wifi8_qcn9575_bringup-v3-0-9875d2a3953f@oss.qualcomm.com>
+ <20261118-wifi8_qcn9575_bringup-v3-15-9875d2a3953f@oss.qualcomm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -97,69 +63,127 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261120202712.3377691-1-nsc@kernel.org>
+In-Reply-To: <20261118-wifi8_qcn9575_bringup-v3-15-9875d2a3953f@oss.qualcomm.com>
 
-Hi Nicolas,
+On Wed, Nov 18, 2026 at 01:45:38PM +0530, Madhavan Ganesan wrote:
+> Add QCN9575 PCI window register constants (WINDOW_VALUE_MASK [25:19],
+> WINDOW_STATIC_MASK [31:7], CE_WINDOW_MASK [13:7], UMAC_WINDOW_MASK
+> [20:14]) and a Wi-Fi 8 reg_base instance (ath12k_wifi8_reg_base) for
+> per-device window selection. Implement ath12k_wifi8_pci_probe() to
+> configure QCN9575-specific PCI settings: MSI vector layout (3 MHI, 5 CE,
+> 8 DP vectors), static window mapping, window register address (0x3278),
+> and hardware revision. Call ath12k_wifi8_hw_init() at the end of probe
+> to complete hardware initialization. Define the Wi-Fi 8 PCI driver
+> struct with the probe callback, and register it with
+> ath12k_pci_register_driver() in ath12k_wifi8_pci_init().
+> 
+> This series only adds Wi-Fi 8 platform scaffolding; QCN9575's CP, DP,
+> and MAC datapath support will be posted as a follow-up series.
+> QCN9575_DEVICE_ID is intentionally left out of
+> ath12k_wifi8_pci_id_table for now, so no physical device can match and
+> probe until that follow-up series lands. The id_table entry will be
+> added in the final patch of that series, once QCN9575 is actually
+> functional.
+> 
+> Tested-on: QCN9274 hw2.0 PCI WLAN.WBE.1.6-01243-QCAHKSWPL_SILICONZ-1
+> Tested-on: WCN7850 hw2.0 PCI WLAN.HMT.1.1.c7-00108-QCAHMTSWPL_V1.0_V2.0_SILICONZ_UPSTREAM-3
+> 
+> Signed-off-by: Madhavan Ganesan <madhavan.ganesan@oss.qualcomm.com>
+> ---
+>  drivers/net/wireless/ath/ath12k/hal.h       |  2 +
+>  drivers/net/wireless/ath/ath12k/wifi7/hal.h |  2 -
+>  drivers/net/wireless/ath/ath12k/wifi8/hal.h |  1 +
+>  drivers/net/wireless/ath/ath12k/wifi8/pci.c | 89 ++++++++++++++++++++++++++++-
+>  4 files changed, 91 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/ath/ath12k/hal.h b/drivers/net/wireless/ath/ath12k/hal.h
+> index 9e88bdf4a93b..b30a8039b2ec 100644
+> --- a/drivers/net/wireless/ath/ath12k/hal.h
+> +++ b/drivers/net/wireless/ath/ath12k/hal.h
+> @@ -11,6 +11,8 @@
+>  
+>  struct ath12k_base;
+>  
+> +#define HAL_CE_WFSS_CE_REG_BASE			0x01b80000
+> +
+>  #define HAL_DESC_REO_NON_QOS_TID	16
+>  
+>  #define HAL_INVALID_PEERID	0x3fff
+> diff --git a/drivers/net/wireless/ath/ath12k/wifi7/hal.h b/drivers/net/wireless/ath/ath12k/wifi7/hal.h
+> index 19e02bb16ff2..fe880b0befcb 100644
+> --- a/drivers/net/wireless/ath/ath12k/wifi7/hal.h
+> +++ b/drivers/net/wireless/ath/ath12k/wifi7/hal.h
+> @@ -31,8 +31,6 @@
+>  	((hal)->regs->umac_ce1_dest_reg_base)
+>  #define HAL_SEQ_WCSS_UMAC_WBM_REG		0x00a34000
+>  
+> -#define HAL_CE_WFSS_CE_REG_BASE			0x01b80000
+> -
+>  #define HAL_TCL_SW_CONFIG_BANK_ADDR		0x00a4408c
+>  
+>  /* SW2TCL(x) R0 ring configuration address */
+> diff --git a/drivers/net/wireless/ath/ath12k/wifi8/hal.h b/drivers/net/wireless/ath/ath12k/wifi8/hal.h
+> index c99521abdcb3..89fa9a7f3fd9 100644
+> --- a/drivers/net/wireless/ath/ath12k/wifi8/hal.h
+> +++ b/drivers/net/wireless/ath/ath12k/wifi8/hal.h
+> @@ -11,6 +11,7 @@
+>  #include "hal_desc.h"
+>  
+>  /* WCSS Relative address */
+> +#define HAL_SEQ_WCSS_UMAC_OFFSET		0xf00000
+>  #define HAL_SEQ_WCSS_UMAC_CE0_SRC_REG(hal) \
+>  	((hal)->regs->umac_ce0_src_reg_base)
+>  #define HAL_SEQ_WCSS_UMAC_CE0_DST_REG(hal) \
+> diff --git a/drivers/net/wireless/ath/ath12k/wifi8/pci.c b/drivers/net/wireless/ath/ath12k/wifi8/pci.c
+> index 3975081d167b..fd0489f8333f 100644
+> --- a/drivers/net/wireless/ath/ath12k/wifi8/pci.c
+> +++ b/drivers/net/wireless/ath/ath12k/wifi8/pci.c
+> @@ -5,14 +5,101 @@
+>  
+>  #include <linux/pci.h>
+>  
+> +#include "../core.h"
+> +#include "../hal.h"
+> +#include "../hif.h"
+> +#include "../mhi.h"
+> +#include "../pci.h"
+> +#include "hal.h"
+> +#include "hw.h"
+> +#include "mhi.h"
+>  #include "pci.h"
+>  
+> +#define QCN9575_DEVICE_ID		0x1113
+> +#define WINDOW_REG_ADDRESS		0x3278
+> +
+> +#define WINDOW_VALUE_MASK		GENMASK(25, 19)
+> +#define WINDOW_STATIC_MASK		GENMASK(31, 7)
+> +#define CE_WINDOW_MASK			GENMASK(13, 7)
+> +#define UMAC_WINDOW_MASK		GENMASK(20, 14)
+> +
+> +static const struct pci_device_id ath12k_wifi8_pci_id_table[] = {
+> +	{}
 
-kernel test robot noticed the following build errors:
+Why do you need an empty table?
 
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on kvm/next linus/master v7.4-rc3]
-[cannot apply to kvm/linux-next next-20261119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +};
+> +
+> +MODULE_DEVICE_TABLE(pci, ath12k_wifi8_pci_id_table);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicolas-Schier/Move-struct-cpu_feature-to-a-linux-device-id-cpu_feature-h/20261120-212711
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20261120202712.3377691-1-nsc%40kernel.org
-patch subject: [PATCH] Move struct cpu_feature to a <linux/device-id/cpu_feature.h>
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261121/202611211941.G0rlpNpN-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 3b14d7c370558b46e5f0c6494a05c492e59bf32c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261121/202611211941.G0rlpNpN-lkp@intel.com/reproduce)
+...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611211941.G0rlpNpN-lkp@intel.com/
+> +static struct ath12k_pci_driver ath12k_wifi8_pci_driver = {
+> +	.name = "ath12k_wifi8_pci",
+> +	.id_table = ath12k_wifi8_pci_id_table,
 
-All errors (new ones prefixed by >>):
+I actually wonder how does it work with such table - what is its
+purpose?
 
->> drivers/s390/crypto/pkey_cca.c:22:45: error: array has incomplete element type 'struct ap_device_id'
-      22 | static struct ap_device_id pkey_cca_card_ids[] = {
-         |                                             ^
-   drivers/s390/crypto/ap_bus.h:158:9: note: forward declaration of 'struct ap_device_id'
-     158 |         struct ap_device_id *ids;
-         |                ^
-   1 error generated.
---
->> drivers/s390/crypto/pkey_ep11.c:23:46: error: array has incomplete element type 'struct ap_device_id'
-      23 | static struct ap_device_id pkey_ep11_card_ids[] = {
-         |                                              ^
-   drivers/s390/crypto/ap_bus.h:158:9: note: forward declaration of 'struct ap_device_id'
-     158 |         struct ap_device_id *ids;
-         |                ^
-   1 error generated.
+> +	.ops.probe = ath12k_wifi8_pci_probe,
+> +	.reg_base = &ath12k_wifi8_reg_base,
+> +};
 
+Best regards,
+Krzysztof
 
-vim +22 drivers/s390/crypto/pkey_cca.c
-
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  20  
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  21  #if IS_MODULE(CONFIG_PKEY_CCA)
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22 @22  static struct ap_device_id pkey_cca_card_ids[] = {
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  23  	{ .dev_type = AP_DEVICE_TYPE_CEX4 },
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  24  	{ .dev_type = AP_DEVICE_TYPE_CEX5 },
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  25  	{ .dev_type = AP_DEVICE_TYPE_CEX6 },
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  26  	{ .dev_type = AP_DEVICE_TYPE_CEX7 },
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  27  	{ .dev_type = AP_DEVICE_TYPE_CEX8 },
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  28  	{ /* end of list */ },
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  29  };
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  30  MODULE_DEVICE_TABLE(ap, pkey_cca_card_ids);
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  31  #endif
-8fcc231ce3bea12 Harald Freudenberger 2024-08-22  32  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
