@@ -1,71 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795321118;
-	b=MvDjFT2n4u6boVlpYg/A1lct61tXfcoF1WW4dvhFf1yCcNALhuJ9+uAkFva2/E0AMriy
-	 4bLCcxPxiRa+8c5Qh+fL8nZBbyMkfq7mrLE/Ip+6UC25kUej4h85p++YdYLENl5uTCQKh
-	 IuwUKQW920thDMebFdXOtrwGI0HAWRBnKH6qMoM/Kf3MjCjnIp9cMgaOFX02aVbSzqxdP
-	 sT18TdMXEKoy/HPsjBEikKJg7saEvyKfZCQFOQu6vZz78JEDI/53w+AWvThCGYFpNtFBv
-	 ZZkgeEEwpGNXZ/il3060wo8ONTfO5+rczfmINSO8TliYlHzWYbHU0x3mp64mb8wbJjw==
+	t=1795323192;
+	b=Cc0en5jHYDhKPzaRQF72c3yslSS1or8xTfnYZe3Xc9y493yhIS+onUWQRRj+U7zLxJHh
+	 kOV9A1CobCqfqnqGD/0+ng5px8HFwu4OzwOYEB6PoLe49XhDg78nkNRXHJmWeFXsqg1z9
+	 /7xMlcwqQ00fNR+3KqTgJljOHmJPCPDs8PH3fIG4FC6aQwXh5lJUcWeBFRDYAjWyRRIwE
+	 N63RJ6//vFi+EhvKrZEe+dkv7lCFsiEC85WNRIXwqnLjtY21b7BedS0qji8GHlGuIas66
+	 AmfmwFLgKRwaYACRp/S6Ni9Zjy42D1nyc1j/IoML1pnDkdpNcnePlotWKsLsDVAgm8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795321118;
-	h=DMARC-Filter:X-SpamFilter-By:DKIM-Signature:Received:Received:
-	 Received:From:To:CC:Subject:In-Reply-To:References:Message-ID:Date:
-	 MIME-Version:Content-Type;
-	bh=fac/KNOQ0/j/4UQ1Z5/+n3/sT765ULivuStqwVxbL9k=;
-	b=kzToeQuErGGFHqz6Re18kQ+GOtgItQI1sEycorHvUq4HMz6MVhsCEY/uLw+zzrZ2a9IE
-	 Cs4ZABJtbzUq32I0wLyi/00UluF8acMagHyoH5xo6Box9EmxA4t1lzKJSDtH9iITggqSS
-	 60V7wca53SI42m1T/akjsyrmLYHl/6kz47p/0trK9QuCImjWcmPOtc6eISf/ZbFeA/6HO
-	 ZeHGY7ro8PI+yUOaugj24VNyxiY3cxNk3EMUCB+eKBLn0ckJqSSrMxqeNrTBHGwLr7tk7
-	 u5T8AdV1IhDhbXrG2G8Lg6Z8Oz1SWHMH0aaGGXOJaStJNOlAH5oD4A2wPOnckCyWaNw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795323192;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=p7rX67+fJl9J+Pa0Y3R1MHHrJYPdQ/dB5tLUZIlFfmY=;
+	b=Z05U6rKRZkG5T9DELc9J7VqDD8NVSifP+BYjsIR+hkqrIPnTCru6yctV4oANfcMZIQW7
+	 l8LYZXPFxUhlEGVaqasZ4cl/Bo9d/7NXJGt6pAuQpvfxGARhc8NMu2K/1ZqyvnqwrduWv
+	 p5EYfKzJBgjfkzXcGNGF58Nzz6kQTOkqegq7fmfz+hvy+XMQCwMh9ugw7lDia33UdsAH8
+	 eQJtH3RSBhqI8+wSv1E7NXmVHJMA+uCc8GQGyd0KuR1HSgRkTsNVGh+3HKuMgvLJs1MSQ
+	 qvnfts+UwPinlNf/znfO8eg+AS98h4CUxKJ+rrP/jZR0t6kQueCp6cIgvnQY4/vAh7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=realtek.com;
-	spf=pass smtp.mailfrom=realtek.com;
-	dkim=pass header.d=realtek.com header.i=@realtek.com header.a=rsa-sha256 header.s=dkim header.b=qiBWDgIc;
-	arc=none smtp.remote-ip=211.75.126.72
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mM81Bs6Q;
+	arc=none smtp.remote-ip=74.125.82.200
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F119D606A32A;
-	Sun, 22 Nov 2026 04:18:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F119D606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0527A606A32C
+	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:53:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0527A606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.a=rsa-sha256 header.s=dkim header.b=qiBWDgIc
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 6AM4IVzD4554653, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1795321111; bh=fac/KNOQ0/j/4UQ1Z5/+n3/sT765ULivuStqwVxbL9k=;
-	h=From:To:CC:Subject:In-Reply-To:References:Message-ID:Date:
-	 MIME-Version:Content-Type;
-	b=qiBWDgIcBii6xnVq2YlT12ur0kx4p2yw16cY2PpejfksEZrtaCLwN2y6Hxppkeb6G
-	 ix6I0ApsVuobYcZ5eTCQVMCIKHEcbB5Lv5yXCrRGhGtISkkpARdbLz6aG9lX3QEGMp
-	 qWbiaxmDtgvB/gF+PiE3qrZNiMMD/5V3zMHVxJoPyg+Lhm52UrevPxHv8E5kyghIZT
-	 76LK8g54cV1nbrxVxtMUz3Oi3cNcPGG8OfaYvLDwrFeB204tsgi5d4/9BOUfasKjAs
-	 0DGTUmF3P4+taorhJ3mKCdeu+wiDvV2g0AdApIw4vR+vYuJ6q9iQ4hLikZxOO8eVSE
-	 P9pjvSg6GGhsA==
-Received: from mail.realtek.com (rtkexhmbs04.realtek.com.tw[10.21.1.54])
-	by rtits2.realtek.com.tw (8.15.2/3.29/5.94) with ESMTPS id 6AM4IVzD4554653
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Sun, 22 Nov 2026 12:18:31 +0800
-Received: from RTKEXHMBS05.realtek.com.tw (10.21.1.55) by
- RTKEXHMBS04.realtek.com.tw (10.21.1.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Sun, 22 Nov 2026 12:18:32 +0800
-Received: from [127.0.1.1] (172.21.40.75) by RTKEXHMBS05.realtek.com.tw
- (10.21.1.55) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.56 via Frontend
- Transport; Sun, 22 Nov 2026 12:18:27 +0800
-From: Ping-Ke Shih <pkshih@realtek.com>
-To: Ian Rogers <irogers@google.com>, Ping-Ke Shih <pkshih@realtek.com>
-CC: <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Elkin Cruz <elkin@google.com>, Ian Rogers
-	<irogers@google.com>
-Subject: Re: [PATCH] wifi: rtlwifi: Fix octal 024 typo in P2P_PS_OFFLOAD H2C command IDs
-In-Reply-To: <20261119170753.1526210-1-irogers@google.com>
-References: <20261119170753.1526210-1-irogers@google.com>
-Message-ID: <de6975cb-ebe4-4cf0-ba22-5058526691eb@RTKEXHMBS05.realtek.com.tw>
-Date: Sun, 22 Nov 2026 12:18:27 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mM81Bs6Q
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-38531c1a566so5918152eec.1
+        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 20:53:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795323190; x=1795927990; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=p7rX67+fJl9J+Pa0Y3R1MHHrJYPdQ/dB5tLUZIlFfmY=;
+        b=mM81Bs6Quht2keyersOPskdAI8d+GP4QkjHS3ksyK37lkqn7xvPNE3YVUDUSRf2wMb
+         7LKjdpTE+MuJxGXvkF9fA6JB6UvQaCN90sELNtfCyXEDzgblkn4Fn5XAkWPG6cUlpaS6
+         8nfLh/MqkcWebMl0Yah1FSqXBWvYxzuBuxnvadXDTYa+B2V/r21+Q28Lkx9J0bMkh4XO
+         S79gRfTx6Zy0F/a+eUH+2B97amDCPrw5pVq0TXpNHnz1AtEHmuRCeQxJISlL1+vZQ6AW
+         G2cE5FJsitlygUMbsoPqSUbiSLi56pTCBMMfNmvOm/XgqjcC+p+Pfd3djCGodGJld7ye
+         Ob2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795323190; x=1795927990;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=p7rX67+fJl9J+Pa0Y3R1MHHrJYPdQ/dB5tLUZIlFfmY=;
+        b=fPPJvWxCZuzp997RBbp0c36FHDdQnQlTAfDjvyyGuCeeBX389Z8Bjtpz7T8k2Fleam
+         Pnv82kxP32eWvQ6Y1QJlIPPlbuZ2oeJJ1cNYx6Y1vrgX5Jm17fmwG7VcFIPeV72Ufe7w
+         GypOk18W+9TL5e8BaC5DNL3lblS7w/s73UBFzSFSo2+QsQYKea1ZfUhYYEghGjFx2KCz
+         V9vcuVg16PubJAATLEs3BjhdO8FH2vRmg7W9L+RxTG5UpFiTf2+B8X3DX8j/0QNRvxq6
+         OfsIdGGVObsSx1tJesti6ObXENdMWSQJ9bEdUBKAAwf4g+5QC2Ak9JLYRbfg/+zK01sB
+         18DA==
+X-Forwarded-Encrypted: i=1; AL+hErHxeze1maELsNVmmFC75syHL+JbgTpRtgFdX0DGvaEx0PD30d7mFpwAc8VC5OWMTBdkbztt@lists.linux.dev
+X-Gm-Message-State: APuU4Z/tdZDjMo9sX0TfWj09om4scF5D4z7Wajrpxrj5bby0FIpHfnHC
+	Wz1q2qzesOhbvIMaM+ejhQD8G/Vc4lnko8pgC+S7c5oyVO6PCTVzUZK0iFKWWhCOEIQKfXv/uT0
+	tImUoHa2PtA==
+X-Received: from dycnb22.prod.google.com ([2002:a05:7301:b16:b0:383:7f56:6996])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:416:b0:356:7ddb:2e54
+ with SMTP id 5a478bee46e88-38570f27b33mr8386164eec.29.1795323189687; Sat, 21
+ Nov 2026 20:53:09 -0800 (PST)
+Date: Sat, 21 Nov 2026 20:53:05 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -74,35 +75,76 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
+Message-ID: <20261122045305.17511-1-irogers@google.com>
+Subject: [PATCH net v2] net: marvell: prestera: Fix skb leak on error in prestera_rxtx_xmit()
+From: Ian Rogers <irogers@google.com>
+To: Elad Nachman <enachman@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Ian Rogers <irogers@google.com> wrote:
+prestera_rxtx_xmit() is invoked directly from prestera_port_xmit(), the
+driver's .ndo_start_xmit() callback, whose return type is netdev_tx_t.
+When skb_cow_head() or prestera_dsa_build() fails, prestera_rxtx_xmit()
+returns NET_XMIT_DROP (0x01) without freeing skb.
 
-> In rtl8821ae, rtl8192ee, and rtl8188ee, the H2C power-save command enums
-> define 0x20, 0x21, 0x22, 0x23 followed by 'H2C_*_P2P_PS_OFFLOAD = 024'.
-> The missing 'x' makes 024 an octal constant (decimal 20, 0x14) instead of
-> 0x24 (decimal 36, matching H2C_8723B_P2P_PS_OFFLOAD = 0x24 in rtl8723be
-> and rtl8xxxu), sending the wrong H2C command ID to firmware during Wi-Fi
-> Direct P2P power-save offload updates.
-> 
-> Change 024 to 0x24 in all three headers.
-> 
-> Found via inspection of H2C command enums during an x86_64 LLVM=1
-> (Clang 21.1.8) allyesconfig warning audit; fix and changelog drafted with
-> an AI coding assistant. Build-tested under LLVM=1 W=1 (-Werror); not
-> tested on Realtek Wi-Fi hardware.
-> 
-> Fixes: f0eb856e0b6c ("rtlwifi: rtl8188ee: Add new driver")
-> Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
-> Fixes: b1a3bfc97cd9 ("rtlwifi: rtl8192ee: Move driver from staging to the regular tree")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+Because NET_XMIT_DROP (0x01) is less than NET_XMIT_MASK (0x0f),
+dev_xmit_complete() returns true and dev_hard_start_xmit() assumes the
+driver has already consumed or freed the skb, leaking the packet buffer.
 
-1 patch(es) applied to rtw-next branch of rtw.git, thanks.
+Free the skb with dev_kfree_skb_any(), increment the core tx_dropped
+counter via dev_core_stats_tx_dropped_inc() (so .ndo_get_stats64 reports
+the software drop), and return NET_XMIT_DROP.
 
-931e49022fb6 wifi: rtlwifi: Fix octal 024 typo in P2P_PS_OFFLOAD H2C command IDs
+Found by enabling Clang's -Wassign-enum on an x86_64 allyesconfig build,
+with AI coding assistant help to audit the warning and prepare the fix.
+Build-tested with LLVM=1 W=1 (-Werror); not runtime-tested on Prestera
+switch hardware.
 
+Fixes: 501ef3066c89 ("net: marvell: prestera: Add driver for Prestera family ASIC devices")
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
-https://github.com/pkshih/rtw.git
+
+Notes:
+    v2:
+      - Keep returning NET_XMIT_DROP at drop_skb and fix the commit message
+        description of dev_xmit_complete() / dev_hard_start_xmit() (Elad
+        Nachman).
+    
+    v1: https://lore.kernel.org/r/20261119170354.1509589-1-irogers@google.com
+
+ drivers/net/ethernet/marvell/prestera/prestera_rxtx.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
+index c4ea247d2470..e62378abcffc 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
+@@ -817,13 +817,18 @@ netdev_tx_t prestera_rxtx_xmit(struct prestera_port *port, struct sk_buff *skb)
+ 	dsa.port_num = port->hw_id;
+ 
+ 	if (skb_cow_head(skb, PRESTERA_DSA_HLEN) < 0)
+-		return NET_XMIT_DROP;
++		goto drop_skb;
+ 
+ 	skb_push(skb, PRESTERA_DSA_HLEN);
+ 	memmove(skb->data, skb->data + PRESTERA_DSA_HLEN, 2 * ETH_ALEN);
+ 
+ 	if (prestera_dsa_build(&dsa, skb->data + 2 * ETH_ALEN) != 0)
+-		return NET_XMIT_DROP;
++		goto drop_skb;
+ 
+ 	return prestera_sdma_xmit(&port->sw->rxtx->sdma, skb);
++
++drop_skb:
++	dev_kfree_skb_any(skb);
++	dev_core_stats_tx_dropped_inc(port->dev);
++	return NET_XMIT_DROP;
+ }
+-- 
+2.56.1.750.gf70dc682cf-goog
 
