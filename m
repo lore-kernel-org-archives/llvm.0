@@ -1,78 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795310823;
-	b=CYOXwqr7cs6gt/RG5qEqbHrDGJ/XJ8gxgWJBuRuO125UgmC9cprHgGNsghXV05AQaDZf
-	 i5p4qhB/IFhjLb89BeKsZdAsyFRKIYyFoSAVRE3/i1rVIhGDDz/4SV/GICWSSBKHCdMsD
-	 1Fhpy70iiwmLw4P9F5REhgg/hyypafEnsJs4SS0R5/zVa+vPIWGyYkiTSnFy9MBgfyB/J
-	 06KtX+dFEKaHyTObslxcxfHUGz7NclABcAa3FlwQ77lIK5xcOuj5PDDyk7O8ryLnHzary
-	 d/1wb6jVKCJbVL6ZmyvoJOr+5xuzEsS/LSRWc1TY21DwyBUu7TBdRNu+HNdTf5wjBUA==
+	t=1795320368;
+	b=kS5Pte4F3yHuNj5B6Jh95QT0j0hwDkHFBlF9n4M9q4I51gV6cnWmjmzdzv4bV9+FpSQo
+	 B/ScyG3Pv0h+Suwwr6eRH5zOTPsNjMRXRuAUQcFY31zEYDziIYwWI9NWOSn9oecOHHwSA
+	 Zo8ob7C/Mo43aYtYqePta3/e7MZH6dsqooZdp5U3Y1HEXhk+alGaIAQUdnfqWl1mSutpA
+	 TusKsn9vN8XefVJkAHQPPSeFvY+WSuycrLB4xteIAoNGRqeRO4n3A4FjMYTYjolZy0jTZ
+	 Os15bjFJw6a3ZjL3PgFQoa71acVkGMf+FTHTMYA7tyylejlRJkf0Q0S8E9FFiQLrtGg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795310823;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=nlrnJ1MEmoSQ8WjYVvRJfU9Fpkq5KKWacqaqSZEKft8=;
-	b=mU5rboQPSRi5E/k1x7N4czUi/fCcv8uotn+5yoztCYK09EiS4khcWwoGPy+qiMSRDJHl
-	 XDVTPY9j02sIUiH4UKSiTVClOUTrHjbMNjxtBsQtlDhqXMzbWnGfrJu4C/iQIOOceh4x9
-	 ONcCjTKVqh06XcDQinFGd9h7M/n749MGibDhbj6dM6nc54kBM8hSdk09yfh7owH5mZYBF
-	 XTGjmzXIwP6VgHMCk4zr1TU6+H5X+fBu8WMoBzWO4XxnEIp9yvUkLbG7aiG9RuTETIDN8
-	 8AzsXQ8yZjgqLvnyHvnz/18h7iwKuRZjPUHMk9nR4VOKv2FUeeqSXHVYTjHAvt/eVCg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795320368;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=9PuR6BxW1bsGd2uW0XkZ13RLiKGF+CwssnUyvB4C4G8=;
+	b=Kg6wzktmYmnPI+PJiR1BhmqImgn9XzIXwKjgMQkSgvnjijiNt0NmhhOkklqa4TSPD6n4
+	 vPYanEBFbDGK4oiWjPZ0DWfdZuZTfeP6eVbItOLIDgFHr4ssgmlGKZSj8E7jp/Kn8N6ro
+	 IlX9r15DN2GbG1UfU7I1My+RVylbovxwxXaQz4VtJno8/y/XHdxD5XO5DsAG3hGtnKkQS
+	 9F9Ms7Ir4sKn12j/ZmDqWGRTz6M3vYCp6ar0g4CRRh3/JzD7cLZLOT6CcpDuqXwK+hbWt
+	 4bvUbnTYcv0nqohu87vmw0fxJXAa8wX5z+xb6M6dR3dOgkBFFHh9d33Frlkg6nb0nXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mp4p5VI3;
-	arc=none smtp.remote-ip=192.198.163.8
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Qp9OY3Fn;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60564606A330;
-	Sun, 22 Nov 2026 01:27:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60564606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C44C606A32C
+	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:06:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C44C606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mp4p5VI3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795310823; x=1826846823;
-  h=date:from:to:cc:subject:message-id;
-  bh=R1jUNFW4du44WXWAvk6UbdFhllk3VGpcCk8YPcCxEW8=;
-  b=mp4p5VI3KYduxRinfdV9yWR25mZf/i4LhKVslHBBA7vFOtOyDCEM3A6d
-   OjXShpP6FAC2EKqAUmNc2WZ61fpBBjXrTn8UAH+htZv5y4pHQH9dtykYv
-   seaiQGzzQyfZns9SkWm7g+jVFUUzUdsdpI1fVrFfJdvC4AW3d4twOaMAj
-   Wpk9i1hfQ+rk05XqG7qbbagD81kFLVrJRoBEdc3LA2U0Vrc2IgSbhNP+j
-   KZ2ohzt+yCrRJfvA8TrcfM/Ol/Ar9aRk6mrqeVwHjJJK9GRlyQHLKpFQO
-   Cr4jO7MxbwDEtKi5IjVXBq9Wn926LNRyDoG3Idf+D593aSGE97CQI8YIU
-   w==;
-X-CSE-ConnectionGUID: x3aIA4srQ3G3J8gN6+BWuQ==
-X-CSE-MsgGUID: xQ4x3l9gR72JBsduNDYs8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11973"; a="4049772"
-X-IronPort-AV: E=Sophos;i="6.27,226,1787036400"; 
-   d="scan'208";a="4049772"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2026 17:27:02 -0800
-X-CSE-ConnectionGUID: btGkmVORTIOsOqYro0KLbw==
-X-CSE-MsgGUID: R1YcoLHNRxCwKNfx54FAsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,226,1787036400"; 
-   d="scan'208";a="11412789"
-Received: from igk-lkp-server01.igk.intel.com (HELO 1073a420ae3a) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 21 Nov 2026 17:27:00 -0800
-Received: from kbuild by 1073a420ae3a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xUwM3-000000004Rx-37er;
-	Sun, 22 Nov 2026 01:26:55 +0000
-Date: Sun, 22 Nov 2026 02:26:38 +0100
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Helge Deller <deller@gmx.de>
-Subject: [deller-fbdev:for-next 15/16]
- drivers/video/fbdev/core/bitblit.c:94:35: error: no member named 'rotated' in
- 'struct fbcon_par'
-Message-ID: <20261122015534.liMRwGYt-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Qp9OY3Fn
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2f00fc215f9so15222935ad.0
+        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 20:06:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795320368; x=1795925168; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9PuR6BxW1bsGd2uW0XkZ13RLiKGF+CwssnUyvB4C4G8=;
+        b=Qp9OY3FnzrJfQZoHMD9a67hELZBhK+p7IsyMmXY+v3X40t8tNtEIVopfKwH3rp+28R
+         vOiHq84WjnzpKNqYmoSEjCtDK+E7aW7ylMDs65I6w9I0sBy/f395kAK9Gn/PcCTnMbWc
+         z6saJesUvmWyVg4PvKfSWKTNGsWQV2ELK9IXbuCA2zDxshp9dtFj/UCSAezLhKpotb45
+         Yxo7teAICgXeak1oc8JgAxnVLcOvi4XCuuF9NVN0mTGEol0ZX4JFyvfeMeoFWoRGblsW
+         GEGaD1PahNYB+nMjNWgojHdxpQkDvy9kMoDTTMZXJ15oJKOONCOWZE4ZsojSVBYNmsFj
+         KmIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795320368; x=1795925168;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9PuR6BxW1bsGd2uW0XkZ13RLiKGF+CwssnUyvB4C4G8=;
+        b=J7IifJ2aXIsfKYFLum42awdauHV8/joI4dRNyXKIoKN6Q1uH7tU/8Lr0ccP1Zl2jOc
+         EoDulluSY9VlLsHBIORY2zYlsKIGkSTYpvoTitvZTwtQ+lUNdK37uNSxayg0Gebry19V
+         MxQpa/ruYPTC2kUmJRIeyFfLyofOtykFPw9QdeWwecNFnnYZPvt3zLwACZUTIRYr66F6
+         5XYsiShGSQ1g0Y96ylLPFLe8NFJj7HNcSzXbtrgop3sA/YSak51DFwhxw+OUH+VK4ryS
+         exDN2fgHLyoaCpVb1PM7P3UB2zuOqmLGdFEw82DU4mPunw8w4VNPSk2yq+xSXoxWsjn6
+         ycBw==
+X-Forwarded-Encrypted: i=1; AL+hErEl+se26ilGKQtgFPDpmkMO+1tXmo/7kJr8HXnauLaoePkQ0j7XGYYb4tTqDfi61z3ifTbu@lists.linux.dev
+X-Gm-Message-State: APuU4Z8J3HWeiVYlTmochoU83UOSE/P4T3/V2DnhMEdUtOt2dBJHKdi/
+	5BBFrBp6xfzTypc3Chj4HQvx7X5AahvKJHQmmALqNBF/dZJolQ6btAPU
+X-Gm-Gg: AZFdTZc006k5NXvdwUh8vDxvKhumIp9VhrF0YSHuqsboc3nTc1WQp0QvHme7lkvGOTG
+	oXy69bl2IBpgC/DLMRJWMGvgoUjcsMv6ebVpuWoHZ9GR7NBFX6Yf8dCtjTB8WkVu/jeAVSqM415
+	yx3aY7D3l8KVShckjNCU65k3iMtMLFi+5Zr/x48zObZltDmEFOO5hd2KXKp6C7kl56BEiT0pDX8
+	0gYGkrZK7W4sPELqoTXKuEWzMlxdq62BlIAzT3JYBXJA8RiGXBpyCTf8vr78aIpvmxe9aWS9CAv
+	DcLUrF+1eV6Ttv8F57rUT194ts7ly4pBOGGWVMFv8YoxoHZ/JPse4nIGCx0/5ssH2GwVbi70wPb
+	hkUApW1DC03BZsT0YdyKWHngsHfWdBvFzhH1EoclRF6NPoq+T1EvCVqoPTBsjVTGd7TMo0o4Bte
+	DaFnLw1f/jY8HKzDj53weta2/3AZ2K5W2DK8PtoraC9pKX/4KZO+URikIjOR4dh4KtIr2r+TvSN
+	RkTWvMjJKcjjHvI35WU7Bj6VVebvOGlEszhNKFmxmRp4day3IouW1K1YaDnFDDiTjppZc1uj4qe
+	VFsUMsNhOy2sCntekVZtXShjuvhExNOb6Q==
+X-Received: by 2002:a17:90b:3d92:b0:3b1:2237:3c93 with SMTP id 98e67ed59e1d1-3b41c8de8d7mr6039371a91.18.1795320367746;
+        Sat, 21 Nov 2026 20:06:07 -0800 (PST)
+Received: from arm-a100.. ([140.112.28.118])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad92c07sm10947018a91.13.2026.11.21.20.06.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2026 20:06:07 -0800 (PST)
+From: Tzu-Ching Yang <shingekinocore@gmail.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-mips@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix genex.S build with LLVM before 21
+Date: Sun, 22 Nov 2026 12:05:59 +0800
+Message-Id: <20261122040559.1120594-1-shingekinocore@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <alpine.DEB.2.21.2611040746160.6502@angie.orcam.me.uk>
+References: <20261104030147.3117325-1-shingekinocore@gmail.com> <alpine.DEB.2.21.2611040746160.6502@angie.orcam.me.uk>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -81,74 +106,44 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git for-next
-head:   b2595e9adf4d5ea8ab31f3da7bd5ff5b0a479a64
-commit: c8d71132c412bc50728c5ec2b8a8c7ab405e132d [15/16] fbcon: Handle characters with no glyph defined in a consistent way
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261122/20261122015534.liMRwGYt-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261122/20261122015534.liMRwGYt-lkp@intel.com/reproduce)
+Sorry for the late reply: your mail did not reach my mailbox, and I did
+not check the list archive until now.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261122015534.liMRwGYt-lkp@intel.com/
+On Wed, 4 Nov 2026, Maciej W. Rozycki wrote:
+>  Shouldn't this use:
+>
+> Cc: <stable@vger.kernel.org> # 6.6.x: 56651128e2fb: MIPS: Fix idle VS timer enqueue
+> Cc: <stable@vger.kernel.org> # 6.6.x: 2b6d718c8dbe: MIPS: Fix whitespace damage in r4k_wait from VS timer fix
+> Cc: <stable@vger.kernel.org> # 6.6.x
+>
+> then to get this all picked up?
 
-All errors (new ones prefixed by >>):
+Yes, with one more prerequisite after 56651128e2fb: b713f27e32d8
+("MIPS: Move r4k_wait() to .cpuidle.text section"). I will send v2
+with it added to your tags.
 
->> drivers/video/fbdev/core/bitblit.c:94:35: error: no member named 'rotated' in 'struct fbcon_par'
-      94 |                         src = font_data_glyph_buf(par->rotated.buf, s_width, s_vpitch, '\0');
-         |                                                   ~~~  ^
-   drivers/video/fbdev/core/bitblit.c:137:35: error: no member named 'rotated' in 'struct fbcon_par'
-     137 |                         src = font_data_glyph_buf(par->rotated.buf, s_width, s_vpitch, '\0');
-         |                                                   ~~~  ^
-   2 errors generated.
+56651128e2fb adds a .previous after END(r4k_wait), and the .section
+that it pairs with only comes with b713f27e32d8. With only your three
+tags, on 6.12.118 and 6.6.162, all the code after r4k_wait in genex.S,
+handle_int and the other exception handlers included, is placed in
+.init.text, and a malta kernel hangs under QEMU about when the init
+memory is freed.
 
+With the four tags, the cherry-picks and this patch apply cleanly on
+both trees. For malta_defconfig, genex.o builds with GCC 8.1 and 16.2
+and with LLVM 13.0.1, 17.0.1 and 21.1.8 (on 6.6.162 also 11.1.0), and
+kernels built with GCC 16.2 and LLVM 17.0.1 boot under QEMU. On 6.1.y
+and older, 56651128e2fb conflicts in idle.c, so 6.6.x is as far back
+as the cherry-picks apply cleanly.
 
-vim +94 drivers/video/fbdev/core/bitblit.c
+> Or is it unsupported annotation syntax
+> where a prerequisite matches a Fixes: tag?
 
-    76	
-    77	static inline void bit_putcs_aligned(struct vc_data *vc, struct fb_info *info,
-    78					     const u16 *s, u32 attr, u32 cnt,
-    79					     u32 d_pitch, u32 s_width, u32 s_vpitch,
-    80					     struct fb_image *image,
-    81					     unsigned char *buf, u8 *dst)
-    82	{
-    83		u16 charmask = vc->vc_hi_font_mask ? 0x1ff : 0xff;
-    84		u32 idx = vc->vc_font.width >> 3;
-    85		struct fbcon_par *par = info->fbcon_par;
-    86		u32 s_pitch = font_glyph_pitch(s_width);
-    87		const unsigned char *src;
-    88	
-    89		while (cnt--) {
-    90			u16 ch = scr_readw(s++) & charmask;
-    91	
-    92			src = font_data_glyph_buf(par->p->fontdata, s_width, s_vpitch, ch);
-    93			if (!src) {
-  > 94				src = font_data_glyph_buf(par->rotated.buf, s_width, s_vpitch, '\0');
-    95				if (!src)
-    96					goto next_char;
-    97			}
-    98	
-    99			if (attr) {
-   100				update_attr(buf, src, attr, vc);
-   101				src = buf;
-   102			}
-   103	
-   104			if (likely(idx == 1))
-   105				__fb_pad_aligned_buffer(dst, d_pitch, src, idx,
-   106							image->height);
-   107			else
-   108				fb_pad_aligned_buffer(dst, d_pitch, src, idx,
-   109						      image->height);
-   110	next_char:
-   111			dst += s_pitch;
-   112		}
-   113	
-   114		info->fbops->fb_imageblit(info, image);
-   115	}
-   116	
+It has worked before: the prerequisite named by 4409df5866b7 is
+its Fixes: target, and 6.1.76 and 6.6.15 took both.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Tzu-Ching
