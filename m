@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795323192;
-	b=Cc0en5jHYDhKPzaRQF72c3yslSS1or8xTfnYZe3Xc9y493yhIS+onUWQRRj+U7zLxJHh
-	 kOV9A1CobCqfqnqGD/0+ng5px8HFwu4OzwOYEB6PoLe49XhDg78nkNRXHJmWeFXsqg1z9
-	 /7xMlcwqQ00fNR+3KqTgJljOHmJPCPDs8PH3fIG4FC6aQwXh5lJUcWeBFRDYAjWyRRIwE
-	 N63RJ6//vFi+EhvKrZEe+dkv7lCFsiEC85WNRIXwqnLjtY21b7BedS0qji8GHlGuIas66
-	 AmfmwFLgKRwaYACRp/S6Ni9Zjy42D1nyc1j/IoML1pnDkdpNcnePlotWKsLsDVAgm8A==
+	t=1795323195;
+	b=aOg3mE5dkpxxU6ulHPOlie2esLBoq+pcGuYz21YP3T+8L80GeCl3sW6ZAnZRR6jYHwhj
+	 v1dP4783/9VDP0xaBtR0xohGrn0SOuHi4Ll99WPKF2PZ00aBN7dFK+u+bGV7qN7hgKdXV
+	 4J402xcCUQa9TFJewlXnd4rsDjDDLbVtF7nHe48ru1hO59bpDfu+O87fgqzwvSJ1JpWsl
+	 EcbDGYMrqZSzbNSeX0XaRyss8+nqaUMsjg1/x6mh9eYMqMcm2WQ3JfVeGDVnb/eKPiRoV
+	 Ep5lSR8GWWj426OCYwF5AyNQz+sWbDYO9NJguf5jRLPvKIDtCiYTBi+SqKeV4FUi6hw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795323192;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795323195;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=p7rX67+fJl9J+Pa0Y3R1MHHrJYPdQ/dB5tLUZIlFfmY=;
-	b=Z05U6rKRZkG5T9DELc9J7VqDD8NVSifP+BYjsIR+hkqrIPnTCru6yctV4oANfcMZIQW7
-	 l8LYZXPFxUhlEGVaqasZ4cl/Bo9d/7NXJGt6pAuQpvfxGARhc8NMu2K/1ZqyvnqwrduWv
-	 p5EYfKzJBgjfkzXcGNGF58Nzz6kQTOkqegq7fmfz+hvy+XMQCwMh9ugw7lDia33UdsAH8
-	 eQJtH3RSBhqI8+wSv1E7NXmVHJMA+uCc8GQGyd0KuR1HSgRkTsNVGh+3HKuMgvLJs1MSQ
-	 qvnfts+UwPinlNf/znfO8eg+AS98h4CUxKJ+rrP/jZR0t6kQueCp6cIgvnQY4/vAh7A==
+	bh=KAzUKzhhhScUAMTrwfyxBtcZxPud2TmkB4S9e7vTEGg=;
+	b=tFv6Hm/A3xF/pCJG9b0Kkj/g7p/5oIfGByFq0XNSHsREstSSUXnNaEy531dUjsWPkOqo
+	 WgQopPlA1aNoDrwSihT0hy5L68D/0eBSarZGG02KnUqjeoyymSU3TMLG8bkRBTVYdy8ex
+	 /cAF+9LbhVV7wb3X0ccdlxG8KmGddl4I24uBy/J4vbGGeiLFORThE7eX+kQ39lqN6A/pY
+	 86YCfoQYZXe1Bshmut2+jcJejdTBpnYfq8X7lpk4ryfPVI5AXOWQKd8ao6ZOSUs8Qsuol
+	 dJVMZm1JcCB05qkUtkySEmT2KRxTpOqxpdPTXu5BdeWlphVboFbB0RJjoszOPspoSTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mM81Bs6Q;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=K3tzaj5s;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0527A606A32C
-	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:53:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0527A606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7774606A331
+	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:53:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7774606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mM81Bs6Q
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-38531c1a566so5918152eec.1
-        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 20:53:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=K3tzaj5s
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-386a7af8b94so261815eec.0
+        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 20:53:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795323190; x=1795927990; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795323194; x=1795927994; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=p7rX67+fJl9J+Pa0Y3R1MHHrJYPdQ/dB5tLUZIlFfmY=;
-        b=mM81Bs6Quht2keyersOPskdAI8d+GP4QkjHS3ksyK37lkqn7xvPNE3YVUDUSRf2wMb
-         7LKjdpTE+MuJxGXvkF9fA6JB6UvQaCN90sELNtfCyXEDzgblkn4Fn5XAkWPG6cUlpaS6
-         8nfLh/MqkcWebMl0Yah1FSqXBWvYxzuBuxnvadXDTYa+B2V/r21+Q28Lkx9J0bMkh4XO
-         S79gRfTx6Zy0F/a+eUH+2B97amDCPrw5pVq0TXpNHnz1AtEHmuRCeQxJISlL1+vZQ6AW
-         G2cE5FJsitlygUMbsoPqSUbiSLi56pTCBMMfNmvOm/XgqjcC+p+Pfd3djCGodGJld7ye
-         Ob2g==
+        bh=KAzUKzhhhScUAMTrwfyxBtcZxPud2TmkB4S9e7vTEGg=;
+        b=K3tzaj5smhcmwt5HzIuvFFwc/YASGgSRCioN/38gYLpNeYUNRuT13QdSEMCN+eVb8W
+         iYOdNBXouzZ+7SGqb2mGOyJ8sZSGwJCxNtZG2q998/bNMt9topEYZSFATiZs3HxJMvP2
+         4Nx3jvUcbRBd3GUlV/gyexyspaeSj8l/qp00BbZ1LZi6aUu9b4cuoxEvECtVAf/ESyyS
+         LNia5iOs+xGuuiPXTIln9K5qsDcfT4nKILCMYi9ZwmIAgLU8xrcbbeQV+SlwPmPlY4OD
+         Vr0fk3pCMxObzbG7MUs1oHZsUF3yRY+clYP23lJL4LLUZm3Fi9/fbjqA5bdjRQ05WTy7
+         Zopw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795323190; x=1795927990;
+        d=1e100.net; s=20260707; t=1795323194; x=1795927994;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=p7rX67+fJl9J+Pa0Y3R1MHHrJYPdQ/dB5tLUZIlFfmY=;
-        b=fPPJvWxCZuzp997RBbp0c36FHDdQnQlTAfDjvyyGuCeeBX389Z8Bjtpz7T8k2Fleam
-         Pnv82kxP32eWvQ6Y1QJlIPPlbuZ2oeJJ1cNYx6Y1vrgX5Jm17fmwG7VcFIPeV72Ufe7w
-         GypOk18W+9TL5e8BaC5DNL3lblS7w/s73UBFzSFSo2+QsQYKea1ZfUhYYEghGjFx2KCz
-         V9vcuVg16PubJAATLEs3BjhdO8FH2vRmg7W9L+RxTG5UpFiTf2+B8X3DX8j/0QNRvxq6
-         OfsIdGGVObsSx1tJesti6ObXENdMWSQJ9bEdUBKAAwf4g+5QC2Ak9JLYRbfg/+zK01sB
-         18DA==
-X-Forwarded-Encrypted: i=1; AL+hErHxeze1maELsNVmmFC75syHL+JbgTpRtgFdX0DGvaEx0PD30d7mFpwAc8VC5OWMTBdkbztt@lists.linux.dev
-X-Gm-Message-State: APuU4Z/tdZDjMo9sX0TfWj09om4scF5D4z7Wajrpxrj5bby0FIpHfnHC
-	Wz1q2qzesOhbvIMaM+ejhQD8G/Vc4lnko8pgC+S7c5oyVO6PCTVzUZK0iFKWWhCOEIQKfXv/uT0
-	tImUoHa2PtA==
-X-Received: from dycnb22.prod.google.com ([2002:a05:7301:b16:b0:383:7f56:6996])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:416:b0:356:7ddb:2e54
- with SMTP id 5a478bee46e88-38570f27b33mr8386164eec.29.1795323189687; Sat, 21
- Nov 2026 20:53:09 -0800 (PST)
-Date: Sat, 21 Nov 2026 20:53:05 -0800
+        bh=KAzUKzhhhScUAMTrwfyxBtcZxPud2TmkB4S9e7vTEGg=;
+        b=iBEP/KOExahtjhjGmfb8kU2HSxMC1nEaFRZFSnHSaGokORI/htV4Qo7kcKVhR3Pob2
+         tBv2JB5ODOMNOMppuoK1m2cam6lrFTyiFg+kK61oDqVFLKB6GkNxudRT0ZFKTTQbaKXe
+         BaZu2UhwwZumn+K7lwIct75U9hYfBECsmRRkUGKcni0yeEDVpsu5gRA9uDBjZY4IPPov
+         KYs4BpdnHNSePYja3SYnELkiJOmVYtwjMYvOpyPzU0n47HjQKVRoH0mP+X20i5i4R0cW
+         vnXe4clg2LWh0PmFNMf4wJQYhASZwm75Lv0trmwjPDpra9yY/NkMxKku7ynsoVPZTTAx
+         1x2Q==
+X-Forwarded-Encrypted: i=1; AL+hErGjVrLetsYZOWNSTh7JUwQGmh/tbmuOZ1qOKdFNKp7VkHrgTV+mMvvswW3QUrTe93xUf1Vy@lists.linux.dev
+X-Gm-Message-State: APuU4Z95LE6vuTTSr+5P/lUi+Xqq9Rf8+aEPMV1Ww+HgFPVwKXylXC3D
+	spV5avgN1/ctJNXObzBCWXOjNyFkpeOKjYnV520F3bqXFPgo5lgvp57QX9OybG0Ps0kJskASZJR
+	IQQz3XfScaw==
+X-Received: from dybzy10.prod.google.com ([2002:a05:7301:e10a:b0:381:6d21:2e90])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:20c6:10b0:36a:15ee:c20e
+ with SMTP id 5a478bee46e88-3869a150409mr4897178eec.33.1795323193190; Sat, 21
+ Nov 2026 20:53:13 -0800 (PST)
+Date: Sat, 21 Nov 2026 20:53:10 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,74 +77,104 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261122045305.17511-1-irogers@google.com>
-Subject: [PATCH net v2] net: marvell: prestera: Fix skb leak on error in prestera_rxtx_xmit()
+Message-ID: <20261122045310.17980-1-irogers@google.com>
+Subject: [PATCH v2] scsi: aic7xxx: Check ahc->flags instead of ahc->features
+ for AHC_SCB_BTT
 From: Ian Rogers <irogers@google.com>
-To: Elad Nachman <enachman@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: Hannes Reinecke <hare@suse.com>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>
+Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-prestera_rxtx_xmit() is invoked directly from prestera_port_xmit(), the
-driver's .ndo_start_xmit() callback, whose return type is netdev_tx_t.
-When skb_cow_head() or prestera_dsa_build() fails, prestera_rxtx_xmit()
-returns NET_XMIT_DROP (0x01) without freeing skb.
+In ahc_linux_run_command(), the untagged queue throttling check tests
+'(ahc->features & AHC_SCB_BTT) == 0'. However, AHC_SCB_BTT (0x40000) is
+an ahc_flag bit stored in ahc->flags (and tested via ahc->flags at all
+17 other sites across aic7xxx), whereas ahc->features has type
+ahc_feature where bit 0x40000 is AHC_MULTIROLE, which is never set on
+any controller.
 
-Because NET_XMIT_DROP (0x01) is less than NET_XMIT_MASK (0x0f),
-dev_xmit_complete() returns true and dev_hard_start_xmit() assumes the
-driver has already consumed or freed the skb, leaking the packet buffer.
+Until now, '(ahc->features & AHC_SCB_BTT) == 0' was always true, which
+serialized untagged commands across the whole target via
+ahc->untagged_queues and masked a second omission from commit
+e4e360c325c9 ("[SCSI] remove aic7xxx busyq"): ahc_platform_set_tags()
+sets queue_depth to 2 for untagged devices ("even though we can only
+execute them serially on the controller/device"), while SCB_64_BTT only
+stores one SCB tag per (target, LUN) slot. In addition, sdev->simple_tags
+remains set on SCSI-2+ devices even when aic7xxx disables tagging on dev
+(clearing AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED).
 
-Free the skb with dev_kfree_skb_any(), increment the core tx_dropped
-counter via dev_core_stats_tx_dropped_inc() (so .ndo_get_stats64 reports
-the software drop), and return NET_XMIT_DROP.
+Check both !(cmd->flags & SCMD_TAGGED) and
+(dev->flags & (AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED)) == 0, return
+SCSI_MLQUEUE_DEVICE_BUSY when dev->active != 0 so untagged commands are
+serialized per LUN, and test ahc->flags instead of ahc->features for
+AHC_SCB_BTT so controllers with SCB-space busy-target tables can still
+issue untagged commands to different LUNs of a target concurrently.
 
-Found by enabling Clang's -Wassign-enum on an x86_64 allyesconfig build,
-with AI coding assistant help to audit the warning and prepare the fix.
-Build-tested with LLVM=1 W=1 (-Werror); not runtime-tested on Prestera
-switch hardware.
+Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
+-Wenum-enum-conversion enabled; fix and changelog drafted with an AI
+coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
+-Wenum-enum-conversion; not tested on Adaptec Parallel SCSI hardware.
 
-Fixes: 501ef3066c89 ("net: marvell: prestera: Add driver for Prestera family ASIC devices")
+Fixes: e4e360c325c9 ("[SCSI] remove aic7xxx busyq")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
 
 Notes:
     v2:
-      - Keep returning NET_XMIT_DROP at drop_skb and fix the commit message
-        description of dev_xmit_complete() / dev_hard_start_xmit() (Elad
-        Nachman).
+      - Serialize untagged commands per LUN via 'dev->active != 0' (and cover
+        devices where AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED is clear despite
+        SCMD_TAGGED) so queue_depth == 2 cannot dispatch two concurrent
+        untagged SCBs to the same (target, LUN) slot when AHC_SCB_BTT is set
+        (caught by Sashiko review on v1).
     
-    v1: https://lore.kernel.org/r/20261119170354.1509589-1-irogers@google.com
+    v1: https://lore.kernel.org/r/20261119170605.1518761-1-irogers@google.com
 
- drivers/net/ethernet/marvell/prestera/prestera_rxtx.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/scsi/aic7xxx/aic7xxx_osm.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-index c4ea247d2470..e62378abcffc 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-@@ -817,13 +817,18 @@ netdev_tx_t prestera_rxtx_xmit(struct prestera_port *port, struct sk_buff *skb)
- 	dsa.port_num = port->hw_id;
- 
- 	if (skb_cow_head(skb, PRESTERA_DSA_HLEN) < 0)
--		return NET_XMIT_DROP;
-+		goto drop_skb;
- 
- 	skb_push(skb, PRESTERA_DSA_HLEN);
- 	memmove(skb->data, skb->data + PRESTERA_DSA_HLEN, 2 * ETH_ALEN);
- 
- 	if (prestera_dsa_build(&dsa, skb->data + 2 * ETH_ALEN) != 0)
--		return NET_XMIT_DROP;
-+		goto drop_skb;
- 
- 	return prestera_sdma_xmit(&port->sw->rxtx->sdma, skb);
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+index d93b522695eb..af5782a63155 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+@@ -1429,18 +1429,26 @@ ahc_linux_run_command(struct ahc_softc *ahc, struct ahc_linux_device *dev,
+ 	 * We only allow one untagged transaction
+ 	 * per target in the initiator role unless
+ 	 * we are storing a full busy target *lun*
+-	 * table in SCB space.
++	 * table in SCB space, in which case we
++	 * allow one untagged transaction per lun.
+ 	 */
+-	if (!(cmd->flags & SCMD_TAGGED)
+-	    && (ahc->features & AHC_SCB_BTT) == 0) {
+-		int target_offset;
+-
+-		target_offset = cmd->device->id + cmd->device->channel * 8;
+-		untagged_q = &(ahc->untagged_queues[target_offset]);
+-		if (!TAILQ_EMPTY(untagged_q))
+-			/* if we're already executing an untagged command
+-			 * we're busy to another */
++	if (!(cmd->flags & SCMD_TAGGED) ||
++	    (dev->flags & (AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED)) == 0) {
++		if (dev->active != 0)
+ 			return SCSI_MLQUEUE_DEVICE_BUSY;
++		if ((ahc->flags & AHC_SCB_BTT) == 0) {
++			int target_offset;
 +
-+drop_skb:
-+	dev_kfree_skb_any(skb);
-+	dev_core_stats_tx_dropped_inc(port->dev);
-+	return NET_XMIT_DROP;
- }
++			target_offset = cmd->device->id + cmd->device->channel * 8;
++			untagged_q = &(ahc->untagged_queues[target_offset]);
++			if (!TAILQ_EMPTY(untagged_q)) {
++				/*
++				 * If we're already executing an untagged
++				 * command we're busy to another.
++				 */
++				return SCSI_MLQUEUE_DEVICE_BUSY;
++			}
++		}
+ 	}
+ 
+ 	nseg = scsi_dma_map(cmd);
 -- 
 2.56.1.750.gf70dc682cf-goog
 
