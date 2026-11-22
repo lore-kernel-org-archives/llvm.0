@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795323195;
-	b=aOg3mE5dkpxxU6ulHPOlie2esLBoq+pcGuYz21YP3T+8L80GeCl3sW6ZAnZRR6jYHwhj
-	 v1dP4783/9VDP0xaBtR0xohGrn0SOuHi4Ll99WPKF2PZ00aBN7dFK+u+bGV7qN7hgKdXV
-	 4J402xcCUQa9TFJewlXnd4rsDjDDLbVtF7nHe48ru1hO59bpDfu+O87fgqzwvSJ1JpWsl
-	 EcbDGYMrqZSzbNSeX0XaRyss8+nqaUMsjg1/x6mh9eYMqMcm2WQ3JfVeGDVnb/eKPiRoV
-	 Ep5lSR8GWWj426OCYwF5AyNQz+sWbDYO9NJguf5jRLPvKIDtCiYTBi+SqKeV4FUi6hw==
+	t=1795323198;
+	b=W3r2KmurRshXxWpLT5+UI/0bKltKYEzCBzaAuqMTCa9YedhOdxrSMvBY01ANwscxEQ2l
+	 l0llOjxz3efscAUF8F6/J7mFn7N9K+1SFCkzLCyR0HEIb5d6utPemsHvaFC4S6o/fFLQZ
+	 1mfVNDtMl3ZOr/Sfd/yR/aMXCWS5PIZSGLajB7b1xQf8DUuIJ+FLgJVYeYW2MUwGO5BiE
+	 ZAFfgN+lO0JN53vx3XJSkRzgbUGnKFXNEAdO2PiH9SNf2CiPgCYhTlHEHaWHsTEBhtazB
+	 67/52+g36nuMPQ8kbnFgH1YhBR78N7Sne961dg88MBSHIGzazoCP5DE15TGCDx1uEuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795323195;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795323198;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=KAzUKzhhhScUAMTrwfyxBtcZxPud2TmkB4S9e7vTEGg=;
-	b=tFv6Hm/A3xF/pCJG9b0Kkj/g7p/5oIfGByFq0XNSHsREstSSUXnNaEy531dUjsWPkOqo
-	 WgQopPlA1aNoDrwSihT0hy5L68D/0eBSarZGG02KnUqjeoyymSU3TMLG8bkRBTVYdy8ex
-	 /cAF+9LbhVV7wb3X0ccdlxG8KmGddl4I24uBy/J4vbGGeiLFORThE7eX+kQ39lqN6A/pY
-	 86YCfoQYZXe1Bshmut2+jcJejdTBpnYfq8X7lpk4ryfPVI5AXOWQKd8ao6ZOSUs8Qsuol
-	 dJVMZm1JcCB05qkUtkySEmT2KRxTpOqxpdPTXu5BdeWlphVboFbB0RJjoszOPspoSTQ==
+	bh=oks9eY76UytAKWrw+eVWgHuLR6pmqJrjhRKQxGvvV4U=;
+	b=5Pr+Hf21C3WMagfsfDaX4pPq+Olb+SFql6Aen2GMUu4wn1Z2SMyu8YuW0F7LEfohcbgx
+	 /0dqoPziY8KSgFB/dxcE/XDcXu08Ct7jMYh5zp4E3xzY3EGflLOb9MPmAds285izufS4Q
+	 RmncRp515CLSx0dS5NTdeeu7dSlDfrfj22311JtsCk+Pu2lwPcbEN0n8pOJAIDlkkBhGM
+	 XXYCA0e/1YPMzowzUzBfsepIa74R4BwZXSzylqXXTCWrOq5AN1hRvHG36wwzFEpLsPgHa
+	 pyMmPIqcA59OoBNqEqrAk/igRYo70LB5/CupGPtjn2cQJzDDbeMOnBD19OGncd7JZog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=K3tzaj5s;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=n0aY6eah;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7774606A331
-	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:53:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7774606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1D3606A320
+	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:53:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF1D3606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=K3tzaj5s
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-386a7af8b94so261815eec.0
-        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 20:53:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=n0aY6eah
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-38355b03cb8so2260027eec.0
+        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 20:53:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795323194; x=1795927994; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795323197; x=1795927997; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KAzUKzhhhScUAMTrwfyxBtcZxPud2TmkB4S9e7vTEGg=;
-        b=K3tzaj5smhcmwt5HzIuvFFwc/YASGgSRCioN/38gYLpNeYUNRuT13QdSEMCN+eVb8W
-         iYOdNBXouzZ+7SGqb2mGOyJ8sZSGwJCxNtZG2q998/bNMt9topEYZSFATiZs3HxJMvP2
-         4Nx3jvUcbRBd3GUlV/gyexyspaeSj8l/qp00BbZ1LZi6aUu9b4cuoxEvECtVAf/ESyyS
-         LNia5iOs+xGuuiPXTIln9K5qsDcfT4nKILCMYi9ZwmIAgLU8xrcbbeQV+SlwPmPlY4OD
-         Vr0fk3pCMxObzbG7MUs1oHZsUF3yRY+clYP23lJL4LLUZm3Fi9/fbjqA5bdjRQ05WTy7
-         Zopw==
+        bh=oks9eY76UytAKWrw+eVWgHuLR6pmqJrjhRKQxGvvV4U=;
+        b=n0aY6eah2L8KVoFAbWMeK2/yikToRh53hcuLQPIeQ6pvGM1ag5gj7dPIFhIa/7lAiZ
+         Rgq1HpxMCVioaGHFbtNp6HxXA4j7Leu8A/eKQAQhlwXc57TLpXTQZdsCg0KuUX9k9nMP
+         k6vA4yWXx+X2pw+gCOHdvst7eXCR118CXLN8uO5hO8Ja8SC8cwkkxXD9wGSmdzKbNOzG
+         ZLnTpEMonZTSuBtCm2kpsdyjdOsbOfmRgv0fGdMkc64DM9UlgdSWeZYkFohz7BCjmdyz
+         aqvotWhesjOHse8ZPqteym5pvgpLGpQuT0It9FYrCxSCfyD90UlT/cxroiSdS0xdN56X
+         frnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795323194; x=1795927994;
+        d=1e100.net; s=20260707; t=1795323197; x=1795927997;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KAzUKzhhhScUAMTrwfyxBtcZxPud2TmkB4S9e7vTEGg=;
-        b=iBEP/KOExahtjhjGmfb8kU2HSxMC1nEaFRZFSnHSaGokORI/htV4Qo7kcKVhR3Pob2
-         tBv2JB5ODOMNOMppuoK1m2cam6lrFTyiFg+kK61oDqVFLKB6GkNxudRT0ZFKTTQbaKXe
-         BaZu2UhwwZumn+K7lwIct75U9hYfBECsmRRkUGKcni0yeEDVpsu5gRA9uDBjZY4IPPov
-         KYs4BpdnHNSePYja3SYnELkiJOmVYtwjMYvOpyPzU0n47HjQKVRoH0mP+X20i5i4R0cW
-         vnXe4clg2LWh0PmFNMf4wJQYhASZwm75Lv0trmwjPDpra9yY/NkMxKku7ynsoVPZTTAx
-         1x2Q==
-X-Forwarded-Encrypted: i=1; AL+hErGjVrLetsYZOWNSTh7JUwQGmh/tbmuOZ1qOKdFNKp7VkHrgTV+mMvvswW3QUrTe93xUf1Vy@lists.linux.dev
-X-Gm-Message-State: APuU4Z95LE6vuTTSr+5P/lUi+Xqq9Rf8+aEPMV1Ww+HgFPVwKXylXC3D
-	spV5avgN1/ctJNXObzBCWXOjNyFkpeOKjYnV520F3bqXFPgo5lgvp57QX9OybG0Ps0kJskASZJR
-	IQQz3XfScaw==
-X-Received: from dybzy10.prod.google.com ([2002:a05:7301:e10a:b0:381:6d21:2e90])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:20c6:10b0:36a:15ee:c20e
- with SMTP id 5a478bee46e88-3869a150409mr4897178eec.33.1795323193190; Sat, 21
- Nov 2026 20:53:13 -0800 (PST)
-Date: Sat, 21 Nov 2026 20:53:10 -0800
+        bh=oks9eY76UytAKWrw+eVWgHuLR6pmqJrjhRKQxGvvV4U=;
+        b=Zg0Jp/5ZDc4vxiTcJAlluMTIFm55dq9nj/HcYe7rHIGsiJND8AJG0d/QpeCyQ5p5Pe
+         pRBY/7RAevd16sVhL+jIYve+RpDQk3QttX7REsIXAf3OVb0cKyqqFLYchF06z5XSQq25
+         VdBWqkuFQRnJjEt9c5yQXnftJ2Tild/1yYKFifFH6Cq0P/r/+Wtb17//9/ym4b/t163P
+         XI8MSXTV3dbuoA3wtmvkTSoiBkR+txKARnI6Ns5MwfJY15XXOTIEJhIXlYXNEnO2Uo13
+         rZOEvxHMsL/tOSGEVK0B2dUT+fDly/YJECatLFsiyoXJLn0DW/tTxsLx4aHqmDG7RDY/
+         JcBg==
+X-Forwarded-Encrypted: i=1; AL+hErGyn4iaLr8vcH5wDd6d4Y10CRMm2bLqAv7F0BMpq92Tio+Z2MEKHoo/EdvYpUHRHZJ89ER/@lists.linux.dev
+X-Gm-Message-State: APuU4Z/HiAYI5CtSkSmyq2lUYAJj4au9pUDIwdadr/M1oIJ1W2cjI0NC
+	oLzexyQ39GZ2ZfmiXreXFzrbjByv/wLG+5aBFhVpbTMU17BxRFLBUJIPj0LyLn3KVUjvp7jSrHB
+	hW08wbhyL3A==
+X-Received: from dybgw22.prod.google.com ([2002:a05:7301:2396:b0:386:d33:70e9])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:e9c5:20b0:381:f33d:ed9d
+ with SMTP id 5a478bee46e88-3856fb6a214mr9733196eec.21.1795323196565; Sat, 21
+ Nov 2026 20:53:16 -0800 (PST)
+Date: Sat, 21 Nov 2026 20:53:13 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,104 +77,157 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261122045310.17980-1-irogers@google.com>
-Subject: [PATCH v2] scsi: aic7xxx: Check ahc->flags instead of ahc->features
- for AHC_SCB_BTT
+Message-ID: <20261122045313.18372-1-irogers@google.com>
+Subject: [PATCH v2] usb: typec: hd3ss3220: Propagate regmap_read() errors from
+ attached-state check
 From: Ian Rogers <irogers@google.com>
-To: Hannes Reinecke <hare@suse.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>
-Cc: linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In ahc_linux_run_command(), the untagged queue throttling check tests
-'(ahc->features & AHC_SCB_BTT) == 0'. However, AHC_SCB_BTT (0x40000) is
-an ahc_flag bit stored in ahc->flags (and tested via ahc->flags at all
-17 other sites across aic7xxx), whereas ahc->features has type
-ahc_feature where bit 0x40000 is AHC_MULTIROLE, which is never set on
-any controller.
+hd3ss3220_get_attached_state() has return type 'enum usb_role' (an
+unsigned enum) yet returns negative regmap_read() error codes directly.
+Neither hd3ss3220_set_role() nor output_poll_execute() checks for errors;
+on a transient I2C failure (such as -EIO, cast to 0xfffffffb),
+hd3ss3220_set_role() passes the bogus value to usb_role_switch_set_role()
+and disables VBUS power. On role-switch providers without a .get callback
+(where sw->role caches the value passed to usb_role_switch_set_role()),
+reading /sys/class/usb_role/*/role subsequently indexes usb_roles[role]
+out-of-bounds.
 
-Until now, '(ahc->features & AHC_SCB_BTT) == 0' was always true, which
-serialized untagged commands across the whole target via
-ahc->untagged_queues and masked a second omission from commit
-e4e360c325c9 ("[SCSI] remove aic7xxx busyq"): ahc_platform_set_tags()
-sets queue_depth to 2 for untagged devices ("even though we can only
-execute them serially on the controller/device"), while SCB_64_BTT only
-stores one SCB tag per (target, LUN) slot. In addition, sdev->simple_tags
-remains set on SCSI-2+ devices even when aic7xxx disables tagging on dev
-(clearing AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED).
-
-Check both !(cmd->flags & SCMD_TAGGED) and
-(dev->flags & (AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED)) == 0, return
-SCSI_MLQUEUE_DEVICE_BUSY when dev->active != 0 so untagged commands are
-serialized per LUN, and test ahc->flags instead of ahc->features for
-AHC_SCB_BTT so controllers with SCB-space busy-target tables can still
-issue untagged commands to different LUNs of a target concurrently.
+Return an int status from hd3ss3220_get_attached_state() and
+hd3ss3220_set_role(), pass the resolved enum usb_role via an output
+pointer, leave the current role and VBUS state unchanged on I2C read
+errors, and propagate errors to hd3ss3220_probe() and hd3ss3220_irq().
 
 Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
--Wenum-enum-conversion enabled; fix and changelog drafted with an AI
+-Wimplicit-int-enum-cast enabled; fix and changelog drafted with an AI
 coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
--Wenum-enum-conversion; not tested on Adaptec Parallel SCSI hardware.
+-Wimplicit-int-enum-cast; not tested on TI HD3SS3220 hardware.
 
-Fixes: e4e360c325c9 ("[SCSI] remove aic7xxx busyq")
+Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
+Cc: stable@vger.kernel.org
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
 
 Notes:
     v2:
-      - Serialize untagged commands per LUN via 'dev->active != 0' (and cover
-        devices where AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED is clear despite
-        SCMD_TAGGED) so queue_depth == 2 cannot dispatch two concurrent
-        untagged SCBs to the same (target, LUN) slot when AHC_SCB_BTT is set
-        (caught by Sashiko review on v1).
+      - Propagate regmap_read() errors out of hd3ss3220_set_role() to
+        hd3ss3220_probe() and hd3ss3220_irq(), and test
+        !hd3ss3220_get_attached_state() in output_poll_execute() (Greg
+        Kroah-Hartman).
+      - Add Cc: stable@vger.kernel.org (Heikki Krogerus).
     
-    v1: https://lore.kernel.org/r/20261119170605.1518761-1-irogers@google.com
+    v1: https://lore.kernel.org/r/20261119170650.1521609-1-irogers@google.com
 
- drivers/scsi/aic7xxx/aic7xxx_osm.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ drivers/usb/typec/hd3ss3220.c | 38 ++++++++++++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-index d93b522695eb..af5782a63155 100644
---- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
-+++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-@@ -1429,18 +1429,26 @@ ahc_linux_run_command(struct ahc_softc *ahc, struct ahc_linux_device *dev,
- 	 * We only allow one untagged transaction
- 	 * per target in the initiator role unless
- 	 * we are storing a full busy target *lun*
--	 * table in SCB space.
-+	 * table in SCB space, in which case we
-+	 * allow one untagged transaction per lun.
- 	 */
--	if (!(cmd->flags & SCMD_TAGGED)
--	    && (ahc->features & AHC_SCB_BTT) == 0) {
--		int target_offset;
--
--		target_offset = cmd->device->id + cmd->device->channel * 8;
--		untagged_q = &(ahc->untagged_queues[target_offset]);
--		if (!TAILQ_EMPTY(untagged_q))
--			/* if we're already executing an untagged command
--			 * we're busy to another */
-+	if (!(cmd->flags & SCMD_TAGGED) ||
-+	    (dev->flags & (AHC_DEV_Q_BASIC | AHC_DEV_Q_TAGGED)) == 0) {
-+		if (dev->active != 0)
- 			return SCSI_MLQUEUE_DEVICE_BUSY;
-+		if ((ahc->flags & AHC_SCB_BTT) == 0) {
-+			int target_offset;
-+
-+			target_offset = cmd->device->id + cmd->device->channel * 8;
-+			untagged_q = &(ahc->untagged_queues[target_offset]);
-+			if (!TAILQ_EMPTY(untagged_q)) {
-+				/*
-+				 * If we're already executing an untagged
-+				 * command we're busy to another.
-+				 */
-+				return SCSI_MLQUEUE_DEVICE_BUSY;
-+			}
-+		}
+diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+index 60d6de9ba339..bdd4eaeca753 100644
+--- a/drivers/usb/typec/hd3ss3220.c
++++ b/drivers/usb/typec/hd3ss3220.c
+@@ -163,10 +163,10 @@ static int hd3ss3220_set_source_pref(struct hd3ss3220 *hd3ss3220, int prefer_rol
+ 				  src_pref);
+ }
+ 
+-static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
++static int hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220,
++					enum usb_role *attached_state)
+ {
+ 	unsigned int reg_val;
+-	enum usb_role attached_state;
+ 	int ret;
+ 
+ 	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL,
+@@ -176,17 +176,17 @@ static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
+ 
+ 	switch (reg_val & HD3SS3220_REG_CN_STAT_CTRL_ATTACHED_STATE_MASK) {
+ 	case HD3SS3220_REG_CN_STAT_CTRL_AS_DFP:
+-		attached_state = USB_ROLE_HOST;
++		*attached_state = USB_ROLE_HOST;
+ 		break;
+ 	case HD3SS3220_REG_CN_STAT_CTRL_AS_UFP:
+-		attached_state = USB_ROLE_DEVICE;
++		*attached_state = USB_ROLE_DEVICE;
+ 		break;
+ 	default:
+-		attached_state = USB_ROLE_NONE;
++		*attached_state = USB_ROLE_NONE;
+ 		break;
  	}
  
- 	nseg = scsi_dma_map(cmd);
+-	return attached_state;
++	return 0;
+ }
+ 
+ static int hd3ss3220_try_role(struct typec_port *port, int role)
+@@ -229,9 +229,14 @@ static void hd3ss3220_regulator_control(struct hd3ss3220 *hd3ss3220, bool on)
+ 	hd3ss3220->vbus_enabled = on;
+ }
+ 
+-static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
++static int hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+ {
+-	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
++	enum usb_role role_state;
++	int ret;
++
++	ret = hd3ss3220_get_attached_state(hd3ss3220, &role_state);
++	if (ret < 0)
++		return ret;
+ 
+ 	usb_role_switch_set_role(hd3ss3220->role_sw, role_state);
+ 
+@@ -250,6 +255,8 @@ static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+ 		hd3ss3220_regulator_control(hd3ss3220, role_state == USB_ROLE_HOST);
+ 
+ 	hd3ss3220->role_state = role_state;
++
++	return 0;
+ }
+ 
+ static void output_poll_execute(struct work_struct *work)
+@@ -258,9 +265,10 @@ static void output_poll_execute(struct work_struct *work)
+ 	struct hd3ss3220 *hd3ss3220 = container_of(delayed_work,
+ 						   struct hd3ss3220,
+ 						   output_poll_work);
+-	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
++	enum usb_role role_state;
+ 
+-	if (hd3ss3220->role_state != role_state)
++	if (!hd3ss3220_get_attached_state(hd3ss3220, &role_state) &&
++	    hd3ss3220->role_state != role_state)
+ 		hd3ss3220_set_role(hd3ss3220);
+ 
+ 	schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
+@@ -270,7 +278,10 @@ static irqreturn_t hd3ss3220_irq(struct hd3ss3220 *hd3ss3220)
+ {
+ 	int err;
+ 
+-	hd3ss3220_set_role(hd3ss3220);
++	err = hd3ss3220_set_role(hd3ss3220);
++	if (err < 0)
++		return IRQ_NONE;
++
+ 	err = regmap_write_bits(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL,
+ 				HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS,
+ 				HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
+@@ -501,7 +512,10 @@ static int hd3ss3220_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		goto err_unreg_port;
+ 
+-	hd3ss3220_set_role(hd3ss3220);
++	ret = hd3ss3220_set_role(hd3ss3220);
++	if (ret < 0)
++		goto err_unreg_port;
++
+ 	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
+ 	if (ret < 0)
+ 		goto err_unreg_port;
 -- 
 2.56.1.750.gf70dc682cf-goog
 
