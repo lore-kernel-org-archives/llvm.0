@@ -1,72 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795323212;
-	b=YoK106eSOQioAjJHuTrexoz5iW2Ua87CFxmp06mEMVYu27dKtVPPfLIrf2M8p4vsQPM6
-	 4eDzqNGKu9madnskIR+Ye+mBxmFIrpKOQkLI8K8xDq3oug7Cy0mINWmOce5iP6/IOA/XW
-	 KINg/sDPut0uR5FEB0tUDvafZ7Y0sTBYQK2ZPewHg9t69hG9kOu1nuWo/oKE7yPKgFT1V
-	 0YPr6GC2xfMA768ksmH4nXqHOuJLf9v533JsD48VTSp/gsaMNt9fX/83CiLoDlZkFD8Zq
-	 iY9iizWc3IHqRugtusO9kafeV2wMVb6O538ljaNtsHQewu0s2y+w/hxFoTwr4nRfJOA==
+	t=1795323330;
+	b=rHePDrvYhoO7S34gEZOv+SM7ikddZ8ciq/TtptPqWJx9NrCm2T+C5m4QljyATXSG6Po8
+	 3BoMuZ9nmKsoIYIflTlfM5qviKun1cbNBaCcF38bsIU4M78xcEfMicBw0+pvBaJ9QqLIW
+	 1C/uoxptb4prdjlmE9WyAV6kV3V5ehqBWtc0D23pqzw2VJcSnjzsAlS2l4zjgVMmDho5l
+	 FvMpf9+18csBTZJ0jgXo/UdJi4T6eq2OaQvujvxG7CETu098QAg5Hy4raLcdNHAXMZDu4
+	 aFqybxN0NLOxulOuqlZzFT1LOI5qqbh3NkJpk0s32Ub/q4Y02GS2KOycAoi7NYbM0ag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795323212;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=pDpU6PvkkR9T5YMpWrxr6Vm8fDQspCIPlW5JeeJkxnA=;
-	b=iduor+GlSYjYpoKCLN+OjGtiUQ93DWAXcEkkS0GFy4QcriXXTe3nHOIEERQpvSBOs7r9
-	 aS4I1Fm4JroxkuOw0XHAct2Fq35GRNJgeku0a9WhN5hcPqiSnT+NWWxlNL5MoujD6PKu8
-	 9fYU+56C4+bdYc46cDiyu0mCCRvhBMuQi6xMS6JBXNMzcR4jGMERP3tRfkyuypZe5Y43Y
-	 LaWWBnRYVzSi1WKVSlzcQ1solJbuLuLb2hMezjGRdOd/D9+3Po7y5kaNi/4DTYQlSr9fg
-	 eSX0YKfCFxtX3WDajj80dnPTNUMTzxC68UXipWJ/Upfsl6nV7c1KcdXLhPFtuQl1klQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795323330;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-TM-AS-GCONF:X-Proofpoint-Reinject:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Authority-Analysis:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=thwpgcBtCakbOmTmxUAgaX82W7RbYJlWb66owgXNdUs=;
+	b=jicFcT7CW0Lg/0d/QP9RH6P3wYW8CKae+DybWJZDxhASlGP37PW3G0m3X8hDJ8K7NHJR
+	 9mH+SdaulyPgpfQdr/aeH0kHWrvwSPYRPApa4bFkLQ2B/rgmRQGY8jD4AOM4PfQvkk3dq
+	 lRJPNQsqSTVuEf8ldnfwXOV4ccms1blWIvSM/wTjqUQTrJux+ykwARbSPlbiif830SAGH
+	 d/iH4zQ/u3lfqSNJzT1kGrlySUpmw2YjQkOxawyDWfTIDgyYfKswMOy1BloBKALo/+vf+
+	 2g9OAsrdvnMDq7EdPljNciIsH9eaIlNDz8lX9yJCasqH4gKkXC+uKyMud7ECIJanbGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="XHKZ/LTq";
-	arc=none smtp.remote-ip=74.125.82.198
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=PaTpGKGW;
+	arc=none smtp.remote-ip=148.163.158.5
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572B2606A337
-	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:53:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 572B2606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767D6606A32A
+	for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 04:55:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 767D6606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XHKZ/LTq
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-3846d5f54c1so2908203eec.1
-        for <llvm@lists.linux.dev>; Sat, 21 Nov 2026 20:53:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795323210; x=1795928010; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pDpU6PvkkR9T5YMpWrxr6Vm8fDQspCIPlW5JeeJkxnA=;
-        b=XHKZ/LTqysnkio3Ux3rVTO5QapEtv31JXxS94rzsgWDoH0dyZ/22bowgU9tzD/K95o
-         zmR7/NEPrz9ukH+ubsiLNUTgNqgdFjJBybYpC2OA/NcKfgUP4By9COPIMAHNjsKjDsAv
-         3PSWxuc/qO3ZvXG95aUcGhF4mwEssvFHlOf/CfF4j6AJgxOufas3oQFL5jMe+k7FbT6v
-         hJ20T9pALxEfLpxlJN7fg3ZoC9MCbC35IfuZxAswr4+tIDr7zomWKyTIQ/7wwbyP2rrt
-         DjZj97IHavAw2BNyorrZI5PV7i1sBoJHdlKUe52eL/o5J+zryKeq7NA1acf52GwiAnTU
-         9YtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795323210; x=1795928010;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pDpU6PvkkR9T5YMpWrxr6Vm8fDQspCIPlW5JeeJkxnA=;
-        b=w7PbLs5Bi++1i7Ppp/4KL4wEIFmwrqHHHi6rFUwWxZ4tSstEzZZvqCc4GDehgRwX2h
-         5mYm4UPa8VXKBNwS1T+BLjqSx2WxorT/L8TeiMeyZecq7WsjiBhsQ9zEVlNqEh5Nrjxn
-         GMPZES6GuIHi9ZWdrbfCPcDyGgkbLDIVar8ARKUSo0rwnLnw5exVdr+MOY2rRl22D7L3
-         BvQ9Yx33tbZQc31Mpgj+sIbCy2zDtC15Esn22WqjxclISsieeSjT9IBj9aIaZ409oUW6
-         6e6IKXFBA2Xx/ijPfucbpkxvMlJYzQGHn+OuzBXwSQPKl6f6tAMTirhbskZBkl6fNjYO
-         xC/Q==
-X-Forwarded-Encrypted: i=1; AL+hErHp66scZK+aWTKT+PmR8ImSPAHZGBxGZuEGSTnRWEweq4syRH6FCHrnhW2a3MqcdD2VIdB2@lists.linux.dev
-X-Gm-Message-State: APuU4Z/3+uJjTlRdYGHVPl6LY3EqnfAS5H1qnQZNcL9oPg8MAxplYGNC
-	UJEM+RrxAgX5WITx0tGYvFCyrE6lWJOUbtp50LeZGuLgAYzb/UVD70Yy1/3pfDkX/v0rpMRxVUF
-	iUe1OsR/pUg==
-X-Received: from dlbtu1.prod.google.com ([2002:a05:7022:3c01:b0:197:f679:f62d])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:290:b0:1b5:dc3:209b
- with SMTP id a92af1059eb24-1b5568ac6b0mr7480933c88.22.1795323210085; Sat, 21
- Nov 2026 20:53:30 -0800 (PST)
-Date: Sat, 21 Nov 2026 20:53:26 -0800
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=PaTpGKGW
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AM44qcc2469945;
+	Sun, 22 Nov 2026 04:55:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=thwpgc
+	BtCakbOmTmxUAgaX82W7RbYJlWb66owgXNdUs=; b=PaTpGKGW3q9eSzH2kq7+RI
+	pN35uVIJSav7sVVNqZs+2Nu3U+o6e8UUjozH/cbRi60lCW9bAfiLuQS0/mdb4kPB
+	9SJUFQwXvP0h/U9jQPhl3HFJlR4tNvikpZvyxOKwgseNWm7L4p3pbBf/cu5IIYJw
+	98BBVIU4a2T6XZW1Q9SAsgwj6YkIihQuLNyt2m5uwJosD6onkYc6Xtr3U9MXRVeS
+	/8avab2LGk4kWI0klpZ7Th6o0R21KgTzUjWKQUTl4JLfwVOftFPD3cqjIOp0yalF
+	PpGMXX6PTNXOWgwkOwl+DVE21f7MXv2yxFg6mQZunffO3hlmAZhmSnwQPfryXHuw
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34p44rtm-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Sun, 22 Nov 2026 04:55:15 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AM3nlu8811059;
+	Sun, 22 Nov 2026 04:55:15 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j3q4h0hk8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 22 Nov 2026 04:55:15 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AM4tDrs52035980
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 22 Nov 2026 04:55:13 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 46B5B20043;
+	Sun, 22 Nov 2026 04:55:13 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 486E720040;
+	Sun, 22 Nov 2026 04:55:09 +0000 (GMT)
+Received: from Linuxdev.ibmuc.com (unknown [9.43.90.96])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Sun, 22 Nov 2026 04:55:08 +0000 (GMT)
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Shrikanth Hegde <sshegde@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] powerpc/xmon: Avoid unsequenced accesses to tsk in show_task()
+Date: Sun, 22 Nov 2026 10:25:07 +0530
+Message-ID: <179532322369.92012.8619272472025580101.b4-ty@linux.ibm.com>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261115-xmon-wunsequenced-v1-1-42ae3fe45bf4@kernel.org>
+References: <20261115-xmon-wunsequenced-v1-1-42ae3fe45bf4@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -75,96 +97,54 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261122045326.19641-1-irogers@google.com>
-Subject: [PATCH net-next v2] tg3: Propagate PHY reset retry failures in tg3_phy_reset_5703_4_5()
-From: Ian Rogers <irogers@google.com>
-To: Pavan Chebbi <pavan.chebbi@broadcom.com>, Michael Chan <michael.chan@broadcom.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIyMDAxOCBTYWx0ZWRfXwJ1HDbFa87mP
+ lqAvmrNAu6+SCIMPWs2wjQLQduf9MM7DDGMNlB0HeQsqVVVc22KqZmbsQZWo0/U+Mugx1cC6JmX
+ 4Cz9BDRMLDKL8FkKeqvZkaDstmQ6mbk=
+X-Proofpoint-GUID: OYydPgwM-ZzYhCyZHv1QZkly5bhoRtwl
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIyMDAxOCBTYWx0ZWRfX676fR8w4GtMf
+ PGRk3jLdcQaFwSLNxGJuRWtP6EFvuFwRSmiyI4uWrjFB93ziKOURnygSC/aVrcuoGZe7VHcT5nY
+ rgd7H9/kN/LyS5+Q4W14MpeZQdw4a4NfHlzijRLIcCYBwxynMCtb8NY7tB2uCCe8hhFerZxxk61
+ YAoWu5WcJ6HhwlIoUJz6GXXguBKsEq4q3VEunkR232h0NJ/5JcSVUcC6AFwJHZyZTS1+ILB8ZKg
+ U7lkVgsD0rOHDt8UMdUfV0QhyOfTl5cnvLlItSJB5ntreNiIezoqSPB6PYLAGXALvH72YrC21sm
+ 8Kug7H3r6hO09GnjtB1TleReNp9eOQmI7z88N3rpnmcKZwdPayidkk5epIW7oCJVEzChnZIUeV3
+ zKLLE8b2LuxsRkgjo4pKsugQ0qNGYTBS9dFicy2OLmoMda1VzDJOgMQ6B9RqzC7UfZw4Xx+VeTv
+ dBTH4529FbK2t1d4rTw==
+X-Proofpoint-ORIG-GUID: 0hUo7JWjhDyHlCGn2rfsBZ7-l8O6dy6x
+X-Authority-Analysis: v=2.4 cv=QabzLcbv c=1 sm=1 tr=0 ts=6b0275b4 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8
+ a=2oOorpea6NrDkEfdVwMA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-22_01,2026-11-19_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1011 malwarescore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611220018
 
-In tg3_phy_reset_5703_4_5(), the 10-iteration retry loop discards the
-return value of both tg3_readphy() calls on continue and never checks
-err after the loop terminates. If MDIO reads fail across all 10
-retries, phy9_orig is never initialized before being written back to
-MII_CTRL1000; if tg3_phy_write_and_check_testpat() fails across all 10
-retries, the function silently continues as if the PHY test pattern
-succeeded.
+On Sun, 15 Nov 2026 14:18:07 -0700, Nathan Chancellor wrote:
+> After a recent improvement in clang to warn on unsequenced accesses to
+> volatile variables [1], an instance appears in show_task(), which can
+> break the build with CONFIG_PPC_WERROR=y / CONFIG_WERROR=y / W=e:
+> 
+>   arch/powerpc/xmon/xmon.c:3262:3: error: unsequenced accesses to volatile qualified 'tsk' [-Werror,-Wunsequenced]
+>    3261 |         printf("%16px %16lx %16px %6d %6d %c %2d %s\n", tsk,
+>         |                                                         ~~~
+>    3262 |                 tsk->thread.ksp, tsk->thread.regs,
+>         |                 ^
+> 
+> [...]
 
-Record err on both tg3_readphy() calls and return err if the retry
-loop finishes with an error so dead MDIO hardware fails probe cleanly
-via tg3_phy_probe(), and zero-initialize phy9_orig since Clang's
-value-insensitive -Wconditional-uninitialized check does not correlate
-the earlier continue on err != 0 with the post-loop 'if (err)' check.
+Applied to powerpc/fixes.
 
-Found via Clang -Wconditional-uninitialized on an x86_64 allyesconfig
-build with AI coding assistant help. Verified by building
-drivers/net/ethernet/broadcom/tg3.o with LLVM=1 W=1 (-Werror) and
--Wconditional-uninitialized; not runtime-tested on BCM5703/5704/5705
-hardware.
+[1/1] powerpc/xmon: Avoid unsequenced accesses to tsk in show_task()
+      https://git.kernel.org/powerpc/c/9ea01307e6c824eb0b8934d95d52bbacae17887d
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
-
-Notes:
-    v2:
-      - Target net-next and drop the Fixes tag (Andrew Lunn).
-      - Also zero-initialize phy9_orig so Clang's value-insensitive
-        -Wconditional-uninitialized check sees no uninitialized CFG path across
-        the earlier 'continue'.
-    
-    v1: https://lore.kernel.org/r/20261119171021.1535172-1-irogers@google.com
-
- drivers/net/ethernet/broadcom/tg3.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/broadcom/tg3.c b/drivers/net/ethernet/broadcom/tg3.c
-index 95827df4cf6a..4d375328621c 100644
---- a/drivers/net/ethernet/broadcom/tg3.c
-+++ b/drivers/net/ethernet/broadcom/tg3.c
-@@ -2544,7 +2544,7 @@ static int tg3_phy_reset_chanpat(struct tg3 *tp)
- 
- static int tg3_phy_reset_5703_4_5(struct tg3 *tp)
- {
--	u32 reg32, phy9_orig;
-+	u32 reg32, phy9_orig = 0;
- 	int retries, do_phy_reset, err;
- 
- 	retries = 10;
-@@ -2558,7 +2558,8 @@ static int tg3_phy_reset_5703_4_5(struct tg3 *tp)
- 		}
- 
- 		/* Disable transmitter and interrupt.  */
--		if (tg3_readphy(tp, MII_TG3_EXT_CTRL, &reg32))
-+		err = tg3_readphy(tp, MII_TG3_EXT_CTRL, &reg32);
-+		if (err)
- 			continue;
- 
- 		reg32 |= 0x3000;
-@@ -2569,7 +2570,8 @@ static int tg3_phy_reset_5703_4_5(struct tg3 *tp)
- 			     BMCR_FULLDPLX | BMCR_SPEED1000);
- 
- 		/* Set to master mode.  */
--		if (tg3_readphy(tp, MII_CTRL1000, &phy9_orig))
-+		err = tg3_readphy(tp, MII_CTRL1000, &phy9_orig);
-+		if (err)
- 			continue;
- 
- 		tg3_writephy(tp, MII_CTRL1000,
-@@ -2587,6 +2589,9 @@ static int tg3_phy_reset_5703_4_5(struct tg3 *tp)
- 			break;
- 	} while (--retries);
- 
-+	if (err)
-+		return err;
-+
- 	err = tg3_phy_reset_chanpat(tp);
- 	if (err)
- 		return err;
--- 
-2.56.1.750.gf70dc682cf-goog
-
+cheers
