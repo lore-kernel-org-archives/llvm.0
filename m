@@ -1,96 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.53.57
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795424829;
-	b=JNgXLtgzm/4VmC5yCZksiJjHRVx64P0nWmDXOt3TRo9Pvk4is56ZHHXOet7nJD5lt8S4
-	 twCK81sRVANi/HsKqaO1o6uCbsLPVlG5A68NaGbY+lRJ12nqZMzftfGjDCcMlHPhCPB35
-	 BvgFPiWP1xFHYqu+Fvx3xK+CaA7sRy5xSbFt5KwqFXc5c5Np5Yd4AUB8Y5vFdm2yMaAq+
-	 mXTYciHev703PGz0VQb5FB+t9wYbRHra4Yt0TAJZ4yhqNNFA56UXFJM6tSHfgD+m0MVXb
-	 t5bOQH82eHgF5+8zZzOapGWVQ4WStgpKDRbKWm9jTmGSU84bV0aWpvMY6LjzopM1oOA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795424829;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=8swlrxvhmxn6Cpwl9g6LDv0B0qhkNF30+Kx6QZ2vu2w=;
-	b=HSUWrN+q/J9u6/k6fRDPlgiCJjIS6wtZSTy4I6TE0J09EFO5oRDICY8Dtx1ZsaecIZJC
-	 KTUOZ5EqThN4ik20ON0eafLMxXhaR3CzIJ9iUTFinWHSSR8V0kS+B7G/MuIhiZDYXBAHp
-	 9ohvWUX9vltQL+qRksCixYkzNEUJc/fWjehgRK5ZIY7mEUIoDGDq8biHeTdW+UA/eMIYx
-	 TkH2j4NbIRJoxI5y5GXfNrCjc5YKEZ1iXwqP4iw8pYmHCSFjsiodnKmhuBD3sF5qu1IZF
-	 3iDeNumGGSSrgXGQvTChsYG4gmxed7lHe5//aSSoykuISbKZWuCwc2rvJjphsc/qwEg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amd.com;
-	spf=fail smtp.mailfrom=amd.com;
-	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=4IgqoSrH;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.53.57
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012057.outbound.protection.outlook.com [52.101.53.57])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.154.123
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795424853;
+	b=awfVRo1csCWz3LeAN/OygaNxlhTGTbRMDiW94yOi5tMDEvJzVD2jcJOqQkIbU5fdiPni
+	 VvrfSzxycwm7oiQBb50GsVmTfONH7etiBn17etMQnmjjdHVtAzZVGNVYowG2Likl1GOHR
+	 RIZ/fVyHF+Fl28muhAwtJm+CbVefJMxeUqj34FrxWMgs7pSPRPbgE/ModXbLDGGTOuWVn
+	 hGiunwQ5JxxyBEs/iS9rdAv/lLsE1ik4AvdxNDU5I3B6EBGEuszcInzwxyVLzhM+0AXAx
+	 L0N5HPOZSd8Vx64ts3cP53zxBIa2JL3YEAVaQZw5iT5lSrMMQIeNbvst4t+KlfbXZqg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795424853;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:Date:From:To:CC:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=s1+xyywWJx875swgmqI1rAMPqceEFht+o+5gfJd4QUM=;
+	b=iFWRTsgYtU0ozWclpxPvzcYGtGVMn+suaUlQUUh1fcEERzsPZ3L3Q2i5qmIbX+KeCMBz
+	 Ma7WQtvmOeBvCE2wKnCgIYeBx4/HRuEyhufKYg+6GUEtQtMlO571LKYxLyUYW9A0CZz0N
+	 kx09m/QsuXmOTklgdk4GfrLdNFajJyumuwX/lvFN9PnE3cY/ERdQNgwHxSzA66llhtEeF
+	 dycwFwFnaaEdJXDAfp7rslDYJRRqjfN1yBLSqkGg3dOpPCkg3DxswoB4AbMhl/JaajLXG
+	 PhpN8DA3pE7koDfLs+Wk22l+jI9xtRz3NqYgLHuF1a+IQnV4/0Y69RRsh0+pIqfoPTQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=microchip.com;
+	spf=pass smtp.mailfrom=microchip.com;
+	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=RcjqURFP;
+	arc=none smtp.remote-ip=68.232.154.123
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD12606A31A
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 09:07:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4CD12606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959DE606A31E
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 09:07:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 959DE606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=4IgqoSrH
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dhfKQchremZ/wmnxC/IjW/axcnCDdvWd7XBlfMEXnlt1OyBTVIygzSHfgTcuxeIKQa2JbOAIq48t3xYvQqrsU3400ZDIkvYYhfwqYOYzLBO2rxrz2b3OVxDN4/rXCb3gTb4kRM7CleEuE3rRKhcGm4ZoInHON4LSAkKlGgTOfWt+jrBOVSHN5TjJcl2Jz+tCM1aet1tcqz476xw0FrZuQgRv11wyaqQwkwbegRF1L0A8+3mCK0lmXBrmSldMQyUxi4o1zlMjH7rY0ML1ec33SrNrBfs6J9rcTOm2agiBPL8Qc+04VIdT7+EiPX8cdlA3VA31+esfWp7RO+gMydg8hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8swlrxvhmxn6Cpwl9g6LDv0B0qhkNF30+Kx6QZ2vu2w=;
- b=xYX5/4h0O/ZDCRwmdgYeyLT4oP4SURkyeuko3y0wbVnLpdHVRN0NZlBDpbUwxg7g1GacmcYvQHuq9gqOA+/k+kRKBWps2ifow3NSl6GdCifvbJRRYX/hXMjms5tJhFVRwWOlyubpIRS9casYtK2ZdzvGIE9b3DnW+kpUbcLfCZWECzsVO6LWxFoGKW0bTM6r8uIxz97efme7oIZ+DWaGpREX+hWu1BRHNokDgX52BqigORvV3VQiav7VVHIDZpJF3R67OEx0GEsvZ/ioon/W7bSSNqoWK7VT76CkYdTT+rFth946xmjAzv3Si5t0gHVP/oCwWG0q4Le8nfog19vayg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8swlrxvhmxn6Cpwl9g6LDv0B0qhkNF30+Kx6QZ2vu2w=;
- b=4IgqoSrHvXiRvvYHLcHR+PCTG+q47Cg4dvzBn5DXXpZcp1/jlccu1cmyaEc0zafwbH+Da2vkHEeJxfbBh0IG9CiucYp0Wo3JO0PIzwltK2cQgVJ+FNhjkCvhQLwCY3ejt1BmZj2YN0Bj4a2v/2UrmVeQswiRnl0RsKig37225lo=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by CH3PR12MB8306.namprd12.prod.outlook.com (2603:10b6:610:12c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.14; Mon, 23 Nov
- 2026 09:07:01 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%3]) with mapi id 15.21.0639.012; Mon, 23 Nov 2026
- 09:07:01 +0000
-Message-ID: <c7a81b11-73de-49dd-b38d-76aabf193dc5@amd.com>
-Date: Mon, 23 Nov 2026 10:06:56 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] drm/amdgpu: Initialize r in VM and TTM buffer
- helpers
-To: Ian Rogers <irogers@google.com>, Alex Deucher
- <alexander.deucher@amd.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Elkin Cruz <elkin@google.com>
-References: <20261122045319.18651-1-irogers@google.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20261122045319.18651-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0032.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:c7::6) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=RcjqURFP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1795424852; x=1826960852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jEkDjgkAKC9Fxc3XQnLgmWRwUmXMEQRyG6rRR1lxVSc=;
+  b=RcjqURFPswTnh1SeQJmJ6wKQNCb7vsaE25aTgXUw9t2kszXiht7dBdeE
+   FGJ57R7H+WVH9CpMtpar4m3aLjGi4prpB5sf5O4r0g3T6XpwtyPmmL2BF
+   F+Qtk9dK6fw2CWOTvRN8Lw6eMFxYH6TLnYEtl5j6SOlXeTROnZO+c76RE
+   jWlc1VLT0ThP2VH+bE7YGMXfsWczJgfMplmIFapj1m60X/KYn7BiMpD78
+   avcB1yRdkMTl/ZaxKvH1V8tAq9S0JsKr5NvEGz0NMpCX1VdibGqve5gcU
+   wJf2OM2N+tcApYw8UH5LSI9CmqYeMGrLQ88xrOLb8Qg5KVFU2fcC832nY
+   A==;
+X-CSE-ConnectionGUID: 9QKuukfETJaxYQzdaDaMIg==
+X-CSE-MsgGUID: EC7/SU8YTS6mUc72DBytEw==
+X-IronPort-AV: E=Sophos;i="6.27,227,1787036400"; 
+   d="scan'208";a="65939751"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2026 02:07:25 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.87.152) by
+ chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.56; Mon, 23 Nov 2026 02:07:25 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Mon, 23 Nov 2026 02:07:23 -0700
+Date: Mon, 23 Nov 2026 10:07:22 +0100
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Ian Rogers <irogers@google.com>
+CC: Dimitris Michailidis <dmichail@fungible.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, Elkin Cruz
+	<elkin@google.com>
+Subject: Re: [PATCH net] eth: funeth: Include FEC stats in
+ fun_free_stats_area() DMA free size
+Message-ID: <20261123090722.z5xcxwwdelnnjifq@DEN-DL-M70577>
+References: <20261119170613.1519353-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -100,103 +83,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|CH3PR12MB8306:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e6204fd-a98b-4474-8a8b-08df49412249
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|376014|261026140227099003|261022105027099003|261028144727099003|261021121427099003|261102123227099003|11063799006|56012099006|10067099003|260925021911599003|260925021311599003|260925022911599003|261009223027099003|18002099003|22082099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	E3e3+4BSkV0Ti+yCGLT6WeI4nCvdHkPoBs/yZmOfgMRspLadhz5jgEye3Z+il3opCb8IPQitdKPuch9ZBNK9QA3eAokUb93G6xncTBYthbS0FqcyipAvlE5+KLa+J6pCLaBxwZpVUyKBlj6X0aHG1SrxCi8WM3PQKD7F7IjJXoZ70En1bsV5pEmboCkSONGSRKVQpzrY+JDtxPCKDoe3vSBPDOQuIZNtdL0Tk9s6izzBjd0Ka17AC9w/11fRTDa4HpJWkrXjMaLXYgwmMTxrCyC/SBKgzf5exepqqD8dcU2XNfl89Q5dahzpdVBhu1TrwYCV+ZLe9ZfNNPsWi+QxO8fBg3GZauhNBUBjnmA1MY7Gzn0HuNJTJEw9B0Ks3v62NJbFrmx9KktOA8UrzsjNaY/n5a9pPoQL3wTW9RPiN65FIFKUtJTFk89tv8MSaePtLXYnyayeNWQdKan9xov4rS1jmFF84yeLJg8sh1ML7cMjRHJ8NP5ifemxyVkhTukZNAKBS4/7HV8w03intxLOzKGgueMMFwqPysn7FSXr8aX25z+clkRkg5u3hEotuzXVJXro2xOKwmisnBzu2cWtkiGNfv/nQAlLyPCKfhCmyuV4lcQ7B1FkWJuV+z0Nq4NG
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(376014)(261026140227099003)(261022105027099003)(261028144727099003)(261021121427099003)(261102123227099003)(11063799006)(56012099006)(10067099003)(260925021911599003)(260925021311599003)(260925022911599003)(261009223027099003)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WFlVVWw4Y1E1dEM4ZDl5SXJaMWNRZ0g5d0FjZ1FFN2NlUDFuc084SVhHZDdZ?=
- =?utf-8?B?OURwb3F6Mjd5OGtYRmRCcHF6NCtoZkFJOHBTaEFSTW5uWG9xMlFNTmE4MHZp?=
- =?utf-8?B?L2xSNS9RYVFzV2dxLzk2VVVkNzROUjhjYmJNR0VuZFhsaDNWTXVJeVAwMUJX?=
- =?utf-8?B?dmNVSDlRT251NjBSZTdqN1lKNVNKZS9NR3VWUW5NWFRtV3luNTN2eGZKWmVk?=
- =?utf-8?B?S2lZdFlwQ2NORUs5MTR3L1BmRDhFVGVkbk95QzlrcWpxd0VLeVdqNkdpTTJz?=
- =?utf-8?B?b2J0TVhROW9STTYxcGFVZjEzMWhSMTBLL2lMdC9Ub01uOGlWY2g4QmZ4V21Y?=
- =?utf-8?B?RHJqTU80S01MN0ZZK0VXUTZWMnlCZmFiU1M0REV0NnZhQnFWaTVOTXB1ZUQr?=
- =?utf-8?B?NGJPcTF4STVkTXFQRUJCNzhEYWNvTzNSS0ZiMHhCb1BiUnAvQzdscWhwMGcv?=
- =?utf-8?B?TXVpWUtCK0VBTVhVYXJGaXFjT096akRRZDZQNUJveGR5VUtzekZrbk4zMUMy?=
- =?utf-8?B?Z2loaHVJN1VML2lMOVV5UU5QUUhaTE5wSWcxQVUrNkdYMEJvdlZXc0IwZUNH?=
- =?utf-8?B?NVRUUThnYThlWlVJbldFaDY0ZnMyNm94cEZWZHFLTGhGeHBnV0lIbTJIM2dj?=
- =?utf-8?B?SkI1QTFRQlIrN2ZSRHR0M3pPRjFlazNDeFpicnUzUUNBMUI3NVNMQXh3SVBv?=
- =?utf-8?B?S01ZK0RwZFg3YVp2OWxPWVRhSkoxTWhHUUV2UlJUL2RPZm1kOHFLVVBCQVNj?=
- =?utf-8?B?VHNUaktzME85eGtzYnFZdmV0Wmd2ZVZHTVNlYmN2bEs0YjNHUWRkRDE1K1dF?=
- =?utf-8?B?bFFuOElTVGJNaVgva2V4Qm4vdElPS3dPWTZ3TXBDUG9qVDcwVC9Ibkp2b25x?=
- =?utf-8?B?M2pqSzVJTld0bFJhWGFuQkd3V1VwYUxHYTFkRTd2Y25CanNtNld1L2o0aTcx?=
- =?utf-8?B?MWpSUUVoSkRUQ3hnWVZEQTdJd05MYk0vblhibFAxMkFnd0tjOFhEU09hSkRF?=
- =?utf-8?B?UGhnekltUnNaVVFpLzdKaUcwSmwvVk9DZjQ5T2NwcGQ5enJEY3FoWFphZmhk?=
- =?utf-8?B?NURIYUlMY0U3Rm5PcUREV09GRFAzRFVrMkhXWVZqMDlWbzVZekw5UTRrVjlN?=
- =?utf-8?B?ZC9MSnREaDJ3S3ZPdTdjSG44RjBwWS9hYlFhQXI3ZHdpZ1l1MUV6ZFZSV2hw?=
- =?utf-8?B?RHlPUkhGTUZYbnFsSWpqZ2hGZ2Z0NFZ2TnBac0gyTTJMRXlYcnFGMzJkRVlY?=
- =?utf-8?B?ZW5DTHJmaGJMeUZjc1FwdzM2clZ0Y3JPREVrWTVoNmxDM28rQXpXRDdtZVdZ?=
- =?utf-8?B?K2d2MW1YTUVTeFl3emppbHpWSUNYbmdicWJlbGJqc1JqK3kvMWc2R2M2UXRo?=
- =?utf-8?B?WUYxeWIveVVMeEphOE1LK2VmMnJvQnZPYVRiTVJTMGlTSHBJYndINk5mY05P?=
- =?utf-8?B?MmdsK2svTGpNSFkzNzRMU3RwSnN0b0FJUGVTaU52TVBxVlNocHhBeXVrcWRE?=
- =?utf-8?B?bjk4Lzk5dGh3ZkhFRDFneTM2YVMxY3phU0dvbjdHYUowT1djMXBYVEN1QWdC?=
- =?utf-8?B?K2hrdGtxbjAwNDk5UVlqeWlXSElKVWViQU9EM29EQ0Y2U3QxNDBKeWpVRFJ3?=
- =?utf-8?B?NzZ5ZEQzdjZpVFlNanVRZExaa3B3YndwU1JoRmtTVmhxeGR6ZzR6NWtBdk1H?=
- =?utf-8?B?U1FYZVBTRlluWUFRNkdycTBSdHkwMkxvSHljTkxVWC9XVHFjbUJ4Ky9ublZG?=
- =?utf-8?B?RnBmZTRDYnZ2TVdxTkxVWmJaUnVUbjc0VHBrMDJsZFRpd2hNMlZxcXlYZTF2?=
- =?utf-8?B?UkEwTVh4RG9XQTBlS1ZKb0o3Tld2ZHZyQURsQWQ5SFYvbWM1ak82bFl5Qm56?=
- =?utf-8?B?SVh1VURyaHdxNm5jZ3kwdUhTalVvN3NNTUUzNFpZYzk0UFNXQWhHNEc3VDhN?=
- =?utf-8?B?cDN5c1ZET3l2bCtPVVFZTkpXVzJGcDZkQkNZbHNlZUNCajJXemFIY3FuWkZp?=
- =?utf-8?B?dGRjdWhSOWQxWE9YV2FOcjJSd2p3MEZtNGpYUVFXbHVzMmswemNxYW9samJn?=
- =?utf-8?B?a2JTVk1XQXpLRlUyTkhCdlZ2d3VYQ3o4Z3Bua2pNOGpqMHdtbzRRN1FhRTVp?=
- =?utf-8?B?T0RlQmJqU0dBK3g1RFBzVXAzQnBVN09DTDVPcUxVWEE3d3Rub1lhdnptZWtD?=
- =?utf-8?B?ZWtOc3pNUmJLYUw4dnZCY1MweHVwTjNmU2pWZXQzSFdvY0pGTGN1dnF4eXhk?=
- =?utf-8?B?Mlp4eWtUWVZIaVpIa3A1NUpsVHN1ZEF5d0dubC9FQmFwUHpGNWY4aXZZeFFj?=
- =?utf-8?Q?PCPkxRZ4iQ8GhPcLY6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e6204fd-a98b-4474-8a8b-08df49412249
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2026 09:07:00.9580
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2iV5J9fmOR3UtMlAa9ESXMMOopfXBjUiaYIDRwjLWl4qIGm4nQ5hx/3Uq0q2RlH0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8306
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20261119170613.1519353-1-irogers@google.com>
 
-Reviewed-by: Christian König <christian.koenig@amd.com> for both patches.
+> fun_init_stats_area() allocates coherent DMA memory for
+> (PORT_MAC_RX_STATS_MAX + PORT_MAC_TX_STATS_MAX + PORT_MAC_FEC_STATS_MAX)
+> 64-bit counters (632 bytes), whereas fun_free_stats_area() omits
+> PORT_MAC_FEC_STATS_MAX and passes 616 bytes to dma_free_coherent(),
+> triggering DMA-API debug size-mismatch warnings on teardown.
+> 
+> Extract a shared fun_stats_area_size() helper used by both allocation and
+> deallocation paths, and cast the leading enum constant to unsigned int to
+> avoid cross-enum arithmetic.
+> 
+> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
+> -Wenum-enum-conversion enabled; fix and changelog drafted with an AI
+> coding assistant. Build-tested under LLVM=1 W=1 and
+> -Wenum-enum-conversion; not tested on Fungible Ethernet hardware.
+> 
+> Fixes: ee6373ddf3a9 ("net/funeth: probing and netdev ops")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  .../ethernet/fungible/funeth/funeth_main.c    | 20 +++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/fungible/funeth/funeth_main.c b/drivers/net/ethernet/fungible/funeth/funeth_main.c
+> index bad8276d26b0..e0d4e69abfa4 100644
+> --- a/drivers/net/ethernet/fungible/funeth/funeth_main.c
+> +++ b/drivers/net/ethernet/fungible/funeth/funeth_main.c
+> @@ -1457,17 +1457,20 @@ void fun_set_ring_count(struct net_device *netdev, unsigned int ntx,
+>  	}
+>  }
+>  
+> -static int fun_init_stats_area(struct funeth_priv *fp)
+> +static size_t fun_stats_area_size(void)
+>  {
+> -	unsigned int nstats;
+> +	unsigned int nstats = (unsigned int)PORT_MAC_RX_STATS_MAX +
+> +			      PORT_MAC_TX_STATS_MAX + PORT_MAC_FEC_STATS_MAX;
+> +
+> +	return nstats * sizeof(u64);
+> +}
+>  
+> +static int fun_init_stats_area(struct funeth_priv *fp)
+> +{
+>  	if (!(fp->port_caps & FUN_PORT_CAP_STATS))
+>  		return 0;
+>  
+> -	nstats = PORT_MAC_RX_STATS_MAX + PORT_MAC_TX_STATS_MAX +
+> -		 PORT_MAC_FEC_STATS_MAX;
+> -
+> -	fp->stats = dma_alloc_coherent(&fp->pdev->dev, nstats * sizeof(u64),
+> +	fp->stats = dma_alloc_coherent(&fp->pdev->dev, fun_stats_area_size(),
+>  				       &fp->stats_dma_addr, GFP_KERNEL);
+>  	if (!fp->stats)
+>  		return -ENOMEM;
+> @@ -1476,11 +1479,8 @@ static int fun_init_stats_area(struct funeth_priv *fp)
+>  
+>  static void fun_free_stats_area(struct funeth_priv *fp)
+>  {
+> -	unsigned int nstats;
+> -
+>  	if (fp->stats) {
+> -		nstats = PORT_MAC_RX_STATS_MAX + PORT_MAC_TX_STATS_MAX;
+> -		dma_free_coherent(&fp->pdev->dev, nstats * sizeof(u64),
+> +		dma_free_coherent(&fp->pdev->dev, fun_stats_area_size(),
+>  				  fp->stats, fp->stats_dma_addr);
+>  		fp->stats = NULL;
+>  	}
+> -- 
+> 2.56.1.708.g77570a6a1d-goog
+>
 
-Alex will probably pick the patches up, if not please ping me again.
+Fix looks good to me.
 
-Regards,
-Christian.
+Although, I think it's more common with a compile time constant for a fixed size
+used for alloc and free. Something like:
 
-On 11/22/26 05:53, Ian Rogers wrote:
-> Two fixes in drm/amdgpu for uninitialized return-value regressions
-> found via Clang -Wconditional-uninitialized on an x86_64
-> allyesconfig build:
-> 
-> 1. Set r = 0 in the 'else if (!bo)' branch of amdgpu_vm_bo_update().
-> 2. Set r = 0 right after the while loop before 'error:' in
->    amdgpu_ttm_clear_buffer().
-> 
-> Build-tested with LLVM=1 W=1 (-Werror) and -Wconditional-uninitialized;
-> not runtime-tested on AMDGPU hardware.
-> 
-> v2:
->   - Keep 'int r;' uninitialized at declaration in both functions so
->     future missing-assignment paths are not masked; instead set 'r = 0;'
->     inside 'else if (!bo)' in patch 1/2 and directly before 'error:' in
->     patch 2/2 (Christian König).
-> 
-> v1: https://lore.kernel.org/r/cover.1795106955.git.irogers@google.com
-> 
-> Ian Rogers (2):
->   drm/amdgpu: initialize r in amdgpu_vm_bo_update()
->   drm/amdgpu: initialize r in amdgpu_ttm_clear_buffer()
-> 
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 ++
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c  | 1 +
->  2 files changed, 3 insertions(+)
-> 
+#define FUN_PORT_NSTATS ((unsigned int)PORT_MAC_RX_STATS_MAX + \
+                         PORT_MAC_TX_STATS_MAX + PORT_MAC_FEC_STATS_MAX)
 
+        fp->stats = dma_alloc_coherent(&fp->pdev->dev,
+                                       FUN_PORT_NSTATS * sizeof(u64),
+                                       &fp->stats_dma_addr, GFP_KERNEL);
+
+Not a big deal though.
+
+Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
