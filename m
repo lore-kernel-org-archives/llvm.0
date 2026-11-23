@@ -1,58 +1,123 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795446022;
-	b=FKFk+2xYOa/SlTCU5UNIplbIbsopm9ebOUD4fzhh+gLSobeDMBV2CYJ+ABeeoualwy0N
-	 1zjDa/2GOfbZsoJgfDnDJQhUrWzzMfTc6YYCyQ/x4T/HZx2wI0IPPnQjaAz7+B+cTmI7A
-	 andVWPyUNoiP4FUFTzvxNGDmRSyGKexhWR6xMFfI3Y4Idv5EtBX0jFQUindWoTxem7JeL
-	 9Bh149kmAHmF5OkX7IaIVCZpmRvtYvmMkij5uv7zgnU4yMzAZ53mYuhyOJf6IIYHXWtr7
-	 xXkdf/NDKd0PD//QV9In1wrJAOs/Jo3Y7huiP4HDH7RMhbL3eEacVSmNKCfKGwF30fQ==
+	t=1795446404;
+	b=NxFhPNCodMijX9kmzstBJAYeuNoolBumhcWn+4ROdy3GHhbrPuHC8EeCS/Ikire1LoOd
+	 1s4CC+PIETHvsmkvd2UzqXApyZrkNAMR3WCpd7n1Ub1loIOrEUCS2z5Tsn7v/j5VYd4W+
+	 V3TD/Cw5rPmsPSnkk2W++BTQvJQ1TsYuJTC8JVQnU82tQOGdRiqVQp+6UqNyh843cEvHU
+	 b/V/tnkU8rThzEZ6HI8oXBffnclKYgX7Fqfr9NIJCps563BwxzgF3zXjoLH9Rk5KabanP
+	 SJlBrlPokAlth+ZdaIYh2tPehWYpsm0mxU2hIVhjO0evU3jPgLr8+LpDwA3QQT0v19A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795446022;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Last-TLS-Session-Version;
-	bh=byP1kMDVZHEXOHaPsdzqxrOuK3QLySv9pjAZMI2VCWQ=;
-	b=dlydmwAXNvE93eNkQXl5slsZt6BzjY4krHnIFTEfDgrT0wtlwTKth6bELGEMrgtWlmWy
-	 I237jo0OsMUF39/sTRzqHChL/akEGkqO9sWVSzLBmW/NWdtJauuh3QVUnt7j/+E8Tl4MJ
-	 btxoPBN78Al97Wl624grbDXDfC2//zTDgPqBJs2AbQxj45jcc2diAyPEyjxDOMckuPsjx
-	 0wDrh1XinLvnkYa6ZjWAnC3AbPq8UsRqf5a2k4SOMTSSpOWJT0DBxymNKKVOjn6dPb5i6
-	 0IZFpQF7Pj6qjxZyOP3SqAXG93ZRlLUgQIRsTpB/oB43q9EXpGA1qHK6UXYS9ORr76g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795446404;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding;
+	bh=EC2mcbhZaUCQFFpEa+7YYJ6zsvThGtcbiOMpvNNHs8M=;
+	b=A/dbeUV7LUep5JhuKMWJhM1XAqThHisza9rKaATJvnb4NPzs3Z0jNlGA8DJ2cMrYoNb+
+	 JTIbSL31mSxXlcC/FVs+9hdagZUurYbMQ4ZBILd7m/ynGaeJm9WoKOFUFCCxpbIdbneou
+	 eWFJYMBLq1CxrgOoCQ95JJtqyKH0PAvb5n47ACr6IJAC1GabYMew/Ok7AwExdhfYcIzTr
+	 zqVb9tkUxcv74o0wwFvMLPmTxB1KQwO0DoPKYHYPYOeGzla8T7/djlheuPHdiGyKcQAnQ
+	 j53A+1WYRyFrycbQchsGMYAMfU2KUyQPYHvgNYWjymGHiZmLPTc8gYxtTugUBkwr1Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Q9RoxlwF;
-	arc=none smtp.remote-ip=185.246.84.56
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="w5/AcN8s";
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E4C606A321
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 15:00:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57E4C606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BAD606A31F
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 15:06:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91BAD606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Q9RoxlwF
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id EF6111A1795;
-	Mon, 23 Nov 2026 15:00:18 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 952C0601E1;
-	Mon, 23 Nov 2026 15:00:18 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D950811E68EB8;
-	Mon, 23 Nov 2026 16:00:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795446015; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=byP1kMDVZHEXOHaPsdzqxrOuK3QLySv9pjAZMI2VCWQ=;
-	b=Q9RoxlwFV/d7u3pieMNnWNcAZHglsNUae4Eh1WJnS0nCUIFvoSZB3cmzBOOr0ZH99awg+T
-	islPHguKhHYqVdkKu4dooqt+kDfirixH6wFTZ3FY73v0hvN1c7zO2JeQqVX5SWMP8JsUYg
-	g0lGE5MYSQZMJhLLZsUa36jmO7AnlgjUjQuHDGAalDYCnqga6HG0PdAbMKsL/9vuaWV21R
-	5pc6tph3UobKuaiAjjI2ENhlOri/5EQU3qdyFgcoyGWnmqnfstRRXwRK838byy5hmadLQz
-	fdIB10/niK5sJ8IcgVAKvTt4o65XAJUmJD8yjAb/PShd/XHlOg0S68ltfAFrqA==
-Message-ID: <18c7d8af-1156-4bee-be0d-f78334d1908d@bootlin.com>
-Date: Mon, 23 Nov 2026 16:00:04 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w5/AcN8s
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4bb85e07aadso41819665e9.1
+        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 07:06:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795446403; x=1796051203; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EC2mcbhZaUCQFFpEa+7YYJ6zsvThGtcbiOMpvNNHs8M=;
+        b=w5/AcN8sO393GQDbX7LsfYf3MxZOds3Do85JrwKOtcHxkdC9G1cE60014w055twgIn
+         hOYzRNmjt46WA440KNmXIEPCYrDSfBljRU54xX6Cd4f2+Xsv5ucwGp5Ak/QE+IS5pOn3
+         j02Ll9+R2yztL1mSZcF6bVlG7SOUr0MwVGse2shyr4HJLKrCSpS02anzc4c7jaiWi4Dc
+         OslbMobdiZo0XAMt9EvqaSfpYGN9Ni3KFxZfU1tsbTLf42p3ezf7IQwndI4UuZG6xCpX
+         XUJYYN+Ok1t1lO23/TqeUmrERy2LsmOkg32qnyMcIorpvZ9RrgE2/KnxyalqLBS33We7
+         o/+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795446403; x=1796051203;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=EC2mcbhZaUCQFFpEa+7YYJ6zsvThGtcbiOMpvNNHs8M=;
+        b=FqKy3Qe+5A/8Gb2zn4ov02Ru6PEDxbEpbJvOKNQyn3LZMnc2RiOfLzeIqbNz0MuipB
+         WT/dgXJsrfy1NFxQ5svWShyC3rX7KBJ5Zls6pQxdRq8aBdqkfQKqJQWNXoecpOO+k5H9
+         cL3Muk6uC9HSAzAK4GxqtVqIKdrUEz3RS18uuRL8w3JYpn6s9lU7qfAYzdYmI4pD5qcv
+         5Rq0CGHhy8/L+YUMlynXQtZvK+HNXdB68xGw3RexR/wRXadmBuTmc9bodh5bKZCNikY/
+         Kuew1FHHmKw6dXvTRH07mOoJbvTLyBav8cTyT3kE+bi5vIgWNRWq0oLiZ8PmzymyaCCG
+         rtYg==
+X-Forwarded-Encrypted: i=1; AL+hErElSMd4hU5licg2kzmiBlkCHQeC14Namlrx98OKNHPZ3UKBU+FG6Xzf5yw+vS4Si0UvFxCz@lists.linux.dev
+X-Gm-Message-State: APuU4Z+miYjpi3opdF8vaQMMVFhTlYKa/N9R53DWXiUSIVmiVJcvlCOi
+	PbZf+7sqHdwQWAoo8lI5ppO1UqCK7VLkIgvtGyy4Fgm2rV4DC6tsnCXi
+X-Gm-Gg: AZFdTZf2K+faFWKGyT/bUDO2Diy4ChKz1Y7vdf/AWsDZmoW1eSQvY2fuGvS+LfGxS4M
+	imoPqFc3+POWI5Z+bWPKbHtvjcMR2WHZe8iBfmCTpd99Ua25JEkLRfobIPgR8XLDb+qmAZFIRXz
+	HwB4qOhw1Fh44o+IxJDKEQ63X/Mke1tkimOPPqdZ1XfH6ZndXbXArj14/ccLQMt/lD9gy7uGzOY
+	RF3pws7mgyxAD9sTd5tBWJojY5W9Oya4Ngtdy2Ipd2dBvsnavrG1VNvQmYPH2x5zNIAIHc0e3YY
+	UnRDm+hdwmLBtIBD0G3wpUg3JSFgFEBKXsuNqyy+ApOF1W9gOW1ZblyHafo1adWKKKv2+VXySe6
+	paIRoFYO+IQhSuOflWYCw7fKeksjqR7GgQ7nY0Wayk4xhxrBAaVVOWB0qrEOo9d/Q95jP7VHHol
+	YFKo0jn5fJG2Oy1DgHyLzjxRXqPGNcQSA0/Bvr7UNi4Eq4bo5fIMY+/Y87ub43FflvgCiQISvz9
+	+oysHWSc8b42DG2zQjEvD+nJd4Jx2rxm/PLMMj+i4o44EnMbPv8R/nrzw3qAqsVYmonEJMFpNRu
+	Sirno0bwsEi8jBegrwcCtBR447MYxXiUDg==
+X-Received: by 2002:a05:600c:4755:b0:4bb:7033:de79 with SMTP id 5b1f17b1804b1-4bb8881dd02mr248093335e9.35.1795446402877;
+        Mon, 23 Nov 2026 07:06:42 -0800 (PST)
+Received: from ArchOarora ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb989b3sm22848177f8f.51.2026.11.23.07.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 07:06:42 -0800 (PST)
+From: Oarora Etimis <oaroraetimis@gmail.com>
+To: Louis Chauvet <louis.chauvet@bootlin.com>
+Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Melissa Wen <melissa.srw@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	jose.exposito89@gmail.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Lucas De Marchi <demarchi@kernel.org>,
+	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	sebastian.wick@redhat.com,
+	victoria@system76.com,
+	thomas.petazzoni@bootlin.com,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6 18/43] drm/vkms: Introduce config for plane name
+Date: Mon, 23 Nov 2026 16:06:14 +0100
+Message-ID: <awRWEiYaktJcbFfU@Oarora>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <18c7d8af-1156-4bee-be0d-f78334d1908d@bootlin.com>
+References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-18-78ace90f4fc1@bootlin.com> <awRQxKxzVyw10pFr@ArchOarora> <18c7d8af-1156-4bee-be0d-f78334d1908d@bootlin.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -62,69 +127,11 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 18/43] drm/vkms: Introduce config for plane name
-To: Oarora Etimis <oaroraetimis@gmail.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Melissa Wen <melissa.srw@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com,
- Jonathan Corbet <corbet@lwn.net>, Harry Wentland <harry.wentland@amd.com>,
- Lucas De Marchi <demarchi@kernel.org>,
- =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
- Randy Dunlap <rdunlap@infradead.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Kory Maincent <kory.maincent@bootlin.com>, sebastian.wick@redhat.com,
- victoria@system76.com, thomas.petazzoni@bootlin.com,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, Simona Vetter <simona.vetter@ffwll.ch>,
- llvm@lists.linux.dev
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
- <20261120-vkms-all-config-v6-18-78ace90f4fc1@bootlin.com>
- <awRQxKxzVyw10pFr@ArchOarora>
-From: Louis Chauvet <louis.chauvet@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <awRQxKxzVyw10pFr@ArchOarora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+> Can I keep your R-by with this change?
 
-
-On 11/23/26 15:56, Oarora Etimis wrote:
->> @@ -265,7 +266,7 @@ struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
->>   					   &vkms_plane_funcs,
->>   					   vkms_formats, ARRAY_SIZE(vkms_formats),
->>   					   NULL, vkms_config_plane_get_type(plane_cfg),
->> -					   NULL);
->> +					   "%s", vkms_config_plane_get_name(plane_cfg));
->>   	if (IS_ERR(plane))
->>   		return plane;
->>
-> 
-> Small one: with no name configured,every plane ends up as "null",so they all look the same in the debugfs listing. Before this patch, the core named: "plane-d", which was pretty handy.
-> 
-> Could we keep that fallback when the name is missing, as it can improve readability? :)
-> 
-
-Make sense, I will do it for the next iteration:
-
-if (get_name())
-	init(... %s, get_name())
-else
-	init(..., NULL)
-
-Can I keep your R-by with this change?
-
-> 
-> Reviewed-by: Oarora Etimis <oaroraetimis@gmail.com>
-> 
-> Thanks,
-> Oarora Etimis
-
+Yes, please.
+ 
