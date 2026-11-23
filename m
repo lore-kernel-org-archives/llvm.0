@@ -1,55 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795459032;
-	b=a7HV63dSgLPxmo0UbcOAiCOnlIt2GEOp9sQ6/hqabzIaZ90+PJ0NmoeZIxRElM2dLmrx
-	 TBqVcDtCLGPkkUXlNykFioUslIYEnP2Sb9FMDhAprvAA7vOYb9amWD5ACOVWNJdoE/ML9
-	 6uaksHYi2f7B0d7TqOvZj0jFcrwABr2gXBMOiI3LElPWzfcXbAw5rTPZ5/MZECTaDowa5
-	 nYp7jgfSLRFfwCqHz3R1kUgEjmPm9ApQb07I6O5ysv4joJzHURolNGe/uMafPnlrQY1hd
-	 PSjKKpoOxKQWUAMz+4RFQZ23T7W9uehW820M5VWDx5B5WvXfEv0mlOlkyC67TrxHGjg==
+	t=1795459400;
+	b=TNQvoNbrXof7dgUs9hl3sMggZPwoggNDwvatnKn+R/tgngCY9rlvt9jbHaOcjMW0RraK
+	 P/wC9Fma8ik0Y7f2zWf/Ijoz45WbA27mpViYvN2rNmkONTPKbFkjNugkPZ5RFOEqD4j8P
+	 UrHIuZLGRyaCaOwvjCon6UJSQkDvYX0HzA+kHdEmeFbh0QQYx25Jgf+t4iP6WvImFq02b
+	 KCDteH00+u0S7A3QoSwHgmI3dmxesk1oA0Kr0qFL6LfGKrersJ3mqhdbRVL7ww0tTdE8m
+	 /fQa4AFbvL4aLgZaUtCyyxbPa/obfd/J7cGET05Uyu9dtG2dZZYt4kFgY1eF/uMrVpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795459032;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795459400;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=8xyeEM4ykdwPci+rPjGEp+xC7znx8Sw7brM4o0kn09Y=;
-	b=Kta7enilfpF7+qK1xSuMjMkZsXUmzZ9zWKOnz5EoLGmU4lom27+guWJ4IfOz38WAPcsX
-	 CUkk3HWTCcSNL7CkpAOEF/i1CHKXD4Eij3uzAPNbPjiSOvk5PouYK5WMURvmcBmFBI2K0
-	 W1Gz/bA37DSiPuqx6QrDJgFaIgLZ4gBl/4GkiFPhxFKxHrhlcsnpe2UijqAmO4akdGqR8
-	 xFKgA/5LBdOoMvuJJIe3GWhiuF6VP0BtiG9YZ3q6w+Lh+VRBpB82L8MMcdEohlxM+ghEN
-	 o71sY042Ocj6P70//NzLc0UwpcvkcU6Ku/op5o3Ot/xxy/t6SlgWFLftPow7opeenBQ==
+	bh=Bj0rVj9FLIhf8UiYc+IN8rQRnWePKVpim0REyAx+NZY=;
+	b=i0+PAS9VTWm5bZRnYPzz5B00O9pw/QpObV6wggZQ5PFky0GLiHraWiSMcEGbTn4pCy1A
+	 4Q0bCK1968p3rPcreUl5F/3+K0RFJNjghDWVKUJ9ZSjEonkiXffh3unyTTmKUMPrhY/Kg
+	 AX0KT0X+ZQ5rxRawMjEmuRBYftcavN6e0EunjzKSqNr0HD04RkzXUeWvHWwvjmMCv2TBw
+	 aC0uGFIIEDMD/m5XjZcIPXp2GacYDHPaJC2XgL4clzmkQlvAEI6KEfC2r2MWoKZbxORz8
+	 nKwDZTQdD31TtpC7ZWIVOPnPzw2jssK3L4CfLF8YoUCDmsk0gBY+X5o52ycuQoL85IQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WqaRTNLx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DgtdtG6m;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B876606A32A;
-	Mon, 23 Nov 2026 18:37:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 452D4606A31A;
+	Mon, 23 Nov 2026 18:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WqaRTNLx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F5C1F000D1;
-	Mon, 23 Nov 2026 18:37:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DgtdtG6m
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43AE41F000C0;
+	Mon, 23 Nov 2026 18:43:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795459031;
-	bh=8xyeEM4ykdwPci+rPjGEp+xC7znx8Sw7brM4o0kn09Y=;
+	s=k20260515; t=1795459400;
+	bh=Bj0rVj9FLIhf8UiYc+IN8rQRnWePKVpim0REyAx+NZY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=WqaRTNLxXdPxfWEE53ro5YiW3Xrin2037Hek9KJvPxyI81FdWDqWVsV5fr7zcJWAs
-	 tG5GoRuYM5Xmp2OpnaYNODHF6ED3f5vX21V6tEVRflNrV5w6ymqj7cI9U0mCuwrlmm
-	 3+sx3BIGh7SHwQoK1kA2PL5X9TRA7/6c3pMNL9+rvKxgAlZVe2qPF8uR5wJyBFiPtW
-	 WPuYZZonDttW0Xl4MsWwzduw9+cRbNq1XsGnnZ8isj0wg9D6RKx1kjCpNHE8bqOpEE
-	 c39h2Tf9Io+KfIURiWBNn4un4bcT56uNjoYuQwnG0WLSBYkSacUIlMYHgvz+1/x6y8
-	 fRz3ll/fBZs5A==
-Subject: Re: [PATCH net] niu: write back TXC_INT_MASK in niu_txc_set_imask()
+	b=DgtdtG6mxK99luXmkcluJ7cO8/KvuA0cO1nLw1w0AUYAPzg9ZrKTDk1lKuqa5VovR
+	 FC+v0ZeSXCAdEICLCUHlo0Czi96oBpm7B6ug50xg1q6ObKybsZ1hQiMP/rxA9qPyVG
+	 MeL5d271DHe/oLNN6xWMUnOCZvn66dSqSVIiUI8q/5IvDjiy/dfSiVmBZn5RqCMtPs
+	 hWwZR7wrwi95/A2Iq32WzQg/DJ2LedFbpxHM4BGLjbbaMRvR6oqO+bkanVioC2V92s
+	 u2r6Gova6gKnp9n85p3b2Zmwhp33FHV7qTX83IWu72WPAcbkyT1mY6JUu0ZpXy1alk
+	 qebZ+Pd9SJnhg==
+Subject: Re: [PATCH net] net: lan966x: Free skb when PTP TX timestamp request
+ fails in xmit
 From: netdev-bot+sashiko@kernel.org
 To: irogers@google.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, elkin@google.com
-Date: Mon, 23 Nov 2026 18:37:10 +0000
-Message-ID: <179545903032.3135.12672409534586940438@kernel.org>
-In-Reply-To: <20261119170623.1519909-1-irogers@google.com>
-References: <20261119170623.1519909-1-irogers@google.com>
+Cc: horatiu.vultur@microchip.com, daniel.machon@microchip.com,
+ UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ elkin@google.com
+Date: Mon, 23 Nov 2026 18:43:18 +0000
+Message-ID: <179545939880.3135.6341792822211409455@kernel.org>
+In-Reply-To: <20261119170729.1524516-1-irogers@google.com>
+References: <20261119170729.1524516-1-irogers@google.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,10 +66,10 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 (1) · Medium: 1 (1) · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -74,111 +77,211 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The patch makes niu_txc_set_imask() actually write
-  TXC_INT_MASK.
-- [Low] niu_init_hw() calls niu_txc_set_imask(np, 0) without first
-  clearing any TXC_INT_STAT bits already latched for that port.
+- [Medium] The commit message says the patch will 'increment tx_dropped',
+  but the new `dev->stats.tx_dropped++` in lan966x_port_xmit()…
+- [Low] The err->ret change in lan966x_port_xmit()
+  (drivers/net/ethernet/microchip/lan966x/lan966x_main.c:421 and :423)…
+- [Low] The new `dev->stats.tx_dropped++` in lan966x_port_xmit()
+  (lan966x_main.c:410) runs before `spin_lock(&lan966x->tx_lock)`.
+
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but it sits on the
+  same PTP TX skb-ownership path.
+- [Medium] This problem wasn't introduced by this patch, but
+  lan966x_ptp_txtstamp_release() (lan966x_ptp.c:448) rolls back with an…
 
 --
 
-niu: write back TXC_INT_MASK in niu_txc_set_imask()
+net: lan966x: Free skb when PTP TX timestamp request fails in xmit
 
-This patch adds the missing nw64(TXC_INT_MASK, val) to niu_txc_set_imask()
-so the per-port TXC interrupt mask that it computes is actually written to
-hardware. The only caller, niu_init_hw(), passes imask=0, so after this
-change all of the port's TXC error sources are unmasked.
+When lan966x_ptp_txtstamp_request() fails, lan966x_port_xmit() now frees
+the skb, increments tx_dropped and returns NETDEV_TX_OK. Before this
+patch it returned the negative errno from ndo_start_xmit. The patch also
+stores the transmit result in a new netdev_tx_t local instead of the int
+err.
 
-> diff --git a/drivers/net/ethernet/sun/niu.c b/drivers/net/ethernet/sun/niu.c
-> index c74a97fe54641..b2da560edd827 100644
-> --- a/drivers/net/ethernet/sun/niu.c
-> +++ b/drivers/net/ethernet/sun/niu.c
-> @@ -4650,6 +4650,7 @@ static void niu_txc_set_imask(struct niu *np, u64 imask)
->  	val = nr64(TXC_INT_MASK);
->  	val &= ~TXC_INT_MASK_VAL(np->port);
->  	val |= (imask << TXC_INT_MASK_VAL_SHIFT(np->port));
-> +	nw64(TXC_INT_MASK, val);
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> index b8696fc7e9b93..9c722d23e0bb6 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+
+[ ... ]
+
+> @@ -404,8 +405,11 @@ static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
+>  
+>  	if (port->lan966x->ptp && skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) {
+>  		err = lan966x_ptp_txtstamp_request(port, skb);
+> -		if (err)
+> -			return err;
+> +		if (err) {
+> +			dev_kfree_skb_any(skb);
+> +			dev->stats.tx_dropped++;
 
 [Severity: Medium]
-With this write in place, niu_init_hw() now unmasks all six TXC sources
-for the port:
+Will this tx_dropped increment ever reach userspace? lan966x sets
+.ndo_get_stats64 = lan966x_stats_get. dev_get_stats() adds only
+dev->core_stats on top of what that callback returns, so legacy
+dev->stats is never reported.
 
-niu_init_hw()
-    niu_txc_set_imask(np, 0);
+lan966x_stats_get() takes tx_dropped from hardware counters only:
 
-Those sources are SF_CE, SF_UE, RO_CE, RO_UE, REORDER_ERR and PKTASM_DEAD.
-niu.h defines TXC_INT_STAT and its per-port bits, but nothing in niu.c
-reads, decodes or acknowledges that register.
+drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c:lan966x_stats_get() {
+    ...
+	stats->tx_dropped = lan966x->stats[idx + SYS_COUNT_TX_DROP] +
+		lan966x->stats[idx + SYS_COUNT_TX_AGED];
+    ...
+}
 
-What happens when one of these sources fires? The only route seems to be
-the SYS_ERR_STAT_TXC summary on LDN_DEVICE_ERROR. niu_ldg_init() assigns
-that LDN only for port 0. From there:
+rx_dropped, by contrast, does include dev->stats.rx_dropped:
 
-niu_interrupt()
-  niu_slowpath_interrupt()
-    if (v2 & 0x0210)
-        niu_device_error()     <- logs SYS_ERR_STAT, always returns -ENODEV
-    if (err)
-        niu_enable_interrupts(np, 0);
-  if (err)
-      goto out;                <- skips niu_ldg_rearm()
+	stats->rx_dropped = dev->stats.rx_dropped +
+		lan966x->stats[idx + SYS_COUNT_RX_LONG] +
 
-Could one TXC event on any of the four ports turn off all of port 0's
-interrupts (RX/TX DMA, MAC, MIF) with no reset or recovery scheduled? That
-would also include correctable ECC events (SF_CE/RO_CE) that the hardware
-has already corrected.
+The commit message says "increment tx_dropped". As written, though,
+frames dropped because all LAN966X_MAX_PTP_ID slots are busy won't show
+up in ip -s link or sysfs. The existing tx_dropped++ calls in
+lan966x_fdma_xmit() follow the same pattern.
 
-TXC_INT_STAT is never cleared. Could the same bit fire again as soon as
-port 0 is re-armed on the next open?
-
-Before this patch these sources had no effect. The commit message describes
-the change as restoring intended behaviour and says it was not tested on
-Neptune hardware. It also has a Fixes: tag, which makes it a stable
-candidate.
-
-Would it be better to keep the correctable bits masked, for example:
-
-    niu_txc_set_imask(np, TXC_INT_MASK_SF_CE | TXC_INT_MASK_RO_CE);
-
-or to add a TXC_INT_STAT handler that acknowledges events and treats CE as
-non-fatal?
+Would dev_core_stats_tx_dropped_inc(dev), or adding
+dev->stats.tx_dropped in lan966x_stats_get(), make these drops visible?
 
 [Severity: Low]
-Should this port's TXC_INT_STAT be cleared before the mask is opened up?
-Elsewhere in this driver, status is cleared before the mask is programmed:
+Can this increment race with other writers of the same counter? It runs
+before spin_lock(&lan966x->tx_lock). The other dev->stats writers in
+lan966x_port_ifh_xmit() and lan966x_fdma_xmit() run under tx_lock.
 
-niu_init_zcp() {
+lan966x_probe_port() allocates the netdev with
+devm_alloc_etherdev_mqs(..., NUM_PRIO_QUEUES, 1). That means
+ndo_start_xmit can run on several CPUs at once for the same port, and
+the plain read-modify-write can lose increments.
+
+Would DEV_STATS_INC(dev, tx_dropped) or dev_core_stats_tx_dropped_inc(dev)
+avoid this? The second one would also fix the visibility problem above.
+
+> +			return NETDEV_TX_OK;
+> +		}
+>  
+>  		lan966x_ifh_set_rew_op(ifh, LAN966X_SKB_CB(skb)->rew_op);
+>  		lan966x_ifh_set_oam_type(ifh, LAN966X_SKB_CB(skb)->pdu_type);
+> @@ -414,12 +418,12 @@ static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
+>  
+>  	spin_lock(&lan966x->tx_lock);
+>  	if (port->lan966x->fdma)
+> -		err = lan966x->ops->fdma_xmit(skb, ifh, dev);
+> +		ret = lan966x->ops->fdma_xmit(skb, ifh, dev);
+>  	else
+> -		err = lan966x_port_ifh_xmit(skb, ifh, dev);
+> +		ret = lan966x_port_ifh_xmit(skb, ifh, dev);
+
+[Severity: Low]
+Does this change get rid of the implicit int-to-enum conversion, or
+only move it? ret is a netdev_tx_t (enum netdev_tx), but both callees
+are still declared to return int:
+
+drivers/net/ethernet/microchip/lan966x/lan966x_main.h:
+	int (*fdma_xmit)(struct sk_buff *skb, __be32 *ifh,
+			 struct net_device *dev);
+
+drivers/net/ethernet/microchip/lan966x/lan966x_main.c:
+static int lan966x_port_ifh_xmit(struct sk_buff *skb,
+
+The fdma_xmit implementers, lan966x_fdma_xmit() and
+lan966x_fdma_pci_xmit(), are declared int as well.
+
+The commit message says the patch was build-tested with
+-Wimplicit-int-enum-cast. That warning covers assignments as well as
+returns, so wouldn't these two assignments still trigger it?
+
+These functions only ever return NETDEV_TX_OK or NETDEV_TX_BUSY. Could
+the fdma_xmit op, both implementers and lan966x_port_ifh_xmit() be
+changed to return netdev_tx_t instead? The commit message also doesn't
+mention the err to ret change.
+
+[Severity: High]
+This isn't a bug introduced by this patch, but it is on the same PTP TX
+skb ownership path.
+
+For two-step PTP, lan966x_ptp_txtstamp_request() has already linked the
+skb on port->tx_skbs and incremented ptp_skbs and ts_id before
+fdma_xmit is called. On the platform FDMA path, two early returns in
+lan966x_fdma_xmit() skip lan966x_ptp_txtstamp_release():
+
+drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_xmit() {
     ...
-	nw64(ZCP_INT_STAT, ZCP_INT_STAT_ALL);
-	(void) nr64(ZCP_INT_STAT);
-	nw64(ZCP_INT_MASK, ZCP_INT_MASK_ALL);
+	next_to_use = lan966x_fdma_get_next_dcb(tx);
+	if (next_to_use < 0) {
+		netif_stop_queue(dev);
+		return NETDEV_TX_BUSY;
+	}
+
+	if (skb_put_padto(skb, ETH_ZLEN)) {
+		dev->stats.tx_dropped++;
+		return NETDEV_TX_OK;
+	}
     ...
 }
 
-niu_init_ipp() {
-    ...
-	(void) nr64_ipp(IPP_INT_STAT);
+In the NETDEV_TX_BUSY case, the qdisc requeues an skb that is still on
+port->tx_skbs. The retry goes through
+lan966x_port_xmit()->lan966x_ptp_txtstamp_request() again. Two things
+can then happen:
 
-	nw64_ipp(IPP_MSK, ~IPP_MSK_ALL);
+- If the skb has been on the list longer than LAN966X_PTP_TIMEOUT,
+  lan966x_ptp_txtstamp_old_release() frees it while the qdisc still
+  owns it.
+- Otherwise skb_queue_tail() links it a second time.
+
+Linking the tail element again leaves skb->next == skb. Can the
+skb_queue_walk_safe() loops in lan966x_ptp_irq_handler() and
+lan966x_ptp_txtstamp_old_release() then spin forever with the queue lock
+held and IRQs off? ptp_skbs and ts_id also get counted twice.
+
+In the skb_put_padto() failure case, the skb has already been freed but
+is still linked on port->tx_skbs. Later, lan966x_ptp_irq_handler() or
+lan966x_ptp_txtstamp_old_release() dereferences and frees it again.
+
+The err label in lan966x_port_ifh_xmit() and the release label in
+lan966x_fdma_xmit() both call lan966x_ptp_txtstamp_release() before
+returning. Should these two early returns do the same?
+
+The PCIe variant is not affected, because lan966x->ptp is only set when
+!lan966x_is_pci().
+
+[Severity: Medium]
+This is a pre-existing issue, but the release path used by these error
+paths doesn't undo the ts_id wrap done in lan966x_ptp_txtstamp_request():
+
+drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c:lan966x_ptp_txtstamp_request() {
+    ...
+	port->ts_id++;
+	if (port->ts_id == LAN966X_MAX_PTP_ID)
+		port->ts_id = 0;
     ...
 }
 
-The TXC mask was never written before this patch. Any TXC status latched
-earlier would still be present, whether from previous operation, an
-earlier kernel (kexec or module reload), or OBP/firmware use.
+drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c:lan966x_ptp_txtstamp_release() {
+    ...
+	port->ts_id--;
+    ...
+}
 
-Could that stale status assert LDN_DEVICE_ERROR as soon as port 0's LDGs
-are armed in niu_open(), and so lead into the niu_device_error() path
-described above?
+Suppose the skb that took ID 511 then fails injection, either in the
+lan966x_port_ifh_xmit() err path or the lan966x_fdma_xmit() release
+path. Does the u16 ts_id then go from 0 to 65535 instead of back to
+511?
 
-Also, niu_stop_hw() never re-masks the TXC sources, and
-niu_txc_enable_port(np, 0) is not called anywhere. IPP and ZCP are not
-re-masked on stop either. However, after ifdown of ports 1-3, their TXC
-sources would stay armed in the shared register. The latched status is
-never acknowledged, and the device error LDN is bound only to port 0.
-Could a downed port then keep disrupting port 0?
+If so, the next skb gets LAN966X_SKB_CB(skb)->ts_id = 65535, which is
+outside the 0..511 ID space. Whether the hardware can still match that
+ID depends on how it echoes the IFH timestamp field, and that has not
+been verified. If it can't, that frame's TX timestamp is lost and the
+skb is purged after LAN966X_PTP_TIMEOUT.
 
->  	niu_unlock_parent(np, flags);
->  }
+The decrement also assumes allocations are released in LIFO order.
+lan966x_ptp_txtstamp_request() runs outside tx_lock and across several
+TX queues. Could a release undo another CPU's allocation and hand out
+duplicate IDs?
+
+[ ... ]
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119170623.1519909-1-irogers%40google.com
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119170729.1524516-1-irogers%40google.com
