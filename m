@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795437671;
-	b=MAPxaNbfc5v9JfAAh/LmEMyc0rQ9kfigxdSPKgACp/svUYGcdlmFcIc4G0T+dngmv2+r
-	 lfXsc0kt+Al4cJMA92yNG6yK0Nkc6MovPDz4gdn51wzBo3NwbJd9B2dTbdMYRzVGyGU6m
-	 cyhjwhZODTffSNgZLeamkEOVbSNVZhvHIxDZ1HkddDyAGorkSTDqzW6NxwwqnRLEl+n6c
-	 1TaLdqKoR8RUY4/wSMyjj/2lDpeUe+rWyq7DVwvUu6u8HZL66U4C2Bjm4uR793U3NrwjW
-	 qrt4OzySetauHAQi7MiL48edov+5F0LgD6d1hYwBMFerOGLSpxsG1ypb5WIHbR89LsQ==
+	t=1795438995;
+	b=bRgngEVJXuze+INSyjs3gCVf8MKytIBZ/sxhQNv/3HYBArHIw+24RZiJZ2T0MwLWIuM3
+	 CWB9FZnaGVt3FlP6lzGk10MUxrMfNhbbDYEnZkpOX/Ye3TbDE9ctoLxGmUQnPXtSapvqg
+	 CvwH074j94LSPKYWDl1LOkdbRPmXLuQwt6+yK/AOOQldkNEO4jGFKL/G8kqSMKGIXWYRu
+	 iG/mVHDPnxJaLmuObloPeVESIIaPVduFTUqMd2KYaeyYjqA/rN2Befo7Nt3ROGWBZbSdj
+	 0azjlUQDvLAJML/dkWHar8gPFZNE/TsFQQ8K57LuUsI401GsMhRl/ulCO4kDLT8+KuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795437671;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795438995;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Type:Content-Disposition:
 	 Content-Transfer-Encoding;
-	bh=n3T4SwHjmz2olFUDLYwHC6yLLAFa2tC0UOBRI/f1adc=;
-	b=O7xEwgS7moXN8LXqQ5AsnCG9zQVEG5X32sx7sSOc6/kov80xACttxW6edSKs8S2/HROK
-	 X9BZ1bcgyWU6Ym8ArYcV2n/blFtRbjRTur6u43liQ7Pfo0dtYnBbmp+DIhnSZIy4LdXD+
-	 W4s3f3pW/5mi0EmWIiso689Pki8+ZfFshr+8hz7eXf4a4QzWHmTmqLosisx/IOXK9JE1C
-	 UaTFBRI9HfJ5qCyZ3CbwrH+wpkLY4dtpVfT6Zu+lGC7po2BlARo++FkoiQRnqN9EhL70S
-	 aLIunRAoBMYpVDutUI3SUPfR1g+xr0+vcP93nQN/crhue9FKAXwyrFResayrpiMc5nw==
+	bh=eMLemh30tOFWEd3J1uHpw9ECe4OgdCLjsL6KtAJT/rA=;
+	b=4wSKpFpen1aY1y78RSjLwkIRK82zyrh0TksHdNj+I4vp0j3ZDIEJ7RtbdyFVGfpN5NMZ
+	 YE8sys8uEBAOEiSyxrnc6+KVlU77XZI3YRPQJfWixnY9Awt/coVBZg1T45Zso0EN1Oxrz
+	 CCRMRDC9FLkTn2fSS/pB2FWuqg0x6QZl5brE3DHCAFLoC5DA9obONBBciBTF0Lx3ccJS8
+	 d4QMmFvphOe18Id46Yftm0uNiJyfjlOtZu37BN930lAYJaQWQNGm0WWb10Y0i3FKyie0l
+	 E9hwGy9jBbzq1FjuUSY+SAiJpoh0rdMLxuGXZD94HPiXwH8QhUtZmET9yKinWaA3YCg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B7BbNUDI;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ozQJEZfg;
+	arc=none smtp.remote-ip=209.85.221.48
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C87A606A31F
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 12:41:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C87A606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCAE606A31A
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 13:03:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BCAE606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B7BbNUDI
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4bb6886d30aso31416365e9.3
-        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 04:41:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ozQJEZfg
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4a42b34e930so2859111f8f.2
+        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 05:03:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795437669; x=1796042469; darn=lists.linux.dev;
+        d=gmail.com; s=20260707; t=1795438993; x=1796043793; darn=lists.linux.dev;
         h=content-transfer-encoding:content-disposition:content-type
          :mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=n3T4SwHjmz2olFUDLYwHC6yLLAFa2tC0UOBRI/f1adc=;
-        b=B7BbNUDICsmtNWVciwN6+Yw4f0TxT0Sg925sIXJvSa0UB/52wmtmkdS499WRVrjV6z
-         UAJoRf9jn6+r5flK2U0vFE1k4bOTY8ERb5Kh/vLNESTgaVerSNH0suTxisenuKJj0WFw
-         g7Q8cIGbKQ9Fbp1EW6MR6Vb2MvjJfw6ewY1JkrniLiQZbCiIDJvAHlQbquKoXPemy0MZ
-         ShnghzRsY9hFe2gfmkfOoMfvDnQdzCO7VEg1Y6MWZg44CkvsX7ycIPn2+vEuDq9DlIXE
-         C0ohYSzFTufSy9CDxFfLKwuPz91gqNVQRbPbfpCCBFfcL0dhIqsa/l9WlTNY1NqEeS04
-         1bOQ==
+        bh=eMLemh30tOFWEd3J1uHpw9ECe4OgdCLjsL6KtAJT/rA=;
+        b=ozQJEZfgw6koEXxfmVx6E5cQoqqI4s6lCBqHonY8Y25qx/fs/gROZxpZx1CqUBGd4x
+         tj6Odsjsr8gHXFXF6WlpETvr2kfF0hly6KCJPVnN0wwGQPcq8AtWmmD6ED2jpVliNcsS
+         4HqZHbl+RyeqV3Cq03HjEXG/aYTl7L9gWFTiaCCpAgTlQdo6TiyBaWrJxNTM+ueB4kYT
+         IzHcAEXWceGGS6SRx4Ine91thSxmlVyudU7g1vUMA4xtkmpIMNbIHgSTAcWPDDyVj763
+         YAq9arJGhlEQD3aWVo1nYuhOev15XT4Lzj7Z0p9F3taTwFC3f7t/J3p2V+InWW76kpCB
+         PeFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795437669; x=1796042469;
+        d=1e100.net; s=20260707; t=1795438993; x=1796043793;
         h=content-transfer-encoding:content-disposition:content-type
          :mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=n3T4SwHjmz2olFUDLYwHC6yLLAFa2tC0UOBRI/f1adc=;
-        b=Ctx41DIw3RX3yHQt7pN6jJXf/DQLGlqGfAD5eSMBABlKCajwio8aZ70djsT3Ra1NHl
-         3iDsdGupO1RpV1NQJOjCBgSLsgp101io00VpyYCvgEwaf939h64/Q3FIwOLSvCSTA0mu
-         HSHFFSRsicm2KqhjBh3n+LjkZIJ3h9PwGxHDpCeLPb5Xw2vH+WU4ORlVOXUlAucI0wRv
-         R7w7NBWdF091NU9LptE7PZ7ESoBrtleUSXCk+JPZYGe3UvGYi/NoeGoFhRLD6QQnEAiH
-         hcAe+vZNqm9U6xZ03G0ehInnQreVpsWqcevtO8lt3P9Ege/kjYptcsC9RFMViOTw/Q4b
-         DN+w==
-X-Forwarded-Encrypted: i=1; AL+hErH9bEb6NfUeTtP8hxG/PMny8HIaMVmsCQj6ooT5YdNiD8+uzbXMxjBfVcjfzdFpNBr0uY/n@lists.linux.dev
-X-Gm-Message-State: APuU4Z+UQZewBDVxC0sRZjd9iEicSLwvAlLykoPbZIfyCycjaAeha1eB
-	Bnv4dwDBbgn2InVdgdT0exNxY+o5veLbUVhMBPpKyBqptMf2E4G0ySqx
-X-Gm-Gg: AZFdTZcfX7872PzfcklciHdcn0oE1Em2/tPpHc/AVTAPjR+JwM6vc9qkumxBIn6wQvB
-	tqQ1vFzgpxsJdZmGBoBllokavF+AgdMhCTfjQIPoC5UNjnzLP5v9fx5UvrXAsewKmuGOpV7I9al
-	skNVQKZA5nsZB32raRnvTfgHr0UWzrLHmx1lwd+6J76um2l4ur2oAN/lPbvUScAPhHHgxhYhhmj
-	qMbk3hzdoqG0Ug71S0BQV3o14GuSIEfISHoMMI1EytPOS0JpJDbo/AkQiETAlgh/41c+ZiD71Iw
-	qSir6gPdVhh2rqNPbgdGIhwUp7H2GxRq5KbC7dvzKHsbPXBCN4eYnjP5fPB0Jyl0IQwTVfg2ZAe
-	1pgruGbkU+DJmKwxQNHYS4Ror0AOsapprNwvlZEttFuQ2xlcQudbeHfOyvG4FbuZYD5vE8PSvgD
-	RkJVazOp9CmXCenpEbDKQdRSMPLqjsUaOcGyc+43MWTB/vASaoWOBzS00HUJvDB0gXcV/mbo0tq
-	RyjBQtccjakND0OofIsW+U8F8QVCxYlnBJQnCFshL+xY93wgI8BMR6JaIJoQHMXT1kWbeIv532c
-	rPLfP7KaGqf3LVVvFqYvICkPq+d3GQjF5w==
-X-Received: by 2002:a05:600c:3b84:b0:4bb:6f45:2a6d with SMTP id 5b1f17b1804b1-4bb888074bbmr277880715e9.12.1795437669058;
-        Mon, 23 Nov 2026 04:41:09 -0800 (PST)
+        bh=eMLemh30tOFWEd3J1uHpw9ECe4OgdCLjsL6KtAJT/rA=;
+        b=pCCU7jAhvcaK/cXOwdzjodzW+7JlCEUnY9Tl7NjGZO6jYKpPvjYRLPrxHKk+EaHZeB
+         5U4/F00IVCc6LD8PG+x59vVSM9sUjtci9q81078Pucju0sV27sdtMMJMaLIILpq1kHLM
+         GiMGcWeHvLhqMIi2dRiU3sX5zVEHSoS6Rot8Sk+y+0N2FNqAasbsFJXX0kELtX7Jo12f
+         eocMTvJqCemoDRc/q+zXRxlqk4syn7I1HzLUenCsW63XqA0ZB8uLUUg6Zz1PiS7ZGA8x
+         GQz+70S9IikWGLpQR0e1/ViFTlsu1StzjGeHpg2Eoh6XrYvCDL7SmKdLBUzEEKJWnPVI
+         RJQQ==
+X-Forwarded-Encrypted: i=1; AL+hErFwo+2majtTktjJF60tDqeK4z9YOOginh2rKfNm+z/14I4Ck3Hs3ldITP/WrPU5Ql9MUpwb@lists.linux.dev
+X-Gm-Message-State: APuU4Z9KVbwMiI/d2/yXvwlvwGdEm2O090UzSIsdco0fowtAPQonkHo4
+	oLOvGakvSWF8gP5YW/YvDO/jQMSulOzEPIgp4vtz8Swyj79sfx5I5Evv
+X-Gm-Gg: AZFdTZerdmgir2KnAPQoId7Bj4HoQ5KECQV837izuvnCK1d3wuxDeUGRoPYDZatA8lz
+	gBDK9SfIGsnDqCm5pKylTTHdLm73hq1LhOflyG6KNO/RsUCCtCXBTpMxKLhfPf0JvNk2PDFc8HM
+	/FK1FXtmzWe4kqix7v9aQuLr9Er2+mRaHmEWZuiuY+xsusYpW2ibcHioMp0EoMWWeG+8BcADRZh
+	dkZEJ3c+iCjOd/cH9lBVQSzxYn6i+OIvM2D9CJ7nCcpqOF2BDZEzGunJT1/Vfsz5WgBQ88evnCc
+	Uk/7wctHfCUW/R9FdZRSb3Oeo9Ov2EzHn9IT9Jb4hnXVCP/WLU5vkGSTOnE4tOX2dLmSefBvs17
+	eeqZrWqsCklvm1/jt4FZea/is3F7mhMCgMrK9DHlEc+sZd9taOP1fx+OMHz+rmxjrNzabzQZVN4
+	Rx2slOhH5sOwc1HC462NNKY1VOaTLqpQM2S/TyFp8F92clLkxAL3joXSdnT3jt9FY2Wzpm+aF0s
+	cKS9qSiH81WH65ahGkYX5hfEUe3MaZEwq5IDUmCI5K8gOK5ppduNzHpY+gYgbXUFeacfAc93QLA
+	Bw7v7RSJKGhhFBl3qRuMmq0XwAV4eh/hiQ==
+X-Received: by 2002:a05:600c:a085:b0:49f:e8bf:8f9b with SMTP id 5b1f17b1804b1-4bb887ca0dfmr253189505e9.4.1795438992240;
+        Mon, 23 Nov 2026 05:03:12 -0800 (PST)
 Received: from ArchOarora ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb90660cb4sm269127865e9.2.2026.11.23.04.40.57
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884b39b6sm310848795e9.12.2026.11.23.05.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 04:41:08 -0800 (PST)
+        Mon, 23 Nov 2026 05:03:11 -0800 (PST)
 From: Oarora Etimis <oaroraetimis@gmail.com>
 To: Louis Chauvet <louis.chauvet@bootlin.com>
 Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
@@ -112,12 +112,12 @@ Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
 	linux-doc@vger.kernel.org,
 	Simona Vetter <simona.vetter@ffwll.ch>,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 14/43] drm/vkms: Add error handling in plane config creation
-Date: Mon, 23 Nov 2026 12:40:53 +0000
-Message-ID: <awQzMoSQfHO47QgQ@ArchOarora>
+Subject: Re: [PATCH v6 15/43] drm/vkms: Simplify plane_release code
+Date: Mon, 23 Nov 2026 13:02:55 +0000
+Message-ID: <awQ5FMhggIVxJ4py@ArchOarora>
 X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261120-vkms-all-config-v6-14-78ace90f4fc1@bootlin.com>
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-14-78ace90f4fc1@bootlin.com>
+In-Reply-To: <20261120-vkms-all-config-v6-15-78ace90f4fc1@bootlin.com>
+References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-15-78ace90f4fc1@bootlin.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -131,63 +131,35 @@ Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 20, 2026 at 06:58:56PM +0100, Louis Chauvet wrote:
-> Properly route the error path of vkms_config_create_plane() through a
-> fail label to simplify future work.
+On Fri, Nov 20, 2026 at 06:58:57PM +0100, Louis Chauvet wrote:
+> plane_release  code used multiple intermediate variable, remove those in
+> favor of direct access.
 > 
 > Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 > ---
->  drivers/gpu/drm/vkms/vkms_config.c | 12 +++++++++---
->  drivers/gpu/drm/vkms/vkms_config.h |  2 +-
->  2 files changed, 10 insertions(+), 4 deletions(-)
+>  drivers/gpu/drm/vkms/vkms_configfs.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-> index 50cde689f482..03f2d0f0e327 100644
-> --- a/drivers/gpu/drm/vkms/vkms_config.c
-> +++ b/drivers/gpu/drm/vkms/vkms_config.c
-> @@ -424,13 +424,16 @@ void vkms_config_register_debugfs(struct vkms_device *vkms_device)
->  			      ARRAY_SIZE(vkms_config_debugfs_list));
->  }
+> diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
+> index 5f5aa0a1812b..a7ddcfd4e86e 100644
+> --- a/drivers/gpu/drm/vkms/vkms_configfs.c
+> +++ b/drivers/gpu/drm/vkms/vkms_configfs.c
+> @@ -331,13 +331,9 @@ static struct configfs_attribute *plane_item_attrs[] = {
 >  
-> -struct vkms_config_plane *vkms_config_create_plane(struct vkms_config *config)
-> +struct vkms_config_plane __must_check *vkms_config_create_plane(struct vkms_config *config)
+>  static void plane_release(struct config_item *item)
 >  {
->  	struct vkms_config_plane *plane_cfg;
-> +	int ret;
+> -	struct vkms_configfs_plane *plane;
+> -	struct mutex *lock;
+> -
+> -	plane = plane_item_to_vkms_configfs_plane(item);
+> -	lock = &plane->dev->config->lock;
+> +	struct vkms_configfs_plane *plane = plane_item_to_vkms_configfs_plane(item);
 >  
->  	plane_cfg = kzalloc_obj(*plane_cfg);
-> -	if (!plane_cfg)
-> -		return ERR_PTR(-ENOMEM);
-> +	if (!plane_cfg) {
-> +		ret = -ENOMEM;
-> +		goto fail;
-> +	}
->  
->  	plane_cfg->config = config;
->  	plane_cfg->default_pipeline = false;
-> @@ -440,6 +443,9 @@ struct vkms_config_plane *vkms_config_create_plane(struct vkms_config *config)
->  	list_add_tail(&plane_cfg->link, &config->planes);
->  
->  	return plane_cfg;
-> +
-> +fail:
-> +	return ERR_PTR(ret);
->  }
->  EXPORT_SYMBOL_IF_KUNIT(vkms_config_create_plane);
->  
-> diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-> index de6a89819daf..49510a0957c7 100644
-> --- a/drivers/gpu/drm/vkms/vkms_config.h
-> +++ b/drivers/gpu/drm/vkms/vkms_config.h
-> @@ -288,7 +288,7 @@ void vkms_config_register_debugfs(struct vkms_device *vkms_device);
->   * The new plane configuration or an error. Call vkms_config_destroy_plane() to
->   * free the returned plane configuration.
->   */
-> -struct vkms_config_plane *vkms_config_create_plane(struct vkms_config *config);
-> +struct vkms_config_plane __must_check *vkms_config_create_plane(struct vkms_config *config);
->  
->  /**
->   * vkms_config_destroy_plane() - Remove and free a plane configuration
+> -	scoped_guard(mutex, lock) {
+> +	scoped_guard(mutex, &plane->dev->config->lock) {
+>  		vkms_config_destroy_plane(plane->config);
+>  		kfree(plane);
+>  	}
 > 
 > -- 
 > 2.56.0
