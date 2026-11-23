@@ -1,102 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795459991;
-	b=3mNdtospGhRCI23Zb5+OGrHM//LTl4v0XxMSts5is/Zk+S44AeiMpo3T7eVv+SJf7BM8
-	 Iw3t7GrF9B+A8det8mF5FVCC36nUwlZeH1TRTbkSp8spvbuq7B9esq+b+NSVpYtjarlhq
-	 qFqaDqbWOyNKM4WQrUXSQodMM2C35yKAfJb4aIW/+Ko+FqeL0QQ9EcQD2K4hz1R5uqOAu
-	 i6EKveSkoPuQiffxi1r5JAxoPSWklZNb2DTA+vLJ8QZwsJOOLesGI1RhPaJz6AeuICDBY
-	 mYjIffIG29UkqssTeKNDzEvT5vChMZwdqUCcPRsIT8JGXBRO5f7TCKXljB4037BV8kg==
+	t=1795461186;
+	b=NSuFj3emFx81SuVB6O131eEIXpBrsgqnBQU6RHdEnkN+Z4IY+SMAUa24y7WdYtUpBkf9
+	 AE4FUkL9QyBZvPaKDvhG3EJso+Me+Si1LdDch8CqD1D42nCrRhZkg8Qr2Z17Mbw0m1d3p
+	 h/jnTsqWhvbl5ldVM3D2YuF0oFN0Ug4L0rIPRW3M3/0jCVtAwJNfzV2Be5IPbd3v5uGwd
+	 FcpHoX20UErDXZw05+1vleVJu9CVGzRXwB70zkDp7XnJAweonxeiRAvRRpf55zfKIwDdy
+	 s1iSTDiOWNe9B5o6nbTxq5MloK2rTHjd/nX/jFMXuPzyKFUtDRJAJhxvCdq+lFEidwg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795459991;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795461186;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=OzK8e5va1iOv1sYIdDfpKtFNB5Tj3DOer2I2bPq8P24=;
-	b=AtjVem83n3N70X7gSvU8CwO+BZbTZZ8pjJhzKAF3cHqqArZkt/A2UyUygpVOiaep5Qe9
-	 e7acLmKmVaTDDD8QXToiQxGK+5bAAKRbGPYqjjx1PX8Pne2X7lDqxr8WVcYDT1jIXeU/M
-	 n8jsdsOvLJPcqQ2MTBvu23hZxTvfIQZXrnnJOg5CijM+E+vwb/2fFNQOGSn/igJChkWpQ
-	 B8BhhnDnbBbY07kJDnL/B0JjvxpjPoiLkmPTRT+iPryARfPJNASONr9+Z8A2CNerzv3Kx
-	 AQUQYcqcBwDslT4/2nhmhog88m0RETwSnAaEHZoXaQqxUKuPCX43bZqapjoJFRm3m0g==
+	bh=SFo6AVw97R2wCBIFYeT75YVKRSh5N0fKfYv/Pz+bvSk=;
+	b=vqYPb2ANB8ag+yzobIROyMuEVt3b0yafqqDCS57nWLMD+q8ZGaOM9DJ4QFra7+X4b4BV
+	 1/PV/aWJHZVRu5OxhfoNtm2BFuB31Vgqbo1X7c8s9TS75LmOETWRKU4H34wiclHQ6KNA5
+	 2YX8c+63aZVRfirjzM/oAiqN1Nd+/M6LfMCznJcz2OVSpC4op2G0xN/bDChfoQq08U/Qd
+	 2f4AJwuM1H9oGYuQA+wbE/aDZsLi+Onzj3F2fLSFECneXKtPW6cG+ntR4CHGLugSMqo4G
+	 ShcSLxc7Xy5sFWmwZ+n4oetjCZCnlotd2MxMU5+w8T6k4Bw7Eoid+Im+WwGsaGzTStA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fgXb6eCr;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SCEEoBV6;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE69606A327
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 18:53:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4CE69606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75887606A31E
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 19:13:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75887606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fgXb6eCr
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bb64ef5a00so29179835e9.3
-        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 10:53:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795459989; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SCEEoBV6
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4a68190a2a7so3072287f8f.1
+        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 11:13:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795461184; cv=none;
         d=google.com; s=arc-20260327;
-        b=qk8cC4ESxsl+NTLD3/77b8jrDYEJ/D8mSA0hkh8k4DskyCOZRSnBpgEWG2mDbz5xt3
-         Eu3f5nQdDMu3PC6xEawVtz/h8VWW+QkNxTskD3/WBDmEnzrj3vJHexv9B+HmULm7SGny
-         mn6VlY3f+DSy4cBaVqPUWw+Z06IJnjaEpfRGmqHujViXoiEzsmDLLe3UVGLoPbo6QyCK
-         G2EU016vGRKDFyCYoHNW+97s9/Wgzbc2Hkj8mar0Ev1wFGJF4AQ272A/bfEnLuOnrjhu
-         ADYWwEulO+g91wdRgaJjI97xCPLCiFbwT2eR7DgYrVHvxksu9eijtG2q/SPCSOW6bRYi
-         +uSw==
+        b=JqYu2T6LrNj0zm4RJGPAg7rvCfKo0mrKMeQX5rbqYRSePFNrEMany1Z+CnkBFCIQOl
+         5d8lSGBl9g8vazskFjH4msfnf2GfSrhc0ArJWsQR8uu55esdAxRia9QrLC4jGSzxsNWg
+         YJGliuTGR2WHCcUb4rXudVYyXbpbvtGjVxrW5IE6vi6adZ/p2U2yGNNVlR5X2EWwd22+
+         H9nOQt0yj+lk6sfH+vQtngB6OGoJ6mwqFIGGaoEqhOfVxrgB6qwe829u0vWl5N1IX+Zu
+         Leqb//Itup7Cjv1EpPckWBY2Spn72o00llVZp8pXKKRGcWKjEfhAYNb1enA03hP9TY1H
+         4cpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=OzK8e5va1iOv1sYIdDfpKtFNB5Tj3DOer2I2bPq8P24=;
-        fh=FPnqavAbvE76UC8s/ruUySocWuuo+dPZTLhqxiuNoPE=;
-        b=WIXPQto+Ol0M7JsghoiP1grTMokQOV8hV8WwQdLdSJLqqMLaV3IofORLDcdQhnRAEF
-         MS2fulz5lmkM2oObxuzE+ceCTvzeKmNj9faHhfA0zG4VhuUET/emcx9wjHjEWxjfrRmP
-         Uy5XYOg5pzH9t8y2jDP5uSP9UNU7KvwLlTI+0qs5pujrL2ID2BzONKFBVx5MlCDF9POG
-         zw1wnaDVxllYcG+wRiRTvJLjlrIl9F0SHYMB4tBEkXCdPDCH5X0NzLON9wBKcbLrda09
-         EdHrsjUoLPoj/TTcg3HHLYjAO+862As7EmUv4zVFRcorskOMQY2ty6JA9TgKtthVRLPu
-         +mvw==;
+        bh=SFo6AVw97R2wCBIFYeT75YVKRSh5N0fKfYv/Pz+bvSk=;
+        fh=KT6CPgjHoNFD17YDqeh1p1lBSkVop7phyMR5XxqA6kM=;
+        b=JYWmJi8wkGV+tPOmJYTCYyg9Mqv57MjR96Yn45bz/eFFq2DLNoTlpKILlxyQKSM7Kb
+         n+CbOVsE+902bVBLoqfPclDgf+6rQdSRq7bPxqZAIlsp01mYZtYZ3LEnZWLRq1tORKxU
+         mQ7NkmuKjBQV3tXsntrOYGqPczX5G9J0kwuho4yEDLSZ5hngFGqSaTPU6SFxu4cRGZrl
+         POHZrK8xZyHAl/KYXB8J4Opb/h7IjsTPcgi/qN4ip9c3Qnqws5b50MrAsfw1z3oIUtg8
+         ZEBKRMl9F1zl/QGHmLWCuvEmJ1mSPXHaAXnNEuDO9tTLf5GU1feYp88Kk/J3niWxLCKE
+         Gk/Q==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795459989; x=1796064789; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795461184; x=1796065984; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=OzK8e5va1iOv1sYIdDfpKtFNB5Tj3DOer2I2bPq8P24=;
-        b=fgXb6eCrc8f/ujeRFYpXZpaxpYm4wT9uUY1FGV5RAHW3vTZvC/OwMoaVQmT71J5aAD
-         hayBOMBNW6ItAgHbcvshDMkOwBq9RgwLSQF/Tmn80VutYqeoYzqcIq6RZfBeXxI7nU5d
-         mWCMYqmJZnswkisMjpSl96LJD6gk6m5R6yjRGw3ZaWA7uzqwCJAbleFGZGnapThHBnOM
-         bICdRK0Miba20+jvY5PRaNOiu8jBGffwcLtLR0riaLfCO1yweag1TXIi1q+YDJTtK2lG
-         ox6TPcEVoDHPtR0F/vMa5fVBAXMUYm0g6AFB0VOg5PZbKOgeRm1u4nsJ0hrtO4udAHAN
-         ariw==
+        bh=SFo6AVw97R2wCBIFYeT75YVKRSh5N0fKfYv/Pz+bvSk=;
+        b=SCEEoBV6/rhJhp01Ma+R7nWPESF61xVlcZ4ZLvubiVEWKlYhZLkuZugdm04uP3N+Yb
+         09AniyD8N+aEi/1i2gXsPookBumeubTiY6vkrLTsGzOMUSXTvzmCP2EBU3m8T33xDvRc
+         lFDK/hcV+MpFSpl1Qc+nJRIhAAsczZa6tx5S4TzoPS5ftLiBUWt6cvi7q77wLyM/aZw4
+         NMO7Ep3MFJ14v1K0R4uI745J43Lmz2fLpWGukwVFjontOc3GhnVNXyn4CA2ENwflj4uw
+         zuogGIKcxtVEibASyU89YJZDZSQ247Dn8RLks11pGKoW+Yvu1582iCiswD42gylBTCpO
+         xPwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795459989; x=1796064789;
+        d=1e100.net; s=20260707; t=1795461184; x=1796065984;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OzK8e5va1iOv1sYIdDfpKtFNB5Tj3DOer2I2bPq8P24=;
-        b=RES3bZu3oqFua+bNPakuwZTH6BWzi/8e5SBFl3umvQ6/zSqhbnT+r+8ziIXCwftbjW
-         MVPp6n5x2ekJ/2fT7KFEq5YN5ZhQwesrPSndENF7Kctxu0Ho6Jgs+S7CUl6739EdIbcZ
-         rA+yW27uNzcE5+DgByd7MLuY9iv+g8Z7MIqSDIIu9HHmDOOH8MqAPOrdERZceR7uc7/s
-         HTzESKLuLMiaXlgsKoz7SqohyLV1psDR26BXSDkQwXaGflnZKnL4jDcC8rnEzZxtOfvj
-         hjD65Kp7oSdVppESgXVuJy0Lkbemz21jP1bTLdF7JSSNjAKIzCP6pTmAkw/muLwn5cVs
-         ivoA==
-X-Forwarded-Encrypted: i=1; AL+hErEvV6bjOKP8lMy/0mc3vZzHlae/XLtx9qd2A6HBLn2DuPXxkL9NgH0dUfrEbNCzmftes069@lists.linux.dev
-X-Gm-Message-State: APuU4Z8/0QNNMTslZyYm0oQsmHvN/owEPid8jZcNjAW/G2WDVJCMflA4
-	C3vi1A5Lewtu2KzeAbLCtng7leIA8gmWbwvVPZYFUG/wh6897ed9/eJU2QrXGSu3c/lXFpOLLbV
-	c/LdV9IGm5DX7pBUNHfLqHVEHAvfs03+imSOhhGXI
-X-Gm-Gg: AZFdTZcYAVZZLohSEMM6CpcuY3zMi6am+h8d8dbTUKGqplsqME/iA1vXyjf1niIl5Zb
-	kzuSihNW70pclKBizSpQXhDIDS2tm+as+qvZVa076Jey1OZP7M7p7gz60yrfa6iPrgfXglTzNym
-	Ls+Zc0pwyHOFiC13gUsb/pajRtH5Af+EuCqtf8j0ZFzeS9XOzYFe2TmELfA2ZHtNe0bwalwoFzp
-	/N+VBxc/nQCYei2RldnJ0tRI6VYyswkACq34y3V+DWCC/sFj92bgOHFtVQsBbP96RiT59hvcpD6
-	4H7lgphpNvxOK6x9ziLFW48JQ0m1geapf0Y9ZzHTHEsg1q6YGl6LiUw0PZgLENPW/bKD8mqwonL
-	gbYPJiNNpbKnNXL5RSrWSrElRLcWvvi2uebZxDOPfCpiavQmywG6SceiOHc4VocXBGe5aDjCQ1L
-	g+oa6Sl3QYUqQv5Mkkj5zI4lSwe8bSRF0xv6ddA0bDLlm+JzX1Zut/GKys6gOJDtsZ1pY4qxrlJ
-	m8J/kfHbu3nhqvB7YNLUPM8UItOJ9ZvZdENMQ==
-X-Received: by 2002:a05:600c:154f:b0:4bb:6842:66ef with SMTP id
- 5b1f17b1804b1-4bb8893a963mr247968845e9.30.1795459987961; Mon, 23 Nov 2026
- 10:53:07 -0800 (PST)
+        bh=SFo6AVw97R2wCBIFYeT75YVKRSh5N0fKfYv/Pz+bvSk=;
+        b=2S+Ue6O8OGArsGyryOgpnNCYZxnYmSTet5G6z/zr/yD01Dug/JiesgBYNhfwmVHUhW
+         GmzGxMRGY19eIqhdZkBGtPDGlgcv18fTJ7bUAT2udketyEpKlSKWjTElL/AW2o+eX2tm
+         MsQrVNs/FJj8zjtM0+Xv/5V7oK+jpcLyqSVOAcWi+j88zyoY7TFFw9tBO+G0o/NMr2eO
+         MzUVqh8mqdXbZD65+kSCg4p54YrXa6YBhSTQvalUrxO08H8MO2aJ5n6sl5UGIzBo5+0y
+         j8k/VYVXbhRq563jRVl8kTdnV7dUz6tV/UQQ3g2xot33H636JOpKy8GnY4BtPUTJvSIw
+         56QA==
+X-Forwarded-Encrypted: i=1; AL+hErFpStupIGX5d+VhaVSyhRFzRdTK9CMfF8GxEi0wykJRM4w4t9PBrKKAQVi1tLzDDNsBlujh@lists.linux.dev
+X-Gm-Message-State: APuU4Z9/pbr0SZUgDqECMB/wnj9p8ZONA8I2E3LRUjeBQSYn2gg484RL
+	jgmlE/xIbqpDftAb9bvIl+sy0h5CsClazbeOe+YZRHPsUgNU3JCga5PljdiILIlLsEHGFYG+jYq
+	LUqf+1xSUT3DD5OEDiKRh1yY5teEUZ1675UfKws5K
+X-Gm-Gg: AZFdTZcqTQTqVYIBiFxE63rlAPwZXBEu0Vbz8z/Mf02Uq301PEiM4RFOrsYpB/OrYyl
+	Iv3YHeJpLe3jDQfy+k6cE2Bwqoj6FgzduyYlH5Jt5xg6lQeOUimeEBfEG+zNXo6HpBam+mv9k4N
+	xGWeChnFsx9A7TW2E+TbQ6T8C+aJJrlHIQVbnkOoG/+plTPdIfw26R5tAdU6fzc23GdFR0x36vP
+	sorNig2inUAg3ysDfPALyXI9isbBLRD8sEdT/bJ9/37ztxUaGN/Sbb/zOQ8aQ6kRjYKPDys3gz4
+	waQnB+3zZXGekBUp/CD8QMYZuwQtEcCapc020rxcUgwBMcZmd1t53Hm2ffubk3Kq1oAwPYnp46H
+	iy3RrUJS55D3N1fn3XfGqCehG+c6Fggfl70AmyjqttlsS6++Ndjr0XRWBfRttTar6OJC8xbYK6Y
+	ae5V30FgWA79tDFal+0sSXlH217tFHjA+YYf/E7002uE3kxvYYwhmUmc2GQbVwi/m0z+fycwczi
+	k1Wi0AHPfNEOR1/7wsDGvhwlQkH7wekBPUwmQ==
+X-Received: by 2002:a05:6000:2082:b0:4aa:ba0f:c24 with SMTP id
+ ffacd0b85a97d-4abb3956754mr24614079f8f.40.1795461183189; Mon, 23 Nov 2026
+ 11:13:03 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,182 +106,252 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261123025645.2385330-1-shingekinocore@gmail.com>
-In-Reply-To: <20261123025645.2385330-1-shingekinocore@gmail.com>
+References: <20261122105646.2223131-2-ardb+git@google.com>
+In-Reply-To: <20261122105646.2223131-2-ardb+git@google.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 23 Nov 2026 10:52:56 -0800
-X-Gm-Features: Aa3M54rjSx1yo0dE65bPncdIJw5ozLFQnetXM2ws-XF0yEzirPrTrGmtq_bnHFU
-Message-ID: <CAKwvOd=aZam1UR8O5okim1PJqjm5Biv+cBQUmA8ydctUd0v=QA@mail.gmail.com>
-Subject: Re: [PATCH v2] MIPS: Fix genex.S build with LLVM before 21
-To: Tzu-Ching Yang <shingekinocore@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
-	Marco Crivellari <marco.crivellari@suse.com>, Frederic Weisbecker <frederic@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-mips@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, stable@vger.kernel.org
+Date: Mon, 23 Nov 2026 11:12:52 -0800
+X-Gm-Features: Aa3M54r6JmUuoccFpePkZck7gBy4-XWk5fve6pPNHXm6KMQa4IK8PAKHdQcHNY8
+Message-ID: <CAKwvOdkOjGkGajGMKtqcHpRSrpXC9UZrH9XPsiv5Rpcdte5tJQ@mail.gmail.com>
+Subject: Re: [PATCH] locking/local_lock: Don't evaluate the per-CPU lock
+ pointer if unused
+To: Ard Biesheuvel <ardb+git@google.com>, Bill Wendling <morbo@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 22, 2026 at 6:57=E2=80=AFPM Tzu-Ching Yang <shingekinocore@gmai=
-l.com> wrote:
+On Sun, Nov 22, 2026 at 2:56=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
+> wrote:
 >
-> Since commit 56651128e2fb ("MIPS: Fix idle VS timer enqueue"),
-> BUILD_SKIPOVER_PROLOGUE uses label differences as the immediates of ORI
-> and PTR_ADDIU. The LLVM integrated assembler accepts such an immediate
-> only from LLVM 21 on, so LLVM=3D1 builds of every MIPS configuration fail
-> with LLVM 17 to 20 unless LLVM_IAS=3D0 is set:
+> From: Ard Biesheuvel <ardb@kernel.org>
 >
->   <instantiation>:7:11: error: expected an immediate
->    ori $26, r4k_wait_idle_size - 2
->             ^
->   <instantiation>:10:14: error: expected an immediate
->     addiu $26, r4k_wait_exit - r4k_wait_insn + 2
->                ^
+> When lock debugging is disabled, local_lock_acquire() and friends are
+> empty, and so the per-CPU lock pointer that is passed to them, which is
+> usually computed using this_cpu_ptr(), is not used at all.
 >
-> Wrap both expressions in %lo(). For that operator, LLVM 17 to 20
-> emit a LO16 fixup instead of rejecting the operand, and resolve it when
-> writing the object, since both expressions are constants by then; no
-> relocation is left. Both values are between 2 and 30, so %lo() does
-> not change them. GNU as and LLVM 21 to 23 emit the same code as
-> before, except on microMIPS, where GNU as now uses the 32-bit ADDIU in
-> the delay slot instead of the 16-bit one. With GCC, the 2 extra bytes
-> replace the 16-bit NOP that padded the end of the prologue, so all
-> symbols keep their addresses; with Clang and LLVM_IAS=3D0, except_vec_vi
-> and the code after it, up to nmi_handler, move by 4 bytes.
->
-> Fixes: 56651128e2fb ("MIPS: Fix idle VS timer enqueue")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202505071331.Z0N2eSkr-lkp@i=
-ntel.com/
-> Link: https://github.com/llvm/llvm-project/commit/b65e0947cade9bd39036a77=
-00b54c1df4ec00756
+> However, on x86, when the compiler does not support named address spaces
+> (i.e., Clang), this_cpu_ptr() is based on inline asm with a memory
 
-Thanks for the patch.
-Confirming that landed in clang-21.
+I had to look this one up ("named address spaces").
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/2201
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+https://gcc.gnu.org/onlinedocs/gcc/Named-Address-Spaces.html#x86-Named-Addr=
+ess-Spaces
 
-> Cc: stable@vger.kernel.org # 6.6.x: 56651128e2fb: MIPS: Fix idle VS timer=
- enqueue
-> Cc: stable@vger.kernel.org # 6.6.x: b713f27e32d8: MIPS: Move r4k_wait() t=
-o .cpuidle.text section
-> Cc: stable@vger.kernel.org # 6.6.x: 2b6d718c8dbe: MIPS: Fix whitespace da=
-mage in r4k_wait from VS timer fix
-> Cc: stable@vger.kernel.org # 6.6.x
-> Signed-off-by: Tzu-Ching Yang <shingekinocore@gmail.com>
+So __seg_fs / __seg_gs ?
+
+CC_HAS_NAMED_AS : arch/x86/Kconfig#2331
+
+Weird, clang _does_ seem to support these, since clang-11 (clang-17 is
+the current minimum supported default).
+https://godbolt.org/z/cfhj8r69E
+
+commit 47ff30cc1be7 ("x86/percpu: Enable named address spaces for all
+capable GCC versions")
+added a
+
+depends on CC_IS_GCC
+
+What happens if you turn that off?
+
+Ah, a week after that commit was authored, the same author filed
+https://github.com/llvm/llvm-project/issues/93449
+
+(currently assigned to Bill; Bill, can you PTAL?)
+
+They also filed
+https://github.com/llvm/llvm-project/issues/93449
+
+https://github.com/llvm/llvm-project/issues/187893 looks like possible
+a dup of one of the above.  Bill, can you please take a look at those
+3?
+
+> operand, and Clang does not discard such inline asm even if its result
+> is unused. So the computation of the per-CPU address of the lock is
+> emitted regardless, e.g., on every local_lock_nested_bh() in
+> process_backlog() and on every local_lock() in the folio batching code.
+
+I'm more so curious how you even noticed this problem? Was there a
+thread? Were you looking at some assembler and wondering what was
+going on here? Or was there another thread about this?
+
+Very detailed commit message, but you kind of bury the lede here on
+what the actual problem this patch is fixing *is*.
+
+>
+> This was addressed before by commit
+>
+>   9983a9d577db ("locking/local_lock: Make the empty local_lock_*() functi=
+on a macro.")
+>
+> but that change was reverted by commit
+>
+>   2d2f8f083ef2 ("Revert "locking/local_lock: Make the empty local_lock_*(=
+) function a macro."")
+>
+> once commit
+>
+>   1c1e7e3c23dd ("x86/percpu: Remove volatile from arch_raw_cpu_ptr().")
+>
+> had dropped the volatile qualifier from the inline asm, on the basis that
+> the compiler no longer emits the unused per-CPU reference in that case.
+> This is true for GCC, but not for Clang.
+>
+> So implement the !CONFIG_DEBUG_LOCK_ALLOC versions of these helpers as
+> macros that only reference their argument in dead code, so that it is
+> type checked but never evaluated. Referencing it only in an unevaluated
+> context instead, as the typecheck() in the original macros did, makes
+> Clang complain about per-CPU locks that are only used via these helpers
+> (-Wunneeded-internal-declaration), which is what commit
+>
+>   a4812d47deff ("mm/page_alloc: mark pagesets as __maybe_unused")
+>
+> had to work around at the time.
+>
+> Also, only evaluate the lock pointer in __local_lock_acquire() and
+> __local_lock_release() when it is actually needed, i.e., for
+> local_trylock_t.
+>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Boqun Feng <boqun@kernel.org>
+> Cc: Waiman Long <longman@redhat.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: llvm@lists.linux.dev
+> Fixes: 2d2f8f083ef2 ("Revert "locking/local_lock: Make the empty local_lo=
+ck_*() function a macro."")
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 > ---
-> v2: only the stable tags change; the code and the rest of the changelog
-> are those of v1 [v1]. The tags now start at 6.6.x and name the two
-> prerequisites Maciej suggested [review] plus b713f27e32d8.
+>  include/linux/local_lock_internal.h | 47 +++++++++++++-------
+>  1 file changed, 30 insertions(+), 17 deletions(-)
 >
-> What each stable series has today, and what it will get with the tags:
+> diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lo=
+ck_internal.h
+> index 234be7f12c15..7c3191438c90 100644
+> --- a/include/linux/local_lock_internal.h
+> +++ b/include/linux/local_lock_internal.h
+> @@ -69,10 +69,21 @@ static inline void local_lock_debug_init(local_lock_t=
+ *l)
+>  #else /* CONFIG_DEBUG_LOCK_ALLOC */
+>  # define LOCAL_LOCK_DEBUG_INIT(lockname)
+>  # define LOCAL_TRYLOCK_DEBUG_INIT(lockname)
+> -static inline void local_lock_acquire(local_lock_t *l) { }
+> -static inline void local_trylock_acquire(local_lock_t *l) { }
+> -static inline void local_lock_release(local_lock_t *l) { }
+>  static inline void local_lock_debug_init(local_lock_t *l) { }
+> +
+> +/*
+> + * The argument passed to these is usually a this_cpu_ptr() expression, =
+which
+> + * is implemented using inline asm when the compiler lacks support for n=
+amed
+> + * address spaces (e.g., Clang). Clang may fail to discard such inline a=
+sm
+> + * even if its result is never used, so only reference the argument in d=
+ead
+> + * code, which type checks it without evaluating it. (Referencing it onl=
+y in an
+> + * unevaluated context such as sizeof() would make Clang complain about =
+per-CPU
+> + * locks that are only used via these helpers being unneeded.)
+> + */
+> +static inline void __local_lock_typecheck(local_lock_t *l) { }
+> +# define local_lock_acquire(l)         ({ if (0) __local_lock_typecheck(=
+l); })
+> +# define local_trylock_acquire(l)      ({ if (0) __local_lock_typecheck(=
+l); })
+> +# define local_lock_release(l)         ({ if (0) __local_lock_typecheck(=
+l); })
+>  #endif /* !CONFIG_DEBUG_LOCK_ALLOC */
 >
->   series  56651128e2fb  b713f27e32d8  2b6d718c8dbe  will get
->   ------  ------------  ------------  ------------  --------------------
->   7.3.y   yes           yes           yes           this patch
->   6.18.y  yes           yes           no            2b6d718c8dbe + this
->   6.12.y  no            no            no            all three + this (a)
->   6.6.y   no            no            no            all three + this (a)
->   6.1.y   no            no            no            nothing (b)
+>  #define INIT_LOCAL_LOCK(lockname)      { LOCAL_LOCK_DEBUG_INIT(lockname)=
+ }
+> @@ -105,20 +116,23 @@ do {                                               =
+               \
+>         local_lock_debug_init(lock);                            \
+>  } while (0)
 >
-> (a) On 6.12.118 and 6.6.162 the three cherry-picks and this patch apply
->     cleanly. For malta_defconfig, genex.o builds with GCC 8.1 and 16.2
->     and with LLVM 13.0.1, 17.0.1 and 21.1.8 (6.6.162: also 11.1.0),
->     and kernels built with GCC 16.2 and LLVM 17.0.1 boot under QEMU.
->     56651128e2fb needs b713f27e32d8: without it, all the code after
->     r4k_wait in genex.S is placed in .init.text. Both were queued for
->     6.12 and 6.6 in 2025 and dropped because of the build failure
->     fixed here ([1] below).
-> (b) 56651128e2fb conflicts in idle.c on 6.1.y and older.
+> +/*
+> + * Only evaluate @lock if it is actually used, i.e., for local_trylock_t=
+, or
+> + * when lock debugging is enabled (see local_lock_acquire() above).
+> + */
+>  #define __local_lock_acquire(lock)                                     \
+>         do {                                                            \
+> -               local_trylock_t *__tl;                                  \
+> -               local_lock_t *__l;                                      \
+> -                                                                       \
+> -               __l =3D (local_lock_t *)(lock);                          =
+ \
+> -               __tl =3D (local_trylock_t *)__l;                         =
+ \
+>                 _Generic((lock),                                        \
+>                         local_trylock_t *: ({                           \
+> +                               local_trylock_t *__tl =3D (local_trylock_=
+t *)(lock); \
+> +                                                                       \
+
+Why do we need the temporary?
+
+>                                 lockdep_assert(__tl->acquired =3D=3D 0); =
+   \
+>                                 WRITE_ONCE(__tl->acquired, 1);          \
+> +                               local_lock_acquire((local_lock_t *)__tl);=
+ \
+>                         }),                                             \
+> -                       local_lock_t *: (void)0);                       \
+> -               local_lock_acquire(__l);                                \
+> +                       local_lock_t *: ({                              \
+> +                               local_lock_acquire((local_lock_t *)(lock)=
+); \
+
+Is this cast necessary?
+
+> +                       }));                                            \
+>         } while (0)
 >
-> [v1] https://lore.kernel.org/r/20261104030147.3117325-1-shingekinocore@gm=
-ail.com/
-> [review] https://lore.kernel.org/r/alpine.DEB.2.21.2611040746160.6502@ang=
-ie.orcam.me.uk/
+>  #define __local_lock(lock)                                     \
+> @@ -181,18 +195,17 @@ do {                                               =
+               \
 >
-> The notes of v1, unchanged:
+>  #define __local_lock_release(lock)                                     \
+>         do {                                                            \
+> -               local_trylock_t *__tl;                                  \
+> -               local_lock_t *__l;                                      \
+> -                                                                       \
+> -               __l =3D (local_lock_t *)(lock);                          =
+ \
+> -               __tl =3D (local_trylock_t *)__l;                         =
+ \
+> -               local_lock_release(__l);                                \
+>                 _Generic((lock),                                        \
+>                         local_trylock_t *: ({                           \
+> +                               local_trylock_t *__tl =3D (local_trylock_=
+t *)(lock); \
+> +                                                                       \
+> +                               local_lock_release((local_lock_t *)__tl);=
+ \
+>                                 lockdep_assert(__tl->acquired =3D=3D 1); =
+   \
+>                                 WRITE_ONCE(__tl->acquired, 0);          \
+>                         }),                                             \
+> -                       local_lock_t *: (void)0);                       \
+> +                       local_lock_t *: ({                              \
+> +                               local_lock_release((local_lock_t *)(lock)=
+); \
+> +                       }));                                            \
+>         } while (0)
 >
-> > No MIPS hardware here. Against mips-fixes (v7.4-rc1). All builds use
-> > W=3D1 and kernel.org toolchains.
-> >
-> > - genex.o, before and after, with GCC 8.1 to 16.2 and with LLVM 17 to
-> >   23, both with the integrated assembler and with LLVM_IAS=3D0. Configs=
-:
-> >   64r6el, 32r6el, 64r2el, 32r2el, eyeq5, eyeq6, malta (little and big
-> >   endian, MIPS32r1, microMIPS little and big endian), ip22, ip27,
-> >   loongson3 and cavium_octeon.
-> >   - The objects are byte-identical before and after with GCC, with
-> >     LLVM_IAS=3D0 and with LLVM 21 to 23. The only exception is the
-> >     microMIPS ADDIU above. The 4-byte move with LLVM_IAS=3D0 is harmles=
-s:
-> >     set_vi_handler() computes the offsets and the length of the vectore=
-d
-> >     handler from symbols before copying it, and ejtag_debug_handler and
-> >     nmi_handler are only referenced through their symbols.
-> >   - LLVM 17 to 20 now assemble genex.o for all of these configs except
-> >     microMIPS and Octeon, which the integrated assembler rejects for
-> >     other reasons. For malta (little and big endian, MIPS32r1), ip22
-> >     and ip27, these objects are byte-identical to the LLVM 21 genex.o.
-> > - vmlinux of 64r2el, 32r2el and malta, built with GCC 8.1 and 16.2,
-> >   LLVM 17, 20, 21 and 23, and LLVM 17 with LLVM_IAS=3D0. Where both sid=
-es
-> >   build, vmlinux is byte-identical before and after. With LLVM 17 and
-> >   20, genex.o was the only object that failed before, and vmlinux links
-> >   after. No new warnings.
-> > - The malta kernels built with GCC 8.1 and 16.2, LLVM 17, 20 and 23, an=
-d
-> >   LLVM 17 with LLVM_IAS=3D0 boot under QEMU 6.2 -cpu 24Kf. That CPU use=
-s
-> >   r4k_wait(), so interrupts go through skipover_handle_int. Each kernel
-> >   boots to an init that keeps the CPU going in and out of idle and then
-> >   reboots; a QEMU trace shows every interrupt that lands in the idle
-> >   region resuming at r4k_wait_exit. A microMIPS kernel does not boot
-> >   under QEMU -cpu M14Kc with or without this patch, so the microMIPS
-> >   change was not run.
-> >
-> > In the 2025 thread [2], Nathan suggested requiring LLVM 21 for MIPS in
-> > min-tool-version.sh, and Maciej an #error for older Clang. Both would
-> > also stop LLVM 17 to 20 builds with LLVM_IAS=3D0, which work today, and
-> > the stable trees would need the same change before 56651128e2fb could
-> > go back to them.
-> >
-> > On 6.18.y, which also allows LLVM 15 and 16, the patch applies after
-> > 2b6d718c8dbe, and LLVM 15 and 16 fail and are fixed the same way.
-> >
-> > The 56651128e2fb backport was dropped from the 6.14, 6.12 and 6.6
-> > stable queues because of this build failure [1], so 6.12.y and 6.6.y
-> > still lack that fix.
-> >
-> > [1] https://lore.kernel.org/r/2025051415-unloader-likely-b0e6@gregkh/
-> > [2] https://lore.kernel.org/r/20250521224450.GA2412476@ax162/
->
->  arch/mips/kernel/genex.S | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> index be1b049d856f..ef27965f6ad9 100644
-> --- a/arch/mips/kernel/genex.S
-> +++ b/arch/mips/kernel/genex.S
-> @@ -146,10 +146,10 @@ r4k_wait_exit:
->         MFC0    k0, CP0_EPC
->         /* Subtract/add 2 to let the ISA bit propagate through the mask. =
- */
->         PTR_LA  k1, r4k_wait_insn - 2
-> -       ori     k0, r4k_wait_idle_size - 2
-> +       ori     k0, %lo(r4k_wait_idle_size - 2) /* %lo() for LLVM < 21 */
->         .set    noreorder
->         bne     k0, k1, \handler
-> -        PTR_ADDIU      k0, r4k_wait_exit - r4k_wait_insn + 2
-> +        PTR_ADDIU      k0, %lo(r4k_wait_exit - r4k_wait_insn + 2) /* dit=
-to */
->         .set    reorder
->         MTC0    k0, CP0_EPC
->         .set pop
->
-> base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+>  #define __local_unlock(lock)                                   \
 > --
-> 2.34.1
+> 2.56.1.750.gf70dc682cf-goog
 >
 
 
