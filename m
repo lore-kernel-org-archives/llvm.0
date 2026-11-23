@@ -1,80 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795466739;
-	b=B/lC01gd9tS6YndUoPTjEImhjsdyZO7oadif3zCmKLq/73nIAvlm0KRMqUWsJGyO9KsG
-	 Wtgd8HbochTdy5tbrzsVCzTJAgwf+zwnoHIPmDbOJfsmzB9hfsykZd40dljE0oHs9w9Xw
-	 k4ac9uGEfLZQIyPIc7bVJyt6T9HdHKxWyOO4kwJbA1rYwpsgfZiBRTRwlSf6nudwL2ssk
-	 YkqZ2NMOERwRLBg2RGUI1uiwGQmWH290D+Z1UP5vmp5afUJWSYMu1jNK3ywqAebP1oxYO
-	 vVhLUlELrg+hI+f03nEzPoytraTIZobGKIvYYztJ8PPFjUHDzU5aUZaYSSvyOF6o2Dw==
+	t=1795469022;
+	b=u/am57A3GPnpoXvZ6j6gOdngZTGeZ6zePryg7qKFqKtSmXKNwyZv13MxrE2I5HSU46T4
+	 leEKPdE5FejMl8LCP3iiZZdeQ7O/QbwQJr1+H5V3T0UcrItoQTShIrFSyO4QRnGu9WQrw
+	 GBNMgXr0CSeG9kV6vQZIVGJqhy8XBbq4xRXD5t3TqOX1odruyaEs63G7MxzzbEq3QGlCc
+	 P2wuvEP2FL1SAylQyWe0BnxWeMgOHLhJieirxKAT2g3OtwPVJLPJoG0kTd7wtEbby2/ce
+	 9R7itv4BQ+D7i9CDSSRR8/SvLBhBK5vcsuJZroXfoedrCdLHW/lUOP7Tg1JmMSj6fbg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795466739;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=0VnDzB9Agb8Amuz7dt6dADKRSDTSttYnUxwg1T6681U=;
-	b=uueM9z/XiQovV9CbMlxcjsqI6HaQbzXYB6Kg8iZJIlQC8PPXFPoMWMiSXBnfJ5mOu3Ky
-	 DCKZzj0gUkJv+5JJ8CLhGfyxTAmm79/YV5tmL4alVeNoSgX9xoQaZoj0DBwKxqsgFTOFx
-	 04q4g/5apPa5CLovtdo/2Y8M1nelSog0Rri4v+4QS1JXFYWy6exr3DJZBuG1MHBXxowi4
-	 zOP1TZ0jrNTSBUbBoRn3i2DazsD4tS5k4wkQRBNRlGUBFAXubtaqAMHDpkMIx2xEUzy5U
-	 gfjXkclX4OGOkHFX1RA4hLXV/Ba12fUSaxxk71FYavKxQ66/BJT03R2NkppLdzmwtNw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795469022;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=GFKS1M/ugygSth0KV1QCCg4c4RPGB7yY7RUQAx8Pqdc=;
+	b=CIjrpbG0OI+LVudIsagjvydaA7sb+60YlbMie+OZkbYQSZRFQrXmha3q70iSl3//x+aV
+	 2jqPGcWF9vCwR+5TQWT6rw9wFDYIRcrZfG7aj/J52ye23fmvjM6d/blrShuumvj6RXw/n
+	 0CE7AxJ+O5xryR6tvcJeEOhU9BrQPpg3+kavj774l+7CFo8ZWCC99VbbcKm/VMUvfH3LF
+	 shUUPd4ZAEfNNJ2x6JYjFs0oILo6czRWese8Yqf9tuYTGycO59Tk3226Lwsnu/LKdSXD9
+	 4yl8HVkYFICeuLz3ytNfrVgjzYu4HUTUdWThmHImmL5mTeyPL7g4Yqnekep6fjM2bOw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XfV8i5uv;
-	arc=none smtp.remote-ip=192.198.163.14
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b89gdi9D;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89061606A333;
-	Mon, 23 Nov 2026 20:45:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89061606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24996606A31E
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 21:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XfV8i5uv
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795466738; x=1827002738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6gkWUv1slhnM9aD8OpSgfBPXiR4hMfiYjKQsCunZYD4=;
-  b=XfV8i5uvFhDohw+fUS9AtTSPNMzX5Ccz67muWPGBKWl/EYVmQPcwApr1
-   GAK926F54ARJdS9B+doUIxk79pg7MSDolRRhYzXU+KEJ+YKJPVCLvVlOV
-   KmB1DwsMbrDKJfJtyX3G/+uDeRmRLR/AomqCRSqS3rlxO6Ph9UavF4VCW
-   Nl4QLsxxu8Eg+DoLzB1CGKvJyJfgj8UKgcrfhYRck92vzqs+5pM+Whf6a
-   88MjDkuTfHaXMQuVJv0jO1lqt60Pjkhz3KXs4gzMD7af+xHX2s1JI/4Wt
-   13nhUl4zeMqF9NqLzaEAFGOm7b9bQxXn38jeyHvBEsSQZNX4PPBmkq1Y6
-   A==;
-X-CSE-ConnectionGUID: Z8xRx0rmSUeh+exnZYAtcQ==
-X-CSE-MsgGUID: r54356OrTDqSeZI05S4Uuw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11975"; a="4187730"
-X-IronPort-AV: E=Sophos;i="6.27,229,1787036400"; 
-   d="scan'208";a="4187730"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2026 12:45:38 -0800
-X-CSE-ConnectionGUID: mCaRPCwpTKOwjvUalQD94w==
-X-CSE-MsgGUID: mZD1cFO1RVCe0x5lHz0ZkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,229,1787036400"; 
-   d="scan'208";a="13182741"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa011.fm.intel.com with ESMTP; 23 Nov 2026 12:45:36 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xVaur-00000001NtW-1mgr;
-	Mon, 23 Nov 2026 20:45:33 +0000
-Date: Tue, 24 Nov 2026 04:44:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kiran K <kiran.k@intel.com>, linux-bluetooth@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	chethan.tumkur.narayan@intel.com, chandrashekar.devegowda@intel.com,
-	ravindra@intel.com, Kiran K <kiran.k@intel.com>
-Subject: Re: [PATCH v1 3/3] Bluetooth: btintel_pcie: Serialize MAC access
- requests
-Message-ID: <20261124043547.lzdrjg8w-lkp@intel.com>
-References: <20261123065523.2769017-3-kiran.k@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b89gdi9D
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A281E1F000D2;
+	Mon, 23 Nov 2026 21:23:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795469021;
+	bh=GFKS1M/ugygSth0KV1QCCg4c4RPGB7yY7RUQAx8Pqdc=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=b89gdi9DouznMBe+ShzlOtiKgXgqNoFjhpKo5jKI7IEw6wTwCHIBXtebxKLh7blmT
+	 PCFxTw5HKujQOYfAIE6F+i38Jc/rHZZe+2+pWCRv1gCa+r+SfcfjJdevoRgZQ0v5IM
+	 c9FJTIphJFLJBT6HTYHLBsGN3X0pX0N6qSkPXCYL99zxAyVJlgn4VWnNgmZLhAmLA5
+	 Mc3st0l6/LiKvGhtTg1oLYgwV2QcaSiSZqDykWCZvSN+zqEpyA6zIR19qrpWvVaZVT
+	 fltciZtCP8kv9BPWLaxl7M842vgshfXpCll6XvOMPa2Im94bGnSkNbQUKWB7T9PleA
+	 5befu3CpkWeJQ==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id C4887198003A;
+	Mon, 23 Nov 2026 16:23:38 -0500 (EST)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Mon, 23 Nov 2026 16:23:38 -0500
+X-ME-Sender: <xms:2K4Ea0SSde7BXSoM6ODRwD9RArJol7NOgv00R7Bt1jYYukxjRxRNRA>
+    <xme:2K4Ea8kyt9Mw3rSPUEcvE0uSz4u_nb9m7TBU26wyujiWQXVeWbYZ4YtEjr-h_IQ27
+    5fdGvAop2QeEsegZFOVeQ04alZQWZRsX6ZoGD0qHmMsgaIWNUznFquf>
+X-ME-Proxy-Cause: dmFkZTFInon+c5sIa6I1naIOJZlzN6rFeuvwKb3zVD+CP6sukxXXVdc4xoOYAJTOf3U4ZX
+    HitTXuaAwYPC3JUsPNSBwWNHDVNKNH2hfrnWxyTOALciBMUl/v24zohAjAtB6AvB/KcPe4
+    wtFwEZdbYYRn+nar04E46w6/ycWBsApcKhJRAGzOOripbpWwDM6dfxvXAJQjXp7Qc5WJDB
+    U1W0RbDoRP//cg7tpuvlcMgileqv9EG6rDxoKRm+6+9bL7kR61TJIt4rSgmYHFUXEtkEjP
+    1gBlsEE/QA09CI1ISO5TKIcL9RGMqQq6Zw6vugr0vuxZyhICjY3Npj0vlCWVwemZ1wQ4ml
+    U5/zdjlUrdvsDKWnIdEkcwSVwA1yuGz7UM3PFEYdUM0BCC0fztjVz2vWMr+XY0SDeU/DCm
+    9ZvSU/2fLyruVDr/5KcEKiPkTOqha3xHZAWT3n/OVoV1o6wdU+DoFEkjQJu5e+Hk8sH8lX
+    BVnE4CFxf+A1L2tAtx8UvsmZ1/5zqlEwvLyLygMicgdbp/aufndnA03xOIjvIL72SRKueu
+    uJFSl5SdORSFh0q20NWC8+fjo4Zl2Yvm6Iyu8pYZPgyffJ7EtQoBxfT5x3e1hCk6xQegfT
+    qD4j+d2nYHzTHwGsoqL6Ks+7IwNE3Dc8DrK1w2dSKbqaVNmBOidFJxEiukOQ
+X-ME-Proxy: <xmx:2q4Ea5G5Zd9fky5VJDa77IBnVw0oFgW3HpwUyfJnzKrQRQ5FREO5rw>
+    <xmx:2q4Ea7CUXmDw307bZ5kAtoMIwCladoHbXBdW4mP9DAtwRSVxGmHp-A>
+    <xmx:2q4Ea_BRCS4nptObegFBoFTZdzgZwJk0rc82DoY7RMB11IpSc8LkPA>
+    <xmx:2q4Ea5N2m0AHrQeTIkagCLA8eZ-o0MPxNh7lvVyjiiYafSSztAbBvQ>
+    <xmx:2q4EazPctL83sAJklw-MIz9I__KeAaLT92pjBAEvfAlNSZtHjNURbyUV>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 43F71F8008E; Mon, 23 Nov 2026 16:23:36 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,170 +77,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261123065523.2769017-3-kiran.k@intel.com>
-
-Hi Kiran,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on bluetooth-next/master]
-[also build test WARNING on next-20261123]
-[cannot apply to linus/master v7.4-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kiran-K/Bluetooth-btintel_pcie-Serialize-doorbell-writes-and-target-reads/20261123-122522
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20261123065523.2769017-3-kiran.k%40intel.com
-patch subject: [PATCH v1 3/3] Bluetooth: btintel_pcie: Serialize MAC access requests
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20261124/20261124043547.lzdrjg8w-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2012344e5da8e03ea4b8283ecd6fad6e13f09d64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261124/20261124043547.lzdrjg8w-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261124043547.lzdrjg8w-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/bluetooth/btintel_pcie.c:1053:12: warning: mutex 'data->mac_access_lock' is not held on every path through here [-Wthread-safety-analysis]
-    1053 |                 for (i = 0; i < config_set->num_pairs; i++) {
-         |                          ^
-   drivers/bluetooth/btintel_pcie.c:1038:4: note: mutex acquired here
-    1038 |                         mutex_lock(&data->mac_access_lock);
-         |                         ^
-   include/linux/mutex.h:193:26: note: expanded from macro 'mutex_lock'
-     193 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
-         |                          ^
->> drivers/bluetooth/btintel_pcie.c:1111:4: warning: releasing mutex 'data->mac_access_lock' that was not held [-Wthread-safety-analysis]
-    1111 |                         mutex_unlock(&data->mac_access_lock);
-         |                         ^
-   2 warnings generated.
+X-ThreadId: AiuDo6z7Qkcc
+Date: Mon, 23 Nov 2026 22:23:16 +0100
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Ard Biesheuvel" <ardb+git@google.com>, "Bill Wendling" <morbo@google.com>
+Cc: linux-kernel@vger.kernel.org,
+ "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Will Deacon" <will@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
+ "Waiman Long" <longman@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Justin Stitt" <justinstitt@google.com>, llvm@lists.linux.dev
+Message-Id: <73d50ff0-36db-4dcc-ad1e-c34bf3ebbce6@app.fastmail.com>
+In-Reply-To: 
+ <CAKwvOdkOjGkGajGMKtqcHpRSrpXC9UZrH9XPsiv5Rpcdte5tJQ@mail.gmail.com>
+References: <20261122105646.2223131-2-ardb+git@google.com>
+ <CAKwvOdkOjGkGajGMKtqcHpRSrpXC9UZrH9XPsiv5Rpcdte5tJQ@mail.gmail.com>
+Subject: Re: [PATCH] locking/local_lock: Don't evaluate the per-CPU lock pointer if
+ unused
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +1053 drivers/bluetooth/btintel_pcie.c
+On Mon, 23 Nov 2026, at 20:12, Nick Desaulniers wrote:
+> On Sun, Nov 22, 2026 at 2:56=E2=80=AFAM Ard Biesheuvel <ardb+git@googl=
+e.com> wrote:
+>>
+>> From: Ard Biesheuvel <ardb@kernel.org>
+>>
+>> When lock debugging is disabled, local_lock_acquire() and friends are
+>> empty, and so the per-CPU lock pointer that is passed to them, which =
+is
+>> usually computed using this_cpu_ptr(), is not used at all.
+>>
+>> However, on x86, when the compiler does not support named address spa=
+ces
+>> (i.e., Clang), this_cpu_ptr() is based on inline asm with a memory
+>
+> I had to look this one up ("named address spaces").
+>
+> https://gcc.gnu.org/onlinedocs/gcc/Named-Address-Spaces.html#x86-Named=
+-Address-Spaces
+>
+> So __seg_fs / __seg_gs ?
+>
+> CC_HAS_NAMED_AS : arch/x86/Kconfig#2331
+>
+> Weird, clang _does_ seem to support these, since clang-11 (clang-17 is
+> the current minimum supported default).
+> https://godbolt.org/z/cfhj8r69E
+>
+> commit 47ff30cc1be7 ("x86/percpu: Enable named address spaces for all
+> capable GCC versions")
+> added a
+>
+> depends on CC_IS_GCC
+>
+> What happens if you turn that off?
+>
+> Ah, a week after that commit was authored, the same author filed
+> https://github.com/llvm/llvm-project/issues/93449
+>
+> (currently assigned to Bill; Bill, can you PTAL?)
+>
+> They also filed
+> https://github.com/llvm/llvm-project/issues/93449
+>
+> https://github.com/llvm/llvm-project/issues/187893 looks like possible
+> a dup of one of the above.  Bill, can you please take a look at those
+> 3?
+>
+>> operand, and Clang does not discard such inline asm even if its result
+>> is unused. So the computation of the per-CPU address of the lock is
+>> emitted regardless, e.g., on every local_lock_nested_bh() in
+>> process_backlog() and on every local_lock() in the folio batching cod=
+e.
+>
+> I'm more so curious how you even noticed this problem? Was there a
+> thread? Were you looking at some assembler and wondering what was
+> going on here? Or was there another thread about this?
+>
 
-50932a1567d614c Ajaykv  2026-11-11  1000  
-68e0925f16c028a Ajaykv  2026-11-11  1001  static void
-68e0925f16c028a Ajaykv  2026-11-11  1002  btintel_pcie_apply_yoyo_config_sets(struct btintel_pcie_data *data,
-68e0925f16c028a Ajaykv  2026-11-11  1003  				    u32 time_point)
-68e0925f16c028a Ajaykv  2026-11-11  1004  {
-68e0925f16c028a Ajaykv  2026-11-11  1005  	struct btintel_pcie_yoyo_config_set *config_set;
-68e0925f16c028a Ajaykv  2026-11-11  1006  	resource_size_t bar0_len;
-68e0925f16c028a Ajaykv  2026-11-11  1007  	int ret;
-68e0925f16c028a Ajaykv  2026-11-11  1008  	u32 i;
-68e0925f16c028a Ajaykv  2026-11-11  1009  
-68e0925f16c028a Ajaykv  2026-11-11  1010  	if (!data)
-68e0925f16c028a Ajaykv  2026-11-11  1011  		return;
-68e0925f16c028a Ajaykv  2026-11-11  1012  
-68e0925f16c028a Ajaykv  2026-11-11  1013  	/* Get the length of PCI BAR0 */
-68e0925f16c028a Ajaykv  2026-11-11  1014  	bar0_len = pci_resource_len(data->pdev, 0);
-68e0925f16c028a Ajaykv  2026-11-11  1015  
-68e0925f16c028a Ajaykv  2026-11-11  1016  	if (!data->yoyo.enabled)
-68e0925f16c028a Ajaykv  2026-11-11  1017  		return;
-68e0925f16c028a Ajaykv  2026-11-11  1018  
-68e0925f16c028a Ajaykv  2026-11-11  1019  	list_for_each_entry(config_set, &data->yoyo.config_set_list, list) {
-68e0925f16c028a Ajaykv  2026-11-11  1020  		u32 pair_addr, addr, value;
-68e0925f16c028a Ajaykv  2026-11-11  1021  
-68e0925f16c028a Ajaykv  2026-11-11  1022  		if (config_set->time_point != time_point)
-68e0925f16c028a Ajaykv  2026-11-11  1023  			continue;
-68e0925f16c028a Ajaykv  2026-11-11  1024  
-68e0925f16c028a Ajaykv  2026-11-11  1025  		switch (config_set->config_set_type) {
-68e0925f16c028a Ajaykv  2026-11-11  1026  		case BTINTEL_PCIE_CFGSET_CSR:
-68e0925f16c028a Ajaykv  2026-11-11  1027  		case BTINTEL_PCIE_CFGSET_PERIPH_MAC:
-68e0925f16c028a Ajaykv  2026-11-11  1028  		case BTINTEL_PCIE_CFGSET_DEVICE_MEM:
-68e0925f16c028a Ajaykv  2026-11-11  1029  			break;
-68e0925f16c028a Ajaykv  2026-11-11  1030  		default:
-68e0925f16c028a Ajaykv  2026-11-11  1031  			BT_WARN("YoYo: unknown/unsupported config_set type %u, skipping",
-68e0925f16c028a Ajaykv  2026-11-11  1032  				config_set->config_set_type);
-68e0925f16c028a Ajaykv  2026-11-11  1033  			continue;
-68e0925f16c028a Ajaykv  2026-11-11  1034  		}
-68e0925f16c028a Ajaykv  2026-11-11  1035  
-68e0925f16c028a Ajaykv  2026-11-11  1036  		if (config_set->config_set_type == BTINTEL_PCIE_CFGSET_PERIPH_MAC ||
-68e0925f16c028a Ajaykv  2026-11-11  1037  		    config_set->config_set_type == BTINTEL_PCIE_CFGSET_DEVICE_MEM) {
-1151389a60ccbe5 Kiran K 2026-11-23  1038  			mutex_lock(&data->mac_access_lock);
-68e0925f16c028a Ajaykv  2026-11-11  1039  			ret = btintel_pcie_get_mac_access(data);
-68e0925f16c028a Ajaykv  2026-11-11  1040  			if (ret) {
-68e0925f16c028a Ajaykv  2026-11-11  1041  				BT_WARN("YoYo: MAC access failed for config set (%d), skipping",
-68e0925f16c028a Ajaykv  2026-11-11  1042  					ret);
-68e0925f16c028a Ajaykv  2026-11-11  1043  				/* get_mac_access() asserts MAC_ACCESS_REQ before it
-68e0925f16c028a Ajaykv  2026-11-11  1044  				 * polls, and leaves it set on timeout; drop it so the
-68e0925f16c028a Ajaykv  2026-11-11  1045  				 * request bit is not leaked.
-68e0925f16c028a Ajaykv  2026-11-11  1046  				 */
-68e0925f16c028a Ajaykv  2026-11-11  1047  				btintel_pcie_release_mac_access(data);
-1151389a60ccbe5 Kiran K 2026-11-23  1048  				mutex_unlock(&data->mac_access_lock);
-68e0925f16c028a Ajaykv  2026-11-11  1049  				continue;
-68e0925f16c028a Ajaykv  2026-11-11  1050  			}
-68e0925f16c028a Ajaykv  2026-11-11  1051  		}
-68e0925f16c028a Ajaykv  2026-11-11  1052  
-68e0925f16c028a Ajaykv  2026-11-11 @1053  		for (i = 0; i < config_set->num_pairs; i++) {
-68e0925f16c028a Ajaykv  2026-11-11  1054  			pair_addr = get_unaligned_le32(&config_set->pairs[i].address);
-68e0925f16c028a Ajaykv  2026-11-11  1055  
-68e0925f16c028a Ajaykv  2026-11-11  1056  			/* Calculate the effective address by adding the address offset */
-68e0925f16c028a Ajaykv  2026-11-11  1057  			if (check_add_overflow(pair_addr, config_set->addr_offset, &addr)) {
-68e0925f16c028a Ajaykv  2026-11-11  1058  				BT_WARN("YoYo: config set address overflow (0x%08x + 0x%08x)",
-68e0925f16c028a Ajaykv  2026-11-11  1059  					pair_addr, config_set->addr_offset);
-68e0925f16c028a Ajaykv  2026-11-11  1060  				continue;
-68e0925f16c028a Ajaykv  2026-11-11  1061  			}
-68e0925f16c028a Ajaykv  2026-11-11  1062  
-68e0925f16c028a Ajaykv  2026-11-11  1063  			value = get_unaligned_le32(&config_set->pairs[i].value);
-68e0925f16c028a Ajaykv  2026-11-11  1064  
-68e0925f16c028a Ajaykv  2026-11-11  1065  			switch (config_set->config_set_type) {
-68e0925f16c028a Ajaykv  2026-11-11  1066  			/* Direct Address Access (CSR) */
-68e0925f16c028a Ajaykv  2026-11-11  1067  			case BTINTEL_PCIE_CFGSET_CSR:
-68e0925f16c028a Ajaykv  2026-11-11  1068  				/* Validate the effective address for CSR access (Direct Address)
-68e0925f16c028a Ajaykv  2026-11-11  1069  				 * addr not aligned to 4 bytes or exceeds the BAR0 length
-68e0925f16c028a Ajaykv  2026-11-11  1070  				 */
-68e0925f16c028a Ajaykv  2026-11-11  1071  				if ((addr & (sizeof(u32) - 1)) ||
-68e0925f16c028a Ajaykv  2026-11-11  1072  				    bar0_len < sizeof(u32) ||
-68e0925f16c028a Ajaykv  2026-11-11  1073  				    addr > bar0_len - sizeof(u32)) {
-68e0925f16c028a Ajaykv  2026-11-11  1074  					BT_WARN("YoYo: bad CSR address 0x%08x for BAR0 length %llu",
-68e0925f16c028a Ajaykv  2026-11-11  1075  						addr, (unsigned long long)bar0_len);
-68e0925f16c028a Ajaykv  2026-11-11  1076  					continue;
-68e0925f16c028a Ajaykv  2026-11-11  1077  				}
-68e0925f16c028a Ajaykv  2026-11-11  1078  
-68e0925f16c028a Ajaykv  2026-11-11  1079  				BT_DBG("YoYo: CSR write [0x%08x] = 0x%08x", addr, value);
-6df2b5e2ac4b8a1 Kiran K 2026-11-23  1080  				/* addr may be PRPH_DEV_* or HBUS_TARG_WRPTR */
-6df2b5e2ac4b8a1 Kiran K 2026-11-23  1081  				spin_lock(&data->dev_mem_lock);
-68e0925f16c028a Ajaykv  2026-11-11  1082  				btintel_pcie_wr_reg32(data, addr, value);
-6df2b5e2ac4b8a1 Kiran K 2026-11-23  1083  				spin_unlock(&data->dev_mem_lock);
-68e0925f16c028a Ajaykv  2026-11-11  1084  				break;
-68e0925f16c028a Ajaykv  2026-11-11  1085  			/* Indirect Address Access (Peripheral MAC and Device Memory) */
-68e0925f16c028a Ajaykv  2026-11-11  1086  			case BTINTEL_PCIE_CFGSET_PERIPH_MAC:
-68e0925f16c028a Ajaykv  2026-11-11  1087  			case BTINTEL_PCIE_CFGSET_DEVICE_MEM:
-68e0925f16c028a Ajaykv  2026-11-11  1088  				/* The config-set TLV comes from an untrusted external file;
-68e0925f16c028a Ajaykv  2026-11-11  1089  				 * reject null or unaligned targets.
-68e0925f16c028a Ajaykv  2026-11-11  1090  				 */
-68e0925f16c028a Ajaykv  2026-11-11  1091  				if (!addr || (addr & (sizeof(u32) - 1))) {
-68e0925f16c028a Ajaykv  2026-11-11  1092  					BT_WARN("YoYo: bad indirect address 0x%08x for type %u",
-68e0925f16c028a Ajaykv  2026-11-11  1093  						addr, config_set->config_set_type);
-68e0925f16c028a Ajaykv  2026-11-11  1094  					continue;
-68e0925f16c028a Ajaykv  2026-11-11  1095  				}
-68e0925f16c028a Ajaykv  2026-11-11  1096  
-6df2b5e2ac4b8a1 Kiran K 2026-11-23  1097  				btintel_pcie_wr_dev_mem(data, addr, value);
-68e0925f16c028a Ajaykv  2026-11-11  1098  				BT_DBG("YoYo: indirect write type %u addr 0x%08x value 0x%08x",
-68e0925f16c028a Ajaykv  2026-11-11  1099  				       config_set->config_set_type, addr, value);
-68e0925f16c028a Ajaykv  2026-11-11  1100  				break;
-68e0925f16c028a Ajaykv  2026-11-11  1101  			default:
-68e0925f16c028a Ajaykv  2026-11-11  1102  				BT_WARN("YoYo: unknown config_set type %u",
-68e0925f16c028a Ajaykv  2026-11-11  1103  					config_set->config_set_type);
-68e0925f16c028a Ajaykv  2026-11-11  1104  				break;
-68e0925f16c028a Ajaykv  2026-11-11  1105  			}
-68e0925f16c028a Ajaykv  2026-11-11  1106  		}
-68e0925f16c028a Ajaykv  2026-11-11  1107  
-68e0925f16c028a Ajaykv  2026-11-11  1108  		if (config_set->config_set_type == BTINTEL_PCIE_CFGSET_PERIPH_MAC ||
-1151389a60ccbe5 Kiran K 2026-11-23  1109  		    config_set->config_set_type == BTINTEL_PCIE_CFGSET_DEVICE_MEM) {
-68e0925f16c028a Ajaykv  2026-11-11  1110  			btintel_pcie_release_mac_access(data);
-1151389a60ccbe5 Kiran K 2026-11-23 @1111  			mutex_unlock(&data->mac_access_lock);
-1151389a60ccbe5 Kiran K 2026-11-23  1112  		}
-68e0925f16c028a Ajaykv  2026-11-11  1113  	}
-68e0925f16c028a Ajaykv  2026-11-11  1114  }
-68e0925f16c028a Ajaykv  2026-11-11  1115  
+No it manifested in local testing of my fgkaslr implementation.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'm doing some very detailed profiling to ensure it does not regress
+performance.
+
+> Very detailed commit message, but you kind of bury the lede here on
+> what the actual problem this patch is fixing *is*.
+>
+
+Apologies. I'll trim it down,
+
+The TL;DR is that non-volatile asm() statements with memory input
+operands are not elided by Clang if their output is never used.
+
