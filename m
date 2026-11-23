@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.203
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795456029;
-	b=mXToXxQaQMhygqQzKCDpiXMltXi/c5jUnX6R17V+okRV2OKf+95gNPSfAebB4RMt6h0y
-	 WlIPrD38zADY9wktj2dGRi7sikJmlrMHHSL4bDNRA11oJWP+/dXQyMDwICyoZ5eXXSpmy
-	 QWCJE/n8EWdOQC/O/uzY6v5sR5wBccas1IQ+zQXElQQ1OSOxdiCWDZk2J3aMP52Mfb8zs
-	 RU55jWPamhfrEJoKUkjDjUJatU4tyvxxe0k89kx9FD2zbKc8RDEieWKEbuiqP4WniRunF
-	 iqZK6dnrWaVdg6CSXUUZOauVVL8sBk3Sa4UHWuB8a20WwglllAMezVHnR7oNFpEdjzw==
+	t=1795456032;
+	b=lkbwvne+nqzF67GoUhq/m0+NsoOgJhkWtmG/Fdopr5d7uzuUgYFo1tRUkGSIx9VEQ+WV
+	 Z/J5uX59/tIlJVFmaakVNhYOMoo1niVJfzDBOZHJ3R8p6gtVqhyNx6sS0Nn5RZpZC465i
+	 1JSLoM11dtY0k/zzKzK8NP0cbv6w0Fdb1QI0T+iAyUGps/8DVRcHUqtlGV38d3XffLteT
+	 359HPaSqsRfoBnghqyzE2NhY1aRxboTjAwVlNW84alkyswAOOLjgKinNMWqRzJfosYa36
+	 LlYAy7lHEFslFkOoVCiCpo5mwKO+iRv/uXz2cCIKtR32K1xtzVjNMyjkcnWdJs71TEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795456029;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795456032;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=+EIsW0Fyp4FUISuPz5cViVS//4FP11RjU+ucX4qbvl4=;
-	b=RdCst1MiQUoPMJTsTaAgIt50G/xw/Sv4i9ZU7pBm3cJ88A3tIqozfc/pflxULntgTq31
-	 vajY4+kpm+RC1kmJwb70llTQx/7KUxaBjMNqr/V6fvDkAZCNHtrp0NrfzD939qsDKMAhq
-	 etFNU0xj2tptGIxMHObYV/0HJpDvhxAHqsRIUbWPzsoZFXBUGjAMgO1KY34An2IN9HrgC
-	 oSHbD/NgC/EwrN0VVp7w6dTYlzqER6+LqdEQRchJ9sBw3OeVLGHXcRrDOfOVUajf0NmCw
-	 uOxwdbAuyj2j3PpG1vnLLLEzAl1NSRr5k0x2M+eWqAMmyJ6J4bfsOWkOwdGNfPEaaWg==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=0t8zKtZ6fbUUYbPPtktIppYZP4GIvXsyFuY7JtvY8tM=;
+	b=LvyJGl5yW8cuvv5iZhDmXANsPovaNk5uLO84aSxLuKYB6+d0hHM7GSpu84FTB2ebq0y8
+	 RqvEgod7v1OjdeSzlXXVaKTxh1b8vLPD0HPwh8SMhSQSzmIS/zqo8yykH5wXePPOTDdJA
+	 WzvTIlvgJvWQNJ8mTPp8Um1j7cKxjtNIt3LwWh6U1TMkHF6btMLpJjtHvLh4uKAxBQfCN
+	 dgcoy2c3tQmn2KjdfSYpVhKvf27fNRf9l6yobYwgCMLq3KhdK1oyhJwPQEYsqc5284NQx
+	 EZRatbWt1u6JuQ3h55dTStlsZP0yHdvNDGx5lBX23XhzXkgdCxXY2IBvu917e/rUmsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GhOVZ6hq;
-	arc=none smtp.remote-ip=95.215.58.203
-Received: from mta1.migadu.com (out-203.mta1.migadu.com [95.215.58.203])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xgqvIaD2;
+	arc=none smtp.remote-ip=91.218.175.51
+Received: from mta0.migadu.com (out-51.mta0.migadu.com [91.218.175.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596BE606A31F
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 17:47:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 596BE606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2AE606A33F
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 17:47:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE2AE606A33F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GhOVZ6hq
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xgqvIaD2
 X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=vTq/47LX7EXP25/eUB2xcyGE3kvFvEXFYsqeUA9EgO0=;
+DKIM-Signature: a=rsa-sha256; bh=3Nw85x2cfbSPxOnqDEnKHg1gdA6E9NYWawWTXVjvbSw=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795456026; v=1; x=1796060826;
- b=GhOVZ6hqFxmUdbdfRzl3aRnSTvvLMHqMb/l6oDMNBEgWG3aZUBD2EPsgbr9sDTmGF2+QAxek
- IyiZ+nI6RCoJTgPj9Rwj5sKYCfvSvuljTEnG18S5lSDXevIm6Ay25DI/cH6FR/ohhQXxECTIxCW
- GzGjUf9IVg+ZEi4ZFN4JSCmw=
+ t=1795456029; v=1; x=1796060829;
+ b=xgqvIaD2LrYAxWibzuWNcUp6S/pNNkYjKMeQoJvKIIk7f+4XbK+GgnC8sfSyET3v/r2ODoM4
+ C/E0KrgsF6GV0fzcLBC99jGpWyPjOmpY8MvlDdtvSUCMjn8CoGpRChd9rna8ReHWU+WF9JDtoxa
+ LMKad5snk9KbNxflCqDhurcI=
 X-Envelope-To: llvm@lists.linux.dev
-Received: by mta12.migadu.com with ESMTPS id 91c2c5e67698e3d9;
-	Mon, 23 Nov 2026 17:47:06 +0000
-X-Mizu-Trace-ID: 91c2c5e67698e3d9
+Received: by mta10.migadu.com with ESMTPS id 24ffb119dd589146;
+	Mon, 23 Nov 2026 17:47:09 +0000
+X-Mizu-Trace-ID: 24ffb119dd589146
 X-Migadu-Flow: FLOW_OUT
 From: Usama Arif <usama.arif@linux.dev>
 To: tglx@kernel.org,
@@ -72,10 +73,12 @@ Cc: hpa@zytor.com,
 	atish.patra@linux.dev,
 	dgreid@meta.com,
 	Usama Arif <usama.arif@linux.dev>
-Subject: [PATCH v2 0/2] Subject: [PATCH v2 0/2] x86/kstack_erase: Faster stack poisoning, plus a startup build fix
-Date: Mon, 23 Nov 2026 09:46:37 -0800
-Message-ID: <20261123174703.133167-1-usama.arif@linux.dev>
+Subject: [PATCH v2 1/2] x86/boot/startup: Disable kernel stack depth tracking
+Date: Mon, 23 Nov 2026 09:46:38 -0800
+Message-ID: <20261123174703.133167-2-usama.arif@linux.dev>
 X-Mailer: git-send-email 2.53.1
+In-Reply-To: <20261123174703.133167-1-usama.arif@linux.dev>
+References: <20261123174703.133167-1-usama.arif@linux.dev>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -87,51 +90,45 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With KSTACK_ERASE, every return to user space poisons the part of the
-task stack used since the previous return, one 8-byte store at a time.
-On Meta hosts running many small VMs, that loop costs about 1.5% of
-non-idle host kernel cycles. Most of it is on the way out of futex,
-epoll, procfs and socket syscalls that go 1-2 KiB deep.
+Commit 57fbad15c2ee ("stackleak: Rename STACKLEAK to KSTACK_ERASE")
+renamed DISABLE_STACKLEAK_PLUGIN to DISABLE_KSTACK_ERASE everywhere
+except in arch/x86/boot/startup/Makefile. The old name now expands to
+nothing, so the startup code is built with stack depth tracking enabled.
 
-Patch 2 makes x86-64 use memset64() for spans above 512 bytes, through
-the arch hook that s390 already uses. Shorter spans keep the loop, and
-the range and value written do not change.
+The startup code is linked with every symbol prefixed by __pi_, so that
+it cannot call into the rest of the kernel by accident. It has no alias
+for the tracking callback, and tracking stack depth there is of no use.
 
-Patch 1 is an independent build fix I found while testing patch 2 with a
-small KSTACK_ERASE_TRACK_MIN_SIZE. The startup code still uses the
-pre-rename DISABLE_STACKLEAK_PLUGIN, so with Clang, AMD memory
-encryption and a tracking minimum below about 90 bytes, vmlinux fails
-to link. It can be applied on its own.
+At the default KSTACK_ERASE_TRACK_MIN_SIZE of 100 no startup function is
+large enough to be tracked, so this went unnoticed. With Clang,
+CONFIG_AMD_MEM_ENCRYPT=y and a minimum below about 90 bytes,
+pvalidate_4k_page(), snp_cpuid() and do_vc_no_ghcb() get a call to
+__sanitizer_cov_stack_depth() and vmlinux fails to link:
 
-Zen 5c KVM guest, one vCPU, before -> after:
+  ld.lld: error: undefined symbol: __pi___sanitizer_cov_stack_depth
 
-  stackleak_erase() per return to user       68 ns -> 47 ns
-  futex wake/wait ping-pong                  6% faster
-  Unix socket sendmsg()/recvmsg() ping-pong  6% faster
-  open+read+close of /proc/self/stat         8% faster
-  getppid() (spans below 512 bytes)          within 1%
+Use DISABLE_KSTACK_ERASE, which disables tracking with either compiler.
 
-v1 -> v2: https://lore.kernel.org/r/20261119213147.1094488-1-usama.arif@linux.dev
-- Patch 1: add Nick's Reviewed-by.
-- Patch 2: use memset64() instead of inline asm and make it
-  __always_inline (Nick, Peter). KMSAN kernels keep the generic loop,
-  as memset64() is out of line there.
-- Patch 2: keep the word loop up to 512 bytes; this is the v2.1
-  variant from the v1 thread. Unrolled loops, Duff's device, a 64-byte
-  aligned REP STOSQ and REP STOSQ for all lengths (Peter, David) all
-  came within 1 ns per erase of it. Most of the time left is the
-  search for the poison, not the fill. This current version is the cleanest
-  one IMO.
+Fixes: 57fbad15c2ee ("stackleak: Rename STACKLEAK to KSTACK_ERASE")
+Signed-off-by: Usama Arif <usama.arif@linux.dev>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ arch/x86/boot/startup/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Usama Arif (2):
-  x86/boot/startup: Disable kernel stack depth tracking
-  x86/kstack_erase: Use memset64() for large stack fills
-
- arch/x86/boot/startup/Makefile   |  2 +-
- arch/x86/include/asm/processor.h | 21 +++++++++++++++++++++
- arch/x86/include/asm/string_64.h |  2 +-
- 3 files changed, 23 insertions(+), 2 deletions(-)
-
+diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
+index 5e499cfb29b5c0..0815105e7205c7 100644
+--- a/arch/x86/boot/startup/Makefile
++++ b/arch/x86/boot/startup/Makefile
+@@ -3,7 +3,7 @@
+ KBUILD_AFLAGS		+= -D__DISABLE_EXPORTS
+ KBUILD_CFLAGS		+= -D__DISABLE_EXPORTS -mcmodel=small -fPIC \
+ 			   -Os -DDISABLE_BRANCH_PROFILING \
+-			   $(DISABLE_STACKLEAK_PLUGIN) \
++			   $(DISABLE_KSTACK_ERASE) \
+ 			   $(DISABLE_LATENT_ENTROPY_PLUGIN) \
+ 			   -fno-stack-protector -D__NO_FORTIFY \
+ 			   -fno-jump-tables \
 -- 
 2.53.1-Meta
 
