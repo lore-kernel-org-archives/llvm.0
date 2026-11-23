@@ -1,47 +1,123 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795449550;
-	b=IEiYm4CLyluWX/1q0ttsvE7aN+qoUMld4N73IJtFJrsx2A8GTLhVIdFN+2YfAr42qyBz
-	 i33Afv8ObuuwuBD7x+et47ljPJ9NjinkGX+AanTJP4iH8A25+yzlEWN3dxdrLZDEECPbR
-	 zJBOOzBSiiwDM/TppYPwTwilkcREA/7tF/gQhVEos/y8TcDcBt+PICq64UQJXUU9AhAC6
-	 CbHXrO34+mnHj2cH3YQ7ZEoSOgJGAfWYHdpClpfWAEeo5hme8j+BxCj9AQINxm9RRkx9N
-	 CNpa1hQibeifyluvMZfeV0WriHk8u+MuKWAprEHJNkQFm9Sv4QZUeOboAih+xXv6lww==
+	t=1795450352;
+	b=XmA7zht6PMbo9mv7WkHY9IBoqr5xDaV0GBYAcXhTiU5WwhBcvtN3uvlvmju+4m3uMGR4
+	 tsvKHxQvpQHVcgAGUkrqLRNn7fcddpw5PA8Tu0mAan3pTt6eLaGa3sPwAezJlKZEmwsHN
+	 xKtGi974ATZ4Ctd3wjf4cFc9kZyqzBe6a+l+ZmOSrQymtDaofl9y+oDjYgi3B3tpFZBCx
+	 yWAhX3/YKRPcqL7fWSGYuFFkpahGU1hKmGpqWF64WptxqZw6wwEyOQgdvGi76WbJkLjAD
+	 mpfhas/LkRBECEN+H0tpps5/65OK7ZAl2kl+sMTiVpRTMyBVHaBtgo+xqDDSooXUVOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795449550;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=5T3kLA/R/0xtFF9nFDh0Ria4cdzh2STsxbalTTV9D7U=;
-	b=QR1GbrXKIiDKbKV30rb2lGVziinX433lKRmw8vrj2S2vxlInlE2dqpKSiHfjI2r8Stiu
-	 VwrUFY516UFmLB0BrhdyokBjeKJpI56sNnLR7/NLcTns4KD1+7/b5Lh4VVHeo88ENM97b
-	 XnLcry3oAfKzjLwBKqlv/g6OaRV3fz42J0WjCIm80fq96vBpS9nzTMx8cyO9oz8sEd3Ta
-	 D5WCb1HeA8it39b4NKFBHYSJsS+39M4woblV3JzNRdWu4ALuuUay2SDTI3SbXj5mMlP1H
-	 +jFb2M+nJKA6CA4TDYN+8ISWWIoSgQnv53CGa2ZZXVsG/QgxjAti6UvBbPpi4Lrjp6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795450352;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding;
+	bh=q8nYEbLZ2llq6j+JAuDJiblDLINgvbNEzxuytFyLiig=;
+	b=kqEqCdn8GVkcosT9sdVUIlmjsBOwSmZ25bSK+k40spO6QLxr+fz5z8IQQTPk5hvEPoWp
+	 HesuB0NMTWG3VXM3395o2wBc40K9J/qAv6HFifCS2yqWUnD+h6uM5NdfZWlQn35aWT73o
+	 qLylBmtMml+uBOwNF+h0AwelIT0s4SSMFc+mrCu07gwq2wQMzDgDb1QJTLrSA46JbGdGD
+	 7K3Bh2J0/3nikf62yMMNODzKTadAZQRBpwIqJ5Ik6vCXjJc9CVcigs6voAtuj4NLvUVI7
+	 +KvBuccEWxnqNpfqVKHshQQ7lapG6V/pn70/v2NUez1mmq2B4zOf7IpUvFrEBbRQ60g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UI43AN56;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tB5XAWTh;
+	arc=none smtp.remote-ip=209.85.128.52
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1B7606A31A;
-	Mon, 23 Nov 2026 15:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E542D606A321
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 16:12:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E542D606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UI43AN56
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA261F000C6;
-	Mon, 23 Nov 2026 15:59:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795449549;
-	bh=5T3kLA/R/0xtFF9nFDh0Ria4cdzh2STsxbalTTV9D7U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=UI43AN56Jrf+bRXL7nqszjrCRyxwb/xXhy/+ErQp6gKI8Z565GoghPhYsAwGsPG4F
-	 ik8zT3hvYqUF6Cnn+PMZyM16ROyVqkrqVSVbL2D4dmPkikLDKhuz3DkUTCWY5/Sado
-	 +TaIBoYEUHJ9CkhRkScAwxzeF/4eXlXQt4kA/cLMXitcheQHtjEbLMAamXuZ4Z+ZxH
-	 X8QKQYiqhXRqVemqyanRIFnQM165yHI4LgzN+99MPGitbLc95+VBjmH9Sd9nehwkDS
-	 ElCkgDWKkmN6jjFKsb66y+fbgRFtwj4jW/3rNQHF113lLsi1osBBmS8WUEIePjBj9B
-	 gCmA7hyvt/GSQ==
-Message-ID: <f513c601-ef8b-4524-9c56-d3d121c8df2a@kernel.org>
-Date: Mon, 23 Nov 2026 16:59:01 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tB5XAWTh
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4bb55cda775so22242305e9.0
+        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 08:12:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795450350; x=1796055150; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=q8nYEbLZ2llq6j+JAuDJiblDLINgvbNEzxuytFyLiig=;
+        b=tB5XAWThJJSBP6w/hImyBc0yMpfwMLF1OnjExLJwJ14cgZ2AUyRcelU4AkM/opOoc7
+         qJN8wjtMWHeQ/xTTe95R4r/6wVyNi/jf0eRhtYwpbw+Qe3mDFbbfrBl2/S9cboAKRQGy
+         waFvnMz1fH1zKzmIT6QTCJaai/FDhiP2q9oypehIY0icD9QewGpj8S3EhCBS8/hJ6dgS
+         6kOwXzs0KTAwskCmveXw3fB5Wf7MYVz0R69gwySdQHKRWIKbuULHegBYizQoO4yRL1wD
+         PHhYOSeplokIVRcAEHOfIqWEDkJv8LFRWNaxs51YZSioLN7WFlpShC/umKI9jCdTuRZ5
+         E4gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795450350; x=1796055150;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=q8nYEbLZ2llq6j+JAuDJiblDLINgvbNEzxuytFyLiig=;
+        b=24xMobP7JDY28LfrM5Cn14vXmFNmkyH8JS+2pbw+Y52DORrPDoA+dnqCYcYJnFXcu5
+         oXACIV9fKYE1S4OZDp4OEnEhT4EBvyLQEOf01RtGHPkMKNWsM2Bp53QVZyYi1lLAcmaF
+         HzacD6QVi23hKDzu8cAq+p24J33no4uz8qmciIS6nsVNRD8B4JyrrrLFVh4AKzikq2IP
+         H9NKxXxfi80JOZ/lULrsZ+95a5wchAlPI8UEC5pEwEivRXGF0SblkYbk6bNtl+edpQFG
+         LmX1RN3jxNVwR0L8N03UXMfFHuIWicMmcWqYXOmRFq4r8u2WBS32Z78MrGhjlHTuK+dA
+         yiHA==
+X-Forwarded-Encrypted: i=1; AL+hErGHXRKssYMA4Sp9tdsQJq2wSmAcYjCh4E9WcN9QnmYOMfnLsPS6DrG4NG7XYp56tBb5aVLP@lists.linux.dev
+X-Gm-Message-State: APuU4Z8N9ut5Rk6t3V3ibEyQhcLBthX8GnjH4kNbGc5I9yHcJEkV6POX
+	7hSoKUKmNB6WHYpXBvJHXJh6Fdx6dWNWecrEF74AzkwuwUq46Dh6/7oH
+X-Gm-Gg: AZFdTZdQXClmjmLRCkHiZdHOZZT/pODh8Vk2Vc5vrMJGcMGkJzBSONIEHKP7i875t1k
+	B16R0VyDYD3nI7XC3lYzmOdVsxPWyVH6fs7Hi00RdbKHNXcJG9lapaRUfzT4gHBTUy+BF6rJzMM
+	YCGjYt82EW5ATMDUY9BYAe/SJ3blAfweaDEv59Hs75HRmTOwQ3gnX7UUZwGw2dWxeXSWmYxw/0H
+	rpGp4ikq0TCM2hZj7bO5Q67Ak+A6a/0xEqbyhUbQvEgjk7psWNeuQ+YQ0FCpQ+rPVoHdajEkIYY
+	JWOVSMP3Q4h+tBauP5mAbYQKQB8DOSadCMYsCQ80JY07VphZqn+qrbdcrwO7o7ohIxhEzVbL/P/
+	fv0xangZpzL+7hSAdURY5FNIl5QaF8Qg5u0ItbXrdelI5C3/5eHc+3lQ9rJs5lF/u6rvV+YT/Y7
+	gg8y8gpRxCXjCsMFkdwprU9a8Ca2aaDxwUzApXryqubqwwZeqOK0CeWXsd3M90FLtbEYDpPk6Ms
+	48Z1g9E9ywglFHNS+w+Pf/EZdi4NICEvgvx4NfTQwqYDkx33Frd/7hG824DHnmMtlyCV5iBsaki
+	S1LsNgBPeHy0tkSdI3HFuFc8S/Qia2PurA==
+X-Received: by 2002:a05:600c:848a:b0:4a2:1960:6fa with SMTP id 5b1f17b1804b1-4bb887fb678mr237295105e9.4.1795450350202;
+        Mon, 23 Nov 2026 08:12:30 -0800 (PST)
+Received: from ArchOarora ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb9066e34esm201819645e9.3.2026.11.23.08.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 08:12:29 -0800 (PST)
+From: Oarora Etimis <oaroraetimis@gmail.com>
+To: Louis Chauvet <louis.chauvet@bootlin.com>
+Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Melissa Wen <melissa.srw@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	jose.exposito89@gmail.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Lucas De Marchi <demarchi@kernel.org>,
+	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	sebastian.wick@redhat.com,
+	victoria@system76.com,
+	thomas.petazzoni@bootlin.com,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6 32/43] drm/vkms: Introduce connector type
+Date: Mon, 23 Nov 2026 17:12:08 +0100
+Message-ID: <awRlnGwi30MkhfyZ@Oarora>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261120-vkms-all-config-v6-32-78ace90f4fc1@bootlin.com>
+References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-32-78ace90f4fc1@bootlin.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -51,132 +127,131 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH ath-next v3 01/15] dt-bindings: net: wireless: add ath12k
- wifi device QCN9575
-To: Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
- Madhavan Ganesan <madhavan.ganesan@oss.qualcomm.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jeff Johnson <jjohnson@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-wireless@vger.kernel.org, devicetree@vger.kernel.org,
- ath12k@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20261118-wifi8_qcn9575_bringup-v3-0-9875d2a3953f@oss.qualcomm.com>
- <20261118-wifi8_qcn9575_bringup-v3-1-9875d2a3953f@oss.qualcomm.com>
- <20261121-lobster-of-unearthly-variation-e75ea9@quoll>
- <f2f50403-fa42-4ee2-bb22-c78309590196@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <f2f50403-fa42-4ee2-bb22-c78309590196@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On 23/11/2026 16:54, Jeff Johnson wrote:
-> On 11/21/2026 4:37 AM, Krzysztof Kozlowski wrote:
->> On Wed, Nov 18, 2026 at 01:45:24PM +0530, Madhavan Ganesan wrote:
->>> -  The ath12k devices (QCN9274) feature WSI support. WSI stands for
->>> -  WLAN Serial Interface. It is used for the exchange of specific
->>> +  Some ath12k devices (QCN9274 and QCN9575) feature WSI support. WSI stands
->>> +  for WLAN Serial Interface. It is used for the exchange of specific
->>>    control information across radios based on the doorbell mechanism.
->>>    This WSI connection is essential to exchange control information
->>>    among these devices.
->>> @@ -48,6 +48,7 @@ properties:
->>>    compatible:
->>>      enum:
->>>        - pci17cb,1109  # QCN9274
->>> +      - pci17cb,1113  # QCN9575
->>
->> I do not see any user of this (see submitting patches in DT directory
->> for explanation).
+On Fri, Nov 20, 2026 at 06:59:14PM +0100, Louis Chauvet wrote:
+> In order to emulate connector-specific behavior, add the connector type
+> to the connector configuration.
 > 
-> For this and the other patches you had comments on, the cover letter describes
-> the approach being taken. What the cover letter is missing is the scope: The
-
-No one reads cover letters :), but I skimmed it now and did not find the
-explanation for bindings without user.
-
-
-
-> QCN9575 device support plus all of the Wi-Fi 8 functionality is roughly 160
-> patches which have been split into 23 reviewable patchsets with 40K+ LOC. This
-> is just the first patchset in the series.
+> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> ---
+>  drivers/gpu/drm/vkms/tests/vkms_config_test.c |  5 +++++
+>  drivers/gpu/drm/vkms/vkms_config.c            |  3 +++
+>  drivers/gpu/drm/vkms/vkms_config.h            | 24 ++++++++++++++++++++++++
+>  drivers/gpu/drm/vkms/vkms_connector.c         |  2 +-
+>  4 files changed, 33 insertions(+), 1 deletion(-)
 > 
-> This is similar to the approach taken when refactoring the original ath12k
-> driver to create the wifi7 folder and wifi generation abstraction. That
-> refactoring was also done as a series of small patchset due to the large
-> number of code changes (102 patches, 20K+ LOC). This was requested by members
-> of the community who wanted to digest the code at a reviewable rate.
+> diff --git a/drivers/gpu/drm/vkms/tests/vkms_config_test.c b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
+> index a43dff511fc3..257ba0342034 100644
+> --- a/drivers/gpu/drm/vkms/tests/vkms_config_test.c
+> +++ b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
+> @@ -137,6 +137,7 @@ static void vkms_config_test_default_config(struct kunit *test)
+>  	struct vkms_config *config;
+>  	struct vkms_config_plane *plane_cfg;
+>  	struct vkms_config_crtc *crtc_cfg;
+> +	struct vkms_config_connector *connector_cfg;
+>  	int n_primaries = 0;
+>  	int n_cursors = 0;
+>  	int n_overlays = 0;
+> @@ -211,6 +212,10 @@ static void vkms_config_test_default_config(struct kunit *test)
+>  
+>  	/* Connectors */
+>  	KUNIT_EXPECT_EQ(test, vkms_config_get_num_connectors(config), 1);
+> +	vkms_config_for_each_connector(config, connector_cfg) {
+> +		KUNIT_EXPECT_EQ(test, vkms_config_connector_get_type(connector_cfg),
+> +				DRM_MODE_CONNECTOR_VIRTUAL);
+> +	}
+>  
+>  	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
+>  
+> diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
+> index 963e32d5adf7..291c0330bc56 100644
+> --- a/drivers/gpu/drm/vkms/vkms_config.c
+> +++ b/drivers/gpu/drm/vkms/vkms_config.c
+> @@ -651,6 +651,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
+>  		seq_printf(m, "\tstatus=%s\n",
+>  			   drm_get_connector_status_name(
+>  				   vkms_config_connector_get_status(connector_cfg)));
+> +		seq_printf(m, "\ttype=%s\n",
+> +			   drm_get_connector_type_name(vkms_config_connector_get_type(connector_cfg)));
+>  	}
+>  
+>  	return 0;
+> @@ -984,6 +986,7 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
+>  
+>  	connector_cfg->config = config;
+>  	connector_cfg->status = connector_status_connected;
+> +	vkms_config_connector_set_type(connector_cfg, DRM_MODE_CONNECTOR_VIRTUAL);
+>  	xa_init_flags(&connector_cfg->possible_encoders, XA_FLAGS_ALLOC);
+>  	kref_init(&connector_cfg->refcnt);
+>  
+> diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
+> index 9d0a0087c9da..88429e01089b 100644
+> --- a/drivers/gpu/drm/vkms/vkms_config.h
+> +++ b/drivers/gpu/drm/vkms/vkms_config.h
+> @@ -138,6 +138,7 @@ struct vkms_config_encoder {
+>   * struct vkms_config_connector
+>   *
+>   * @link: Link to the others connector in vkms_config
+> + * @type: Store the type of connector using DRM_MODE_CONNECTOR_* values
+>   * @config: The vkms_config this connector belongs to
+>   * @status: Status (connected, disconnected...) of the connector
+>   * @possible_encoders: Array of encoders that can be used with this connector
+> @@ -150,6 +151,7 @@ struct vkms_config_connector {
+>  	struct list_head link;
+>  	struct vkms_config *config;
+>  
+> +	int type;
+>  	enum drm_connector_status status;
+>  	struct xarray possible_encoders;
+>  
+> @@ -371,6 +373,28 @@ vkms_config_plane_set_default_pipeline(struct vkms_config_plane *plane_cfg,
+>  }
+>  
+>  /**
+> + * vkms_config_connector_get_type() - Return the connector type
+> + * @connector_cfg: Connector to get the type from
+> + */
+> +static inline int
+> +vkms_config_connector_get_type(const struct vkms_config_connector *connector_cfg)
+> +{
+> +	return connector_cfg->type;
+> +}
+> +
+> +/**
+> + * vkms_config_connector_set_type() - Set the connector type
+> + * @connector_cfg: Connector to set the type to
+> + * @type: New connector type
+> + */
+> +static inline void
+> +vkms_config_connector_set_type(struct vkms_config_connector *connector_cfg,
+> +			       int type)
+> +{
+> +	connector_cfg->type = type;
+> +}
+> +
+> +/*
+>   * vkms_config_plane_get_default_rotation() - Get the default rotation for a plane
+>   * @plane_cfg: Plane to get the default rotation from
+>   *
+> diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
+> index 11e313440225..f5e99e77e84f 100644
+> --- a/drivers/gpu/drm/vkms/vkms_connector.c
+> +++ b/drivers/gpu/drm/vkms/vkms_connector.c
+> @@ -88,7 +88,7 @@ struct vkms_connector *vkms_connector_init(struct vkms_device *vkmsdev,
+>  		return ERR_PTR(-ENOMEM);
+>  
+>  	ret = drmm_connector_init(dev, &connector->base, &vkms_connector_funcs,
+> -				  DRM_MODE_CONNECTOR_VIRTUAL, NULL);
+> +				  vkms_config_connector_get_type(connector_cfg), NULL);
+>  	if (ret)
+>  		return ERR_PTR(ret);
+>  
 > 
-> One key difference in the wifi8 approach is that for the wifi7 refactor we
-> used a separate branch, ath12k-ng, but for wifi8 we want to directly submit to
-> ath-next. The reason the development team wanted to take this approach is to
-> avoid the pain that was encountered where there was a "big bang" merge of the
-> ath12k-ng feature branch with the ath-next branch at the very end of the
-> development cycle which resulted in a large number of merge conflicts with
-> parallel development and bug fixing. Some of those conflicts were
-> unfortunately not initially resolved correctly, leading to instability in the
-> driver. The hope is that introducing the feature directly into the ath-next
-> branch in an ongoing manner will avoid those issues since each subject matter
-> expert will need to resolve their individual conflicts as their pieces land.
-> 
-> As ath12k maintainer, this approach to incrementally introduce the pieces
-> directly into ath-next, but only enabling them at the end, seems like a better
-> approach than the ath12k-ng approach.
-> 
-> Specifically for the DT issue, the original version of this series vetted
-> internally did have a patch to add the device in the PCI registration table,
-> but it was decided to drop it from this patchset when posting to public. We
-> can also drop the DT patch until the point the PCI registration comes.
+> -- 
+> 2.56.0
+>
 
-Still does not explain why do we want bindings without users...
-
-Best regards,
-Krzysztof
+Reviewed-by Oarora Etimis <oaroraetimis@gmail.com>
