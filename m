@@ -1,78 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795425180;
-	b=fJDx+o5vZh4/5OYfj8+/mbjIVLRQ2HPMRp5/QLWQlDoO5P5TKb8H99Q+288al1q8nRje
-	 eHS0Tlq+kqL5BueHBsT2WVM8tpzC7HVUAg2DuQk/cKT8AhlcDhnzf0J3c7vGh1tNLJOBY
-	 B8p7Lu6XyoaX4P51QIBwhIRVk17AP+MNzDZ8qM4mto3J0ctJpWXf25h0k5J2FPtsi5m/1
-	 Z5klWw4jJVBnoSfT5tOCJNv8qtPC3JmpHR9QWy8TXI0I9j9lvucLvX0w3XQXlIXOISDwK
-	 aewfN95CynRZLAUlPbPame/Jop6jxL8pGPSZ5KqnDUsnZUK9fJppYzP5UwC9qWVCZDA==
+	t=1795433249;
+	b=18Do/qebSo12MT54h7kJOx/7zeYU7YRkBlw7BtKAzCyZMDiMNa+1H76za2CXyOOzd8tN
+	 QCYMIqWWJbwvJdydci8esDzzZEFu/nzy7kjHBbNH1pK+EbqU4WYLqEkiEDerLiWZPwniX
+	 hdiL/RxmdDo8oCjFR4ylUofK19QD8mW57A127j7WES35khq8gOD5hhFcg1r5t9RjxmrZs
+	 McenaDO/236yv32foMMvSwig/uLe81qLhAghwCfI0XJtw+jPIcNG2S4xtqFYr8m4PBIVy
+	 5csj1QddECUPn1pp4d8AhwASewweRvoXLv9Yqg3Xv96IoMM9zmS2s5BuXIeBeEIm9Iw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795425180;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:Date:From:To:CC:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=anejgf3VFZWtxVU9c4AFqaVC3HK4nGCoYvLC+5KHP3c=;
-	b=0kSMV0g1Gq8UZjW4YSVDFO4s4GF7yaVTOL1aa5Eyz0cLPUCZgirL5INIPfniyUPlesxB
-	 OCRm8ZYwjSXnfkCEfvMuPoq2IEghMxyTB53w6pbJ+tM1+avJtIZ7y5vISjFyifkWsFtIX
-	 fbBUjF7wyPi9y9EJmEHFAU7bqHoi/v01EZCl75Wln7zvOKhc4l/qfS81vNfiNNoN18zaJ
-	 otWkqceY5u+1XlBWLzToZqQIy5SSlAM9T4Sn7+3HXgdDshlkRCCl4UzXKZ5TSVLpADZx9
-	 EKyGAYtXa2fIj3/Ubf0jZMKN+FtJu6bpQc1yu08y4t8G4a5Z4cNxRUiuwOKxhaIlnwA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795433249;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:From:Subject:To:Cc:References:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=Z7l6Yjh1JSeT2JRed35IiGX95vMbKdZloECt/CtA1YI=;
+	b=a3oDvbOAvYRxfkPZkcSPTA9i8Re8YeP1V07uhwaoHB5XStSePFAwX3q+RQksIl1IoInb
+	 VzVXBt5bPPMd8h/AvaBztPo11hHKi4+6gONdMcQvBBRGYhxipas7TspM4+ieNMgJThGkG
+	 8/Gs3LonmdJCvZFNnyg3SHU+yH1M4VUFZXSIMUwm8uhkBO224Q6hvizmIra+LnEktO9qd
+	 rcvkDx0x+CzYO8jxmxh22pB96EVuAgpyhCy3E6VQXXb4p9l+mPlq/B+DC/h7qkSIQhkhh
+	 9YIuXfYI3tv5vdxtoFf/OznB7Eby0nVFlo727hpjZQvW9V71SGNqDmelUdMMi9oKpIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=microchip.com;
-	spf=pass smtp.mailfrom=microchip.com;
-	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=q8HJt9UK;
-	arc=none smtp.remote-ip=68.232.154.123
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w9ab+rl5;
+	arc=none smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5B9606A31E
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 09:12:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD5B9606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27C9606A31F
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 11:27:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A27C9606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=q8HJt9UK
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1795425179; x=1826961179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3ryaluqfKzxvo3ZirRDsVv3HcflaLJShT6Mv1EIlFMQ=;
-  b=q8HJt9UKY4eirSruXc8JmAA91SndcBVMGVxtJfKKeNOrkKpUbms7t+2Q
-   tfHJmPgOz8LL0AOtVKBNxVX6LW1hNQMxLUSM3BE5WNxhQj0niuslvG8WB
-   pGSG39bwGRdYsILy//2AvRPb99ZD/hwgWmxDijbWSJdV1mgsjaWE/pWeY
-   wFV3eWyjYaoYvrirD1b/cbgIuEQh4yCO9+qtTd1HsJp5HHAHBOUkOBvyY
-   0RfEpk2Bb9kHFbdWi1ojtME14NVt7XsuAAOOkC0g+2uQ3TWMpoYJ8ei9X
-   oxXq0ITiJ9yq+d7pxANauICKmgsnAz0zwkgEMIMpz9hfXv4UBo77xUlX5
-   Q==;
-X-CSE-ConnectionGUID: Fw+vHhtMT0KOaRvlRN/wjA==
-X-CSE-MsgGUID: F0uCZpcHTkmXmJevVc7tuw==
-X-IronPort-AV: E=Sophos;i="6.27,227,1787036400"; 
-   d="scan'208";a="65940093"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Nov 2026 02:12:58 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Mon, 23 Nov 2026 02:12:58 -0700
-Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Mon, 23 Nov 2026 02:12:56 -0700
-Date: Mon, 23 Nov 2026 10:12:56 +0100
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Ian Rogers <irogers@google.com>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, Elkin Cruz
-	<elkin@google.com>
-Subject: Re: [PATCH net] qed: Fix missing bar_id comparison in
- qed_hw_bar_size()
-Message-ID: <20261123091256.ljax5hiuvfpg6kxo@DEN-DL-M70577>
-References: <20261119170412.1511344-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w9ab+rl5
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4bb64ef5a00so24466965e9.3
+        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 03:27:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795433247; x=1796038047; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:subject:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Z7l6Yjh1JSeT2JRed35IiGX95vMbKdZloECt/CtA1YI=;
+        b=w9ab+rl5bHRElnQmH0snXRphNr6mDX+5tcaBX1PvBP/b+Qf40LZXjMkCP5eKKWUHh9
+         A5EMN9HJlYPJbJtvujbhrQ73O2lDmUlzAFtIn+p4upMswRG/Oj6hgTGBlNWW/9rKp4Uc
+         HnrnOmsWcZV/3GLxgK8n57aLPGFYiQnIL+Mi5ugY3lbQx+ex2HA46vfp0wwMWoIhGrSQ
+         aNCFzz37yZjXyjz2Km8hmIhEv/V9BvfsYzZervVYA/QISBOjBRzzvmVM258p01GJM/cu
+         LRjYU6I+20GcLwEiQI8/nB3Fkfjhv3xcECW34SNpbadU4efSpJ4tHrtdh/2EC3v3gsay
+         +TEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795433247; x=1796038047;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:subject:from:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Z7l6Yjh1JSeT2JRed35IiGX95vMbKdZloECt/CtA1YI=;
+        b=AwINM0qt5OVJjEcAijcMBbKl6ZsP3KO9LSJCjoNIkIMroUan3r54QXr3B5MyYykJ2Z
+         5ly+TdV1fx1cuxcY+B2Wo4PePNYbPk8y3dff2IgdpmAKSum+bTPRgCNhI8445jLVt3e6
+         F0hiVbbfNS4MBLIxbmWBTKJTrmtVZk+252QFHo5YuWopIIbjfwrmwSEU6EEc4ARJB+P6
+         h/tbal0g0x6kqTUGY1FyVVEo48vEahWNSHYTmYeQPUcGjzZRc/cLYm8D6riZt+KtjKmd
+         l26n29CFtNb+rUEDT/UJu/PLgrbMDKHl5/zmot/YE4Bp9dsVOICaNBkHN2JyUyTigMoS
+         eLpg==
+X-Forwarded-Encrypted: i=1; AL+hErF9PaPpBNqkNuViJ/GxHz7ncmR3X2pyxbyp8RuQIutQvLpmjk20sHfSNQd37/tzPmJy94op@lists.linux.dev
+X-Gm-Message-State: APuU4Z/TYHV9k041PmQFF1KWP86dtkGAXgjo5POepK1VAOPsKacyfQ9l
+	Vma+5ccPgu7c2ie8V1C7cNnkG+KsxGOG52KowoLeQ8AFAY9jqsvSl/Xr
+X-Gm-Gg: AZFdTZfEGVbMhiKgk7D9Z2jq7MftvYVhGASH6PGayhECm1Wy46j9uu4Hh1H0RTGGSur
+	pfch929HSgHrDzl/l7LvdSW+ZyVp/RQHEqZicB+zg7VY8D9xt1AovtBtWApLSu5wWL/e14KMTqj
+	8SAhNH1KTVnpfO6xS5EVwGDLQeQ5apLmWReAV8iXywHJ9R7iUWrdYl/RFap/XzRm26EXe8ewLx5
+	0KYIUyaXcLzb7boC3DZlQFwebBpD6DmHSJyI26xlq3ZzO7sNYhoPrgLxQyF3A6zIopl9kSn1Ehz
+	rgxS0ONBTPSz4n5p84Mx7uDP9kVY4tsKV9o8HsnVlaw4N/HSySzsW6T4J8zmLDnWcRcHAGIs6ho
+	7gW0H6ZwVy8q31+9ynPQ8vfxC7QUh/e376YF7SfmFxU9NHoAXntT47UnMXQVulVigS5h01PL9NB
+	BPcnAFr8skiEJtNDafMRBTXU08d7a8xTUss9dMUd9C2CLg2XX/TyWCmvYn+qpBV2ihjqEjejt3K
+	W8lZhRnD8DUfujnlwzKn0Xpw1D/zqWsCQ7J5YhKbEYA9SVmQ9ANRFF4I8IHcrzIp+bcjRwHBTjc
+	z5KlozWB3cJZDdk1ZSuejoQxDoUmOydMyPPYxgiIZxyZT89Q77MBuMPRhwvyE8j1c01QrAT35RI
+	KlAwkMd+TdVv6wRyHk2ZxPo8F
+X-Received: by 2002:a05:600c:468c:b0:4bb:6d61:af7c with SMTP id 5b1f17b1804b1-4bb88944bf5mr221650055e9.35.1795433246798;
+        Mon, 23 Nov 2026 03:27:26 -0800 (PST)
+Received: from ?IPV6:240e:47e:509a:b87f:26b:b35a:8dbf:81dd? ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884865b1sm336307275e9.5.2026.11.23.03.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2026 03:27:26 -0800 (PST)
+Message-ID: <2f885fbf-1887-4740-a7ee-0189d74260a3@gmail.com>
+Date: Mon, 23 Nov 2026 12:27:12 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -82,29 +91,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20261119170412.1511344-1-irogers@google.com>
+User-Agent: Mozilla Thunderbird
+From: Oarora Etimis <oaroraetimis@gmail.com>
+Subject: Re: [PATCH v6 02/43] drm/vkms: Lock the config dump against
+ concurrent configfs changes
+To: Louis Chauvet <louis.chauvet@bootlin.com>,
+ Haneen Mohammed <hamohammed.sa@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Melissa Wen <melissa.srw@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com,
+ Jonathan Corbet <corbet@lwn.net>, Harry Wentland <harry.wentland@amd.com>,
+ Lucas De Marchi <demarchi@kernel.org>,
+ =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, sebastian.wick@redhat.com,
+ victoria@system76.com, thomas.petazzoni@bootlin.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, Simona Vetter <simona.vetter@ffwll.ch>,
+ llvm@lists.linux.dev
+References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com>
+ <20261120-vkms-all-config-v6-2-78ace90f4fc1@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <20261120-vkms-all-config-v6-2-78ace90f4fc1@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> When PGLUE_B_REG_PF_BAR{0,1}_SIZE reads back as 0 on older management
-> firmware with multi-hwfn devices, qed_hw_bar_size() logs that it assumes
-> 256 KiB for GRC (BAR_ID_0) and 512 KiB for DB (BAR_ID_1), but evaluates:
-> 
->   return BAR_ID_0 ? 256 * 1024 : 512 * 1024;
-> 
-> Because BAR_ID_0 is enum constant 0, the ternary condition is always
-> false and qed_hw_bar_size() unconditionally returns 512 KiB even for
-> BAR_ID_0, doubling the computed GRC BAR offset for the second hardware
-> function.
-> 
-> Compare bar_id == BAR_ID_0 as intended (matching the bar_reg selection
-> at the top of qed_hw_bar_size()).
-> 
-> Found by enabling Clang's -Wunreachable-code on an x86_64 allyesconfig
-> build, with AI coding assistant help to audit the warning and prepare
-> the fix. Build-tested with Clang; not runtime-tested on QLogic hardware.
-> 
-> Fixes: c2035eea3e9e ("qed: Correct BAR sizes for older MFW")
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Hello Louis,
 
-Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
+ > The vkms_config debugfs dump iterates the configuration lists while
+ > configfs can concurrently mutate or free them, which leads to a
+ > use-after-free. Move the configuration lock into struct vkms_config and
+ > run the dump under it.
+ >
+ > Fixes: 13fc9b9745cc ("drm/vkms: Add and remove VKMS instances via 
+configfs")
+ > Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+ >
+ > @@ -347,6 +349,14 @@ static int vkms_config_show(struct seq_file *m, 
+void *data)
+ >      struct vkms_config_crtc *crtc_cfg;
+ >      struct vkms_config_encoder *encoder_cfg;
+ >      struct vkms_config_connector *connector_cfg;
+ > +    struct vkms_config *config = (struct vkms_config *)vkmsdev->config;
+ > +
+ > +    /*
+ > +     * The configuration lists and fields are concurrently mutated by
+ > +     * configfs (creation, removal, attribute stores); iterate under the
+ > +     * configuration lock to keep the iteration coherent.
+ > +     */
+ > +    guard(mutex)(&config->lock);
+ >
+ > @@ -711,7 +709,7 @@ static ssize_t device_enabled_store(struct 
+config_item *item, const char *page,
+ >      if (kstrtobool(page, &enabled))
+ >          return -EINVAL;
+ >
+ > -    scoped_guard(mutex, &dev->lock) {
+ > +    scoped_guard(mutex, &dev->config->lock) {
+ >          if (!dev->enabled && enabled) {
+ >              if (!vkms_config_is_valid(dev->config))
+ >                  return -EINVAL;
+
+Now that the dump takes the same lock, holding it across
+vkms_create()/vkms_destroy() closes a cycle. vkms_destroy() calls
+drm_dev_unregister(), which removes the vkms_config debugfs file and
+waits for its readers to drain, while a reader in vkms_config_show() is
+waiting for that same lock:
+
+     echo 0 > enabled : holds config->lock, waits for the debugfs readers
+     cat vkms_config  : holds a debugfs read, waits for config->lock
+
+Also, vkms_connector_detect() reads cfg->status without taking
+config->lock, while connector_status_store() writes it under the lock
+and still allows the write after the device is enabled. The kref in
+detect only keeps the object alive, so these two are a data race on the
+same field.
+
+By the way, Fixes: 13fc9b9745cc looks wrong -- the device cannot be
+enabled at that commit, 64229b846a7e looks like the first reachable
+point.
+
+Thanks,
+Oarora Etimis
+
