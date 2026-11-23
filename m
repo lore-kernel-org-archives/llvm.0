@@ -1,123 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.154
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795450352;
-	b=XmA7zht6PMbo9mv7WkHY9IBoqr5xDaV0GBYAcXhTiU5WwhBcvtN3uvlvmju+4m3uMGR4
-	 tsvKHxQvpQHVcgAGUkrqLRNn7fcddpw5PA8Tu0mAan3pTt6eLaGa3sPwAezJlKZEmwsHN
-	 xKtGi974ATZ4Ctd3wjf4cFc9kZyqzBe6a+l+ZmOSrQymtDaofl9y+oDjYgi3B3tpFZBCx
-	 yWAhX3/YKRPcqL7fWSGYuFFkpahGU1hKmGpqWF64WptxqZw6wwEyOQgdvGi76WbJkLjAD
-	 mpfhas/LkRBECEN+H0tpps5/65OK7ZAl2kl+sMTiVpRTMyBVHaBtgo+xqDDSooXUVOg==
+	t=1795452939;
+	b=UyKpksQlqaOIZBwqYj+514WBbeZ31EzsNRRDI0jRqytvVgsTey3VCrZ035Jh90LDg1zP
+	 HZlE8JXC5N4guyTBhrdYvJTVu/Qxwfm0EH+R8+aBnDMNz7cNj6JnsPo1bPwMRCfQPxHq1
+	 EdNKPx/Cv5QaWYvWAK12KnZQbQD4QLbzlM7RCH7isXBbSmL7k/IGIXuYxULNYFeppgWiw
+	 Fb+S+v9SVGWGTrc7SMbCSVJ7RGkxlA5SX6rJgpR+jCJV2xzcXhbHvkybSStnC2prhFo1+
+	 Wf2DjTYuNUz0xJfqAYwoQ2DPcRhrKxmsL9Z3wwdUovbp8Qgz3TdgiIRrMPmNTlY80YA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795450352;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding;
-	bh=q8nYEbLZ2llq6j+JAuDJiblDLINgvbNEzxuytFyLiig=;
-	b=kqEqCdn8GVkcosT9sdVUIlmjsBOwSmZ25bSK+k40spO6QLxr+fz5z8IQQTPk5hvEPoWp
-	 HesuB0NMTWG3VXM3395o2wBc40K9J/qAv6HFifCS2yqWUnD+h6uM5NdfZWlQn35aWT73o
-	 qLylBmtMml+uBOwNF+h0AwelIT0s4SSMFc+mrCu07gwq2wQMzDgDb1QJTLrSA46JbGdGD
-	 7K3Bh2J0/3nikf62yMMNODzKTadAZQRBpwIqJ5Ik6vCXjJc9CVcigs6voAtuj4NLvUVI7
-	 +KvBuccEWxnqNpfqVKHshQQ7lapG6V/pn70/v2NUez1mmq2B4zOf7IpUvFrEBbRQ60g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795452939;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=EGhE/gTVVw4lTmadtgJvAW92ULGYgs84JT341auV/S8=;
+	b=wonlyJiBbG+nTg+WXH7RT+nWS+Iq56iKcX2AcWLsIou0i9J2/VxMDCy8aQoqvINyHba/
+	 4R2q3yJnNQpSVAQFiMo+a0OWIMDKk0WWGUpdF30OScruWl3yRwZCo8T8IUXEQIZi4SjmU
+	 YvPl1QPIZPqtjDZdOHuc6LhRegGuVkR1foZV4xRzVnvx6A6hfMEA16tiHsoENSUlSjd7f
+	 Vwx4ubR8cfa1tzRfZe6LqhPQ23uDnrWWHN76P1Jjd1Pc0C4YUfTuZACZwT+E4edk95Qld
+	 X8qQqisJZzVy6MyR+qp7sG9difa4dV0QHlEsgdj8DzdmGbAdm8OJ7+rRFx+tUQtsc1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tB5XAWTh;
-	arc=none smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=squebb.ca;
+	spf=pass smtp.mailfrom=squebb.ca;
+	dkim=pass header.d=squebb.ca header.i=@squebb.ca header.a=rsa-sha256 header.s=fm1 header.b=elYMQWEy;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=5ZOoJdC2;
+	arc=none smtp.remote-ip=202.12.124.154
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E542D606A321
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 16:12:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E542D606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF99606A321
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 16:55:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1DF99606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tB5XAWTh
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4bb55cda775so22242305e9.0
-        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 08:12:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795450350; x=1796055150; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=q8nYEbLZ2llq6j+JAuDJiblDLINgvbNEzxuytFyLiig=;
-        b=tB5XAWThJJSBP6w/hImyBc0yMpfwMLF1OnjExLJwJ14cgZ2AUyRcelU4AkM/opOoc7
-         qJN8wjtMWHeQ/xTTe95R4r/6wVyNi/jf0eRhtYwpbw+Qe3mDFbbfrBl2/S9cboAKRQGy
-         waFvnMz1fH1zKzmIT6QTCJaai/FDhiP2q9oypehIY0icD9QewGpj8S3EhCBS8/hJ6dgS
-         6kOwXzs0KTAwskCmveXw3fB5Wf7MYVz0R69gwySdQHKRWIKbuULHegBYizQoO4yRL1wD
-         PHhYOSeplokIVRcAEHOfIqWEDkJv8LFRWNaxs51YZSioLN7WFlpShC/umKI9jCdTuRZ5
-         E4gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795450350; x=1796055150;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=q8nYEbLZ2llq6j+JAuDJiblDLINgvbNEzxuytFyLiig=;
-        b=24xMobP7JDY28LfrM5Cn14vXmFNmkyH8JS+2pbw+Y52DORrPDoA+dnqCYcYJnFXcu5
-         oXACIV9fKYE1S4OZDp4OEnEhT4EBvyLQEOf01RtGHPkMKNWsM2Bp53QVZyYi1lLAcmaF
-         HzacD6QVi23hKDzu8cAq+p24J33no4uz8qmciIS6nsVNRD8B4JyrrrLFVh4AKzikq2IP
-         H9NKxXxfi80JOZ/lULrsZ+95a5wchAlPI8UEC5pEwEivRXGF0SblkYbk6bNtl+edpQFG
-         LmX1RN3jxNVwR0L8N03UXMfFHuIWicMmcWqYXOmRFq4r8u2WBS32Z78MrGhjlHTuK+dA
-         yiHA==
-X-Forwarded-Encrypted: i=1; AL+hErGHXRKssYMA4Sp9tdsQJq2wSmAcYjCh4E9WcN9QnmYOMfnLsPS6DrG4NG7XYp56tBb5aVLP@lists.linux.dev
-X-Gm-Message-State: APuU4Z8N9ut5Rk6t3V3ibEyQhcLBthX8GnjH4kNbGc5I9yHcJEkV6POX
-	7hSoKUKmNB6WHYpXBvJHXJh6Fdx6dWNWecrEF74AzkwuwUq46Dh6/7oH
-X-Gm-Gg: AZFdTZdQXClmjmLRCkHiZdHOZZT/pODh8Vk2Vc5vrMJGcMGkJzBSONIEHKP7i875t1k
-	B16R0VyDYD3nI7XC3lYzmOdVsxPWyVH6fs7Hi00RdbKHNXcJG9lapaRUfzT4gHBTUy+BF6rJzMM
-	YCGjYt82EW5ATMDUY9BYAe/SJ3blAfweaDEv59Hs75HRmTOwQ3gnX7UUZwGw2dWxeXSWmYxw/0H
-	rpGp4ikq0TCM2hZj7bO5Q67Ak+A6a/0xEqbyhUbQvEgjk7psWNeuQ+YQ0FCpQ+rPVoHdajEkIYY
-	JWOVSMP3Q4h+tBauP5mAbYQKQB8DOSadCMYsCQ80JY07VphZqn+qrbdcrwO7o7ohIxhEzVbL/P/
-	fv0xangZpzL+7hSAdURY5FNIl5QaF8Qg5u0ItbXrdelI5C3/5eHc+3lQ9rJs5lF/u6rvV+YT/Y7
-	gg8y8gpRxCXjCsMFkdwprU9a8Ca2aaDxwUzApXryqubqwwZeqOK0CeWXsd3M90FLtbEYDpPk6Ms
-	48Z1g9E9ywglFHNS+w+Pf/EZdi4NICEvgvx4NfTQwqYDkx33Frd/7hG824DHnmMtlyCV5iBsaki
-	S1LsNgBPeHy0tkSdI3HFuFc8S/Qia2PurA==
-X-Received: by 2002:a05:600c:848a:b0:4a2:1960:6fa with SMTP id 5b1f17b1804b1-4bb887fb678mr237295105e9.4.1795450350202;
-        Mon, 23 Nov 2026 08:12:30 -0800 (PST)
-Received: from ArchOarora ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb9066e34esm201819645e9.3.2026.11.23.08.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 08:12:29 -0800 (PST)
-From: Oarora Etimis <oaroraetimis@gmail.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	jose.exposito89@gmail.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Lucas De Marchi <demarchi@kernel.org>,
-	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	sebastian.wick@redhat.com,
-	victoria@system76.com,
-	thomas.petazzoni@bootlin.com,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 32/43] drm/vkms: Introduce connector type
-Date: Mon, 23 Nov 2026 17:12:08 +0100
-Message-ID: <awRlnGwi30MkhfyZ@Oarora>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261120-vkms-all-config-v6-32-78ace90f4fc1@bootlin.com>
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-32-78ace90f4fc1@bootlin.com>
+	dkim=pass (2048-bit key, unprotected) header.d=squebb.ca header.i=@squebb.ca header.a=rsa-sha256 header.s=fm1 header.b=elYMQWEy;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=5ZOoJdC2
+Received: from stl-compute-04.internal (stl-compute-04.internal [10.204.2.64])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 7D9507A064B
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 11:55:38 -0500 (EST)
+Received: from stl-imap-02 ([10.204.2.93])
+  by stl-compute-04.internal (MEProxy); Mon, 23 Nov 2026 11:55:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1795452938;
+	 x=1795539338; bh=EGhE/gTVVw4lTmadtgJvAW92ULGYgs84JT341auV/S8=; b=
+	elYMQWEyfR9KGiach80Lz6BTNBAI7NKE6z/QS9NN+Yqdj7r16vBt77WplqHsn5WS
+	lNXzCMyxEoOoeQmDqBg55L6FDg7/PFSeo9T2c2LZdAklZpg6KuyZtNEgg+rWC6Mf
+	qYIP7y+/cOyMUHIxVh2Ans7Ooj+j9a/2xg3WcOaRuyOZT4mHtY5aKqm6WGdi0JTL
+	Lj4TBT2Sd89hI64JVjd+NwXjXLe+OCRp8mKiZZCLLsB/iBW1GppwWlfzXXd/Eor6
+	h669SPIQtM381VUSZPn7VjpAy1VhvIhLPvn1YjdGJjUOMtsKOa1But78XyJgxxJk
+	t8UFQe9foZ/bG6+WkHbrBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1795452938; x=
+	1795539338; bh=EGhE/gTVVw4lTmadtgJvAW92ULGYgs84JT341auV/S8=; b=5
+	ZOoJdC2dOLJ1GCWFKw07n9Px/srJBXbLiNmX47rwTwLLiGnxGGvhAMRvJjyoCBij
+	wGPvRveDsjNEJ14NgDpsgGKA3B5FRzaK121rPb/4jDxOQnsiygJ8Ov9IBverM/Fk
+	gyIxh6TnD0w3fO80SBBdmEEM7+toCIXw/tNHUZdWZzdtyzRu7IFVCceBmtVFbVEi
+	OTa05PiT2+KtP3cJJsqzEkpLivEVLZ5OJYs6C2vxu8DPdZ6atZ3EqNIcmHuKdvWS
+	Icmz/MXCDH11/bd5MK6wsd5Oo25xUN6ik6HjctNaay/KQSYGzUs5WoqCvMd3ibC2
+	iqQF+lN9KFliGskVhz9fA==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=squebb.ca a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1795452938; d=squebb.ca;
+	mf=PG1wZWFyc29uLWxlbm92b0BzcXVlYmIuY2E+;
+	rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm1:rsa-sha256:ShhPyBMwVPzFOYXaHZdYK1t91NIZ3a7U73idsSBGC0DLuhS
+	7X8J9ahQUdhR8QQPLI0ytz0IjHIxHAZWi/wEofHrDp3ND/y2E1AXbq8rMN3JjQpN
+	Z5yxHTD1j/xv85VKPY7rEcBJA2zYwbflJStlTlwoialPBCTC3XMbY1VMYFExtZzu
+	K9v8RHzOvUJdtgZa4NjebOoxth7dPthfNQMj4Rbw1khq2jH5ycaM+VLZpaQIAvlJ
+	QasAoCGnr1SPFDIKEvi75+fCVfdY5bzxVPeOrIay4nZu5Xe1Czj8a6VEFY6jwmbo
+	fU3tXS1bhE4EOCNZ9HUiVEd0DUe9VLr3gZWcy/A==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:dSW+OMkbNCxjoFjhHHWk3AKHq+umtctzOqH+qKfxWCM=:zy8hdcS9wb/JeVx80DsolvH5LLt3fQ5I2MrylWqERYk=;
+X-ME-Sender: <xms:CXAEa64yS_bOTmuYzRo0-dKq2x9LgmdByEiOQv29QjvBJzsWessfEw>
+    <xme:CXAEa-u7g-U2QBpVgcIyUdOxKpqWbrncl-DtG2wDWuMSosiRlmxSGsxaUZt9Qj0mJ
+    phQWhnYw6mjHHuVo1Ek0629TIuAEqmtQuGCvZfnZoaa_XpkeKPg3cc>
+X-ME-Proxy-Cause: dmFkZTFbBuGazmSMDqiQ60nYW9W2/+xzdu6zocl6ygoBHLTNpQgk3r7adcD/4+8L2WH6gJ
+    3QLKol2/a47Scu68GFM0mdcYT3MNhEzj2OnRPR5pVAmggcSD1pk0P70Ln6nbact3OzF7mS
+    6IhKmqgG7I5++OZAG2xiOOozI4S75KbuNOSiCnHmP6Ho/BqmH2DFSs1pSU5GAUOW6JHus8
+    dvzx7osH+KzZmy4pEsqWMlCiaIMSJ1H078Cogm5y4LFUzpeHXJNrVfAA2JGes/sRlK4faz
+    ULggQBXPLczjU1jdIK0WxqT382BqksJVqcnzRT2EveYzBeHj10M52FEdq6Fvl9Po9yMAbS
+    zrRQFhKJhBvKtF0K5/42QVm09Ru2LjOl0YdKJ16J4B2BcNvVSANmgiPYvXB5eJoo6HcDPd
+    hfMw9xX5BZpj8G8TmrJXEBbA35POvBkbknEcZIB/bJimtWgqhsVaHDDbtEV8o5yDN73gjX
+    Wfs8+uB7tCAYOaMG0CwePrmiXno1f/+zU938zi/ibItEUGTfeq6MKmjSzBv488/uRfdXdZ
+    dWHZxciFQ3M6Or80LI1zv/Oky/5zWyHmRFndSEqAwQJvFzQAwHXXTCuNpUGlaqF1CGaihQ
+    Kd5ZzvVlyyAr8hoCxF2YaUZLSgR3MoeaCZzajPzsRhAv4++RjKQM8gExavZw
+X-ME-Proxy: <xmx:CnAEa5q5Zv_o0ZdX7B9M99sDeVInArT4Y0Uy3ISennewifLUFRF7Og>
+    <xmx:CnAEa-NCKeL7G1CqfvKub-LZacKrxP-FME2oiOHh5l_YlFmKFbIgog>
+    <xmx:CnAEa51BC2hHdGuwTDfTn3a2lf8ZhtxiBFp4F2FAf8eWA7rztRRbVw>
+    <xmx:CnAEa1CzBhpWI8s1v71DJah79YVv6bBH3JM_2l97GxBtD7cX95EYjA>
+    <xmx:CnAEa9OFzMNcrqUc-G_7p0tEC2k5ruWV5ffROZVu9-blu2InH-hp2PPz>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.stl.internal (Postfix, from userid 501)
+	id C6C0D2C00085; Mon, 23 Nov 2026 11:55:37 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -127,131 +115,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-ThreadId: ANys3X3_Nnt7
+Date: Mon, 23 Nov 2026 11:55:17 -0500
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Ian Rogers" <irogers@google.com>,
+ "Derek J . Clark" <derekjohn.clark@gmail.com>,
+ "Jiri Kosina" <jikos@kernel.org>, "Benjamin Tissoires" <bentiss@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, "Elkin Cruz" <elkin@google.com>
+Message-Id: <3e9ccb31-6c81-47a4-a441-e7cfb786b2c5@app.fastmail.com>
+In-Reply-To: <20261119170418.1511770-1-irogers@google.com>
+References: <20261119170418.1511770-1-irogers@google.com>
+Subject: Re: [PATCH] HID: lenovo-go: Fix reset_tx_dongle sysfs attribute to be
+ write-only
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 20, 2026 at 06:59:14PM +0100, Louis Chauvet wrote:
-> In order to emulate connector-specific behavior, add the connector type
-> to the connector configuration.
-> 
-> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
-> ---
->  drivers/gpu/drm/vkms/tests/vkms_config_test.c |  5 +++++
->  drivers/gpu/drm/vkms/vkms_config.c            |  3 +++
->  drivers/gpu/drm/vkms/vkms_config.h            | 24 ++++++++++++++++++++++++
->  drivers/gpu/drm/vkms/vkms_connector.c         |  2 +-
->  4 files changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/vkms/tests/vkms_config_test.c b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-> index a43dff511fc3..257ba0342034 100644
-> --- a/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-> +++ b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-> @@ -137,6 +137,7 @@ static void vkms_config_test_default_config(struct kunit *test)
->  	struct vkms_config *config;
->  	struct vkms_config_plane *plane_cfg;
->  	struct vkms_config_crtc *crtc_cfg;
-> +	struct vkms_config_connector *connector_cfg;
->  	int n_primaries = 0;
->  	int n_cursors = 0;
->  	int n_overlays = 0;
-> @@ -211,6 +212,10 @@ static void vkms_config_test_default_config(struct kunit *test)
->  
->  	/* Connectors */
->  	KUNIT_EXPECT_EQ(test, vkms_config_get_num_connectors(config), 1);
-> +	vkms_config_for_each_connector(config, connector_cfg) {
-> +		KUNIT_EXPECT_EQ(test, vkms_config_connector_get_type(connector_cfg),
-> +				DRM_MODE_CONNECTOR_VIRTUAL);
-> +	}
->  
->  	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
->  
-> diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-> index 963e32d5adf7..291c0330bc56 100644
-> --- a/drivers/gpu/drm/vkms/vkms_config.c
-> +++ b/drivers/gpu/drm/vkms/vkms_config.c
-> @@ -651,6 +651,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
->  		seq_printf(m, "\tstatus=%s\n",
->  			   drm_get_connector_status_name(
->  				   vkms_config_connector_get_status(connector_cfg)));
-> +		seq_printf(m, "\ttype=%s\n",
-> +			   drm_get_connector_type_name(vkms_config_connector_get_type(connector_cfg)));
->  	}
->  
->  	return 0;
-> @@ -984,6 +986,7 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
->  
->  	connector_cfg->config = config;
->  	connector_cfg->status = connector_status_connected;
-> +	vkms_config_connector_set_type(connector_cfg, DRM_MODE_CONNECTOR_VIRTUAL);
->  	xa_init_flags(&connector_cfg->possible_encoders, XA_FLAGS_ALLOC);
->  	kref_init(&connector_cfg->refcnt);
->  
-> diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-> index 9d0a0087c9da..88429e01089b 100644
-> --- a/drivers/gpu/drm/vkms/vkms_config.h
-> +++ b/drivers/gpu/drm/vkms/vkms_config.h
-> @@ -138,6 +138,7 @@ struct vkms_config_encoder {
->   * struct vkms_config_connector
->   *
->   * @link: Link to the others connector in vkms_config
-> + * @type: Store the type of connector using DRM_MODE_CONNECTOR_* values
->   * @config: The vkms_config this connector belongs to
->   * @status: Status (connected, disconnected...) of the connector
->   * @possible_encoders: Array of encoders that can be used with this connector
-> @@ -150,6 +151,7 @@ struct vkms_config_connector {
->  	struct list_head link;
->  	struct vkms_config *config;
->  
-> +	int type;
->  	enum drm_connector_status status;
->  	struct xarray possible_encoders;
->  
-> @@ -371,6 +373,28 @@ vkms_config_plane_set_default_pipeline(struct vkms_config_plane *plane_cfg,
->  }
->  
->  /**
-> + * vkms_config_connector_get_type() - Return the connector type
-> + * @connector_cfg: Connector to get the type from
-> + */
-> +static inline int
-> +vkms_config_connector_get_type(const struct vkms_config_connector *connector_cfg)
-> +{
-> +	return connector_cfg->type;
-> +}
-> +
-> +/**
-> + * vkms_config_connector_set_type() - Set the connector type
-> + * @connector_cfg: Connector to set the type to
-> + * @type: New connector type
-> + */
-> +static inline void
-> +vkms_config_connector_set_type(struct vkms_config_connector *connector_cfg,
-> +			       int type)
-> +{
-> +	connector_cfg->type = type;
-> +}
-> +
-> +/*
->   * vkms_config_plane_get_default_rotation() - Get the default rotation for a plane
->   * @plane_cfg: Plane to get the default rotation from
->   *
-> diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
-> index 11e313440225..f5e99e77e84f 100644
-> --- a/drivers/gpu/drm/vkms/vkms_connector.c
-> +++ b/drivers/gpu/drm/vkms/vkms_connector.c
-> @@ -88,7 +88,7 @@ struct vkms_connector *vkms_connector_init(struct vkms_device *vkmsdev,
->  		return ERR_PTR(-ENOMEM);
->  
->  	ret = drmm_connector_init(dev, &connector->base, &vkms_connector_funcs,
-> -				  DRM_MODE_CONNECTOR_VIRTUAL, NULL);
-> +				  vkms_config_connector_get_type(connector_cfg), NULL);
->  	if (ret)
->  		return ERR_PTR(ret);
->  
-> 
-> -- 
-> 2.56.0
+
+On Thu, Nov 19, 2026, at 12:04 PM, Ian Rogers wrote:
+> reset_tx_dongle is defined with LEGO_DEVICE_ATTR_RO(), whereas all other
+> FEATURE_RESET_GAMEPAD attributes in hid-lenovo-go.c (reset_mcu,
+> reset_left, and reset_right) use LEGO_DEVICE_ATTR_WO().
 >
+> Because feature_status_show() has no case for FEATURE_RESET_GAMEPAD
+> (which is only handled in feature_status_store()), exposing tx_dongle's
+> reset attribute as read-only makes reading it always fail with -EINVAL
+> while preventing userspace from writing to it to reset the TX dongle.
+>
+> Change reset_tx_dongle to LEGO_DEVICE_ATTR_WO().
+>
+> Found by enabling Clang's -Wswitch-enum on an x86_64 allyesconfig build,
+> with AI coding assistant help to audit the warning and prepare the fix.
+> Build-tested with Clang; not runtime-tested on Lenovo Legion Go hardware.
+>
+> Fixes: 82cd9bc866e1 ("HID: hid-lenovo-go: Add Feature Status Attributes")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  drivers/hid/hid-lenovo-go.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hid/hid-lenovo-go.c b/drivers/hid/hid-lenovo-go.c
+> index 318b1152ff8b..8a2aa2b4825d 100644
+> --- a/drivers/hid/hid-lenovo-go.c
+> +++ b/drivers/hid/hid-lenovo-go.c
+> @@ -1848,7 +1848,7 @@ static struct go_cfg_attr version_gen_tx_dongle = 
+> { HARDWARE_GENERATION };
+>  LEGO_DEVICE_ATTR_RO(version_gen_tx_dongle, "hardware_generation", 
+> TX_DONGLE, version);
+> 
+>  static struct go_cfg_attr reset_tx_dongle = { FEATURE_RESET_GAMEPAD };
+> -LEGO_DEVICE_ATTR_RO(reset_tx_dongle, "reset", TX_DONGLE, feature_status);
+> +LEGO_DEVICE_ATTR_WO(reset_tx_dongle, "reset", TX_DONGLE, feature_status);
+> 
+>  static struct attribute *tx_dongle_attrs[] = {
+>  	&dev_attr_reset_tx_dongle.attr,
+> -- 
+> 2.56.1.708.g77570a6a1d-goog
 
-Reviewed-by Oarora Etimis <oaroraetimis@gmail.com>
+This looks good to me
+
+Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+Mark
