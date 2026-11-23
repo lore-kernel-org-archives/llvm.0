@@ -1,123 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795448202;
-	b=xXTasEhSB04J2c+0FRpvjJbSW7yMafPpRRVfkbUGvyg75EWRtCkMwWY/yxute0fhFPhz
-	 3W8nZit5AZDkKwv1QeX/+NKmVdauqcboxAbxka3OZnZPDfViBTgnkjcNS5oCe9ZkROUyq
-	 fzo4U34HZ9AfyD164LSpazI3YMi/1Wv1YYnWFVqv9eFk+YAVnImGlp6v4WXbNl5HALqE4
-	 r+QQXiGi7S81WaJ+NEdi+OTiBL/6CpbAHn1MGgioY2uKnbeaNGHQeQ8BVI9EddkfXv5Ak
-	 cr8S8BaBZtytD4zpwRdH5c2/4rSkubA+sryVkXUuMkrqyodE4knVGpLPYbywkmSKaUg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795448202;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795448210;
+	b=YpQulblVWOxxBgMjxAMPzlPmk6TRMTYY2Nse+jGyqb32H2sMQknw91YJtxi66NFUvHXl
+	 L+K3hw8IXDVtdOsH6hPusHNYCqKoBXmxhxe/tSkhCXNKrdrHc1vpFvnwsWKUIUShh7wD8
+	 qdpfQ0aPmOc9JZ/WmImvTI6nDT8AQrxso3OKUPq+31xBF/dXLk70kp07deLbek6IReA20
+	 ZjfvScioCoF4jdWE0f4DezD87Q7qYX98a9yMH+nzdCoHyPhCPM+2dbmMY24OY6EaHsW+p
+	 Yq/lECBteadihBWHBdSrGWjHtjleHxIoh4cr8MepC+RBUv74Wu3I8TQHUdK4B9QYPWw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795448210;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding;
-	bh=iMj2t4hUan0LrC5voc+bXHqikDQMoVSMga8MiF5GiH8=;
-	b=mApAGMDI4Qu4x8J3T4+E2i6yjv3De3hyqdgxuLBcyEVAfhMTmc5hN/zHXaTwsU55EEa1
-	 WYrGJxXQWp0afe7x5OYBas61QrZlBUzEE3C1K6zsQohQONcUDw5DbpKhBPWDslbU+JgQB
-	 ST4D8EzlMJKok54TlSxT4o35jFJj6CNqmkJF6tp+v4gEof5NOH8lpXc1QQdifPj5FoIo8
-	 NDVGgIRqfc3B4VdgSDtMV9MqVYozoBdt+lKjpdtQd6w6Cs1nPQV8W3CszKH8gAkE4vK2j
-	 ySfOMXGGrqHbxf0Reu0MRPGyxt2OZHUHP/fmD8D+m17zmZoIpJ8t3Oadpjj7wzC5/5A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=O+ZsCUKlDNFkykdhaFUY00lREXOJ7VO+hfzdF9elZiI=;
+	b=m0bTl5bYxEf7YonqtQQcfjE1ft6QY9esmO4zseB/MMsr7EOL6nOzl61aD5eW5EMAHMjo
+	 CRFd6yhibLEwExTVBmFxeMjOZtyG4Qw3Qx3wrCMnwLYiFg7wuG8wDEyl508biv0uuSc56
+	 5kxs/1yjZOJs3iUwCDVytB5FRVOe78YUnAsENWVzI0opPXzpPbBYXGel5nTIjc0kehoRr
+	 h0lKkxu5jRD3j3FC6bg97COGQPRovzWQEyKya3mhhMBWOPBXVnZSgOWHyDrV00PvQ2kkc
+	 tfbogXq/yEE3LTKhlmDtUU66RsuAaRkedCCHSGOQIMpx0cyxbemXOmdVriu1q4/9ZNA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R60aEJi0;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xUSs2uca;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB79606A327
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 15:36:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EBB79606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E6A606A33C
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 15:36:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77E6A606A33C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R60aEJi0
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4bb6057b333so15316285e9.3
-        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 07:36:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xUSs2uca
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-71ae8568d90so170874eaf.2
+        for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 07:36:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795448208; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qYyHxpzPszrvI1VSMAnWf233ykDntxbu8s54nhbhghD3TbTt1k38bCBHLu3+062KgL
+         tiyCxg0uvhe+VKXP0OsGDcoXZgYZIPgRXeW/jBSr20lj7PDKq2B0nZsiWJY2WMrK1o6m
+         mKsvI+UlXln4seMZk6g/vK6fE5mehk0K8DqOnec8p4VSccWf0MavDul/iZ3kzz5EnNlY
+         GesSmHy9aRKOdAv9aSd/gMgKzGajO92zrA8DZyyf3wy7r65d5fPxigWZldPju1KMu9tm
+         gnc9vXIR9tt6cXOfextd28UXPsvTO7ClSYcXGi1KyjgV31k3zQDNLzNyqJMm8gGj0tCU
+         h1Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=O+ZsCUKlDNFkykdhaFUY00lREXOJ7VO+hfzdF9elZiI=;
+        fh=Aj7CUVvF5xlVVyJdMCmK4d2D66uWhneACChJlXQ5zGM=;
+        b=HuSt4n0INKABgkAB00+Y8rjAaz5PIEIIfPQm5vPGsXA7i0szlrOiKgtWyMe2QBMCAs
+         cK61EhwpgNlW3Y/hQAzKMP8Nhc0tTrXdawyv5JwmUup9Tbofu1PBjBZTWqTefSgp37PZ
+         bnSsp1sn0lF03putHmq6jS5m7GvBMeu+1T6RYfIxHoUQefGv0wweJoTUCCaYOpuUSQLp
+         BgD5g4PJ+OOVlI6pg/JbCbz3DtNYgdVMapMpQjpFwCZ5dpt0tByZDemvGEic1LnOO4fq
+         bHzEBpDFZvDCHvoVWxg1o1DZs9g/Uuezws2fuqm0fDnXMuWFcxb0aRo1vtb1z9YAalR4
+         +bbw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795448200; x=1796053000; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iMj2t4hUan0LrC5voc+bXHqikDQMoVSMga8MiF5GiH8=;
-        b=R60aEJi0T1BOxW71OrdsybXMXSEH/Pw+zQozyjGO/XMpCbinmtRqCUzHwEzKFVHnFs
-         MpioEC/5hvu4h50iJJAZEEA+nbl5mYzQApN+1f2Zh40CY72byfzUUrT58h4dlJo2phOk
-         uHSjHLmpNL0KIX/zFGGP/9R22wBiRXtKtxA3b8arEkpmEbCWj/cxvFTZhyaMeAqrD62F
-         kzrUonCNPyG1I7wnw+tKAn0JervG1mwuCDBtOvvNdneYwNmOo0ISMW8MO5dfzZVrlYVu
-         KrxnW7p5yI0bim71xSh6zd13PwdMmuY2fN1O6pVxc4zxI3VckoJvwQzJOJaIn0XE12cS
-         KGrQ==
+        d=gmail.com; s=20260707; t=1795448208; x=1796053008; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=O+ZsCUKlDNFkykdhaFUY00lREXOJ7VO+hfzdF9elZiI=;
+        b=xUSs2ucavKVfPy7FE0Q91cPRFLDTTWSvprODBGPK4cCvzeX3Y/O+g2QKSx8hPrlwFX
+         CC5ujezn22VAQnmYcr7ud4fEkXCernz9D4efY4UrToC/mFz5cLYt61rnS511iKi/w2IH
+         2D01QIXOfY32V1Hswg6u5VWQe1k3FQpr/QXcRo6h8Xocp0p3fUtdw3knZNnxo4QZc0ct
+         MFuVhUlIPIE2ypEx0PB4hv2TLnvZ8QbldTRWn2cvkUrg4tBDBp3BU5U9ukZS+JY7Fm19
+         +rJVT+tY+ex6tPhpHDifVpbJZvMbKqZ5WQdx23Bf8zUQCWW0fbVRyXYp6st20oQeYOnN
+         7NZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795448200; x=1796053000;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=iMj2t4hUan0LrC5voc+bXHqikDQMoVSMga8MiF5GiH8=;
-        b=sunXPSB9HEqt8kvYjF+Na3+/vHW10Xts4y6yOK4ZpOJOn7zGJJEJZ21gnFHxTCFkhc
-         fuBFdxsciBXsDsQUE8nnohmnX2mtsazjDxtXAG3kJAkuc35gkiVfI73DmmNh49kkoIwz
-         livGaL2RzRHLt7shyMxRQWcTtbbQvavGUczJHI0skaFWQWz2NPzhIyqts+kI4LyHivHn
-         YDmKrrERQJhnXuV0Z+3Kw+D95gKIi+9I0y2uFI2JI3LLf3oTAeTyhXpM3FbvQ2kvRvXm
-         ORkqt7/7k2JspB+CvFlB+Gn2/lPy3VS9qYYsL1/J70NShOXLUudz3dTnF+NJbi+D4LOp
-         OGow==
-X-Forwarded-Encrypted: i=1; AL+hErHrdjdhQYTxcnuIhZdnsyrIPB5e204rctbbngLLgc8TSmZYgSgAQijSHz5hHUr2G7xE1cJh@lists.linux.dev
-X-Gm-Message-State: APuU4Z+ET65DSLG2wYq0wuBVau0LSS6yDwWOnJ/bxUdJkttpwJ1jDttu
-	MUcxOCGJ6RJSljOHWLOuj0F5r4ERhw0URYDpFVagHqhLuNaKNKiQmT6g
-X-Gm-Gg: AZFdTZeiiBlKkCQ+u7HPS43HIbOS14O6zq1LomxquTHBgug1fqlhGWqX6Vm9CRzzNp8
-	GnylhAWy2cWy2BJt0Fk/qsb0v6Yf//+c2dCrDItQI68oPOYsZC383ULT47TDLckLiHdAij73R4l
-	W+j/xG0K61957GysrAYi/qnA2VgLuJqbxUfvmFXKfzW/WG0GXqcBLCjjETK6Avwo8BrR4FEwcj9
-	Hl/igayRHewfZcq/k+IF/3QQYetkVmN8VDkJ4M9SahXjXAScpunXkQ3NRFx2vKEKKL+buZk/p6k
-	+BkGGMEISh7yixtu+tEh0m82rfDsEuG2lipAPzj5gowqySuWcy9tmreW+NtrZhT5plVmzJRu18H
-	DfwwPlMiN3FPB2ddFYcxqBUeRcBuBQD/NzMotbQQ6y/OQKq2YIh5iLL5F/GuFWclzJEtvlgKLTo
-	sY8I67dSEutGCn4Q2VZW3p+tPFbAwHRRa1YX0mvu9MEx3QMy8XFZhNhyVpuDoE+cHoGhdY1kA0c
-	kh9Mg+bVo4EnUlDA+p0iGh59bzphUMPmqONbcFbPcnYT+39C9cCMsf/8n6++vvA/ujpcuh5wkUG
-	tHFVIxTZiN4xOndlbYPMpQbA42MO/04Chg==
-X-Received: by 2002:a05:600c:3b88:b0:4a2:191f:7cbd with SMTP id 5b1f17b1804b1-4bb888078a8mr280286605e9.11.1795448200216;
-        Mon, 23 Nov 2026 07:36:40 -0800 (PST)
-Received: from ArchOarora ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb90655f5asm193318255e9.1.2026.11.23.07.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 07:36:39 -0800 (PST)
-From: Oarora Etimis <oaroraetimis@gmail.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	jose.exposito89@gmail.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Lucas De Marchi <demarchi@kernel.org>,
-	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	sebastian.wick@redhat.com,
-	victoria@system76.com,
-	thomas.petazzoni@bootlin.com,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 19/43] drm/vkms: Use plane folder name as plane name
-Date: Mon, 23 Nov 2026 16:36:17 +0100
-Message-ID: <awRbCaRRole752Pk@Oarora>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261120-vkms-all-config-v6-19-78ace90f4fc1@bootlin.com>
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-19-78ace90f4fc1@bootlin.com>
+        d=1e100.net; s=20260707; t=1795448208; x=1796053008;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=O+ZsCUKlDNFkykdhaFUY00lREXOJ7VO+hfzdF9elZiI=;
+        b=TpzEFViyM35W61KSm0ofZTMNB2bnyhj+qQclE4vulQ0BlFLEK9zFd24vNSqF/q1B1I
+         Exz/H6mu3f3YOsd2PJKzmMWNUFj/gwv8F5U2EURkdOn5QMUVj9eERcCPJsSrC2BX0A+R
+         60I34xWccRuammLIATiuoLhdBJRpTFZ9f1iy7p8k5ldvZ1A1b8jkaBqbF05BIOD9sGLI
+         rJU4z2QJFaCowShWpNUhPE1MXM9ovwgjq4tN0xf/oPEDzGsp6D67f2mzkoyIJr0fcF0l
+         xFDt75b16jd/y9WslBCxJK6wrLFIOjRZJOc5LKu7i2TwsoULbL32lICTTvuWMiWL8sPs
+         /uiw==
+X-Forwarded-Encrypted: i=1; AL+hErFV4pz78BnopPONe5ntnE/vnQwY5bS/a1+cQknGYsHi2TEXDGl3KOFbvk2gKWZ8y5UIImRF@lists.linux.dev
+X-Gm-Message-State: APuU4Z8QYWv/Ky5ZOlGPSiy0NnmYLIEBAWBlr209gVCaFdJjOT7mX0WC
+	V5TqnwqjgaPNcdQGq43jEtDp4R5psZ4IoC+GrBUqZjssx4phvLk02f8K/eSYceNMdy2optr7DN4
+	b3xY0NppyUbNl6v5hoAVoTA2b/1GqqHg=
+X-Gm-Gg: AZFdTZfHgv7k1gVuNaCt/kG/Na98rYSbW+bYJ09LdO+Kz8eo1ynEhwjtFaFktFrH1m6
+	QeirTResvE2Fm/e/0ZRhmJavYZ+ulfBhE07EgByIQ8bpWWl6lMVb9X3mGEOENERFwuKHkuNDW1v
+	dCraZHF24BoDrH9NQHNeOmqVmJJGWc0omfawQi1IempfWIKezBt9r/FJ8VbYd/wlP6cpw71wb8S
+	nar/uZIoaTy9dgddNDKNNl7LT71t/7fQUp+dg9NFRzAlWO9/9YxDPOnke6CbBa1H0+lQK8l63bg
+	rJ/JXgsOQZqGkLPgC4RouQOqxPO0EVNAvCnXCP4L/MQZkfKLlRZ3vulbdjY39IwUydNiplXipjP
+	sGPGtvjIslO6JQp/oM0DOqN2JH0PmrxR+8oBUBbSuoUAev4Yy+jWdg2XZRiK3iTSyO+q9BHoYbw
+	nY/ZhypeKFQnH3QiJkH5S6vkpmQcEVryKPdalKKlbeU0AZm4Qrn+ShmxFEH90=
+X-Received: by 2002:a05:6808:1383:b0:549:e9e3:9460 with SMTP id
+ 5614622812f47-57a025ed532mr17234457b6e.0.1795448208292; Mon, 23 Nov 2026
+ 07:36:48 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -127,28 +105,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20261122045319.18651-1-irogers@google.com> <c7a81b11-73de-49dd-b38d-76aabf193dc5@amd.com>
+In-Reply-To: <c7a81b11-73de-49dd-b38d-76aabf193dc5@amd.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 23 Nov 2026 10:36:36 -0500
+X-Gm-Features: Aa3M54rvn7dkOhohcibCJnEbcJ8Ls1D79SvQUldxYdV48pGWUDZbdwQoEIZo65U
+Message-ID: <CADnq5_P23gnpD8eXOF-hOE3bjHcffEOQdwvfjY9xMsF_Awbx9Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] drm/amdgpu: Initialize r in VM and TTM buffer helpers
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Ian Rogers <irogers@google.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- 
-> diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
-> index a7ddcfd4e86e..3a1a34643cce 100644
-> --- a/drivers/gpu/drm/vkms/vkms_configfs.c
-> +++ b/drivers/gpu/drm/vkms/vkms_configfs.c
-> @@ -375,6 +375,12 @@ static struct config_group *make_plane_group(struct config_group *group,
->  			return ERR_PTR(ret);
->  		}
->  
-> +		ret = vkms_config_plane_set_name(plane->config, name, strlen(name));
-> +		if (ret) {
-> +			vkms_config_destroy_plane(plane->config);
-> +			return ERR_PTR(ret);
-> +		}
-> +
->  		config_group_init_type_name(&plane->group, name, &plane_item_type);
->  
->  		config_group_init_type_name(&plane->possible_crtcs_group,
+Applied.  Thanks!
+
+On Mon, Nov 23, 2026 at 6:56=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
 >
-
-Oops, looks like this leaks the plane allocated by kzalloc_obj() above :)
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com> for both pat=
+ches.
+>
+> Alex will probably pick the patches up, if not please ping me again.
+>
+> Regards,
+> Christian.
+>
+> On 11/22/26 05:53, Ian Rogers wrote:
+> > Two fixes in drm/amdgpu for uninitialized return-value regressions
+> > found via Clang -Wconditional-uninitialized on an x86_64
+> > allyesconfig build:
+> >
+> > 1. Set r =3D 0 in the 'else if (!bo)' branch of amdgpu_vm_bo_update().
+> > 2. Set r =3D 0 right after the while loop before 'error:' in
+> >    amdgpu_ttm_clear_buffer().
+> >
+> > Build-tested with LLVM=3D1 W=3D1 (-Werror) and -Wconditional-uninitiali=
+zed;
+> > not runtime-tested on AMDGPU hardware.
+> >
+> > v2:
+> >   - Keep 'int r;' uninitialized at declaration in both functions so
+> >     future missing-assignment paths are not masked; instead set 'r =3D =
+0;'
+> >     inside 'else if (!bo)' in patch 1/2 and directly before 'error:' in
+> >     patch 2/2 (Christian K=C3=B6nig).
+> >
+> > v1: https://lore.kernel.org/r/cover.1795106955.git.irogers@google.com
+> >
+> > Ian Rogers (2):
+> >   drm/amdgpu: initialize r in amdgpu_vm_bo_update()
+> >   drm/amdgpu: initialize r in amdgpu_ttm_clear_buffer()
+> >
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 ++
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c  | 1 +
+> >  2 files changed, 3 insertions(+)
+> >
+>
