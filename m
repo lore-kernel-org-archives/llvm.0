@@ -1,155 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.70.54
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795401041;
-	b=D/6tSR76JrTkOEZbybN41brnhUIzkMd++gtC0ia6NQ9ELTKrOSd+LFhLwL8YD81dhpZS
-	 6kV/yIaFwuMBZPyNCOAyrNJ0lRLkAk92bGom6UH3CSSRLaNhx49DMi08gu5xEQ4nqFxeD
-	 2QQ2IwBhmGsl68A/CQub1R/NtfIpt3FXJ/Mguh9T14U7a6ioaU94Ud2pDPAOP1Z2EuQch
-	 MXQsKDGP3wPmUUFEhhCue+KoRGqBrGh8dARZVwhCoALN+pR10bp74xx9PhydoSzohXhEt
-	 K1zfC50AAfgA2Rrs/ouKonN3DQpb9dMKVoe5loL8sCLkIkPoHkdX3hIFzXubdeLdupQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795401041;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=3rMGwOVEo1qiTtwxvkHa7gZlWWM64ENrzOnMp4npICY=;
-	b=1neI97BWd8ZVnebL7du30Sk9OY6hpzlnJHwGoOPj22Gjy+mYT7xnSigzeeCJdCACanmO
-	 8KBBVYLB71e8gKF0u9m5at+9HEQM1DXjYaN/+UnvCC7Ah0mRiAQM5hU4erdGIzXvLBOaJ
-	 TT/g96qOb3DOAPXmkTnvmRzJh0MrmM5N/Wy5Fc8WALE3AB3gsDLwXY1nbosloOpUEjiia
-	 caGeCdWIzmCPo9AoRU0XbVl4ResRp/fgvmKcRna2lIhb0VUuHGRu0N23d0jt5gSiPYr/v
-	 82YkNvxQ9yBYEDS4WH2q28vGA4Z7tn+KbYPSdsSBV9HOzBMaH+mla3BCldLwHfmh/1w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=est.tech;
-	spf=pass smtp.mailfrom=est.tech;
-	dkim=pass header.d=est.tech header.i=@est.tech header.a=rsa-sha256 header.s=selector1 header.b=HO+XUMcq;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.70.54
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011054.outbound.protection.outlook.com [52.101.70.54])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795402628;
+	b=YDExxmoOiATQqOAAHytKABGXwqEsB1LrrL854dOpU2YJQPZO5bT31B789ByjToU0iNzE
+	 8qKU3zp1MwXl4FkqXgtdQiGTgsf5FAF17mtuIO8yEQjFr3vYNJTsUMr1tFWpxl/BMrMOO
+	 Yhu9t2xjSdbzLryB08TRwp7ZDS6yXmJ0YJReo4nIs46vyG467ilOHTNfuUEmRpU3eDm3Y
+	 PGETYmUp6zdbJsWNjse0rQ3Wciu9bZeJCPyHcvS5cFllKJgLgg3F+p9kYs/UUXaDrKv5Z
+	 AYpqT4xUNWgzFP+MjCTOWFk3BQKb9dLu82ufLdkGeUUYoe9vA/j/Jk4gHmMFe4zIjnQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795402628;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=GDNT0b/bhyDzKt86MPLi6HOpcuh4V0yz8R1khihljtE=;
+	b=zpbfoFAuWW/2wAi3qxqqaChN8PsYi1CJL/1DnIRDgmo4V9ht0bSTG0sFZXoGpI9kmN/5
+	 NmLN7j0O1ng9KjCtIkR2oCEMFxKLuAWF2vGEYHbifaDO/QrEm0kiFOlrUHkJ6bXEgBUFq
+	 syfxQl5vjryPY/sfvje4T7sqrBb+BiC6piItdYgAwqVbQFa5Pa9g3vQ7howWeCtrT48BV
+	 1sxnahdYtrr4SySzrPR2kQpEnQxFZS6j+IE85pzLUsHqouz/h0M5raUCWivfIz+NaBEfx
+	 78ilQTtpKKDuDiTHuoy3sIdvrswjpzaeuKuQrfGZyZoGVG7ur+elg0LwrI+9cZkdmuw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VLHOJjVS;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA87606A31A
-	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 02:30:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FA87606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33B2606A327
+	for <llvm@lists.linux.dev>; Mon, 23 Nov 2026 02:57:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F33B2606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=est.tech header.i=@est.tech header.a=rsa-sha256 header.s=selector1 header.b=HO+XUMcq
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HmngUGf6ZbKan1RTKrt1JNfSL+jbMx1jlQWdLpdPVccAD1cJbY4jI6Cs2E/oaevqKghHRY5SBnKxcSeGTVAliey4j1iQoUaqJ9011SVsaIgQAsgzjkZgCzAPIiaj/8iqboQhuqKSQuel3jFwLUsfpe/xrXYQ5BAd4psLB5q82B4P3bzqh8DTyHm0mKraEdSpYNSjwjPNHHESmXcbMINcDczrZdGZGzBkNSb8r+5fJEjsZqXmabyxIc93SljF940QWtd3RLU9sMdpRhIOQtZ7LUnCihlr1H4u0fR3GWTdSkvjQM1K904ZxQAXGuyd9qZlcOlEc0ez+qqzUFFkRkJXbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3rMGwOVEo1qiTtwxvkHa7gZlWWM64ENrzOnMp4npICY=;
- b=ILiKDcBXVbTS7EzEJ3NpskU00VRJmD/qJ7TZpYWsNK0lufWemr2NogXU+PkZ4szBv/kVat+JRfBpzvTvN7qoF11LLgk5/JwEU3G8Ya/t7ZejgVE3+r4PnqQjC5tqNImnV5/U5VhU6/hkiLdCT9zG7XSojpzP774fl3v7akbyqRhOHUdz+veeN9oljp7foOkPi5IYSJS8Ks0TXEd+2yY8xMvGgcVPJEuyo0m3rvteJ706TPoBWGCizW4qG+uZqz9v8RwSQZKONJFDtcU1Z1b/7ha1ultYRrtgPJBfFW5UAor7pmX0n5RcL4abRArIglnUdfFNtlco2RjJvMmJPe9UHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3rMGwOVEo1qiTtwxvkHa7gZlWWM64ENrzOnMp4npICY=;
- b=HO+XUMcqpfvvP7WalfSTz7bqEo32hmJlYeHMt4yz+8n4RpFB0AKhcPMFDYYphgC5CLPyf8TdEj9BSzzu+zV1cxtMkwuHrbcRINNDw/CuGTqGh/QoyYFO1UhTu9efhndUOaeU17O6k1BwhlQplVodYTe+b7kgdZqNXocVDHi1zxzI+bS506aSH60iEbT0iPWDtMQLGb07U/ZIPluMD4KaZhadNSk2/IogSJROtRwLWHNbmDPVnBPmwROBm2zG6Y+A8cQDswTVJoQemdAClDLo/vx1BY7lbChgnRnpqJXl7+0SXhxFvb0Og/j8ddBdDDT0InPJ/mCQP/pqJFlgBN9NFQ==
-Received: from AM7P189MB1137.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:17e::23)
- by DU4P189MB3472.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:5f0::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Mon, 23 Nov
- 2026 02:30:37 +0000
-Received: from AM7P189MB1137.EURP189.PROD.OUTLOOK.COM
- ([fe80::86f0:8ce1:a437:b2d5]) by AM7P189MB1137.EURP189.PROD.OUTLOOK.COM
- ([fe80::86f0:8ce1:a437:b2d5%6]) with mapi id 15.21.0615.013; Mon, 23 Nov 2026
- 02:30:37 +0000
-From: Tung Quang Nguyen <tung.quang.nguyen@est.tech>
-To: Ian Rogers <irogers@google.com>
-CC: Simon Horman <horms@kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "tipc-discussion@lists.sourceforge.net"
-	<tipc-discussion@lists.sourceforge.net>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Jon Maloy <jmaloy@redhat.com>, Elkin Cruz
-	<elkin@google.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>
-Subject: RE: [PATCH net] tipc: validate peer address attributes in
- tipc_nl_peer_rm()
-Thread-Topic: [PATCH net] tipc: validate peer address attributes in
- tipc_nl_peer_rm()
-Thread-Index: AQHdeEhE9NH7h0X5MEybNE+ZYLKd5rc69ESg
-Date: Mon, 23 Nov 2026 02:30:37 +0000
-Message-ID:
- <AM7P189MB11376E1386BB26B523A99509C6452@AM7P189MB1137.EURP189.PROD.OUTLOOK.COM>
-References: <20261119170556.1518068-1-irogers@google.com>
-In-Reply-To: <20261119170556.1518068-1-irogers@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM7P189MB1137:EE_|DU4P189MB3472:EE_
-x-ms-office365-filtering-correlation-id: da3da05b-c539-4f71-89a9-08df4909c248
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|23010399003|22082099003|18002099003|261022105027099003|261026140227099003|261026121527099003|261028144727099003|56012099006|10067099003|38070700021|11063799006;
-x-microsoft-antispam-message-info:
- Hkk6P7Xtd8R1ybRkLJiIq9shHBZUqZiiPzVRGN54hjMl0I+r2hVyumtLfkbfnHWvaDQ3Oe4g+nGx7pnazE8FyccbEt7mx0qV+CHAXlo1/dJJ4gS4a0HIzbFv4eHPI6Tx+JRQ3axNSoYNO+OreIND6lMArev7E8MNXS1E7n3nMj9FWkvQ++r94Qv00psbOeRD1jVb4Y7woTTXETWO0cUmeXXiG7PXR0goh0G5kbDWXEo0IvYVkhWgWHOQXsZeLRBkSaowDvZNqTDiuhaTm6nbAvNGM7+0aqPg6grwZCln8YiwA/T/QkrC/g5LjMSSGWVGqVrP3f1j1jejnFaSwbu14eu7V9F0ZS0w0MnGkyWhaNVZGV4303+FhFOGJgtbs7ya+OCahK679F9pRJedwsA8pEG8PJP6ieZtZ2I5Jay26ZMxJCkxdvPBaBz3zqjMA5tijWxO4wbbbvBLoLSTlBF34w43irdlFEAv3aKTzd6M51k6EHcbSopMcWYaLm5XfT1PAWTzSx0oT6+F1zERGwh0P1btN/oe7SH5xr4VZqQxNrDrM70Ef5+GDdBEqo6FYizyj5dnFBfX3VBG1+HEhd9+8w8AdK6KG2SiKQQyTFLHTAJQ5ZgREW7HR3/+ouHn+bGdxKmzd7DHKH8S/tRjlvxzCfTmy/IzIlUm6I+R3xAa24lPXmajf4hm4/0504B6df5JSBH9y519XPYtJ+aEeVBLLGHrD2YkahUnqSCpbkqJ+8c=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7P189MB1137.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(23010399003)(22082099003)(18002099003)(261022105027099003)(261026140227099003)(261026121527099003)(261028144727099003)(56012099006)(10067099003)(38070700021)(11063799006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?T3liQ0RBWEFkdmdsU3hxdFZwUkRoOUE5WEtoaXVVOGJ5L3E3M05JZVhnekpU?=
- =?utf-8?B?eXZWanNMYXBjZTVnV0pMbDJIbVdqMmN6elNUMkpQVy93LyswME9abnFQaW0y?=
- =?utf-8?B?bmU2ak8rRTRxQXlIZDdnVUF1RmdEaUlhQy94a1lFNmVFQ1BFQkJkeUYxejhL?=
- =?utf-8?B?R3VrQ2hLamE4dlBYVjdzRXBPcUpnRFNwazBvZks2YTRUTUdSZEFiWWV3Rk5J?=
- =?utf-8?B?QW5EZ3IvdXg3UlgxQ2hvL2VXUWpIOFdJZVV0SjB2U0RqSlpXSUszU1hVLzB5?=
- =?utf-8?B?OVgyb1QvK0plZU92RGwraGRSWUl2SVNqbW5IckNiUThsai9GK3R4bHNxdUtM?=
- =?utf-8?B?U2FzN2lxN29vUmYrUm1IbEZHeG4venA1WFJ6R0ZBZkdrWm5KaFUzV0N1Rkty?=
- =?utf-8?B?SHp0bERDUG4yQnhJaG0zWEcvT2ozclgzdmthV21qRGlEOXNJV0VzSHQxSHFW?=
- =?utf-8?B?dGd2VFBlQitlRDlsRjRobEV1aDFpQXUyQzVMUGh2K29JWGh4R3hkbVNEeUNT?=
- =?utf-8?B?bDgwTGtSbDkvaHhacmFQaTU3bC91RVYwNzRQQ3owRitEcUFNaWwxZStpejZO?=
- =?utf-8?B?ZDluRXdYMXFxdkhnZVk4UnJDcjVNSXowSFpFL05PSERjUDBkczg0MnNNVi9N?=
- =?utf-8?B?dE9VVUF1Nm9PcEUydy9yWHdYY0xJbWs3bHdETVUrNUE1UWE1Ylo5MGNvNWc5?=
- =?utf-8?B?eUk2bE9jQnN2eWNQSEFPVzQ4UnhDODhuSjU0R2hIQjBXSnc5MnB1Q2Z4bE9L?=
- =?utf-8?B?WHBXaTFudSs5ZTVtQ05Qd0t3VzhtZW1KRnFsWHY0cFhWU3FmaU85ZzROc2FO?=
- =?utf-8?B?VU92eGpSN3o0VEVjcXBrdTdVV3BZUFNZQ2JSaVZvUkRUaFJYd08walMrTHVq?=
- =?utf-8?B?VzNaQlIwZUVzUFBSZnV2QSt0aVlYeDR5Sis4d3d5a294T1hVcXZ3MnZKdE10?=
- =?utf-8?B?RlpXRUhFTU9nTWZPeDFvZ2JIcnpMcE90OUFRT1JWTVZCODRJdGE0eW9RYWNC?=
- =?utf-8?B?dkRXVHdzVGVyNHAxK09HWVpUeGw5VlI2RFR3cGlVd2g2b3pNUnV2VmQ3ZlY5?=
- =?utf-8?B?Y3hBcTM1YXQ0TldaWFFGWjhJam5TdDFCcjVOckUxUmg1ZDl3YlVsUnVnSzht?=
- =?utf-8?B?OFRKeTlDNmJFdzNJdlc1dDkyOWlKZFdiVzE5eEtaQWRrK2lhVXliQjFIeThM?=
- =?utf-8?B?TmFjbkd5MWhjZC9NaXZZZnR4NGo5THN0U0xmSzBmamRHMG9xUHlnNmM3VU9G?=
- =?utf-8?B?ZURPcnVzeFZicG1BSk1pUUE0d28xU1ZGbGdjaGRlNFZwWmVmRHJQV2R4QXVE?=
- =?utf-8?B?YkdjUGpJR1RxcjhhcEprWXFJd0NGNkpjbVlSR1RHcW0ycmNPa1paVlltd1Bm?=
- =?utf-8?B?VlJmVm8waVp4eFpuTDA4TmZ3cDRoMTUwQkhyNm1iZ0tqNEtzQ1pNOXo3ZmJW?=
- =?utf-8?B?QTRDdVJPY0dmYXVxeXpyeFYxTDBUc2lvc2RJbTJGTHRWamhQOGVQL295aDNq?=
- =?utf-8?B?dDF2K1pZczZlTzdwYjY1WHNDUml3WE84Tlg3Y1Z1dDcydTZJWDRsT1U1VWd4?=
- =?utf-8?B?bjEzSlNnU3VlZXg2QnVkUWFmTkNma0FtM3pwU25YSmFETHJtcEI0aXlncUYy?=
- =?utf-8?B?T0YrSWFwY0c2RUlUVGlJV1oyckxNMjhPTVZKSlVJVnNxbE9iTERGM1lOOXVG?=
- =?utf-8?B?UFBteTNQTXhXMWJIM3ByQ3g4RXBBakhBUkFTKzhMaW9LZTAzdGhHdW1QWWRQ?=
- =?utf-8?B?VDBUV0lkSGUyU213cldrd3UxbmdyekJLcCt5OHBWdjM4SUdxWG9Gay84UFJn?=
- =?utf-8?B?aWJjUUF6T1RubnRNSmZuYzRXVHk5K3pCaTN5STN5b3l0dDlMMXQ2QU5vb1Rl?=
- =?utf-8?B?dEJzNDM3em1rNFA2NlMyY2RkRlhRS0tKVUdEZXFBZ3c1bUNJWm1yR00vSXds?=
- =?utf-8?B?OVpwU3RoM0dWT3VIUDU3VzB0VERhMGptbnlXeUh1cVR1T1U4R0wxaTBuZFZE?=
- =?utf-8?B?RFNTR2lzUjQzTy9oc0kyamp6dGxkVHNwTkRnNy83YVNkOEdUdGYvZWhBZmU4?=
- =?utf-8?B?RzN6VXo2T1BUSnlaalB1aVlkUlZzdm5VT0NNN0FTY082cDE5QmdNSHEvbU9M?=
- =?utf-8?B?dmJremIweDlyT3RwOXRCM3cxWGJFSWxyUWh5VUNjWS9SWFY4ckFGU2tXNElD?=
- =?utf-8?B?cUl3MkM2K3M2MDlIUTZob2hjZ081UGNsOTFsNHdFRW8zSEdDQ3JFRnd6REd5?=
- =?utf-8?B?dW5HejlWNkl4MmJRaGxpeHZ4cXdpRTk2NDlQTjkvdmlWVEFNYWJjUHlsUDlP?=
- =?utf-8?B?RGVtd1htOGJOemF0UGRIejRQQzdGaHE2TWxDRm9MQXV6bkZBbUJPQT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VLHOJjVS
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdba1bbde0bso1061857a12.2
+        for <llvm@lists.linux.dev>; Sun, 22 Nov 2026 18:57:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795402627; x=1796007427; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GDNT0b/bhyDzKt86MPLi6HOpcuh4V0yz8R1khihljtE=;
+        b=VLHOJjVSv6poI8KxNomRdafGAObrnKrGJuVaPWKHQ1iJdX25VrMzSnQhvt2SZ6HJ17
+         yNd8aJGWUlNJmS0jMiwq3av73bBA9iH0HYCkI01OOw4DVjVHFVzc+DNmfzNgbb6A+fHu
+         VSEPmgFa4FdVmlyv47GuDxJXQWMFuFBUgub/oN0uT38ev/eUXzK6ei5Xu2a+FydEi5UU
+         9OjO858vgMqzuW4zFBFeJ3ZvbigyAJckVhpwiTctYx0PBN2CcnuAu4vFG65yfuQmgcGr
+         oxJZWTZwNqKw7WWtiNwC6TdDzg8orK81kJYgzoYrs09V3Sg32znGHvxtt8CuIy9bBFSK
+         laPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795402627; x=1796007427;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GDNT0b/bhyDzKt86MPLi6HOpcuh4V0yz8R1khihljtE=;
+        b=GvSG9kLZ+R5sap0bFz9bPllYFUUfw5NA2yA1rPzyAiPcxni24rcus31MGzb1oWeIDg
+         j9LLZ7gpeEdQDwPL6osJEQRybiApIBuezcv8w8+O1P5PRXLLQWn7u2hhuiXtCCLmf8f/
+         b0KwYXmmy4nb4Kqbnr0vKO5mz6uiJxOX+BtwsOWKK9t1Tjk7VfVlBmCBb3mVHGgreJJA
+         /V38EE6tLDj+c0/6vS1/5ZcfLg+ac1ziqM+4IR7+yRQmhSoMB3dg4pSQH9nghmN4DDDW
+         yvh8ntgVW7r7GD55BfvccMg1aFo0JWy+dTsplThO7QiPmQq24yoAwQVkh6Jt7YUzprGT
+         Z0UQ==
+X-Forwarded-Encrypted: i=1; AL+hErGPF0TAVuNLNSmiws8vW4l9ltYjdtLRmMeGc+FOH5YPAhEsxtKv5/DLbkRjKyrugaitq2Jd@lists.linux.dev
+X-Gm-Message-State: APuU4Z+ZiIaIQp2hXEl9vTOMuGUNAj89VQJP4YfT2rYmVUfKvcDdMZZp
+	W6stczTMpI3qDo1SJGON3TRwF6IDkNvqHnmIyugdB1Ia53ulA48DKjRK
+X-Gm-Gg: AZFdTZef5a+d5t35r6XidbDJOFuWnGw61/ejCeYqB+j9gpYvUAmrOuwmjWOjuVF+1iL
+	nVwEUL6r4KyaBzFC92KlGBRWvr17vBDHLyxciGTrY2MMzZwWd9DR4yFoTSmyJSRv4otmw1hwRcG
+	AVTxZiqbwFfx+WN2I3sfHJ5gmT6SKmxdAHUmRZkhN91jA6gj/4i9Bt+8cQv4i4Tuvb2aCDZz8X/
+	gnbqLFrDTMWnB9Lz9mGchcma1/L+63buOwBLzGw1RwHvi6Khl7txVS2ua4DoDoB+9ofTgNv0CjS
+	MmzOvxrTU4IgINN4iW1PnXgly4rYcd/jR4wDVcwfvmn7kf0XMzrqcL7nLBYo5pbMrXjLG9SBqKm
+	2YFWjMEUIYlZ8Lg/kWKntWHPyO0Vv4QVCFC0u96Chlrv+ELk6eVLmefzzds08r5v/Zg1mclkyHY
+	PXIaeZ9GzamC/jLM/61jliQFVhZYnb85CSapsut1BA7WfbDo4wsqUvfZ4ETiaZRj/+3OHmAsHte
+	DE+AWr+N4jfG6kjyl+l18aXeC6rBcuclakn1n3C+4tdIrbHR6JRRIkPQthY/xKu5AIthXsp98KR
+	1Cl8ONak6QOHa8zR79VOz5xajIJxxIc4OQ==
+X-Received: by 2002:a17:90b:1a90:b0:3b0:e388:d9da with SMTP id 98e67ed59e1d1-3b41c92ce29mr8507796a91.29.1795402627197;
+        Sun, 22 Nov 2026 18:57:07 -0800 (PST)
+Received: from arm-a100.. ([140.112.28.118])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad92c13sm15279137a91.14.2026.11.22.18.57.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Nov 2026 18:57:06 -0800 (PST)
+From: Tzu-Ching Yang <shingekinocore@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-mips@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] MIPS: Fix genex.S build with LLVM before 21
+Date: Mon, 23 Nov 2026 10:56:45 +0800
+Message-Id: <20261123025645.2385330-1-shingekinocore@gmail.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -159,29 +104,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7P189MB1137.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: da3da05b-c539-4f71-89a9-08df4909c248
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2026 02:30:37.2806
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YTHWWvmp5i3Yf4D9YOEZvT13s18aCA9kpqBb9BD9EWQPV22uAVFDEg65Zc9abIR0n4TzkpaVPnnTMGem9SCsZA4MMr+mQjAOVpVMOyBA5T0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4P189MB3472
+Content-Transfer-Encoding: 8bit
 
-PlN1YmplY3Q6IFtQQVRDSCBuZXRdIHRpcGM6IHZhbGlkYXRlIHBlZXIgYWRkcmVzcyBhdHRyaWJ1
-dGVzIGluIHRpcGNfbmxfcGVlcl9ybSgpDQo+DQo+dGlwY19ubF9wZWVyX3JtKCkgZG9jdW1lbnRz
-IFRJUENfTkxBX05FVF9BRERSIGFuZA0KPlRJUENfTkxBX05FVF9OT0RFSUQgYXMgbXV0dWFsbHkg
-ZXhjbHVzaXZlIHdheXMgdG8gaWRlbnRpZnkgdGhlIHBlZXIgdG8NCj5yZW1vdmUsIGJ1dCBpbXBs
-ZW1lbnRzIHRoZW0gYXMgdHdvIGluZGVwZW5kZW50IGlmLWJsb2NrcyB3aXRoIG5vIGZhbGxiYWNr
-DQo+Y2hlY2suIElmIGEgVElQQ19OTF9QRUVSX1JFTU9WRSBuZXRsaW5rIHJlcXVlc3QgcHJvdmlk
-ZXMgYW4gZW1wdHkgbmVzdGVkDQo+VElQQ19OTEFfTkVUIGF0dHJpYnV0ZSAob3Igb25seSB1bnJl
-bGF0ZWQgVElQQ19OTEFfTkVUXyogYXR0cmlidXRlcyksICdhZGRyJw0KPnJlbWFpbnMgdW5pbml0
-aWFsaXplZCBvbiB0aGUgc3RhY2sgYW5kIGlzIHBhc3NlZCBpbnRvIGluX293bl9ub2RlKCkgYW5k
-DQo+dGlwY19ub2RlX2ZpbmQoKS4gQ29udmVyc2VseSwgaWYgYm90aCBhdHRyaWJ1dGVzIGFyZSBz
-dXBwbGllZCwgdGhlIHNlY29uZA0KPnNpbGVudGx5IG92ZXJ3cml0ZXMgdGhlIGZpcnN0Lg0KPg0K
-PlJldHVybiAtRUlOVkFMIHdoZW4gYm90aCBhdHRyaWJ1dGVzIGFyZSBwcmVzZW50IG9yIHdoZW4g
-bmVpdGhlciBpcyBwcmVzZW50Lg0KDQpSZXZpZXdlZC1ieTogVHVuZyBOZ3V5ZW4gPHR1bmcucXVh
-bmcubmd1eWVuQGVzdC50ZWNoPg0K
+Since commit 56651128e2fb ("MIPS: Fix idle VS timer enqueue"),
+BUILD_SKIPOVER_PROLOGUE uses label differences as the immediates of ORI
+and PTR_ADDIU. The LLVM integrated assembler accepts such an immediate
+only from LLVM 21 on, so LLVM=1 builds of every MIPS configuration fail
+with LLVM 17 to 20 unless LLVM_IAS=0 is set:
+
+  <instantiation>:7:11: error: expected an immediate
+   ori $26, r4k_wait_idle_size - 2
+            ^
+  <instantiation>:10:14: error: expected an immediate
+    addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+               ^
+
+Wrap both expressions in %lo(). For that operator, LLVM 17 to 20
+emit a LO16 fixup instead of rejecting the operand, and resolve it when
+writing the object, since both expressions are constants by then; no
+relocation is left. Both values are between 2 and 30, so %lo() does
+not change them. GNU as and LLVM 21 to 23 emit the same code as
+before, except on microMIPS, where GNU as now uses the 32-bit ADDIU in
+the delay slot instead of the 16-bit one. With GCC, the 2 extra bytes
+replace the 16-bit NOP that padded the end of the prologue, so all
+symbols keep their addresses; with Clang and LLVM_IAS=0, except_vec_vi
+and the code after it, up to nmi_handler, move by 4 bytes.
+
+Fixes: 56651128e2fb ("MIPS: Fix idle VS timer enqueue")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202505071331.Z0N2eSkr-lkp@intel.com/
+Link: https://github.com/llvm/llvm-project/commit/b65e0947cade9bd39036a7700b54c1df4ec00756
+Cc: stable@vger.kernel.org # 6.6.x: 56651128e2fb: MIPS: Fix idle VS timer enqueue
+Cc: stable@vger.kernel.org # 6.6.x: b713f27e32d8: MIPS: Move r4k_wait() to .cpuidle.text section
+Cc: stable@vger.kernel.org # 6.6.x: 2b6d718c8dbe: MIPS: Fix whitespace damage in r4k_wait from VS timer fix
+Cc: stable@vger.kernel.org # 6.6.x
+Signed-off-by: Tzu-Ching Yang <shingekinocore@gmail.com>
+---
+v2: only the stable tags change; the code and the rest of the changelog
+are those of v1 [v1]. The tags now start at 6.6.x and name the two
+prerequisites Maciej suggested [review] plus b713f27e32d8.
+
+What each stable series has today, and what it will get with the tags:
+
+  series  56651128e2fb  b713f27e32d8  2b6d718c8dbe  will get
+  ------  ------------  ------------  ------------  --------------------
+  7.3.y   yes           yes           yes           this patch
+  6.18.y  yes           yes           no            2b6d718c8dbe + this
+  6.12.y  no            no            no            all three + this (a)
+  6.6.y   no            no            no            all three + this (a)
+  6.1.y   no            no            no            nothing (b)
+
+(a) On 6.12.118 and 6.6.162 the three cherry-picks and this patch apply
+    cleanly. For malta_defconfig, genex.o builds with GCC 8.1 and 16.2
+    and with LLVM 13.0.1, 17.0.1 and 21.1.8 (6.6.162: also 11.1.0),
+    and kernels built with GCC 16.2 and LLVM 17.0.1 boot under QEMU.
+    56651128e2fb needs b713f27e32d8: without it, all the code after
+    r4k_wait in genex.S is placed in .init.text. Both were queued for
+    6.12 and 6.6 in 2025 and dropped because of the build failure
+    fixed here ([1] below).
+(b) 56651128e2fb conflicts in idle.c on 6.1.y and older.
+
+[v1] https://lore.kernel.org/r/20261104030147.3117325-1-shingekinocore@gmail.com/
+[review] https://lore.kernel.org/r/alpine.DEB.2.21.2611040746160.6502@angie.orcam.me.uk/
+
+The notes of v1, unchanged:
+
+> No MIPS hardware here. Against mips-fixes (v7.4-rc1). All builds use
+> W=1 and kernel.org toolchains.
+>
+> - genex.o, before and after, with GCC 8.1 to 16.2 and with LLVM 17 to
+>   23, both with the integrated assembler and with LLVM_IAS=0. Configs:
+>   64r6el, 32r6el, 64r2el, 32r2el, eyeq5, eyeq6, malta (little and big
+>   endian, MIPS32r1, microMIPS little and big endian), ip22, ip27,
+>   loongson3 and cavium_octeon.
+>   - The objects are byte-identical before and after with GCC, with
+>     LLVM_IAS=0 and with LLVM 21 to 23. The only exception is the
+>     microMIPS ADDIU above. The 4-byte move with LLVM_IAS=0 is harmless:
+>     set_vi_handler() computes the offsets and the length of the vectored
+>     handler from symbols before copying it, and ejtag_debug_handler and
+>     nmi_handler are only referenced through their symbols.
+>   - LLVM 17 to 20 now assemble genex.o for all of these configs except
+>     microMIPS and Octeon, which the integrated assembler rejects for
+>     other reasons. For malta (little and big endian, MIPS32r1), ip22
+>     and ip27, these objects are byte-identical to the LLVM 21 genex.o.
+> - vmlinux of 64r2el, 32r2el and malta, built with GCC 8.1 and 16.2,
+>   LLVM 17, 20, 21 and 23, and LLVM 17 with LLVM_IAS=0. Where both sides
+>   build, vmlinux is byte-identical before and after. With LLVM 17 and
+>   20, genex.o was the only object that failed before, and vmlinux links
+>   after. No new warnings.
+> - The malta kernels built with GCC 8.1 and 16.2, LLVM 17, 20 and 23, and
+>   LLVM 17 with LLVM_IAS=0 boot under QEMU 6.2 -cpu 24Kf. That CPU uses
+>   r4k_wait(), so interrupts go through skipover_handle_int. Each kernel
+>   boots to an init that keeps the CPU going in and out of idle and then
+>   reboots; a QEMU trace shows every interrupt that lands in the idle
+>   region resuming at r4k_wait_exit. A microMIPS kernel does not boot
+>   under QEMU -cpu M14Kc with or without this patch, so the microMIPS
+>   change was not run.
+>
+> In the 2025 thread [2], Nathan suggested requiring LLVM 21 for MIPS in
+> min-tool-version.sh, and Maciej an #error for older Clang. Both would
+> also stop LLVM 17 to 20 builds with LLVM_IAS=0, which work today, and
+> the stable trees would need the same change before 56651128e2fb could
+> go back to them.
+>
+> On 6.18.y, which also allows LLVM 15 and 16, the patch applies after
+> 2b6d718c8dbe, and LLVM 15 and 16 fail and are fixed the same way.
+>
+> The 56651128e2fb backport was dropped from the 6.14, 6.12 and 6.6
+> stable queues because of this build failure [1], so 6.12.y and 6.6.y
+> still lack that fix.
+>
+> [1] https://lore.kernel.org/r/2025051415-unloader-likely-b0e6@gregkh/
+> [2] https://lore.kernel.org/r/20250521224450.GA2412476@ax162/
+
+ arch/mips/kernel/genex.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+index be1b049d856f..ef27965f6ad9 100644
+--- a/arch/mips/kernel/genex.S
++++ b/arch/mips/kernel/genex.S
+@@ -146,10 +146,10 @@ r4k_wait_exit:
+ 	MFC0	k0, CP0_EPC
+ 	/* Subtract/add 2 to let the ISA bit propagate through the mask.  */
+ 	PTR_LA	k1, r4k_wait_insn - 2
+-	ori	k0, r4k_wait_idle_size - 2
++	ori	k0, %lo(r4k_wait_idle_size - 2)	/* %lo() for LLVM < 21 */
+ 	.set	noreorder
+ 	bne	k0, k1, \handler
+-	 PTR_ADDIU	k0, r4k_wait_exit - r4k_wait_insn + 2
++	 PTR_ADDIU	k0, %lo(r4k_wait_exit - r4k_wait_insn + 2) /* ditto */
+ 	.set	reorder
+ 	MTC0	k0, CP0_EPC
+ 	.set pop
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+-- 
+2.34.1
+
