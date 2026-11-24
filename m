@@ -1,101 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.180
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795530337;
-	b=l4YoJ9v4P9JB0po+pK9m/CTuag5+7QLDjEF0FMo1w18GtC3D7+6KQBDerP2NtpYf8JAL
-	 lIBkNHLWyYkI5sCBrtlaqxausgWC57UjdPQjkITS/gA131+iKDMDgDGhkl8CQMLe/rcwR
-	 lp0N3b9nfJGdVe8+w7cJo2Ncx1MPkvqUa8LffghRnItnQKN/sxxL1Ox5NqCCbAyfUcIrc
-	 ylV43mIYA/Np8bLScUq0TiIEIcZuTOr4TDlX79fcXTm8sbZLH/XAlA5+PnfrETOKgrcgC
-	 G7fHbsAWV2Y0QYBUvxpokJjzRVtoDhj5k46NbCTsi8bO+MwNqP7D5bIwfaZqv7NkWdQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795530337;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
-	b=aAF3csKZnyHpQYy22bEgKD105Ss6fan4YuxDqSEv1EoM9TcdC5tVeRDaAGQUJbX/vBUU
-	 umyw459Tn+B4Yi/PLXQaqaouCbm1LvUr7Jq+GFlr6B1K2BIR1AU2VH4dlpDzyplzjC84q
-	 muB0mRDeIE/yLinWhEzQE+FYTacV186gPTUk7rNrn6A6vej/l/7f+uwJpXEPOJjUIsuDw
-	 x41x+mSYLmD97toA4EccuSddHBhsIVfVKR1Nxh18T8yTxq1VOnTbLrtVYwpaqp/f7pXjl
-	 Vf1WisAgKULiY0EJgrBPbOzsG+fAFLaPe2WIBZ3P6gfO8ujb/GJL01UA0l4T64M2fUQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Iv2t9W8y;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.180
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795530481;
+	b=42HRF8Z3lLXAw6AnY4uMCiENO4gPgDvSi3qYdkxGGJnARLw0LxnJUBe2jAQZdKF8iIIg
+	 NXCzG6cZNU0mRK0UahsRoWZzkhaAiOBOyVaSZd1tObam3o4Dgk2VJw0mEAWnEy6PTnTS5
+	 zdgxKV+uSWP73ttYpCMqaTN7UJpZy3odqWTQhgk01DOcZWkqAzk+HXzsUtk06Ntvyy4xG
+	 O7gcys8eEQYCbW8S1cN4KdOFjQURl2C+xgAi4cwl8UPUHelgNwy+lYvszuNqR0oV5b8B8
+	 cAhUNEmpo3lWT2Hxuf43dpW32u1ZEDqHp0z8nsbAq0PsjB9XCjmM4oCI5c9uNK5kVvg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795530481;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=2e1f8mH50dVq3zUP41WlpUgQLkq7jx1cCFUDQDKor2E=;
+	b=tBiaKhpcGPDQSH/YwY69dIIXFd/ivilNTW5po3yVQWhmvCcb+N2DKjpQaYdrh3ryLPA2
+	 DNN2TthWOSPl5eCXO54JQ58bS6Q4kEQN7nqSttSKURMSru7jLrKFEnnMaWVSoZit1ZwR5
+	 TH0o+43R9c9xaKTnyxeIP8VYWqAmW8Tuox5gBTFX9nh0ZSUYtp3GZyUsecQo0JEl4odR5
+	 8+FaNG7i2f3rp7huoBuKJJvM+V6j4F0CkIkjy6WT5rKBuNzXgC+mPo/XYMGspx0PgYCj6
+	 gwv0NyQZcJc0wUfJKbmaHUoBO/2W/uZXj7Xm9BaZL0OENbsS1TizFori0veOeW4JPEQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=oss.qualcomm.com;
+	spf=pass smtp.mailfrom=oss.qualcomm.com;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=ehHEymiP;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=I5+JCqU9;
+	arc=none smtp.remote-ip=205.220.180.131
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EE8606A330
-	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 14:25:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38EE8606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7274A606A31E
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 14:28:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7274A606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Iv2t9W8y
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8b5a6f2f27fso1839760b3a.3
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 06:25:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795530336; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dTNziPQEMAb7YeiZ+a6F+OA7xEe9RV6RrQUI/kC4L5mZcWnq3Ha2A8g8G9c7uFVLvW
-         vQ15oUUzh+jU95tEXZ2cQY3h9383ALRYQois8VpwPYDSyD+36YbzFofE8za1Vkoaoftl
-         KHbmHNeU+4SvLzQKEhIZNgx8mv1i/hpUGO1c2RewKKeIXpTbqOz92zdk4NFOo5ajbrNi
-         XSUi6lBbLaoDpbCXGI++3vuf4L6ePOkarRxfqNMaW0gUmWCyL1qa25c8UzvdVKbapmf1
-         mHPcnIEjMlLmHKPf8Lvajm3OL4c53FwN3KqLNvF0re8fkq4bAJdwYqakCoyriLI+CGzP
-         2vxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
-        fh=qikLwWVAZjHj8mNYvFMdSJKsRTnMFabdRYB2z2lC9Js=;
-        b=IzqCFzcOKWIAUZfNg0QG3H6EhzQnZDYaPnHwomNv5hb20FO0vlsDXceqUomjvcDwQ3
-         CZdibiZr6REClx1w1b5hWbqpYOkPbLLe7Rm+KFM9/1hm6hFfpFhrvxC7wBAJCY2xOawx
-         lk2A28rU/NLf3zdTYVEqKaK5UCb2tGCv5zXYnDUQ+UzeQd9kN4jL3uxmDGwhwl+NdUUh
-         p9Rpwxp/jfp4bXOLFRWm2Uqh/BcZf3keDwcMI9YR1MQl7GqNcx7aeFQfJ+IQArc8k7Ke
-         0i6wLk/oj+KzkyK2gN17xZIwp5UeObCo2v3bwn7xtKv+BwdkubCc0HA0sZT3TM55nu75
-         CDDw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=ehHEymiP;
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=I5+JCqU9
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AOAua0f3299629
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 14:27:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	2e1f8mH50dVq3zUP41WlpUgQLkq7jx1cCFUDQDKor2E=; b=ehHEymiP2vHy9XnQ
+	ME9obw6CtHFbeMT2Aw/3n6M3lSRaUO5J5xly4qxrWUub6qa6o/aDmymIFsNuD6rT
+	644KKRGOjTuyAx+fISCxw5uJzuDgb3429BOIaPk5s8uvOdXZDPyIGf5v6I5yrSpS
+	eG9gVyRdOpcHf/yHojuxyBpiDDGpjCk5RAvPmX2bWeNF/QXJQ2UH/KPhZ0stBiD8
+	+Q/roXCceCYAKGJzSpktDc9qmshL8ojn/FiFneH7pSJax52Y4G01J7aA9SwOoIlG
+	s4sH3UhufW4ODC3m8EcaIln+HSmK1V1JJPL6M8nKYx8fIf1NBfGrXRsu4TGJXOla
+	Of08Xw==
+Received: from mail-yx1-f72.google.com (mail-yx1-f72.google.com [74.125.224.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4j4yy139jy-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 14:27:59 +0000 (GMT)
+Received: by mail-yx1-f72.google.com with SMTP id 956f58d0204a3-67de1a8a5e7so8076353d50.2
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 06:27:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795530336; x=1796135136; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
-        b=Iv2t9W8yhdEOX0uMyp0KOyJL9z5AJ+De0imhTG82PSaZNucMHerR3GvFjUetfW0wyT
-         rbLSIR37n1KVqOK5al2fpTfsj0YG3Amt0OHjETBJ5Y5m81PgWjA5Fxx0S+AAR0oztUfp
-         ZfFBrAUSlLmuP4utOZwLYG6oQev3CJlYI+Km/ZCxaSi7UkIE/RaDjM3tBaE1ribW10DB
-         ppb11PXybpjnenyoCG/QwxtJX45QSWhDJuMzS7Jg2PJ4ik7vxNXJijq8wSj4v7yUxp5e
-         cAOXKa4KqNujI+uy1kpbdobVHYPy1qwRrOX1uBvzIzgGJxnnPk+peUElX5HuKT6H/H8t
-         weiw==
+        d=oss.qualcomm.com; s=google; t=1795530479; x=1796135279; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2e1f8mH50dVq3zUP41WlpUgQLkq7jx1cCFUDQDKor2E=;
+        b=I5+JCqU9wqghPxPfN0bPIkwg3r+Se5fyXvu9sLAhn6g7lCitFS7mUzpbleClfOV5Wp
+         tNuurvJGoKbGMGJDrNjsapQDcqp4Amb4qVlLACv5FETki5vlLlY+3CNW6TBaSk+DZIbf
+         k6rh3Yt08yYxzXC1+dmMsdMeSjbVzGFTD8lfq85sHrI0uiod2ZXHlqD5gBZa32MXp6Dm
+         fxUfIgDCPsX/RvetIPAjgs1MDL7DwKaBH3uEp7UkzN4SlzU1gTjc7XISpYH1jv6sWUKc
+         NIuSXRoysV00PW28xAnub/21UbeWf9xAiUrJtIkNCZWRQKXwusDYJQcH6gAWn5k5mEZM
+         LK7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795530336; x=1796135136;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
-        b=JPzfPtcX4AtvLraL87a32QiWVADYZPw7g952+UCPiysCF3ohO8m7zTvA5Ui8HJ5pKh
-         B5Dt4/BDmZmdP8DfC1WWhi9qhRD9adc2TZAUNf18TREDl+VFeoA0U2aK3HU1+wItENRX
-         xIm8I3VinhoxmcDR6hA3Ts/qywqRoLK6uFenQzlw8tdcWcKBOeMnuBCWMclAlY4MM2nc
-         4rgxTCKYfXQ65MC56hYRpU3ikJ/AkIflPpU9B2OX5FO7j6CZX7IWRF7iEEZherU/bO8a
-         d+4e0WQ2+Ljm8hh8coN4SsYYKyHjW6hPT5BFAO7ZmeeMUQrvl2Jiaw/i7z3zdV2DS1dD
-         NAtA==
-X-Forwarded-Encrypted: i=1; AL+hErErSl5FYfRjeq4bbvhaJ0JuPKkcgEg+y3R65Eor7flWxuiUTdPqIP46EcknE6fnHzMnwryc@lists.linux.dev
-X-Gm-Message-State: APuU4Z/g2x6ktTc0JFVwZT7zbaQooGfYo84DnJZZY6KgICVLpisH48Dw
-	0JLuZv16uXfXHFYD0zB+1Iu4Zi/B80FKfp8VcS+V5Q5dFJkrQ7cUgR098rwH2HMato6+tzbQyXd
-	LUzwCIeCkBaLhDMbUQp0Fi+7atnKwgo8=
-X-Gm-Gg: AZFdTZdecHxfsmbO03Ex10ff5LuicqGapt5GGjF4fYdYBSCJijk4QI46KwVELWzhFwi
-	3dplyJpmixn1jSOw1/AjBqiFLC9HWuWjFG6T/ArD9EEGjtjSYRsXbkI+DBiplWfqbGgqRUKkOxc
-	hB03NpLGk7PvIBJM+wyNlSWv67Sn7D0QcV1rCuzF7HrEhZi2ZdTUN2kxyu7sgeldFfy5dTa59U3
-	NdT+hmJSqpXSzeuge0z9BLtwvapa8/f9UP3zs8mZZEOY6HsHkMfYQCN7mCsOVZ1z90dKvK3DIRT
-	qrROaq18v2eYjHuN5mmUOBXRTTUQY6RgwtU/W591JvD9TNaR+bOk3vHPI2fcRUNzERK6NOo9qWz
-	Gn5qNK/Ju8FCzlNXCzt7O1XTeMm2oQd5x/JIFB0QRg1Bwz/uMu6v09hjVvhsZRlt8PLCrD/2kn0
-	86SBTEEQmBzRddC1Yro4UVP8BmRPdDVUKLmVdCmg==
-X-Received: by 2002:a05:6a00:aa05:b0:8ac:3a71:38a6 with SMTP id
- d2e1a72fcca58-8c87d51b350mr14612611b3a.52.1795530336387; Tue, 24 Nov 2026
- 06:25:36 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795530479; x=1796135279;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2e1f8mH50dVq3zUP41WlpUgQLkq7jx1cCFUDQDKor2E=;
+        b=euqz9DWITNenBTcsS+n5RBrFbZUTZc4NKDfHqAvweiTd7QWhtCHNagyDrGSPlHsmGa
+         ga4yIbV0Ia+TXXh4Eavw/uGifFEqKzBjM8NPJ2pJCb1YGpo46A42YEWNJlI+CM4PfB+i
+         HzV4sp9UPsCHTp6fIW/pJ+Tpxr49eW15ofEUpTYiyviKoXhlsu+zPem4z8N/5htbQAMe
+         Cd8gXSuFdkyNlnz5RYGJu/rKop6XvFDNVblapBahQabgRjT1mn7KvxKMmyPkmI4H82LU
+         zRwsTHrEBascKMMAY0wsu0cUoxusu7Bx5jjqTwgWdKTKCp2IWyHwO67wJjd8teLwoPsI
+         ffNw==
+X-Forwarded-Encrypted: i=1; AL+hErHyAPQ5qQg7VrOeFsD9lhBfh8n4FKasoq9NFnPyS6N6DN2xelBwi0CpvKhdyKVSGde3hPJk@lists.linux.dev
+X-Gm-Message-State: APuU4Z+W6jQjA11TdnMtjGFntmw5N8qxdUkw7izvA5fx0PHa8DCs1jCW
+	8bs56nBxZ32SYBHScKGm2VXk5BnNg+z75kPA4AbZFfqyeASp0g0kJkU2XjPyB6hIwbNmyridSsN
+	K0g4dOsCI9xqcaHJ2v19vF1acbiLOkUEQBzNX+u4tSPhYUJidrBuzxXgW
+X-Gm-Gg: AZFdTZfhX2I7LgOd6SrQQlMojZAiYOZ/yEQEeUcfkdbOt/3LezQ3Kn8foZUl6yLdYCS
+	AUq88I0CDdmd7TMAKckO5ndtKmJSlgSiqHkP88/cmOoe2ogqkKrc/jtDMGfgQkKt9AYSdxs8EXY
+	sWnq3/KL3ubo0iSO2840ggFt5m0Xax6mVlX6M4bA4aPCqQxGMp9dswxTP6jsdY4ZEwnyc8Ej55b
+	O9LZPfcyMQhTbWXrjRCtOG5d1w5sjlJqXegCft6BO3h8hGKiWOmP3MPwzlaDT/LzkPPtwzBKdfQ
+	uFLzozhYDiVxgqjmlgAYq+0RJLIf5FHcKvpyqeCD8a+iQzhyvgqWq7snE/uPSyShB+xC6LaLk1m
+	+HvzU2kCUs86aHdeL1qDcQYfYPDB0AuRyJ37HFZcdDgzS8hoz3AwvERoC9TTnhYNyleTrBu5Hkh
+	pxzcW6hHhZnBo225+5m8yAzeHKmtXEusndEg==
+X-Received: by 2002:a05:690e:801:10b0:67d:bbf9:11d4 with SMTP id 956f58d0204a3-67df44b7404mr4067708d50.78.1795530478732;
+        Tue, 24 Nov 2026 06:27:58 -0800 (PST)
+X-Received: by 2002:a05:690e:801:10b0:67d:bbf9:11d4 with SMTP id 956f58d0204a3-67df44b7404mr4067679d50.78.1795530478139;
+        Tue, 24 Nov 2026 06:27:58 -0800 (PST)
+Received: from [10.227.105.111] (i-global254.qualcomm.com. [199.106.103.254])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67df33554b5sm7035521d50.13.2026.11.24.06.27.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 06:27:57 -0800 (PST)
+Message-ID: <748d38da-fb00-4f76-9b58-87ad0fe9b770@oss.qualcomm.com>
+Date: Tue, 24 Nov 2026 06:27:53 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -105,172 +114,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261119170342.1508789-1-irogers@google.com>
-In-Reply-To: <20261119170342.1508789-1-irogers@google.com>
-From: Xin Long <lucien.xin@gmail.com>
-Date: Tue, 24 Nov 2026 09:25:24 -0500
-X-Gm-Features: Aa3M54q7cf8dGtPcbVzPYANJ8EMqW3ekx7jrSJiP6UuKtxdr80Wu8XceJYu_RHk
-Message-ID: <CADvbK_fM=xmwthLnz=j7YqRghc6ncDo8ESVYgWYeR0t_Byubhg@mail.gmail.com>
-Subject: Re: [PATCH net] sctp: initialize new_value in custom proc_dointvec
- sysctl handlers
-To: Ian Rogers <irogers@google.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Elkin Cruz <elkin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH ath-next v3 01/15] dt-bindings: net: wireless: add ath12k
+ wifi device QCN9575
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Madhavan Ganesan <madhavan.ganesan@oss.qualcomm.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Jeff Johnson <jjohnson@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-wireless@vger.kernel.org,
+        devicetree@vger.kernel.org, ath12k@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20261118-wifi8_qcn9575_bringup-v3-0-9875d2a3953f@oss.qualcomm.com>
+ <20261118-wifi8_qcn9575_bringup-v3-1-9875d2a3953f@oss.qualcomm.com>
+ <20261121-lobster-of-unearthly-variation-e75ea9@quoll>
+ <f2f50403-fa42-4ee2-bb22-c78309590196@oss.qualcomm.com>
+ <f513c601-ef8b-4524-9c56-d3d121c8df2a@kernel.org>
+From: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <f513c601-ef8b-4524-9c56-d3d121c8df2a@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: SmzQgau5n-LiBa0WjmLJasKGnqtKpndH
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA1NiBTYWx0ZWRfX5lh6zJDCm59T
+ heonGMiLQnNn4WYaFb8FWT7f+b2qfKClm+QuNhL3FM56eoZK+6807hOTVIdCvaKGm2ifwWMzXef
+ PKQRMa9lq7sQ3LwiXw1Ik4bU/surabU=
+X-Authority-Analysis: v=2.4 cv=JYspPkKV c=1 sm=1 tr=0 ts=6b059eef cx=c_pps
+ a=VEzVgl358Dq0xwHDEbsOzA==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
+ a=UQl-3I4BsUNNjRoNwgMA:9 a=QEXdDO2ut3YA:10 a=uujmmnXaIg8lM0-o0HFK:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA1NiBTYWx0ZWRfXx2LR+daoDlGL
+ Vj2R0QmceVWYXz/d9Jleh438IX0eEFjHrJe5wK1P+zLD70KCLZ1aYMi14WP8E3oGZqK7E+mdU79
+ gtsaqz8XGNMXj+IhRhyuHvba8qhj5gSbwazVu3RGC4MHbFCptBjTM5AS/4mUCRzuY54W5ZseGtB
+ X028rje242veOuLKo8eo9FgcG/O83rkXrIIWjJQA8CDIUIE7GdZQfM+SxUgtV2gaAQDpOrWpIVZ
+ rke7NTB5mwJfc1mERTyuIU6FuUViRiTbHTsD/QVAr4CIxh0jScfsMtIytpDJzXM3Rqf2yd0ZQMG
+ ynyBOh9IuyrKucsnI0RQ3auBTo/TylE9bT+dehsWUfmn9FNrNGjzRkhlqAe+2z7BGgnkeHxc654
+ G0aHBSlH4Ed2LTUNcxODdARnKjAobh5GV8/1SUBZCyz1/5Sn3rUCqXXQm7JDq1+dHSX1XAhX2Le
+ qckNV6TCrbuW5yOcPlg==
+X-Proofpoint-GUID: SmzQgau5n-LiBa0WjmLJasKGnqtKpndH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-24_02,2026-11-23_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 adultscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611240056
 
-On Thu, Nov 19, 2026 at 12:03=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
->
-> proc_sctp_do_rto_min(), proc_sctp_do_rto_max(), proc_sctp_do_auth(),
-> proc_sctp_do_udp_port(), and proc_sctp_do_probe_interval() point
-> tbl.data at an uninitialized stack variable new_value on writes before
-> calling proc_dointvec().
->
-> proc_dointvec() can return 0 without writing to tbl.data, for example on
-> a zero-length write (*lenp =3D=3D 0) or on a write at a non-zero file off=
-set
-> ignored by proc_first_pos_non_zero_ignore() (such as pwrite(fd, "1\n",
-> 2, 1) or a split write where the trailing newline is written separately).
->
-> When that happens:
-> - proc_sctp_do_auth() unconditionally stores the uninitialized stack int
->   into net->sctp.auth_enable and sctp_sk(sk)->ep->auth_enable, both
->   corrupting SCTP authentication state and leaking 4 bytes of kernel
->   stack memory back on subsequent sysctl reads.
-> - proc_sctp_do_rto_min(), proc_sctp_do_rto_max(),
->   proc_sctp_do_udp_port(), and proc_sctp_do_probe_interval() validate
->   the uninitialized value and overwrite the netns setting whenever stack
->   bytes happen to fall within range.
-> - proc_sctp_do_udp_port() also stops and restarts the UDP encapsulation
->   socket even when the port number did not change.
->
-> Initialize new_value to the current netns setting before calling
-> proc_dointvec() (matching proc_dobool()), and skip tearing down and
-> restarting the UDP encapsulation socket in proc_sctp_do_udp_port() when
-> new_value equals net->sctp.udp_port.
->
-> Found by enabling Clang's -Wconditional-uninitialized on an x86_64
-> allyesconfig build, with AI coding assistant help to audit the warning
-> and prepare the fix. Build-tested with Clang; not runtime-tested.
->
-> Fixes: 4f3fdf3bc59c ("sctp: add check rto_min and rto_max in sysctl")
-> Fixes: b14878ccb7fa ("net: sctp: cache auth_enable per endpoint")
-> Fixes: 046c052b475e ("sctp: enable udp tunneling socks")
-> Fixes: d1e462a7a5f3 ("sctp: add probe_interval in sysctl and sock/asoc/tr=
-ansport")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  net/sctp/sysctl.c | 39 +++++++++++++++++++++++----------------
->  1 file changed, 23 insertions(+), 16 deletions(-)
->
-> diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-> index 2b94c211427d..0c33f05fa532 100644
-> --- a/net/sctp/sysctl.c
-> +++ b/net/sctp/sysctl.c
-> @@ -425,8 +425,9 @@ static int proc_sctp_do_rto_min(const struct ctl_tabl=
-e *ctl, int write,
->         struct net *net =3D container_of(ctl->data, struct net, sctp.rto_=
-min);
->         unsigned int min =3D *(unsigned int *) ctl->extra1;
->         unsigned int max =3D *(unsigned int *) ctl->extra2;
-> +       int new_value =3D net->sctp.rto_min;
->         struct ctl_table tbl;
-> -       int ret, new_value;
-> +       int ret;
->
->         memset(&tbl, 0, sizeof(struct ctl_table));
->         tbl.maxlen =3D sizeof(unsigned int);
-> @@ -453,8 +454,9 @@ static int proc_sctp_do_rto_max(const struct ctl_tabl=
-e *ctl, int write,
->         struct net *net =3D container_of(ctl->data, struct net, sctp.rto_=
-max);
->         unsigned int min =3D *(unsigned int *) ctl->extra1;
->         unsigned int max =3D *(unsigned int *) ctl->extra2;
-> +       int new_value =3D net->sctp.rto_max;
->         struct ctl_table tbl;
-> -       int ret, new_value;
-> +       int ret;
->
->         memset(&tbl, 0, sizeof(struct ctl_table));
->         tbl.maxlen =3D sizeof(unsigned int);
-> @@ -489,8 +491,9 @@ static int proc_sctp_do_auth(const struct ctl_table *=
-ctl, int write,
->                              void *buffer, size_t *lenp, loff_t *ppos)
->  {
->         struct net *net =3D container_of(ctl->data, struct net, sctp.auth=
-_enable);
-> +       int new_value =3D net->sctp.auth_enable;
->         struct ctl_table tbl;
-> -       int new_value, ret;
-> +       int ret;
->
->         memset(&tbl, 0, sizeof(struct ctl_table));
->         tbl.maxlen =3D sizeof(unsigned int);
-> @@ -522,8 +525,9 @@ static int proc_sctp_do_udp_port(const struct ctl_tab=
-le *ctl, int write,
->         struct net *net =3D container_of(ctl->data, struct net, sctp.udp_=
-port);
->         unsigned int min =3D *(unsigned int *)ctl->extra1;
->         unsigned int max =3D *(unsigned int *)ctl->extra2;
-> +       int new_value =3D net->sctp.udp_port;
->         struct ctl_table tbl;
-> -       int ret, new_value;
-> +       int ret;
->
->         memset(&tbl, 0, sizeof(struct ctl_table));
->         tbl.maxlen =3D sizeof(unsigned int);
-> @@ -541,18 +545,20 @@ static int proc_sctp_do_udp_port(const struct ctl_t=
-able *ctl, int write,
->                         return -EINVAL;
->
->                 mutex_lock(&sctp_sysctl_mutex);
-> -               net->sctp.udp_port =3D new_value;
-> -               sctp_udp_sock_stop(net);
-> -               if (new_value) {
-> -                       ret =3D sctp_udp_sock_start(net);
-> -                       if (ret)
-> -                               net->sctp.udp_port =3D 0;
-> +               if (new_value !=3D net->sctp.udp_port) {
-> +                       net->sctp.udp_port =3D new_value;
-> +                       sctp_udp_sock_stop(net);
-> +                       if (new_value) {
-> +                               ret =3D sctp_udp_sock_start(net);
-> +                               if (ret)
-> +                                       net->sctp.udp_port =3D 0;
-> +                       }
-> +
-> +                       /* Update the value in the control socket */
-> +                       lock_sock(sk);
-> +                       sctp_sk(sk)->udp_port =3D htons(net->sctp.udp_por=
-t);
-> +                       release_sock(sk);
->                 }
-> -
-> -               /* Update the value in the control socket */
-> -               lock_sock(sk);
-> -               sctp_sk(sk)->udp_port =3D htons(net->sctp.udp_port);
-> -               release_sock(sk);
->                 mutex_unlock(&sctp_sysctl_mutex);
->         }
->
-> @@ -564,8 +570,9 @@ static int proc_sctp_do_probe_interval(const struct c=
-tl_table *ctl, int write,
->  {
->         struct net *net =3D container_of(ctl->data, struct net,
->                                        sctp.probe_interval);
-> +       int new_value =3D net->sctp.probe_interval;
->         struct ctl_table tbl;
-> -       int ret, new_value;
-> +       int ret;
->
->         memset(&tbl, 0, sizeof(struct ctl_table));
->         tbl.maxlen =3D sizeof(unsigned int);
-> --
-> 2.56.1.708.g77570a6a1d-goog
->
+On 11/23/2026 7:59 AM, Krzysztof Kozlowski wrote:
+> On 23/11/2026 16:54, Jeff Johnson wrote:
+>> Specifically for the DT issue, the original version of this series vetted
+>> internally did have a patch to add the device in the PCI registration table,
+>> but it was decided to drop it from this patchset when posting to public. We
+>> can also drop the DT patch until the point the PCI registration comes.
+> 
+> Still does not explain why do we want bindings without users...
+Concur, and I've asked him to drop the DT change until the series that
+introduces the user.
 
-Acked-by: Xin Long <lucien.xin@gmail.com>
+/jeff
