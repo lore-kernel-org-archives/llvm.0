@@ -1,123 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795517334;
-	b=cEEHG6jAzDc7Nlm43qiy7Dw2z8q/fbB7hNWlMUI0YWJSRjUdcDNFh1s7uvekHoqHClIL
-	 XFBDOuxuWMY8dBZqq7vVaSkMwKVQ5DuMhmtB/8zy53J1Xl3LxkExl+yS1JzCb0ODa5uhu
-	 ZePO0hPEwEWn/UReiqEf99lJWkSMsfIxrJw08Tz2IcHhWRTdAD30zMl8B9c0FnQR9LdoQ
-	 5CFuhn8Q8gQRc77A/zInycLx0+ahM+5Z3s/28MkxwdIdDrchwSJtK8jc3E3E/XatAeyG1
-	 Ge0jiICVWdHphZzIhPp7rGAKTLrBoRFPwg4B4oLNtTIupD46p4rpUB16FUdv8d1v/QQ==
+	t=1795522825;
+	b=D5jfuT+9D5LaBXUOkYWI3F0weQBk69Ptr/MYHV5VBhcwt0T6wdO6PZcs43oQg6cHLJuz
+	 fU5TtyWmS8BXp4Bh3oCyKgLLYCFHTf4gPa3LBXPZArGE/WACu28V+prHlpSPiVvAtGLFB
+	 jMarxWjkMlO58hLzSoRtTBbi/OMfW4Zy1y/oIf4PnS7RDP0woEWyidSLmyluWtn3i2xGY
+	 /rKjjyFtegEt5sb3ox6sedF5mA/r13OczPt7WuBOjbnJ6aPm3U44RmXMToXgKstU+Fbxv
+	 j9IJCt+p5qPNBLsLDP2BAQqnPPaQpSnUad21VQqfk8RZBJoY62PpFj1r2WjgWS+vbzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795517334;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding;
-	bh=BQWm+RaJP4cvkyTJMqTUs+AJFoZOLPdvH4gKpxS4kaE=;
-	b=k/gDTDPLDHWvlP2SXBw3wRR9asHZdB/l4WezrBOPO1Og5TykdJqS+2C9eEhvaUgfc2CY
-	 7tUkBxVHMuqTw4ndBAqUEGoN0/D2TTpBG4Ozx7n7/KdEoQBfWRnklJmHTWjbRHa9hI3Nh
-	 seCuWb5OF9gGbyoz+1R4ow+HjS2TvTer9Cl0r6G44/rBDe5OfVt/SPlC52SKhi+TVWl98
-	 38xdhTF41v4XC28agw0hicLpRE5BV9ZMsZYHbFAsMmHng+//2h20JWpG58Rv8w/cIsmDW
-	 GbmCVrCtjRYkcCDG2tQtFdOeYH2nKjPAVxCAAkVUXg4mD2svWFGlWpb34ZDvKHbNFfw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795522825;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=jRmyV/mgccMwa5dA9dJDObsBJXz4w6vmH9HA/EQIW8s=;
+	b=iuds5o/ySZrN55voNlPBWJi8PcwTgjUfHapOB0xPg0Pway1qR+mkpOsh2fjsqXtRI8Ef
+	 4sMpJf+m59PrD8YGA0Yqa11kBerrRP/Vql59qoaXKesO9N0I3A8C1XBJPjtyYBSr+jIvg
+	 jfYrhKq8AmvGrY0eSkwHKG4LAK6Z0XKRt6GJYtkqwMon/qGhRfuf1riqkyIDmER6WEQT5
+	 o6mmvZtPM0JseXPTKsRZ/iKL0xsgn0mDNJi0Lm3mYvDwQHlSRXq+oUs71vQvsriDrZ/qF
+	 27GWNDq5WBbv+TC2LIFJsF4cfmHBpScKVIhwcaivVHF0SFfgvj2zFItRv05T/iHZp2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xbcdxtAW;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RGVzLAe7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7AF606A322
-	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 10:48:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C7AF606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5003606A322;
+	Tue, 24 Nov 2026 12:20:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xbcdxtAW
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4bb64ef5a00so34511715e9.3
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 02:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795517332; x=1796122132; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BQWm+RaJP4cvkyTJMqTUs+AJFoZOLPdvH4gKpxS4kaE=;
-        b=xbcdxtAW69iK/psAWXVzLMvOnF5APlI0AFCAsbNANleUbe42y0R6FF56MBpJnmZPba
-         lHu/4zNTqro5EeMWVfsPT49I6oIIcMvyngB6D+t5VHIZSaJBPwThBdN3di4ZYckY/jrL
-         rYlrUQ3pgKKvxEEgAJZjVmSXoO+W77fQ5XqcjiGaT0uz56pNPPHSEF7UCdNtNTmjl+9c
-         R/p2gEacop2YWKJvXuh84f+OBlVbIWlJCtmElZsodOeuGgr7bmP5QVCPA2wtP6i2ty/M
-         CrGa9+rqKRp6M81h2txsfxg4S36awWdLo+VCCbgc6GZR2YE941D5h/r/Cj7w4d3yUwey
-         GMsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795517332; x=1796122132;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=BQWm+RaJP4cvkyTJMqTUs+AJFoZOLPdvH4gKpxS4kaE=;
-        b=zN0CuwpBck9RtSel6nAJtxfhkvybl0JqKob18xotkRaLLet7jcqMB2ZbzUbZMa6z70
-         LyYdtF7EYdYsRUWSP2Cqa72E/W59snGkEjhoYwJuSaO4E8GF++yuTxa983A9b1POsol/
-         5nqssMBb5fQXIT/jLaSYaB74Dyr/2Rka/1Ds21iHYP9eIrowUZ1JOWdQc/oW/t3onG90
-         iJWae2c5N/mdVn8CY+VjkXZXEE5BmKUeZ8+WuPaNFLDNIKyeI5DbuhIe5giliy96OPaP
-         9z+wqgulod484CPXTnEao9W4cIVWoH4DwSURSvejFcoN/sKlXtH758OHZIWDyg4yKmD7
-         t9Ow==
-X-Forwarded-Encrypted: i=1; AL+hErFzjxgq2beil48+/MFAxAcppok+biefAugEdZ2poxUGD1Le36jV6G8PJ55g7jo9hKiz2448@lists.linux.dev
-X-Gm-Message-State: APuU4Z/cFV4VsROJvlMKeJMBk5gpU0ONIc1lJk4hd06JgwgOn6SgnKfy
-	lC1h4QzlsvKaByGVzJ3y+Gk9frK8fqjd3ORO8sruzmNkYg0AiDDDi4Ck
-X-Gm-Gg: AZFdTZd0nCYvjcKLWdJIIuYMXNDentw/XQMl++xeaeqc359VCcx0ydSwp0PDf7yNCWY
-	sRcuKLUdGE5+Fekk2EZI5JFJ8o9UJWMJAR5JhyqF/8zKnAM9GNwEm3CmbIDUnLKb0n2s7B+Zlt7
-	n+CYQKRkSQfswKInuIqthGAZ3v9txrJPF1aDAVSR0c6VtVgBaJ8PEX/ShgfJAhzPXZXUUy/vrfk
-	8VI1+81uve1IC6bnjSq+75yuY5XMJ2OSIvSxUyRax9vTgqpiBhTkI6b61t3Gtp2ZKz0N+Y+Yebs
-	GQ/D9kms8eK8puEprQDGpmBPc3NkSA4zm95APnLMXjox8T6DZC7AqNfN8cnOJAEABdZa+OUwbzh
-	fGNK34+9CyUxhr2oZ2Bw9IwUzOgcz1ikt2Qob7m4oaCHBXxjkG6E5wp0jpG2Z/EciU9c1Iq1iRZ
-	dtd6Nv4IPi+BCm+oVuyUFYcYpdCCzV2OD9sO3u8zVmZFQLKz9iNTlJpULlHI92wSvgc2ULGeWXW
-	tXzEgVq+4IFxqW8gpnUj+WP4szfkwZ2Vnk8KHWFTORQ4XwZQ54tfiGaxa/MIPclLE7L+TP2+cIR
-	ZTlkx5vPfSDNaV2Ikuw820TKJnedlEmPzg==
-X-Received: by 2002:a05:600c:4f4e:b0:4bb:6c71:b268 with SMTP id 5b1f17b1804b1-4bb8882672fmr303322955e9.6.1795517331573;
-        Tue, 24 Nov 2026 02:48:51 -0800 (PST)
-Received: from ArchOarora ([2001:19f0:6c01:2c43:5400:5ff:fef6:1b30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884b7515sm585521185e9.13.2026.11.24.02.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 02:48:49 -0800 (PST)
-From: Oarora Etimis <oaroraetimis@gmail.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	jose.exposito89@gmail.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Lucas De Marchi <demarchi@kernel.org>,
-	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	sebastian.wick@redhat.com,
-	victoria@system76.com,
-	thomas.petazzoni@bootlin.com,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 05/43] drm/blend: Get a rotation name from its bitfield
-Date: Tue, 24 Nov 2026 11:48:33 +0100
-Message-ID: <awVrWZkluWav6Jg9@Oarora>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261120-vkms-all-config-v6-5-78ace90f4fc1@bootlin.com>
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-5-78ace90f4fc1@bootlin.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RGVzLAe7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CACC1F000D0;
+	Tue, 24 Nov 2026 12:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795522824;
+	bh=jRmyV/mgccMwa5dA9dJDObsBJXz4w6vmH9HA/EQIW8s=;
+	h=From:Subject:Date:To:Cc;
+	b=RGVzLAe7JYRwzPM6fbg+qrWGGBotlHhJgrMb5JBrqTZsNu5Zokba0ewrRkXvc+5qS
+	 z20oAP/FiG1igDusybCgNhFpBNgOjOvI5fV7uv0LUGqmbsmQLZ0e2IMOgpsgAyIQHJ
+	 8ogvhlfq+nrB/W3SYjFHaG89U9P6kEGvn6PHr5G7fMV2AEp0n5X3ujmdJQJFZSwZhB
+	 XCFEeyvmETXSh1dSQXeVimTWIU/E2LckYhgrp1YyXD3IZq5OdJWqg2zKASm6G0ZeGh
+	 0Xaouda7S9cnz23uRbkq6kqaqHiVFOXi/SdJt54c0RTrGznKSqJ7REZocClg0SDJsF
+	 vJyEKlfqswo2g==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Subject: [PATCH v6 0/7] kbuild: significantly speed up kernel builds
+Date: Tue, 24 Nov 2026 12:20:10 +0000
+Message-Id: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -127,113 +53,499 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/2XQ3W7CMAwF4Fepco2RnaS/V7zHxEWauJANKEvaa
+ BPqu0+l2sTaS0v+jq3zEJGD5yia7CECJx99fxNNVuwyYc/mdmLwTjSZkCgLrFFDO/qLg3hnduM
+ dZM5EBrFVDsUuE/fAnf965r0dlzmO7TvbYQ6ZN84+Dn34fh5MNO/9Zler7ESAkDtLxiIVpXSHD
+ w43vuz7cBJzeJIvnNavJQkIqq6oZJu7VqoNV6+8XHMFCDXbTlOhuk4VG65fuFRrrgGhVCSrCmu
+ jjd7w/I8TbXpNOSBgVyBVLVfO8D8+Lc0G/hx99MNSt2hNZLD99eqHJkvlXkOwJI7T9ANwLVI95
+ QEAAA==
+X-Change-ID: 20260904-build-speedup-25e11a00b3d0
+To: Linus Torvalds <torvalds@linux-foundation.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Geert Uytterhoeven <geert@linux-m68k.org>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Nicolas Schier <n.schier@fritz.com>, Kees Cook <kees@kernel.org>
+Cc: ljs@kernel.org, linux-kbuild@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
+ rust-for-linux@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=21894; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=GSDCYQ1A5TOphcMSv9H3NNiGmykp8rl2SBzBm1wAhTs=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJZG/55Cj4paN7kqBJ9pipwqY9nl3lc+fbIFE/f/EPX5
+ 13+KKjcUcrCIMbFICumyPL8i/j+IJGweZ0X/N1g5rAygQxh4OIUgImUWTAyPPwS4jV3/5lsc5tU
+ O1WLsP9rWXuW2zw6msz3bIZa/CqTF4wM03JXn/qz9uU3jlMbhF4xVBkpiv3YfjTP9KfoeTZXxRo
+ GbgA=
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On Fri, Nov 20, 2026 at 06:58:47PM +0100, Louis Chauvet wrote:
-> Extract the rotation/reflection name table and expose the
-> DRM_ROTATION_FMT()/DRM_ROTATION_FMT_ARGS() helpers to print a
-> human-readable rotation mask.
-> 
-> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
-> ---
->  drivers/gpu/drm/drm_blend.c | 19 ++++++++++---------
->  include/drm/drm_blend.h     | 34 ++++++++++++++++++++++++++++++++++
->  2 files changed, 44 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_blend.c b/drivers/gpu/drm/drm_blend.c
-> index d17ae964fb21..b62f1db9c311 100644
-> --- a/drivers/gpu/drm/drm_blend.c
-> +++ b/drivers/gpu/drm/drm_blend.c
-> @@ -256,6 +256,15 @@ int drm_plane_create_alpha_property(struct drm_plane *plane)
->  }
->  EXPORT_SYMBOL(drm_plane_create_alpha_property);
->  
-> +static const struct drm_prop_enum_list rotation_props[] = {
-> +	{ __builtin_ffs(DRM_MODE_ROTATE_0) - 1,   "rotate-0" },
-> +	{ __builtin_ffs(DRM_MODE_ROTATE_90) - 1,  "rotate-90" },
-> +	{ __builtin_ffs(DRM_MODE_ROTATE_180) - 1, "rotate-180" },
-> +	{ __builtin_ffs(DRM_MODE_ROTATE_270) - 1, "rotate-270" },
-> +	{ __builtin_ffs(DRM_MODE_REFLECT_X) - 1,  "reflect-x" },
-> +	{ __builtin_ffs(DRM_MODE_REFLECT_Y) - 1,  "reflect-y" },
-> +};
-> +
->  /**
->   * drm_plane_create_rotation_property - create a new rotation property
->   * @plane: drm plane
-> @@ -294,14 +303,6 @@ int drm_plane_create_rotation_property(struct drm_plane *plane,
->  				       unsigned int rotation,
->  				       unsigned int supported_rotations)
->  {
-> -	static const struct drm_prop_enum_list props[] = {
-> -		{ __builtin_ffs(DRM_MODE_ROTATE_0) - 1,   "rotate-0" },
-> -		{ __builtin_ffs(DRM_MODE_ROTATE_90) - 1,  "rotate-90" },
-> -		{ __builtin_ffs(DRM_MODE_ROTATE_180) - 1, "rotate-180" },
-> -		{ __builtin_ffs(DRM_MODE_ROTATE_270) - 1, "rotate-270" },
-> -		{ __builtin_ffs(DRM_MODE_REFLECT_X) - 1,  "reflect-x" },
-> -		{ __builtin_ffs(DRM_MODE_REFLECT_Y) - 1,  "reflect-y" },
-> -	};
->  	struct drm_property *prop;
->  
->  	WARN_ON((supported_rotations & DRM_MODE_ROTATE_MASK) == 0);
-> @@ -309,7 +310,7 @@ int drm_plane_create_rotation_property(struct drm_plane *plane,
->  	WARN_ON(rotation & ~supported_rotations);
->  
->  	prop = drm_property_create_bitmask(plane->dev, 0, "rotation",
-> -					   props, ARRAY_SIZE(props),
-> +					   rotation_props, ARRAY_SIZE(rotation_props),
->  					   supported_rotations);
->  	if (!prop)
->  		return -ENOMEM;
-> diff --git a/include/drm/drm_blend.h b/include/drm/drm_blend.h
-> index bebbb77a8f21..f000b10a16e7 100644
-> --- a/include/drm/drm_blend.h
-> +++ b/include/drm/drm_blend.h
-> @@ -43,6 +43,40 @@ static inline bool drm_rotation_90_or_270(unsigned int rotation)
->  
->  #define DRM_BLEND_ALPHA_OPAQUE		0xffff
->  
-> +/**
-> + * DRM_ROTATION_FMT - printf format string describing a rotation bitmask
-> + *
-> + * To be used together with DRM_ROTATION_FMT_ARGS(), e.g.:
-> + *
-> + *	seq_printf(m, "rotation=" DRM_ROTATION_FMT "\n",
-> + *		   DRM_ROTATION_FMT_ARGS(state->rotation));
-> + *
-> + * The result names every set bit, separated by single spaces, and ends
-> + * with the raw value in parentheses, e.g.:
-> + *
-> + *	rotate-90 reflect-x (0x00000012)
-> + *
-> + * The trailing raw value ensures the output is never empty and never
-> + * ends with a space, even when no bit is set.
-> + */
-> +#define DRM_ROTATION_FMT "%s%s%s%s%s%s(0x%08x)"
-> +
-> +/**
-> + * DRM_ROTATION_FMT_ARGS - printf arguments for DRM_ROTATION_FMT
-> + * @rot: rotation bitmask (DRM_MODE_ROTATE_* | DRM_MODE_REFLECT_*)
-> + *
-> + * Evaluates @rot several times: only pass a variable or an expression
-> + * without side effects.
-> + */
-> +#define DRM_ROTATION_FMT_ARGS(rot) \
-> +	((rot) & DRM_MODE_ROTATE_0)   ? "rotate-0 "   : "", \
-> +	((rot) & DRM_MODE_ROTATE_90)  ? "rotate-90 "  : "", \
-> +	((rot) & DRM_MODE_ROTATE_180) ? "rotate-180 " : "", \
-> +	((rot) & DRM_MODE_ROTATE_270) ? "rotate-270 " : "", \
-> +	((rot) & DRM_MODE_REFLECT_X)  ? "reflect-x "  : "", \
-> +	((rot) & DRM_MODE_REFLECT_Y)  ? "reflect-y "  : "", \
-> +	(rot)
-> +
->  int drm_plane_create_alpha_property(struct drm_plane *plane);
->  int drm_plane_create_rotation_property(struct drm_plane *plane,
->  				       unsigned int rotation,
-> 
-> -- 
-> 2.56.0
->
+A typical kernel build consists of a frustratingly large amount of time
+spent stuck in single-threaded bottlenecks.
 
-Reviewed-by: Oarora Etimis <oaroraetimis@gmail.com>
+It turns out that there's a lot we can do about this and doing so
+significantly impacts kernel build times.
+
+This series makes allmodconfig builds up to 36% faster, incremental builds
+up to ~70% faster, and noop builds up to ~90% faster.
+
+Builds are faster across the board on every device I tested.
+
+Machines used for perf testing:
+
+* Threadripper -   x86, AMD Threadripper 9980X, 64 cores, 128 threads
+* EPYC         -   x86, 2 socket EPYC 9754, 256 cores, 512 threads
+* M2           - arm64, 2022 M2 macbook pro, 8 cores, 8 threads
+                        (4 perf, 4 efficiency)
+
+Cutting to the chase:
+
+		== IMPORTANT NOTE on dependencies/build configuration ==
+
+Performance numbers are based on a build which:
+
+* Is based on v7.4-rc1, which contains the first 11 patches of v4 (see
+  the Patches section).
+* Was measured with these series applied (neither are required, but do
+  shift the numbers by a few seconds):
+	https://lore.kernel.org/linux-modules/20260731-module_ver_remove-v2-0-c9163858f382@linuxfoundation.org/
+	https://lore.kernel.org/all/cover.1788899473.git.jpoimboe@kernel.org/
+* Includes objtool changes from v5 (or equivalent pending rewrites).
+* Runs `make KRUSTFLAGS=-Zthreads=8 -j $(nproc) ...`.
+* Runs with the pigz tool installed locally.
+
+		== allmodconfig FULL build ==
+
+                        before    after     delta
+                      ----------------------------------
+Threadripper, gcc       344.2s   278.6s    -65.6s (-19%)
+Threadripper, clang     342.6s   266.8s    -75.8s (-22%)
+EPYC, gcc               188.0s   121.1s    -66.9s (-36%)
+EPYC, clang             259.5s   184.6s    -74.9s (-29%)
+
+		== allmodconfig INCREMENTAL build ==
+
+                        before    after     delta
+                      ----------------------------------
+Threadripper, gcc        40.1s    15.4s    -24.7s (-62%)
+Threadripper, clang      40.3s    15.6s    -24.8s (-61%)
+EPYC, gcc                70.9s    24.3s    -46.6s (-66%)
+EPYC, clang              70.4s    24.3s    -46.1s (-65%)
+
+		== allmodconfig NO-OP build ==
+
+                        before    after     delta
+                      ----------------------------------
+Threadripper, gcc        15.3s     1.4s    -13.9s (-91%)
+Threadripper, clang      16.2s     1.8s    -14.4s (-89%)
+EPYC, gcc                30.6s     1.5s    -29.1s (-95%)
+EPYC, clang              32.3s     2.2s    -30.1s (-93%)
+
+		== defconfig FULL build ==
+
+                        before    after     delta
+                      ----------------------------------
+Threadripper, gcc        32.5s    26.3s     -6.1s (-19%)
+Threadripper, clang      34.5s    27.2s     -7.3s (-21%)
+EPYC, gcc                28.7s    20.6s     -8.1s (-28%)
+EPYC, clang              39.8s    32.2s     -7.6s (-19%)
+M2, gcc			564.7s   512.1s    -52.6s (-9%)
+M2, clang		615.1s   564.1s    -51.0s (-8%)
+
+		== defconfig INCREMENTAL build ==
+
+                        before    after     delta
+                      ----------------------------------
+Threadripper, gcc        11.2s     6.0s     -5.3s (-47%)
+Threadripper, clang      11.3s     5.4s     -5.9s (-52%)
+EPYC, gcc                18.6s     9.2s     -9.4s (-51%)
+EPYC, clang              19.6s     8.6s    -11.0s (-56%)
+M2, gcc                  18.0s     9.9s     -8.1s (-45%)
+M2, clang                18.1s     8.2s     -9.9s (-55%)
+
+		== defconfig NO-OP build ==
+
+                        before    after     delta
+                      ----------------------------------
+Threadripper, gcc         1.1s    0.60s    -0.50s (-45%)
+Threadripper, clang       1.3s    0.66s    -0.63s (-49%)
+EPYC, gcc                 1.7s    0.66s     -1.0s (-61%)
+EPYC, clang               2.0s    0.80s     -1.2s (-60%)
+M2, gcc                   6.4s     1.7s     -4.7s (-74%)
+M2, clang                 7.1s     1.7s     -5.4s (-76%)
+
+Further performance numbers are provided for each commit giving a sense of
+what each contributes to the final result.
+
+			== Testing ==
+
+Beyond x86, allmodconfig was built with the series for arm64, arm, riscv,
+powerpc64, s390 and loongarch, and for arm64, arm, s390 and loongarch the
+System.map is identical to what the previous shell mksysmap produces for
+the same vmlinux.
+
+Also tested were parisc64 and m68k build as far as mainline lets them
+(a driver's static assertion and an undefined-symbol check on parisc, gcc
+16 internal compiler errors on m68k, none of it from this series).
+
+Kernels for x86, arm64, arm, riscv, loongarch, powerpc64, s390, m68k and
+parisc64 all boot under qemu, every text symbol of System.map is in
+/proc/kallsyms at the relocated address, and a module loads and unloads.
+The s390, arm and loongarch kernels also pass the kallsyms selftest.
+
+An x86 kernel with CONFIG_MODVERSIONS, CONFIG_EXTENDED_MODVERSIONS and
+CONFIG_MODULE_SRCVERSION_ALL boots, loads and unloads modules. External
+modules build against both in-tree and O= builds, and every commit builds
+on x86 defconfig.
+
+Build times are the best of several runs, no unexpected errors or
+warnings were seen.
+
+While some aspects of the build process have been changed, all tooling
+should function identically to before.
+
+			== LLM usage ==
+
+An LLM was used to first determine where the bottlenecks were then to
+figure out how to improve them.
+
+It generated a lot of code, much of it hideous.
+
+I extensively audited and rewrote a lot of it, and heavily edited commit
+messages, the cover letter and comments.
+
+The LLM has also orchestrated build runs, testing, debugging and analysis.
+
+I have manually checked for correctness in both build and running kernels
+generated with this series applied.
+
+Performance improvements were also verified manually.
+
+			== What was changed? ==
+
+Fundamentally the series improves build times by parallelising
+single-threaded tasks as much as possible and improving the efficiency of
+code used in the build process.
+
+kbuild, kallsyms, modpost, mksysmap and the rust build system were all
+updated as part of this change.
+
+Nothing too controversial was included. There are further improvements that
+could be made, but they would either by very invasive (large scale C header
+changes) or generate diminishing returns.
+
+                        == Patches ==
+
+Patches marked [upstream] are already in v7.4-rc1. Those marked [dropped]
+have been taken over by Josh Poimboeuf, who will repost his rewrite.
+
+   kbuild:           [upstream] Make .modinfo an INFO section.
+
+   kallsyms:         [upstream] Some efficiency improvements through use of a
+                     cache.
+
+   sorttable:        [upstream] Parse nm output correctly, for the next patch.
+
+   kbuild:           [upstream] Don't sort nm output unnecessarily, do not
+                     include relocations in the kallsyms trial links.
+
+   elf-parse:        [upstream] Section flags, symbol binding and a read-only
+                     mapping, for the next patch.
+
+   kallsyms:         [upstream] Don't use nm, read the ELF symbol table
+                     directly.
+
+   kbuild (1, 2):    Implement a cache to track objects, check dependency
+                     timestamps more efficiently.
+
+   kbuild:           [upstream] Move the toolchain checks into their own
+                     Kconfig file.
+
+   kbuild:           [upstream] Probe compiler, linker flags once at top of
+                     build.
+
+   modpost (3):      Improve performance through use of a cache.
+
+   modules (4, 5):   Emit module descriptors as assembly (*.mod.S) rather
+                     than C (*.mod.c), reducing CPU seconds taken by 10x to
+                     perform the task. Also shard module finalisation
+                     rather than running 10's of thousands of tiny runs.
+
+   objtool:          [dropped] Replace reloc hash with a per-section index,
+                     size the instruction hash to the code rather than
+                     hard-code it, and decode large objects over multiple
+                     threads.
+
+   rust (6, 7):      Set correct dependencies and build crates in parallel
+                     with C code, retaining the requirement that rust/
+                     crates are built first.
+
+   kbuild:           [upstream] Default to using a parallel implementation of
+                     gzip (pigz) if available on the system.
+
+---
+v6:
+* Dropped the objtool patches (were 6-9/11) as per Josh, he will submit
+  a rewrite.
+* Updated 2/7 to build depcheck after fixdep, which its build rule runs, as
+  per Sashiko and Miguel.
+* Updated 2/7 to write each depcheck run's fragment to its own temporary
+  file, so two make instances in one directory cannot corrupt it, as per
+  Sashiko and Miguel.
+* Updated 2/7 to delete .depcheck.mk files from packaged external module
+  build trees, as per Sashiko.
+* Updated 4/7 to drop the unnecessary .previous directives from the .mod.S
+  output, as per Petr.
+
+v5:
+* Rebased onto v7.4-rc1, which contains the cc-option-str series, so that
+  is no longer a separate prerequisite.
+* Dropped the first 11 patches of v4, taken by Nathan for 7.4-rc1.
+* Dropped the Assisted-by: tags, as the kernel no longer uses them.
+* Updated 3/11 (was 13/22) to keep the section mismatch cache in struct
+  elf_info, alongside the existing symsearch cache, as per Petr.
+* Updated 3/11 (was 13/22) to name the destination section index
+  to_secndx in the cache helpers, as per Petr.
+* Updated 3/11 (was 13/22) to take the elf_info first in
+  get_section_mismatch() like the rest of modpost, as per Petr.
+* Updated 4/11 (was 14/22) to fold the ksymtab string and flag emitters
+  into add_asm_ksymtab(), as per Petr.
+* Updated 4/11 (was 14/22) to inline export_is_kept() at its only call
+  site, as per Petr.
+* Updated 4/11 (was 14/22) to drop a const qualifier on a local, as per
+  Petr.
+* Updated 4/11 (was 14/22) so the extended version name loop uses
+  skip_unversioned() rather than repeating its condition, as per Petr.
+* Updated 4/11 (was 14/22) to shorten the module-offsets.c comment, as per
+  Petr.
+* Updated 4/11 (was 14/22) to remove the now unused MODULE_ARCH_INIT from
+  include/linux/module.h and m68k, as per Petr.
+https://lore.kernel.org/r/20261104-build-speedup-v5-0-0f6018be8dae@kernel.org
+
+v4:
+* Added tags, thanks everybody!
+* Fixed broken m2 numbers in cover letter as per Linus.
+* Rebased onto 36d4a11b56aa as per Nathan, see
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git/commit/?id=36d4a11b56aa
+* Also rebased onto the cc-option-str series at
+  https://lore.kernel.org/linux-kbuild/20260919005923.i.879-kees@kernel.org/
+  as per Kees (impacts 12/22).
+* Updated cover letter to declare these dependencies.
+* Updated 1/22 to use /dev/null for objcopy output file, as per Kees.
+* Updated 1/22 so the .modinfo dump no longer picks up the arch's image
+  OBJCOPYFLAGS, as per Nicolas.
+* Updated 2/22 to define NR_TOKENS for token count as per Kees.
+* Updated 2/22 to Use ARRAY_SIZE() for token_profit iteration in
+  find_best_token() as per Kees.
+* Updated 2/22 to restore erroneously deleted comments as per Kees.
+* Added 4/22, fixing an already-existing sorttable bug that didn't matter
+  before but which the next patch can trigger in a problematic way, as
+  vaguely kinda-reported by Sashiko (incorrect analysis, but right to query
+  sorttable).
+* Updated 6/22 to add a comment noting that --emit-relocs comes from
+  link-vmlinux.sh, as per Kees.
+* Updated 7/22 to provide elf_open_ro()/elf_close() and struct elf_file, as
+  per Kees.
+* Updated 7/22 to also handle the section 0 overflow case (SHN_XINDEX, zero
+  e_shnum) in elf_open_ro() matching what sorttable does.
+* Updated 8/22 to lay out omit tables one entry per line, resurrecting
+  comments from the old mksysmap script, as per Kees.
+* Updated 8/22 to add sysmap_omit_patterns[] rather than open-coding, as
+  per Kees.
+* Updated 8/22 to check ferror() before closing System.map output,
+  as per Kees.
+* Updated 8/22 to grow the kallsyms table by doubling rather than in fixed
+  steps, as per Kees.
+* Updated 8/22 to use the elf_file helper in elf-parse rather than
+  open-coding it, as per Kees.
+* Updated 9/22 to reword the commit message to say the object state is
+  calculated rather than cached, as per Kees + Nicolas.
+* Updated 10/22 to zero depcheck's dependency entries on allocation, as per
+  Kees.
+* Updated 10/22 to never treat targets in the dependency list as fresh, so
+  that objects including a header regenerated in the same make run are
+  rebuilt in the same run, as per Kees.
+* Updated 10/22 so depcheck is not run for a non-existent directory/one
+  that doesn't have .cmd files. Came up in a private tree kernel robot run
+  for sh allnoconfig, as per kernel robot.
+* Updated 11/22 to put the toolchain Kconfig entries in
+  scripts/Kconfig.toolchain as per Kees, Nathan + Nicolas.
+* Updated 11/22 to add scripts/Kconfig.toolchain to the KCONFIG entry in
+  MAINTAINERS.
+* Updated 12/22 to use Kees's new [cc, ld]-option-str functionality as per
+  Kees and Nathan.
+* Updated 12/22 to check negative options using the positive form, as gcc
+  accepts unknown -Wno-xxx options without complaint, only warning later in
+  the build. Came up in a private tree kernel robot run for arc, parisc
+  randconfig's. As per kernel robot.
+* Updated 14/22 to emit each export's ksymtab entry and CRC in one walk, as
+  per Petr.
+* Updated 14/22 to fold extended version emitters into one function, as per
+  Petr.
+* Updated 14/22 to fold dependency collection into add_asm_depends(), as
+  per Petr.
+* Updated 14/22 to add a weak __this_module symbol to module-common.c so
+  debug info continues to be provided for it, as per Petr.
+* Updated 17/22 to split the DWARF skipping in objtool into its own commit,
+  as per Josh.
+* Updated 17/22 to index out-of-order relocations over a sorted order
+  rather than doing a linear scan, as per Josh.
+* Updated 19/22 to rebuild dropped relocation index under a lock as a
+  belts+braces measure (contention shouldn't actually happen).
+* Updated 21/22 to add rust as a dependency to rustdoc and rusttest, as per
+  kernel robot.
+* Updated 22/22 (was 20/20) to add pigz to scripts/ver_linux as per Manuel
+  (and previously I think Kees suggested it also? :)
+https://lore.kernel.org/r/20260923-build-speedup-v4-0-73128809a4a4@kernel.org
+
+v3:
+* Rebased on Linus's master branch.
+* Fixed link to Josh's series, which was wrongly pointing at a single
+  commit as per Andre (off-list).
+* Fixed typo in 11/20 (+ fixed a couple more), as per John.
+* Hardened depcheck in 9/20 against a .cmd file with an empty name as per
+  Sashiko.
+* Updated 14/20 so only the top-level make instance builds .module-common.o
+  the chunk instances treat it as a plain prerequisite, to prevent a child
+  accidentally building it as per Sashiko.
+* Updated 15/20 to drop the relocation hash altogether, building one
+  section at a time incrementally, falling back to linear scan for anything
+  out of order (not sure that'll ever happen though?) as per Josh, Linus.
+* Updated 17/20 to limit the parallelisation to the --link step only (in
+  practice - objtool's processing of vmlinux.o) + updated commit msg to
+  reflect, as per Kees.
+* Updated the commit message in 14/20 to give clearer rationales for the
+  batching of modfinal instances, as per Kees.
+* Dropped what was 18/21 - the rustc front end threading patch, as the
+  parallel flag name is still uncertain and a user can set
+  KRUSTFLAGS=-Zthreads=8 to get the behaviour without it. Also updated
+  cover letter pre-requisite section to mention this, as per Miguel.
+* Updated 19/20 (was 20/21) so modules_prepare no longer builds rust/
+  when a goal that builds the tree is also given, ensuring duplicate rust/
+  builds do not happen, as per Kees.
+* Updated 20/20 (was 21/21) to remove the reproducible build doc update,
+  as per Kees.
+* Updated 20/20 (was 21/21) to have pigz use the make job server and to
+  define a specific kernel build variable for this - KPGZIP - also fold
+  in a further suggestion which eliminates a wrapper script, as per Kees.
+https://lore.kernel.org/r/20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org
+
+v2:
+* Rebased on Linus's master branch.
+* Removed the first 2 fix patches as they have been taken to upstream in
+  commit 281b61d408d4 ("scripts/mksysmap: drop the MODULE_INFO() symbols
+  from kallsyms") and commit 59351365ac27 ("scripts/mksysmap: fix escape of
+  '$' in the __pi_ pattern") - thanks Nicolas!
+* Fixed patch 3/21 (previously 4/23) to check error on close via ferror()
+  and fclose() as per David Laight.
+* Updated 21/21 to not use threads for modules, only for vmlinux, and
+  updated docs to reflect this.
+* Dropped patches (as was) 13 and 17 as the equivalent work is being
+  performed upstream:
+  https://lore.kernel.org/linux-modules/20260731-module_ver_remove-v2-0-c9163858f382@linuxfoundation.org/
+* Updated the cover letter to mention the dependency on this series for
+  perf numbers.
+* Fixed various typos.
+* Checked all of the hallucinated sashiko reports. Replied inline to emails
+  to keep a record of them but not going to repeat here, unless people want
+  a list.
+* Fixed up 9/21 (was 11/23) to fix the bit of sashiko's report that wasn't
+  hallucinated - check ferror() to bring depcheck in line with fixdep and
+  kallsyms.
+* Fixed up patch 13/21 (was 15/23) to emit the __this_module fields in
+  offset order to handle CONFIG_RANDSTRUCT as per Sashiko.
+* Fixed up patch 19/23 (now 17/21) to resolve various races. Sashiko
+  hallucinated a lot of the report, and missed some stuff thread sanitizer
+  found. Resolve call destinations serially to resolve most of the valid
+  stuff and add a lock around pv_ops, and instruction hash freed
+  properly. Tested and confirmed resolved locally, as per Sashiko.
+* Fixed up patch 20/21 (was 22/23) to only build rust/ when modules_prepare
+  is one of several make goals, rather than the only one. This matches the
+  rest of the Makefile's behaviour on this and ensures rust components are
+  built if multiple build choices are passed to make, as per Sashiko.
+* Fixed up patch 5/21 (was 6/23) to test CONFIG_ARCH_VMLINUX_NEEDS_RELOCS
+  directly in link-vmlinux.sh rather than plumbing a var through, for a far
+  smaller patch as per Nathan.
+* Moved patch 1/21 (was 9/23) to the front of the series and dropped two
+  comments, as per Nathan, so it can go in ahead of the rest.
+* Added patch 10/21 moving the existing toolchain checks out of
+  init/Kconfig into init/Kconfig.toolchain, as per Nathan, with 11/21
+  adding to it.
+* In 11/21 (previously 12/23) Moved -fno-stack-clash-protection back to
+  the Makefile to fix an issue with ppc32 as per Nathan.
+* Updated patch 15/21 (was 18/23) to drop the dead end cache as Josh has
+  one in his noreturn series:
+  https://lore.kernel.org/9d4b8ccfed745ac47a954aa2e1de62a85197122d.1788899473.git.jpoimboe@kernel.org
+* Also updated patch 15/21 (was 18/23) to hash relocation sections objtool
+  creates itself and moved cache-to-hash copy into elf_create_reloc(), as
+  per Josh.
+* Split the instruction hash sizing out of patch 17/21 (was 19/23) into its
+  own patch 16/21, as per Josh.
+* Made the rustc parallel front end opt-in in patch 18/21 (was 20/23) via
+  KBUILD_RUST_THREADS, as its output is not yet reproducible, and dropped
+  the probe for the planned -j flag, as per Björn, Miguel and Nicolas.
+* Tested changes to ensure any flagged issues were resolved and that
+  nothing broke.
+* Did a re-run of profiling numbers to reflect changes and updated cover
+  letter and commit messages.
+https://lore.kernel.org/r/20260914-build-speedup-v2-0-39817ec5db23@kernel.org
+
+v1:
+https://lore.kernel.org/r/20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org
+
+---
+Lorenzo Stoakes (ARM) (7):
+      kbuild: calculate list, composite object state per object
+      kbuild: implement and use depcheck to check dependency timestamps
+      modpost: cache section relocation mismatch state
+      modpost: emit module descriptors as assembly
+      kbuild: batch module finalisation
+      rust: make exports.o depend on the headers generated for it
+      kbuild: build rust crates in parallel with the rest of the build
+
+ .gitignore                           |   1 +
+ Kbuild                               |   5 +
+ Makefile                             |  22 +-
+ arch/m68k/include/asm/module.h       |   6 -
+ include/linux/module.h               |   3 -
+ include/linux/vermagic.h             |   2 +-
+ rust/Makefile                        |   5 +
+ scripts/Makefile.build               |  28 +-
+ scripts/Makefile.lib                 |   7 +-
+ scripts/Makefile.modfinal            |  40 ++-
+ scripts/Makefile.modpost             |   2 +-
+ scripts/basic/.gitignore             |   1 +
+ scripts/basic/Makefile               |   5 +-
+ scripts/basic/depcheck.c             | 492 ++++++++++++++++++++++++++
+ scripts/mod/.gitignore               |   1 +
+ scripts/mod/Makefile                 |   8 +
+ scripts/mod/modpost.c                | 645 ++++++++++++++++++++++++++---------
+ scripts/mod/modpost.h                |   8 +
+ scripts/mod/module-offsets.c         |  32 ++
+ scripts/module-common.c              |   3 +
+ scripts/package/install-extmod-build |   2 +-
+ scripts/tags.sh                      |   5 +-
+ 22 files changed, 1127 insertions(+), 196 deletions(-)
+---
+base-commit: bc71431221f5ba8bb33918399552636e059c2c45
+change-id: 20260904-build-speedup-25e11a00b3d0
+
+Cheers,
+-- 
+Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
