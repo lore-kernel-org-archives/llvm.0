@@ -1,54 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795532563;
-	b=5Ac1yz2ryXse2j001NJHNTNGfBCYtMw2pZ9XAM5n2YYkz88sGg1T5nw/LTq/sdscuLgR
-	 nhMVyF4FFQzRPJL0l/qA79SVdvsgFrXKk4ibgi4/TsR5f/FcxHbU6deYyrUZ0hLiT5SGC
-	 leKwoiqO84ikDx1WcGhxzcbhr4BtMj/JEsiPY6rr9IS10PsGgNOjBT4lfFVqoYbwkoKJh
-	 Gl+VPqOXQWa80uberSzBwKTZEXVRlcmNXyDyJNZEKVmzzcqWmePz1DXl3iY3rl4yPafAT
-	 XfBJmjBM8GOkFeHkUinnoICzGrXcY0VUquD7LuC+0RrmPGsllxeW06RbfKyb5uNgOow==
+	t=1795538349;
+	b=T/DOK7jNrF4h3dO8dQCURi7AN+enctD0XTTkXvyPK6KjuvNuUmV8QoHv3yTruERag5jG
+	 XLkVUDa/n6oI9ZiI/zp9pJDTddR0Uv1P1sfvG8U4dnB4L8J1Oy2eynWnh9v66zV+s36FQ
+	 tSVqlyB0mCgUb6Qk3L308ebuSHXGwP0VhIIydyJ9IddxkfHhCGxgXxDcjTk030qaYt1GV
+	 EsJUsk8RSY49M8c5he+Arr/85fdYI/TX3ws3yxZ5XC56rRitSKfY3kCWU1k/fn0XWQvDP
+	 RHvCIC5GJWnKHIMfK9ReLXtLw8Bg8v2MDBu9xATYNdKIaear9RtFtneTjUYWMAgCBOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795532563;
-	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
-	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=/2YTiD7W3HO1AsCXEsbdjTD6UDZx8pPc9redwqi69eY=;
-	b=mW7vv2bmV0O24bQgd33y2DaNkyOsPWNEikBNd2BCHhpxizUx/LKtG5U0NdhPUMecQR9f
-	 b/bGZSKeZ+Dmk5vjXX8Wcuowg623BYoGQ73vrMyRCus1VqWcEGu+JxnMHrxoRMxxff48p
-	 FP5wKQCS7sxi7w/Spj+APzLA2acn3N89AbAT1B9vsWB8/kjF/kjgqZ/0qas4f2Eh+dYvn
-	 lTcNqBJY2dB6hyTq9oh3J0l6u2WZfI4VKHR08wERvDNGeRlOS4415IukPFVcsWaVo48z4
-	 x2wLGWYMcrau6iYyArRUxnW6/KmLr5iGAAEp+ulRu0sRSflZS1+hSKdPS5Ryowv9HBQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795538349;
+	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=O3Yc9yBO+zRnIRqu752XYobg3uDpvi0FYWhI2zmSe4E=;
+	b=kTy2uRUrEQjAFp2SDJ78N6lUKKxbd53X5VivISQKH3XcEeZKjNRJxPFuwjj11IjbasyG
+	 aFRYg8P13HgeWiV1clAZ6rmI5z1OU936xzd7+9+XCvVzfUjRpUecQHI8tmmn2Q8ToBA/e
+	 m/oEio9A+C0CZAm1ZNlP0YlwJWjnlMm7k08RcNwPh2n3ZBs7MCocPl4chO9HLTvwtBUHJ
+	 AzqUEAQ5iF3jbR5x6GMQGP/C7HFSRI+sLIe9B4JhuF8o/UiH4Cy5Kz8JYAUpTsgaMD9iE
+	 q/1IVoKT4z2DolheRZAbltLSjk+C9dUcA/w+5S7QQ7/VBSwCXDKUoVfrVz1cnCCDRpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hxX1pGvm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ng4e1vBb;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=6oFIjVyv;
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F761606A334;
-	Tue, 24 Nov 2026 15:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1D0606A31E
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 16:39:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C1D0606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hxX1pGvm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09D21F000E1;
-	Tue, 24 Nov 2026 15:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795532562;
-	bh=/2YTiD7W3HO1AsCXEsbdjTD6UDZx8pPc9redwqi69eY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=hxX1pGvmt2SJyL5ZYhiw1GUR93J0tYGMVLufq343liRCeW0PY7ZMRhdOM3SRxpLyM
-	 x8B3odsIaK5mBdS4qL5zveJGN8Mg9gpojQLzdyh7YfPBBJ/iy41FCSA54XBiOcGOUr
-	 /+TPz6u1diN6OdhT90vMlk6COzgshcQklKh3hDGg6AeONdE1a+WiajfJcKam/Nw6kR
-	 j02/73mVT0Z6n1tNiHrlmfsIlGJrng+D2dxp8uNs1WhB0ADhskEIK6pguqHoQt09PT
-	 8uuK9ZfA1xWVnss7za2FN2gP/Zi0F3HA1w04onJLQGXw5+qzlZAbdRs5Wr/c1bNxf2
-	 tmDp59bKNRA/Q==
-From: Mark Brown <broonie@kernel.org>
-To: Elkin Cruz <elkin@google.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com
-In-Reply-To: <20261120190442.2851983-1-elkin@google.com>
-References: <20261120190442.2851983-1-elkin@google.com>
-Subject: Re: [PATCH] regmap: guard DEFINE_FREE(regmap_field) against
- ERR_PTR values
-Message-Id: <179552828430.264265.12790396165505407935.b4-ty@b4>
-Date: Tue, 24 Nov 2026 13:51:24 +0000
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ng4e1vBb;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=6oFIjVyv
+Date: Tue, 24 Nov 2026 17:39:05 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1795538347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=O3Yc9yBO+zRnIRqu752XYobg3uDpvi0FYWhI2zmSe4E=;
+	b=ng4e1vBbfdX5/dorThtbISpx96vazOBXlS75bQ2/eq1KONdWOyaoeBjLhuZOCBJvui7H5U
+	S6MAkHe4MV9l9CGM4rz7PgBa0YD7+j36bwtysAms8757gZUw3UEclZFhoEIcSzW7sdkGKX
+	CKb0Ky9HuvdvsvrFtZq9xT5NqUmKwQhovwatLslSQN6LQLdjHiM4S54VX5oxavLaFyQOqA
+	HLe846EursoSM1Cvz1cwO0w9880Ul9AKMnAqWEkAhDaDgpYzr7kEFhVXPBYFz6KVeQt8km
+	qUXPWlfiHSyIpAMozjHh9tuVMO+3wj0kxsZU5Jxisxwk1muLFaYQaU52+TPQTA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1795538347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=O3Yc9yBO+zRnIRqu752XYobg3uDpvi0FYWhI2zmSe4E=;
+	b=6oFIjVyvpb//At/nw26MytUw4eLxYdY7Hn/TEb7xhBNtPBW1dm5lc8mQ+QfyUCqISMPIjL
+	CgCMpYAN0x1G+tDw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Ard Biesheuvel <ardb+git@google.com>,
+	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH] locking/local_lock: Don't evaluate the per-CPU lock
+ pointer if unused
+Message-ID: <20261124163905.tkkaLhJ2@linutronix.de>
+References: <20261122105646.2223131-2-ardb+git@google.com>
+ <CAKwvOdkOjGkGajGMKtqcHpRSrpXC9UZrH9XPsiv5Rpcdte5tJQ@mail.gmail.com>
+ <73d50ff0-36db-4dcc-ad1e-c34bf3ebbce6@app.fastmail.com>
+ <CAKwvOdnh-0nOBdU=J+R-yDE7wrP_K2BZ7mY1icrL-nOQ3Bk=og@mail.gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -58,46 +82,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1142; i=broonie@kernel.org;
- h=from:subject:message-id; bh=H/xokeoG0tJ6qhDSkXi/L6XWm1LIQt1tT8PFRD53Lm0=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLJZlwuYmjTc3X5m85no2GVTV/vNqC+J9bNvVPsb1+XCo
- ZTSZnm6o5SFQYyLQVZMkSUui/tlfcnrNXwHF7bBzGFlAhnCwMUpABNh3svIsEDg79MiSYfHT1cs
- SZb6tKu6d7UAU8sO3izvG6ekojU7+hkZLruyVEW+rLrU++uP0LNjV1oyzddcaiiM8P/Ek2ranb2
- MAwA=
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAKwvOdnh-0nOBdU=J+R-yDE7wrP_K2BZ7mY1icrL-nOQ3Bk=og@mail.gmail.com>
 
-On Fri, 20 Nov 2026 19:04:42 +0000, Elkin Cruz wrote:
-> regmap: guard DEFINE_FREE(regmap_field) against ERR_PTR values
+On 2026-11-23 13:52:09 [-0800], Nick Desaulniers wrote:
+> On Mon, Nov 23, 2026 at 1:23=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> =
+wrote:
+> >
+> >
+> > On Mon, 23 Nov 2026, at 20:12, Nick Desaulniers wrote:
+> > > Very detailed commit message, but you kind of bury the lede here on
+> > > what the actual problem this patch is fixing *is*.
+> > >
+> >
+> > Apologies. I'll trim it down,
+> >
+> > The TL;DR is that non-volatile asm() statements with memory input
+> > operands are not elided by Clang if their output is never used.
+>=20
+> That's not a bug; both Clang and GCC behave that way.
+> https://godbolt.org/z/sEhec4oae
+>=20
+> (perhaps there is a clang bug somewhere, just trying to suss out if
+> there's something we need to fix here; forgive me for being pedantic
+> here)
 
-Applied to
+I see a=20
+	movq %gs:this_cpu_off(%rip), %rXX
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-7.5
+on x86-64 with clang-21, not with gcc-16 for local_lock() and
+local_lock_nested_bh(). Are we hunting a clang bug or considering this
+patch?
 
-Thanks!
-
-[1/1] regmap: guard DEFINE_FREE(regmap_field) against ERR_PTR values
-      https://git.kernel.org/broonie/regmap/c/573c689219af
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Sebastian
