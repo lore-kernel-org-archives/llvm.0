@@ -1,102 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795560304;
-	b=ssxPlFTg6d7LSiznq10MmiN9bUOtwRevPla8g/OFiRCMBYYjseTlKDo9Yp68EJMtRech
-	 OjHlg53zRwQF9ltrGxRK9UOaBOU6xMGJyHqVEqxtWaSep0dtnqz5C4HLDt9MBCjFmhz0a
-	 HyXO6hRt7VogCM9mKgVteEVtlaEm/u2kmyDOMkGhERMnJPXWGCp/rCrTAVIjT7VNscgEQ
-	 KQYdYWGyT2NFpm5FSkmLnf466GsDw1+spWJM9D6X3KKM2zHs5sea+m8flO5So/vn7KlIP
-	 XVaOa8y0cUJ6ia1gO5PTnE8lTcyqWVM9eyOYKsxjEL6ngwWHXJnYjNCoGPzwN5l+C8Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795560304;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795561977;
+	b=vGkG1VJQDyQE+gEuroV4KdRbcmLKiVNbmvgkzbTMuAZ6YscmPz4/65RrLr4qDjahJyyf
+	 wFQVk+VHuAmixdtyQxttBG6wSUTC53CRYPfLeRZTv2dLO8mryEpJgKq5dLLI0fhtVdzhq
+	 y3bU+dmKzMxN+tC4GVUKIrVEkWe6a7ynQlLQPy+5A7iEZhd6kpwBS5j1Fw+GzTlVDllMz
+	 +y7hYqriBrKIrsB9p9BqFfSfoYendTcoHJrVpSiTHzvez4AgSb8PupngSn1AIIoFkGoQr
+	 k8pJY8rmE5xbY5yu+roGqYgPDE2CsBgQKulc/Cg9zJwoi0QC2ep7nHP2QisVqXVic6A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795561977;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=LKPzb2+W5dLdTUHlVB713c/iH+Eklo173lHqi2t1XUI=;
-	b=OMvBMFafN/9mVFB2uEETc5Mjk8c6fWGyIDudpoMIo62KWmh7WBG5/rf8tWzHkrUpIAD6
-	 nurmN+FanqhV2z6WpVzaKt8pePxFDqFRnqBBksptPR7/pj9zJY0weSuC4qWRKlaEKgBLD
-	 viRQzTPZlb05nrmniewcPGYsQ+vtlXIT/8NEfS8QollhYzoOH2tD3o/OcIvUOmN/SHaOC
-	 KNnEwoM/ikZwS9NENJLBle5ANd1MB4gs2Ork3iVB9h06slFZ4Q6g+PJ7E26ULdvhWU+1X
-	 Xao15nhSaQuYtB5rNMVvRNFwOgGy8m890vSiL6Gejydc8cozhTlxJKQpDoTV8B3Cm4w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=MZk9ZQEy;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Fu1JR9BwCRRgF7zql9PraHs0kE4B88Qxih1JN4hThMw=;
+	b=sLEjHvvTysHbmgM7GG+yBJx2ypmI6AfEFqDdoseBaqEOFrY2B4D8UlbY9n8REVlxYSxm
+	 CLcLeawbTBN2isBytp88/r9wP4XaqmbwcXA1wTXy9JH8ka2nTvd39urjsVbRQi63toLhg
+	 hFg/81nKwmJFXMcWH39XGA1a7ro9iC6C3l1xt+C5zwZOooqahix5swKNUBY4SQgTYAZRD
+	 uD9efe0KQfpIqS7J9IaqkZkQsYZ/B4NS0KMXGWJ2//YMwKcN8fYRKTxrFHQBp9TBNalQi
+	 7xI8jzjusrGBdtH94t8RtWdkrY8YBOwVt4A+iqgHx2LMmvFPwxlv1A4RnAVmc42/Hxw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=T+q2na9k;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AE8606A32A
-	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 22:45:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1AE8606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C07606A31E
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 23:12:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49C07606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=MZk9ZQEy
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4bb702a7548so44226025e9.1
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 14:45:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795560302; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZcMAlTNXtTFY/keBR7wldSM0WXFE1SgHQx3LeaOSyINMCCYTjgTuPNfmPkLq4/OmzS
-         1YNZyR3pqyNVhKoZniwnvWomv6asVfZHFlTS+RmLd3hpmY1htK8auahpDBZGrNDUfv9j
-         riBx+EF5lWxM/knUs2OtphSUUkno5O88xIJegf/+OZoNMtQa6UYHE7vi1yyx0710nS+H
-         3nG1WT9XAYHKBbyvY9ig2dWs1H39e9XxeiE4hUMrZGdQ/bTE6kwJntdiFn/vBj+nvas1
-         wckIWXN6vUvZUbopnt/TiQNRQh+85A3UUPfQfa9gMqvTbhMTQFS8tErWAd8Ln0hYWZyC
-         kNVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LKPzb2+W5dLdTUHlVB713c/iH+Eklo173lHqi2t1XUI=;
-        fh=s4sUNO9qlPltmrPtHv4NnfbgiEDYFAvFCuI2+h1WN2g=;
-        b=ED6pQvC8FpNR0f3tS2ML1rfHhEvqOHM3LR96WmaKYaVldKCR8JpiZ03Z7mIPGGMzgg
-         JF6ur6ResVzB7HOFw3zCfInci+Bi1bAOJjC0BuSEEjZvvlntsKmndXCQvNAaq38p2oz5
-         TDk182Z8Xh0gqJRPjSajiiehT9RHVtx1KbdbxigwTslcXjC7pwBTAgU88erMRORPlEeH
-         8N/lCk2ka7FxCqYlDhhGvyfhHG0iZVhOVIWZDP25ZWyVBLZT2LSiRmVgUhEAoz6TEp9b
-         Z+NFQ9yNTDq2AWvo1zyKXNH5Sm6aWkIj6SjlmtxHwkajm9OqlxiQbvykWjOSbAeyf09b
-         yVZA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=T+q2na9k
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4bb69f5b161so33393775e9.0
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 15:12:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795560302; x=1796165102; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LKPzb2+W5dLdTUHlVB713c/iH+Eklo173lHqi2t1XUI=;
-        b=MZk9ZQEyUygAEL8nY/IwhqvhDwHdm+32tgUc0Q6XruzvHkxgspAB3oDoGBv2IG5xzh
-         e3a6DQZz5bqzaj8oTm6qt08G1GM75z8Vv7hLjUDnzh2UibRM/3CuMnUnYqax5LXoT9bv
-         /6UY51SC8HAN8PWv00uRyeEUlt3nzhlW+XvfE7DtuGeoBbupu5GdmDx69miS5cQoDNuH
-         xjw1OrvQD71+grXBfvkUEoYQwjcTF9tm8BTUHntQjL5Qkp6eVC8PPc4R/vQEwKomKBtF
-         3jSznFrCpdms2c3kr/clueSFPErDdqYsC2sEgXClU3mjI9PUqiK019KPUXAGrzxksNed
-         VD+A==
+        d=gmail.com; s=20260707; t=1795561976; x=1796166776; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Fu1JR9BwCRRgF7zql9PraHs0kE4B88Qxih1JN4hThMw=;
+        b=T+q2na9kwZfEXMailyHzD7rtFhlsjZuic99Avsy7MjBg//x5cLpWoBBP1GGtC0mrwJ
+         tz0OO47kcSgLquq6v9utwIkkw/tX28s2Gnnafm7dj+Al9KGOuCmDm3YmDjB2v5i2c8wr
+         DVCRPeWjKYy4w946Yj8YcSKd5jVux+5PEIYPET3YLSr4qNnEGJt7pNQ58OFYzOJfnguQ
+         eGDsjbZh6gqjXiCM5LjpfL8+mxrn/3w0Drq9KySbDcWw8WiKEU2nyS7G1oyXsbxWP/q/
+         EehS7vVX1JY95TVhFtITVYXxSFGhT7C1NfYgL/+GPlSoM5HwgiaxT8oNpKxPPvLEgWab
+         gA7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795560302; x=1796165102;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LKPzb2+W5dLdTUHlVB713c/iH+Eklo173lHqi2t1XUI=;
-        b=KUj3e65Nq4zG/Oi5tWzvbAjcH3KsOnmoqBYDFvnjpYaTfSMR7JsWqyeG5zUPT+d+js
-         WT0nd4qGhKXRVNNqfbgZdU5nUZ97Ja/FINZ5EjfGntJEYZbydVNKME/Zk9bSCrKQZ7AU
-         mF6l8DsWWS+IKi3CQYmWKRrZ4Ey+CN2nXB7tyGbZRF/g1nBt2cRxmth4BSLOBtscwj9y
-         LjlMhCju8/0gJ1BUJq33O2VBJ86N9YtwBeNXflBEjAbruRIxpg8eiCIXr8Bsq70QxPzA
-         SOgpLWEgbQ2uyKYidZ9xlzPOz+gSyQRWjs4Xa3BNZFy+p7kXKx+RPJQ3tzsUDWEzxtSF
-         1Dfg==
-X-Forwarded-Encrypted: i=1; AL+hErEo3Xu6bgC3gVrSZIx8XHUER8iFZvfYdzcqR6PkWoJmmPmzbKZyY0Kdj5wM2uMd0z8FYbj3@lists.linux.dev
-X-Gm-Message-State: APuU4Z9R3zK7HZTGAzuscFn7+WCZbPTNqQraIq9PnH9hlX0LFsP8e7Cg
-	52oRIgXNrBFnHD9wlAcrvxBiJ02Dmex3MBZR2SdZepbmDBrkoUgt8FWB8ueVVy42+4yekO4U1bv
-	fKwE3VhNgZ/3VzpxQaJRAN6pPUHFi5UqdKC+d43I8
-X-Gm-Gg: AZFdTZceRgWjRXL1h4zrI8a9/IiPpKN8qNJN2YJxe7vj7LKuLbcH8hyzEnkECWmNMub
-	4fGdnf/b0J8kzT3g0wBTBcOh9/EtViPIi9R4iiIRHD89nlSbrm4LnZHADsgrbD/f0u/yCeQVUdf
-	r5ebPb4TpronA1nRr5PxXHE0TSnBHLncZlakKp0k1It+Xq2NbytZBVzhv1V57BROB18SLk86BN/
-	4TC2KTPuqNFEDtauFo7HyIddeYVxn0monerjbFmslOE0OYHbkzwIUBbgDKJbyRCarRwB7gfFzKs
-	+w6pnaPOoSR6ZZQG1dRiqbya3nsjb6VCJ7gawp05qRwDhRUPob4JDmSzdZaJh9ydU+dpyzakhjR
-	uSUe53tO/WrAlXa2HKS3lul/f7PQo3TTUBFMH3Qh3Cld27N2oPglVrkYtYJxQ5r2ig0gbtqik2F
-	M3ad2yhEmRHRJy9ejhEAztc8jVxpfXubT1ZVKo2mzSXdjfFAXUUn0bwjCSTeqZpZgsVRYu3mAQd
-	i6qMco76741pRzy1PPIz2IjcgF1NsEJuLLanQ==
-X-Received: by 2002:a05:600c:4e0d:b0:4bb:5f07:10d7 with SMTP id
- 5b1f17b1804b1-4bb8882445cmr316029555e9.26.1795560301449; Tue, 24 Nov 2026
- 14:45:01 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795561976; x=1796166776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Fu1JR9BwCRRgF7zql9PraHs0kE4B88Qxih1JN4hThMw=;
+        b=xsuMhEUE2O83a34rDBfbfyYwLg38cy25gRKzL22gVCl1wPspUymmnR6jWpvs+HU0BV
+         zAj1g0Lu6zOOKQdtQtlq+Kguk3PaWCJi092kUegjNTsKv6bGSwRvyqo1jkbr9vAIuc3R
+         zQbpcbgD/gBPIRuDAkmgJZL3IPeNjGkONuA/uzL963aithsozHPF42HBn+SZGHbvwkHI
+         24tB3A3KnfqnufekNQhfpkbCNQMD4ASfxCJBymGN1ZbdxogHHWVkZsRjW8OTgQkSUO6D
+         9nPR8GVYhmA/oI0hYz4zU9+dW4vFM9wxEx5lLX4rDR2VXj1/vYwg5Ntkl4l1w8H2Yklj
+         DuJw==
+X-Forwarded-Encrypted: i=1; AL+hErGhAci7GW9BpZMi2GhJ8BXvDCp7YuA6bqs7J1FBK6Bsak9aE7zWBKzIvLxRBBghnabo/PSC@lists.linux.dev
+X-Gm-Message-State: APuU4Z8Dw54ll5OKWUUxdUobwRMjaWJqg6oOwnOP94HxgKhUKwwlmuUz
+	6ATIdxBQCSkYwLDc7VjOM7gKspA2dP6esUoRJ8ZuEzdfzZENAYHg4XNO
+X-Gm-Gg: AZFdTZewwO4hVYeVZPNC3gKjfqyZ5JzMRXwFA640fr0k0uTIiXYfkw5MC3/lrkD7qBN
+	qvHmz7IU5qXYvw3QCIwmVhp0WGribEB/A1Ag5GSKNfbDUoc1WRVq1+7zb1Pf/dh7P396/bHqtkg
+	cZVNoj1NP58egXNqZKbC4bYgoLSS2mJLxcZJ4yRuldUCDQ5rqEa0PvamNCoWn7QBRwueQZM2kLk
+	NwYkgcAMHuwB7D2qA6cYifFUo2Re3e4wmpJWw2EMjBiwlPQ1Zze0ez5ziNyGCz3Iuamz0gtb1ZN
+	/UEeYDm0JiYENxXtuXgwzs+g8tpSG25/oCFguB69p/n/LqmZAqdP8l5997wvPgJNadJxnArI608
+	a9mY8KyZ06LiKYGmOQCY9cGDOivAP5tNzFEi22mdpPVr0LLvTP3Rm5ja1dXvU48qoKT/VyrK7r6
+	cSFZfw/tS8fqlxjNG4TcF3+rsZvtVquMiMpi93fFvjGSfa8H6ZUeLnZbIyZmBfqSpu4j7WDaTxb
+	3i9p/im1H0Cjtldd+OvqlrpkOoNm2Eb8XqT9+yqI+CpxR8Yr6G+3/ztCmUQKDNqShhPdWBpEIZv
+	o0j+dU/yTYW3WfuX9SV9M3po0pB3UtAVG02KsQQSzUuklYaObq0MSMjpRawhL4WnUjalE2wdfXJ
+	qotZgZ1J5bk7fu40Z2ZvHiznp
+X-Received: by 2002:a05:600c:3491:b0:4a2:c2b:a91b with SMTP id 5b1f17b1804b1-4bb8880014dmr336408085e9.10.1795561975632;
+        Tue, 24 Nov 2026 15:12:55 -0800 (PST)
+Received: from Ansuel-XPS24.localdomain ([87.13.246.159])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4bb8538b3a7sm527766585e9.3.2026.11.24.15.12.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 15:12:55 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	llvm@lists.linux.dev
+Cc: kernel test robot <lkp@intel.com>
+Subject: [PATCH] ASoC: airoha: fix objtool warning with memif probe loop
+Date: Wed, 25 Nov 2026 00:12:43 +0100
+Message-ID: <20261124231245.271869-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,108 +109,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261122105646.2223131-2-ardb+git@google.com> <CAKwvOdkOjGkGajGMKtqcHpRSrpXC9UZrH9XPsiv5Rpcdte5tJQ@mail.gmail.com>
- <73d50ff0-36db-4dcc-ad1e-c34bf3ebbce6@app.fastmail.com> <CAKwvOdnh-0nOBdU=J+R-yDE7wrP_K2BZ7mY1icrL-nOQ3Bk=og@mail.gmail.com>
- <20261124163905.tkkaLhJ2@linutronix.de> <CAKwvOd=KbZgizb1VhD-zq4S1jRGCxUaLM+VHeRNhTFQf+KMrRQ@mail.gmail.com>
- <1d4d7a84-d0b8-4b81-adb5-4fcecd1e19a1@app.fastmail.com>
-In-Reply-To: <1d4d7a84-d0b8-4b81-adb5-4fcecd1e19a1@app.fastmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 24 Nov 2026 14:44:49 -0800
-X-Gm-Features: Aa3M54rC89z0KOBeXpPiIj8H9mJc9hPSjUEBQDdtYvMjKRBIGlH9HWNTTpZ8tA0
-Message-ID: <CAKwvOdn=FjiYgiB9wdut2=2FwivPUXiNOG2F=uOeEkycrtoVUw@mail.gmail.com>
-Subject: Re: [PATCH] locking/local_lock: Don't evaluate the per-CPU lock
- pointer if unused
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Bill Wendling <morbo@google.com>, 
-	Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 24, 2026 at 2:25=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
->
->
->
-> On Tue, 24 Nov 2026, at 20:32, Nick Desaulniers wrote:
-> > On Tue, Nov 24, 2026 at 8:39=E2=80=AFAM Sebastian Andrzej Siewior
-> > <bigeasy@linutronix.de> wrote:
-> >>
-> >> On 2026-11-23 13:52:09 [-0800], Nick Desaulniers wrote:
-> >> > On Mon, Nov 23, 2026 at 1:23=E2=80=AFPM Ard Biesheuvel <ardb@kernel.=
-org> wrote:
-> >> > >
-> >> > >
-> >> +/*
-> >> + * Only evaluate @lock if it is actually used, i.e., for local_tryloc=
-k_t, or
-> >> + * when lock debugging is enabled (see local_lock_acquire() above).
-> >> + */
-> >>  #define __local_lock_acquire(lock)                                   =
-  \
-> >>         do {                                                          =
-  \
-> >> -               local_trylock_t *__tl;                                =
-  \
-> >> -               local_lock_t *__l;                                    =
-  \
-> >> -                                                                     =
-  \
-> >> -               __l =3D (local_lock_t *)(lock);                       =
-    \
-> >> -               __tl =3D (local_trylock_t *)__l;                      =
-    \
-> >>                 _Generic((lock),                                      =
-  \
-> >>                         local_trylock_t *: ({                         =
-  \
-> >> +                               local_trylock_t *__tl =3D (local_trylo=
-ck_t *)(lock); \
-> >> +                                                                     =
-  \
-> >
-> > Why do we need the temporary?
-> >
->
-> Because 'lock' is a macro argument that we should evaluate only once.
+Objtool produce a warning when clang is used as compiler. This was caused
+by the memif probe loop when assigning the irq to the memif.
 
-Ah, right!  Don't we have __auto_type or something for that though?
-Maybe cleaner than the cast? Ah, that also doesn't work for the same
-reason as below.
+The warning is:
+>> sound/soc/mediatek/an7581/snd-soc-an7581-afe.o: warning: objtool: an7581_afe_pcm_dev_probe(): unexpected end of section .text.an7581_afe_pcm_dev_probe
 
->
-> >>                                 lockdep_assert(__tl->acquired =3D=3D 0=
-);    \
-> >>                                 WRITE_ONCE(__tl->acquired, 1);        =
-  \
-> >> +                               local_lock_acquire((local_lock_t *)__t=
-l); \
-> >>                         }),                                           =
-  \
-> >> -                       local_lock_t *: (void)0);                     =
-  \
-> >> -               local_lock_acquire(__l);                              =
-  \
-> >> +                       local_lock_t *: ({                            =
-  \
-> >> +                               local_lock_acquire((local_lock_t *)(lo=
-ck)); \
-> >
-> > Is this cast necessary?
-> >
->
-> Surprisingly, yes.
->
-> https://godbolt.org/z/E8rGchfev
+Fix this by giving a fixed upper bound for the loop for the memif as it
+seems there are some problem with detecting the runtime value is hardcoded.
 
-What the f...
+Fixes: 4974ffa0d6c2 ("ASoC: airoha: Add AFE driver for Airoha AN7581")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202611201414.1NBNxorL-lkp@intel.com/
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ sound/soc/mediatek/an7581/an7581-afe-pcm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Anyways, with the additional context (git trailers) linking to the
-clang bugs (and missed optimizations):
+diff --git a/sound/soc/mediatek/an7581/an7581-afe-pcm.c b/sound/soc/mediatek/an7581/an7581-afe-pcm.c
+index d47edb630452..b17d58f25d9e 100644
+--- a/sound/soc/mediatek/an7581/an7581-afe-pcm.c
++++ b/sound/soc/mediatek/an7581/an7581-afe-pcm.c
+@@ -447,7 +447,7 @@ static int an7581_afe_pcm_dev_probe(struct platform_device *pdev)
+ 		return irq_id;
+ 
+ 	/* init memif */
+-	for (i = 0; i < afe->memif_size; i++) {
++	for (i = 0; i < AN7581_MEMIF_NUM; i++) {
+ 		int sel_irq = an7581_memif_irq_descs[i].irq;
+ 
+ 		afe->memif[i].data = &memif_data[i];
+-- 
+2.55.0
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
---=20
-Thanks,
-~Nick Desaulniers
