@@ -1,123 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.150
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795544526;
-	b=hyrV/VKP0i2WP6FBe3pLc7sHaqwUq/NV8SACR3lclusW/dt91SOfpCCJIKACPZGxdQBp
-	 SvDg+NlnxmoV6Fg4nCIbwKMrTxZhNxzKrBI0FpP9dxKJT31wVvrft2zhGxTe84G1etPbF
-	 UdObzB3HNh6SVDHlErl9yHeHzCRLjcYjQ3yyHuXZ0NxwQbYBxkD0cWWmjw4NWx9Fh4NlR
-	 2lZni7pN3KPFz5TRpG2tm/aFmIIYvSDXU9WFV8EvNlLr4Pcms0XmwfB5oAEOLUsni3x6Y
-	 JyJL1qLu0E8zkRP+Smq/o9g5xmCYpk17hOFL3cnDq1CnvLCdgnK3Au2Zutq7MKOoF/Q==
+	t=1795545323;
+	b=m/s0gFNd1F9F1P9OgOY05/c6PrUUPGzWPWnebkLru+LJwvr6uxm09KmIkOAGxsJpe1ZM
+	 n8EBCQI6OefJRsZCSe0Ac+SS+4auefJetYl7HvSs617VUibktig+QLm5FuXGwOPSe4J/q
+	 fj4Z10iN264sMRPUVK+ZerJjWg5bmL1yqjdhlpIxUpGnfbL0OqEO80M8P735D26pJe/zl
+	 Gnc42TdaH5l5oy1hUd4voOFxJlGC4a9U+xYdWczS5tu1SVj/kd3vtOh3I4q0uEdBKFHOB
+	 7mEgZxtGBE6dG23xIZuYruh/wTk6wtLmTH8QU1UtPt27RHdUdIpECxW5owH4y/07oGg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795544526;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding;
-	bh=UNWM0kxmEWnOWwACmt2LEHoYvhY3LG1h6QPQ7rX8clQ=;
-	b=oMY4TCKWeJv7WvJVJ8nue3mzoewfc2EkD89BAI1oNTtrkPUYsoyu7S/UIxTXauQz4iK3
-	 Txutkj/gT5VMzjOJHmJ5sYN80WF16OlxoCS4fFJQgrBewP3/Gibhpe14hUmxBia8q0g+F
-	 B5beYIMV6KCOvfHp7jBLZBnAbmnwW6rF5LwcnB5wT/EHERtgnzNql5ZdJz0+GYNUtvhTd
-	 shuDLKuJ8j8kJRnKXc+GJst3PA2zOkouPuLJV08CTbJa/NteIjy6IgREdDR5GH6ypq+vu
-	 PLOvs1ftHK41t9mQF7/MMxHUnaKYKdi5nMW13FCj2MHRrQBcIZOGglTBM5hv8b+xPcw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795545323;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ZD9tL3vMl3UtRiIJdtxpjqUODfVXA7ba8Z8pqs7VXsE=;
+	b=3OmFfJedxEE3MC8qQrzf94vFk2sMLcOC5hC7Q3eAwp8DaChWYy6R385qqgGHgWIyM3LM
+	 RZjim/l43nxep0vKCmHiT8kVU9Y5WEEflsmq/SlH8LkkAyoz9C1Gec5UDueYEf4UVyGn2
+	 z6peAdkVVBtvEVyQ6c82zy5D8Dw2fwvFSbPNgh3KfNYRR5Z7VCHusaUAa71PpSY5vf5/K
+	 vLGeMSqPiNCVXymVBsC34MEVxD40Adat5kY/AGx44qicwKelLmXWNnTVZAUIN1/fZyhje
+	 rj0GT5cl5ChU0eBIME0it+SKnSSvJE41HGYUqblFnWFUfQPhoe0SBPeEzH3e4acfyFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vRtGLiJf;
-	arc=none smtp.remote-ip=209.85.128.44
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZRZrSkvk;
+	arc=none smtp.remote-ip=95.215.58.150
+Received: from mta1.migadu.com (out-150.mta1.migadu.com [95.215.58.150])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA47F606A33D
-	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 18:22:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA47F606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6583606A335
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 18:35:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6583606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vRtGLiJf
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4bb69f5b161so31712325e9.0
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 10:22:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795544524; x=1796149324; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UNWM0kxmEWnOWwACmt2LEHoYvhY3LG1h6QPQ7rX8clQ=;
-        b=vRtGLiJf6j0f//g9gAqyOIsqkinEgcr+X5D5etOjEeRcapKGif5R8f7KOPj+/we8Ix
-         BRuHrUH5Xirw3GL2cJCZVtkX2GnpCxKJIuYqCSPZjyiN1LBKQ4oI1nuyAAWCcg3VDj5V
-         pDVRbe/XCfMgg30EyKX4GVyTkaXI5caMy/U9QyP6lPpTha0w8O4tfaPYAQ/yDy7+8F+s
-         gBSrkhyP/iHF4FoSpBHnKfG0tmUh/4CtF1hHdh4f8b8z6YWZij9NdjrpRofn9YG2VHAq
-         Pm4txE/F/k7YzEOXxr4rPqp2yk3SpYbQa0+kTukmTCvpcOE7EfUsLQOoXR3sE9CA48BP
-         6C5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795544524; x=1796149324;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=UNWM0kxmEWnOWwACmt2LEHoYvhY3LG1h6QPQ7rX8clQ=;
-        b=Sch1uDp447RkhKUFXWuakf3DUB3IKHZqYFEW6ERai8sz3ESgKOcvMwLCqjcIEH1PFM
-         /wgF1fU/OR8vHOoj6rRfp5NP6v/mxd2SmkXpM/4yHtKlpeNQn2sWpKpZhOOeNeR9DeAd
-         /HjoubrwPjkrGUFGWUv5aOI59SujMyxJSdLVJSMSZRkzANfEfJ14hoCwHhZ6/NJ3hJc+
-         Z82fsqZqSZXNFXYr1+X8UOSk2Vm/PoUJG2XCfi3J1uEfv3INeuz2Du3T+nq8+3c9lbRL
-         /ql4B6OV0GRjcfupSurXAQrwaCJkRVoRT30nL2KaVda2JAR1zZeZdxfcNr4pqwa9uqdz
-         hUhQ==
-X-Forwarded-Encrypted: i=1; AL+hErEsbtuQL1dn4HfK2tIhuMiQhM19L5nEwWkELc2XPK8pXDsscDBKok/HompPN0IRWnYSPCfg@lists.linux.dev
-X-Gm-Message-State: APuU4Z8OqDln/eil6pTkqrj3/0Fc6jXXbJwGnfe5Roufn053NzTcQ0QE
-	nnrtMTMWjZXuQwiqsiiWPKmGkt0rabqcQNz0SD1z958DxtUQfmML8aJj
-X-Gm-Gg: AZFdTZcjIEwYG6BuiRrfLNJ4cQalJSzOn79lrSDUyJ4cscuFiE60Cox7c93sVKPeTDO
-	YlWYViZtusrYiXCtdM4/VwBCBZCRCHhRGl9bNZPYQzhaW77RHPHAD/0Ohxr9nNWjMMSkly3K8r1
-	SqSnWqkjXhoRUFfcYq62wOn0w45eJFVtQ6m4LhCTX7Bk0poWQpMNxV33uwT8brAvp1Svg6H45Aa
-	f4Q6Lt+NAV4m9Xwy121L93pZssY/Zb5s5fMRRx/jaLawG2TsapgeuJuMcJuBp/hiOPHrKjcEOL+
-	F89RAeIUmP6E8gAZUmIpY0Olnr7YvnTALvvru7wJoWe3PN1OJ27S9Wj/89IEfHp7iY6u7J6bxy1
-	xDCuw3sTZAUl2+30E+ULaee7o1MPA58SfofuLIFYTNvbuxs7sDfVS7PqoeXxSDwEYgqnI9rZ6UI
-	3q82zSEm2mZWzHoX/a7P2nCi2pjruqoadWiyIWyvLPdQ/nxHO+6lacZn8dGyXz9ZXet3cvfY2Bs
-	GkHQ+VcU5kcSLtEvdC/9TDSBKkYgqlIRhHgibm35Ub0AUf+6HNdra45Xk31tF5jQESzltss1YHX
-	jqfzCZ8LkuCoqdKpXPh46t3bWI1L3/n6
-X-Received: by 2002:a05:600c:3b88:b0:4a1:e672:5721 with SMTP id 5b1f17b1804b1-4bb8880789dmr358586325e9.13.1795544523856;
-        Tue, 24 Nov 2026 10:22:03 -0800 (PST)
-Received: from ArchOarora ([95.179.249.152])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a67f204sm34524117f8f.21.2026.11.24.10.21.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 10:22:03 -0800 (PST)
-From: Oarora Etimis <oaroraetimis@gmail.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	jose.exposito89@gmail.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Lucas De Marchi <demarchi@kernel.org>,
-	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	sebastian.wick@redhat.com,
-	victoria@system76.com,
-	thomas.petazzoni@bootlin.com,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 13/43] drm/vkms: Add KUnit test for device lifecycle
-Date: Tue, 24 Nov 2026 19:21:49 +0100
-Message-ID: <awXRsQbfxPzFWHzw@Oarora>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261120-vkms-all-config-v6-13-78ace90f4fc1@bootlin.com>
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-13-78ace90f4fc1@bootlin.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZRZrSkvk
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=GRQQ4ERdsiUnnr2qKIeSLtPr4xietU4WPx/E9/lU1Gg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795545320; v=1; x=1796150120;
+ b=ZRZrSkvkvM15n3n9+2hAH3EykW0el0ReQMlCL9td8F7nqqmuZWg6w5sA5Neny4EU5g3sLMkk
+ Kv6v6yvptu7mpuG1pCUWXjsputFT13apaq78gl2nfP56itxPmxncalT3HgyHtkwv3PVhlbowqzl
+ MOtIWs7AFEZlDg9zueH7a28E=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id 695234c76aa59047;
+	Tue, 24 Nov 2026 18:35:18 +0000
+X-Mizu-Trace-ID: 695234c76aa59047
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <59a0bc6a-61d2-462c-92c5-445d29298d85@linux.dev>
+Date: Tue, 24 Nov 2026 10:35:08 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -127,29 +58,155 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] percpu: do not put btf_type_tag on per-cpu variable
+ declarations
+To: dennis@kernel.org, tj@kernel.org, cl@gentwo.org
+Cc: chris@chrisdown.name, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, acme@kernel.org, yonghong.song@linux.dev,
+ eddyz87@gmail.com, martin.lau@linux.dev, nathan@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ llvm@lists.linux.dev
+References: <20261117220824.609017-1-vineet.gupta@linux.dev>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20261117220824.609017-1-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello Louis,
+On 11/17/26 2:08 PM, Vineet Gupta wrote:
+> __percpu carries BTF_TYPE_TAG(percpu), which records that a pointer
+> points to per-cpu memory. __PCPU_ATTRS() applies __percpu to the per-cpu
+> variable itself, so DECLARE_PER_CPU() and DEFINE_PER_CPU() put the tag in
+> declaration specifier position on the variable's own type.
+>
+> arch/x86/include/asm/processor.h has
+>
+> 	DECLARE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
+>
+> which an x86 defconfig preprocesses to
+>
+> 	extern __seg_gs __attribute__((btf_type_tag("percpu")))
+> 	__attribute__((section(".data..percpu" "..read_mostly")))
+> 	__typeof__(struct cpuinfo_x86) cpu_info;
+>
+> and GCC warns:
+>
+> 	processor.h:232:36: warning: ignoring attributes applied to
+> 	'struct cpuinfo_x86' after definition [-Wattributes]
+>
+> which -Werror turns into a build failure.
+>
+> The compiler is right to object to a type tag on the aggregate, and the
+> issue is fundamental: every variant of an aggregate shares one DIE, so
+> there is nowhere to put it. clang drops it silently and GCC warns.
+>
+> The tag is meant to record that a pointer points to per-cpu memory, and
+> cpu_info is not a pointer.
+>
+> And this gets worse: for a pointer-typed per-cpu variable GCC attaches
+> the tag to the pointee, so
+>
+> 	static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+>
+> comes out as PTR -> TYPE_TAG 'percpu' -> struct bpf_hrtimer. The truth
+> is the other way round: hrtimer_running lives in per-cpu memory and
+> points at ordinary memory, while that record says it is an ordinary
+> pointer to per-cpu memory. clang emits no tag there at all.
+>
+> Add __percpu_var, which skips the btf tag (__percpu under sparse) and
+> use it in __PCPU_ATTRS(). The cpu_info declaration above becomes
+>
+> 	extern __seg_gs
+> 	__attribute__((section(".data..percpu" "..read_mostly")))
+> 	__typeof__(struct cpuinfo_x86) cpu_info;
+>
+> The pointer spelling, T __percpu *p, is unchanged and keeps its tag.
+>
+> Before this patch the tag also qualified the variable's type, so &var
+> had type "T __percpu *", and a pointer does have a DIE of its own:
+> pahole emitted PTR -> TYPE_TAG 'percpu' -> T for each one.
+> this_cpu_ptr(&var) is that shape, and that is where the records came
+> from.
+>
+> Those are the records an x86 defconfig built with clang loses: 280 BTF
+> types, 140 TYPE_TAG and the 140 pointers carrying them, with .BTF
+> shrinking by 3360 bytes. They are the derived pointers -- clang never
+> recorded the declarations themselves. None of them were reachable: a
+> record points at a type only if something is declared with it, and
+> nothing is declared with these. The 803 places that do declare a
+> "T __percpu *" keep theirs -- the 110 tagged pointers that something
+> references are the same before and after. .text is byte-identical.
+>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> Reviewed-by: Chris Down <chris@chrisdown.name>
+> Tested-by: Chris Down <chris@chrisdown.name>
 
-Two problems.
+If this patch is OK can someone pick this up please. I'm not sure what 
+subsys?
 
-.kunitconfig fails the config stage, so none of the four suites runs:
+Thx,
+-Vineet
 
-- DEBUG_SLAB and PAGE_POISONING_ZERO are gone (2a19be61a651, f289041ed4cf);
-  PAGE_POISONING_NO_SANITY too (8f424750baaa), but it is =n and skipped.
-- DEBUG_KMEMLEAK and DEBUG_OBJECTS* need DEBUG_KERNEL, unset in the UML base
-  config.
 
-The device name collides, 9 of 12 cases fail:
+> ---
+> Changes in v2:
+>   - Dropped the "message is confusing" sentence: GCC's "after definition"
+>     refers to the definition of struct cpuinfo_x86, not to the declaration
+>     of cpu_info, so the message is accurate (Chris Down).
+>   - Dropped 2/2, "local_lock: do not put btf_type_tag on the lock guard
+>     type". Only the tag on the typedef generates a warning, and that
+>     needs a GCC fix [1] anyway. The pointer usage "T __percpu *" is fine
+>     (Chris Down).
+>   - Rebased onto v7.4-rc2.
+>
+> RFC: https://lore.kernel.org/r/20261110012235.1024461-1-vineet.gupta@linux.dev/
+>
+> [1] https://inbox.sourceware.org/gcc-patches/20261112191815.884167-1-vineet.gupta@linux.dev/
+>
+>   include/linux/compiler_types.h | 8 ++++++++
+>   include/linux/percpu-defs.h    | 2 +-
+>   2 files changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index c5921f139007..b250d6870324 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -50,6 +50,7 @@
+>   # define __user		__attribute__((noderef, address_space(__user)))
+>   # define __iomem	__attribute__((noderef, address_space(__iomem)))
+>   # define __percpu	__attribute__((noderef, address_space(__percpu)))
+> +# define __percpu_var	__percpu
+>   # define __rcu		__attribute__((noderef, address_space(__rcu)))
+>   static inline void __chk_user_ptr(const volatile void __user *ptr) { }
+>   static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+> @@ -68,7 +69,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+>   #  define __user	BTF_TYPE_TAG(user)
+>   # endif
+>   # define __iomem
+> +/*
+> + * btf_type_tag records "points to per-cpu memory", so it belongs on the
+> + * pointer spelling only. Declaring the per-cpu variable itself puts the tag
+> + * in declaration specifier position, where clang drops it and GCC attaches it
+> + * to the wrong type, so __percpu_var leaves it out.
+> + */
+>   # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
+> +# define __percpu_var	__percpu_qual
+>   # define __rcu		BTF_TYPE_TAG(rcu)
+>   
+>   # define __chk_user_ptr(x)	(void)0
+> diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
+> index dbe3267a0a13..f53fc430aaad 100644
+> --- a/include/linux/percpu-defs.h
+> +++ b/include/linux/percpu-defs.h
+> @@ -45,7 +45,7 @@
+>    * that section.
+>    */
+>   #define __PCPU_ATTRS(sec)						\
+> -	__percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
+> +	__percpu_var __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
+>   	PER_CPU_ATTRIBUTES
+>   
+>   #define __PCPU_DUMMY_ATTRS						\
 
-- vkms_config_default_create() uses DEFAULT_DEVICE_NAME, already taken by
-  vkms_init(); device_add() fails with -EEXIST, vkms_create() returns
-  -ENODEV.
-- 12/12 with create_default_dev=0.
-
-Tested at f046b77fa3e9, CONFIG_DRM_VKMS=m.
-
-Thank you,
-Oarora Etimis
