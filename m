@@ -1,89 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795556872;
-	b=xQLaliE9N9JPwS2cxAsZUgK6NddmrN2QeJgoBiTkFAkQjNV7bdAxHaWUK5LFGHtFsG3b
-	 kolKCMD7/ZOp/Pr4KvRzBVQmjdVCdGhtjyJQ9IxX3kJvUc9t/k/27xpL83XSwx/JoGNcv
-	 hvkRpiEVmTXRGkNuyBody8UeHhTLFKREdPbFc0ZYoTTk772PNZhUegBwlnaJ02LzGLJxm
-	 hsu4uJnDkoRs3y1rqpDXecKvAl6On17lSvS1r3qV/HhdbNkTapnuKZbXtMRPjw0IAD4nh
-	 tnj3rJQFKVnWrdMgYeoOzuGVoGSdRaKxUN3im2SNAwrAzQtDbyknwgKV0lywsVShCuA==
+	t=1795557044;
+	b=c1ozdVXYYsbSZnGiC5DjsDBdTw+TixeIkLpT+qg631rtDkT1CFWMdWpd5bRfAYMXsC0i
+	 qicbS98jZ6SLf6ZbfSYj+BtlDnnQlpg1OShjg/2zDoMSDk4NxkaPYK8Qsm3Nc+peGighd
+	 HYPbdiCNICz5g3kM1DiVAgdk/RQ8y02KZrzJCS7QFugMq7S/9EISOsuwS/2rwaNRWaeW8
+	 M7BlcRk2B0jLRlBETKMnkYGJTH76Gb0JYZcdaWKTLOkpgucvk41N6w8zmfERlWw6rNHGn
+	 pbJNsEfhPTxWYl3ZmDF/2WTnbhqlHV2Ik20sRjhWoF3VZwpUGmbIPq+72olBV98q5qw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795556872;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:X-CSE-ConnectionGUID:X-CSE-MsgGUID:X-ExtLoop1:
-	 X-IronPort-AV:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=FAusodFBrbI8G7AAMkwV4nh7h71Xni9RUPUyfFZl+Wk=;
-	b=AZIaK+PZLcKjs+nNWopg06MpPEDccRqqonvtdoB5M4dIOcYiwIeAz4jQghZfmDVaus5i
-	 lctr9GhBpxTA0NVWk+SHKE4LDS87+FjuSZatVoktb9pFU1RUad0ZKu7KG7Ka2y6DalgSq
-	 k/TAaP7O4rZ/GBX/VTBrhL4yRuoXebxIh4P1Su3VYyvxe2I74/5OR6bcSq2/s1B0BUESc
-	 iFqEIIC/JxazymbbEQ3lCzyUt2aqMz2qtkoTLv333REMo/R4qUyP53W733dpl60gWBoC/
-	 S4cvzetLeNm8t/E1sCCauVJHgjUFa5Gwl8HLi8Cy2FPe7zCCqzoBooAEmYPpdVH+LZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795557044;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=s70JE8KJI38v26U5JxLEQIN5jyIKDs/r/Z45UhNDVmE=;
+	b=Sur05K6tqJHJYWzpECo4kewySqyEYgHpsGsbXH/AkwJi2N7ziUFjYAf/ROQKg5ehh6En
+	 VKjJnMhZtiF6F2nRzX7qLXBWZRRkS8XUMZTe5XmZb58t+SFih5/7gSBKW1T+nYE2fnWT5
+	 8LR1pCsawy07LjoCDcy2jPnvXiDkO3H7ehRBgE7LXtmufHZkSLrmWTb01zukr11fykqA6
+	 PTbVzv8BJj6+QfX1Sj89LVe6XoKkCm7wHaWamI6UwEhh99/t1rW1d85HzMxEXxugvnGAZ
+	 msiT92pl0CcZRFOqtHfXKcvZG+a08mi5QSb7OrGADdjjZ0M2YdpbtPINNaupLSLX9cA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=g75F1QQQ;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=StUpVOkN;
+	arc=none smtp.remote-ip=209.85.214.177
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0D3606A33E;
-	Tue, 24 Nov 2026 21:47:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D0D3606A33E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE52606A32A
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 21:50:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0DE52606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=g75F1QQQ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795556871; x=1827092871;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=gQ5DGumkXVY5xtwGUpFVEiU5TLfOLBabHwPqzekY9qk=;
-  b=g75F1QQQ8dG3S5YEKdYcTl4HuxKU79AUqtmptshfitKoqUnpeElLqymB
-   3ZAtIk2S7NsRT8GUZK3zRu4SWL9HdSErXp+ApfHGfy64hq4Ak0chxPLwF
-   oUMSd9PF3RobZDPxcEssjnfI+/yYl2DLOZAMXsbawxeEMi2+gGoC9qqLK
-   XuXKj7TpCkc/3nSdoHFLfU2KV6aXfBWVV1Eit0wqRj3cBqpxFVJaSC9S4
-   z51wPiouHV+feaAL13sihXiSeyzghdxGkdKc8Is0gjTpz772RR1qVBSQ7
-   YZ39cR2MV2DSPY/rcvhK+0MKycNiKaKUtcDo1QsFfNexUQn6x+zsripNl
-   A==;
-X-CSE-ConnectionGUID: GxkkxtSTTUq3IGsgbrgt9Q==
-X-CSE-MsgGUID: K/Fx8FzuRuCHuw3CuB0+iw==
-X-IronPort-AV: E=Sophos;i="6.27,231,1787036400"; 
-   d="scan'208";a="4355218"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2026 06:35:49 -0800
-X-CSE-ConnectionGUID: DBADT9mOR3GP8LyuPqes7g==
-X-CSE-MsgGUID: kCiXYfZ5SRyT++JDoxRa5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,231,1787036400"; 
-   d="scan'208";a="11471491"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Nov 2026 06:35:46 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xVrcU-00000001PTi-3CLa;
-	Tue, 24 Nov 2026 14:35:42 +0000
-Date: Tue, 24 Nov 2026 22:35:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>,
-	kernel-janitors@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Frank Li <Frank.Li@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH] power: reset: at91: Use devm_clk_get_enabled() in three
- probe functions
-Message-ID: <20261124222203.k0pVspdI-lkp@intel.com>
-References: <de6c1040-c4d1-4703-9932-b3b668801c72@web.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=StUpVOkN
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2f041f88577so27822605ad.1
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 13:50:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795557043; x=1796161843; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=s70JE8KJI38v26U5JxLEQIN5jyIKDs/r/Z45UhNDVmE=;
+        b=StUpVOkNxDHKJAwuzaSdLx2TZcHDw2AWxJncXu9+l/EFnvU2VacLwBkisJBTOP9lAr
+         Hk2UGzryvCK24OtsTLJ6BpAXIomqkwI1C1e2m/5AEuoZUgsCabfPjVrN3HyudEQBxzGQ
+         Hv8hIdrHC8/NeZs4ymVFeBekj8Wki2ocFGT9Zbq68iwGkNxu/pH75h6UPgaCeyN3DOsx
+         n9JSQbg0sL429yZaVZONJMylxTfLxhnZrr7LSsI970rIHpVbr9HUKw/yp36bx9upbKWt
+         ZmWJMU1s++nFI2qtrMjcaPskF3OrLYJyza38mlgqRKvUqzMjhs2pLPz5TS/N4XE6ZzwI
+         m8pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795557043; x=1796161843;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=s70JE8KJI38v26U5JxLEQIN5jyIKDs/r/Z45UhNDVmE=;
+        b=GVzLHvt0bhRJZeJ9OrjvSX5JQE7gZ1JXTC2FMVUnFAxLkIYuKOqYP+29k6p5fxA5zj
+         13XZR0h55EvL5X1wobNBPMqAgMWmYgMps4zfU6bEIaw2OrykT394EnTgD9tAqNctnJad
+         uqtxYMwD3R5apC73v2PUhWU99nLGF9dN1qPlxpz7UBVZwQZIJ0MzP3LbRMowBk3rYo4q
+         XIXTIBfaSpstlc3WzuVMIH9o6Exkb2Y3gBdVUIX+0Pd95S2ZllVuECmhMlXQli9B1nmB
+         VYYATsiPp1bhZ4FBSu357uJeOtEmvrJmneNhFbOAp7w7CmA0OSOzvZzaWRmsIt8X42H6
+         XxMA==
+X-Forwarded-Encrypted: i=1; AL+hErHZ570et84S1kWRradavIoJ77Gsz3ojoPQi7+iFoo1U1DKDjNoAC4UyFUUytDIsjGraRHGA@lists.linux.dev
+X-Gm-Message-State: APuU4Z+F4ny3MLCf3JwYo1CG+jXIz3puNFumIQmIi6rTEfcIcNbOYpoE
+	Rs7rBq9hBfBXFp23Kc1jTBYA5vO7GI1XTjtxsn30exR7P8WeZim5e3ln
+X-Gm-Gg: AZFdTZdkt6fshdbMsOOvpWpXIZgFgjTHrbYIkdLqIDQ2b4LltjM659w4WoPGKom6cIx
+	6Pul30iErug/o1KSy5SOeFqkvxFNnlRnxvfn3jaKLS8sojqfcxV3hSpnzCjfL78guzkhnKXWmd5
+	RBuVcSDUb8mFn6cUxQStl+agwXu+jDk/k/NIh/hPowLjWD5qDa3uZzCOrVQwguXqxthJ3EUz0an
+	SKovW2dRdjA6OKCPoyxrhvNPaOb20VfFyZIP6y481+N5iIYlUYHAsnFgsli8BogapJygrDQzZed
+	77k6deXtH7ca2/qNaTXI28sThtHFXGJU4UVANI//AcmKvZZXBohnqyDMlWcb0hVXUKdBZIDPNmW
+	Nm9zBk+9juadWJzhvFyDuFx5hYTSIQVnSNOBlj9q1/bpyqpgwAQNLc4OjuCDNtvlxhGhm1HG9n4
+	r3nOIx/lNngjggWWIxSNmlBlgxRwc/ZNY3Ad+Hi9f8XoapBX7PSECcA8a1+Edqv8C9QJ54HCZev
+	GqK2aC9LpEQRSJwdz1fno2O3QyOJKoeTM1HxM7EhcCcBlhs8hQn4tE2yg+wkY0eI9uNEgp4+9iX
+	+M1EWpw/rwW/jLMwFL6/CuSr0U1erUYutf+bQUwL1mHx/gtJKAc27ZoNVryJF5pMUcRjlLnyBWy
+	u8JYvDBBBemCh/FzcDoc94YS/6Tvo7BtHbZdPA4d55YsrjbtMTzIlz8tnLrHgmjuvEez/uLvRJS
+	w/9w==
+X-Received: by 2002:a17:902:c942:b0:2ed:4456:fb2a with SMTP id d9443c01a7336-2f03f1bfa64mr148507965ad.36.1795557043298;
+        Tue, 24 Nov 2026 13:50:43 -0800 (PST)
+Received: from ryzen.lan ([2601:644:8000:37f::e34])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0742996aesm47764545ad.11.2026.11.24.13.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 13:50:41 -0800 (PST)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-wireless@vger.kernel.org
+Cc: Arend van Spriel <arend.vanspriel@broadcom.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	brcm80211@lists.linux.dev (open list:BROADCOM BRCM80211 IEEE802.11 WIRELESS DRIVERS),
+	brcm80211-dev-list.pdl@broadcom.com (open list:BROADCOM BRCM80211 IEEE802.11 WIRELESS DRIVERS),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH wireless-next v2 0/7] wifi: brcmsmac: embed fixed-size allocations in brcms_c_info
+Date: Tue, 24 Nov 2026 13:50:33 -0800
+Message-ID: <20261124215040.1261999-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -93,87 +102,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <de6c1040-c4d1-4703-9932-b3b668801c72@web.de>
 
-Hi Markus,
+brcms_c_attach_malloc() allocates struct brcms_c_info and then a number
+of fixed-size structures that live exactly as long as it does, each with
+its own kzalloc(GFP_ATOMIC), error code and kfree(). This series embeds
+seven of them in their parent structures. That removes the allocations
+and their OOM error paths and, for the per-band state, the open-coded
+pointer arithmetic that carved two arrays out of one allocation.
 
-kernel test robot noticed the following build warnings:
+Patch 1 embeds the per-band state arrays of brcms_c_info and
+brcms_hardware. Patches 2-7 embed the module callback array, the MAC
+statistics snapshot, the default BSS info, the protection settings, the
+core state and the BSS configuration. Patch 6 also drops the
+brcms_c_info::core pointer, which always pointed at the embedded core
+state. Patch 7 moves the definition of struct brcms_bss_cfg, unchanged,
+above struct brcms_c_info.
 
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on amd-pstate/linux-next amd-pstate/bleeding-edge clk/clk-next soc/for-next nferre-at91/at91-next linus/master v7.4-rc4 next-20261123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+There is no functional change. The pub, hw and stf allocations are left
+alone: embedding them would touch most of the driver for little gain.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/power-reset-at91-Use-devm_clk_get_enabled-in-three-probe-functions/20261124-095011
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/de6c1040-c4d1-4703-9932-b3b668801c72%40web.de
-patch subject: [PATCH] power: reset: at91: Use devm_clk_get_enabled() in three probe functions
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20261124/20261124222203.k0pVspdI-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2012344e5da8e03ea4b8283ecd6fad6e13f09d64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261124/20261124222203.k0pVspdI-lkp@intel.com/reproduce)
+Changes in v2:
+- Patch 6: remove the redundant core pointer and use corestate
+  directly (Arend).
+- Collect Arend's Acked-by on patches 1-7.
+- Link to v1: https://lore.kernel.org/linux-wireless/20261111042554.232998-1-rosenp@gmail.com/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261124222203.k0pVspdI-lkp@intel.com/
+Each patch builds with W=1 (arm64, clang) and passes checkpatch.
+Compile-tested only.
 
-All warnings (new ones prefixed by >>):
+An AI coding assistant (Claude Code, Claude Opus 5.5) was used to review
+the series, resolve rebase conflicts, write patches 5-7, and draft the
+commit messages and this cover letter.
 
->> drivers/power/reset/at91-poweroff.c:156:6: warning: unused variable 'ret' [-Wunused-variable]
-     156 |         int ret;
-         |             ^~~
-   1 warning generated.
+Rosen Penev (7):
+  wifi: brcmsmac: embed bandstate arrays instead of separate allocation
+  wifi: brcmsmac: embed modulecb array instead of separate allocation
+  wifi: brcmsmac: embed macstat_snapshot in brcms_core
+  wifi: brcmsmac: embed default_bss in brcms_c_info
+  wifi: brcmsmac: embed brcms_protection in brcms_c_info
+  wifi: brcmsmac: embed brcms_core in brcms_c_info
+  wifi: brcmsmac: embed brcms_bss_cfg in brcms_c_info
+
+ .../broadcom/brcm80211/brcmsmac/ampdu.c       |   2 +-
+ .../broadcom/brcm80211/brcmsmac/channel.c     |  14 +-
+ .../broadcom/brcm80211/brcmsmac/debug.c       |   2 +-
+ .../broadcom/brcm80211/brcmsmac/mac80211_if.c |   4 +-
+ .../broadcom/brcm80211/brcmsmac/main.c        | 229 ++++++------------
+ .../broadcom/brcm80211/brcmsmac/main.h        |  83 ++++---
+ .../broadcom/brcm80211/brcmsmac/stf.c         |  22 +-
+ 7 files changed, 139 insertions(+), 217 deletions(-)
 
 
-vim +/ret +156 drivers/power/reset/at91-poweroff.c
+base-commit: 793807ca13bf3072fc6d16ce6d90e9ab9beff2a5
+--
+2.56.1
 
-ae499f0fadaf28b Maxime Ripard     2014-07-03  151  
-099806de68b75a0 Uwe Kleine-König  2023-11-04  152  static int at91_poweroff_probe(struct platform_device *pdev)
-ae499f0fadaf28b Maxime Ripard     2014-07-03  153  {
-0b0408745e7ff24 Alexandre Belloni 2016-10-25  154  	struct device_node *np;
-0b0408745e7ff24 Alexandre Belloni 2016-10-25  155  	u32 ddr_type;
-064380a12e12412 Alexandre Belloni 2015-08-11 @156  	int ret;
-ae499f0fadaf28b Maxime Ripard     2014-07-03  157  
-0b64a0e53cc7875 Yangtao Li        2023-07-04  158  	at91_shdwc.shdwc_base = devm_platform_ioremap_resource(pdev, 0);
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  159  	if (IS_ERR(at91_shdwc.shdwc_base))
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  160  		return PTR_ERR(at91_shdwc.shdwc_base);
-ae499f0fadaf28b Maxime Ripard     2014-07-03  161  
-e51202a7ed9dff5 Markus Elfring    2026-11-24  162  	at91_shdwc.sclk = devm_clk_get_enabled(&pdev->dev, NULL);
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  163  	if (IS_ERR(at91_shdwc.sclk))
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  164  		return PTR_ERR(at91_shdwc.sclk);
-064380a12e12412 Alexandre Belloni 2015-08-11  165  
-062836db01f9826 Ladislav Michl    2018-03-16  166  	at91_wakeup_status(pdev);
-ae499f0fadaf28b Maxime Ripard     2014-07-03  167  
-ae499f0fadaf28b Maxime Ripard     2014-07-03  168  	if (pdev->dev.of_node)
-ae499f0fadaf28b Maxime Ripard     2014-07-03  169  		at91_poweroff_dt_set_wakeup_mode(pdev);
-ae499f0fadaf28b Maxime Ripard     2014-07-03  170  
-0b0408745e7ff24 Alexandre Belloni 2016-10-25  171  	np = of_find_compatible_node(NULL, NULL, "atmel,sama5d3-ddramc");
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  172  	if (np) {
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  173  		at91_shdwc.mpddrc_base = of_iomap(np, 0);
-0b0408745e7ff24 Alexandre Belloni 2016-10-25  174  		of_node_put(np);
-0b0408745e7ff24 Alexandre Belloni 2016-10-25  175  
-e51202a7ed9dff5 Markus Elfring    2026-11-24  176  		if (!at91_shdwc.mpddrc_base)
-e51202a7ed9dff5 Markus Elfring    2026-11-24  177  			return -ENOMEM;
-0b0408745e7ff24 Alexandre Belloni 2016-10-25  178  
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  179  		ddr_type = readl(at91_shdwc.mpddrc_base + AT91_DDRSDRC_MDR) &
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  180  				 AT91_DDRSDRC_MD;
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  181  		if (ddr_type != AT91_DDRSDRC_MD_LPDDR2 &&
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  182  		    ddr_type != AT91_DDRSDRC_MD_LPDDR3) {
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  183  			iounmap(at91_shdwc.mpddrc_base);
-caa6e150f8fbcf4 Claudiu Beznea    2018-12-06  184  			at91_shdwc.mpddrc_base = NULL;
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  185  		}
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  186  	}
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  187  
-996463fdb8cdec4 Claudiu Beznea    2018-11-05  188  	pm_power_off = at91_poweroff;
-0b0408745e7ff24 Alexandre Belloni 2016-10-25  189  
-ae499f0fadaf28b Maxime Ripard     2014-07-03  190  	return 0;
-ae499f0fadaf28b Maxime Ripard     2014-07-03  191  }
-ae499f0fadaf28b Maxime Ripard     2014-07-03  192  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
