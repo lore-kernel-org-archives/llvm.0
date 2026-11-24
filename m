@@ -1,49 +1,123 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795522889;
-	b=hP05n8brB7zg23FbPTJMFV019yYHyWOYsmZRd5errTj//morC4XOh2BN56CVl/xJgFD5
-	 UN66jJGw/0kQlCo4ZyjrBF2g9pYmcxu3qsCeMCWFEEZIFBrGiFFL+zBUA15Y1YzrrkpTm
-	 tlw1HPZidcrG8ak4RL9eCTXi5Zlp4tbITSuy+LL9pCMyehGve5NaU5JYfvA5nOIiEcTrZ
-	 FxChEQbPoZE+ZBLt3ih7MWvYB4ABcWGvMWCey0rVZFT0sfoF/iTuK5PFONDI5HV/updZc
-	 rzOUpsf+GEzhwYS9ba2CTe6Sd3lJ1RfLoleasMQENoHaxSuyTFi2vqf+KH0aX8Zoyiw==
+	t=1795525942;
+	b=47RCAkTWvsDHMbvY0WAYDu6W6mR0FKL8RsCz5BhYTHTcFFdFSWvPw/xjKP9PyBgzk+Bi
+	 A/YdyQN0D9RV7tudEebWi7X2XMJ2hNiDWqBJRFERT7aTI/jugTpv0INWgk1cPXLqpy+2t
+	 6MDuuHBjTgUGL5cdi07G04QQDdQi7jXnqEZqYm88/ZR7lEXXigHnpbhgoHEUq2m6FjFzT
+	 51mR6ykmQUq7nmeUVysAEn66QKEshAuaXcxBktXwo+gJLSH/LCNESAT9x5tLhcd4w78nV
+	 NPE5P+ozl9PI9DWn9fHFoyF7aeIX3wJhMzyb7WFe+71SKQtm8XS4GXSddPRPJuT35ug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795522889;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=BjOfKecaDq8wEAUnqGtB4mDYnoTQs3eK3b1SK9f2Fkc=;
-	b=irHt7Ph5kGWEmqTTNGG63hV06Xl12RBs4Sf1jaquFsd4s7pOxcea95aPwlJviLusc82X
-	 U3MkEOV/01TDJxUtAAFvo08MTrCj3q4srfto6t+D5StHKC0DS539X9iNCaQOxK/MVeqeB
-	 aqXucKqWbbYu0ZxM2JAxVI1OP6rnMDTh5h2yX0V7kzHpavlIgirWiDwxYh2XupLf3ZGaX
-	 L/PN8go7S+a9yioZV2Fqnmrkk7vlMbHqBr817RocTSWyVKB1Rg9PGFPep+uqiMG1khR4a
-	 BHzx+zkHIOhQodhFFnSwT+ua8nBCmKOd3119bIMTlcjrntcJDDRga8/4GOagOMGDgCw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795525942;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding;
+	bh=SPsNgyVVAqeT7i1RiIgNXc+OMJpYpOzW291/apl/HkE=;
+	b=diE5JdPfHsLxm9Nb/H1klCRmHuPcj93yOukqbmbopep8A3i6wuGiJfUpQdpfq32mBFB9
+	 8I6k8kUS1vwN5S4j6qqLkiagFCGbr0KFoekDQ70Isk2S/PliqwN6g9YCOAnVizza4rq5v
+	 qZoCIopjX7qDrpoIKzXY3QZjFvbghYkAUKshrFNa4JNuA0U8ZD6DRB/ZipFxyxUaeEptb
+	 dvEGaVB1v0RFqYNuVd+FaRolAKCurdafyu1uw6m5A+mHos9jCfXlhqFlZchmYoYo12FSw
+	 M7Tz/EVk7zlX2GNwLRrmQqEZ3Iy97g8XZyoBNTWfqy/ebrF8E2MRQeO3WDaASm5Z1zQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BMmMyyh5;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="A5/bJpmW";
+	arc=none smtp.remote-ip=209.85.221.51
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A675D606A321;
-	Tue, 24 Nov 2026 12:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C07D606A322
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 13:12:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C07D606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BMmMyyh5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A481F000D3;
-	Tue, 24 Nov 2026 12:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795522889;
-	bh=BjOfKecaDq8wEAUnqGtB4mDYnoTQs3eK3b1SK9f2Fkc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=BMmMyyh5vtow9S1jYfDwbpA0eMmnBQzOfG0MbJ0vt9M6kNQ4MD7oYd7rY16GfUtML
-	 3eDUH0BzZutKl+YiJj3IW7tRZLCtCrVksyJLL6+gVJ9QFir2dKsbqUrORGyTr1bVmY
-	 BrloULFanvL7yq+4HvVS9IAMpFVPV5WmPGzcadbv0YBuoPl6yfBfZyh5ullUuVK7t0
-	 Pp9b3Ifvsk0ScEoTSsAS5ygAkSoNtGXKppXQwbqP1AXozUUHpv2IMq+82w+bFky01a
-	 5jEcgK1UhFpskGHbgSLLTfqyeZflOEfi5x5i+GB/rd2Dgq9aSeiTX3iLV7i0WJvcPv
-	 EPx/pMF53lmow==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Tue, 24 Nov 2026 12:20:17 +0000
-Subject: [PATCH v6 7/7] kbuild: build rust crates in parallel with the rest
- of the build
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=A5/bJpmW
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-491f34b4e0fso2079850f8f.2
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 05:12:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795525940; x=1796130740; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SPsNgyVVAqeT7i1RiIgNXc+OMJpYpOzW291/apl/HkE=;
+        b=A5/bJpmW0JY7yfzIUJ5SKNd3UyXsvzOwmvyJIycXJY5WFVQxKG4fj4clvwIROM+15u
+         HrS+U46FA8xnrvkDVIZQM2zI1KPbW4KqFTgPIj+50Ogd6NhbWXsClykJS3YVrlNQlmZC
+         HKXLbwumJOKynaW0hWZNCywXf15xVqHuqkkIvJxw1/rExh+N4AtsZnlyhwXDVISYlPnC
+         VqPQYJVwM2k1nmESrrcW6bSwZK6nMVYn3CQB/s41hXrfIarQ+cDkm8mqYEvQXMvSJ0ju
+         K+M8KwFdw9VgwPkKmUjXIhAf24Q5UujWrE+CF5wdP/fstKR73du82an7gJFjcGtMvj1m
+         jb5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795525940; x=1796130740;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=SPsNgyVVAqeT7i1RiIgNXc+OMJpYpOzW291/apl/HkE=;
+        b=L7zyQ+BjRj7GvT2FmTR3oaSDcR0bh/2FaVtnAzsG6cNqsmheQmlMosdl2sSEHrN9ii
+         jV3KVwG9CXuvM4C3qkGtH0mOwJw9UCo/ZlnHkUxxySRa1CWQMCtqaoA0y48P/4wjXYLh
+         dOX9XbCBFWiTl/Pz6jrnnI1uerqTnGMSMh69AbpEbKuK/mh7U10m3Tt34PAaeWimw8J+
+         9qFI2E3qR/SFdje7h+KCKzU2OZGpkTMK4BjQmF2x52KVscadBGqpjy0HEl7+LYIaIob6
+         r8Au/ZC9c5jWvwGTezPi9RHSPW9PoFcI0OI21WmOdu7uVH3PV/nVUAURNugyT/Yk+Lsh
+         JU+g==
+X-Forwarded-Encrypted: i=1; AL+hErH3TgggLXtFYS/pI+dY66FohSXSA6bku9IE5+saFzbU2f+AJZ/sxNVf5lgQF1Njh5S2Mw8Z@lists.linux.dev
+X-Gm-Message-State: APuU4Z8PV0m1oIpgMOVW2/5heVArjed/UafEq53+s+VsV11hAOuzv6np
+	CO4PQox/m356XbNNp9cMWnRXedDZJHGIfYVlTUyqHq/Gv0mFMWndOpuQ
+X-Gm-Gg: AZFdTZe5443u0LS2W9itb9s+X50AxzhJZ+fIZSqf/hHoRXxitmlXqFvEnq+e5rzoifE
+	TmGVygbYmYEHubd6I4PoZ+Fd9LdQ2q0NlJ0hqXR2lkVVbRjeLqwGAZwJKeAyAu0q/b8KLT531IY
+	Ncg2+Lxqk7ukRh2mxIV5kiSp243NEDlRguNQJ7nvnemwg0z1hJEcdxP6KebzUmFMLnrckTTCoOm
+	rmflJuIcppoyiYOGjFeoEa9uEcsNIFhn6rZ/fuv2GKdiJ48n5A9c1W9XPS4cCnwf3DR3B2XeBiu
+	mThJdimeHmLzad7P0mY9HoZ1zZGptCNgK0lRzdvaoJVJUZ3Hw/HmSPHr3uxPBVbIp8Bn/Zlb0zg
+	6I36dLSoDRkVnl4TNvwfrOjj25Rz3oJZotGm4ZxhKf115j5aMaKryxIjx0hQFNJgtq8JNNH3sfh
+	v93+OArgdgRb0iAoQWA2be0XVeIu3zYXIDLmurn0C9/L5IioimDXBoQdAU0mO/kwzTNN7KtW9Ts
+	BBpdXg7XULVVvYoywd63Mn2yy0txVeb9TVqW22qS98STUYLOHCa4JhgdOlLRInLMk6vgAAdUiv0
+	A2UO0Ey+TPKcycW6UvE+012ReJxbjIQ=
+X-Received: by 2002:a5d:5d05:0:b0:491:6c24:65f5 with SMTP id ffacd0b85a97d-4abaf74024cmr30988416f8f.17.1795525940203;
+        Tue, 24 Nov 2026 05:12:20 -0800 (PST)
+Received: from ArchOarora ([95.179.249.152])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6c43563esm29088126f8f.57.2026.11.24.05.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 05:12:19 -0800 (PST)
+From: Oarora Etimis <oaroraetimis@gmail.com>
+To: Louis Chauvet <louis.chauvet@bootlin.com>
+Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Melissa Wen <melissa.srw@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	jose.exposito89@gmail.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Lucas De Marchi <demarchi@kernel.org>,
+	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	sebastian.wick@redhat.com,
+	victoria@system76.com,
+	thomas.petazzoni@bootlin.com,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6 06/43] drm/tests: Add test cases for DRM rotation name
+Date: Tue, 24 Nov 2026 14:12:02 +0100
+Message-ID: <awWLyW77VcEKkt1w@Oarora>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261120-vkms-all-config-v6-6-78ace90f4fc1@bootlin.com>
+References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-6-78ace90f4fc1@bootlin.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,176 +127,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261124-build-speedup-v6-7-141a4f861c67@kernel.org>
-References: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org>
-In-Reply-To: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Geert Uytterhoeven <geert@linux-m68k.org>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Nicolas Schier <n.schier@fritz.com>, Kees Cook <kees@kernel.org>
-Cc: ljs@kernel.org, linux-kbuild@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org, 
- rust-for-linux@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4608; i=ljs@kernel.org;
- h=from:subject:message-id; bh=5MzJBqb7zsETYjPaIMd7AEqIq2d58l2NTrQXEnXTB9k=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJZG/7XLrlpGcg37S7/5NiXDgdTX8Qm8jKkqjrxLX2yp
- 6DDYdmPjlIWBjEuBlkxRZbnX8T3B4mEzeu84O8GM4eVCWQIAxenAEzEkZOR4YeJSX5O5oV/DktF
- 94rXx3hcYRHX+sgZuZQncfO/RTtnczL8lQp+fyajUCrUUN/bX2Pdtu7/G42sLKdnLwj5pyNgbhv
- EBQA=
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-When CONFIG_RUST is specified make prepare builds all of the rust
-components before descending into the tree.
-
-This means nothing can be done until all of these are compiled, resulting
-in a stall at the start of every clean CONFIG_RUST build.
-
-This also implicitly slows down every rust-capable LLVM allmodconfig build
-as this enables the CONFIG_RUST option.
-
-Fix this by allowing rust crates to be built alongside the C code.
-
-Remove the rust build from the make prepare step, then establish a
-dependency between rust code located elsewhere in the tree upon rust
-components contained in rust/.
-
-Do this by establishing a top-level list of directories containing rust
-code, KBUILD_RUST_DIRS, upon which the dependency is expressed.
-
-Finally, ensure that no rust code is located elsewhere and fail the build
-if any is found to ensure that nothing is missed in future.
-
-Care is taken to ensure the rust/ dependency is also established for any
-module being built to account for external rust modules which rely upon it,
-and that only one rust/ build will be performed at any one time.
-
-External rust modules builds are unaffected - make modules_prepare ...
-(where ... are other goals) will build rust/ first.
-
-The rustdoc and rusttest goals invoke rust/ directly rather than via
-Kbuild, so build rust/ first there too.
-
-Every Rust and C object was confirmed to be byte-for-byte identical after
-this change.
-
-Whole build, 128-thread Threadripper 9980X, best of N runs:
-
-                                         before   after     delta
-                                         -------------------------------
-  x86 defconfig+RUST, clean                36.5s    32.6s     -3.9s (-11%)
-  x86 allmodconfig, clean                 297.0s   278.3s    -18.7s (-6%)
-
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- Kbuild                 |  5 +++++
- Makefile               | 17 ++++++++++++++++-
- scripts/Makefile.build |  5 ++++-
- 3 files changed, 25 insertions(+), 2 deletions(-)
-
-diff --git a/Kbuild b/Kbuild
-index a6a0192dea08..9670556059dd 100644
---- a/Kbuild
-+++ b/Kbuild
-@@ -115,3 +115,8 @@ obj-$(CONFIG_NET)	+= net/
- obj-y			+= virt/
- obj-y			+= $(ARCH_DRIVERS)
- obj-$(CONFIG_DRM_HEADER_TEST)	+= include/
-+
-+# Rust code elsewhere in the tree depends upon rust/.
-+ifdef CONFIG_RUST
-+$(KBUILD_RUST_DIRS): | rust
-+endif
-diff --git a/Makefile b/Makefile
-index b41f613e42e4..879d124e1f69 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1416,11 +1416,14 @@ prepare0: archprepare
- 	$(Q)$(MAKE) $(build)=. prepare
- 	$(Q)$(MAKE) $(build)=scripts/mod
- 
-+ifdef CONFIG_RUST
-+export KBUILD_RUST_DIRS := drivers lib mm samples
-+endif
-+
- # All the preparing..
- prepare: prepare0
- ifdef CONFIG_RUST
- 	+$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh
--	$(Q)$(MAKE) $(build)=rust
- endif
- 
- PHONY += remove-stale-files
-@@ -1767,6 +1770,14 @@ modules: modules_prepare
- # Target to prepare building external modules
- modules_prepare: prepare
- 	$(Q)$(MAKE) $(build)=scripts scripts/module.lds
-+ifdef CONFIG_RUST
-+# Avoid two instances of rust/ being built at any one time.
-+ifneq ($(filter modules_prepare,$(MAKECMDGOALS)),)
-+ifeq ($(filter all vmlinux modules %Image% dtbs rustdoc rusttest,$(MAKECMDGOALS)),)
-+	$(Q)$(MAKE) $(build)=rust
-+endif
-+endif
-+endif
- 
- endif # CONFIG_MODULES
- 
-@@ -2035,13 +2046,17 @@ rustavailable:
- # Documentation target
- #
- # Using the singular to avoid running afoul of `no-dot-config-targets`.
-+#
-+# rust/ is built alongside the rest of the tree, so must be built first here.
- PHONY += rustdoc
- rustdoc: prepare
-+	$(Q)$(MAKE) $(build)=rust
- 	$(Q)$(MAKE) $(build)=rust $@
- 
- # Testing target
- PHONY += rusttest
- rusttest: prepare
-+	$(Q)$(MAKE) $(build)=rust
- 	$(Q)$(MAKE) $(build)=rust $@
- 
- # Formatting targets
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 7b652f169a8f..ec4e220d6831 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -381,8 +381,11 @@ quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
- 		$(cmd_ld_single)) \
- 	$(cmd_objtool)
- 
-+rust-dir-ok = $(or $(KBUILD_EXTMOD),$(filter rust $(KBUILD_RUST_DIRS),$(firstword $(subst /, ,$@))))
-+
-+# Ensure that any rust code located elsewhere from rust/ is listed in KBUILD_RUST_DIRS.
- define rule_rustc_o_rs
--	$(call cmd_and_fixdep,rustc_o_rs)
-+	$(if $(rust-dir-ok),,$(error $@: Rust code in a directory not listed in KBUILD_RUST_DIRS, see the top Makefile))$(call cmd_and_fixdep,rustc_o_rs)
- 	$(call cmd,gen_objtooldep)
- endef
- 
-
--- 
-2.56.1
-
+Tested-by: Oarora Etimis <oaroraetimis@gmail.com>
+Reviewed-by: Oarora Etimis <oaroraetimis@gmail.com>
