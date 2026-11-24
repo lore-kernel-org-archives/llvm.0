@@ -1,123 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.43
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795529538;
-	b=zQg4g+79KnPr/G+cAhKU38tVNq+G6MX0jpw7JGtp0z57+tXi1gH7tYTi+0KmauQKeLe+
-	 oPoe3pV/bM24Amod31QoEI1ny3htG/WEkDq9j0jSdOIy8I70Pqj2FXrok6OhI06GhThPG
-	 RJsKLbiZWnHrVk3PkNJGasDlmCTwkcvR0BJ6xhjfZhNRKUtP0pvCG6JhgSB1BGTZU6tFR
-	 y7SqxsMA+XKix+GgF9qdhHod83zlba079+iaDM3eS757f2SALC/v/lHYKhF4cR37aW+Br
-	 Xd5Ls53L5qx4VcoZDoPSB2OBIDVpP7Ss9+K9EKwesLeUDKu3nbxeA7/npoxsDpVWH7g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795529538;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.180
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795530337;
+	b=l4YoJ9v4P9JB0po+pK9m/CTuag5+7QLDjEF0FMo1w18GtC3D7+6KQBDerP2NtpYf8JAL
+	 lIBkNHLWyYkI5sCBrtlaqxausgWC57UjdPQjkITS/gA131+iKDMDgDGhkl8CQMLe/rcwR
+	 lp0N3b9nfJGdVe8+w7cJo2Ncx1MPkvqUa8LffghRnItnQKN/sxxL1Ox5NqCCbAyfUcIrc
+	 ylV43mIYA/Np8bLScUq0TiIEIcZuTOr4TDlX79fcXTm8sbZLH/XAlA5+PnfrETOKgrcgC
+	 G7fHbsAWV2Y0QYBUvxpokJjzRVtoDhj5k46NbCTsi8bO+MwNqP7D5bIwfaZqv7NkWdQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795530337;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding;
-	bh=a2jTjAttfP/k6A0fA1FgjeitHCs9Uab3ZxcInWTSuWk=;
-	b=VJzcTGIC5AEUpz8eXo4e9ovaB02m9kw5XNv1wZoXj87L7cdX8LoW2Q+CI8sI2dEKaijI
-	 9mMoYdHXs6pbNCV8dtvYHp0Kmrs9e1X7mhSWUqn9d7QCQvd8WVOXlu4j3l61O5P6DAPOb
-	 puZaGCXH1QyzB8YI8eLx1RvWv43EQYYwD9zL1dJEDS3r93Q/iMIx8nGTvoR6+SEcyxxBt
-	 p4KkxVSx795QG5FC+iE6KFELXJ+UcMwaExP/ZRHqBLPbqh83ePbRCDxwmutFjwS4Id5Jz
-	 10fqkJQdl+mLVvld9JmazmeGxjFM8H9X8+SJido7bJ4K3TsLPJlx80/PsgLue5zoUdw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
+	b=aAF3csKZnyHpQYy22bEgKD105Ss6fan4YuxDqSEv1EoM9TcdC5tVeRDaAGQUJbX/vBUU
+	 umyw459Tn+B4Yi/PLXQaqaouCbm1LvUr7Jq+GFlr6B1K2BIR1AU2VH4dlpDzyplzjC84q
+	 muB0mRDeIE/yLinWhEzQE+FYTacV186gPTUk7rNrn6A6vej/l/7f+uwJpXEPOJjUIsuDw
+	 x41x+mSYLmD97toA4EccuSddHBhsIVfVKR1Nxh18T8yTxq1VOnTbLrtVYwpaqp/f7pXjl
+	 Vf1WisAgKULiY0EJgrBPbOzsG+fAFLaPe2WIBZ3P6gfO8ujb/GJL01UA0l4T64M2fUQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eung7fSa;
-	arc=none smtp.remote-ip=209.85.218.43
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Iv2t9W8y;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.180
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77647606A321
-	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 14:12:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77647606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EE8606A330
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 14:25:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38EE8606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eung7fSa
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c506a231b88so628336066b.3
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 06:12:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Iv2t9W8y
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8b5a6f2f27fso1839760b3a.3
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 06:25:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795530336; cv=none;
+        d=google.com; s=arc-20260327;
+        b=dTNziPQEMAb7YeiZ+a6F+OA7xEe9RV6RrQUI/kC4L5mZcWnq3Ha2A8g8G9c7uFVLvW
+         vQ15oUUzh+jU95tEXZ2cQY3h9383ALRYQois8VpwPYDSyD+36YbzFofE8za1Vkoaoftl
+         KHbmHNeU+4SvLzQKEhIZNgx8mv1i/hpUGO1c2RewKKeIXpTbqOz92zdk4NFOo5ajbrNi
+         XSUi6lBbLaoDpbCXGI++3vuf4L6ePOkarRxfqNMaW0gUmWCyL1qa25c8UzvdVKbapmf1
+         mHPcnIEjMlLmHKPf8Lvajm3OL4c53FwN3KqLNvF0re8fkq4bAJdwYqakCoyriLI+CGzP
+         2vxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
+        fh=qikLwWVAZjHj8mNYvFMdSJKsRTnMFabdRYB2z2lC9Js=;
+        b=IzqCFzcOKWIAUZfNg0QG3H6EhzQnZDYaPnHwomNv5hb20FO0vlsDXceqUomjvcDwQ3
+         CZdibiZr6REClx1w1b5hWbqpYOkPbLLe7Rm+KFM9/1hm6hFfpFhrvxC7wBAJCY2xOawx
+         lk2A28rU/NLf3zdTYVEqKaK5UCb2tGCv5zXYnDUQ+UzeQd9kN4jL3uxmDGwhwl+NdUUh
+         p9Rpwxp/jfp4bXOLFRWm2Uqh/BcZf3keDwcMI9YR1MQl7GqNcx7aeFQfJ+IQArc8k7Ke
+         0i6wLk/oj+KzkyK2gN17xZIwp5UeObCo2v3bwn7xtKv+BwdkubCc0HA0sZT3TM55nu75
+         CDDw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795529537; x=1796134337; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=a2jTjAttfP/k6A0fA1FgjeitHCs9Uab3ZxcInWTSuWk=;
-        b=eung7fSa7TX7DfThSkMWR2ddmvn3H266kEfwC/5kFTW1y1gpkP77sJ1BVQVL9CsJZj
-         rHavCYsEyuzqZEhuh4VikQUlyxGvxZBLaLXfUUa5iD6AOkHj+1arYOuiR3dA9R2LI2xE
-         mMhcDoM3I4a7oPpIhwpFMYH26arUg2aNSlR03TLpjFRQPHHUiK5WByQgGKSv6sRhFaR9
-         CCmOjjDGROi46v3wdsFypeZqZU7h+IsANKuA6NAg8VZNa2F5ZlKtedwOJuer5frhMLQ+
-         Warl2rBKQTAPfnWz9qsRcS3E72ktgK5Wei+tL4tHqTWUdVD8bmMFDkr9YCYOWdUegacG
-         GZzA==
+        d=gmail.com; s=20260707; t=1795530336; x=1796135136; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
+        b=Iv2t9W8yhdEOX0uMyp0KOyJL9z5AJ+De0imhTG82PSaZNucMHerR3GvFjUetfW0wyT
+         rbLSIR37n1KVqOK5al2fpTfsj0YG3Amt0OHjETBJ5Y5m81PgWjA5Fxx0S+AAR0oztUfp
+         ZfFBrAUSlLmuP4utOZwLYG6oQev3CJlYI+Km/ZCxaSi7UkIE/RaDjM3tBaE1ribW10DB
+         ppb11PXybpjnenyoCG/QwxtJX45QSWhDJuMzS7Jg2PJ4ik7vxNXJijq8wSj4v7yUxp5e
+         cAOXKa4KqNujI+uy1kpbdobVHYPy1qwRrOX1uBvzIzgGJxnnPk+peUElX5HuKT6H/H8t
+         weiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795529537; x=1796134337;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=a2jTjAttfP/k6A0fA1FgjeitHCs9Uab3ZxcInWTSuWk=;
-        b=tKzetSSuk/j5/yOVa/86ilosMJ/LpujKpJopSK6dklKcSnX+w+9NH2Ajzzfe8+XJWu
-         Eif5G1O3cqa4NRp+DdCMFZpKZ6wzHdLoEpx8pm4SnVASQNz9yRMvOUO/RmaSfyPX8yME
-         R9iVN9oI1DVrj1t0CHcsdwNiVKt1W67QatZS1Z3MypYsyQ376Lya9juiVylVPYsgfyIU
-         sFio+GScSMkWmX655nd2azXHiFaNgIKuKNHo1K58hrNyj0DptO7X7dhzvW2a2hwZsyL5
-         w3i8HBD7q4TpG//TkVFmTi/TNfv7eOVLxNUNFW3MJHdpdqVCJ9+JtvNO3btqAtoYXwg5
-         pdnw==
-X-Forwarded-Encrypted: i=1; AL+hErHMQOEOUKf7sH2ZFv0WLaGUENfT3wTIB0XdrLoedYgh6WrSJQefCIudcqO1nh11RcN1C58g@lists.linux.dev
-X-Gm-Message-State: APuU4Z+JHOntoLLUVhwFWOa0EEw3tMokTUdEF6iN4ZmEVSAHVZz7pKAL
-	jrxr3ADRj7KIHYk5aW8w757Hvvu5HiRxCR9mcF6p6KlsxBuixCWziGAE
-X-Gm-Gg: AZFdTZfU5hSDBDjed74WPtQb5ngrrM64hxg/PHGvJHUtNy5vmxTJN+YH8yFiICDj4tc
-	gacW/MOe5BXrDzsyPUyCQR3L9jr+ODoKCa1nokRGgkJYetK0L/FJU5bbXMwSY2MbsGc92NttrfE
-	hCB0y9O6CorKigzjKWDGZ8fpBFcNvOKZT7jFKzQrTMW3TbGW6tN+eiQaQRGMRI3fZgEdYwtdb+U
-	PVxR/5E9t9ZP4KQ2WBt8bY/yj2jqsVqgL56qtWB+JP4B6nzrplbruvRug9hKnqZEGzh9KoQT3th
-	YLMnO2ibQEzLJ+rGwjqYZK/wUsOMEDVZiwD141a8pAf8XYeVui7YMAMpkGqKSO7E4giPifij3cx
-	T2+UdBL8+K3py1IeHn06k6N/9APgMI+ClwgMBteQnzPNsT7bpVMRoXzE8ypbQKwy9i9Pz2v1y2A
-	Bpn6Jo5hjhvu7zN/r/uWVMThUZxgHwgiqmk4mXREokgYeXdxlxojm+r4NJkdcXiUymkEgsBeLJX
-	eQgKaaycxb7pUgAoRBeF9YRk6EDnICe38CbXsx7jf23sBafd5ghfqBYTlq21mzJlJVQPbiYBw1Y
-	hR9QHNKe3RO1TstanTuaO4Nh33kqtVk=
-X-Received: by 2002:a17:906:26cd:b0:c41:26b8:c49c with SMTP id a640c23a62f3a-c513a5db1d6mr934692166b.10.1795529536866;
-        Tue, 24 Nov 2026 06:12:16 -0800 (PST)
-Received: from ArchOarora ([95.179.249.152])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513ae8db37sm520054266b.35.2026.11.24.06.12.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 06:12:16 -0800 (PST)
-From: Oarora Etimis <oaroraetimis@gmail.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	jose.exposito89@gmail.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Lucas De Marchi <demarchi@kernel.org>,
-	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	sebastian.wick@redhat.com,
-	victoria@system76.com,
-	thomas.petazzoni@bootlin.com,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 10/43] drm/drm_atomic_state_helper: Properly load default value for rotation
-Date: Tue, 24 Nov 2026 15:11:59 +0100
-Message-ID: <awWbIh471dkjKGII@Oarora>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261120-vkms-all-config-v6-10-78ace90f4fc1@bootlin.com>
-References: <20261120-vkms-all-config-v6-0-78ace90f4fc1@bootlin.com> <20261120-vkms-all-config-v6-10-78ace90f4fc1@bootlin.com>
+        d=1e100.net; s=20260707; t=1795530336; x=1796135136;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dF9Eh9RPsijpEV4u/u30zGzXT7uW3lnbZk/EegXl/U0=;
+        b=JPzfPtcX4AtvLraL87a32QiWVADYZPw7g952+UCPiysCF3ohO8m7zTvA5Ui8HJ5pKh
+         B5Dt4/BDmZmdP8DfC1WWhi9qhRD9adc2TZAUNf18TREDl+VFeoA0U2aK3HU1+wItENRX
+         xIm8I3VinhoxmcDR6hA3Ts/qywqRoLK6uFenQzlw8tdcWcKBOeMnuBCWMclAlY4MM2nc
+         4rgxTCKYfXQ65MC56hYRpU3ikJ/AkIflPpU9B2OX5FO7j6CZX7IWRF7iEEZherU/bO8a
+         d+4e0WQ2+Ljm8hh8coN4SsYYKyHjW6hPT5BFAO7ZmeeMUQrvl2Jiaw/i7z3zdV2DS1dD
+         NAtA==
+X-Forwarded-Encrypted: i=1; AL+hErErSl5FYfRjeq4bbvhaJ0JuPKkcgEg+y3R65Eor7flWxuiUTdPqIP46EcknE6fnHzMnwryc@lists.linux.dev
+X-Gm-Message-State: APuU4Z/g2x6ktTc0JFVwZT7zbaQooGfYo84DnJZZY6KgICVLpisH48Dw
+	0JLuZv16uXfXHFYD0zB+1Iu4Zi/B80FKfp8VcS+V5Q5dFJkrQ7cUgR098rwH2HMato6+tzbQyXd
+	LUzwCIeCkBaLhDMbUQp0Fi+7atnKwgo8=
+X-Gm-Gg: AZFdTZdecHxfsmbO03Ex10ff5LuicqGapt5GGjF4fYdYBSCJijk4QI46KwVELWzhFwi
+	3dplyJpmixn1jSOw1/AjBqiFLC9HWuWjFG6T/ArD9EEGjtjSYRsXbkI+DBiplWfqbGgqRUKkOxc
+	hB03NpLGk7PvIBJM+wyNlSWv67Sn7D0QcV1rCuzF7HrEhZi2ZdTUN2kxyu7sgeldFfy5dTa59U3
+	NdT+hmJSqpXSzeuge0z9BLtwvapa8/f9UP3zs8mZZEOY6HsHkMfYQCN7mCsOVZ1z90dKvK3DIRT
+	qrROaq18v2eYjHuN5mmUOBXRTTUQY6RgwtU/W591JvD9TNaR+bOk3vHPI2fcRUNzERK6NOo9qWz
+	Gn5qNK/Ju8FCzlNXCzt7O1XTeMm2oQd5x/JIFB0QRg1Bwz/uMu6v09hjVvhsZRlt8PLCrD/2kn0
+	86SBTEEQmBzRddC1Yro4UVP8BmRPdDVUKLmVdCmg==
+X-Received: by 2002:a05:6a00:aa05:b0:8ac:3a71:38a6 with SMTP id
+ d2e1a72fcca58-8c87d51b350mr14612611b3a.52.1795530336387; Tue, 24 Nov 2026
+ 06:25:36 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -127,52 +105,172 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20261119170342.1508789-1-irogers@google.com>
+In-Reply-To: <20261119170342.1508789-1-irogers@google.com>
+From: Xin Long <lucien.xin@gmail.com>
+Date: Tue, 24 Nov 2026 09:25:24 -0500
+X-Gm-Features: Aa3M54q7cf8dGtPcbVzPYANJ8EMqW3ekx7jrSJiP6UuKtxdr80Wu8XceJYu_RHk
+Message-ID: <CADvbK_fM=xmwthLnz=j7YqRghc6ncDo8ESVYgWYeR0t_Byubhg@mail.gmail.com>
+Subject: Re: [PATCH net] sctp: initialize new_value in custom proc_dointvec
+ sysctl handlers
+To: Ian Rogers <irogers@google.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, linux-sctp@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Elkin Cruz <elkin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 20, 2026 at 06:58:52PM +0100, Louis Chauvet wrote:
-> Currently, the default rotation is always DRM_MODE_ROTATE_0 for all planes.
-> Some planes may have a rotation property, and the property may specify a
-> different default value and supported values.
-> 
-> This is not an issue for "fixed" configurations, but with the introduction
-> of VKMS configuration, some plane may only support 90° and 180°
-> rotations, so the reset state of the plane was wrong (forced to 0°).
-> 
-> Fixes: ab2dd990f4ab ("drm: Add __drm_atomic_helper_crtc_state_reset() & co.")
-> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+On Thu, Nov 19, 2026 at 12:03=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+>
+> proc_sctp_do_rto_min(), proc_sctp_do_rto_max(), proc_sctp_do_auth(),
+> proc_sctp_do_udp_port(), and proc_sctp_do_probe_interval() point
+> tbl.data at an uninitialized stack variable new_value on writes before
+> calling proc_dointvec().
+>
+> proc_dointvec() can return 0 without writing to tbl.data, for example on
+> a zero-length write (*lenp =3D=3D 0) or on a write at a non-zero file off=
+set
+> ignored by proc_first_pos_non_zero_ignore() (such as pwrite(fd, "1\n",
+> 2, 1) or a split write where the trailing newline is written separately).
+>
+> When that happens:
+> - proc_sctp_do_auth() unconditionally stores the uninitialized stack int
+>   into net->sctp.auth_enable and sctp_sk(sk)->ep->auth_enable, both
+>   corrupting SCTP authentication state and leaking 4 bytes of kernel
+>   stack memory back on subsequent sysctl reads.
+> - proc_sctp_do_rto_min(), proc_sctp_do_rto_max(),
+>   proc_sctp_do_udp_port(), and proc_sctp_do_probe_interval() validate
+>   the uninitialized value and overwrite the netns setting whenever stack
+>   bytes happen to fall within range.
+> - proc_sctp_do_udp_port() also stops and restarts the UDP encapsulation
+>   socket even when the port number did not change.
+>
+> Initialize new_value to the current netns setting before calling
+> proc_dointvec() (matching proc_dobool()), and skip tearing down and
+> restarting the UDP encapsulation socket in proc_sctp_do_udp_port() when
+> new_value equals net->sctp.udp_port.
+>
+> Found by enabling Clang's -Wconditional-uninitialized on an x86_64
+> allyesconfig build, with AI coding assistant help to audit the warning
+> and prepare the fix. Build-tested with Clang; not runtime-tested.
+>
+> Fixes: 4f3fdf3bc59c ("sctp: add check rto_min and rto_max in sysctl")
+> Fixes: b14878ccb7fa ("net: sctp: cache auth_enable per endpoint")
+> Fixes: 046c052b475e ("sctp: enable udp tunneling socks")
+> Fixes: d1e462a7a5f3 ("sctp: add probe_interval in sysctl and sock/asoc/tr=
+ansport")
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  drivers/gpu/drm/drm_atomic_state_helper.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c b/drivers/gpu/drm/drm_atomic_state_helper.c
-> index 267f44330629..13e848abb33c 100644
-> --- a/drivers/gpu/drm/drm_atomic_state_helper.c
-> +++ b/drivers/gpu/drm/drm_atomic_state_helper.c
-> @@ -32,6 +32,7 @@
->  #include <drm/drm_crtc.h>
->  #include <drm/drm_device.h>
->  #include <drm/drm_framebuffer.h>
-> +#include <drm/drm_mode_object.h>
->  #include <drm/drm_plane.h>
->  #include <drm/drm_print.h>
->  #include <drm/drm_vblank.h>
-> @@ -231,6 +232,11 @@ void __drm_atomic_helper_plane_state_init(struct drm_plane_state *plane_state,
->  
->  	plane_state->plane = plane;
->  	plane_state->rotation = DRM_MODE_ROTATE_0;
-> +	if (plane->rotation_property &&
-> +	    !drm_object_property_get_default_value(&plane->base,
-> +						   plane->rotation_property,
-> +						   &val))
-> +		plane_state->rotation = val;
->  
->  	plane_state->alpha = DRM_BLEND_ALPHA_OPAQUE;
->  
-> 
-> -- 
-> 2.56.0
-> 
+>  net/sctp/sysctl.c | 39 +++++++++++++++++++++++----------------
+>  1 file changed, 23 insertions(+), 16 deletions(-)
+>
+> diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
+> index 2b94c211427d..0c33f05fa532 100644
+> --- a/net/sctp/sysctl.c
+> +++ b/net/sctp/sysctl.c
+> @@ -425,8 +425,9 @@ static int proc_sctp_do_rto_min(const struct ctl_tabl=
+e *ctl, int write,
+>         struct net *net =3D container_of(ctl->data, struct net, sctp.rto_=
+min);
+>         unsigned int min =3D *(unsigned int *) ctl->extra1;
+>         unsigned int max =3D *(unsigned int *) ctl->extra2;
+> +       int new_value =3D net->sctp.rto_min;
+>         struct ctl_table tbl;
+> -       int ret, new_value;
+> +       int ret;
+>
+>         memset(&tbl, 0, sizeof(struct ctl_table));
+>         tbl.maxlen =3D sizeof(unsigned int);
+> @@ -453,8 +454,9 @@ static int proc_sctp_do_rto_max(const struct ctl_tabl=
+e *ctl, int write,
+>         struct net *net =3D container_of(ctl->data, struct net, sctp.rto_=
+max);
+>         unsigned int min =3D *(unsigned int *) ctl->extra1;
+>         unsigned int max =3D *(unsigned int *) ctl->extra2;
+> +       int new_value =3D net->sctp.rto_max;
+>         struct ctl_table tbl;
+> -       int ret, new_value;
+> +       int ret;
+>
+>         memset(&tbl, 0, sizeof(struct ctl_table));
+>         tbl.maxlen =3D sizeof(unsigned int);
+> @@ -489,8 +491,9 @@ static int proc_sctp_do_auth(const struct ctl_table *=
+ctl, int write,
+>                              void *buffer, size_t *lenp, loff_t *ppos)
+>  {
+>         struct net *net =3D container_of(ctl->data, struct net, sctp.auth=
+_enable);
+> +       int new_value =3D net->sctp.auth_enable;
+>         struct ctl_table tbl;
+> -       int new_value, ret;
+> +       int ret;
+>
+>         memset(&tbl, 0, sizeof(struct ctl_table));
+>         tbl.maxlen =3D sizeof(unsigned int);
+> @@ -522,8 +525,9 @@ static int proc_sctp_do_udp_port(const struct ctl_tab=
+le *ctl, int write,
+>         struct net *net =3D container_of(ctl->data, struct net, sctp.udp_=
+port);
+>         unsigned int min =3D *(unsigned int *)ctl->extra1;
+>         unsigned int max =3D *(unsigned int *)ctl->extra2;
+> +       int new_value =3D net->sctp.udp_port;
+>         struct ctl_table tbl;
+> -       int ret, new_value;
+> +       int ret;
+>
+>         memset(&tbl, 0, sizeof(struct ctl_table));
+>         tbl.maxlen =3D sizeof(unsigned int);
+> @@ -541,18 +545,20 @@ static int proc_sctp_do_udp_port(const struct ctl_t=
+able *ctl, int write,
+>                         return -EINVAL;
+>
+>                 mutex_lock(&sctp_sysctl_mutex);
+> -               net->sctp.udp_port =3D new_value;
+> -               sctp_udp_sock_stop(net);
+> -               if (new_value) {
+> -                       ret =3D sctp_udp_sock_start(net);
+> -                       if (ret)
+> -                               net->sctp.udp_port =3D 0;
+> +               if (new_value !=3D net->sctp.udp_port) {
+> +                       net->sctp.udp_port =3D new_value;
+> +                       sctp_udp_sock_stop(net);
+> +                       if (new_value) {
+> +                               ret =3D sctp_udp_sock_start(net);
+> +                               if (ret)
+> +                                       net->sctp.udp_port =3D 0;
+> +                       }
+> +
+> +                       /* Update the value in the control socket */
+> +                       lock_sock(sk);
+> +                       sctp_sk(sk)->udp_port =3D htons(net->sctp.udp_por=
+t);
+> +                       release_sock(sk);
+>                 }
+> -
+> -               /* Update the value in the control socket */
+> -               lock_sock(sk);
+> -               sctp_sk(sk)->udp_port =3D htons(net->sctp.udp_port);
+> -               release_sock(sk);
+>                 mutex_unlock(&sctp_sysctl_mutex);
+>         }
+>
+> @@ -564,8 +570,9 @@ static int proc_sctp_do_probe_interval(const struct c=
+tl_table *ctl, int write,
+>  {
+>         struct net *net =3D container_of(ctl->data, struct net,
+>                                        sctp.probe_interval);
+> +       int new_value =3D net->sctp.probe_interval;
+>         struct ctl_table tbl;
+> -       int ret, new_value;
+> +       int ret;
+>
+>         memset(&tbl, 0, sizeof(struct ctl_table));
+>         tbl.maxlen =3D sizeof(unsigned int);
+> --
+> 2.56.1.708.g77570a6a1d-goog
+>
 
-Reviewed-by: Oarora Etimis <oaroraetimis@gmail.com>
+Acked-by: Xin Long <lucien.xin@gmail.com>
