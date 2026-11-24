@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795557054;
-	b=Zf9xHfozA4VfCvLzNYZjfIhnvJlmad7SLtlMxkKAAy7WJnwXtLb9w7pJb0wLo4dOh4t+
-	 JWXjQZeRAF7cKnYjAdNmWx0LFiQHV5L0MoHF4cLahihXCSIuEqap0DN/cKxodSZaHrvbB
-	 4y8RYYojHgbMZv0eQoeTJMjMTCLeor6BOdW2Hk1y+UvLu26vBK+lp5hAsn25obttuD6ZF
-	 qqUKgF1cgCRlguUm8j3Q19ZhqY2voNQRTMF7zPg+/Spe1JVP8CNy1ayeFbL5wZ67qiiJE
-	 Uyc8wglfdVnapxsfR2cQQA3RBUqUIb7TGtdeB+QY+opObKFcRe61kjPV22UMHC3rhKg==
+	t=1795557056;
+	b=DyrtZXgHJu+Zc1aCZoypkoeVg1jUqx2JDYU1vyj0puOAwaNd+pQzxSBgRvcXaJ81XIMJ
+	 ykmxj3blCHS1qk6q1zQSIghMVINdMjneHJtscnMuk0aFQFuHVhqdRASB2qiHcRphD6F4t
+	 8DqoPcGjZQA7c0cssueHmPlrgs4aZwrPnrrlYHzyTRqQbjm24fheJfViDKnsVqQNGK3Vy
+	 JWRP0W4CybiQl7b9gYWhRYxyK7bU4jZVEKSGzrBvy2gM4vJLqOWKKJ1AQdxCW7d3ps/Y+
+	 +FuZaBbeomW0+clWjQkTJZ8gTOVDTwKoIEEQQjyJfNBDIUf/p+iDdmI4xFyZF+W19Wg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795557054;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795557056;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=p24XAkvApPQJpmtKWickPyPDaZAtmZMyT0ckONLByAg=;
-	b=akkp1TIPjgOLLBFtwLH2bYLAm2iRIBcmL44/+i62GWynW1+DvMhBOFj3pOjygw0CpuFy
-	 EohTU9Q254BVMYYZR2nUH5hsZa0WXElzgxhUm4HraNJOcjfU51FCYb/O32AjhdxbBEDQQ
-	 cUQhhIpKsO61pX/pSf/ebUd3aNTv7Dx57+pshwC3SmUPdIZnaJ3JKD7a6EUr6+FJBBARG
-	 Z5oZEqV1nbBV/S+Zjrqf/yd014RjmsSuKYM+PH+wzWmnGCr6r/iz+VzwbFCAdb16yhWwf
-	 xzUoitMqy5weHmeopkH97IMf+17SduPHjyY23OciJWjGpoLfJRkYC84wYoibnE4kXhQ==
+	bh=lhC3E6j9bmGggUmcCK8Ii/A2YIIhfQwfAVP2Vr2BAu8=;
+	b=NpQl9ikie3ZhS3am5hJy5Tv/VcWh1bYuLx8EwudOV/ilU01gpVMT7veCXZsJ42onxbvo
+	 7uqKWJTiKS6roYo0d3QeqIlcY75snQBBVDgCeqpE8Bb5Jc2ojDSPBEFRxswmxDv/I1W5e
+	 zYX+2MktD9GfVt8rKYpdTGfEUYg1UPZo+nsYdKKUNP8doDD4bMFv99Vy3mS0Xmr52piuY
+	 LRA46047yw8EMXEnNujy/yBVFb39meho7QdhM0MOm9mtco0Cxu/7jJ73FdSVOBWD6rzd3
+	 xEdUnZzAZOGEnlG+/RdOewPucUTYJGxtrmDsiY9bK+MkPoysEJof5y88vsR8GnOujTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cGAG+dWi;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J6pILxls;
+	arc=none smtp.remote-ip=209.85.214.179
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F70F606A33A
-	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 21:50:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F70F606A33A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5F0606A330
+	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 21:50:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B5F0606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cGAG+dWi
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e9ae391a05so34282365ad.1
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 13:50:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J6pILxls
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2f02ee04378so39855975ad.1
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 13:50:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795557053; x=1796161853; darn=lists.linux.dev;
+        d=gmail.com; s=20260707; t=1795557055; x=1796161855; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=p24XAkvApPQJpmtKWickPyPDaZAtmZMyT0ckONLByAg=;
-        b=cGAG+dWiZX2HReqRD5cZ9OvrT3rak87YSSsSM7ILLsOVp1oEbCQ70bcBl2gU0uui/v
-         Jy6olcKkbfKqimtMJGUe2BOY6RkwlhuwlQusfRhGs/SNypD0Rny5y88BuAZd+m8M0m0D
-         uOv6mMyIv8FTVbsSY2zaFqU7F+TgQeuryRx2FqtYCMN/F8f5bC6i7vQCHymSR1Wod3Rq
-         COgNFT6IUKepX6zlve+p+kG5mnwO+1o7b0MrkikT06JT+JGj478L1cS2Lb7d7oplmaHP
-         RQCJWCcNaUHCDxgpcVXhkPXukURcWiw0+1nLKFN+nn3w9CKv88zi851r+1Mf896gs1QF
-         4iUQ==
+        bh=lhC3E6j9bmGggUmcCK8Ii/A2YIIhfQwfAVP2Vr2BAu8=;
+        b=J6pILxlslWBfmro1mS96c6FhAXg3ZGBCuzw2GMWbfwMlMJG/sCWR3W8tSbmTZ8KJJD
+         YefvgW83369BApm+vfouHsZZJRupnjbODBUrZ4DFoMDwxu7H+QqcbA//41pACkWjeG5/
+         Ow/VRvOlr4cqQozTH+s9e4pzCZxdMJxqz4WX3SrbjPGaOH292udMbNiMbmqjmpE3KEdV
+         gcj+Qy4VArUtpnWVIOOkxqN3wUVB/19qx9vZhYiCGAY2UBt6AyVLk7+gsc31aVhuuAoH
+         NfNDeo2zl+/wR1EXqyZFX9OGSr4sfYZdpcnuqf4a8RoDpQkhySSi5iOLE2CTOuZQQqRV
+         Wxjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795557053; x=1796161853;
+        d=1e100.net; s=20260707; t=1795557055; x=1796161855;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=p24XAkvApPQJpmtKWickPyPDaZAtmZMyT0ckONLByAg=;
-        b=BWl8+7fBaXqfpjImjOYLUZwf6/mh85EDFr5FBiJglXrA3tjfuxwJ5jj99iJvm9JUzZ
-         lln7OrMnhyYHZU5XL5Cj3m8d9/gZANj57yf5OI1A+KxLza6dItZOoGzFX0gOvIaDRTi5
-         ZQQKwMMg9j+IEpoOYXXIio1e7ShIbieiLXmOqdfBCLSES5DCC1Um/40Zpu3yFkMa8I/f
-         evw5OkL1w8OdEeqvs5F9ylGhdxY0EUpqDIhwJ1+0o4OQo8GVqhGk0a0eA0igOoATpkkZ
-         ITpAoWehbyPd+vnv4BZ4fVDn37dTQp+4mdARZ1IDu4VpLWqvgUrnOA3BDbkjLUbl3HwF
-         U55w==
-X-Forwarded-Encrypted: i=1; AL+hErGXc9TFI+SVCf08lLr/2cmuTXfG0em15iiA5UetB/tzpFwKetjEj2G19x8NldCdX6kvGBGs@lists.linux.dev
-X-Gm-Message-State: APuU4Z/w2AC5oh0U3VZLE40/EiMRdWxOleKYBHckLls9PFyddzoyLvtS
-	Ywu9vGzojieHoKQ1CXqN/ftDV1FqbGLlSlSXSv/j6/rimAuCZIEnZsU1/mUxhw==
-X-Gm-Gg: AZFdTZdeeuqXKU7W9QBFG7x0nt64rbiIoPKTNw3uqZXh5yxC0k0S1cvlaAJOiPzVOXO
-	h/UMaqQQGT7O/Qg6Svxt/xNM7mU1fzt9Ff925+ge3ej0dcX7cWdkwtp2X7mH2E0yfWWGztpih2L
-	9nMi5sKIIw+kKKxyVm9abWdlyhtCj8SGyK12xAAgMxJusFdIhR/6mvrppVHgJpssDmw4I1HaHdY
-	516pyE6NPpzcgtyOy4pEygN4oZHvsf0TgfrwnNkM4mEtwudRZ9htAfb9zNMkIa5HguFt7lISfFs
-	k/pJMnc7R8BbzrVLZTpcD6vRLWTxNZKx/VeRU4zrPPVbgK+02sp9tyVJrgIUUgw2VPT23BFWhCv
-	1c62mz8SkRCkEreOoy7woxSLyiaWiIdGPn8fxNcg8qlQZLGyY8F1dHrvwIdu+CII1o18rXUI/Le
-	kf/P9Whg6zCxQpUx8eug1/7Flyy6dr40mO4ypkKl1fV/XcvLr2DnrD9yFEyBWYMmqnVNqCLW6Wl
-	gjzh77oceyIbzzM7SbMnWyokqKnKyFnbLyO4djxPIw66JaWOSXZrTGpjgZGRdC19iJp8mozJQhH
-	wxpn0+3sRPQxC0z+klkSHprNAV9eAbPu2L5Y8pZ0Zm8oS9gqJFaUj26Tp8uo9OTLTkq8BQ61nIm
-	9agC0neD8D4gllApgsEywImkH2sOEl65C8faelIdpF5ggb265A4QXPm6u12b9L6ifpxUep6BGLr
-	6+GQ==
-X-Received: by 2002:a17:903:1a43:b0:2e9:5ed2:c39c with SMTP id d9443c01a7336-2f03f1ba01amr108241825ad.22.1795557053457;
-        Tue, 24 Nov 2026 13:50:53 -0800 (PST)
+        bh=lhC3E6j9bmGggUmcCK8Ii/A2YIIhfQwfAVP2Vr2BAu8=;
+        b=dKq7uTPj5g8qde55Lb3dIUzr4J2+qsuKrK1hh1/FzpJRgcdIsqF9W9EJHpnQmw0l2o
+         eUytd0mLXISvBaYRXG3rppDNTl+tT0q2tzdr1tMHpDCAhC3EpoqpxTpklT0Uwcsx1ln0
+         +1FLZOyskhvkSa/Q5ZWrJ6wCUfp8DjJJhvrHNkA1DyWem8BIbrD3g+A5/iUxxeW6w8xH
+         Qf0UMRX5fAfbAd+g+suRn8RwChqSZ4wL7031L2R3igYRQXdmaLQnB1GYD7cA2yrHWVgj
+         /ppTYbUwKb122xLXD/RCoW3pOGQfLTyPIfx1ifwL8pGhMCTMLrE6g80ygpGOORDw9Oe1
+         +nuQ==
+X-Forwarded-Encrypted: i=1; AL+hErFROaH70qlGy+HWnFwgmicKxzU8xThG9hyJLv0ymfNUNemGArkghhApsQuC8XcMtvTN+itF@lists.linux.dev
+X-Gm-Message-State: APuU4Z+MQkODK/yQFGxFZNQoywq0PNbN9jVDJuhVaAd883TAvJsu+brd
+	vVFT1PGcQxcCOziUUn+yKO2e65UpnSF/njbVMMnT73hLm9cQDkiIlyPm
+X-Gm-Gg: AZFdTZc/vG1k22ujZRv9lGh3jaibMGbsXdJPxYTdwBi0qiq02FtjIsoASvIqlTzQTw4
+	XTMDBtXrEcY6hO/Iy1IXgdpcS0bM7eRZrvV/7R0vaMcM3/9JK20fHg3bt3/GcKF7MoLm6xlHvDt
+	rLUfiXD0+Z2sH3xK8MC7hxNyt2deeconnCTT7OBXMZuiRWCqj3SZEr7PldS1IDWKTxmhVjsQUvu
+	41R7PMPa2K0kX7nd+GBzINlbSzGHG6SkjNKR/O6FtRPKKdhlUkXME/eSeXB2ja6F1Ciy+jnEsoS
+	ayWPT7P6uo5i0TxzyzXlAekP9q9W1wF2vcxqLUyMhQBAmH2Mk05ehgOOjrqoWE8gXqZP6Qo1TE0
+	krPyANDTZQOTQB3DbjVlTss5wJMsxVmtkh5xLHoyz2Yl2zfvqMyDa3aP1Wv7mSsr8yLYLvUmA6u
+	FbkqbcDF6RMrfCBm5OX8UQXO7XAdMfnbt3v/I56F9zeyTjaJ3F3E0oHT+uEaksaHuyOOPyalth0
+	gigV/3PKbmAmF3BxP0MWonJidEGLISasdrIxdjGFrmxrn0p8BU1hXO7YplPwam0gg1OQP3qc5hS
+	snHbV6EKBPVvImH4ZcPu3eqbcVZnQgpNVqi9kl8Ho9AKwVHvmriTqMfk+N5qGjRHhEoG5kfdEMZ
+	NwEmXzySBIk6duYXz5K1BSQbpV5BWkTjkLyVUrrZxpsuULYOf1j/hYZ17bF+W2fU60MWnIMe/Jf
+	OeJ0g=
+X-Received: by 2002:a17:903:298c:b0:2ed:369a:42d2 with SMTP id d9443c01a7336-2f03f218049mr157938935ad.40.1795557055598;
+        Tue, 24 Nov 2026 13:50:55 -0800 (PST)
 Received: from ryzen.lan ([2601:644:8000:37f::e34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0742996aesm47764545ad.11.2026.11.24.13.50.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0742996aesm47764545ad.11.2026.11.24.13.50.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 13:50:51 -0800 (PST)
+        Tue, 24 Nov 2026 13:50:54 -0800 (PST)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-wireless@vger.kernel.org
 Cc: Arend van Spriel <arend.vanspriel@broadcom.com>,
@@ -90,9 +90,9 @@ Cc: Arend van Spriel <arend.vanspriel@broadcom.com>,
 	brcm80211@lists.linux.dev (open list:BROADCOM BRCM80211 IEEE802.11 WIRELESS DRIVERS),
 	brcm80211-dev-list.pdl@broadcom.com (open list:BROADCOM BRCM80211 IEEE802.11 WIRELESS DRIVERS),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH wireless-next v2 5/7] wifi: brcmsmac: embed brcms_protection in brcms_c_info
-Date: Tue, 24 Nov 2026 13:50:38 -0800
-Message-ID: <20261124215040.1261999-6-rosenp@gmail.com>
+Subject: [PATCH wireless-next v2 6/7] wifi: brcmsmac: embed brcms_core in brcms_c_info
+Date: Tue, 24 Nov 2026 13:50:39 -0800
+Message-ID: <20261124215040.1261999-7-rosenp@gmail.com>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261124215040.1261999-1-rosenp@gmail.com>
 References: <20261124215040.1261999-1-rosenp@gmail.com>
@@ -107,144 +107,117 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The protection settings (struct brcms_protection) have the same
-lifetime as struct brcms_c_info. Embed them directly instead of
-allocating them separately, removing one kzalloc()/kfree() pair and
-its OOM error path.
+There is only one struct brcms_core and it has the same lifetime as
+struct brcms_c_info. Embed it directly instead of allocating it
+separately, removing one kzalloc()/kfree() pair and its OOM error path.
+
+Remove the now useless core pointer. It always points to corestate.
 
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
 ---
- .../broadcom/brcm80211/brcmsmac/channel.c     |  6 ++--
- .../broadcom/brcm80211/brcmsmac/main.c        | 31 +++++++------------
- .../broadcom/brcm80211/brcmsmac/main.h        |  2 +-
- 3 files changed, 16 insertions(+), 23 deletions(-)
+ .../wireless/broadcom/brcm80211/brcmsmac/debug.c |  2 +-
+ .../wireless/broadcom/brcm80211/brcmsmac/main.c  | 16 ++++------------
+ .../wireless/broadcom/brcm80211/brcmsmac/main.h  |  3 +--
+ 3 files changed, 6 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/channel.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/channel.c
-index a5c1c4d45683..b4c575f8c0f6 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/channel.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/channel.c
-@@ -312,13 +312,13 @@ brcms_c_set_country(struct brcms_cm_info *wlc_cm,
- 	struct brcms_c_info *wlc = wlc_cm->wlc;
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/debug.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/debug.c
+index 711e994dd04d..76f9d20f0d1c 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/debug.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/debug.c
+@@ -98,7 +98,7 @@ static int brcms_debugfs_macstat_read(struct seq_file *s, void *data)
+ 	int i;
  
- 	if ((wlc->pub->_n_enab & SUPPORT_11N) !=
--	    wlc->protection->nmode_user)
-+	    wlc->protection.nmode_user)
- 		brcms_c_set_nmode(wlc);
+ 	spin_lock_bh(&wl->lock);
+-	stats = drvr->wlc->core->macstat_snapshot;
++	stats = drvr->wlc->corestate.macstat_snapshot;
+ 	spin_unlock_bh(&wl->lock);
  
- 	brcms_c_stf_ss_update(wlc, &wlc->bandstate[BAND_2G_INDEX]);
- 	brcms_c_stf_ss_update(wlc, &wlc->bandstate[BAND_5G_INDEX]);
- 
--	brcms_c_set_gmode(wlc, wlc->protection->gmode_user, false);
-+	brcms_c_set_gmode(wlc, wlc->protection.gmode_user, false);
- 
- 	return;
- }
-@@ -387,7 +387,7 @@ brcms_c_channel_set_chanspec(struct brcms_cm_info *wlc_cm, u16 chanspec,
- 	if (ch->flags & IEEE80211_CHAN_NO_OFDM)
- 		brcms_c_set_gmode(wlc, GMODE_LEGACY_B, false);
- 	else
--		brcms_c_set_gmode(wlc, wlc->protection->gmode_user, false);
-+		brcms_c_set_gmode(wlc, wlc->protection.gmode_user, false);
- 
- 	brcms_b_set_chanspec(wlc->hw, chanspec,
- 			      !!(ch->flags & IEEE80211_CHAN_NO_IR),
+ 	seq_printf(s, "txallfrm: %d\n", stats.txallfrm);
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c
-index 2140feb86964..bd1880e3738f 100644
+index bd1880e3738f..422452b8a832 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.c
-@@ -420,7 +420,6 @@ static void brcms_c_detach_mfree(struct brcms_c_info *wlc)
- 
+@@ -421,7 +421,6 @@ static void brcms_c_detach_mfree(struct brcms_c_info *wlc)
  	kfree(wlc->bsscfg);
  	kfree(wlc->pub);
--	kfree(wlc->protection);
  	kfree(wlc->stf);
- 	kfree(wlc->corestate);
+-	kfree(wlc->corestate);
  	kfree(wlc->hw);
-@@ -466,12 +465,6 @@ brcms_c_attach_malloc(uint unit, uint *err, uint devid)
+ 	if (wlc->beacon)
+ 		dev_kfree_skb_any(wlc->beacon);
+@@ -471,12 +470,6 @@ brcms_c_attach_malloc(uint unit, uint *err, uint devid)
  		goto fail;
  	}
  
--	wlc->protection = kzalloc_obj(*wlc->protection, GFP_ATOMIC);
--	if (wlc->protection == NULL) {
--		*err = 1016;
+-	wlc->corestate = kzalloc_obj(*wlc->corestate, GFP_ATOMIC);
+-	if (wlc->corestate == NULL) {
+-		*err = 1026;
 -		goto fail;
 -	}
 -
- 	wlc->stf = kzalloc_obj(*wlc->stf, GFP_ATOMIC);
- 	if (wlc->stf == NULL) {
- 		*err = 1017;
-@@ -3878,37 +3871,37 @@ void brcms_c_protection_upd(struct brcms_c_info *wlc, uint idx, int val)
+ 	return wlc;
  
- 	switch (idx) {
- 	case BRCMS_PROT_G_SPEC:
--		wlc->protection->_g = (bool) val;
-+		wlc->protection._g = (bool) val;
- 		break;
- 	case BRCMS_PROT_G_OVR:
--		wlc->protection->g_override = (s8) val;
-+		wlc->protection.g_override = (s8) val;
- 		break;
- 	case BRCMS_PROT_G_USER:
--		wlc->protection->gmode_user = (u8) val;
-+		wlc->protection.gmode_user = (u8) val;
- 		break;
- 	case BRCMS_PROT_OVERLAP:
--		wlc->protection->overlap = (s8) val;
-+		wlc->protection.overlap = (s8) val;
- 		break;
- 	case BRCMS_PROT_N_USER:
--		wlc->protection->nmode_user = (s8) val;
-+		wlc->protection.nmode_user = (s8) val;
- 		break;
- 	case BRCMS_PROT_N_CFG:
--		wlc->protection->n_cfg = (s8) val;
-+		wlc->protection.n_cfg = (s8) val;
- 		break;
- 	case BRCMS_PROT_N_CFG_OVR:
--		wlc->protection->n_cfg_override = (s8) val;
-+		wlc->protection.n_cfg_override = (s8) val;
- 		break;
- 	case BRCMS_PROT_N_NONGF:
--		wlc->protection->nongf = (bool) val;
-+		wlc->protection.nongf = (bool) val;
- 		break;
- 	case BRCMS_PROT_N_NONGF_OVR:
--		wlc->protection->nongf_override = (s8) val;
-+		wlc->protection.nongf_override = (s8) val;
- 		break;
- 	case BRCMS_PROT_N_PAM_OVR:
--		wlc->protection->n_pam_override = (s8) val;
-+		wlc->protection.n_pam_override = (s8) val;
- 		break;
- 	case BRCMS_PROT_N_OBSS:
--		wlc->protection->n_obss = (bool) val;
-+		wlc->protection.n_obss = (bool) val;
- 		break;
+  fail:
+@@ -2974,7 +2967,7 @@ static void brcms_c_statsupd(struct brcms_c_info *wlc)
+ 	if (!wlc->pub->up)
+ 		return;
  
- 	default:
-@@ -6800,7 +6793,7 @@ brcms_c_rspec_to_rts_rspec(struct brcms_c_info *wlc, u32 rspec,
- 	if (use_rspec)
- 		/* use frame rate as rts rate */
- 		rts_rspec = rspec;
--	else if (wlc->band->gmode && wlc->protection->_g && !is_cck_rate(rspec))
-+	else if (wlc->band->gmode && wlc->protection._g && !is_cck_rate(rspec))
- 		/* Use 11Mbps as the g protection RTS target rate and fallback.
- 		 * Use the brcms_basic_rate() lookup to find the best basic rate
- 		 * under the target in case 11 Mbps is not Basic.
+-	macstats = &wlc->core->macstat_snapshot;
++	macstats = &wlc->corestate.macstat_snapshot;
+ 
+ #ifdef DEBUG
+ 	/* save last rx fifo 0 overflow count */
+@@ -3031,7 +3024,7 @@ void brcms_c_reset(struct brcms_c_info *wlc)
+ 	brcms_c_statsupd(wlc);
+ 
+ 	/* reset our snapshot of macstat counters */
+-	memset(&wlc->core->macstat_snapshot, 0, sizeof(struct macstat));
++	memset(&wlc->corestate.macstat_snapshot, 0, sizeof(struct macstat));
+ 
+ 	brcms_b_reset(wlc->hw);
+ }
+@@ -4453,7 +4446,7 @@ static int brcms_b_attach(struct brcms_c_info *wlc, struct bcma_device *core,
+ 		wlc_hw->band->bandtype = j ? BRCM_BAND_5G : BRCM_BAND_2G;
+ 		wlc->band->bandunit = j;
+ 		wlc->band->bandtype = j ? BRCM_BAND_5G : BRCM_BAND_2G;
+-		wlc->core->coreidx = core->core_index;
++		wlc->corestate.coreidx = core->core_index;
+ 
+ 		wlc_hw->machwcap = bcma_read32(core, D11REGOFFS(machwcap));
+ 		wlc_hw->machwcap_backup = wlc_hw->machwcap;
+@@ -7808,7 +7801,6 @@ brcms_c_attach(struct brcms_info *wl, struct bcma_device *core, uint unit,
+ 	pub = wlc->pub;
+ 
+ 	wlc->band = &wlc->bandstate[0];
+-	wlc->core = wlc->corestate;
+ 	wlc->wl = wl;
+ 	pub->unit = unit;
+ 	pub->_piomode = piomode;
+@@ -7849,7 +7841,7 @@ brcms_c_attach(struct brcms_info *wl, struct bcma_device *core, uint unit,
+ 
+ 	/* pull up some info resulting from the low attach */
+ 	for (i = 0; i < NFIFO; i++)
+-		wlc->core->txavail[i] = wlc->hw->txavail[i];
++		wlc->corestate.txavail[i] = wlc->hw->txavail[i];
+ 
+ 	memcpy(&wlc->perm_etheraddr, &wlc->hw->etheraddr, ETH_ALEN);
+ 	memcpy(&pub->cur_etheraddr, &wlc->hw->etheraddr, ETH_ALEN);
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.h b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.h
-index 94966418b069..266fe7825042 100644
+index 266fe7825042..5e2052bd913a 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.h
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/main.h
-@@ -549,7 +549,7 @@ struct brcms_c_info {
- 	s8 shortslot_override;
- 	bool include_legacy_erp;
+@@ -468,9 +468,8 @@ struct brcms_c_info {
+ 	bool clk;
  
--	struct brcms_protection *protection;
-+	struct brcms_protection protection;
- 	s8 PLCPHdr_override;
+ 	/* multiband */
+-	struct brcms_core *core;
+ 	struct brcms_band *band;
+-	struct brcms_core *corestate;
++	struct brcms_core corestate;
+ 	struct brcms_band bandstate[MAXBANDS];
  
- 	struct brcms_stf *stf;
+ 	/* packet queue */
 -- 
 2.56.1
 
