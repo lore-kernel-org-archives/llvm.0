@@ -1,79 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587794;
-	b=1uwBkpW+9sv6D8DdV4IMCkkLDKTTCFNZQ0KfrOX0CffadETUIJO4FMhzLRxbFTS+qm+0
-	 RGHhFp3t7QL4stDE2ZBuc3DM7X6Gh0pudbOYKgnX+LAOYAIqTKtICFSonK/VZwIESwn1t
-	 yV8I1Yc+ebZUfwfXJbBrCTZ8RtRvpvowSdCTjjn1wFPe2ROBxO5w1ei30hPb2o60DHMlk
-	 TPoyaQtquzqxVLa4tnmRtWmHKoKWEDi/ViapZSzzovTO4IMc7xREx5kEyzKM07A1viDhu
-	 BKDBf0ErRRe/Nr3RoKvRYHMDWI59zHx1YZvQh9jIk4WNc0sNLRqJWDBVfIGu9XShw/Q==
+	t=1795588173;
+	b=uQRILlUpGbhiUkHoG0GrMItfycX69rFrYV1pl3UqqDswM14IbfQhdPxmY4TQNYo2TAnH
+	 VtXvuBrCB0ZLL3SzkT173JCQJTCWTGDLP8kwxzN2dI3tEX02B12oSWZrCITNxmsh1p3WD
+	 tT6CJXAlPetRF7CQ6VhmPxjb3BGq/dFL5tehNdJSLSVXyabRNUpOMdXjS8YkjAMrmsqrw
+	 MSLk66eUCDAIujp24ajTOWnIWFQbh0MC9hO4zkOVTXm8eDWHPH1arrpndj121tn2VTrDs
+	 uvec92OIqHxEFt01Edyf9hB4iBCVkupgBhpFLUBzTRcNEJphk0BX5x/2HHqH67ov3NA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587794;
-	h=DMARC-Filter:DKIM-Signature:Received:X-Spam-Checker-Version:
-	 X-Spam-Level:X-Spam-Status:DKIM-Signature:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=r5R+OI5w6Wey7KShfjFB5dyA5yUeklrNOEuXPSSexSY=;
-	b=vXMnRiCF2P9f2e2/coFvFuYiM88mUNQTgXp16PlNQnT5LHxXRUUXAlgcPM+sFau20/Lx
-	 6b7JSZ4Gw9CryKgiuDAZvx79tq6jMdgMXvSQy+8aQK/f8FF/I/pymJCprMqRAA2jV/WSZ
-	 MnHK0UTogBqoYrGEQIqbd0pesxlmFMNyYEDkKOsfROpxqECeLrRNlFa1/umwoxU+FOZPe
-	 Cu+jZKe7jvjgM4MWQgo0d8PQB4jufBhKUuAzFZ+4a7tPunOy8YH2OG7dh7/nJaOEYc4bn
-	 PWPDSzengTAlrrtJILPBUF2DCvcDvw3fpJDnUdYdwHfTy35CetM5ruYVGlCtFJcXMEg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795588173;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=fUGmkZ5pnD7Ji+vwezUPcu5hIMdhnLtQNfaT/AXBEjw=;
+	b=TvhntD74twFzXrIVS6lmkYkOGe0ISEvxdnGt803i7ZoBTGJszHiXqJskQ+n4d8TFnH37
+	 ICH48VReNzCsRSlsLcPAyDwOZehno5j9dB+bVMGVTUDpEtDv0SB6jWkEh5nKIEmk3PFBd
+	 Z5jiqa1FUD0wJ/Xt3nxmbb3DHFHJ75wPuDKp+mLb9O6r3lm8MiJV9o2o5gZNR+g7QajGj
+	 +mm5093FCQX1R/VFHsiul5jLd0B1flNqUzs4TJF95nf4HoTvJn74h2+EORZQHMT7qKC/y
+	 jV/oeGsoAjFEnrRKwAl2+eHOW0T9NxtPtNSpODRhlorw56/dfS5FBSqVlD0l8GlXciw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=davidgow.net;
-	spf=pass smtp.mailfrom=davidgow.net;
-	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=Fukq2irA;
-	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b="Gb/L/6UM";
-	arc=none smtp.remote-ip=203.29.242.92
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QWCJMN0G;
+	arc=none smtp.remote-ip=198.175.65.9
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA16F606A321
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 06:23:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA16F606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EE7606A321;
+	Wed, 25 Nov 2026 06:29:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31EE7606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=Fukq2irA;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=Gb/L/6UM
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1795587791;
-	bh=03p9BfUgLsUDUL9nX2wwVFpZWUlKJx5s1cP92PW09LI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Fukq2irAvPlPUk9iF5jdmlYYc/gizjMWIJyCriNMbOtxmoKeQ8lQZiBE73k2KlPaP
-	 ze5pTP1iswks0eCar3eU/+PueQpePQmK6EZCg3UgyjyvxSZckP3NjY/ElVgIojp3Bi
-	 FmpcOySAqlCwGTFJzZvrIHJMjVekzR8jGrmpEeC1fTGk/IKE76hCrT+C1yJaN2IP3B
-	 0hlmdfTwEFRZ7v3yXzgW8fOzEMoYnRi2JvWG/V4o++yJO0wwC3j0jbCqfDsByIV5xV
-	 eHY4sjeWzNJ+IMUdY7HbRG4AlA4qf6oycgnXbEP61LkuOXW6LDokgKUP8nwroHeMIM
-	 TZST/a0efMit0yEIFjV5bRwj8A0eJTWtmaMaRtVH++HY/I62deYXIoNgqcsMTMVXSD
-	 Iva7o633lBkdd6JUpPbGbjIKL96SuwKqnWd77ZRbsjgfMJPTsB5wehK+IahSxWn0CZ
-	 F0KLI5g1rktInC9bPmTn4D9YKr+eE/l/NCLSXvvn0/sHcRlQkrJFHm8MxSVehohIok
-	 HYysaYSh86gwjsCZK/NX7VktsWt5d9fC72iyQSI7cp09OgMitHJJfdz5d/heJWZNxO
-	 LOJzHjhw/BXcpCghvBe3xvWGfQwYRgZcE1On1+pzk9b1AxClkVZkirztHZNPFYnPmY
-	 W+YSbBuSp8xWjTw3A6PBZA5c=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 6DC9C1EAD82; Wed, 25 Nov 2026 14:23:11 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1795587789;
-	bh=03p9BfUgLsUDUL9nX2wwVFpZWUlKJx5s1cP92PW09LI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Gb/L/6UMoeVvp1v9O1slsag6QQOW4ZGNf8A6kpJn3fDB+GmJmwhuXogY4AL14xScg
-	 6uBCRR+AqGwjQx3p4OE+21RQibWbq/89Jbxn88lqGDrksZltAm+XSGqehF+NSaHPNB
-	 cS3e3SLdLHdto9Cv90S76peRUqWdeUTZyNSxb9ZyIc/oStTcaCbwUf3KDofennt4sl
-	 mk8+6n8eQZHA7Lpu9f84oD3zdOD2rjiSesWp5n4M3NqRZ++yvRxX3/i22zCvUgDGZN
-	 mE4Jh4myT9jv665qFiq96DPS46mmO0dgGZg5UaVqugrDx5Wzlc8BQ2mYJo+qfWVCuj
-	 ryEaUvaJjvoKjiPKSm3+anjVfl6Qv2iRwcZQzLq+zUxRN0iNVilFVUOvxCKPXYh8dQ
-	 NBcHz/lCOafDSCKCJSTenkBlGcfS54aWzcusenj94GBcoGk9P+iXEPkguu4ceUa0ZR
-	 6Uq5C9B313CcvCpoZ8VxM7z/sRNWkzmi9XN61tI2juRuYY4ipSfmF+4gcbfYfMxu7G
-	 KWGrTCWmDP0dlCSLvQRK7meqzhhE41dIdndTGbCXMvritl2rgUJQWTM4gSHS6IGD0D
-	 x2gZY2fI/CpA/xVFCPymGnXQUtY7Df5gfvES+q4g/xwyLGrXmd1x5zU+508Jl/MKR4
-	 WSfHr/hm8SLGVy3FHymUOeAY=
-Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 38C251EAD76;
-	Wed, 25 Nov 2026 14:23:09 +0800 (AWST)
-Message-ID: <f2271237-2998-4d21-9973-d0174da23389@davidgow.net>
-Date: Wed, 25 Nov 2026 14:23:06 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QWCJMN0G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795588173; x=1827124173;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zbfSXjIyKSD5Zk3TOvJSq6/F/aAsespPwza+20D7QQc=;
+  b=QWCJMN0GGnZNj0/toHQaOglw3+Fh46UhlhLoJncF7dpgPXkBRtFbSXO2
+   XlTlg+nEJViRgdIWuR+MELw/Bs6754WvuOA2Wju/rwutbKkwurBKrQ8kf
+   c46Yn+vHZ4API8g30cENTJRUVkpB1bSQ3tjF1Mw47OCg15H0o6oKbbQRK
+   TDRIBm8GuxWNHyEKV7YNr2ap0EH2rPZlu3ZboZ9i/FQRFTTcMWbErpraJ
+   SghGefEnykmpFUsmDTRAqvSaACtucxTAdENwtaRpGRH+zmkeK5ymiv7Lq
+   9Y572YUESA32z/+kZ2z405ipMdilNavArW+QwZvOR7FWw2cxd4mBCP3K3
+   w==;
+X-CSE-ConnectionGUID: GErM0kS3Q9uAcqu3hFeH0g==
+X-CSE-MsgGUID: d1Cz8DMpSz+j+ujKjiVe0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11976"; a="4327647"
+X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
+   d="scan'208";a="4327647"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2026 22:29:32 -0800
+X-CSE-ConnectionGUID: U2iK7523Q6OhqPtrIr3ZOw==
+X-CSE-MsgGUID: oWoe1juLSb2zHvTRnd4GDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
+   d="scan'208";a="11764984"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 24 Nov 2026 22:29:28 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xW6VS-00000001Qyu-0xCE;
+	Wed, 25 Nov 2026 06:29:26 +0000
+Date: Wed, 25 Nov 2026 14:28:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Robert Ijtsma via B4 Relay <devnull+robertijtsma.gmail.com@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Robert Ijtsma <robertijtsma@gmail.com>
+Subject: Re: [PATCH 2/2] iio: light: add ams OSRAM TCS3430 XYZ and ambient
+ light sensor driver
+Message-ID: <20261125142230.FjfgcgpD-lkp@intel.com>
+References: <20261124-iio-tcs3430-v1-2-0f2a38a6a4c1@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -83,105 +91,185 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: fix uninitialized err and static suite kfree()
- when disabled
-To: Ian Rogers <irogers@google.com>,
- Brendan Higgins <brendan.higgins@linux.dev>
-Cc: Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
-References: <20261119170636.1520696-1-irogers@google.com>
-Content-Language: en-US
-From: David Gow <david@davidgow.net>
-In-Reply-To: <20261119170636.1520696-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261124-iio-tcs3430-v1-2-0f2a38a6a4c1@gmail.com>
+
+Hi Robert,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 4843f6873f7c4835e62f2c73ba0fd538e57a2f22]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Ijtsma-via-B4-Relay/dt-bindings-iio-light-add-ams-OSRAM-TCS3430/20261124-234657
+base:   4843f6873f7c4835e62f2c73ba0fd538e57a2f22
+patch link:    https://lore.kernel.org/r/20261124-iio-tcs3430-v1-2-0f2a38a6a4c1%40gmail.com
+patch subject: [PATCH 2/2] iio: light: add ams OSRAM TCS3430 XYZ and ambient light sensor driver
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261125/20261125142230.FjfgcgpD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261125/20261125142230.FjfgcgpD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261125142230.FjfgcgpD-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/iio/light/tcs3430.c:175:2: error: cannot jump from switch statement to this case label
+     175 |         default:
+         |         ^
+   drivers/iio/light/tcs3430.c:166:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     166 |                 guard(mutex)(&data->lock);
+         |                 ^
+   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
+     299 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:22:1: note: expanded from here
+      22 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:28:1: note: expanded from here
+      28 | __UNIQUE_ID_unlock_541
+         | ^
+   drivers/iio/light/tcs3430.c:166:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:16:1: note: expanded from here
+      16 | __UNIQUE_ID_guard_540
+         | ^
+   drivers/iio/light/tcs3430.c:142:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     142 |                 guard(mutex)(&data->lock);
+         |                 ^
+   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
+     299 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:17:1: note: expanded from here
+      17 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:23:1: note: expanded from here
+      23 | __UNIQUE_ID_unlock_537
+         | ^
+   drivers/iio/light/tcs3430.c:142:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:416:15: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:11:1: note: expanded from here
+      11 | __UNIQUE_ID_guard_536
+         | ^
+   drivers/iio/light/tcs3430.c:170:2: error: cannot jump from switch statement to this case label
+     170 |         case IIO_CHAN_INFO_INT_TIME:
+         |         ^
+   drivers/iio/light/tcs3430.c:166:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     166 |                 guard(mutex)(&data->lock);
+         |                 ^
+   include/linux/cleanup.h:416:2: note: expanded from macro 'guard'
+     416 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:299:3: note: expanded from macro 'CLASS'
+     299 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:22:1: note: expanded from here
+      22 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
 
 
-Le 20/11/2026 à 01:06, 'Ian Rogers' via KUnit Development a écrit :
-> Commit e38f53f04824 ("kunit: Return void from kunit_run_all_tests()")
-> removed the zero-initialization of 'err' in kunit_run_all_tests(),
-> overlooking two live consumers of 'err':
-> 
-> 1. When KUnit is disabled at runtime (kunit.enable=0) while any suite or
->     attribute filter is configured (via kunit.filter_glob, kunit.filter, or
->     CONFIG_KUNIT_DEFAULT_FILTER*), kunit_run_all_tests() sets suite_set to
->     normal_suite_set (pointing directly into the static .kunit_test_suites
->     linker section when init_num_suites == 0) and jumps to free_out before
->     kunit_filter_suites() runs. At free_out, 'if (err)' reads uninitialized
->     stack memory and either calls kunit_free_suite_set() on static linker
->     symbols (panicking at boot) or stores them in kunit_boot_suites.
-> 2. When kunit.filter is set without kunit.filter_glob,
->     kunit_filter_suites() never initializes *err on the success path (or
->     on !copy OOM), so 'if (*err)' reads uninitialized stack memory and
->     aborts KUnit execution.
-> 
-> Check kunit_enabled() before merging or filtering suites and jump directly
-> to 'out', initialize 'err' to 0 in both kunit_run_all_tests() and
-> kunit_filter_suites(), and report -ENOMEM when suite pointer copy
-> allocation fails.
-> 
-> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
-> -Wconditional-uninitialized enabled; fix and changelog drafted with an AI
-> coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
-> -Wconditional-uninitialized; not boot-tested with KUnit kernel parameters.
-> 
-> Fixes: fb6988b83b4c ("kunit: fix use-after-free in debugfs when using kunit.filter")
-> Fixes: e38f53f04824 ("kunit: Return void from kunit_run_all_tests()")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
+vim +175 drivers/iio/light/tcs3430.c
 
-Nice catch, thanks!
+   132	
+   133	static int tcs3430_read_raw(struct iio_dev *indio_dev,
+   134				    const struct iio_chan_spec *chan,
+   135				    int *val, int *val2, long mask)
+   136	{
+   137		struct tcs3430_data *data = iio_priv(indio_dev);
+   138		int ret;
+   139	
+   140		switch (mask) {
+   141		case IIO_CHAN_INFO_RAW:
+   142			guard(mutex)(&data->lock);
+   143			ret = i2c_smbus_read_word_data(data->client, chan->address);
+   144			if (ret < 0)
+   145				return ret;
+   146			*val = ret;
+   147			return IIO_VAL_INT;
+   148	
+   149		case IIO_CHAN_INFO_SCALE: {
+   150			u32 itime_us = TCS3430_DEFAULT_ATIME_CYCLES * TCS3430_ATIME_STEP_US;
+   151			u64 scale_nano;
+   152			u32 rem;
+   153			int gain;
+   154	
+   155			scoped_guard(mutex, &data->lock)
+   156				gain = tcs3430_gains[data->gain_idx];
+   157	
+   158			scale_nano = div_u64(TCS3430_LUX_FACTOR * NSEC_PER_SEC * USEC_PER_MSEC,
+   159					     (u32)gain * itime_us);
+   160			*val = div_u64_rem(scale_nano, NSEC_PER_SEC, &rem);
+   161			*val2 = rem;
+   162			return IIO_VAL_INT_PLUS_NANO;
+   163		}
+   164	
+   165		case IIO_CHAN_INFO_HARDWAREGAIN:
+   166			guard(mutex)(&data->lock);
+   167			*val = tcs3430_gains[data->gain_idx];
+   168			return IIO_VAL_INT;
+   169	
+   170		case IIO_CHAN_INFO_INT_TIME:
+   171			*val = 0;
+   172			*val2 = TCS3430_DEFAULT_ATIME_CYCLES * TCS3430_ATIME_STEP_US;
+   173			return IIO_VAL_INT_PLUS_MICRO;
+   174	
+ > 175		default:
+   176			return -EINVAL;
+   177		}
+   178	}
+   179	
 
-Reviewed-by: David Gow <david@davidgow.net>
-
-Cheers,
--- David
-
->   lib/kunit/executor.c | 15 +++++++++------
->   1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index c798a02470d8..5525f4da0bc9 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -189,8 +189,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
->   
->   	const size_t max = suite_set->end - suite_set->start;
->   
-> +	*err = 0;
-> +
->   	copy = kzalloc_objs(*copy, max);
->   	if (!copy) { /* won't be able to run anything, return an empty set */
-> +		*err = -ENOMEM;
->   		return filtered;
->   	}
->   	copy_start = copy;
-> @@ -382,7 +385,12 @@ void kunit_run_all_tests(void)
->   		__kunit_suites_start, __kunit_suites_end,
->   	};
->   	size_t init_num_suites = init_suite_set.end - init_suite_set.start;
-> -	int err;
-> +	int err = 0;
-> +
-> +	if (!kunit_enabled()) {
-> +		pr_info("kunit: disabled\n");
-> +		goto out;
-> +	}
->   
->   	if (init_num_suites > 0) {
->   		suite_set = kunit_merge_suite_sets(init_suite_set, normal_suite_set);
-> @@ -391,11 +399,6 @@ void kunit_run_all_tests(void)
->   	} else
->   		suite_set = normal_suite_set;
->   
-> -	if (!kunit_enabled()) {
-> -		pr_info("kunit: disabled\n");
-> -		goto free_out;
-> -	}
-> -
->   	if (filter_glob_param || filter_param) {
->   		filtered_suite_set = kunit_filter_suites(&suite_set, filter_glob_param,
->   				filter_param, filter_action_param, &err);
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
