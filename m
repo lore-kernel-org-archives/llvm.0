@@ -1,113 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795641932;
-	b=i4NinhIUjwHxNKbC2Yrv4oJA8iCweEjjqYTJuGdlZJydd5cmAP0J41H4Z5M2rKxlAc8R
-	 Yt2+uvbAcK/TKYX/pifsPN+n5aH0Jk2qyzdILJaKdwQl6Gz+i0kZM3mz47NQ8xI+UvaI3
-	 9fVwZJ8blsjm+4ZOEMGc+hczDg/CVCQa79L1/sXt5rg4fyrCtldgQCagQCn0dRVIb5KLM
-	 Z7XcKPhPdctxzv5rohd8JeDPZgPBpBR9i8wFXSIsO9tlagHYTNp1VOzIX34DtZuXwEPWy
-	 T19ja3q2HSxA3MP6AR/+3EgbMtPiYOOxy+3xDZheGItVYzNrtC9r1BICd6xsQYaUw0g==
+	t=1795643862;
+	b=hEDrZjO20rCnIomZFZQDBGAalc36N1fqmy8VznxoscVDpmnw6RNeKoAxpZ0da7nvJ/R4
+	 3uJAcN+FSDcWGbmeCcW45Rt8QeFikVjCGGfHoQ9S7EcoiSKIce/k+/y9dRvuAJHnXkHiG
+	 sb+AIWRJb7kC+cOB0My1F4x0x8CEy4Vk89sL7OVGiIIGbrOJ/wzFrPXeoyZV/22P4pQCz
+	 lsgJEazRCR49NZ4YyNp96acQpiUoAEtyzLd5TyBs6paQP9Bcj90rSfIaPH2yt2wTpO7g3
+	 lJWE+FiNGlor7cl7ExgxAfZyyrlJMw/W6f5KDm6+SbXNuEwXNjVOICbEC5fVbTJqfVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795641932;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
-	b=b5a2oPV3AW+KWDitT4PPixQIvsNt44ys2t6I28b2I5w8GETnZfKWX1bs2yE+2j4WFBiF
-	 uYUjJruUe+DNP+Uvp5RlJNubblrE8RlFbWgfl6vRYVvEoYyhcqcZNEv7RUhAZ1Eigc09y
-	 +DpcPmBkzZYEQ9P6rqlBupPNdcwzjiw1b9G9xX2PBWCrmH5SSfV4vP18HGMJ/t7d1fjb8
-	 RODvvrfcVsql9fkUPITfZeheKBt4ko3SRY8h64D8/h0i2fgAeVTjWV4mtl+W2cgqqGLM/
-	 mRGZ+Vq1cZjCbdLRSJfM1LF6LYmp6h2YWamhTW1VkeBRTLC2QGkMKWGDFruj4cNa6Pw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795643862;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=fQSJlq2AB9gSSiRXHYp7CIMNPJd6C/z8QNb96gGU/Io=;
+	b=s1hBxni8RndGtaSl4VaIcYWLoY8/Zf0dkp5/zWJxdR2OYxZepvGK3MY/v0TVEdXiXzqn
+	 r6bFIt5F0Vs5LvnUqXDD0qwx3yh2hCWRcU7h6a42BBMc2yFFJ7ezt3sN/yZdIfEc/PI2V
+	 bQhzcENJf8B2C5NcWynB/cYSaUheq0a3Ivu39134c5M+tMmWr21fvX27uWOw1qN7iTprx
+	 asf7AYVya0xf57O+ZcHZUX4zPVBRwquRPENVznoDz+3pyCfG3yjXSJ2nMt9xkRAdsq8gr
+	 QrXxooquOWZxMoqpyMOFah7KFLYBSvZw1ikM0M1qEgJfdHa/Q302zIMAxFYsfrUDJ+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iSICuufZ;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dvWh1JfU;
+	arc=none smtp.remote-ip=198.175.65.13
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB54606A32A
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 21:25:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9DB54606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11413606A31E;
+	Wed, 25 Nov 2026 21:57:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11413606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iSICuufZ
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bba60271d7so10453005e9.2
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 13:25:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795641930; x=1796246730; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
-        b=iSICuufZb/ZNpTUd2iVorkIL4hxRkwoQV816NkheEr+OMqREBchwFC9IuUfb4S9bnL
-         xHMZYlDRGatjJ5NOzZjv9/sB8jPhY9cIchuevvsDNXwZ4gHV7DZgiCwxRhdjIYW9Vwma
-         Slx8wBl0J3vc/HJBHvVlkGuf1OYuSxKQMlXj/XXbUHWqGpng0DVWVKfEAW5r+P9KD1ZA
-         9XP0LJWE9t8Vc6s5fnt+7K7uQ3oI8jic4ClffvMouhf/b5xjkK0C84pngYE2CU1qLBZU
-         FLObBDBUVX8sQstJ3vBt3v+ZqwV/C8G5nblLS1KsIUO4UXILqQJLKNiEvQPa6trvApCu
-         vI5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795641930; x=1796246730;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
-        b=mo38FJx5H2vlvw/pVQwh9rpQO4RMzshBFVgpULEIk7k1DaYUp8W0BcgpQGYyqIJ3u9
-         nZLXS/NsGnNoEZ5NYo0tPaM5XHYBPQX9/8t6j8jG5VzKRD/9b46VCiZ3ZazMdLNtqBTU
-         xxFBA/b9/7q1FXecwD3tgqs3KeNH9Atd5RKujN1tL4rlLQTvlts9QD74GjV7fv3ZsLbv
-         laLk5xlsF8fPc0HJWO90OsubZvfqhbHCG1aAUFoG8j8dAr/Nvak2Crcd+qPT1s8ZyDoI
-         KBgrjX7l3BOQOpK4aj/6Z6rOcHeQuxtZk9WaJJPKtyCj/MqYIledHP8Lb93rhypkviPF
-         fnAA==
-X-Forwarded-Encrypted: i=1; AL+hErHHa0NTuj7N2aZt4IhdhHalTMqq1xqNAta0xqZYyJrwK8tC7w2zpian3egIyXk/w+7qgZ+K@lists.linux.dev
-X-Gm-Message-State: APuU4Z+U+hr0WRwJkIgiPBSxMd2wbk3tXxlVDQG8MFU4HhPIp1DEIVPh
-	gLfE2p+v7dkRrshWBjHATTfXgf+LoDDam2XUk+9voNIuOXe2433+sCbB
-X-Gm-Gg: AZFdTZdhTwEdKtl4/3AYR3egzADJ9Q8aqBqFpKvlcXrXnJxAGzf4m/4QAEhNA48N9rv
-	hxPwAVtoaRlPLWj7Z2d5C/UIxXn+54U4aL6Khkypk6LEROkGJ5ae0p+z3m6CUHgyOyU06VbgDiE
-	n2sXUC1EV/UVJPF+5l4D7643iPch5jpoyfBjYis5h9kn6i7/GXie3ZaRIGS+3lq3Df8hImPHgV0
-	D7SQBV/USMDvHaOsX3oq1IemhJlWRCkc2BBYFOrXyI2+O6JZId0z16JHNpOWiFkaHfn6Qt9KNWY
-	O6rPy5VoxdNMLVe/XZOmKNW8/p1uXAK6rg9Jx+nCpvZagzD2QPXHFa8TIY4s8MwKXoorqRj9+dO
-	f7zLEmsR4idsNm7aUEq536ZCJI/gwC+sOKGqmSESEY1ImIIdrzA6ERS1DQk4SFyLAj9fC3jiE4V
-	RtCBlBufq5VqzIg5pKU/fQSglIYRuZntAFKNOlqFBvOkwm/HjkgnpQ8FNbGL7Qrw2B1pkYqxQ/e
-	OTK115g8DY2PHBfTxk6874jR+6qJtKgwF2koZ8eNFg6JSmpvlUugQvQlOa0Lj8+nDk924IW52Mi
-	yRHN5GIJw3a3O7JGzbUkquTsXSoL8xATZzVEGtU06DEQH+w/A7CX0IDcPkhJNEPmoA==
-X-Received: by 2002:a05:600c:4584:b0:4bb:5de1:e90f with SMTP id 5b1f17b1804b1-4bb88819bcdmr380720815e9.31.1795641929874;
-        Wed, 25 Nov 2026 13:25:29 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853c9170sm615777065e9.14.2026.11.25.13.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 13:25:29 -0800 (PST)
-Date: Wed, 25 Nov 2026 21:25:28 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin
- <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
- Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
-Message-ID: <20261125212528.239ab6bf@pumpkin>
-In-Reply-To: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
-References: <20261113221248.3535369-11-wusamuel@google.com>
-	<20261113221248.3535369-13-wusamuel@google.com>
-	<0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dvWh1JfU
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795643862; x=1827179862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pZh7FPy1aRkXInOd3Z/lqy51P/H4KfXJDCzy5vYW68Y=;
+  b=dvWh1JfUPT3iCHVmrASvgn4ZpXZk16048LVbpXkJg6pMZ/Q88TCOpvVp
+   99psw2SvAAPgszw3xqe4zFDgKNX3wdrUaiQutwnhDMwKDqkgGmKCXoAjq
+   GCQr4/x1hrj5JnT3LYH+EoVpqcTZ4r7q9RaDeW19D+knSn4wBAUZ8ll+O
+   GzzpC0l2bHYTTi/m8LAUVSfsR9DGSVy+mzw8W2Du5BKgOs1PAo/CTiK3J
+   Ls+WyrockeVN13pOSMpjWkKHLowvBimkWrdum4osMQgSQ9sCsG8/NlDIm
+   gz8OkIPmnB0sdReyB+Vp/2sv/INX8WRr6E/HUqYFFxYDWVKV1GiDyC4pN
+   A==;
+X-CSE-ConnectionGUID: iGXYVs0ARZ6sCWkFlgBdkA==
+X-CSE-MsgGUID: GL2K6iz6RI6cCs6T10QpqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4446496"
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="4446496"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 13:57:42 -0800
+X-CSE-ConnectionGUID: HkRkHbzMTgG06ER/z44mbw==
+X-CSE-MsgGUID: s2DEfbL2R6S8bPeeGAfkTQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="12569558"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 25 Nov 2026 13:57:37 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xWKze-00000001Sji-1nMK;
+	Wed, 25 Nov 2026 21:57:34 +0000
+Date: Thu, 26 Nov 2026 05:57:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hikmah Gumelar <hikmahgumelar@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Abel Vesa <abelvesa@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	Brian Masney <bmasney+clk@redhat.com>,
+	Jerome Brunet <jbrunet+clk@baylibre.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org, u.kleine-koenig@baylibre.com,
+	Hikmah Gumelar <hikmahgumelar@gmail.com>
+Subject: Re: [PATCH v4 3/7] media: i2c: add s5k5e8 image sensor driver
+Message-ID: <20261126053002.F2AZOt2m-lkp@intel.com>
+References: <20261125123146.379057-4-hikmahgumelar@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -117,72 +95,180 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261125123146.379057-4-hikmahgumelar@gmail.com>
 
-On Wed, 25 Nov 2026 17:45:36 +0100
-Petr Pavlu <petr.pavlu@suse.com> wrote:
+Hi Hikmah,
 
-> On 11/13/26 11:12 PM, Samuel Wu wrote:
-> > KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
-> > symbol name or prefix across module symbols in one pass.
-> > module_get_kallsym() walks the module list from the head and runs an
-> > export bsearch() for every symbol index.
-> > 
-> > Add module_kallsyms_find_name(), and put the shared query struct in
-> > linux/kallsyms.h, so we have a more efficient linear walk.
-> > 
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> > [...]
-> > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> > index 1ff8ce857d92..72006c9bad42 100644
-> > --- a/kernel/module/kallsyms.c
-> > +++ b/kernel/module/kallsyms.c
-> > @@ -406,6 +406,63 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
-> >  	return -ERANGE;
-> >  }
-> >  
-> > +/**
-> > + * module_kallsyms_find_name - Find a module symbol by name or prefix
-> > + * @symnum: in: index to start at; out: index of the match. The index
-> > + *          counts the symbols of the searched modules in list order.
-> > + * @q: name query; if @q->modname is set, only that module is searched
-> > + * @value: set to the symbol address
-> > + * @name: set to the symbol name (KSYM_NAME_LEN bytes)
-> > + * @module_name: set to the module name (MODULE_NAME_LEN bytes)
-> > + *
-> > + * Undefined (SHN_UNDEF) symbols are skipped.
-> > + *
-> > + * Return: 0 on a match, or -ENOENT.
-> > + */
-> > +int module_kallsyms_find_name(unsigned int *symnum,
-> > +			      const struct kallsyms_name_query *q,
-> > +			      unsigned long *value, char *name,
-> > +			      char *module_name)  
-> 
-> Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
-> with similar names. Adding module_kallsyms_find_name() adds more to the
-> confusion, being similar to module_kallsyms_lookup_name() and
-> find_kallsyms_symbol_value().
+kernel test robot noticed the following build errors:
 
-I've thought of splitting the file in two.
-Separating the core symbol table functions from the /proc/kallsyms code.
-Might help here as well.
-The cut goes just above the extra structure the /proc code uses.
-Three functions have to be made non-static, none are that internal.
+[auto build test ERROR on next-20261124]
+[cannot apply to robh/for-next linuxtv-media-pending/master media-tree/master linus/master v7.4-rc4 v7.4-rc3 v7.4-rc2 v7.4-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-David
+url:    https://github.com/intel-lab-lkp/linux/commits/Hikmah-Gumelar/clk-qcom-gcc-msm8953-fix-csi_phytimer_clk_src-100MHz-parent/20261125-193140
+base:   next-20261124
+patch link:    https://lore.kernel.org/r/20261125123146.379057-4-hikmahgumelar%40gmail.com
+patch subject: [PATCH v4 3/7] media: i2c: add s5k5e8 image sensor driver
+config: hexagon-randconfig-1000-20261126 (https://download.01.org/0day-ci/archive/20261126/20261126053002.F2AZOt2m-lkp@intel.com/config)
+compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126053002.F2AZOt2m-lkp@intel.com/reproduce)
 
-> 
-> I suggest calling it module_kallsyms_query_name() to match the
-> kallsyms_name_query parameter and to express that this is a structured
-> query, as opposed to a simple by-name lookup. It might be a good idea to
-> similarly stick to "query" instead of "find" in kernel/kallsyms.c.
-> 
-> Otherwise, this looks ok to me from the modules perspective. Feel free
-> to add:
-> 
-> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261126053002.F2AZOt2m-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/st-mipid02.c:847:19: error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     847 |         bridge->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                          ^
+>> drivers/media/i2c/st-mipid02.c:847:17: error: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
+     847 |         bridge->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> drivers/media/i2c/thp7312.c:2097:20: error: call to undeclared function 'devm_cci_regmap_init_i2c'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2097 |         thp7312->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                           ^
+>> drivers/media/i2c/thp7312.c:2097:18: error: incompatible integer to pointer conversion assigning to 'struct regmap *' from 'int' [-Wint-conversion]
+    2097 |         thp7312->regmap = devm_cci_regmap_init_i2c(client, 16);
+         |                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/devm_cci_regmap_init_i2c +847 drivers/media/i2c/st-mipid02.c
+
+642bb5e88fed89e Mickael Guene 2019-04-09  803  
+642bb5e88fed89e Mickael Guene 2019-04-09  804  static int mipid02_probe(struct i2c_client *client)
+642bb5e88fed89e Mickael Guene 2019-04-09  805  {
+642bb5e88fed89e Mickael Guene 2019-04-09  806  	struct device *dev = &client->dev;
+642bb5e88fed89e Mickael Guene 2019-04-09  807  	struct mipid02_dev *bridge;
+642bb5e88fed89e Mickael Guene 2019-04-09  808  	u32 clk_freq;
+642bb5e88fed89e Mickael Guene 2019-04-09  809  	int ret;
+642bb5e88fed89e Mickael Guene 2019-04-09  810  
+4dd10fbbeb9c337 Kees Cook     2026-10-28  811  	bridge = devm_kzalloc_obj(dev, *bridge);
+642bb5e88fed89e Mickael Guene 2019-04-09  812  	if (!bridge)
+642bb5e88fed89e Mickael Guene 2019-04-09  813  		return -ENOMEM;
+642bb5e88fed89e Mickael Guene 2019-04-09  814  
+642bb5e88fed89e Mickael Guene 2019-04-09  815  	bridge->i2c_client = client;
+642bb5e88fed89e Mickael Guene 2019-04-09  816  	v4l2_i2c_subdev_init(&bridge->sd, client, &mipid02_subdev_ops);
+642bb5e88fed89e Mickael Guene 2019-04-09  817  
+642bb5e88fed89e Mickael Guene 2019-04-09  818  	/* got and check clock */
+642bb5e88fed89e Mickael Guene 2019-04-09  819  	bridge->xclk = devm_clk_get(dev, "xclk");
+642bb5e88fed89e Mickael Guene 2019-04-09  820  	if (IS_ERR(bridge->xclk)) {
+642bb5e88fed89e Mickael Guene 2019-04-09  821  		dev_err(dev, "failed to get xclk\n");
+642bb5e88fed89e Mickael Guene 2019-04-09  822  		return PTR_ERR(bridge->xclk);
+642bb5e88fed89e Mickael Guene 2019-04-09  823  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  824  
+642bb5e88fed89e Mickael Guene 2019-04-09  825  	clk_freq = clk_get_rate(bridge->xclk);
+642bb5e88fed89e Mickael Guene 2019-04-09  826  	if (clk_freq < 6000000 || clk_freq > 27000000) {
+642bb5e88fed89e Mickael Guene 2019-04-09  827  		dev_err(dev, "xclk freq must be in 6-27 Mhz range. got %d Hz\n",
+642bb5e88fed89e Mickael Guene 2019-04-09  828  			clk_freq);
+642bb5e88fed89e Mickael Guene 2019-04-09  829  		return -EINVAL;
+642bb5e88fed89e Mickael Guene 2019-04-09  830  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  831  
+642bb5e88fed89e Mickael Guene 2019-04-09  832  	bridge->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+642bb5e88fed89e Mickael Guene 2019-04-09  833  						     GPIOD_OUT_HIGH);
+642bb5e88fed89e Mickael Guene 2019-04-09  834  
+61c03b631b74a38 Chuhong Yuan  2019-10-17  835  	if (IS_ERR(bridge->reset_gpio)) {
+61c03b631b74a38 Chuhong Yuan  2019-10-17  836  		dev_err(dev, "failed to get reset GPIO\n");
+61c03b631b74a38 Chuhong Yuan  2019-10-17  837  		return PTR_ERR(bridge->reset_gpio);
+61c03b631b74a38 Chuhong Yuan  2019-10-17  838  	}
+61c03b631b74a38 Chuhong Yuan  2019-10-17  839  
+642bb5e88fed89e Mickael Guene 2019-04-09  840  	ret = mipid02_get_regulators(bridge);
+642bb5e88fed89e Mickael Guene 2019-04-09  841  	if (ret) {
+642bb5e88fed89e Mickael Guene 2019-04-09  842  		dev_err(dev, "failed to get regulators %d", ret);
+642bb5e88fed89e Mickael Guene 2019-04-09  843  		return ret;
+642bb5e88fed89e Mickael Guene 2019-04-09  844  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  845  
+6223dafa3c9111d Alain Volmat  2023-11-25  846  	/* Initialise the regmap for further cci access */
+6223dafa3c9111d Alain Volmat  2023-11-25 @847  	bridge->regmap = devm_cci_regmap_init_i2c(client, 16);
+6223dafa3c9111d Alain Volmat  2023-11-25  848  	if (IS_ERR(bridge->regmap))
+6223dafa3c9111d Alain Volmat  2023-11-25  849  		return dev_err_probe(dev, PTR_ERR(bridge->regmap),
+6223dafa3c9111d Alain Volmat  2023-11-25  850  				     "failed to get cci regmap\n");
+6223dafa3c9111d Alain Volmat  2023-11-25  851  
+642bb5e88fed89e Mickael Guene 2019-04-09  852  	bridge->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+642bb5e88fed89e Mickael Guene 2019-04-09  853  	bridge->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+04d170b288b3404 Alain Volmat  2023-11-25  854  	bridge->sd.internal_ops = &mipid02_subdev_internal_ops;
+642bb5e88fed89e Mickael Guene 2019-04-09  855  	bridge->sd.entity.ops = &mipid02_subdev_entity_ops;
+642bb5e88fed89e Mickael Guene 2019-04-09  856  	bridge->pad[0].flags = MEDIA_PAD_FL_SINK;
+642bb5e88fed89e Mickael Guene 2019-04-09  857  	bridge->pad[1].flags = MEDIA_PAD_FL_SINK;
+642bb5e88fed89e Mickael Guene 2019-04-09  858  	bridge->pad[2].flags = MEDIA_PAD_FL_SOURCE;
+642bb5e88fed89e Mickael Guene 2019-04-09  859  	ret = media_entity_pads_init(&bridge->sd.entity, MIPID02_PAD_NB,
+642bb5e88fed89e Mickael Guene 2019-04-09  860  				     bridge->pad);
+642bb5e88fed89e Mickael Guene 2019-04-09  861  	if (ret) {
+642bb5e88fed89e Mickael Guene 2019-04-09  862  		dev_err(&client->dev, "pads init failed %d", ret);
+04d170b288b3404 Alain Volmat  2023-11-25  863  		return ret;
+04d170b288b3404 Alain Volmat  2023-11-25  864  	}
+04d170b288b3404 Alain Volmat  2023-11-25  865  
+04d170b288b3404 Alain Volmat  2023-11-25  866  	ret = v4l2_subdev_init_finalize(&bridge->sd);
+04d170b288b3404 Alain Volmat  2023-11-25  867  	if (ret < 0) {
+04d170b288b3404 Alain Volmat  2023-11-25  868  		dev_err(dev, "subdev init error: %d\n", ret);
+04d170b288b3404 Alain Volmat  2023-11-25  869  		goto entity_cleanup;
+642bb5e88fed89e Mickael Guene 2019-04-09  870  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  871  
+642bb5e88fed89e Mickael Guene 2019-04-09  872  	/* enable clock, power and reset device if available */
+a74e17ca6443260 Alain Volmat  2024-10-08  873  	ret = mipid02_set_power_on(&client->dev);
+642bb5e88fed89e Mickael Guene 2019-04-09  874  	if (ret)
+642bb5e88fed89e Mickael Guene 2019-04-09  875  		goto entity_cleanup;
+642bb5e88fed89e Mickael Guene 2019-04-09  876  
+642bb5e88fed89e Mickael Guene 2019-04-09  877  	ret = mipid02_detect(bridge);
+642bb5e88fed89e Mickael Guene 2019-04-09  878  	if (ret) {
+642bb5e88fed89e Mickael Guene 2019-04-09  879  		dev_err(&client->dev, "failed to detect mipid02 %d", ret);
+642bb5e88fed89e Mickael Guene 2019-04-09  880  		goto power_off;
+642bb5e88fed89e Mickael Guene 2019-04-09  881  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  882  
+642bb5e88fed89e Mickael Guene 2019-04-09  883  	ret = mipid02_parse_tx_ep(bridge);
+642bb5e88fed89e Mickael Guene 2019-04-09  884  	if (ret) {
+642bb5e88fed89e Mickael Guene 2019-04-09  885  		dev_err(&client->dev, "failed to parse tx %d", ret);
+642bb5e88fed89e Mickael Guene 2019-04-09  886  		goto power_off;
+642bb5e88fed89e Mickael Guene 2019-04-09  887  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  888  
+642bb5e88fed89e Mickael Guene 2019-04-09  889  	ret = mipid02_parse_rx_ep(bridge);
+642bb5e88fed89e Mickael Guene 2019-04-09  890  	if (ret) {
+642bb5e88fed89e Mickael Guene 2019-04-09  891  		dev_err(&client->dev, "failed to parse rx %d", ret);
+642bb5e88fed89e Mickael Guene 2019-04-09  892  		goto power_off;
+642bb5e88fed89e Mickael Guene 2019-04-09  893  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  894  
+a74e17ca6443260 Alain Volmat  2024-10-08  895  	/* Enable runtime PM and turn off the device */
+a74e17ca6443260 Alain Volmat  2024-10-08  896  	pm_runtime_set_active(dev);
+a74e17ca6443260 Alain Volmat  2024-10-08  897  	pm_runtime_get_noresume(&client->dev);
+a74e17ca6443260 Alain Volmat  2024-10-08  898  	pm_runtime_enable(dev);
+a74e17ca6443260 Alain Volmat  2024-10-08  899  
+a74e17ca6443260 Alain Volmat  2024-10-08  900  	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+a74e17ca6443260 Alain Volmat  2024-10-08  901  	pm_runtime_use_autosuspend(&client->dev);
+a74e17ca6443260 Alain Volmat  2024-10-08  902  	pm_runtime_put_autosuspend(&client->dev);
+a74e17ca6443260 Alain Volmat  2024-10-08  903  
+642bb5e88fed89e Mickael Guene 2019-04-09  904  	ret = v4l2_async_register_subdev(&bridge->sd);
+642bb5e88fed89e Mickael Guene 2019-04-09  905  	if (ret < 0) {
+642bb5e88fed89e Mickael Guene 2019-04-09  906  		dev_err(&client->dev, "v4l2_async_register_subdev failed %d",
+642bb5e88fed89e Mickael Guene 2019-04-09  907  			    ret);
+642bb5e88fed89e Mickael Guene 2019-04-09  908  		goto unregister_notifier;
+642bb5e88fed89e Mickael Guene 2019-04-09  909  	}
+642bb5e88fed89e Mickael Guene 2019-04-09  910  
+642bb5e88fed89e Mickael Guene 2019-04-09  911  	dev_info(&client->dev, "mipid02 device probe successfully");
+642bb5e88fed89e Mickael Guene 2019-04-09  912  
+642bb5e88fed89e Mickael Guene 2019-04-09  913  	return 0;
+642bb5e88fed89e Mickael Guene 2019-04-09  914  
+642bb5e88fed89e Mickael Guene 2019-04-09  915  unregister_notifier:
+3c8c153914812a9 Sakari Ailus  2021-03-05  916  	v4l2_async_nf_unregister(&bridge->notifier);
+3c8c153914812a9 Sakari Ailus  2021-03-05  917  	v4l2_async_nf_cleanup(&bridge->notifier);
+a74e17ca6443260 Alain Volmat  2024-10-08  918  	pm_runtime_disable(&client->dev);
+a74e17ca6443260 Alain Volmat  2024-10-08  919  	pm_runtime_set_suspended(&client->dev);
+642bb5e88fed89e Mickael Guene 2019-04-09  920  power_off:
+a74e17ca6443260 Alain Volmat  2024-10-08  921  	mipid02_set_power_off(&client->dev);
+642bb5e88fed89e Mickael Guene 2019-04-09  922  entity_cleanup:
+642bb5e88fed89e Mickael Guene 2019-04-09  923  	media_entity_cleanup(&bridge->sd.entity);
+642bb5e88fed89e Mickael Guene 2019-04-09  924  
+642bb5e88fed89e Mickael Guene 2019-04-09  925  	return ret;
+642bb5e88fed89e Mickael Guene 2019-04-09  926  }
+642bb5e88fed89e Mickael Guene 2019-04-09  927  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
