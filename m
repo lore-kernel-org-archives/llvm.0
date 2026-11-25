@@ -1,72 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.42.244.120
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795600011;
-	b=JpBX6EgmL/zXBigkOZVLMq6qMn834/aDdMMvFkPJ1vqYxjHX4inR929e/u0g/SX+lPWo
-	 8NeMguaI5XqB6qv0uQwq2hgYn61zxnJRW/wBrm2kIlqU8Vx6TiW1JhG5jP0oMreUSxxnl
-	 Av4RkzWnNlcVJGnX+tJd26WKhpWnWwazvhhZjF0V8NAd40xafr4Q4PRtO2xQLpx+pfZEy
-	 8R96JjG45rvb7iX/PaXuxzSb1mw4M+O2pdf3PRI2EUaYR4owbV90P5eIyiHrNOR2eQCs+
-	 eTDiAh15uqnhkC8wAI7gUpKb9R4qrfneESdbjOYSbD77vXKU1HLexNONS4vNrczCvRw==
+	t=1795600604;
+	b=NlhkE4/AxJL+yP0H/RFZmlBT53Kzi0AUolw8RnULZ5DV/X6vRVFVhdvodKUyOFxy+7Zg
+	 Z/KrZctePKL5iP/jeJLwPtYF9Kw4liC+/8304/SX/aX7rdWTvVNdV4wLhKDJHnLM9ixQA
+	 Ufl0VaP/VBCAKrgUYh4l6BblMouG8IpAKs5E/cLEWwj1zP0R3yL1SAAm2os7+o/UB7XtJ
+	 0lhl06H9E7v3NaQ/yCxIuwrjI/Crny8isKuuk6ZmaPTb7VQjgfBSfNFcE5FGENodxg27k
+	 007X9GMCuJ7hGEWBFX7wcKKY6JNq82Dvq6Owiq/gL+WZsUBSTKKS7h+YdRXpMoLhxQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795600011;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795600604;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=8sTc2bCjctzlaRsbys2WSDh+IM60pvW2yIGOU2jAXq0=;
-	b=TSsLHR9F49Iki8S+ZBRR3acYSMX2Y75GNL+rDXK+lnkeL1ZoR5Fq3B4+f6js9iNzje1M
-	 +t09zAu7D1y45iewNd09VOeMqoCLpZzkiLQAsoNBSTTZk0r46c+bA7bD4jfmBI6tV366L
-	 g/M2bxj2io3HPGdAWQj580RQ6e1+mRJnU/2BV5tMYr5aa2NV4fxzX8hLhpT+Fa9kUuVzj
-	 dC+TCAKlqCXK9gPLj4Zr1w3dhjhj7XzbiAn7XI6z49UE6G2OjkLask8AER/rfPI52SZKN
-	 smZEoRMvqEjDE2ClkoKuH6aTzHRAKwK/h9C+oN+Fiydv9zdxHAbP4GEvwNmpJgE/jPA==
+	 Content-Disposition:In-Reply-To:Organization:x-ms-reactions:
+	 X-purgate-ID:X-purgate-type:X-purgate-size:X-Notice:X-purgate:
+	 X-purgate:X-pfmilter;
+	bh=o9V35QWmnxkcGDaXqhjxiPIy0R24gUWruywCyvkZf9g=;
+	b=2kh70uA18B2nm0Pkpw4OFn2h8SA5599pYIXdKzzDvj/XNhdKNrEgMzDXpgXBKzIgBwVx
+	 pfW9zdZXzhkNgE1I9GfOYkv319HP7R/SF2o1xVGEtTV07O8kkfNvAhRYNDp6puAcoDR4/
+	 SC4uB7Zs26utWuFsp7wdtP0FmvGILxDeABqfVMHhFjo11zEuBE803Q9qzckJT8LYs382e
+	 ghToqX8x7ONvGyFlleHeBSSHIQyCl6jYM4vV9cmO5rJo1bUomyvrbNvao/5hC8ZS7LOaw
+	 jAlcBy1lXz301fQ6ylksPCWnSO4IdNhZdVJ1N9h/AXe3rAV4Bo0vmpwMqnFLpzzJ+Zw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=LVJHJRJD;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dmarc=pass header.from=fritz.com;
+	spf=pass smtp.mailfrom=fritz.com;
+	dkim=pass header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=OvOVK9ai;
+	arc=none smtp.remote-ip=212.42.244.120
+Received: from mail.avm.de (mail.avm.de [212.42.244.120])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD94606A337;
-	Wed, 25 Nov 2026 09:46:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCD94606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67104606A321
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 09:56:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67104606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=LVJHJRJD
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=8sTc2bCjctzlaRsbys2WSDh+IM60pvW2yIGOU2jAXq0=; b=LVJHJRJDGjJaw8cvgz0hSzdYba
-	k8XwHqFV9Q/pHOVyFLJTWjUit2DxPbr1VDps7/EtA2FqOGGkPEaPRsBI7GfiQmn0cFj8jLDlsDpAH
-	1qPVqpPyLeAaQ2ttIFNqjiYu41DFnKwJZRmoeckouK/CjTX44j+pRvaxrNBHHY6olIhnDCWexjo8X
-	IdNpyinCjTfncIOliFucyuV9WF6yNwVGwNE0qpeOi26s2sPYve1GiElj+XOyx0XCcEpihFpz8HTcT
-	PoIhP8ePVTi8ownYMkKw5fiJx+jRwNHbE0iHX9GauYM74Mnf2wMOjq5F7PKSbAYpVIdKL6DOrZbEJ
-	14Z1lk4Q==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xW9aO-0000000A1BX-2R6t;
-	Wed, 25 Nov 2026 09:46:45 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7A3E9302186; Wed, 25 Nov 2026 10:46:43 +0100 (CET)
-Date: Wed, 25 Nov 2026 10:46:43 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
+	dkim=pass (2048-bit key, unprotected) header.d=fritz.com header.i=@fritz.com header.a=rsa-sha256 header.s=mail header.b=OvOVK9ai
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
+	t=1795600592; bh=pZNseUamYF/NcBCWp2XFZ917wokQkwCmyXEupzEFfo0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OvOVK9aiHm8AT8ElIOf0mHmcxUZqwvb9/Usx9TkHvu+FLOLBysBfDif3qHokFDPEe
+	 nlzMytPtB80W+7JR1u9lNTK7rMmuJQhpwqyTN6A7oifJLbZbukMFQuMWk/alMlt7Vz
+	 709n2l4yfmtdMnlpyL7Sz1aW77eKlBu86HvbUzwnDQs5u30YYG/+tvXeEs95Gk8Mk2
+	 Vm9cM/0CQj/vpLQiMGoal3nPkHzq25SNIMrakcmlahLSPSgMUAH7pa87hTS7S6j619
+	 S5FDwDQnzFvw0BuXbAIJFVQnuzcNaxH+3WwOWAwuMk038+czYJ0r/x5Bpu8bwCAXQe
+	 cYRcdz8PZrcSg==
+Received: from [212.42.244.78] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
+	(envelope-from <n.schier@fritz.com>)
+	id 6b06b0d0-045b-7f0000032729-7f000001912c-1
+	for <multiple-recipients>; Wed, 25 Nov 2026 10:56:32 +0100
+Received: from mail-auth.fritz.com (unknown [212.42.244.78])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Wed, 25 Nov 2026 10:56:32 +0100 (CET)
+Date: Wed, 25 Nov 2026 10:56:32 +0100
+From: Nicolas Schier <n.schier@fritz.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v3] sched/topology: Avoid unsequenced accesses to jiffies
- in sd_init()
-Message-ID: <20261125094643.GY2668804@noisy.programming.kicks-ass.net>
-References: <20261125-topology-wunsequenced-v3-1-efa3db7e0bf8@kernel.org>
+	Justin Stitt <justinstitt@google.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
+	Kees Cook <kees@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v6 5/7] kbuild: batch module finalisation
+Message-ID: <20261125-bald-mushroom-of-development-7b2288@l-nschier-z2>
+References: <20261124-build-speedup-v6-0-141a4f861c67@kernel.org>
+ <20261124-build-speedup-v6-5-141a4f861c67@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,49 +96,125 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261125-topology-wunsequenced-v3-1-efa3db7e0bf8@kernel.org>
+In-Reply-To: <20261124-build-speedup-v6-5-141a4f861c67@kernel.org>
+Organization: FRITZ! Technology GmbH
+x-ms-reactions: disallow
+X-purgate-ID: 149429::1795600592-22FEB977-6F71B524/0/0
+X-purgate-type: clean
+X-purgate-size: 4480
+X-Notice: Whitelisted
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
+X-pfmilter: host: postfix-mx-01  mail-id: D1F4DA0233  external: no
 
-On Wed, Nov 25, 2026 at 12:23:35AM -0700, Nathan Chancellor wrote:
-> After a recent improvement in clang to warn on unsequenced accesses to
-> volatile variables [1], an instance appears in sd_init(), which can
-> break the build with CONFIG_WERROR=y / W=e:
+On Tue, Nov 24, 2026 at 12:20:15PM +0000, Lorenzo Stoakes (ARM) wrote:
+> With the .mod.S change in place, module finalisation on allmodconfig builds
+> consists of a large number of very short-lived jobs.
 > 
->   In file included from kernel/sched/build_utility.c:86:
->   kernel/sched/topology.c:2008:29: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
->    1998 |                 .last_balance           = jiffies,
->         |                                           ~~~~~~~
->    1999 |                 .balance_interval       = sd_weight,
->    2000 |
->    2001 |                 /* 50% success rate */
->    2002 |                 .newidle_call           = 512,
->    2003 |                 .newidle_success        = 256,
->    2004 |                 .newidle_ratio          = 512,
->    2005 |                 .newidle_stamp          = now,
->    2006 |
->    2007 |                 .max_newidle_lb_cost    = 0,
->    2008 |                 .last_decay_max_lb_cost = jiffies,
->         |                                           ^
+> For allmodconfig x86-64 this can be on the order of ~22,000 jobs of a few
+> milliseconds in duration each.
 > 
-> Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-> 6.5.2, unsequenced side effects on the same scalar object are undefined
-> behavior. Per C11 6.7.9.23, the evaluation of the initialization list
-> expressions in a designated initializer is indeterminately sequenced
-> relative to each other, meaning any side effects in the initialization
-> list are unsequenced.
+> Each job entails processing ~22k .cmd files, so the combination of heavy
+> overhead and small individual job results in a lot of unnecessary and
+> repeated work even with all cores being utilised.
 > 
-> Clang's warning is ultimately pointing out that jiffies may have two
-> separate values in this initializer because it is volatile and accessed
-> twice and the order of these accesses is not specified. This could
-> result in unexpected or inconsistent behavior depending on the code
-> author's intent and whether they realized the variable was volatile or
-> not.
+> The solution is to batch by a number of jobs. Determining which value makes
+> sense was done empirically.
 > 
-> As two separate accesses is not necessary here, add a local variable to
-> hold the value of jiffies before the designated initializer so that a
-> consistent value is used for initializing both members, clearing up the
-> warning.
+> On a 128-thread threadripper box doing an allmodconfig build, best of
+> 2, *.ko, *.mod.o deleted each time:
+> 
+>     modules per chunk    instances    wall
+>     -----------------    ---------    ------
+>                     1        11171    10.22s
+>                     2         5586     6.72s
+>                     4         2793     4.97s
+>                     8         1397     4.26s
+>                    16          699     4.05s
+>                    32          350     4.05s
+>                    64          175     4.07s
+>                   128           88     4.05s
+>                   256           44     4.03s
+>                   512           22     4.18s
+> 
+> Wall time flattens for 16-256 module batches.
+> 
+> A slower/lower core machine will do better with fewer modules-per-batch, a
+> faster/higher core machine will do better with more modules-per-batch.
+> 
+> Therefore, take the midpoint which works in the most margin in either
+> direction - 128 modules per batch.
+> 
+> This naturally scales with module count too as the optimum gains are
+> obtained with higher module count, so fewer batches in this case costs less
+> overhead.
+> 
+> Each instance holds only its own modules' variables and the top-level one
+> reads no per-module .cmd files at all, the same rules serve both levels,
+> and an instance is told its chunk with modfinal-first=<index>.
+> 
+> Only the top-level instance builds .module-common.o, to the chunks it is a
+> plain prerequisite, so no two instances ever write it.
+> 
+> "make modules" with every *.mod.o and *.ko deleted goes from 28.9s to 15.9s
+> with clang 22. No-op "make modules" goes from 5.6s to 4.8s, as checking the
+> 22,000 targets is spread over the chunks too.
+> 
+> Whole build, 128-thread Threadripper 9980X, best of N runs:
+> 
+>                                          before   after     delta
+>                                          -------------------------------
+>   x86 allmodconfig, no-op make, gcc         2.3s     1.4s    -0.85s (-38%)
+>   x86 allmodconfig, no-op make, clang       2.8s     1.8s    -0.94s (-34%)
+>   x86 allmodconfig, clean, gcc            306.6s   294.1s     -12.6s (-4%)
+>   x86 allmodconfig, clean, clang          290.2s   283.9s     -6.4s (-2%)
+> 
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
+>  scripts/Makefile.modfinal | 30 +++++++++++++++++++++++++++++-
+>  1 file changed, 29 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 75e9effdf02c..4d5e6e1a0ff9 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -13,9 +13,30 @@ include $(srctree)/scripts/Makefile.lib
+>  # find all modules listed in modules.order
+>  modules := $(call read-file, modules.order)
+>  
+> +modfinal-chunk-size := 128
+> +
+> +ifdef modfinal-first
+> +
+> +# this instance handles the chunk of modules.order starting at $(modfinal-first)
+> +modules := $(wordlist $(modfinal-first), $(words $(modules)), $(modules))
+> +modules := $(wordlist 1, $(modfinal-chunk-size), $(modules))
+> +
+>  __modfinal: $(modules:%.o=%.ko)
+>  	@:
+>  
+> +else
+> +
+> +modfinal-chunks := $(addprefix chunk-, $(shell seq 1 $(modfinal-chunk-size) $(words $(modules))))
+> +
+> +PHONY += $(modfinal-chunks)
+> +$(modfinal-chunks): .module-common.o
+> +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal modfinal-first=$(@:chunk-%=%)
 
-None of this tells me why we should not just disable that warning and
-get on with life.
+Thanks!
+
+Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+
+
+(bike-shedding) For readability, I'd favourised the use of pattern 
+matching stem:
+
+$(modfinal-chunks): chunk-%: .module-common.o
+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal modfinal-first=$*
+
+-- 
+Nicolas
