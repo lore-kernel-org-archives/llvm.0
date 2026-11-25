@@ -1,73 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795572418;
-	b=rFhN+iWXuh2zHeQ6fy9aWpoEnQJ/kF03DkzO0C2zhKwEp+AmLEo1u7ed38yhWjbpD2cU
-	 HVgGKdjYLuy21eM+vKAXF3HBcpV71+WWakiONnrjpe6Wl+RnGFssU3Ulgigj7ZqEKfkXX
-	 grm69pV13tKYl1ht6xTiXzBb1XlaNlbaI7mIeo66JXrMuT9tNlq/+I9pqxte0kzgHCvd4
-	 nwBwmnzZHu4vMzOTo1PYieOfbPFH5dl41QELF8XWobHcKIsUZpnQ+yGZaweNlkypqxZHw
-	 ERSr5CIW1K+Ya0ynJGfhtVO0y3MxOE1Nl3G4lwsssWl1KBs4h2k3OM78qb62krPOMlw==
+	t=1795575020;
+	b=RP2tofHmEyHEAuQ7B7YQJh1OKE44VxHDMw25HK7XPU2cRNyo75hGQlJIFkKBC4a1s61e
+	 QPRv12yiBEVYseDMXbUIFMenRo8Wfpj4/mhZcdMCPPPlCP5GHD8QmrzuRSaIpq4ENhh9p
+	 cy16sdqO5/3imhc5HtNi0FQoADOf/Ry9w8XLB2L+2N+qZ6tBSvJ3fz41pKf9Pt7x0tf9C
+	 SbJzaUJpbeAvElvjvtDJqMokVPCUMNdTBGBEq6wjKE0IMlmIQNYn6vfOtuq2MAokIOudU
+	 ttLosW4097+FF554xuKJ1+45Zy/2sYFtVVXvJ9yPkt282WErM091lyzzOE9jMl45xNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795572418;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=LObbUE4SlW6IGQlyQRo5/awQw3nZ90YOcL/yKK/xkvQ=;
-	b=cs92ASDdP+jKeuZR6QxOlniB60y4c83An294OxEy1b9JYWsUYDQBzM7Ocu227EiU9Pvk
-	 /KL3eSrJoB1xPHAbbIwAGnqGRxPtV1ope+eZ7e4JSKhJe5gLWWdIgtFti+5JxEBdtvBK4
-	 t6DnTI9G9OuH2iOGEAj7l8+hoKtCDlfU/jEK01/ghn6D2a4o33cDDgJJVzTg0Wa4a02VW
-	 VsTSeLB3m3SNuwvZz8ycljCrjlq/aGftwh9+0Ob6P85Ux5G4Uf5da7/cz7ZAS+tr/38Sv
-	 79RdjVx96Q9+GUUDk1Zd+A6G5YYcC+TGM9ju9zm6mRERMOpANfQnQOM2F4cdja/FSug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795575020;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=hjTsEiHsB3scrTtDDV5jrh4xR7hyZtuQPmXQXJ4G5oA=;
+	b=HguGbNyVr9B6AIcGU+GnrPx9Oz69+2hNqlkrBYi3UeZjqbkottZB8Fh1IwQnEng8Ss8Z
+	 Tyd8UZA6j/ImSDxKX8xjJ9T93QMkbGsyP4aNwJW5WYiEK2KBD7HUxwyWpZjCXFhr7i21v
+	 LVniLE/6U6I9qFUxBaT5xS3cUSU/+BFJN76WqjpT6flkggudXl2ncn4wqRN5rEOmXAUae
+	 YBTzNINsC12Opaa2w50P2E+FRhvmBxnZjAC00hWqxK1/DkVmKxlTstIWQskbvaJhDTtte
+	 7C1dcBSHrLMHmsmKaMuFgWq9dQo6Yomn6ihZD6bXcWiW1flXOxB+VPkXclhg8mlt2RA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JopSRnYL;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YqFq14zg;
+	arc=none smtp.remote-ip=198.175.65.9
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD39606A327;
-	Wed, 25 Nov 2026 02:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129ED606A33F;
+	Wed, 25 Nov 2026 02:50:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 129ED606A33F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JopSRnYL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED8E1F000C6;
-	Wed, 25 Nov 2026 02:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795572418;
-	bh=LObbUE4SlW6IGQlyQRo5/awQw3nZ90YOcL/yKK/xkvQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JopSRnYLQwm+YfIu0nM3zDyaqrzbSe7k9/RYsF+aX81IfT9QsrNB6rzWamYNV+U+u
-	 6OTY5JFwZWOsN+HVXW5jBgTa0Mvw+RAm0IkFQuJ3Wvb9FvaGjoLEcw8YPtxhTmUcYr
-	 cXyW0i9MWZHV5JNaYYjtH/IELmlFPOsTSLLWnTai8t2j6Q3wxp7/5j1Y8xdDTViIPX
-	 /L04gP39ICEV0e6tY7I7xIbtIeE0U+Th8jMaahwm0ZFOPyVLxuZ88RCkA72DZGysia
-	 IoOemjBiS7+PA7gA3KfFV27fEbNDPkeGTuvy5LVmEvXD5Hk+M9rfqdX9wIZC5K0do5
-	 SIU41lL3t8iNw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Chuck Wolber <chuck@wolber.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Marco Elver <elver@google.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Oberparleiter <oberpar@linux.ibm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	workflows@vger.kernel.org
-Subject: [PATCH v3 19/19] Documentation: dev-tools: document the common code coverage interface
-Date: Tue, 24 Nov 2026 21:06:03 -0500
-Message-ID: <20261125020603.3934222-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261125020603.3934222-1-sashal@kernel.org>
-References: <20261125020603.3934222-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YqFq14zg
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795575019; x=1827111019;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FMJRwqJHxhDPXVt+DDIaX5xHOfNnwmDVihBZyK76jyw=;
+  b=YqFq14zgaQoW6sdIxFjmKVUmQswP7w+TU8pTEbz3pZhnes5nPpCXmeR3
+   pcErAriQhH/ZFTUq7iNqtGQzKLjiWgxjJNN+CYTT4RzLi12tKQigk8Xpr
+   0WeY4dLoOOPNh5Bf/apH9xSdy2umM2tBL+Lfr5CV3gxl1bPyrdOVl28Y2
+   95qVxPVMSrxfAz5vqpTtzntXZtu5CZWVJk6wgOFmBzJdp0tPunAxFB8uv
+   dszJb4UeKCo8ZYHU6/0WvSTn7IAXDo8DTFn76a1EJOrxNyOMyx4DhPJff
+   TSvhqNuyZvdS4kMB177DwZBX0GyxJuir1U7ouIr3NDc5o9tDDtLQSvaMQ
+   w==;
+X-CSE-ConnectionGUID: RQAYVx90T36oqe6IJPv3+Q==
+X-CSE-MsgGUID: CqPlPi4qTnmkcY50g19lUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11976"; a="4312486"
+X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
+   d="scan'208";a="4312486"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2026 18:50:18 -0800
+X-CSE-ConnectionGUID: LGuQYm+xS0WWm+/cuAibYA==
+X-CSE-MsgGUID: BbyHB66dR1+vA+YgeLPFng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
+   d="scan'208";a="11851290"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 24 Nov 2026 18:50:16 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xW35I-00000001Qio-3vrh;
+	Wed, 25 Nov 2026 02:50:12 +0000
+Date: Wed, 25 Nov 2026 10:49:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
+	linux-security-module@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, jmorris@namei.org, serge@hallyn.com,
+	keescook@chromium.org, john.johansen@canonical.com,
+	penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+	selinux@vger.kernel.org
+Subject: Re: [PATCH 1/1] LSM: infrastructure management of mount options
+Message-ID: <20261125104210.ICeMgnNL-lkp@intel.com>
+References: <20261124181522.30415-2-casey@schaufler-ca.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,287 +86,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261124181522.30415-2-casey@schaufler-ca.com>
 
-Describe the code coverage implementations and what they share: the
-Kconfig options, the COVERAGE_PROFILE annotations, the
-/sys/kernel/debug/coverage/ interface, MC/DC measurement, and how they
-deal with noinstr code. Point to it from the gcov and KCOV
-documentation, and document gcov's MC/DC support.
+Hi Casey,
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- Documentation/dev-tools/coverage.rst | 173 +++++++++++++++++++++++++++
- Documentation/dev-tools/gcov.rst     |  28 +++++
- Documentation/dev-tools/index.rst    |   1 +
- Documentation/dev-tools/kcov.rst     |   3 +
- MAINTAINERS                          |   1 +
- 5 files changed, 206 insertions(+)
- create mode 100644 Documentation/dev-tools/coverage.rst
+kernel test robot noticed the following build warnings:
 
-diff --git a/Documentation/dev-tools/coverage.rst b/Documentation/dev-tools/coverage.rst
-new file mode 100644
-index 0000000000000..3634f01a9444d
---- /dev/null
-+++ b/Documentation/dev-tools/coverage.rst
-@@ -0,0 +1,173 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=============
-+Code coverage
-+=============
-+
-+The kernel can be instrumented to find out which parts of it get executed.
-+This serves two different purposes:
-+
-+* Measuring code coverage, e.g. to assess and improve a test suite, or to
-+  show the structural coverage required by safety standards. This is done by
-+  one of the code coverage measurement implementations described below.
-+
-+* Guiding fuzzers. This is done by KCOV, which collects coverage per task;
-+  see Documentation/dev-tools/kcov.rst.
-+
-+All of them are configured in the "Kernel hacking -> Kernel Testing and
-+Coverage -> Code coverage" menu, live in ``kernel/coverage/``, and share the
-+``/sys/kernel/debug/coverage/`` debugfs directory.
-+
-+
-+Code coverage measurement
-+=========================
-+
-+The implementation is selected by the "Code coverage measurement" choice:
-+
-+============================  ==============  ================================
-+Option                        Compilers       Data
-+============================  ==============  ================================
-+``CONFIG_GCOV_KERNEL``        GCC, Clang      gcov ``.gcda`` files, see
-+                                              Documentation/dev-tools/gcov.rst
-+``CONFIG_LLVM_COV_KERNEL``    Clang 19 and    LLVM raw profile of the kernel
-+                              later           image (``.profraw``)
-+============================  ==============  ================================
-+
-+The instrumentation and the format of the data are defined by the toolchain,
-+so only one implementation can be used at a time. Both only instrument C
-+code.
-+
-+Clang's source-based code coverage (``CONFIG_LLVM_COV_KERNEL``) instruments
-+the code in the compiler front end. Its data therefore maps back to the source
-+code exactly, regardless of the optimizations applied, and it can show the
-+coverage of every condition of a decision. It only instruments code built into
-+the kernel image. gcov also supports modules.
-+
-+
-+Selecting the code to instrument
-+--------------------------------
-+
-+``CONFIG_COVERAGE_PROFILE_ALL`` instruments the entire kernel. On architectures
-+that don't support it, or to instrument only parts of the kernel, add a line
-+like the following to the respective Makefile.
-+
-+For a single file (e.g. main.o)::
-+
-+	COVERAGE_PROFILE_main.o := y
-+
-+For all files in one directory::
-+
-+	COVERAGE_PROFILE := y
-+
-+To exclude files from being instrumented even when
-+``CONFIG_COVERAGE_PROFILE_ALL`` is enabled, use::
-+
-+	COVERAGE_PROFILE_main.o := n
-+
-+and::
-+
-+	COVERAGE_PROFILE := n
-+
-+The per-file setting takes precedence over the per-directory one, which takes
-+precedence over ``CONFIG_COVERAGE_PROFILE_ALL``.
-+
-+Code that is built as a module is only instrumented by an implementation that
-+supports modules, whatever these settings say.
-+
-+Only exclude code that can't work when instrumented, for example because it
-+runs before the kernel is relocated or is copied elsewhere. Code that must not
-+be instrumented for correctness reasons, such as the entry code, is annotated
-+``noinstr`` instead; see `noinstr`_.
-+
-+
-+Interface
-+---------
-+
-+``/sys/kernel/debug/coverage/`` contains:
-+
-+``backend``
-+	The name of the selected implementation, ``gcov`` or ``llvm``, followed by
-+	``mcdc`` when MC/DC is measured. The implementation keeps its files in the
-+	directory of that name.
-+
-+``<name>/reset``
-+	Writing to this file resets all coverage data of the implementation. It
-+	does not affect KCOV.
-+
-+``gcov``
-+	A symlink to ``/sys/kernel/debug/gcov``, where gcov keeps its data (see
-+	Documentation/dev-tools/gcov.rst).
-+
-+``llvm/profraw``
-+	The raw profile of the kernel image, for Clang's source-based code
-+	coverage.
-+
-+``kcov``
-+	A symlink to ``/sys/kernel/debug/kcov`` (see
-+	Documentation/dev-tools/kcov.rst).
-+
-+The instrumented code updates the coverage data without synchronizing with
-+readers, so reading the data while other CPUs execute instrumented code
-+doesn't give an atomic snapshot, and the same applies to a reset.
-+
-+With Clang's source-based code coverage, convert the raw profile and create a
-+report with the ``llvm-profdata`` and ``llvm-cov`` tools of the LLVM version
-+that built the kernel, since the raw profile format changes between releases::
-+
-+	# cp /sys/kernel/debug/coverage/llvm/profraw vmlinux.profraw
-+	$ llvm-profdata merge vmlinux.profraw -o vmlinux.profdata
-+	$ llvm-cov report -instr-profile=vmlinux.profdata vmlinux
-+	$ llvm-cov show -instr-profile=vmlinux.profdata vmlinux kernel/fork.c
-+
-+
-+MC/DC
-+-----
-+
-+Modified condition/decision coverage (MC/DC) verifies that each condition of a
-+boolean decision has been shown to independently affect the outcome of the
-+decision. It is required by safety standards such as DO-178C (avionics) and
-+ISO 26262 (automotive). Enable it with ``CONFIG_COVERAGE_MCDC``:
-+
-+* With Clang's source-based code coverage, decisions with more than
-+  ``CONFIG_LLVM_COV_MCDC_MAX_CONDITIONS`` conditions are not measured. Show
-+  the results with ``llvm-cov show -show-mcdc`` and
-+  ``llvm-cov report -show-mcdc-summary``.
-+
-+* With gcov, GCC 14 or later is required, and decisions with more than 64
-+  conditions are not measured. Show the results with ``gcov --conditions``.
-+
-+Decisions that aren't measured still get branch coverage. To list them, build
-+with ``KCFLAGS=-Wpgo-coverage`` (Clang) or
-+``KCFLAGS=-Wcoverage-too-many-conditions`` (GCC). Clang only warns about them
-+by default before version 22, as it can't disable these warnings.
-+
-+
-+noinstr
-+=======
-+
-+Code annotated ``noinstr`` must not be instrumented; this includes the code
-+running on kernel entry and exit, and in NMI context. Outside of
-+``instrumentation_begin()``/``instrumentation_end()`` sections, ``noinstr``
-+functions may only call other ``noinstr`` functions and ``__always_inline``
-+functions.
-+
-+``noinstr`` functions are not instrumented themselves. The compilers insert
-+the code coverage instrumentation before functions get inlined though, which
-+carries the counter updates of a function into the ``noinstr`` code it is
-+inlined into.
-+
-+On x86-64, objtool takes them out of ``noinstr`` functions, including their
-+``instrumentation_begin()``/``instrumentation_end()`` sections. It replaces
-+the counter updates with NOPs. Clang also accesses the coverage data in ways
-+that can't simply be removed, such as the load that an MC/DC bitmap update
-+starts with: those instructions stay and are pointed at a piece of memory
-+that nothing else uses. With Clang's gcov, a counter that gets updated
-+through its address in a register is not recognized and keeps being updated.
-+
-+A function that is only ever inlined into ``noinstr`` code is therefore
-+reported as not executed, and one that has other callers as well only counts
-+the executions from those. On other architectures the counter updates stay.
-+
-+KCOV instruments the code after inlining and honours ``noinstr`` through the
-+``no_sanitize_coverage`` attribute with Clang and GCC 12 or later; with older
-+GCC, objtool removes its calls from ``noinstr`` code on x86-64.
-diff --git a/Documentation/dev-tools/gcov.rst b/Documentation/dev-tools/gcov.rst
-index b6910c3fc00dd..b4add0af2da2f 100644
---- a/Documentation/dev-tools/gcov.rst
-+++ b/Documentation/dev-tools/gcov.rst
-@@ -22,6 +22,9 @@ Possible uses:
- * minimizing kernel configurations (do I need this option if the
-   associated code is never run?)
- 
-+See Documentation/dev-tools/coverage.rst for the options and interfaces shared
-+with the other code coverage implementations.
-+
- .. _gcov: https://gcc.gnu.org/onlinedocs/gcc/Gcov.html
- .. _lcov: https://github.com/linux-test-project/lcov
- 
-@@ -180,6 +183,31 @@ b) gcov is run on the BUILD machine
-       [user@build] gcov -o /tmp/coverage/tmp/out/init main.c
- 
- 
-+MC/DC Coverage
-+--------------
-+
-+When using GCC 14 or later with ``CONFIG_COVERAGE_MCDC=y``, Modified
-+Condition/Decision Coverage (MC/DC) data is collected alongside standard
-+branch coverage. MC/DC verifies that each condition in a decision
-+independently affects the decision's outcome.
-+
-+To view MC/DC data, use::
-+
-+    gcov --conditions -o /sys/kernel/debug/gcov/path/to/dir file.c
-+
-+MC/DC coverage is required by safety standards such as DO-178C
-+(avionics) and ISO 26262 (automotive).
-+
-+GCC's condition coverage implementation has a limit of 64 conditions per
-+boolean expression, due to the use of 64-bit bitmasks internally.
-+Expressions exceeding this limit cannot be instrumented. This does not
-+affect the correctness of the kernel; those expressions simply will not
-+have MC/DC coverage data.
-+
-+Note that MC/DC instrumentation increases binary size and execution
-+overhead compared to standard gcov profiling.
-+
-+
- Note on compilers
- -----------------
- 
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-index 59cbb77b33ff4..d670c1398e495 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -23,6 +23,7 @@ Documentation/process/debugging/index.rst
-    coccinelle
-    context-analysis
-    sparse
-+   coverage
-    kcov
-    gcov
-    kasan
-diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-index 1a739290c8ecc..98a30a1a3f88a 100644
---- a/Documentation/dev-tools/kcov.rst
-+++ b/Documentation/dev-tools/kcov.rst
-@@ -12,6 +12,9 @@ To achieve this goal, it does not collect coverage in soft/hard interrupts
- (unless remove coverage collection is enabled, see below) and from some
- inherently non-deterministic parts of the kernel (e.g. scheduler, locking).
- 
-+KCOV is configured next to the other code coverage implementations, see
-+Documentation/dev-tools/coverage.rst.
-+
- Besides collecting code coverage, KCOV can also collect comparison operands.
- See the "Comparison operands collection" section for details.
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d7910586005a1..460d4e5f1b029 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6636,6 +6636,7 @@ F:	drivers/media/platform/chips-media/coda
- CODE COVERAGE
- M:	Sasha Levin <sashal@kernel.org>
- S:	Maintained
-+F:	Documentation/dev-tools/coverage.rst
- F:	kernel/coverage/Kconfig
- F:	kernel/coverage/Makefile
- F:	kernel/coverage/core.c
+[auto build test WARNING on pcmoore-selinux/next]
+[also build test WARNING on linus/master v7.4-rc4 next-20261124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/LSM-infrastructure-management-of-mount-options/20261124-101522
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+patch link:    https://lore.kernel.org/r/20261124181522.30415-2-casey%40schaufler-ca.com
+patch subject: [PATCH 1/1] LSM: infrastructure management of mount options
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20261125/20261125104210.ICeMgnNL-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2012344e5da8e03ea4b8283ecd6fad6e13f09d64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261125/20261125104210.ICeMgnNL-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261125104210.ICeMgnNL-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> security/selinux/hooks.c:2887:6: warning: variable 'opts' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2887 |         if (!fc->security) {
+         |             ^~~~~~~~~~~~~
+   security/selinux/hooks.c:2903:2: note: uninitialized use occurs here
+    2903 |         opts->initialized = true;
+         |         ^~~~
+   security/selinux/hooks.c:2887:2: note: remove the 'if' if its condition is always true
+    2887 |         if (!fc->security) {
+         |         ^~~~~~~~~~~~~~~~~~
+   security/selinux/hooks.c:2878:31: note: initialize the variable 'opts' to silence this warning
+    2878 |         struct selinux_mnt_opts *opts;
+         |                                      ^
+         |                                       = NULL
+   1 warning generated.
+
+
+vim +2887 security/selinux/hooks.c
+
+  2873	
+  2874	static int selinux_fs_context_submount(struct fs_context *fc,
+  2875					   struct super_block *reference)
+  2876	{
+  2877		const struct superblock_security_struct *sbsec = selinux_superblock(reference);
+  2878		struct selinux_mnt_opts *opts;
+  2879	
+  2880		/*
+  2881		 * Ensure that fc->security remains NULL when no options are set
+  2882		 * as expected by selinux_set_mnt_opts().
+  2883		 */
+  2884		if (!(sbsec->flags & (FSCONTEXT_MNT|CONTEXT_MNT|DEFCONTEXT_MNT)))
+  2885			return 0;
+  2886	
+> 2887		if (!fc->security) {
+  2888			int rc;
+  2889	
+  2890			rc = lsm_mnt_opts_alloc(&fc->security);
+  2891			if (rc)
+  2892				return rc;
+  2893			opts = selinux_mnt_opts(fc->security);
+  2894			opts->initialized = true;
+  2895		}
+  2896	
+  2897		if (sbsec->flags & FSCONTEXT_MNT)
+  2898			opts->fscontext_sid = sbsec->sid;
+  2899		if (sbsec->flags & CONTEXT_MNT)
+  2900			opts->context_sid = sbsec->mntpoint_sid;
+  2901		if (sbsec->flags & DEFCONTEXT_MNT)
+  2902			opts->defcontext_sid = sbsec->def_sid;
+  2903		opts->initialized = true;
+  2904		return 0;
+  2905	}
+  2906	
+
 -- 
-2.53.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
