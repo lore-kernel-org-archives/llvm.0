@@ -1,105 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795561977;
-	b=vGkG1VJQDyQE+gEuroV4KdRbcmLKiVNbmvgkzbTMuAZ6YscmPz4/65RrLr4qDjahJyyf
-	 wFQVk+VHuAmixdtyQxttBG6wSUTC53CRYPfLeRZTv2dLO8mryEpJgKq5dLLI0fhtVdzhq
-	 y3bU+dmKzMxN+tC4GVUKIrVEkWe6a7ynQlLQPy+5A7iEZhd6kpwBS5j1Fw+GzTlVDllMz
-	 +y7hYqriBrKIrsB9p9BqFfSfoYendTcoHJrVpSiTHzvez4AgSb8PupngSn1AIIoFkGoQr
-	 k8pJY8rmE5xbY5yu+roGqYgPDE2CsBgQKulc/Cg9zJwoi0QC2ep7nHP2QisVqXVic6A==
+	t=1795567228;
+	b=oIsYNPwgtuMzpxNq/IstOZvL7YtE7Wa3S6nak5zhHN4KPcOxnmtlf9QS8aIXzg3gqNpb
+	 3Aa/99zFx/2AIiAS8AtZiv5u8RL9VYTW7Bx+5l4NmboxhmFTva++U2+021XRJLOYZYTs6
+	 UEMUvepoLWKSopXHTG+4SEzhTuuPlO1dlMXAwHk7gFEr5BH9WPBjLYnBNUCeO1VZ9Vp9q
+	 PrpsrCwhEcCPCffDSxDTsv+F3qeF54AiY0Vr178bt4fl/LSvLhLYO3w4KmiPZDuU8CT2j
+	 ktHs0mPrQx8nkER1wdNfJtZzHRZsd/sFL1Cp2h2oAiFDh9u/k6VKZWJHfk3UHAYtA2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795561977;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795567228;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Fu1JR9BwCRRgF7zql9PraHs0kE4B88Qxih1JN4hThMw=;
-	b=sLEjHvvTysHbmgM7GG+yBJx2ypmI6AfEFqDdoseBaqEOFrY2B4D8UlbY9n8REVlxYSxm
-	 CLcLeawbTBN2isBytp88/r9wP4XaqmbwcXA1wTXy9JH8ka2nTvd39urjsVbRQi63toLhg
-	 hFg/81nKwmJFXMcWH39XGA1a7ro9iC6C3l1xt+C5zwZOooqahix5swKNUBY4SQgTYAZRD
-	 uD9efe0KQfpIqS7J9IaqkZkQsYZ/B4NS0KMXGWJ2//YMwKcN8fYRKTxrFHQBp9TBNalQi
-	 7xI8jzjusrGBdtH94t8RtWdkrY8YBOwVt4A+iqgHx2LMmvFPwxlv1A4RnAVmc42/Hxw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=oOpg3uSPPiTt8UBdeq8O6ud7wdhrFnrJaDHHSURW9XQ=;
+	b=CiuzHO23uhOEPRsbdoL/xqG8ebwZLWC65g9906CMOfGPCo2NyXsjDlHETwXodagI8Qea
+	 2GWyS5J7zis5MkBPeOM+X13VmkfmdOGnwLZEOUanpc3S2mEbXFBDurDspiJeXu/etEaVw
+	 eeWPgQxt4BbcDqQ4Lf5+M7IWwXlWGKJBxGTXzrwF2ywe9tUHvE/qRa0U8sROHvSgQUKSW
+	 TwURRXY1+5ePnpItq3+T+v1iXIvPAafjky6x04lc5MZdxwBWBDHU1HHbbI6l3O/G1NZlp
+	 EPrHQCxngMYUwrRPuIqiaKL2TjRBFlBjTT7LUDIYqrkxloJOCaYpNmhXh8jZhi4sEQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=T+q2na9k;
-	arc=none smtp.remote-ip=209.85.128.46
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kbwDX0EH;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C07606A31E
-	for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 23:12:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49C07606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD61F606A323
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 00:40:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD61F606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=T+q2na9k
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4bb69f5b161so33393775e9.0
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 15:12:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kbwDX0EH
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-38355b03cb8so5050650eec.0
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 16:40:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795561976; x=1796166776; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Fu1JR9BwCRRgF7zql9PraHs0kE4B88Qxih1JN4hThMw=;
-        b=T+q2na9kwZfEXMailyHzD7rtFhlsjZuic99Avsy7MjBg//x5cLpWoBBP1GGtC0mrwJ
-         tz0OO47kcSgLquq6v9utwIkkw/tX28s2Gnnafm7dj+Al9KGOuCmDm3YmDjB2v5i2c8wr
-         DVCRPeWjKYy4w946Yj8YcSKd5jVux+5PEIYPET3YLSr4qNnEGJt7pNQ58OFYzOJfnguQ
-         eGDsjbZh6gqjXiCM5LjpfL8+mxrn/3w0Drq9KySbDcWw8WiKEU2nyS7G1oyXsbxWP/q/
-         EehS7vVX1JY95TVhFtITVYXxSFGhT7C1NfYgL/+GPlSoM5HwgiaxT8oNpKxPPvLEgWab
-         gA7A==
+        d=google.com; s=20260707; t=1795567227; x=1796172027; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oOpg3uSPPiTt8UBdeq8O6ud7wdhrFnrJaDHHSURW9XQ=;
+        b=kbwDX0EHGQuQPrOum7P17seK70uqLdhdJUsbfy5rfNum6Eic6IVNXJd1Nww3vXiaec
+         9KO0hKAr3as/TNez/OdvuAmAQ65SAcM2Dw8KyEwcR6M7KNkBknnuhiE2R4UEodCWCeDL
+         W6QjBlIQRn2nHd64yy+xh9Zgbin3lvhgQ9o3yDzbLuLc+xFO0G57x+OSPJXzzx+zQJ0J
+         fW0AP0Sb/xDGbNBeX6PYDdUcbU12Tnme4aTL7jr+2JKYbSdY6b2qERuv9Yi7FrSxD/wz
+         LbIiIRpPu+iP+nnFA2IfIZqOiWE/5cNqW+0dbiSLpkgjNepPMxdtH8rOHzE5Gyfp599J
+         OTrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795561976; x=1796166776;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1795567227; x=1796172027;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Fu1JR9BwCRRgF7zql9PraHs0kE4B88Qxih1JN4hThMw=;
-        b=xsuMhEUE2O83a34rDBfbfyYwLg38cy25gRKzL22gVCl1wPspUymmnR6jWpvs+HU0BV
-         zAj1g0Lu6zOOKQdtQtlq+Kguk3PaWCJi092kUegjNTsKv6bGSwRvyqo1jkbr9vAIuc3R
-         zQbpcbgD/gBPIRuDAkmgJZL3IPeNjGkONuA/uzL963aithsozHPF42HBn+SZGHbvwkHI
-         24tB3A3KnfqnufekNQhfpkbCNQMD4ASfxCJBymGN1ZbdxogHHWVkZsRjW8OTgQkSUO6D
-         9nPR8GVYhmA/oI0hYz4zU9+dW4vFM9wxEx5lLX4rDR2VXj1/vYwg5Ntkl4l1w8H2Yklj
-         DuJw==
-X-Forwarded-Encrypted: i=1; AL+hErGhAci7GW9BpZMi2GhJ8BXvDCp7YuA6bqs7J1FBK6Bsak9aE7zWBKzIvLxRBBghnabo/PSC@lists.linux.dev
-X-Gm-Message-State: APuU4Z8Dw54ll5OKWUUxdUobwRMjaWJqg6oOwnOP94HxgKhUKwwlmuUz
-	6ATIdxBQCSkYwLDc7VjOM7gKspA2dP6esUoRJ8ZuEzdfzZENAYHg4XNO
-X-Gm-Gg: AZFdTZewwO4hVYeVZPNC3gKjfqyZ5JzMRXwFA640fr0k0uTIiXYfkw5MC3/lrkD7qBN
-	qvHmz7IU5qXYvw3QCIwmVhp0WGribEB/A1Ag5GSKNfbDUoc1WRVq1+7zb1Pf/dh7P396/bHqtkg
-	cZVNoj1NP58egXNqZKbC4bYgoLSS2mJLxcZJ4yRuldUCDQ5rqEa0PvamNCoWn7QBRwueQZM2kLk
-	NwYkgcAMHuwB7D2qA6cYifFUo2Re3e4wmpJWw2EMjBiwlPQ1Zze0ez5ziNyGCz3Iuamz0gtb1ZN
-	/UEeYDm0JiYENxXtuXgwzs+g8tpSG25/oCFguB69p/n/LqmZAqdP8l5997wvPgJNadJxnArI608
-	a9mY8KyZ06LiKYGmOQCY9cGDOivAP5tNzFEi22mdpPVr0LLvTP3Rm5ja1dXvU48qoKT/VyrK7r6
-	cSFZfw/tS8fqlxjNG4TcF3+rsZvtVquMiMpi93fFvjGSfa8H6ZUeLnZbIyZmBfqSpu4j7WDaTxb
-	3i9p/im1H0Cjtldd+OvqlrpkOoNm2Eb8XqT9+yqI+CpxR8Yr6G+3/ztCmUQKDNqShhPdWBpEIZv
-	o0j+dU/yTYW3WfuX9SV9M3po0pB3UtAVG02KsQQSzUuklYaObq0MSMjpRawhL4WnUjalE2wdfXJ
-	qotZgZ1J5bk7fu40Z2ZvHiznp
-X-Received: by 2002:a05:600c:3491:b0:4a2:c2b:a91b with SMTP id 5b1f17b1804b1-4bb8880014dmr336408085e9.10.1795561975632;
-        Tue, 24 Nov 2026 15:12:55 -0800 (PST)
-Received: from Ansuel-XPS24.localdomain ([87.13.246.159])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4bb8538b3a7sm527766585e9.3.2026.11.24.15.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 15:12:55 -0800 (PST)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Christian Marangi <ansuelsmth@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	llvm@lists.linux.dev
-Cc: kernel test robot <lkp@intel.com>
-Subject: [PATCH] ASoC: airoha: fix objtool warning with memif probe loop
-Date: Wed, 25 Nov 2026 00:12:43 +0100
-Message-ID: <20261124231245.271869-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        bh=oOpg3uSPPiTt8UBdeq8O6ud7wdhrFnrJaDHHSURW9XQ=;
+        b=s5O/rShAFP1wVQP+QOVinpl/x4S0Xn8dk8Ic4ENgV/VDTUBYacOcQvpwlANEjcsNeJ
+         flcTVgEOZJhfp2Pgq7kXatvz1JXCUutIv4lpbxjg+g5lAfAsu7RQ12KaiBIUq5VnuS7q
+         v5NS6ATvPNca3J2eXkI6DI7c6KmC7STBOSwrmPD4alTHau7ceY42ddAPI/x6fGiB0U1q
+         j2DrX2A2wapqv5XTu57d0JZ8cPElWyNFzimjH3OVohNcAOsDWhl99eezrXMbTf5w/zO/
+         R7HYQWYoOPMAk8G5aGJsOWdPbzIdlrH8OHGpukAfDll73YjMGBiqKC9w4SYUQhdBMGIL
+         IGbA==
+X-Forwarded-Encrypted: i=1; AL+hErGKwFeWv5gfOsBGJ3iCi+ConxhOkfTq/qJV5im1dJNENs+OVrpiNjU5IQRM3Z6kP9X4Ara+@lists.linux.dev
+X-Gm-Message-State: APuU4Z9DZg7ve19bdAEFCkG9K5TPU5ZG4Syml8kRUFV1rqHjMhwoxPsb
+	Qw4ZbGY3sWM6+hg4tnDTtr4V1oLxCJXSmx4KaYG8rZA8194i9SH+KLmUIUOMQ1MtA5Au3GKMI24
+	XH0dFVwpDdw==
+X-Received: from dyhd10.prod.google.com ([2002:a05:7300:828a:b0:386:95bc:ec27])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:2419:b0:367:185e:867a
+ with SMTP id 5a478bee46e88-38571027a5dmr18199472eec.38.1795567226076; Tue, 24
+ Nov 2026 16:40:26 -0800 (PST)
+Date: Tue, 24 Nov 2026 16:40:24 -0800
+In-Reply-To: <179540977827.3135.7089774240645592681@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -108,39 +78,41 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20261122045326.19641-1-irogers@google.com> <179540977827.3135.7089774240645592681@kernel.org>
+X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
+Message-ID: <20261125004024.1004485-1-irogers@google.com>
+Subject: Re: [PATCH net-next v2] tg3: Propagate PHY reset retry failures in tg3_phy_reset_5703_4_5()
+From: Ian Rogers <irogers@google.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: pavan.chebbi@broadcom.com, michael.chan@broadcom.com, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, 
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, elkin@google.com, 
+	Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Objtool produce a warning when clang is used as compiler. This was caused
-by the memif probe loop when assigning the irq to the memif.
+On Sun, Nov 22, 2026 at 8:56 PM <netdev-bot+sashiko@kernel.org> wrote:
+>
+> [Severity: Medium]
+> Is this description accurate? In tg3_get_invariants(), an error from
+> tg3_phy_probe() is logged and probe keeps going:
+[...]
+> [Severity: High]
+> Can this early return leave the BCM5703/5704/5705 PHY in its DSP test
+> configuration?
 
-The warning is:
->> sound/soc/mediatek/an7581/snd-soc-an7581-afe.o: warning: objtool: an7581_afe_pcm_dev_probe(): unexpected end of section .text.an7581_afe_pcm_dev_probe
+Both points are valid - returning early skips unblocking DSP 0x8005 and
+clearing MII_TG3_EXT_CTRL 0x3000 when test-pattern retries are exhausted
+(while callers such as tg3_reset_hw() ignore tg3_phy_reset()'s return
+value), and tg3_get_invariants() logs the tg3_phy_probe() failure
+without aborting PCI probe.
 
-Fix this by giving a fixed upper bound for the loop for the memif as it
-seems there are some problem with detecting the runtime value is hardcoded.
+I'll send a v3 for net-next that keeps the existing post-loop cleanup
+intact and simply guards the MII_CTRL1000 restore with a boolean flag so
+phy9_orig is only written back if MII_CTRL1000 was actually read.
 
-Fixes: 4974ffa0d6c2 ("ASoC: airoha: Add AFE driver for Airoha AN7581")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202611201414.1NBNxorL-lkp@intel.com/
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- sound/soc/mediatek/an7581/an7581-afe-pcm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Ian
 
-diff --git a/sound/soc/mediatek/an7581/an7581-afe-pcm.c b/sound/soc/mediatek/an7581/an7581-afe-pcm.c
-index d47edb630452..b17d58f25d9e 100644
---- a/sound/soc/mediatek/an7581/an7581-afe-pcm.c
-+++ b/sound/soc/mediatek/an7581/an7581-afe-pcm.c
-@@ -447,7 +447,7 @@ static int an7581_afe_pcm_dev_probe(struct platform_device *pdev)
- 		return irq_id;
- 
- 	/* init memif */
--	for (i = 0; i < afe->memif_size; i++) {
-+	for (i = 0; i < AN7581_MEMIF_NUM; i++) {
- 		int sel_irq = an7581_memif_irq_descs[i].irq;
- 
- 		afe->memif[i].data = &memif_data[i];
--- 
-2.55.0
-
+pw-bot: cr
