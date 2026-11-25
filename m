@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587415;
-	b=uSKZZewISlQmxxp/J2mTzX7u6uRmk2RYgg5eMaIK01fpKNDo3YfIFDP1L6ztWzjP8gFJ
-	 NKh1WRPuveRCfeUU5bTfCyuvhU7iVyY6rSc1O9CDCmlHax2SEmebI/Eae5wid+vGsm/HE
-	 UDYP+nEfE0zETConwLRco5nuAFtDVtONmbjoggqt9pwSqChai3BOGTNB4hMO56UqK6Cgj
-	 mrHLKm/txwW6su7bgyK02E3d1vJn/J/qzJdGcYI8rww9BGEsnESBYfqp4fWEkjg/fW+/Q
-	 1Rblo9Jmak+yHe2nXt/tW9gayBxGWKvnqPkaaWjbfKFzlZjCwfaRaXIhLtQuAxqg6Mw==
+	t=1795587416;
+	b=Bw9SO+Zj0y3CTyQddXRgD7nJ0t3q5xud1t4VFB6D7YIK3GBJlrYudKSYt/6eqpj8XA3z
+	 uw8Ef2BI6scam8kAwZ+5A4NIX8dMCQlFde+I9heMH49JEURopoPW0dlPTj+d4sHr3NUT+
+	 ByoekMyffVPMpmD3dS6/Od2gcVoqA+yqZ2SpMSp4YBtErESeslGzx8B2udnQNs6OA3zwy
+	 KfFsmvDvqcf5NAcBh4gj1pyrXFjJLHv333khZPXYicWNOTwE0GzVpFQ4lu78x4nr7Kl1c
+	 P4o9Omy+1LnWO2cPX5h8Vo6/M834cMwnN4lSRpRy1CUr2zxXMSLGag4TRHuJgxSIeeQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587415;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587416;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=jFmNLdaybvaWIRtLdTiBMi3UUKe/rujAV3S2k7ZenzI=;
-	b=Sd0ZxAaQ9F2Rjjjk+zewhfj/DDHQy3nK1VntriS+XTCvwT205AZ82w9XJVVAmDD6EQ5k
-	 s95XC7/V//tlsvIdxQqhsbZnguyh/EGsWeEiALJjmyGQt6oSigc0g/pSTwekSemnznQix
-	 su3LGHf0IZZIhl4/iUuftVJ2rdz9Jt5joUXDSwjEETZQa6LNaT+PF3q6/RdiSthDfHXPH
-	 OoVKpHPVL7tVFPkDGUXzLnO1thc9gOx1qunusWQN/XST605CgSOCKF4DrBaOXS3kX5JO3
-	 L7S4xuv9+GaDqNLGDD8zYLeHa/5ckfZjsQlsaTnRA2SLMFuJLMIhfp+soQqD6UVNwtA==
+	bh=7idd1vMoQrkJGtb4Pai7PHauPn4l7yH4Zzs++IrNt10=;
+	b=jt8KjNNQ8ykde6qjpvnIYfRvO9VwNhSQ5gEpfKbFH8Rq3fSUT3ymoKn5rCUzyBw7o4my
+	 G7X753Meq6jk0s+IzNX3XmjokX7Y31TAwL/qauS3RRGSnJ++afXXMFtXFkcIaRPKvAmHL
+	 XNJ6IHkow98O2VDrjX2Y8r8CUkIAHUxAIauuE9dHM/RSLxLQA3cJmDRTCCwP4gCRsTduh
+	 3aTAFL4UHoRyMZTjG29y9a/9UQ5E2E08R4pIoOsPab7K3EnqBP2IQcpxWLBEQVItF/4B9
+	 Z+4NTVSlZq+4NnTY0CXbTeFZsV7Vxv87+Ls1AL94UHgui0pwr98eZQQKUFLLEViLihA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="Qva/x0dK";
-	arc=none smtp.remote-ip=74.125.82.198
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=in3d9HTk;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2FA606DE69
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 06:16:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC2FA606DE69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C48606BCA4
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 06:16:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69C48606BCA4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Qva/x0dK
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-382af5cfc58so32631eec.0
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 22:16:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=in3d9HTk
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2f0291cc0f2so68032135ad.2
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 22:16:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587414; x=1796192214; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795587416; x=1796192216; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jFmNLdaybvaWIRtLdTiBMi3UUKe/rujAV3S2k7ZenzI=;
-        b=Qva/x0dKctygc+AcoTKNii3DphnbsC4aiFIBGZ+pv4CmAaJxmAVVPod6qyLmYarMe+
-         CrD0rn6kuzBIFnL/34vMJ2ZSvwricwCx5GOQAKgym+ZKvAe6Zk154rK8jyB3vb1e61wX
-         B/Wj3R5zU/VhZcHTUNuqZhguGZyaPdWWiZ0NndM0CcwkDYUSFmkPlke1WqEyyPAndSkJ
-         tWzmGb43+3MnClYviqrQaaCe4TnZnBpTBYe7VXcV1HIMERZmS8bGs/vwyqQckhU/HSqb
-         qYrzabFyro3Mmb0KdCKBpjoSzmIMmymgU0ArNcpUXr5k/AvaoKtYt7rJzZwj2lBkQUB9
-         XuvQ==
+        bh=7idd1vMoQrkJGtb4Pai7PHauPn4l7yH4Zzs++IrNt10=;
+        b=in3d9HTkDUV/0kM1+rm1YKcDq6L2FV78pLa/pdkvlHpTkSvjLMuszO1MS+O5hMF+wu
+         CbxjYsj7AwZ36cZSQhB/DVQLGVYaMGecLoGWYO0k6aKrkZbwPoCNXjZUkdTAT9olSmbh
+         XoMX3C1C6vzC/H0mtVfqFc7iiMIbS8DM2QiHmmnTsSirKRU1cb+6OP7aL4GRL6wXgpRs
+         ygFuWpURmmAWejXdPrsBzmkN5WvLFLgREroP+OETPsaFPJenirqHp1ZMxD9yO3nyl9+I
+         d0DkWgQgTfi30GO85qJw1Z/O8sAUjdqb8kF7EhqDeYsCAs19tgdpccvDFwA1T36e/gKw
+         6/gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587414; x=1796192214;
+        d=1e100.net; s=20260707; t=1795587416; x=1796192216;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jFmNLdaybvaWIRtLdTiBMi3UUKe/rujAV3S2k7ZenzI=;
-        b=ln8njR9cbX5x8auiK2H1gdwgjHlA06+Jjm4QekuTbsY+cS8Sv8wRrEX8gBDMx0Fw7F
-         PfeKq1Ysg5rhq/3mGS09G39rsYDIlEOtPb71bqVm1ggL6u2l3dePkDStr9eEZRQv/1Oi
-         RnAkp38OCOtNjOaJ2q/VzAag0k64xnKXb1GfgtBu2croudBnIsX5xkPsn/Rs2dGjvfoo
-         /aIy1EQCswej8EYZyGi1q9N1jZVSWFGJ3NADeY3omhYwv3kdBpo3MSBrH60OiE2dsL8p
-         m6nXOOuP1YjKWoJPVl3F67GlQOW5wG4xoEfqX1KIwEZ8NEyutzkI3+XMuSZYbGFqWSxt
-         Q1MA==
-X-Forwarded-Encrypted: i=1; AL+hErGQ2fmA/e8WjC+gxmNOIxNhv3vv/sKa2SFHU0tSaOPVJZIAtiqHs1ajJDxx5zzho+u4Z2af@lists.linux.dev
-X-Gm-Message-State: APuU4Z/vsJuxYy8gx+19Vx8h5/Ofru370RFuXEreXx2U+O67+J9Im0g1
-	XZT1tAOxEASMM2BnJks0heVByKNz5yaZrVOV+xifSmQ90EGy3Cb8pswmpXPcxxexKCY9Es8J2hP
-	wqRV5HfbF5A==
-X-Received: from dybpk12.prod.google.com ([2002:a05:7301:428c:b0:377:a5e3:b669])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:108:b0:375:50d9:474e
- with SMTP id 5a478bee46e88-3856c0d0bb4mr22379541eec.4.1795587413560; Tue, 24
- Nov 2026 22:16:53 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:21 -0800
+        bh=7idd1vMoQrkJGtb4Pai7PHauPn4l7yH4Zzs++IrNt10=;
+        b=xpOD3X9yCPvq5OZ0dnElqNK+9HNsvBjskgdN/ylVZBwXT48I5XxpncEaqGBvCkfzuT
+         u+bimDNuu5zrVzS25ZPUV0XintMRVh5h/Yn56dwhRb2+aPHKJpscp7KCtI5Zdcb6PuLG
+         oPiefpC+NOUiCDH1yD+gN6YsZvwkABPsijGN6V0T7BunxHvwoWt6taImsxS6quOHlDfY
+         bl+QejsJUZslFZP1gQEx0DumV+6upQijR4Iubg0iOV+/RmsdmhWktxeYnsTqCVxUKWIa
+         DRQ2nXy6X+/ks2gv4F1MTZyT6H4lv5VGo02xeWBpwNkbe7ohmQYnDoQO1+pxlTCN+4b0
+         gwog==
+X-Forwarded-Encrypted: i=1; AL+hErEBSyW/ewPiKU5bsVaPdLFH9rXubgsbnfD/qA1CFx/4bUeSi3w3S03NsuDTJoipmR00l218@lists.linux.dev
+X-Gm-Message-State: APuU4Z8I2Gngj5RmGLO/Hty/pKi+8yd6HtShcCbyCn6bolfi/VOZEohB
+	pviuprbA6FYccb6VVBUw51vVzb1irNOy66DkmwXTrrjDS8VaBmYw2fElIodIyvV8gVeotlUEZnN
+	4WNHM5pA6Ww==
+X-Received: from plbjw23.prod.google.com ([2002:a17:903:2797:b0:2f0:6eae:f018])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:b4f:b0:2ef:f0cc:17ce
+ with SMTP id d9443c01a7336-2f03f1ceec3mr187359255ad.11.1795587415506; Tue, 24
+ Nov 2026 22:16:55 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:22 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-29-irogers@google.com>
-Subject: [RFC PATCH v2 28/30] tools/unwind: Add CFG instruction abstract
- execution oracle to verify_cfi
+Message-ID: <20261125061523.1540234-30-irogers@google.com>
+Subject: [RFC PATCH v2 29/30] tools/unwind: Add x86-64 ORC cross-check oracle
+ to verify_cfi
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org
@@ -103,407 +103,252 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add verifyOracle2Instructions() in tools/unwind/verify_insn.cpp and
-enable -DHAVE_VERIFY_INSN in tools/unwind/Makefile, propagating symbolic
-register and stack state over per-function basic-block CFGs across
-x86_64, arm64, and riscv64 and verifying at every reachable instruction
-that Minimal DWARF CFI recovers the caller's exact CFA, RA (including
-AArch64 PAC sign state), and FP.
+Add verifyOracle3Orc() in tools/unwind/verify_orc.cpp using
+<asm/orc_types.h> and enable -DHAVE_VERIFY_ORC in tools/unwind/Makefile,
+cross-checking objtool's ORC_TYPE_CALL entries in .orc_unwind /
+.orc_unwind_ip directly against Minimal DWARF CFI across every
+instruction covered by an FDE (matching identically on 99.9823% of
+4,468,154 x86-64 vmlinux instructions, with 0 BP diffs).
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/unwind/Makefile        |   5 +-
- tools/unwind/verify_insn.cpp | 360 +++++++++++++++++++++++++++++++++++
- 2 files changed, 363 insertions(+), 2 deletions(-)
- create mode 100644 tools/unwind/verify_insn.cpp
+ tools/unwind/Makefile       |   5 +-
+ tools/unwind/verify_orc.cpp | 205 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 208 insertions(+), 2 deletions(-)
+ create mode 100644 tools/unwind/verify_orc.cpp
 
 diff --git a/tools/unwind/Makefile b/tools/unwind/Makefile
-index 90c4b47ae851..c0a8d477dc13 100644
+index c0a8d477dc13..d368b9ed90ee 100644
 --- a/tools/unwind/Makefile
 +++ b/tools/unwind/Makefile
 @@ -79,7 +79,7 @@ TOOLS_INCLUDES := -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi \
  SHIM_CFLAGS := -O2 -g -Wall -Wextra -Wno-unused-parameter -Wno-maybe-uninitialized \
  	$(TOOLS_INCLUDES)
  
--VERIFY_CXXFLAGS := -O2 -g -Wall -Wextra -std=gnu++20 $(LLVM_CXXFLAGS) \
-+VERIFY_CXXFLAGS := -O2 -g -Wall -Wextra -std=gnu++20 $(LLVM_CXXFLAGS) -DHAVE_VERIFY_INSN \
+-VERIFY_CXXFLAGS := -O2 -g -Wall -Wextra -std=gnu++20 $(LLVM_CXXFLAGS) -DHAVE_VERIFY_INSN \
++VERIFY_CXXFLAGS := -O2 -g -Wall -Wextra -std=gnu++20 $(LLVM_CXXFLAGS) -DHAVE_VERIFY_INSN -DHAVE_VERIFY_ORC \
  	-I$(CURDIR) $(TOOLS_INCLUDES) $(CXXFLAGS)
  VERIFY_LDFLAGS  := $(LLVM_LDFLAGS) $(LDFLAGS)
  
-@@ -88,7 +88,8 @@ KERNEL_CFI_DEPS := $(srctree)/kernel/unwind/dwarf_cfi.c \
- 
+@@ -89,7 +89,8 @@ KERNEL_CFI_DEPS := $(srctree)/kernel/unwind/dwarf_cfi.c \
  VERIFY_OBJS := $(OUTPUT)dwarf_cfi_host.o \
  		 $(OUTPUT)verify_cfi.o \
--		 $(OUTPUT)verify_insn_arch.o
-+		 $(OUTPUT)verify_insn_arch.o \
-+		 $(OUTPUT)verify_insn.o
+ 		 $(OUTPUT)verify_insn_arch.o \
+-		 $(OUTPUT)verify_insn.o
++		 $(OUTPUT)verify_insn.o \
++		 $(OUTPUT)verify_orc.o
  
  ifeq ($(HAS_LIBLLVM),1)
  all: $(OUTPUT)verify_cfi
-diff --git a/tools/unwind/verify_insn.cpp b/tools/unwind/verify_insn.cpp
+diff --git a/tools/unwind/verify_orc.cpp b/tools/unwind/verify_orc.cpp
 new file mode 100644
-index 000000000000..45dbd9a94764
+index 000000000000..629849f3187e
 --- /dev/null
-+++ b/tools/unwind/verify_insn.cpp
-@@ -0,0 +1,360 @@
++++ b/tools/unwind/verify_orc.cpp
+@@ -0,0 +1,205 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR MIT
 +/*
-+ * Oracle 2: Multi-architecture basic-block CFG abstract execution & soundness
-+ * verification against kernel/unwind/dwarf_cfi.c.
++ * Oracle 3: Direct x86-64 .orc_unwind / .orc_unwind_ip comparison against
++ * kernel/unwind/dwarf_cfi.c.
 + */
 +
-+#include "verify_insn.hpp"
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wunused-parameter"
++#include "llvm/MC/MCInst.h"
++#include "llvm/Support/Endian.h"
++#include "llvm/Support/raw_ostream.h"
++#pragma GCC diagnostic pop
++
++#include "verify_cfi.hpp"
 +
 +#include <algorithm>
 +#include <cinttypes>
 +#include <cstdio>
-+#include <queue>
-+#include <unordered_map>
++
++extern "C" {
++#include <asm/orc_types.h>
++}
 +
 +using namespace llvm;
 +
 +/**
-+ * isKnownNoreturnName() - Check if a symbol name is a non-returning callee
-+ * @Name: ELF symbol name of a direct call target.
++ * verifyOracle3Orc() - Cross-check x86-64 .orc_unwind against Minimal DWARF CFI
++ * @AS: Target architecture specification (x86_64).
++ * @eh_hdr_vma: Virtual address of .eh_frame_hdr.
++ * @eh_hdr_bytes: Raw contents of .eh_frame_hdr.
++ * @orc_bytes: Raw contents of .orc_unwind (6-byte &struct orc_entry records).
++ * @orc_ip_bytes: Raw contents of .orc_unwind_ip (PC-relative s32 offsets).
++ * @orc_ip_vma: Virtual address of .orc_unwind_ip.
++ * @exec_secs: Executable ELF sections.
++ * @func_syms: Deduplicated STT_FUNC symbol list.
++ * @Disasm: x86-64 LLVM MCDisassembler.
++ * @STI: Target subtarget info for instruction printing.
++ * @InstPrinter: Disassembly formatter for mismatch diagnostics.
++ * @opts: CLI verification options.
++ * @st: Aggregated verification counters and diagnostic samples.
 + *
-+ * Return: true if calls to @Name never return to the fallthrough instruction.
++ * Evaluates every instruction inside STT_FUNC symbols whose active ORC record
++ * has type %ORC_TYPE_CALL and a defined SP base register, mapping `<asm/
++ * orc_types.h>` `ORC_REG_*` encodings directly to `DWARF_CFI_BASE_*` and
++ * `DWARF_CFI_RULE_*` fields.
 + */
-+bool isKnownNoreturnName(StringRef Name)
++void verifyOracle3Orc(const ArchSpec &AS, uint64_t eh_hdr_vma,
++		      StringRef eh_hdr_bytes, StringRef orc_bytes,
++		      StringRef orc_ip_bytes, uint64_t orc_ip_vma,
++		      const std::vector<ExecSec> &exec_secs,
++		      const std::vector<FuncSym> &func_syms,
++		      const MCDisassembler &Disasm, const MCSubtargetInfo &STI,
++		      MCInstPrinter &InstPrinter, const VerifyOptions &opts,
++		      VerifyStats &st)
 +{
-+	static const char *const Exact[] = {
-+		"panic", "do_exit", "make_task_dead", "__stack_chk_fail",
-+		"__stack_chk_fail_local", "fortify_panic", "usercopy_abort",
-+		"__bug", "bug_at", "do_group_exit", "complete_and_exit",
-+		"kthread_exit", "cpu_bringup_and_idle", "cpu_startup_entry",
-+		"abort", "_exit", "_Exit", "exit", "__assert_fail",
-+		"__assert_perror_fail", "__cxa_throw", "__cxa_rethrow",
-+		"__cxa_bad_cast", "__cxa_bad_typeid", "_Unwind_Resume",
-+		"_ZSt9terminatev", "_ZSt20__throw_length_errorPKc",
-+		"_ZSt17__throw_bad_allocv", "_ZSt20__throw_out_of_rangePKc",
-+		"_ZSt24__throw_out_of_range_fmtPKcz", "_ZSt19__throw_logic_errorPKc",
-+		"__libc_fatal", "__chk_fail", "pthread_exit", "__longjmp_chk",
-+		"longjmp", "_longjmp", "siglongjmp", "verr", "verrx", "err", "errx",
-+	};
-+	for (const char *s : Exact) {
-+		if (Name == s)
-+			return true;
++	st.has_orc = true;
++	constexpr size_t kOrcEntSz = 6;
++	size_t n_orc = orc_bytes.size() / kOrcEntSz;
++	size_t n_ip = orc_ip_bytes.size() / 4;
++	size_t n = std::min(n_orc, n_ip);
++	const uint8_t *orc_raw =
++		reinterpret_cast<const uint8_t *>(orc_bytes.data());
++	const uint8_t *ip_raw =
++		reinterpret_cast<const uint8_t *>(orc_ip_bytes.data());
++
++	std::vector<std::pair<uint64_t, size_t>> sorted_orc;
++	sorted_orc.reserve(n);
++	for (size_t i = 0; i < n; i++) {
++		int32_t rel = (int32_t)support::endian::read32le(ip_raw + i * 4);
++		uint64_t epc = orc_ip_vma + i * 4 + (uint64_t)(int64_t)rel;
++		sorted_orc.push_back({epc, i});
 +	}
-+	if (Name.starts_with("__throw_") || Name.starts_with("_ZSt7__throw") ||
-+	    Name.starts_with("_ZSt9__throw") || Name.contains("panicking") ||
-+	    Name.starts_with("rust_begin_unwind") || Name.contains("noreturn") ||
-+	    Name.starts_with("__bad_"))
-+		return true;
-+	return false;
-+}
++	std::stable_sort(sorted_orc.begin(), sorted_orc.end(),
++			 [](const auto &a, const auto &b) {
++				 return a.first < b.first;
++			 });
 +
-+/**
-+ * evalRowAgainstAbs() - Check Minimal DWARF unwind row against abstract state
-+ * @st: Symbolic register/stack state reaching the current instruction PC.
-+ * @row: Unwind row returned by kernel/unwind/dwarf_cfi.c at the same PC.
-+ * @AS: Target architecture parameters.
-+ * @err_kind: Populated with a short category tag on mismatch.
-+ * @err_detail: Populated with diagnostic state details on mismatch.
-+ *
-+ * Return: true if CFA, RA (including AArch64 PAC sign state), and FP all
-+ * recover the exact caller entry state; false on any discrepancy.
-+ */
-+static bool evalRowAgainstAbs(const AbsState &st, const dwarf_cfi_row &row,
-+			      const ArchSpec &AS, std::string &err_kind,
-+			      std::string &err_detail)
-+{
-+	SymVal cfa{VK_UNKNOWN, 0};
-+	if (row.cfa_base == DWARF_CFI_BASE_SP)
-+		cfa = addSymImm(st.regs[AS.karch.sp_reg], row.cfa_off);
-+	else if (row.cfa_base == DWARF_CFI_BASE_FP)
-+		cfa = addSymImm(st.regs[AS.karch.fp_reg], row.cfa_off);
-+	else if (row.cfa_base == DWARF_CFI_BASE_REG && row.cfa_reg < 32)
-+		cfa = addSymImm(st.regs[row.cfa_reg], row.cfa_off);
-+	else if (row.cfa_base == DWARF_CFI_BASE_FP_INDIRECT)
-+		cfa = st.load(addSymImm(st.regs[AS.karch.fp_reg], row.cfa_off));
-+	else if (row.cfa_base == DWARF_CFI_BASE_SP_INDIRECT)
-+		cfa = st.load(addSymImm(st.regs[AS.karch.sp_reg], row.cfa_off));
-+
-+	SymVal expected_cfa{VK_ENTRY_SP, AS.entry_cfa_off};
-+	if (cfa != expected_cfa) {
-+		err_kind = (cfa.kind == VK_UNKNOWN) ? "cfa_clobbered_or_opaque"
-+						    : "cfa_offset_mismatch";
-+		char buf[160];
-+		snprintf(buf, sizeof(buf),
-+			 "CFI cfa_base=%u off=%d evaluated to kind=%u off=%" PRId64
-+			 ", expected ENTRY_SP+%d",
-+			 row.cfa_base, row.cfa_off, cfa.kind, cfa.off,
-+			 AS.entry_cfa_off);
-+		err_detail = buf;
-+		return false;
-+	}
-+
-+	if (row.ra_rule != DWARF_CFI_RULE_UNDEFINED) {
-+		SymVal ra{VK_UNKNOWN, 0};
-+		if (row.ra_rule == DWARF_CFI_RULE_SAME) {
-+			if (AS.karch.ra_reg < 32)
-+				ra = st.regs[AS.karch.ra_reg];
-+		} else if (row.ra_rule == DWARF_CFI_RULE_OFFSET) {
-+			ra = st.load(addSymImm(cfa, row.ra_off));
-+		} else if (row.ra_rule == DWARF_CFI_RULE_SP_OFFSET) {
-+			ra = st.load(addSymImm(st.regs[AS.karch.sp_reg],
-+					       row.ra_off));
-+		}
-+		int64_t exp_signed =
-+			(AS.llvm_arch == Triple::aarch64 && row.ra_signed) ? 1 : 0;
-+		if (ra.kind != VK_CALLER_RA ||
-+		    (AS.llvm_arch == Triple::aarch64 && ra.off != exp_signed)) {
-+			err_kind = "ra_recovery_mismatch";
-+			char buf[160];
-+			snprintf(buf, sizeof(buf),
-+				 "CFI ra_rule=%u off=%d signed=%d evaluated to kind=%u off=%" PRId64,
-+				 row.ra_rule, row.ra_off, (int)row.ra_signed,
-+				 ra.kind, ra.off);
-+			err_detail = buf;
-+			return false;
-+		}
-+	}
-+
-+	if (row.fp_rule != DWARF_CFI_RULE_UNDEFINED) {
-+		SymVal fp{VK_UNKNOWN, 0};
-+		if (row.fp_rule == DWARF_CFI_RULE_SAME)
-+			fp = st.regs[AS.karch.fp_reg];
-+		else if (row.fp_rule == DWARF_CFI_RULE_OFFSET)
-+			fp = st.load(addSymImm(cfa, row.fp_off));
-+		else if (row.fp_rule == DWARF_CFI_RULE_FP_OFFSET)
-+			fp = st.load(addSymImm(st.regs[AS.karch.fp_reg],
-+					       row.fp_off));
-+		else if (row.fp_rule == DWARF_CFI_RULE_SP_OFFSET)
-+			fp = st.load(addSymImm(st.regs[AS.karch.sp_reg],
-+					       row.fp_off));
-+		if (fp.kind != VK_CALLER_FP) {
-+			err_kind = "fp_recovery_mismatch";
-+			char buf[160];
-+			snprintf(buf, sizeof(buf),
-+				 "CFI fp_rule=%u off=%d evaluated to kind=%u off=%" PRId64,
-+				 row.fp_rule, row.fp_off, fp.kind, fp.off);
-+			err_detail = buf;
-+			return false;
-+		}
-+	}
-+
-+	return true;
-+}
-+
-+/**
-+ * verifyOracle2Instructions() - Verify CFI rows via CFG symbolic execution
-+ */
-+void verifyOracle2Instructions(
-+	const ArchSpec &AS, uint64_t eh_hdr_vma, StringRef eh_hdr_bytes,
-+	const std::vector<ExecSec> &exec_secs,
-+	const std::vector<FuncSym> &func_syms,
-+	const std::unordered_set<uint64_t> &noreturn_addrs,
-+	const std::vector<FDERange> &fde_ranges, const MCDisassembler &Disasm,
-+	const MCInstrInfo &MCII, const MCRegisterInfo &MCRI,
-+	const MCInstrAnalysis *MIA, const VerifyOptions &opts, VerifyStats &st)
-+{
-+	st.has_insn_oracle = true;
-+
-+	auto findFDE = [&](uint64_t pc) -> const FDERange * {
++	auto lookupOrcIdx = [&](uint64_t pc, size_t &idx_out) -> bool {
 +		auto it = std::upper_bound(
-+			fde_ranges.begin(), fde_ranges.end(), pc,
-+			[](uint64_t val, const FDERange &r) {
-+				return val < r.start;
++			sorted_orc.begin(), sorted_orc.end(), pc,
++			[](uint64_t val, const std::pair<uint64_t, size_t> &e) {
++				return val < e.first;
 +			});
-+		if (it == fde_ranges.begin())
-+			return nullptr;
++		if (it == sorted_orc.begin())
++			return false;
 +		--it;
-+		if (pc >= it->start && pc < it->end)
-+			return &*it;
-+		return nullptr;
++		idx_out = it->second;
++		return true;
 +	};
 +
 +	for (const FuncSym &fn : func_syms) {
-+		st.funcs_total++;
-+		const FDERange *fr = findFDE(fn.addr);
-+		if (!fr || !fr->supported) {
-+			st.funcs_no_fde++;
-+			continue;
-+		}
-+		if (fr->signal)
-+			continue;
-+
-+		dwarf_cfi_row entry_row{};
-+		if (dwarf_cfi_unwind_user_eh_frame_hdr(
-+			    (unsigned long)eh_hdr_vma, eh_hdr_bytes.size(),
-+			    (unsigned long)fn.addr, &AS.karch, &entry_row) != 0) {
-+			st.funcs_no_fde++;
-+			continue;
-+		}
-+		if (fn.addr != fr->start ||
-+		    entry_row.cfa_base != DWARF_CFI_BASE_SP ||
-+		    entry_row.cfa_off != AS.entry_cfa_off ||
-+		    entry_row.fp_rule != DWARF_CFI_RULE_SAME ||
-+		    (AS.ra_on_entry_stack
-+			 ? (entry_row.ra_rule != DWARF_CFI_RULE_OFFSET ||
-+			    entry_row.ra_off != -8)
-+			 : (entry_row.ra_rule != DWARF_CFI_RULE_SAME))) {
-+			st.funcs_mid_frame_split++;
-+			continue;
-+		}
-+
-+		uint64_t range_end =
-+			fn.size ? std::min(fr->end, fn.addr + fn.size) : fr->end;
-+		if (range_end <= fn.addr)
++		if (!fn.size)
 +			continue;
 +		ArrayRef<uint8_t> code =
-+			findExecBytes(exec_secs, fn.addr, range_end - fn.addr);
++			findExecBytes(exec_secs, fn.addr, fn.size);
 +		if (code.empty())
 +			continue;
 +
-+		st.funcs_verified++;
-+
-+		AbsState init_st;
-+		init_st.regs[AS.karch.sp_reg] = {VK_ENTRY_SP, 0};
-+		init_st.regs[AS.karch.fp_reg] = {VK_CALLER_FP, 0};
-+		if (AS.ra_on_entry_stack)
-+			init_st.store({VK_ENTRY_SP, 0}, {VK_CALLER_RA, 0});
-+		else
-+			init_st.regs[AS.karch.ra_reg] = {VK_CALLER_RA, 0};
-+
-+		std::unordered_map<uint64_t, AbsState> visited;
-+		std::queue<uint64_t> worklist;
-+		visited[fn.addr] = init_st;
-+		worklist.push(fn.addr);
-+
-+		bool func_ok = true;
-+		unsigned steps = 0;
-+		while (!worklist.empty() && steps < 4096) {
-+			uint64_t pc = worklist.front();
-+			worklist.pop();
-+			steps++;
-+
-+			if (pc < fn.addr || pc >= range_end)
-+				continue;
-+
-+			const AbsState cur = visited[pc];
-+
-+			dwarf_cfi_row row{};
-+			int kerr = dwarf_cfi_unwind_user_eh_frame_hdr(
-+				(unsigned long)eh_hdr_vma, eh_hdr_bytes.size(),
-+				(unsigned long)pc, &AS.karch, &row);
-+			if (kerr != 0) {
-+				func_ok = false;
-+				recordIssue(st, opts, "fde_eval_error", fn.name);
-+				break;
-+			}
-+
-+			st.insns_verified++;
-+			std::string ekind, edetail;
-+			if (!evalRowAgainstAbs(cur, row, AS, ekind, edetail)) {
-+				func_ok = false;
-+				if (ekind.starts_with("cfa"))
-+					st.insns_cfa_mismatch++;
-+				else if (ekind.starts_with("ra"))
-+					st.insns_ra_mismatch++;
-+				else
-+					st.insns_fp_mismatch++;
-+
-+				char loc_buf[128];
-+				snprintf(loc_buf, sizeof(loc_buf),
-+					 "%s+0x%" PRIx64 " (0x%" PRIx64 "): ",
-+					 fn.name.c_str(), pc - fn.addr, pc);
-+				recordIssue(st, opts, ekind,
-+					    std::string(loc_buf) + edetail);
-+				break;
-+			}
-+
++		uint64_t off = 0;
++		while (off < code.size()) {
++			uint64_t pc = fn.addr + off;
 +			MCInst MI;
 +			uint64_t InsnSize = 0;
-+			ArrayRef<uint8_t> slice = code.slice(pc - fn.addr);
-+			auto DStat = Disasm.getInstruction(MI, InsnSize, slice,
-+							   pc, nulls());
-+			if (DStat != MCDisassembler::Success || InsnSize == 0)
++			auto DStat = Disasm.getInstruction(
++				MI, InsnSize, code.slice(off), pc, nulls());
++			if (DStat != MCDisassembler::Success || InsnSize == 0) {
++				off++;
++				continue;
++			}
++			off += InsnSize;
++
++			size_t oidx = 0;
++			if (!lookupOrcIdx(pc, oidx))
++				continue;
++			const uint8_t *ep = orc_raw + oidx * kOrcEntSz;
++			int16_t sp_offset =
++				(int16_t)support::endian::read16le(ep + 0);
++			int16_t bp_offset =
++				(int16_t)support::endian::read16le(ep + 2);
++			uint16_t flags = support::endian::read16le(ep + 4);
++
++			unsigned o_sp_reg = flags & 0xf;
++			unsigned o_bp_reg = (flags >> 4) & 0xf;
++			unsigned o_type = (flags >> 8) & 0x7;
++			if (o_type != ORC_TYPE_CALL ||
++			    o_sp_reg == ORC_REG_UNDEFINED)
 +				continue;
 +
-+			const MCInstrDesc &Desc = MCII.get(MI.getOpcode());
-+			StringRef OpName = MCII.getName(MI.getOpcode());
-+
-+			bool is_ret_or_ind_jump =
-+				Desc.isReturn() || Desc.isIndirectBranch();
-+			bool is_uncond_branch = Desc.isUnconditionalBranch();
-+			bool is_cond_branch = Desc.isConditionalBranch();
-+			bool is_call = Desc.isCall();
-+			if (AS.llvm_arch == Triple::riscv64)
-+				normalizeRiscvControlFlow(MI, OpName, MCRI,
-+							  is_ret_or_ind_jump,
-+							  is_uncond_branch,
-+							  is_call);
-+
-+			if (is_ret_or_ind_jump || Desc.isTrap() ||
-+			    OpName == "UD2" || OpName == "BRK" ||
-+			    OpName == "EBREAK" || OpName == "C_EBREAK" ||
-+			    OpName == "SVC" || OpName == "ECALL" ||
-+			    OpName == "SYSCALL" || OpName == "IRET64" ||
-+			    OpName == "SYSRET64" || OpName == "ERET" ||
-+			    OpName == "SRET" || OpName == "MRET")
++			st.orc_call_insns++;
++			dwarf_cfi_row row{};
++			if (dwarf_cfi_unwind_user_eh_frame_hdr(
++				    (unsigned long)eh_hdr_vma,
++				    eh_hdr_bytes.size(), (unsigned long)pc,
++				    &AS.karch, &row) != 0) {
++				st.orc_no_fde++;
 +				continue;
-+
-+			uint64_t next_pc = pc + InsnSize;
-+
-+			if (is_call) {
-+				uint64_t CallTarget = 0;
-+				bool has_target = MIA &&
-+						  MIA->evaluateBranch(MI, pc,
-+								      InsnSize,
-+								      CallTarget);
-+				if (has_target &&
-+				    noreturn_addrs.count(CallTarget))
-+					continue;
-+				if (next_pc < range_end &&
-+				    (!has_target || CallTarget != next_pc)) {
-+					dwarf_cfi_row next_row{};
-+					if (dwarf_cfi_unwind_user_eh_frame_hdr(
-+						    (unsigned long)eh_hdr_vma,
-+						    eh_hdr_bytes.size(),
-+						    (unsigned long)next_pc,
-+						    &AS.karch, &next_row) == 0 &&
-+					    !rowsEqual(row, next_row))
-+						continue;
-+				}
 +			}
 +
-+			AbsState next_st = cur;
-+			if (AS.llvm_arch == Triple::riscv64 && is_call) {
-+				for (int d = 1; d < 32; d++) {
-+					if (d == 2 || d == 3 || d == 4 ||
-+					    d == 8 || d == 9 ||
-+					    (d >= 18 && d <= 27))
-+						continue;
-+					next_st.regs[d] = {VK_UNKNOWN, 0};
-+				}
++			bool cfa_ok = false;
++			if (o_sp_reg == ORC_REG_SP) {
++				cfa_ok = (row.cfa_base == DWARF_CFI_BASE_SP &&
++					  row.cfa_off == sp_offset);
++			} else if (o_sp_reg == ORC_REG_BP) {
++				cfa_ok = (row.cfa_base == DWARF_CFI_BASE_FP &&
++					  row.cfa_off == sp_offset);
++			} else if (o_sp_reg == ORC_REG_BP_INDIRECT) {
++				cfa_ok = (row.cfa_base ==
++						  DWARF_CFI_BASE_FP_INDIRECT &&
++					  row.cfa_off == sp_offset);
++			} else if (o_sp_reg == ORC_REG_SP_INDIRECT) {
++				cfa_ok = (row.cfa_base ==
++						  DWARF_CFI_BASE_SP_INDIRECT &&
++					  row.cfa_off == sp_offset);
++			} else if (row.cfa_base == DWARF_CFI_BASE_REG) {
++				int exp_dreg = (o_sp_reg == ORC_REG_AX) ? 0 :
++					       (o_sp_reg == ORC_REG_DX) ? 1 :
++					       (o_sp_reg == ORC_REG_DI) ? 5 :
++					       (o_sp_reg == ORC_REG_R10) ? 10 :
++					       (o_sp_reg == ORC_REG_R13) ? 13 :
++					       -1;
++				cfa_ok = (row.cfa_reg == exp_dreg &&
++					  row.cfa_off == sp_offset);
++			}
++
++			bool bp_ok = false;
++			if (o_bp_reg == ORC_REG_UNDEFINED) {
++				bp_ok = (row.fp_rule == DWARF_CFI_RULE_SAME);
++			} else if (o_bp_reg == ORC_REG_PREV_SP) {
++				bp_ok = (row.fp_rule == DWARF_CFI_RULE_OFFSET &&
++					 row.fp_off == bp_offset);
++			} else if (o_bp_reg == ORC_REG_BP) {
++				bp_ok = (row.fp_rule ==
++						 DWARF_CFI_RULE_FP_OFFSET &&
++					 row.fp_off == bp_offset);
++			}
++
++			if (cfa_ok && bp_ok) {
++				st.orc_matched++;
 +			} else {
-+				stepInstruction(next_st, MI, OpName, Desc, MCRI,
-+						AS, next_pc, MIA, pc, InsnSize);
-+			}
-+
-+			auto enqueue = [&](uint64_t target) {
-+				if (target < fn.addr || target >= range_end)
-+					return;
-+				if (!visited.count(target)) {
-+					visited[target] = next_st;
-+					worklist.push(target);
++				if (!cfa_ok)
++					st.orc_cfa_mismatch++;
++				if (!bp_ok)
++					st.orc_bp_mismatch++;
++				if (st.sample_orc_diffs.size() <
++				    opts.max_samples * 3) {
++					std::string dis_str;
++					raw_string_ostream rso(dis_str);
++					InstPrinter.printInst(&MI, pc, "", STI,
++							      rso);
++					char b[256];
++					snprintf(b, sizeof(b),
++						 "%s+0x%" PRIx64 " (0x%" PRIx64
++						 ")%s | ORC(sp=%u:%+d bp=%u:%+d)"
++						 " vs CFI(cfa=%u:%+d fp=%u:%+d)",
++						 fn.name.c_str(), pc - fn.addr,
++						 pc, rso.str().c_str(), o_sp_reg,
++						 sp_offset, o_bp_reg, bp_offset,
++						 row.cfa_base, row.cfa_off,
++						 row.fp_rule, row.fp_off);
++					st.sample_orc_diffs.push_back(b);
 +				}
-+			};
-+
-+			if (is_uncond_branch || is_cond_branch) {
-+				uint64_t BranchTarget = 0;
-+				if (MIA && MIA->evaluateBranch(MI, pc, InsnSize,
-+							       BranchTarget))
-+					enqueue(BranchTarget);
-+				if (is_cond_branch)
-+					enqueue(next_pc);
-+			} else if (!Desc.isBarrier()) {
-+				enqueue(next_pc);
 +			}
 +		}
-+
-+		if (func_ok)
-+			st.funcs_clean++;
 +	}
 +}
 -- 
