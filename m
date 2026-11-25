@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587378;
-	b=tUx/mbKDvZty0poctreDffYQHHEkfABwnDF4QC6pC/e4wp4Vo+Jmsofwss2gmiHKBhpE
-	 uaz5b+px8tcn/g88mi9aTO4A5psULmgWBrEyR1u7c0pBGRUCds/50J2v1IC5/cLt7UV7A
-	 S7BuBnYp8HhLBEFDvQQQIEWjhykNoX2GZuqHDnXGIjotqOyL0pcup+Jzd8/23IbKWo2PK
-	 NO3XeWUzJPWcXEBlGaY/YJfd23dx1y6o5Cj1rzSB9Btoh1djeC85uTAZ4DwZd+s2mE49d
-	 d+874mBvgRIOxRTSv3/ObvKMM30KOJcCiYeuKzyG7eWtNDacbnggCX1Nr4W1qPBLLtA==
+	t=1795587381;
+	b=yjOEp1Y1U6BAxc70V+y4lxGfKyD/VcQ+z6lwl+CgC360ZW8HRwR4qSFggq8n27cZyTHL
+	 rKbfALaon5V4/JdyXoziP29Mv+cQIzA0dgyMbRtdEfkin7Aejy52NnT4yFy5emRbvN9qN
+	 rtfDt073PDKM/9KqKFqr2SvzJrGg7c+8HBjDskMHpuxMaA6f2E78LYEnQkE8LAG4uh2BB
+	 TdpP/AtD0JbCDI4LkXKNSgwo+Og0qxa14JGVho+okDBIVK+gf2HFPFn3s5JjW3eDiH9zy
+	 J073+IaYxz36TA3fJztqC5wf3MWx7zKH33R6flRSPTqZ6DMbg7AY65+EHkTPLlX07OQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587378;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587381;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=09MAmcu0nJvDv2rEHeASXKSxzXy8pllt4XI/+xpi/1s=;
-	b=NCSayf+H0RAbxWv7sfwVLVCRi65p/UIu4gjVes/SyrgWAs+K4VBc+3aZlXtQAr4pbCIy
-	 k2aoegZK8jKgJqc/fQVfbgvT5YXEho6EXLF/gg/YpC+eML3Pq+6qi+Ipe2rtreLj+hMEM
-	 MQk+N6jaxHylj8PVXyOm/H5l0W5LfyRlQMoPShXxkeQv5/tIcnAHCZFG1TZlRzgcX21lx
-	 +Ts/XIQ98a8vhhLPPz9m51ejk/pwvQNMNe0duSp/HnvP/x6SJLwscJjgxYuFaG4cHLsRk
-	 gAySk8uFdWCayqtNs1JZpVVViTSxZ3isVd1A3dLRg6Mdw1nNlfEPcJAm3pVIqEtsCpw==
+	bh=7RSsSfZmAsaQDGBU/83cZLNmSBWE8xnXwx5ZRwlx4tY=;
+	b=itAzOIk1gvCBSz25lbmRLtSHiucJgfrq9s16khwKavy7oFdGMLdfMvJ5ukzQzPYBskzz
+	 +wy+fkPhXOaefxmut1pIUtqviuqU5bVtCwIVulp221S8M2js0Q0A2Wa6AEeto8QcRyU1a
+	 RhVFihXvd1F8aGHJXNZ9+mOxLu1cV5bT5pdeHmPvx+9FtKemcEKNpbnkMaM39GSm9dZJr
+	 oYSp7bbLpDP7zlEe0VoU4wDfPd8pvZLs7tgeLz/q1Ugv0YcGRZQOD9IGU3hC8IJStO+M5
+	 8T+neky6fEEun3ZnfN+S9k92z1XInt4702t4OFpDJRAqhu6iq7ErOHfcvEUSHJQZC9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=THNmwCxI;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WCoOD0Rr;
 	arc=none smtp.remote-ip=74.125.82.198
 Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5751C607024C
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 06:16:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5751C607024C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4863E60A383F
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 06:16:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4863E60A383F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=THNmwCxI
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-3846d5f54c1so6513564eec.1
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 22:16:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WCoOD0Rr
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-386b8624cf7so555275eec.1
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 22:16:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587377; x=1796192177; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795587379; x=1796192179; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=09MAmcu0nJvDv2rEHeASXKSxzXy8pllt4XI/+xpi/1s=;
-        b=THNmwCxI++eAxLgVQdEZiKUYHJXRFpAptWNUkNON+VsGiQF9aAOdTUiEKQMftU7VgY
-         ECtLNsShW30LNja8sT9CWILOqke9HPjmKX5oT8ldpmPWrisk7BctGYwXtaYnpgcy42bH
-         XrgDfPrvZXtNuWZ7B4+5+XJJNS8Ec6KN8A9x8RrnSU3NiFMHxqmrPvN3VfpIHm9Cj+Ox
-         QRjIiR20mLyhqn8b+hjL7xJjhh3gAggTilfg8fq78X13OyKE9Io9MObhnF0gkySurSgo
-         cXP+GvSLYcAFL//yloqu1AiWQKT9G35JcKd9Yy6T/3R7jeQv9/4mzvJGAnqsrAHosT4g
-         3I1w==
+        bh=7RSsSfZmAsaQDGBU/83cZLNmSBWE8xnXwx5ZRwlx4tY=;
+        b=WCoOD0RrGN61L9VZ6OdEdstXL+E2IWXWE3ZTor+JdGjgSkrhZDm8llAwrtqIeIpqgo
+         dbCVRDpVWE3/NdT3/B3jk7STCr5thvndd5V00s9ALTMZaI9P9o+xePsKJUHmnBKXxyxW
+         PhK5EVxxg0TR8tKSphpSj7ZpMbkK+LptRqyjSQte6S1AxbAMlEVGoDePYwcZGkYCGOC4
+         pA5fV9F2fRCmo4rindICQ3tFx1DPL9iFUjQ4yxBWMt8M3HtHHjZPMzMfsqbCUMvRe0ew
+         kti/6ofkYUKpizBejuDL6BNi0ln1Av6rZC5itJe1GReUrCDyu266gz9/ZUQ4GBNQPvsp
+         zxKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587377; x=1796192177;
+        d=1e100.net; s=20260707; t=1795587379; x=1796192179;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=09MAmcu0nJvDv2rEHeASXKSxzXy8pllt4XI/+xpi/1s=;
-        b=pCDK2VfcybY7JebB2ijUK/pNrl2vCgZkKyJyaAyHg39V/lFIVSISQcyCbo1JLXWSpS
-         dNwCs3aPeMxyZws25ShbGTbsTueLxO3iCHWXkjgtFgo0nR7UY1DAK+SyfDRJTZI83u3v
-         hSyf4EXuAVwxmD4dcZsjch4fvTV77wZntIEmOO0GGXZIlf+FdvARUW71vf3UuwEJYSok
-         evIkaZOQyuvbLUQDBi/WP9mAVqzZuFEteUvQm/n1FIM7CoATxfJxDHwmYaifBbbPt8O7
-         /jVaB1OmZeaKTD9V9WASBjOyH+z4IC9fTRjJ5Z/kvKV4tzwBJr5u3ZUXKWNMLeehjZeS
-         l0mg==
-X-Forwarded-Encrypted: i=1; AL+hErE6/BYez+DitwrH3raj4BK8t0AgtfaK6PNwHL1NKbT49+LDnjp7b6ggvalumSwZ9Aq3jvz9@lists.linux.dev
-X-Gm-Message-State: APuU4Z8iNH8XVYCYUdu15BTytWvJtQDMXJYBiYKhZLlCp8WaMOQlWkLw
-	urq93lJKGLieSqhKg0BeWXQ5ieQlMlS1ipHLmTmPGvzHPxZocI7j0BaeUAV/5vVYopRk0nhOh7Y
-	EBZ3cORQjJw==
-X-Received: from dyba9.prod.google.com ([2002:a05:693c:63c9:b0:386:a06c:3241])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:c72d:b0:369:f9c4:1fda
- with SMTP id 5a478bee46e88-38570845628mr15750428eec.27.1795587377097; Tue, 24
- Nov 2026 22:16:17 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:03 -0800
+        bh=7RSsSfZmAsaQDGBU/83cZLNmSBWE8xnXwx5ZRwlx4tY=;
+        b=QF4BbPJ4hKg+cEbjpfen1+Pw0q9h1TNqAwOWeHcXKGFcaUl1cC+49pT356S4ZGgrxF
+         pZZwFRuO5vxihXV7YVHbLd9+YVdnQW54QA/OrfrB5RtYZWKpZo1BgaTrYY98Oaojd7Am
+         eLnyrpIXsNlFYvvZoPSuPjd3dDW9fpXQDCpD0MOj06bFcQlbAjT0DGu7LyzBH8SRHVM4
+         ZRM0mpGcloGU8emM/AGdYX08p2pxwNhK1TVHYshRMnFcSdVeFn/bBOmSr/Zf4Ttp5oVn
+         Igr38olesz5QfATHcAEpQBkV/aH1ge3f4hMSq9IKUEBkXdQNq3fy2sGK8HaCYmbxjMir
+         6ADw==
+X-Forwarded-Encrypted: i=1; AL+hErFglpbryr7LcBXywLhZhmTnrBjPZ//t1HBX7s5038shOnklJIWRzNnGGaa7jCLyzUY92JMp@lists.linux.dev
+X-Gm-Message-State: APuU4Z8q9zXgakyZQz7/ADdC0mSLVUA0TBc65M9o7mNYkYimXp3TzTQM
+	IEgKuAypAigsQYd6szhr4GFWnFuM+xXnLXa/SI7+N0CRzUXEeDd5mIYcLQvg1yfEiU6TeENgaPy
+	Mox+CEqx2+Q==
+X-Received: from dycol11.prod.google.com ([2002:a05:7301:db8b:b0:385:d2b9:379d])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:d090:b0:386:8bd2:da2c
+ with SMTP id 5a478bee46e88-3868bd2db9amr15053728eec.2.1795587379163; Tue, 24
+ Nov 2026 22:16:19 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:04 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-11-irogers@google.com>
-Subject: [RFC PATCH v2 10/30] tracing: Skip internal ftrace frames under CONFIG_UNWINDER_DWARF_CFI
+Message-ID: <20261125061523.1540234-12-irogers@google.com>
+Subject: [RFC PATCH v2 11/30] x86: Add DWARF CFI annotations to entry, ftrace,
+ frame, and rethook
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org
@@ -102,75 +103,471 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Calibrate ftrace internal stack-trace skip counts under
-CONFIG_UNWINDER_DWARF_CFI alongside CONFIG_UNWINDER_ORC so stack traces
-captured from tracepoints and function tracers omit internal ftrace
-wrapper frames consistently.
+Prepare x86-64 hand-written and inline assembly paths for runtime
+Minimal DWARF CFI kernel unwinding when CONFIG_UNWINDER_DWARF_CFI is
+enabled:
+ - Emit .eh_frame alongside .debug_frame in asm/dwarf2.h and preserve
+   FRAME_BEGIN/FRAME_END frame setup for non-leaf assembly helpers in
+   asm/frame.h.
+ - Annotate THUNK (arch/x86/entry/calling.h), ftrace_caller /
+   ftrace_regs_caller / return_to_handler (arch/x86/kernel/ftrace_64.S),
+   and arch_rethook_trampoline() (arch/x86/kernel/rethook.c) with .cfi_*
+   directives.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- kernel/trace/trace.c                | 4 ++--
- kernel/trace/trace_events_trigger.c | 2 +-
- kernel/trace/trace_functions.c      | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/entry/calling.h      | 17 +++++++
+ arch/x86/include/asm/dwarf2.h |  6 +--
+ arch/x86/include/asm/frame.h  | 42 ++++++++++------
+ arch/x86/kernel/ftrace_64.S   | 44 ++++++++++++++++-
+ arch/x86/kernel/rethook.c     | 92 ++++++++++++++++++++++++++++++++++-
+ 5 files changed, 180 insertions(+), 21 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 65b9d67647e5..6d36c790c2b0 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -2156,7 +2156,7 @@ void __ftrace_trace_stack(struct trace_array *tr,
- 	 * Add one, for this function and the call to save_stack_trace()
- 	 * If regs is set, then these functions will not be in the way.
+diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
+index 77e2d920a640..1a133ad44b95 100644
+--- a/arch/x86/entry/calling.h
++++ b/arch/x86/entry/calling.h
+@@ -432,9 +432,19 @@ For 32-bit we have the following conventions - kernel is built with
+ /* rdi:	arg1 ... normal C conventions. rax is saved/restored. */
+ .macro THUNK name, func
+ SYM_FUNC_START(\name)
++#ifdef CONFIG_UNWINDER_DWARF_CFI
++	.cfi_startproc
++#endif
+ 	ANNOTATE_NOENDBR
+ 	pushq %rbp
++#ifdef CONFIG_UNWINDER_DWARF_CFI
++	.cfi_def_cfa_offset 16
++	.cfi_offset rbp, -16
++#endif
+ 	movq %rsp, %rbp
++#ifdef CONFIG_UNWINDER_DWARF_CFI
++	.cfi_def_cfa_register rbp
++#endif
+ 
+ 	pushq %rdi
+ 	pushq %rsi
+@@ -458,7 +468,14 @@ SYM_FUNC_START(\name)
+ 	popq %rsi
+ 	popq %rdi
+ 	popq %rbp
++#ifdef CONFIG_UNWINDER_DWARF_CFI
++	.cfi_def_cfa rsp, 8
++	.cfi_restore rbp
++#endif
+ 	RET
++#ifdef CONFIG_UNWINDER_DWARF_CFI
++	.cfi_endproc
++#endif
+ SYM_FUNC_END(\name)
+ 	_ASM_NOKPROBE(\name)
+ .endm
+diff --git a/arch/x86/include/asm/dwarf2.h b/arch/x86/include/asm/dwarf2.h
+index 09c9684d3ad6..0fa61360f69d 100644
+--- a/arch/x86/include/asm/dwarf2.h
++++ b/arch/x86/include/asm/dwarf2.h
+@@ -22,7 +22,7 @@
+ #define CFI_ESCAPE		.cfi_escape
+ #define CFI_SIGNAL_FRAME	.cfi_signal_frame
+ 
+-#ifndef BUILD_VDSO
++#if !defined(BUILD_VDSO) && !defined(CONFIG_UNWINDER_DWARF_CFI)
+ 	/*
+ 	 * Emit CFI data in .debug_frame sections, not .eh_frame sections.
+ 	 * The latter we currently just discard since we don't do DWARF
+@@ -33,8 +33,8 @@
+ 	.cfi_sections .debug_frame
+ #else
+ 	 /*
+-	  * For the vDSO, emit both runtime unwind information and debug
+-	  * symbols for the .dbg file.
++	  * For the vDSO or runtime Minimal DWARF unwinding, emit both
++	  * runtime unwind information and debug symbols.
+ 	  */
+ 	.cfi_sections .eh_frame, .debug_frame
+ #endif
+diff --git a/arch/x86/include/asm/frame.h b/arch/x86/include/asm/frame.h
+index 0ab65073c1cc..62939fbb6668 100644
+--- a/arch/x86/include/asm/frame.h
++++ b/arch/x86/include/asm/frame.h
+@@ -9,7 +9,7 @@
+  * callable non-leaf asm function to make kernel stack traces more reliable.
+  */
+ 
+-#ifdef CONFIG_FRAME_POINTER
++#if defined(CONFIG_FRAME_POINTER) || defined(CONFIG_UNWINDER_DWARF_CFI)
+ 
+ #ifdef __ASSEMBLER__
+ 
+@@ -22,6 +22,30 @@
+ 	pop %_ASM_BP
+ .endm
+ 
++#else /* !__ASSEMBLER__ */
++
++#define FRAME_BEGIN				\
++	"push %" _ASM_BP "\n"			\
++	_ASM_MOV "%" _ASM_SP ", %" _ASM_BP "\n"
++
++#define FRAME_END "pop %" _ASM_BP "\n"
++
++#endif /* __ASSEMBLER__ */
++
++#define FRAME_OFFSET __ASM_SEL(4, 8)
++
++#else /* !CONFIG_FRAME_POINTER && !CONFIG_UNWINDER_DWARF_CFI */
++
++#define FRAME_BEGIN
++#define FRAME_END
++#define FRAME_OFFSET 0
++
++#endif /* CONFIG_FRAME_POINTER || CONFIG_UNWINDER_DWARF_CFI */
++
++#if defined(CONFIG_FRAME_POINTER) || defined(CONFIG_UNWINDER_DWARF_CFI)
++
++#ifdef __ASSEMBLER__
++
+ #ifdef CONFIG_X86_64
+ /*
+  * This is a sneaky trick to help the unwinder find pt_regs on the stack.  The
+@@ -53,12 +77,6 @@
+ 
+ #else /* !__ASSEMBLER__ */
+ 
+-#define FRAME_BEGIN				\
+-	"push %" _ASM_BP "\n"			\
+-	_ASM_MOV "%" _ASM_SP ", %" _ASM_BP "\n"
+-
+-#define FRAME_END "pop %" _ASM_BP "\n"
+-
+ #ifdef CONFIG_X86_64
+ 
+ #define ENCODE_FRAME_POINTER			\
+@@ -84,9 +102,7 @@ static inline unsigned long encode_frame_pointer(struct pt_regs *regs)
+ 
+ #endif /* __ASSEMBLER__ */
+ 
+-#define FRAME_OFFSET __ASM_SEL(4, 8)
+-
+-#else /* !CONFIG_FRAME_POINTER */
++#else /* !CONFIG_FRAME_POINTER && !CONFIG_UNWINDER_DWARF_CFI */
+ 
+ #ifdef __ASSEMBLER__
+ 
+@@ -104,10 +120,6 @@ static inline unsigned long encode_frame_pointer(struct pt_regs *regs)
+ 
+ #endif
+ 
+-#define FRAME_BEGIN
+-#define FRAME_END
+-#define FRAME_OFFSET 0
+-
+-#endif /* CONFIG_FRAME_POINTER */
++#endif /* CONFIG_FRAME_POINTER || CONFIG_UNWINDER_DWARF_CFI */
+ 
+ #endif /* _ASM_X86_FRAME_H */
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 4b20673a3395..a7afcded8d09 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -27,6 +27,24 @@
+ /* Size of stack used to save mcount regs in save_mcount_regs */
+ #define MCOUNT_REG_SIZE		(FRAME_SIZE + MCOUNT_FRAME_SIZE)
+ 
++#ifdef CONFIG_UNWINDER_DWARF_CFI
++# define FTRACE_CFI_STARTPROC		.cfi_startproc
++# define FTRACE_CFI_ENDPROC		.cfi_endproc
++# define FTRACE_CFI_ADJUST_CFA(off)	.cfi_adjust_cfa_offset (off)
++# define FTRACE_CFI_OFFSET(reg, off)	.cfi_offset reg, (off)
++# define FTRACE_CFI_RESTORE(reg)	.cfi_restore reg
++# define FTRACE_CFI_REMEMBER		.cfi_remember_state
++# define FTRACE_CFI_RESTORE_STATE	.cfi_restore_state
++#else
++# define FTRACE_CFI_STARTPROC
++# define FTRACE_CFI_ENDPROC
++# define FTRACE_CFI_ADJUST_CFA(off)
++# define FTRACE_CFI_OFFSET(reg, off)
++# define FTRACE_CFI_RESTORE(reg)
++# define FTRACE_CFI_REMEMBER
++# define FTRACE_CFI_RESTORE_STATE
++#endif
++
+ /*
+  * gcc -pg option adds a call to 'mcount' in most functions.
+  * When -mfentry is used, the call is to 'fentry' and not 'mcount'
+@@ -80,6 +98,7 @@
+ 	 * We add enough stack to save all regs.
  	 */
--#ifndef CONFIG_UNWINDER_ORC
-+#if !defined(CONFIG_UNWINDER_ORC) && !defined(CONFIG_UNWINDER_DWARF_CFI)
- 	if (!regs)
- 		skip++;
+ 	subq $(FRAME_SIZE), %rsp
++	FTRACE_CFI_ADJUST_CFA(FRAME_SIZE)
+ 	movq %rax, RAX(%rsp)
+ 	movq %rcx, RCX(%rsp)
+ 	movq %rdx, RDX(%rsp)
+@@ -98,6 +117,7 @@
+ 	movq %rbp, %rdx
  #endif
-@@ -2258,7 +2258,7 @@ void trace_dump_stack(int skip)
- 	if (tracing_disabled || tracing_selftest_running)
- 		return;
+ 	movq %rdx, RBP(%rsp)
++	FTRACE_CFI_OFFSET(rbp, RBP - MCOUNT_REG_SIZE - 8 - \added)
  
--#ifndef CONFIG_UNWINDER_ORC
-+#if !defined(CONFIG_UNWINDER_ORC) && !defined(CONFIG_UNWINDER_DWARF_CFI)
- 	/* Skip 1 to skip this function. */
- 	skip++;
+ 	/* Copy the parent address into %rsi (second parameter) */
+ 	movq MCOUNT_REG_SIZE+8+\added(%rsp), %rsi
+@@ -118,6 +138,7 @@
+ 
+ 	/* ftrace_regs_caller or frame pointers require this */
+ 	movq RBP(%rsp), %rbp
++	FTRACE_CFI_RESTORE(rbp)
+ 
+ 	movq R9(%rsp), %r9
+ 	movq R8(%rsp), %r8
+@@ -128,6 +149,7 @@
+ 	movq RAX(%rsp), %rax
+ 
+ 	addq $MCOUNT_REG_SIZE-\save, %rsp
++	FTRACE_CFI_ADJUST_CFA(-(MCOUNT_REG_SIZE - \save))
+ 
+ 	.endm
+ 
+@@ -153,6 +175,7 @@ SYM_FUNC_END(__fentry__)
+ EXPORT_SYMBOL(__fentry__)
+ 
+ SYM_FUNC_START(ftrace_caller)
++	FTRACE_CFI_STARTPROC
+ 	ANNOTATE_NOENDBR
+ 	/* save_mcount_regs fills in first two parameters */
+ 	save_mcount_regs
+@@ -195,13 +218,16 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
+ 	ANNOTATE_NOENDBR
+ 	RET
++	FTRACE_CFI_ENDPROC
+ SYM_FUNC_END(ftrace_caller);
+ STACK_FRAME_NON_STANDARD_FP(ftrace_caller)
+ 
+ SYM_FUNC_START(ftrace_regs_caller)
++	FTRACE_CFI_STARTPROC
+ 	ANNOTATE_NOENDBR
+ 	/* Save the current flags before any operations that can change them */
+ 	pushfq
++	FTRACE_CFI_ADJUST_CFA(8)
+ 
+ 	/* added 8 bytes to save flags */
+ 	save_mcount_regs 8
+@@ -274,9 +300,11 @@ SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
+ 	ANNOTATE_NOENDBR
+ 	jnz	1f
+ 
++	FTRACE_CFI_REMEMBER
+ 	restore_mcount_regs
+ 	/* Restore flags */
+ 	popfq
++	FTRACE_CFI_ADJUST_CFA(-8)
+ 
+ 	/*
+ 	 * The trampoline will add the return.
+@@ -286,23 +314,28 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	RET
+ 
+ 1:
++	FTRACE_CFI_RESTORE_STATE
+ 	/* See ftrace_jmp_set(), jmp to the trampoline */
+ 	btsq	$63, %rax
+ 	jc	2f
++	FTRACE_CFI_REMEMBER
+ 	movq %rax, MCOUNT_REG_SIZE+8(%rsp)
+ 	restore_mcount_regs
+ 	/* Restore flags */
+ 	popfq
++	FTRACE_CFI_ADJUST_CFA(-8)
+ 	RET
+ 
+ 	/* Swap the flags with orig_rax */
+-2:	movq MCOUNT_REG_SIZE(%rsp), %rdi
++2:	FTRACE_CFI_RESTORE_STATE
++	movq MCOUNT_REG_SIZE(%rsp), %rdi
+ 	movq %rdi, MCOUNT_REG_SIZE-8(%rsp)
+ 	movq %rax, MCOUNT_REG_SIZE(%rsp)
+ 
+ 	restore_mcount_regs 8
+ 	/* Restore flags */
+ 	popfq
++	FTRACE_CFI_ADJUST_CFA(-8)
+ 	UNWIND_HINT_FUNC
+ 
+ 	/*
+@@ -314,11 +347,14 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	CALL .Ldo_rebalance
+ 	int3
+ .Ldo_rebalance:
++	FTRACE_CFI_ADJUST_CFA(8)
+ 	add $8, %rsp
++	FTRACE_CFI_ADJUST_CFA(-8)
+ 	ALTERNATIVE __stringify(RET), \
+ 		    __stringify(ANNOTATE_UNRET_SAFE; ret; int3), \
+ 		    X86_FEATURE_CALL_DEPTH
+ 
++	FTRACE_CFI_ENDPROC
+ SYM_FUNC_END(ftrace_regs_caller)
+ STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
+ 
+@@ -370,17 +406,21 @@ SYM_CODE_START(return_to_handler)
+ 	/* Restore return_to_handler value that got eaten by previous ret instruction. */
+ 	subq $8, %rsp
+ 	UNWIND_HINT_FUNC
++	FTRACE_CFI_STARTPROC
+ 
+ 	/* Save ftrace_regs for function exit context  */
+ 	subq $(FRAME_SIZE), %rsp
++	FTRACE_CFI_ADJUST_CFA(FRAME_SIZE)
+ 
+ 	movq %rax, RAX(%rsp)
+ 	movq %rdx, RDX(%rsp)
+ 	movq %rbp, RBP(%rsp)
++	FTRACE_CFI_OFFSET(rbp, RBP - FRAME_SIZE - 8)
+ 	movq %rdi, RSP(%rsp)
+ 	movq %rsp, %rdi
+ 
+ 	call ftrace_return_to_handler
++	FTRACE_CFI_ENDPROC
+ 
+ 	movq %rax, %rdi
+ 	movq RDX(%rsp), %rdx
+@@ -398,8 +438,10 @@ SYM_CODE_START(return_to_handler)
+ 	int3
+ .Ldo_rop:
+ 	mov %rdi, (%rsp)
++	FTRACE_CFI_STARTPROC
+ 	ALTERNATIVE __stringify(RET), \
+ 		    __stringify(ANNOTATE_UNRET_SAFE; ret; int3), \
+ 		    X86_FEATURE_CALL_DEPTH
++	FTRACE_CFI_ENDPROC
+ SYM_CODE_END(return_to_handler)
  #endif
-diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
-index a2487ad7fef8..c79df5b526e5 100644
---- a/kernel/trace/trace_events_trigger.c
-+++ b/kernel/trace/trace_events_trigger.c
-@@ -1597,7 +1597,7 @@ static __init int register_trigger_snapshot_cmd(void) { return 0; }
- #endif /* CONFIG_TRACER_SNAPSHOT */
+diff --git a/arch/x86/kernel/rethook.c b/arch/x86/kernel/rethook.c
+index 85e2f2d16a90..2bff76758024 100644
+--- a/arch/x86/kernel/rethook.c
++++ b/arch/x86/kernel/rethook.c
+@@ -15,6 +15,87 @@ __visible void arch_rethook_trampoline_callback(struct pt_regs *regs);
+ #define ANNOTATE_NOENDBR
+ #endif
  
- #ifdef CONFIG_STACKTRACE
--#ifdef CONFIG_UNWINDER_ORC
-+#if defined(CONFIG_UNWINDER_ORC) || defined(CONFIG_UNWINDER_DWARF_CFI)
- /* Skip 2:
-  *   event_triggers_post_call()
-  *   trace_event_raw_event_xxx()
-diff --git a/kernel/trace/trace_functions.c b/kernel/trace/trace_functions.c
-index acaba990aaaa..d601fdedceaa 100644
---- a/kernel/trace/trace_functions.c
-+++ b/kernel/trace/trace_functions.c
-@@ -251,7 +251,7 @@ function_args_trace_call(unsigned long ip, unsigned long parent_ip,
- 	ftrace_test_recursion_unlock(bit);
- }
- 
--#ifdef CONFIG_UNWINDER_ORC
-+#if defined(CONFIG_UNWINDER_ORC) || defined(CONFIG_UNWINDER_DWARF_CFI)
++#if defined(CONFIG_X86_64) && defined(CONFIG_UNWINDER_DWARF_CFI)
++#define RETHOOK_CFI_STARTPROC		"	.cfi_startproc\n"
++#define RETHOOK_CFI_ENDPROC		"	.cfi_endproc\n"
++#define RETHOOK_CFI_ADJUST(off)		"	.cfi_adjust_cfa_offset " #off "\n"
++#define RETHOOK_SAVE_REGS_STRING	\
++	"	subq $24, %rsp\n"	\
++	RETHOOK_CFI_ADJUST(24)		\
++	"	pushq %rdi\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %rsi\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %rdx\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %rcx\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %rax\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %r8\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %r9\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %r10\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %r11\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %rbx\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %rbp\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	.cfi_offset rbp, -144\n"\
++	"	pushq %r12\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %r13\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %r14\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	"	pushq %r15\n"		\
++	RETHOOK_CFI_ADJUST(8)		\
++	ENCODE_FRAME_POINTER
++#define RETHOOK_RESTORE_REGS_STRING	\
++	"	popq %r15\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %r14\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %r13\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %r12\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %rbp\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	.cfi_restore rbp\n"	\
++	"	popq %rbx\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %r11\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %r10\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %r9\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %r8\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %rax\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %rcx\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %rdx\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %rsi\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	popq %rdi\n"		\
++	RETHOOK_CFI_ADJUST(-8)		\
++	"	addq $24, %rsp\n"	\
++	RETHOOK_CFI_ADJUST(-24)
++#else
++#define RETHOOK_CFI_STARTPROC
++#define RETHOOK_CFI_ENDPROC
++#define RETHOOK_CFI_ADJUST(off)
++#define RETHOOK_SAVE_REGS_STRING	SAVE_REGS_STRING
++#define RETHOOK_RESTORE_REGS_STRING	RESTORE_REGS_STRING
++#endif
++
  /*
-  * Skip 2:
-  *
-@@ -602,7 +602,7 @@ ftrace_traceoff(unsigned long ip, unsigned long parent_ip,
- 	tracer_tracing_off(tr);
- }
- 
--#ifdef CONFIG_UNWINDER_ORC
-+#if defined(CONFIG_UNWINDER_ORC) || defined(CONFIG_UNWINDER_DWARF_CFI)
- /*
-  * Skip 3:
-  *
+  * When a target function returns, this code saves registers and calls
+  * arch_rethook_trampoline_callback(), which calls the rethook handler.
+@@ -29,17 +110,23 @@ asm(
+ 	/* Push a fake return address to tell the unwinder it's a rethook. */
+ 	"	pushq $arch_rethook_trampoline\n"
+ 	UNWIND_HINT_FUNC
++	RETHOOK_CFI_STARTPROC
+ 	"       pushq $" __stringify(__KERNEL_DS) "\n"
++	RETHOOK_CFI_ADJUST(8)
+ 	/* Save the 'sp - 16', this will be fixed later. */
+ 	"	pushq %rsp\n"
++	RETHOOK_CFI_ADJUST(8)
+ 	"	pushfq\n"
+-	SAVE_REGS_STRING
++	RETHOOK_CFI_ADJUST(8)
++	RETHOOK_SAVE_REGS_STRING
+ 	"	movq %rsp, %rdi\n"
+ 	"	call arch_rethook_trampoline_callback\n"
+-	RESTORE_REGS_STRING
++	RETHOOK_RESTORE_REGS_STRING
+ 	/* In the callback function, 'regs->flags' is copied to 'regs->ss'. */
+ 	"	addq $16, %rsp\n"
++	RETHOOK_CFI_ADJUST(-16)
+ 	"	popfq\n"
++	RETHOOK_CFI_ADJUST(-8)
+ #else
+ 	/* Push a fake return address to tell the unwinder it's a rethook. */
+ 	"	pushl $arch_rethook_trampoline\n"
+@@ -57,6 +144,7 @@ asm(
+ 	"	popfl\n"
+ #endif
+ 	ASM_RET
++	RETHOOK_CFI_ENDPROC
+ 	".size arch_rethook_trampoline, .-arch_rethook_trampoline\n"
+ );
+ NOKPROBE_SYMBOL(arch_rethook_trampoline);
 -- 
 2.56.1.831.g720f3f5937-goog
 
