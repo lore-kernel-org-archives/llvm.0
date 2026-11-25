@@ -1,102 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795626982;
-	b=u0iguGTauSXhaSsDdFo1s3nX9NjLbY10Ug2RG/DYT+iaaEyKSpKg0u5/Bfrcsx69tIjN
-	 4HIRbpGYTj/JBlyUMKUdIxstXnpZ4kkbYTGX5U/fdCqcp1Rydi1TVSVgSXBLoma7BTxu3
-	 Dk1bwmBs7j+7pHDmUTjUTHqB4TvZEP5v1Z60Iy3gUIxWrQVUdxMhRusRhOK4nNFXj9aKz
-	 miMU5RYhojqw8IZ0+KoKOPtl6uv21ygYYQx2A98uRdhPN9uDlqN8/Yv5tJLmoDqrS6/mG
-	 s4QDxg1ckhkNsYNjiluE36Zg5TfXKtI5b+ilJDZJ8ZRggUKhH7HSB7uVASofWREGRyg==
+	t=1795628493;
+	b=LCHBk3mN9C2bIxrn9ryRzKSpICY80MrsNDGIVWKUSLmJBjfkFOERzCyil0kKkPHjAKOP
+	 +l6j/8Pt+VtT+hktd0ZrvHw7QlXB+vn2m3O+H06ROEn+/lUCZdBhX5wUSIgySWWsS9ZKk
+	 odWTYB/mLk2hUM1j874WB86/xeykvBqOplVAHYR1fWcSLs2dq4YnzqOLNzh1Iwf085kNb
+	 9XlhXmn+rekpW12tY9dlGbxiJyqMXqC021+LxhGb00AB5VF+frVbH+2b/pyuglZxC1bLn
+	 kzUlP64g0E0egU5OCtSiJPqJnnNEyMuSd/IokJss2fJcfjsrMhJjVQ2+elJ+ZnHodqw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795626982;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=0XJ99uewa+KtsNo9XkOKtjKPjKDCzD0NbSDxZp+Yar8=;
-	b=bK67NtyrnFmr8mU2x2dPFt1BUrhequYJulcQtbYu89ryHDtU0mVaZxr4hy/OV/MeJ8en
-	 CdMU5dL3vIKH0RI6ZSy24KzuEzPwF0EiXufn9S9cW9p8vg5V80NhqmvG+zP6QqFJSvOo6
-	 2p084xvxGmAl3TIRJBs6jL8+Rj72Hqv+hsRwoHPMuoLQhQ9IIq8PjALuEx0TkDlx0Ik3e
-	 kudfBYNee3gndxQPHhqj82eGEaxdV+RYd+j19LPH1A3wcTM2Jc/FKp0LmRqcNgz9Xvsva
-	 rToCMpWvDJhSpA9c0kW4rxp77OAO61W+9hjhwHVxQ06Dr9N36OrnKKhPVCvZ/kPW1RQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795628493;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-TM-AS-GCONF:X-Proofpoint-Reinject:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=rnoF/YnbWgH7sQ349/gu0J3NwT5mIhTPar9IrbUkFi4=;
+	b=Bv0lwaagfA69RvJ++zeptvBOXjnxgMEvMWF/sH2q8xaW4WmRS3uzHCpopcdUgRm3E6Dz
+	 s8o0NxhMmlOH/NDrnEBaGuumUBMbNZG4Mn3h/d2RHL2/f2BL/G009PSxL/WX1PkRe7yWw
+	 mNJYgTZcOKx+iwOL7IysTdu76d6DXd0VE6mMTWYiVpAG0QRrf4hNRqetOIyJhTr8D4lPO
+	 0mNpESuQp5U8KnUtGks5mUWslWdpTMTFPILCYv9va3x6hbikPOzJEI+eKh5h8upQe2wV2
+	 KuRFPPy16EO9VQ3rnr8EZSDfMptvbxHmZ2fga82+PZ3GrZM0cSjE9z3r0ZhL20o7ECw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nxNDVcFB;
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=UbPXCvOT;
+	arc=none smtp.remote-ip=148.163.156.1
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927D3606A326;
-	Wed, 25 Nov 2026 17:16:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 927D3606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D18606A326
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 17:41:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 03D18606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nxNDVcFB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795626982; x=1827162982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WcuGcUE+EwZ5wRASadJcsmh+YFYYe0xIYYtZnCYENIY=;
-  b=nxNDVcFBI0Nvo64YuGRcS7VtYKVFHTsSDpRIrn+WEsCfNferl98GqX7N
-   iwQRPEXXZVxCWF60oBCS3ounNsYqe9msh8gG17ZMg+sdYlYOkujnDElzh
-   D8m72XmRs/XHbvY9qGS5H4Kn8AN+V8g5lEXIrK1lbL0U57BqSg+VXGekT
-   I7ewDWEHtxNj4qOxrCbqNRkgYkb7WHqtY5ogDRkOIOa6uGy+eeaGYkB6Y
-   wBqC9/5DvhSuLkX7wh61jqwe05mRTiU/6xBmWGJOjsyVT1Pz21TxDNpxL
-   0osJKFq8pLvc6B+TEgCtJqUb5e4F3eV2Q5twd6U8ouESzujN9shUm9+C9
-   g==;
-X-CSE-ConnectionGUID: W0Agm05kRDOf61RJSBx6zw==
-X-CSE-MsgGUID: mH1T0KlLSf6n3sZ/Sr+z1g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4504438"
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="4504438"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 08:45:12 -0800
-X-CSE-ConnectionGUID: N09VVOjbRLiZ5trnYphJjA==
-X-CSE-MsgGUID: KqMnJCIJQsSP7hGHZ+fvdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="11802730"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 25 Nov 2026 08:45:06 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xWG7C-00000001S7G-0Bev;
-	Wed, 25 Nov 2026 16:45:02 +0000
-Date: Thu, 26 Nov 2026 00:44:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shivank Garg <shivankg@amd.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Dev Jain <dev.jain@arm.com>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Peter Xu <peterx@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-	Andrei Vagin <avagin@gmail.com>,
-	Paul Gofman <pgofman@codeweavers.com>,
-	Bharata B Rao <bharata@amd.com>, Daniel Wade <danjwade95@gmail.com>,
-	Yin Tirui <yintirui@gmail.com>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Shivank Garg <shivankg@amd.com>
-Subject: Re: [PATCH 1/3] mm: move the soft-dirty fallbacks up in pgtable.h
-Message-ID: <20261126003542.QALFbvl0-lkp@intel.com>
-References: <20261125-b4-mm-soft-dirty-fixes-v1-1-538e3cdb618c@amd.com>
+	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=UbPXCvOT
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6APGYlkE232931;
+	Wed, 25 Nov 2026 17:41:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=rnoF/YnbWgH7sQ349/gu0J3NwT5mIhTPar9IrbUkF
+	i4=; b=UbPXCvOTAVCwIR3L+vvY/5xSjmfzVsQl5b8bu+Uu1+pYzsk+PxkSM0YD3
+	HyT1s1RAgKZr/MBgJguY/1jrdipjdWINvu/PlFFJJ5rFqWlSIxtji0EYYkbyaIfN
+	0GmFNjDWw7qowX51Iw98wQk/Ldw627vN7BdE86Q/qyLLz9sLWJBxRI5z/Cm0XXIp
+	k75MPawomCdgIF5dydaAo1e7aWCZZeUPK+/J67T+JtCu5TlENLfS5pYpW388ylO8
+	GSIZ51wdGVWhonHbVvfQfoy4hISWzhKyaT1IeRbU8wvQR05s20nXi7b7W/fGqtcp
+	HnqD2fWuzTkRcGg9PVz1y5JN5DMQw==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g3dqq1-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 25 Nov 2026 17:41:10 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6APGYKfu313817;
+	Wed, 25 Nov 2026 17:41:10 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j5uxx1mbc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Nov 2026 17:41:09 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6APHf5eN49217894
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 25 Nov 2026 17:41:05 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C988720040;
+	Wed, 25 Nov 2026 17:41:05 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2A50A2004B;
+	Wed, 25 Nov 2026 17:41:01 +0000 (GMT)
+Received: from li-398ad3cc-28e7-11b2-a85c-e030a5b10d54.ibm.com.com (unknown [9.43.127.4])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 25 Nov 2026 17:41:00 +0000 (GMT)
+From: "Nysal Jan K.A." <nysal@linux.ibm.com>
+To: linuxppc-dev@lists.ozlabs.org
+Cc: Jeevitha Palanisamy <jeevitha@linux.ibm.com>,
+        "Nysal Jan K.A." <nysal@linux.ibm.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Shrikanth Hegde <sshegde@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David Hildenbrand (Arm)" <david@kernel.org>, SJ Park <sj@kernel.org>,
+        Usama Arif <usama.arif@linux.dev>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        "Kiryl Shutsemau (Meta)" <kas@kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 0/3] powerpc: Implement cmpxchg128()
+Date: Wed, 25 Nov 2026 23:10:21 +0530
+Message-ID: <20261125174035.1412724-1-nysal@linux.ibm.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -106,65 +106,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125-b4-mm-soft-dirty-fixes-v1-1-538e3cdb618c@amd.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=SoQFe/O0 c=1 sm=1 tr=0 ts=6b071db7 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=NEAV23lmAAAA:8 a=mDV3o1hIAAAA:8
+ a=So1Eduup0IF1CtLnSYcA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI1MDA3MCBTYWx0ZWRfX28EbsGtFJABs
+ qJh56u0xp3R5r5mZSUiY8/f4KAMWf9T2wVeElqEsKdwuvcTDvtvQfTt4Vle+zkrYAEU5/8JQEex
+ HcEG8SQhjuC7Fu4bGZrSX/t2E72au0I=
+X-Proofpoint-ORIG-GUID: L_DyCqQm9XciaYjFooRVCw3sTZqUstVF
+X-Proofpoint-GUID: gqlHjYBnnj1PyX0snfyQKoAWJSm4Pd1_
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI1MDA3MCBTYWx0ZWRfXyNyIvfkmd8Ik
+ KYM1WI4USRtGj96nIKnePwt980SuPnCI8m5M45iaZFLfEXCqXN8aBnozJqFqktT4Ot2OV2Vk9Ej
+ FrHCQEJveX6WcOb7MYPYrc6QyfbXRkLq+6K5IQV0n/MMEglIjsJgG1d07BPPHEkNecD8OZ3trAh
+ arAXohjqk+GPvvCn72airmEIPDGzeLiTP0PJ4MOhyK19D5/YjRffcbzcEOkyz0gy7r4LOtzahqk
+ YLgEgfQOSVuPlTkIcXFikWrBnIJOnpbHQkRm7+TVWPMyzvjNWLT5rCh16nEKsRc9yvE2Z4xnS5c
+ WA78dIoMIrUmuTpNkVm9Ii6Y2EP7eMm7FEtJDdC0iateGWh17gzAfmRaPBBVF59Sx5tePMC5PLk
+ 8l1qFXFIy8R3pwKgBtzPFJZh06UAAV0JW/wHKIvRzoQPhG3o1n3MpbRTbmFBukszuijSVlryaoy
+ LxlgriIc7hof2Z/Qyeg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-25_04,2026-11-25_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1011 malwarescore=0 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611250070
 
-Hi Shivank,
+This series adds arch_cmpxchg128() and arch_cmpxchg128_local() for
+little-endian POWER8 and later, using lqarx/stqcx. This enables
+HAVE_CMPXCHG_DOUBLE and HAVE_ALIGNED_STRUCT_PAGE, which gives us:
 
-kernel test robot noticed the following build errors:
+* SLUB's lockless __update_freelist_fast() path (avoiding slab_lock()).
+* kmalloc_nolock(), without which BPF task-local storage creation fails
+  with -ENOMEM, and the selftests task_local_data_race and
+  struct_ops_assoc (timer subtests) fail. BPF Arena kfuncs were changed
+  to be callable from any context. kmalloc_nolock() replaced kvcalloc()
+  in the arena allocation paths because kvcalloc() may sleep and take
+  ordinary allocator locks, while kmalloc_nolock() can run in NMI or
+  non-sleepable contexts.
 
-[auto build test ERROR on 98f6b507621822477db7ec7cef8519de0dd243c4]
+The lqarx and stqcx. instructions require the 128-bit operand to reside in
+a consecutive even/odd register pair. In the Power ISA, the operand uses
+big-endian register layout where the most significant and least
+significant 64 bits are in the even and odd registers respectively.
+Until now this could not be expressed in inline asm without hard
+register constraints [1].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shivank-Garg/mm-move-the-soft-dirty-fallbacks-up-in-pgtable-h/20261125-133227
-base:   98f6b507621822477db7ec7cef8519de0dd243c4
-patch link:    https://lore.kernel.org/r/20261125-b4-mm-soft-dirty-fixes-v1-1-538e3cdb618c%40amd.com
-patch subject: [PATCH 1/3] mm: move the soft-dirty fallbacks up in pgtable.h
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20261126/20261126003542.QALFbvl0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126003542.QALFbvl0-lkp@intel.com/reproduce)
+GCC now supports this through the PTI mode attribute [2,3] for PowerPC
+and it will be available in the upcoming GCC 17 release. Backports have
+landed in the GCC 14, 15 and 16 branches. GCC 16.2 is the first release
+which has PTI mode support. For older GCC releases and clang there is a
+fallback implementation with hard register constraints.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261126003542.QALFbvl0-lkp@intel.com/
+Additionally, this series enables PPC_HAS_LBARX_LHARX for Power10, which
+was previously omitted in the Kconfig.
 
-All errors (new ones prefixed by >>):
+[1] https://github.com/linuxppc/issues/issues/463
+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106895
+[3] https://gcc.gnu.org/pipermail/gcc-patches/2026-April/712831.html
 
-   In file included from arch/arm/kernel/asm-offsets.c:14:
->> include/linux/mm.h:972:19: error: call to undeclared function 'pgtable_supports_soft_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     972 |         VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-         |                          ^
-   include/linux/mm.h:985:19: error: call to undeclared function 'pgtable_supports_soft_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     985 |         VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-         |                          ^
-   include/linux/mm.h:1000:19: error: call to undeclared function 'pgtable_supports_soft_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1000 |         VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-         |                          ^
-   3 errors generated.
-   make[3]: *** [scripts/Makefile.build:185: arch/arm/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1417: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Nysal Jan K.A. (3):
+  powerpc: Add support for 128-bit cmpxchg
+  powerpc: Implement 128-bit cmpxchg fallback
+  powerpc: Enable lbarx/lharx for Power10
+
+ arch/powerpc/Kconfig                   |   8 ++
+ arch/powerpc/include/asm/cmpxchg.h     | 100 +++++++++++++++++++++++++
+ arch/powerpc/platforms/Kconfig.cputype |   4 +
+ 3 files changed, 112 insertions(+)
 
 
-vim +/pgtable_supports_soft_dirty +972 include/linux/mm.h
-
-027232da7c7c1c Kiryl Shutsemau    2018-07-26  967  
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  968  /* Use when VMA is not part of the VMA tree and needs no locking */
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  969  static inline void vm_flags_init(struct vm_area_struct *vma,
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  970  				 vm_flags_t flags)
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  971  {
-277a1ae3879a82 Chunyan Zhang      2025-11-13 @972  	VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-9ea35a25d51b13 Lorenzo Stoakes    2025-11-25  973  	vma_flags_clear_all(&vma->flags);
-9ea35a25d51b13 Lorenzo Stoakes    2025-11-25  974  	vma_flags_overwrite_word(&vma->flags, flags);
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  975  }
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  976  
-
+base-commit: 65e4fd942f72a9dba0e4e257290c4fa1aa756854
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.52.0
+
