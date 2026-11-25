@@ -1,130 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795634447;
-	b=EJm4H/hXLS9KV8Jdlxivvu0jPtSZ0+f8uEgJd5IlSuYDxboGal+kSVaIDHh+dTTwXlOq
-	 ZZg+cFZPDqn9efTgNQepP0j+BAYz2gPK9Fbhuo9qTpjjs+psytZIniRLJ3ovqr+ljt9Q/
-	 SOLDLpT0zUp/qxrd44Tf+Y6KWeF/m++57GL3McBR8rxW/xKov8wGo0LGEmoPDYtwNZHIf
-	 JmoMenQg+KP30xp4V+fACWqbkk27Z0tCC3KOcA6H/JBptzYRD7W7/ObMXgkQzLhGMSTzW
-	 TqbVqenWjtBRLa7XUAC87zAExvnNTiFgGrz8Q4/4L6e6CCYS4eCQO8ME28uFxOR1D8w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795634447;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To:X-TM-AS-GCONF:
-	 X-Proofpoint-Reinject:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=gjkmUYAQqhObZomEhSZvG/YB77KWT+YtxY8LYQ+JXBM=;
-	b=ueMDUTiU/1j693kDbkmSgNgCpOoAPNHvSHdSBza/t5eRwv97AMQyorrCgDVd2lVZQbuI
-	 Zx6tFVrDa8DKr4BvTtr9wFlhdMsK4urXC3INySV0aQ693/vWvLR10wTa52CBCUcHwodvw
-	 hvR9pdoF/at7dTC5a/6GsJBxMhYs6TlbyhG/9X39pswUJG1m3WWNTY9iXI+ixWXceiZE/
-	 HdoCUxVa54zvFDehBwwFPRG4WxiOkdBgpu6Y6bXdMkL1SSSQU7OcZ3lHaxVeQqn9SCzkK
-	 G1D+BFDrfYOul5PNLPdUTyHSO/xsscB8dg3Ge6dYeUa53JFxjiRvNDgWZ4iabXSZofw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=b4o1XNDl;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795635164;
+	b=hZ0T6a51gY+yAxgKrWKELuvOawm508fb+/YQZWAhByJNbmx2fKoEZ3cQEKciVSgTXTzb
+	 7rFXxFbec0PrxVnGb0t4YNdeNSi/GgsF4lqMQAzFMygfZx0yE30zwcsRuRUXXYDxEGQ4W
+	 Jlu96Z6kQjZkLbJ8mZjqmXSDh9s5+rU9tbl+tRLIEaR8MaLH7kiqNNF411Ql2IF12wOxU
+	 jh8W2esoVu2BLgbURCNuLN0dUPnAnBQx0qFERFj4Exg6JZRTbnM9chUWisrt/BNneB2tp
+	 UbnS9s/pojG4L8Brk1TrmTgz1gL+t7OEzVK4IOQy22fl5UHB5Fv70O+AauJn3ua9W0w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795635164;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=X9M4PV8SNdlzGSgquLvXH/wlU/lqxuN+YYGaruhCqiI=;
+	b=Snl67bCX+hs3a/LGDSNdjaaBZ43TUmCOGod8fxvF71PTo9nWNTNNa4eSC5RNAkK50prV
+	 jm2z/NN496/7x/pyCN1kYo8Cy7i1TvZvj8lV6Dc+7QY9Sew9knfVxeGPLDmahJPs8G4WF
+	 k/DuYBJo+NyTFCRI33GAlUmh3dLWFkkHbfrJ96mi8w0cKdqm/enzozWKSGuf859MG8gHa
+	 HqKcmxacdSiZjY1Jfoxw1tuiafGWKQ+LLzDu6E9BkC8e+/7RMTBHZxFxh8fzJeB6OT2cO
+	 cmOHKUnknyib1s3Fq83fou0VEGNg0qxHq8mxBp7tsROSK5JeZM9G2qZiSgmpRcbjdKw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=S2+b8fKm;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.49
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64ADF606A31E;
-	Wed, 25 Nov 2026 19:20:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64ADF606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C320606A336
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 19:32:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C320606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=b4o1XNDl
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6APGYdNb1999322;
-	Wed, 25 Nov 2026 19:19:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=gjkmUY
-	AQqhObZomEhSZvG/YB77KWT+YtxY8LYQ+JXBM=; b=b4o1XNDlfljukz22wGJQ0h
-	hFDvCKahLQE5+oELMoxpvR8yus1xr/9HFGs7jXKfv24NedjQNfOPAQLQsOYaYxmJ
-	dUFE5fhXckqAuW0PYjKLfUY4rjnJnXiiEJ3J6heXYs/hWnlWwEUIeiE6+U2PbLg2
-	8YmBlg57Xz94o6TGMiXCPGRFMqcx7uqeKTvP5PT0Ve/GxmJjLufrD15klX7U8Hzv
-	zal0O8X8xVHjp69b9e+a0liO17XVYXOOvkfuUiwLL6YKgBmTbYUQ+hOU7A7uWYN1
-	Af/9bgIBBKYXWxK+4RRNAGIaKYwc8nTS7EMTL98PhsZN4n/5Bz49Dm62UQ2Sqx/g
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34fae8qk-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 25 Nov 2026 19:19:44 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6APJJJGp505545;
-	Wed, 25 Nov 2026 19:19:43 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j5uxx22n6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Nov 2026 19:19:43 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6APJJdNd42139928
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Nov 2026 19:19:39 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EBD8220043;
-	Wed, 25 Nov 2026 19:19:38 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 75D8420040;
-	Wed, 25 Nov 2026 19:19:14 +0000 (GMT)
-Received: from shivang.upadyay (unknown [9.67.112.155])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 25 Nov 2026 19:19:14 +0000 (GMT)
-Date: Thu, 26 Nov 2026 00:49:10 +0530
-From: Shivang Upadhyay <shivangu@linux.ibm.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <lossin@kernel.org>,
-        Andreas Hindborg <a.hindborg@kernel.org>,
-        Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-        Danilo Krummrich <dakr@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-        Christophe Leroy <chleroy@kernel.org>, Boqun Feng <boqun@kernel.org>,
-        Nicolas Schier <nsc@kernel.org>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org,
-        linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Jan Stancek <jstancek@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 05/11] powerpc/vdso: Enable the vdsocheck tool
-Message-ID: <awc0rvqmahY6cHtv@shivang.upadyay>
-References: <20261123-vdso-absolute-reloc-v6-0-161e218dd217@linutronix.de>
- <20261123-vdso-absolute-reloc-v6-5-161e218dd217@linutronix.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=S2+b8fKm
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-492690dd5daso4712090f8f.1
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 11:32:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795635163; cv=none;
+        d=google.com; s=arc-20260327;
+        b=sBy0O85nIDx/Gtz4DmhWXm9FQIgQsEd1NO3IJZn1+4mA3Wl8BxEh3LhNz43WVtAYjJ
+         5uxcryqKS99l/5ec7tJIPNUBqOddWvqNlNjvPjCVtu8zDygBK7Fa8n0ja8cbNqLbyZum
+         HVTh0w0bnQ+qU2OxN/VT0wWOZPQQewSFdyuQzsASAHiEsTuDCSCDb4RrU94sLH2Hk0bm
+         FropW9SapSx4AUZQkU2KIQs1+UQtX05ULelAU1lHN1ZnlCYIP12TrYk4pDCN3MQ1WBcv
+         5J+d4TPm/BXUpUQ8vkU2u2lzZyVxZAAcmcJfhY8i5pLmL1bMeQjqNavjlz+dPy2FbIHD
+         Kk8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=X9M4PV8SNdlzGSgquLvXH/wlU/lqxuN+YYGaruhCqiI=;
+        fh=iMnGnwoWJAc8uLQRx2jnaSw4qbJvR/srQNNK3dCnxaY=;
+        b=YLPB7JKkWH52agXkhx5MvlXxdRjyyAxsCkXa0CdabAP2CEZTBldCi8KHPu5bPrdjge
+         MayFCX1axiAgfd2nuvBlD3Ub4GdGsV/Z+iB/LrEg+Hjx64Ak7NKvqEzbEc51PCm51XE7
+         yLH745j+R+OGzGiAgEwVeNs6jseOgZHYTZxJCfytg2eRHab0GYwlkmCPWyS6ZQqfCuW5
+         w4FgGwT6DHX1Zevp8DRrVMkqb6dprOBsnwEqqiNAGmz5524qi4UrDrKy5xQhMuhd0cyM
+         COpeLdXWhKKwcKDyD/C5Hb2xZKGZOsixubMVEdWvrDByotnnbT/c5LbrnQF8ItDjT2Vo
+         vA/Q==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795635163; x=1796239963; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=X9M4PV8SNdlzGSgquLvXH/wlU/lqxuN+YYGaruhCqiI=;
+        b=S2+b8fKmdRBx/wBTwecUJCBDhnQEQvtlxf7nLrrRPbKyy0254rFOI0mDpbp2KoZsrj
+         WqKsDKHHvtka8KX/UeBYw7mhxg2/E1udAMl80XocBhvw1ghTuiwwluDSd+xSOIl/pX+3
+         HLCztuKwzqv8w340Kpvw/+VIqTsPr/jXvoOb104pT+UHnzr244PY2u8AOYQQWqeGlfnH
+         KO3FqcU4CNEh9nJlodNQuLQZC9KxcqM7nAphIgJIVZN53StMsRiNyXD6L8bZuf+PM6rY
+         vBNfyIgovZ+IZilfuTVOcV+gcgccvxw4jtzzRGqt0JBK/Z8kdJfWRJpIGq8bmhap5PYm
+         FIQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795635163; x=1796239963;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=X9M4PV8SNdlzGSgquLvXH/wlU/lqxuN+YYGaruhCqiI=;
+        b=gzfNVK202s+bx2onQLEuinqwUmtBN5MzhZYsuFkdf73XiQ0Ee3/LZCbihy98fzowd0
+         zvXQF2ujpL4dqPDSHnu6G5TRJuruKsQdJ0ECYPZlkCyaiE2tbzmJlt7Wa/tuh1mtdDmU
+         /NEgbnvY5hCdYFA0RBBnnm8m3XUcGCDPbTy/V6nJB0qwvJxikZ8FWMjlcC5w670iA3RT
+         uk+MdtccEn0fNjrKMYLma4aLvNlbPiMR1/lkGMu8OrvlBfxf8EQCMdDe9OfOFiW0XhLC
+         WI0h23jOzCvjS32AVqlVRspUa5w3ZjOXmjlY5ip7WEjgYnlS7bbWEozYegxdmhrFggfc
+         Ewrw==
+X-Forwarded-Encrypted: i=1; AL+hErFZdwbWOfonPE04Ap1gQD/Ndtbkc+4dOwAEPq46ATSD1EN8sLHmmk2x3+9InOG4+pNHTSRk@lists.linux.dev
+X-Gm-Message-State: APuU4Z+PQdeENs5wOykBKJKAEAM3PZZp3GaaFWdf3ovrc7oyBGD41V3a
+	PE0o6ydNjDsmHb73G0W5j0Uq7ZPWjtuK/dsV415UgnsY/A7I38Y8OXXuAb8fYbG1zOSsSXf7Jyo
+	N1TatAEizNKOqCINMKUZDoM+HsoPEyKrYc/yojoQh
+X-Gm-Gg: AZFdTZeEbg2WU83aSTCtRHMBqhPgCzc6ybuCR2nkwwm3DZ22hFEizq5ynPTtsmMkLKl
+	wl9/cW+aL3nbYC87STkdkraOIBk5iFY6fm80ASnjh7VecgYWOd28EjG2gd/08BCp6gMedQVrO2e
+	GpBGF+c7usxyMuzMmg93//b2bMHcysr6ed3CfACbRyvqKOp3a6+XqYjmC8Rzb+bvo1K2Clxf5vy
+	4JR4FqGqT+ulx3idaTIKBVSMqFqeMCGxgPsbqbTTrO4wDgh5dZOknd0IzEwdNEO4qhuQIoQhkqk
+	m2dPLIQvdsRb3m/6x3adqlIMWzBf4XIvsGYxgIBAWADva3XH8C9Gn+p5bh+m/1HwovM+IqQ30CL
+	2e8aD0DsYT7jdZmrqXx1P8jAS/36w9wzljoKiS5+xW9IzUGBv1HgJItGokYr/pr4b4nNXuR5wLO
+	7dGAo12F5aGRE1PDR6x/22PFjgLFHy1er+KN8h/0qZWh09QGrebmYa6WQ4IWXZySU5f1368YLCA
+	1OqZO+4aAIO3dvHqYyEWC5a4Sgp4qM9440urw==
+X-Received: by 2002:a5d:6f06:0:b0:4a6:8d5b:7338 with SMTP id
+ ffacd0b85a97d-4abb3a4d35fmr38121765f8f.37.1795635162216; Wed, 25 Nov 2026
+ 11:32:42 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -134,65 +106,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261123-vdso-absolute-reloc-v6-5-161e218dd217@linutronix.de>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI1MDA3NiBTYWx0ZWRfX3whPefz46WC1
- hNygsADgWWH3q76IQ97vzHqlw0KVrxx7r7UAw5SVuBqmP03DlIHvveHdnCb8I+LFUdhf3IBTEF4
- 8I0LKw8A6RDat+2jMShRhIdJyHC/snbMARzB3j97ZRg4dk9eQk6Kb/c17OPxkgsEeh56QxlIgDC
- wUPWuvr9YTBgUtvA8T8GCqkSSvcvT95hsmx8Ct0PUUDgvFCs7cWvxl/cHPmpiD4Kk1M2+/XY3xk
- DLiaxWKhSrSivaxvdgJ1EA4G7gz0ulJrAaMk8ySQ2/S47CSLA2FI3plB5nV4GNPFWQXLUfRWPHl
- QcXK+Qe1+YjjykPhUcW6RI716uPTfT8UPFmL8V6qwT/f4oC1rJT58R1VQobyjiFZ9MGmwr6WlCS
- z5ZKV+GghS12zlmcdRFYX61cx8WcuTghM7JYnVHIKLaR9Q0N8q8XzXIjmtuCeYWzKrV/9/k7FwS
- CZCtvJAPPqeb1X+3DCw==
-X-Proofpoint-ORIG-GUID: 9DuPW81bc1Ne1-Acmq-ZFQ1oXTeQgO4D
-X-Authority-Analysis: v=2.4 cv=U6QHnuru c=1 sm=1 tr=0 ts=6b0734d1 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=8nJEP1OIZ-IA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
- a=K52B-zMjTZoA2OaJzQcA:9 a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10
-X-Proofpoint-GUID: kgd6ntmKeCF4y3vpHzpfFLVurSHBIu2a
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI1MDA3NiBTYWx0ZWRfXwLCiikm0vVyM
- 9boHPXPDQcdJQkQPxTdXN6x3x8c/RPGIYsu6hqtP046Hh/4b5uaJA5LSJKyG0fXuE8vE282QQVw
- jau+sQ3OeVvDMeZGSzccJJHxqp+Tqsg=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-25_04,2026-11-25_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 impostorscore=0
- clxscore=1011 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
- definitions=main-2611250076
+References: <20261125-topology-wunsequenced-v3-1-efa3db7e0bf8@kernel.org> <20261125094643.GY2668804@noisy.programming.kicks-ass.net>
+In-Reply-To: <20261125094643.GY2668804@noisy.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 25 Nov 2026 11:32:31 -0800
+X-Gm-Features: Aa3M54rVQ8eJKNwIoeqgCfcnaPCAwUQ4sJvYenMtBURouDlRSqpiVSf8nOBT24w
+Message-ID: <CAKwvOdmyGdn4ES6Ku+Yovd7a5imzmtmYtd7KB=OMCqKpv1X8rg@mail.gmail.com>
+Subject: Re: [PATCH v3] sched/topology: Avoid unsequenced accesses to jiffies
+ in sd_init()
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 23, 2026 at 02:50:56PM +0100, Thomas Weißschuh wrote:
-> +        bindings::EM_PPC64 => AllowedRelocations {
-> +            in_object_file: &[
-> +                10,  /* R_PPC64_REL24 */
-> +                11,  /* R_PPC64_REL14 */
-> +                26,  /* R_PPC64_REL32 */
-> +                44,  /* R_PPC64_REL64 */
-> +                249, /* R_PPC64_REL16 */
-> +                250, /* R_PPC64_REL16_LO */
-> +                251, /* R_PPC64_REL16_HI */
-> +                252, /* R_PPC64_REL16_HA */
-> +            ],
-Seems to excluise list of all reletive relocations.
-I only could find the following being actually used, for defconfig ppc64le.
-But good to have all there.
+On Wed, Nov 25, 2026 at 1:46=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Wed, Nov 25, 2026 at 12:23:35AM -0700, Nathan Chancellor wrote:
+> > Clang's warning is ultimately pointing out that jiffies may have two
+> > separate values in this initializer because it is volatile and accessed
+> > twice and the order of these accesses is not specified. This could
+> > result in unexpected or inconsistent behavior depending on the code
+> > author's intent and whether they realized the variable was volatile or
+> > not.
+> >
+> > As two separate accesses is not necessary here, add a local variable to
+> > hold the value of jiffies before the designated initializer so that a
+> > consistent value is used for initializing both members, clearing up the
+> > warning.
+>
+> None of this tells me why we should not just disable that warning and
+> get on with life.
 
-[root@system vdso]# for i in `ls *.o`; do objdump -r -SD $i  | grep -oP 'R_PPC\w*' ; done | sort |  uniq
-R_PPC64_REL16_HA
-R_PPC64_REL16_LO
-R_PPC64_REL24
-R_PPC64_REL32
-R_PPC64_REL64
-[root@system vdso]#
+Nathan has provided you 3 different ways to do so. (Could also do ugly
+pragma's around this code; disable it for this entire source file via
+-Wno-unsequenced-volatile in the Makefile, and finally this diagnostic
+was forked into a group; it's now -Wunsequenced-volatile under the
+-Wunsequenced group, that could go in W=3D1).  Pick one?
 
-Looks good. Feel free to add,
-Reviewed-by: Shivang Upadhyay <shivangu@linux.ibm.com>
-
-~Shivang.
+I think the warning has value generally across the tree, even if this
+particular single instance "isn't a bug, per se."
+--=20
+Thanks,
+~Nick Desaulniers
