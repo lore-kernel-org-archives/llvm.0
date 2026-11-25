@@ -1,75 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645739;
-	b=FCKKWgVkmQuVKbqbkcYMhF3q58+Kfd2nyU0kQkMFzMVUOx1/l2dKlD7PRz5Peaq4bfrZ
-	 oaaVhItGKCEGwCKXGfbHzztaRk714g2+wLL0H9MfIUgLAedOZM16UNJMpK6aCOCAoGdMm
-	 dstmul3l7u1YUpk3tEpDjZGltVMC2wDDLMqiSEl1bO7Uyc6G4uFjm2fEWxV+RLeqEtcVr
-	 048NQX//ZMf3UoEuGwoSmt2l0eotatbDTC4T7ADEQplVv2AdNFAn/9ryXpoOd6L8UGtEI
-	 6MynOw/s2kBQ7ycDWj75w7QeE6ICB9s6D47RBrL/JXBbAjhbD2kWxmkaTQPiqOtYciA==
+	t=1795646442;
+	b=LVJY3xYYivqYcb1RzYVzBKz5pBM4XZdfDJI7fAt/kq1KcLRhfbnmZxYJhFiMfeGKxyLf
+	 lVWRrHR5c57J1nqMCWQ294KgyLAsiB5IJUcsq2h6lPK1j/1DKZGTd0zkIhQAWC1SUsawv
+	 bs0cmfYeBLbAYzzFty7gGngJd9zaVrDkg1RMR6GDO6lkxLWo3ZQEnj9h9+QLFZX1xaee/
+	 MmGzGACMNgIx/VazXExpoIisBbabEMzZSj0y/W6iVTPYD2+o4P25BYjdNexi3+BKz8oPO
+	 SrfNSDJuOpbdQ9q4AHjuQp29SUZS1oYGXiM/zrygv67qRWJ3Tdpd/f6J2EbtenzWn6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645739;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=sLJgVW+/Vd4As4viT9lUZGKhVy1YU+uNFIGupA5gILQ=;
-	b=Q0oQITzc5SA0Xy2zp+j4JQu89tkzGX7Or4Drge/pYdV8e36mxGfvWn4nJXoI6HylyhGW
-	 qQZ6O0h7J4j9Kqu67IKg9cjLSHFFU4OPEja7JkqouRYwFWSLhgt8Go3uz5kjs21DJI2IP
-	 ZAPudVxJ4d/JnyUkHYUx7cmdLrOIYhbOZilQnMGgOqRL79sdTKRtIiBr1hy1WUh2GbGr+
-	 u55mFmprhGqnUyPy5xXYRbUl4glZGLVow0Lh0V6F6SZy/Ypq5lcmTg8VaJKt7zULsMs1C
-	 BnrUgDiVKhs0OnhYzrT+8M4c6fiQII53asmDUSvJcc+RoOP19OOXpyBERFAPiZ2YsSQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795646442;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=HFEO3+Zpc0o9i9tlrP3rTUdlR6T3RFfXFEfEcMTXpBc=;
+	b=2MwRU1LQzZOBdoAVIEE/+p91A5SvvvllY7nCamU0/o1R4AhF6p8MmaDdwqQNejZoO6c0
+	 buSG+sNKBjSMCQWn0vmaxRrH3aLKs0AMGkOhWvmBJGeUjkqg4IEy0eHKjlEenJnNlYgAS
+	 P6sIT77F9BrD+Lk26vrgJiRBMKZPubG5GKu2dci9EXTIhwVmtXLfPtmqOCZ9H/e8t4pih
+	 D8HcT5+qCD0nyTJpAnTlCOnjAaU0tAySNTr302C/jBAcLpsVrjvnLFRGXFMkHVkZyD4vR
+	 hkq3mDyq53GSbnfdFI1JeN+nuxke45xswk4Xa7KGs+fIOBqF39xEvZswwsmR+UR9TBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fAck4aX6;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fF39pGtq;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E73606A68F
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:28:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2E73606A68F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003FF606A31E;
+	Wed, 25 Nov 2026 22:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fAck4aX6
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-3846d5f54c1so7338542eec.1
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:28:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645738; x=1796250538; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sLJgVW+/Vd4As4viT9lUZGKhVy1YU+uNFIGupA5gILQ=;
-        b=fAck4aX6ON5hsyAaP/RYZQdcTHpQw1Uh0GG2UhanDhA/UXgxSXDjyhE6HGrXrFT3Mn
-         l/cWc42frdcQ58AzENdfcUEE+0P5jFa3RGupIYiYXuq4bYuSQ+aCwjQnTditcikuJqws
-         7JfWawXCaPKa0d9OmouXgBn5TRlKEd/uylypIEa6ckfIjMq/Noj1skFQrN76n+2Wg4x/
-         E5QhJDoy8CPUnHIsCn6jDRn47mXrTGOvdoC+b7AlCAQmynKFHpVIl1r8odQNYmddqtsR
-         xiqjfeBuJaevJCcCD0ex7aYTdVuHShxvRXxd8M5oqQNxt7OejJMQ+8tR7g0269zHy/He
-         Vw0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645738; x=1796250538;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=sLJgVW+/Vd4As4viT9lUZGKhVy1YU+uNFIGupA5gILQ=;
-        b=mYTs/MY3pSTGV3lLRiHL5s9TAxa9maJ4iUYC8l3SfRz0mKPmdFCkOIYbOIHwUHu/nn
-         meFgZza5MZ2BdFUP0Z+p35UC2d5HNz2jKEVaWldqg/wImPn7q1iYrflR1v7Cl0Pf8n9A
-         /G3Q1OAhRvwoG6s3HrXw3evW4zXEXOJjrv3kKxDgyrvtyDped7brfbXMYeMVXJe20iRM
-         zIVORe3rfP515rMGCxKd5rIg+4YdhnYK7csENSYex+hCXjJv4dVcodxWFZPeGAQIBBx5
-         KfwaPAGKEjWNBMo17DidGZpBYn+g0RyJszyw06OH0ynjim8tjunNF920Mw4wJZEAdyLx
-         Ahiw==
-X-Forwarded-Encrypted: i=1; AL+hErHjvwC/DybJL9WOK2I3odrk7vIZVVz1K+/inXeD+O2fB6MYjZxXYQ+hxwcYgrzCOEllnB1A@lists.linux.dev
-X-Gm-Message-State: APuU4Z/LYMLB8d7toLq7K4sEffE73PtFxwurY8h6s4Iow72YkFnqRLex
-	yIrBGuCJm9ZkToXeMQAXGSTimjxwq4mO81bwsrmufp6ORDb4LTLaLXUi2hpQkVBClYbtx3Cur9T
-	jzQ==
-X-Received: from dycnm14.prod.google.com ([2002:a05:7300:d18e:b0:386:2134:b328])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:1c1b:b0:386:9d31:2d18
- with SMTP id 5a478bee46e88-3869d313208mr14179933eec.0.1795645737640; Wed, 25
- Nov 2026 14:28:57 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:28:28 +0000
-In-Reply-To: <20261125222828.1452483-1-elkin@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fF39pGtq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02C51F000C0;
+	Wed, 25 Nov 2026 22:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795646441;
+	bh=HFEO3+Zpc0o9i9tlrP3rTUdlR6T3RFfXFEfEcMTXpBc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fF39pGtqxxepy+KP0PC+Y5OKcM1qbgbvQ7TJG1E7JQ1LbKpysFsiO4+v8/8SzJf1w
+	 CwsMtXjhKZYoN1dD3aJN2guDN3cw5Dznx4xjInTNJCFHq2bKJcBeVKeaFX5Rk7LKVP
+	 cYSHh1VQdh2C4FAW/3az0ia3b9J0ilS0+xym14vm2ErXaZGbuupCVmH/grvPI3gBt9
+	 DMDfqHie2T45umUwG0j8L4KHIe7dUHIRbaFRM9+qQ3qNDnF8tg/sXkbSJjDMnSAwoI
+	 rGjJR1e4Wgf9wcRUhgXTja5yXcvjS78LNDqT7CBfsYHk9o5q+zPtm/bUjPUNXOF/lh
+	 56G1y+0j7M6jA==
+Message-ID: <6afabd96-1888-43d2-9ccb-73ca6702a004@kernel.org>
+Date: Wed, 25 Nov 2026 23:40:32 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,67 +50,86 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261125222828.1452483-1-elkin@google.com>
-X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125222828.1452483-3-elkin@google.com>
-Subject: [PATCH 2/2] usb: misc: usbio: validate endpoint maxpacket sizes in usbio_probe()
-From: Elkin Cruz <elkin@google.com>
-To: Hans de Goede <hansg@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Antti Laakso <antti.laakso@linux.intel.com>, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com, 
-	Elkin Cruz <elkin@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/huge_memory: check VMA end bounds in insert_pmd() and
+ insert_pud()
+To: Elkin Cruz <elkin@google.com>, Zi Yan <ziy@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ irogers@google.com, stable@vger.kernel.org
+References: <20261125221911.1425213-1-elkin@google.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261125221911.1425213-1-elkin@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-usbio_probe() allocates ctrlbuf, txbuf, and rxbuf directly from the
-USB descriptor maxpacket sizes without verifying that each buffer can
-hold its packet header. A malformed USB descriptor with a smaller
-maxpacket size causes unsigned underflow in length checks and buffer
-overflows in usbio_ctrl_msg() and usbio_bulk_msg().
+On 11/25/26 23:19, Elkin Cruz wrote:
+> insert_pmd() and insert_pud() only check that addr lies within
+> [vma->vm_start, vma->vm_end) without verifying that the full PMD or PUD
+> mapping fits below vma->vm_end. On a VMA whose end is not PMD- or
+> PUD-aligned, inserting a huge mapping at the tail straddles past
+> vma->vm_end.
+> 
+> Require vma->vm_end - addr >= HPAGE_PMD_SIZE in insert_pmd() and
+> vma->vm_end - addr >= HPAGE_PUD_SIZE in insert_pud().
+> 
+> Fixes: 5cad465d7fa6 ("mm: add vmf_insert_pfn_pmd()")
+> Fixes: a00cc7d9dd93 ("mm, x86: add support for PUD-sized transparent hugepages")
 
-Reject devices whose control or bulk endpoint maxpacket sizes are
-smaller than sizeof(struct usbio_ctrl_packet) or
-sizeof(struct usbio_bulk_packet), respectively.
+Which users in the tree trigger this?
 
-Fixes: 121a0f839dbb ("usb: misc: Add Intel USBIO bridge driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Elkin Cruz <elkin@google.com>
----
- drivers/usb/misc/usbio.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/misc/usbio.c b/drivers/usb/misc/usbio.c
-index 6142a32c18a9..c9f22b600333 100644
---- a/drivers/usb/misc/usbio.c
-+++ b/drivers/usb/misc/usbio.c
-@@ -591,6 +591,8 @@ static int usbio_probe(struct usb_interface *intf, const struct usb_device_id *i
- 
- 	usbio->ctrl_pipe = usb_endpoint_num(&udev->ep0.desc);
- 	usbio->ctrlbuf_len = usb_maxpacket(udev, usbio->ctrl_pipe);
-+	if (usbio->ctrlbuf_len < sizeof(struct usbio_ctrl_packet))
-+		return -ENODEV;
- 	usbio->ctrlbuf = devm_kzalloc(dev, usbio->ctrlbuf_len, GFP_KERNEL);
- 	if (!usbio->ctrlbuf)
- 		return -ENOMEM;
-@@ -609,6 +611,8 @@ static int usbio_probe(struct usb_interface *intf, const struct usb_device_id *i
- 		usbio->txbuf_len = 63;
- 	else
- 		usbio->txbuf_len = usb_endpoint_maxp(ep_out);
-+	if (usbio->txbuf_len < sizeof(struct usbio_bulk_packet))
-+		return -ENODEV;
- 
- 	usbio->txbuf = devm_kzalloc(dev, usbio->txbuf_len, GFP_KERNEL);
- 	if (!usbio->txbuf)
-@@ -620,6 +624,8 @@ static int usbio_probe(struct usb_interface *intf, const struct usb_device_id *i
- 		usbio->rxbuf_len = 63;
- 	else
- 		usbio->rxbuf_len = usb_endpoint_maxp(ep_in);
-+	if (usbio->rxbuf_len < sizeof(struct usbio_bulk_packet))
-+		return -ENODEV;
- 
- 	usbio->rxbuf = devm_kzalloc(dev, usbio->rxbuf_len, GFP_KERNEL);
- 	if (!usbio->rxbuf)
 -- 
-2.56.1.839.g22a8290db9-goog
+Cheers,
 
+David
