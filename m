@@ -1,65 +1,70 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795638523;
-	b=L9d5RZ549WmvjmEJkOQoUe97YaQI2/MhPVwEkwwOJ0AsQoZzDLLUL7U0SNcgqKd//4Bw
-	 6VjjGOa8HQU37UAPjcRBWg278+khgTyuwa9TmMKTlCniNzZkTrWhnACEeF+lmlypBe9nb
-	 apPPBeaj1RRltoLx0jep2NCIjgavD6KIf0h3Tq3lAcYx3L1HLrCi4qinKQcaIb1XRZ1xb
-	 cv+7NTkucxKE6wOY6smc5hWXyTvDiTEj8R5m3jG9HljMYk9bb8kFHm9qjOL+LVc1vIjxZ
-	 cxdnHc9c9poUnVexDWdZwH+xm/E0Eg93n9LcZnRmrwF17dwt/tbV6M9TCpmicVmdvqA==
+	t=1795639500;
+	b=4kPaW1slA8eHAvmra6+0/MIZLSyJLhKYXeHLQ0yVUrmxE2dYbS12NgCYYzf0mtuvRnZB
+	 p7q8sXROPodrRqUlgNoYpFeE4qz7d57XWlv2x7ipdsrsQ7sNdXuNI4cR8Nt9nQs1TC2Xi
+	 NlO0ZfDWNcDp0m/juMuzWyRVAxETJgxJ5ORL3U+Eyj4O4764ARiU+cemEFmPevSn/H5ih
+	 C8o1vMJ34HN8ZRAzjh49/bzJ009dIOG7bbkbiS97PnqSVK1D0ZI4scVauZ0AeYWpX78XK
+	 +RDAGMQ4FoEaso2BgAWYK51KPxqkGC/oNvngrfUvdiSYLocqiBHSHenUNdeGjVokS8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795638523;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795639500;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=mlda20IdlBMocoURp9TWLKJ60Nes7uXkahJoHZw/DJ8=;
-	b=0x2a/t0vJRhwbeWsufFfLSLh7VC0Rox5TY9PvLjK1JE94PNRY95g2UCFL2ShLNnGw/IC
-	 aNDrYlOo3zo5AmALtiCIVWjLKARunEEXHmi8+A6dLxkW+iYL+zjg5q0+ZySiSFqdytl65
-	 AB+Xp8XvWUgW4obKgaaEOSDDsHeK89GSly2rxGsyepChucjIgXniR12+9258w+Kzk+X27
-	 wGmgu1wSINqiL6rsQYmW/lF6rGQn56N+rDeLQifLIR00Nvl6GdY2dOZRjhRght7FfGdU7
-	 8pyRdQFTXqXOqhKqFJZDFEHN8KwEc+9DzvJUCa0F0lYKjXkUn6Uy6zIoZSMDVWABdVA==
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Vue2jOZ1khdcISxHu/EhJAQ6nZxM803LHVIcey8TaJw=;
+	b=qJmkwKCP8JQiOwfuIH9xLFiyWhPgXw8ojp2Esc2zrHo0r00gCi4mK9wL2fvP2UHjEE/J
+	 qh02aR2oOJ/Y6VJkLvslPeZJYJtStFFj/k5EeBtoTGqBeHj2ls9sVFxoaev1AIsiChw/b
+	 5/Vp53bo5rsztpgBt2e9HGfVzAcfaYrW5jAJGVqNomF69Vh/RO88r7X9HnfZHryHphCGo
+	 659Lzl/5qLN2jUt1U46DTR5SEfQAWulDx7CbcpA5SOH88nBjn9/NOy+BeG4TvXrfN2mrl
+	 Vm/K6uNahgMfvVxcoqMLJVEXU7jYYWV2pcycgiz+CmwodwP3wdd4p3bOzNLHxFVRUdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DiG1zZbi;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gYrZDzw1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA53606A31E;
-	Wed, 25 Nov 2026 20:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF79606A31E;
+	Wed, 25 Nov 2026 20:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DiG1zZbi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB2F81F000C0;
-	Wed, 25 Nov 2026 20:28:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gYrZDzw1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1378C1F000C4;
+	Wed, 25 Nov 2026 20:44:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795638523;
-	bh=mlda20IdlBMocoURp9TWLKJ60Nes7uXkahJoHZw/DJ8=;
+	s=k20260515; t=1795639500;
+	bh=Vue2jOZ1khdcISxHu/EhJAQ6nZxM803LHVIcey8TaJw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=DiG1zZbiN1Nq+gt8o+cgdM/UN1yJvF1qwZse1G7KAnup1sujHnyoFtzcOWe3ZZWTR
-	 EdhpB1HDHsmI7s9wz3CNpzV2hozro1iLh1e6FG6B5Nq7Vf5IW10LVGAYtsG2+Y2tEm
-	 c5zT0hOpzYoM4m8xsxZOAEUMhGGLm9CQqx84ELTXx35rFZSl1zSDA0gjcKp1YaTdqb
-	 j7/gjZRyeJ+FOFyxzQzuRMUCZ3jYFXxGzw+XUcLC0mKFLdZcC2W6+dgqEMWZxtHRvE
-	 o94HB+WULzeZOXt+XQp1GlKbbTEPuJh/pusich2ZIqHAw+KzhuixEZ0YSLVDwZoHRR
-	 WI2/16RJgbdUQ==
-Date: Wed, 25 Nov 2026 13:28:37 -0700
+	b=gYrZDzw1Svtl+8sgjl/5MB/bZPKRYGIMwLvJqrXPnugEnMpS6IXVW7+dzSyrvpQPO
+	 v/Z9C1MP5cUpVKkUyskgLguAbOQgjv59VTajMNrZhuzG/Xl3i0S+dom7fbXp9IUCoc
+	 D6Ndq0/F/WFVZ4JfQKt1DATQuimFZvqDRZrwUJ/f9VMUUu8Ll09nYuVEny+arLXqiX
+	 2CrXIKHXfciXgbIKRkrw6gFoRz2Cv86tnyjKNRBlPypARNcrxW9uq5bNRM/pTuH2YG
+	 MQcihpy0KgjOClaEfOCn0tSuNcfqWHLLBpw0FxpfGwGT9+U2scEgnh1De+70ab+wFP
+	 vUdm1DhIgCEjg==
+Date: Wed, 25 Nov 2026 13:44:53 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Nicolas Schier <nsc@kernel.org>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
+To: "Nysal Jan K.A." <nysal@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org,
+	Jeevitha Palanisamy <jeevitha@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Julian Braha <julianbraha@gmail.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	stable@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v3 1/2] kbuild: Introduce CONFIG_CROSS_COMPILING
-Message-ID: <20261125202837.GB3625068@ax162>
-References: <20261124-x86-no-march-native-on-non-x86_64-v3-0-268354149c5f@kernel.org>
- <20261124-x86-no-march-native-on-non-x86_64-v3-1-268354149c5f@kernel.org>
- <25eaa926-c244-40a5-b7b9-e5182e601446@t-8ch.de>
+	Andrew Morton <akpm@linux-foundation.org>,
+	"David Hildenbrand (Arm)" <david@kernel.org>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Usama Arif <usama.arif@linux.dev>,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	"Kiryl Shutsemau (Meta)" <kas@kernel.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/3] powerpc: Add support for 128-bit cmpxchg
+Message-ID: <20261125204453.GC3625068@ax162>
+References: <20261125174035.1412724-1-nysal@linux.ibm.com>
+ <20261125174035.1412724-2-nysal@linux.ibm.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -69,64 +74,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <25eaa926-c244-40a5-b7b9-e5182e601446@t-8ch.de>
+In-Reply-To: <20261125174035.1412724-2-nysal@linux.ibm.com>
 
-On Wed, Nov 25, 2026 at 11:27:10AM +0100, Thomas Weißschuh wrote:
-> The expansion to bit width and endianess will be a lot of busy-work.
-> See the CC_CAN_LINK infrastructure.
+On Wed, Nov 25, 2026 at 11:10:22PM +0530, Nysal Jan K.A. wrote:
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index c3b6cd655606..79cda056dfc4 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -15,6 +15,9 @@ config CC_HAS_PCREL
+>  	# do pcrel yet.
+>  	def_bool PPC64 && CC_IS_GCC && $(cc-option, -mcpu=power10 -mpcrel)
+>  
+> +config CC_HAS_PTI_MODE_VAR_ATTR
+> +	def_bool $(success,echo 'void foo(void) { unsigned __int128 u128 __attribute__((__mode__(PTI))); }' | $(CC) -x c - -c -o /dev/null)
 
-Yeah, fair enough.
+Please use '$(CC) $(CLANG_FLAGS)' so that this works if clang adds
+support for this, which will depend on the target information in
+CLANG_FLAGS.
 
-> We already have host-architecture detection in kbuild through
-> scripts/subarch.include. So CC_HAS_MARCH_NATIVE could depend on
-> $(ARCH) = $(SUBARCH), after exporting SUBARCH. Or maybe give the
-> variable a better name, like HOSTARCH.
-> 
-> This would avoid the introduction of a new, not-really-correct flag
-> and also the whack-a-mole that Boris complained about.
+Also, consider following the recently added guidance to
+scripts/Kconfig.toolchain and add some information about when this check
+can go away:
 
-Ah, thanks a lot for reminding me about SUBARCH! In looking around, I
-noticed that Kbuild already checks if SRCARCH = SUBARCH and exports
-cross_compiling=1 in that case, which means this patch should just
-become
+  https://git.kernel.org/kbuild/c/c285fe817a92f9c747931134f468d2aefeae6bce
 
-diff --git a/scripts/Kconfig.toolchain b/scripts/Kconfig.toolchain
-index 2acbd40a38f1..a8b5258eac7e 100644
---- a/scripts/Kconfig.toolchain
-+++ b/scripts/Kconfig.toolchain
-@@ -97,6 +97,9 @@ config RUSTC_CLANG_LLVM_COMPATIBLE
- 	  LTO) require the same LLVM major version to work properly. For best
- 	  compatibility it is recommended that the exact same LLVM is used.
- 
-+config CROSS_COMPILING
-+	def_bool $(success,test "$(cross_compiling)" = "1")
-+
- config ARCH_HAS_CC_CAN_LINK
- 	bool
- 
---
+It would probably be something like
 
-unless we did not want the separate symbol, in which case patch two
-could just become
-
-diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index 6e7a366f0798..b40aaff6867d 100644
---- a/arch/x86/Kconfig.cpu
-+++ b/arch/x86/Kconfig.cpu
-@@ -217,6 +217,7 @@ config RUSTC_HAS_APXF
- config X86_NATIVE_CPU
- 	bool "Build and optimize for local/native CPU"
- 	depends on X86_64
-+	depends on $(success,test "$(cross_compiling)" = "")
- 	depends on CC_HAS_MARCH_NATIVE
- 	depends on !RUST || RUSTC_HAS_APXF
- 	help
---
-
--tip folks, preferences?
+  # gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106895 - first fixed in 17.0.0, backported in 16.2.0, 15.4.0, and 14.5.0
+  # clang: not supported - <bug link like Nick requested>
 
 -- 
 Cheers,
