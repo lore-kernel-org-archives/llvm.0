@@ -1,75 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795567234;
-	b=T9jAa/SN2ZsweAS846NaQ7Sf+jW9ygHe1ZgsoatMPjP7kEcSg1fXwUCYQ13yL/aDofGR
-	 KS7N1ufeQGWs/Vqr3Txn+W26xE+3SWovuhX5T5az1zOUXHYO7fJOk1cuCEHHH1BpWyMMX
-	 kodKOn/CbahgAd0dV90MRBXDNW0KVf6O6sLQzZPYNUyrUpuddENOodJ1BM/sDxYuRuU0u
-	 Nio4fpgYQHvsGyqfJlMrlTQgQZY3zHdyYbrzZ/3+6f3uT8Qgfig34IuEV76X6n91ap5uy
-	 +SuO8i6GU+2/GJsQJoaioHEeLke86mg+NT8m6CUIL0CrD60L4agCAKHTpIWb5j6YGJw==
+	t=1795567353;
+	b=CBjAUCkmf27z6kjm4QEV+eozYduNd475U3bxX05RvLxMm29XYTxGHsImIgLnOgAlR+dc
+	 X31OT9qSISACMLpKKaxnWLsEwiZZfsLwPdlat+tk7Rm61bp3aewqAzV4TP0/9yJyFFcsE
+	 RB8zz7W4A6rEP2vOXXPJKzVBaClOOd+FkYwA3WFqAoKuKgI1aJ00WnZTcFZirfV24/9Wp
+	 J8R3AztaPPWogeWNPhjY8LVXWlCeT2rGH+8IW5b7kr2+ROI4eALWYJhNS5bMN1+PeJjcR
+	 /NHJrqdWW3BRwAWVRH5RHx8UKQCuDcBytOulG1CwSpDSkxwVpZalTR07REjcsnOT+Ag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795567234;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795567353;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=iQp3FL1AhJWJCBrSbW0bWv/J/BYowcIJDYfUbu+myC8=;
-	b=IiiVwWwXkLeQnJVME3AMBg/NFfAMup0wxhZZpYgQoYRT92kmOw49BulHwcDEN3RZxVqI
-	 iZpfyz4BSi7s1qW42Nc1FyHX2RtW2MP95qb+quHR7ex2ut9fTQEL9U4G57pLnl/gsaF9s
-	 HIoIbjS5S+Z/0HHE+HaNUpXjOyDVRXC6ZiudPfFlnrZxFKKz2WmQy8SzjVRfcMpiKeB6G
-	 MvhrFimX4eUyk2KOJAOPLOAOm8PTuJom/Oz5uVYTN5Tkr/FXHUBcIYQfBI7aBRK6rOZIX
-	 jKo+jNKcmgYDTnz6P5ONqFFs3AmQp30y92ZtLdAmRV0feZOQOD3xUcIcHd7NAwCuZlw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=J2lsfathSyHFGuAbntm/acIKMsCKCUM9rvg/SL1p21o=;
+	b=i5ToNODvL+t1lZAoj5dy4BY1XNkPn52D9oE6evQZ+T3ebxoa99AF9gbniRPwu3JxUp5s
+	 qX2lCdhgSS8eK756Zj387RAlFYD1zz2BP+e8xSEmZrIUdgoHSq+DaTBnvbcx/twZochpU
+	 X7ZgFRFcA7aoGacWyleKGRGXf6gkdLY1O8ouJtcypnTQ9p4RkrsfUZ2Qxzed8/XU7rdWP
+	 nwWRL3mK9J77Yu4RbWMbQvgk9Qi7yuUH0nUpDHuk0wmT+jgR9L9G6zxCy5aMYpd4cx4RY
+	 ifWW8Ksvzavn0n4ItCLJ59mTqGeVvvPUOQOq8hctew+4ADuopukVuy5TvWrkSO+X41A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IyyaxiOM;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="dyeuF/Bv";
+	arc=none smtp.remote-ip=209.85.160.70
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3D1606A68B
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 00:40:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F3D1606A68B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38E8606A321
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 00:42:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A38E8606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IyyaxiOM
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-341eff9e381so8079907eec.1
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 16:40:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=dyeuF/Bv
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-4ab90cdf747so7572335fac.1
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 16:42:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795567233; x=1796172033; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iQp3FL1AhJWJCBrSbW0bWv/J/BYowcIJDYfUbu+myC8=;
-        b=IyyaxiOMHOmHli9uYTCYLeec/56xvYNoAMRwP5IOsdB4Bd5GqSZWggs+rD86jeygey
-         bfpufn5hMGhbK8SbDpLJ8jSb7HIt7sNDQ3V+D27bpQcaR9/jbx664dxDxalkkVspdLNV
-         CzGsa1/0y6JMPg5w0L0lcSbv870oxp6L1nDLjLW2NwgoHJJaP29YDuPofDkbYhuY6fJk
-         rJLIJnAkDVnGHDdUmimMU19uhuv7CR8tfijom2e7Nmq5ERyTuGU6EpOP2RAL/jHxHLQ3
-         qHU33A5sZSwHsxbYK2X/oangVaD59TuvW2se42SyWzd72VtioSAf1ZN1I/8eo+YbBI0+
-         dfyw==
+        d=google.com; s=20260707; t=1795567351; x=1796172151; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=J2lsfathSyHFGuAbntm/acIKMsCKCUM9rvg/SL1p21o=;
+        b=dyeuF/BvdQr37TQyXKMQsaZ0WwiDAqqqmRc9rGMuefWgqW2UlznTM7225cKPXMBFbD
+         vBGySUQzf3q1mHkBBDFPtACa83C/jk+SmZM55ZZiRBgUju0jjDoNST+Ts5exqafNmr8K
+         1ud0lWgSs+CQ8XdwbZ3oulgNBEdytzOw55sMAT+DKDp9NdLZIupuuyT/vhoXcwNPWbEH
+         +98b/YNQ4WAvyEUDHdikdOUoBISJjfbITaSBFGuPl8jYg1ZB/beu+zb2F5uE21qQaKzg
+         L4AH0AhaNZbt5hmEBaEm7Ujiur0w4yeHna1iwKgUlD+MQzAm/E/jmTz7xshXZcQ7H7Os
+         bd5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795567233; x=1796172033;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=iQp3FL1AhJWJCBrSbW0bWv/J/BYowcIJDYfUbu+myC8=;
-        b=H5RPHrJiiDYVVO8OabRO/W7gPgisXkGgC7c56ebTYQwgeRZBS/UUTooL6Rxt0H4P9B
-         IaUPUrd7sF2jKZnDlkspXPpzK0QSGjzz07lubsfDn6SP1QtQZ9/urBqnx5jDhkPwz7FA
-         iOBweiiGfsNzzHFvKuZZYMp4tOU8DQZQZmTAPPqKElbQOiRfFRwDS9bhJ5cruXt7qb4l
-         NF8kPiB+tCHDqYM3Glhbav4dZZ3ZM1n5GgfHVJHEVjg6H23aik7QbTfjWbgUPDJI4uNO
-         xqv6FOiJosbj/8O12MGcUk9JALzfUMk7lmemLMoDVBQS2cEeizdgUoSHEvp7ZIndpj0k
-         BHyA==
-X-Forwarded-Encrypted: i=1; AL+hErHqQ0FqIobAT7KkoDjI6+eFMjc0EDU2Re0qv+ocWa7P00PVCCLU+48lDYtEwMZO93ro8fNw@lists.linux.dev
-X-Gm-Message-State: APuU4Z9vDmSNAtcVFrnyzMejdmwKPILDKYXZL0fTnOtVeDWOd5GMmnWJ
-	CiVTN2kXT6oCaAA605kL5vuyP8r2HQQEVfExOknD4avEKBTneAPvHrRSij1CW7vk6sw9mQHi32+
-	AwRp4X1DQ4Q==
-X-Received: from dyvs10.prod.google.com ([2002:a05:693c:42ca:b0:385:6c3c:3ea1])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:d205:b0:36a:1f8:a56e
- with SMTP id 5a478bee46e88-3856fe564a1mr16387145eec.23.1795567232754; Tue, 24
- Nov 2026 16:40:32 -0800 (PST)
-Date: Tue, 24 Nov 2026 16:40:31 -0800
-In-Reply-To: <179545939880.3135.6341792822211409455@kernel.org>
+        d=1e100.net; s=20260707; t=1795567351; x=1796172151;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=J2lsfathSyHFGuAbntm/acIKMsCKCUM9rvg/SL1p21o=;
+        b=nfiQYuCJ7zEbVOozziRqbvtL9zD5WDy3acns8crJmhpOuSItXdrgn2cjfF+ZiIe0bN
+         29A1ufgushJMKuiddOqLrGluIUCEvXVcwW2xPrrEX9CEwtvAHfVPv+zJGbl4G/Vi4Mm/
+         d52ElmUhlFrc2gqm9vwBjaIrJzXC417VYQtQ/WFIsJrG0xrn/HmkuY0XvohSJOI2sZxe
+         hi8sGRbnI10wD5g5GiwGDEOoCJenty5Ew/+p9pnysMwrijv8S+4wgVrQesrg3Mk0xxhi
+         DJBJf/fAtGWMDaZZX/nLdZO9Sx2QshbVUdFSWXkigsZdvRtZHI1WURFiIUt/E0ABm75f
+         iX4Q==
+X-Forwarded-Encrypted: i=1; AL+hErEnxXcLOFTndePd22SU+s3pG1+sdNfsqjY1pOxUVtp9LT3ZVVZ8opOkEMBO9w7fecoAXBAW@lists.linux.dev
+X-Gm-Message-State: APuU4Z9cY1VgmFu63D4BKVXkf93fCzjRxlsRc8fD5L/ViosgtYFvOSz+
+	YbjYuRjRrrPFTQ0cK3J9OtkiW/11lCVbrMEKlYz85PSGvxsaev1CJ4nfBemDu1ewnBa9ZkD1814
+	yOYRtsoTU5Q==
+X-Received: from oihi10-n1.prod.google.com ([2002:a05:6808:e8ca:10b0:4e8:f869:7c03])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:4f0f:b0:4f5:dc0d:e013
+ with SMTP id 5614622812f47-579789cf52cmr15894415b6e.4.1795567351259; Tue, 24
+ Nov 2026 16:42:31 -0800 (PST)
+Date: Tue, 24 Nov 2026 16:42:27 -0800
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,36 +76,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
-References: <20261119170729.1524516-1-irogers@google.com> <179545939880.3135.6341792822211409455@kernel.org>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125004031.1005034-1-irogers@google.com>
-Subject: Re: [PATCH net] net: lan966x: Free skb when PTP TX timestamp request
- fails in xmit
+Message-ID: <20261125004227.1007723-1-irogers@google.com>
+Subject: [PATCH net v2] octeontx2-af: Fix uninitialized variables in MCS alloc handlers
 From: Ian Rogers <irogers@google.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: horatiu.vultur@microchip.com, daniel.machon@microchip.com, 
-	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	elkin@google.com, Ian Rogers <irogers@google.com>
+To: Sunil Goutham <sgoutham@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>, 
+	Geetha sowjanya <gakula@marvell.com>, Subbaraya Sundeep <sbhatta@marvell.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 23, 2026 at 10:43 AM <netdev-bot+sashiko@kernel.org> wrote:
->
-> [Severity: Medium]
-> Will this tx_dropped increment ever reach userspace? lan966x sets
-> .ndo_get_stats64 = lan966x_stats_get. dev_get_stats() adds only
-> dev->core_stats on top of what that callback returns, so legacy
-> dev->stats is never reported.
+In rvu_mbox_handler_mcs_alloc_ctrl_pkt_rule(), switch (req->rule_type)
+has no default case; an unrecognized rule_type in a PF/VF mailbox
+request leaves 'offset' uninitialized when passed to
+mcs_alloc_ctrlpktrule(), allocating rules from the wrong hardware
+partition or failing spuriously.
 
-Good point - dev_core_stats_tx_dropped_inc(dev) is needed so
-dev_get_stats() reports the software drop alongside lan966x_stats_get(),
-and it avoids an unlocked increment on dev->stats.tx_dropped as well.
+In rvu_mbox_handler_mcs_alloc_resources(), 'rsrc_id' is left
+uninitialized when !req->all and either req->rsrc_cnt == 0 or
+req->rsrc_type is not one of the four handled types, evaluating
+uninitialized stack memory at 'exit:'.
 
-Daniel, let me know if you'd like me to send a v2 with
-dev_core_stats_tx_dropped_inc(dev) (and netdev_tx_t return types for
-lan966x_port_ifh_xmit() / fdma_xmit) standalone, or if you prefer to
-fold it into your upcoming lan966x PTP TX series.
+Return -EINVAL for unrecognized rule_type, unrecognized rsrc_type, and
+zero rsrc_cnt when !req->all, and zero-initialize rsrc_id so Clang's
+value-insensitive -Wconditional-uninitialized check sees no
+uninitialized path across the rsrc_cnt loop.
 
-Thanks,
-Ian
+Discovered via Clang -Wconditional-uninitialized on an x86_64
+allyesconfig build with AI coding assistant help. Verified by building
+drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.o with LLVM=1 W=1
+(-Werror) and -Wconditional-uninitialized; not runtime-tested on
+Marvell CN10K hardware.
+
+Fixes: cfc14181d497 ("octeontx2-af: cn10k: mcs: Manage the MCS block hardware resources")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+
+Notes:
+    v2:
+      - Unlock rvu->rsrc_lock and return -EINVAL directly on unrecognized
+        req->rsrc_type instead of jumping to 'exit:' (which returns 0 over the
+        mailbox), and do the same in rvu_mbox_handler_mcs_alloc_ctrl_pkt_rule()
+        (Sashiko AI review).
+      - Drop the rsp->flow_ids/secy_ids/sc_ids ARRAY_SIZE() checks since
+        rvu_alloc_rsrc() already bounds IDs to rsrc->max <= 128 and rejecting
+        upfront altered partial-allocation behavior (Sashiko AI review).
+    
+    v1: https://lore.kernel.org/r/20261119170550.1517634-1-irogers@google.com
+
+ .../net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c    | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c b/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c
+index cd9cca5a9cf5..92c987134436 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c
+@@ -682,12 +682,15 @@ int rvu_mbox_handler_mcs_alloc_resources(struct rvu *rvu,
+ {
+ 	u16 pcifunc = req->hdr.pcifunc;
+ 	struct mcs_rsrc_map *map;
++	int rsrc_id = 0, i;
+ 	struct mcs *mcs;
+-	int rsrc_id, i;
+ 
+ 	if (req->mcs_id >= rvu->mcs_blk_cnt)
+ 		return MCS_AF_ERR_INVALID_MCSID;
+ 
++	if (!req->all && !req->rsrc_cnt)
++		return -EINVAL;
++
+ 	mcs = mcs_get_pdata(req->mcs_id);
+ 
+ 	if (req->dir == MCS_RX)
+@@ -744,6 +747,9 @@ int rvu_mbox_handler_mcs_alloc_resources(struct rvu *rvu,
+ 			rsp->rsrc_cnt++;
+ 		}
+ 		break;
++	default:
++		mutex_unlock(&rvu->rsrc_lock);
++		return -EINVAL;
+ 	}
+ 
+ 	rsp->rsrc_type = req->rsrc_type;
+@@ -793,6 +799,9 @@ int rvu_mbox_handler_mcs_alloc_ctrl_pkt_rule(struct rvu *rvu,
+ 	case MCS_CTRL_PKT_RULE_TYPE_MAC:
+ 		offset = MCS_CTRLPKT_MAC_EN_RULE_OFFSET;
+ 		break;
++	default:
++		mutex_unlock(&rvu->rsrc_lock);
++		return -EINVAL;
+ 	}
+ 
+ 	rsrc_id = mcs_alloc_ctrlpktrule(&map->ctrlpktrule, map->ctrlpktrule2pf_map, offset,
+-- 
+2.56.1.831.g720f3f5937-goog
+
