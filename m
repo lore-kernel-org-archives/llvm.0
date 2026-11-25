@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645533;
-	b=OjWzKrqY/n5tNvgdGh8kTlxD0/BGWYftKTEnttlIhn/BDLMRi5hvzzPz9eklIytI6xZW
-	 JoLZAmygF709iBmfnxEhZi3xvKPDRRIDxVedk/zb8xqoQyfIj9mH5ala1UA2rafjZrBoH
-	 8aBeafsyKpwMB+CaycHrCpDBlR0vsds/JsvZYolQ5A2/y9wQyUSnFCUdnGCccKoWRegaQ
-	 vkOqt28I0wEb/pcWG1S/DB8TStftvDc9Yd95nyIYITYOrj/uU/5RaWR4zW6t0SijpeN+X
-	 kUOrmq9fgLXrCaXQ+crp1VtYsmJ9vhZd79SVDQyK58R9e1cZU8nb5U8P+TcoxXscaLw==
+	t=1795645535;
+	b=ZdC7l7Ep/CqUd0Thvmu1Q+0FL+2y+VLFbyxkPf7epL1iKwq0Im9Ebi6lmksHn9DRFW7V
+	 rdYzBlgF8nuCLIBaXlOrxIBbn58zDHHZOI3ZsjWebdfv87lo7T2/WLvR1g1MiIn8F6jpv
+	 cO4BoaZfummQePYRDHfT5cF9Jy9cEvkc1VP9s7ChFstnLg5wNu97lkXD+i7lniKHz0Q2F
+	 9095pHcWIC0npgiOn53Co58e+Lt5yYVs+n+0VQdW7RG7XAd3msmoWOE4/rQYWKIzR1Qwk
+	 wH4b0Hr1xWnfqigg6VAuOvnLdeOt02wvYoBF589xclxpd2E+mn3k126zKB3SBj5Bmmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645533;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645535;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=AOwnGeEvMBKI7TRyjGtfXvp7wm6CBN9E9DeU964AMeM=;
-	b=45JHSG9p2URvILjlpspkt2o4wGYPKWCsie/mWbO+0v7XVMP1QZfG/VpSaZHLMsw8TB7A
-	 0BcB6gCSjmrhvo8n6c3DCwxiGHq6jgwhPeiQOP2oVx6722MV4EgVBNFx2VkQman2IKyQs
-	 CalY9lXGa0g28UBV5egrG7c7wuuwLzqsrCFgNer9jaJUnjYQ9uxhywKMMGvKkfcouDdSU
-	 riz7+ruDQ/Kx+jpMNf5nwK8LQu6KgQAhnfHNSNeyS7Sf+SpXn79pac7lcZ7BNb8j2RGbb
-	 SQpTNzPlstfIBWv3BWzq0DLY9rf07KF21AHPsldAXa8SOUNsdcnmQVDiFXqtwq8fDEw==
+	bh=RCCssxDP7VqyjtjkkMxKeVZicY7ZW2acPhjksq1uY6w=;
+	b=Hq56NXWYnLAJEjOkb+/zXGGQzEJXsfJDKHzE1uNd0XlbnkUN/uDgix/a+Xx205uRmaQi
+	 Wq5YP7sPkcQLia3nPxwJ2JMpq650C96+6hgfyLR5aba4Hwl1+bZxwmVBtkAdof4OxSgai
+	 Zjaz8ncFH9XdaDTBRAKPaY8Gn+qPsuKA+cL6yes8SwtqG9kh4g9PC8GLT8z9le0kcv+2R
+	 vvKaNH8zhMy702p+4NC2hZfBg9RixWQWDrinNxibZNdi4hzapoOTUIl5o0Uhc3aE/j+LY
+	 42D07iRJ5u1iqiYTTp2/hF3bz9eNa2uek/2uaAvzAs2aCl9MUAG82Ip8s8UwySix54Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YD3EZTdf;
-	arc=none smtp.remote-ip=74.125.82.70
-Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="g/4BDtzd";
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9AE60A383B
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:25:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A9AE60A383B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71C860A5BD3
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:25:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D71C860A5BD3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YD3EZTdf
-Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1b3b45597c7so1895313c88.1
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:25:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=g/4BDtzd
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-341eff9e381so9500865eec.1
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:25:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645532; x=1796250332; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795645534; x=1796250334; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AOwnGeEvMBKI7TRyjGtfXvp7wm6CBN9E9DeU964AMeM=;
-        b=YD3EZTdfIIOSX5s+Io0EZcfwK3ybWiQ8wLZjqSNuu7aXB9OR+iaoJssSqU7h++tkfr
-         2EgJ2dlC/jaz21b1JSb8PfNZgL/7i1SLlEIRtodt7YXLMu9/RSQYQt0WFBlXr1hHqEn4
-         Z1CO4ao0v9HS/M4C+XND7UrhjYPWO39Z6nbY/wJoW44Z0dkurSLb+jIM6h9bAljQBS12
-         N017CL3OiRirP8qCxYN++ncGaHEKUzm3Ak/0u5NnmqjbtckuSNubh1b/zDd+SYahIF/U
-         aybgRaPTsSjO/v9F9qNTR+wk2dvDxAzq7GdEGLJdtZgySmgnM6ihyh0Vi8gWnOmJr5Av
-         +VVA==
+        bh=RCCssxDP7VqyjtjkkMxKeVZicY7ZW2acPhjksq1uY6w=;
+        b=g/4BDtzdBALqy0kS1O7V+CUMYsMlIsgZEGazCImyd0jgy+LLhSQXea9HCLUOWahT3+
+         yOqomAaeLUtvQ2T3Q5lMezzZlYIKihcfrhXnQhgr3R0qxLDQvPbD+cPGok9lSU0rcwuF
+         otRR363p0EiFv+qkFn+ClrrdVDZVqSn6ZLyr6Ir2DH6146SyNMyTSZBkx2Zluz3CrZVl
+         lO5NqJJRThugvrUHk6uRqm10q+6RBWG4UJazjkTj6SV4emLMjg59Hj91o3ujUEjqWS7F
+         HtU/APhCz5qxdSZ27ehfEzGyFIfnoOELfV1gP1Xq56pcHC7IKkdOSLo0j4uNUWmBsqtQ
+         CKTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645532; x=1796250332;
+        d=1e100.net; s=20260707; t=1795645534; x=1796250334;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=AOwnGeEvMBKI7TRyjGtfXvp7wm6CBN9E9DeU964AMeM=;
-        b=SxnU7cpvLR99ZExuRU9Hev/lo5FnndZ5O0+c1c//nQ8KQM2gOJn6U9fXck0+a6OTqB
-         Nw/q0aknTndIOx2sXLQUnwaAzpblU2vhFHJVClCkfjc38n0bwouiIuN9tfGeAd2bgDP5
-         s3rel9UAFEhR1Ugp0u8uXdReMr7cmDfFWqQX5Z8976umuB7tU12SZEIGvraum5pjblwg
-         hmTqYZLmeNQZy7ZxQuyfujprHONW3oi2wp5fzIh9EmheUf0AE1JBaubyfuoq13w1NI+F
-         97PDZ1JHB30XNIga3IHGTeL2kFc9IcFBypAPDBhRI4KC5t6I5RMjFt0uxlanDdfseXiC
-         BEJg==
-X-Forwarded-Encrypted: i=1; AL+hErF7qA0ndGEJ+uYVBU4fu1Dy6l4Ep/J+dZOJtV9VorVdlZblnDUGyrv8dgkGPOO7o6cg788o@lists.linux.dev
-X-Gm-Message-State: APuU4Z8c2dY+6r6kplvNz+Lvf8+jyY7qfGZKRl4htTAdUonRuXUDaXyC
-	gFpZ4DDp26HQwQX/e6DY/N01ydO+qSY/450ZxASxCNwYEXN388zZy7GjDMrxvtgSoMXjUj3l4YT
-	lcg==
-X-Received: from dldz4-n1.prod.google.com ([2002:a05:701b:4184:10b0:1b3:af3d:1632])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:ed02:b0:149:50cb:2175
- with SMTP id a92af1059eb24-1b5568fda53mr18476947c88.33.1795645532051; Wed, 25
- Nov 2026 14:25:32 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:25:11 +0000
+        bh=RCCssxDP7VqyjtjkkMxKeVZicY7ZW2acPhjksq1uY6w=;
+        b=v82OdzQX73Yp+yEI9RXyBSJ/isKusDmrt2yUYNxe4UOvx4bq4e9jsYQnBwJNDGeKrX
+         afW/XjKJF7r/b/f7KFUY6pNbpozqefipuFVVsfHWNWESu1/LGKAXwGvMGyxdMdOM6hP8
+         S0LToeK4zMi7U+XrAO+hWoPiiUfMfAXqJPYNsZb5t9Z9Yx6RYAUbeiFpxp6cqwRyLDHs
+         voUNbYlUV/1QMEhBtqadwvaYP9KDYSzGCldROOmc3l1w5hgNRfRlJ4lcobKGzHvIrRw6
+         wdqflYJuNPyil+5MsiqPQpbZ9PE4L0Cih9iqYucHP5Oxh5elrlvwUNDLrwGe2FIPJjyz
+         ovTg==
+X-Forwarded-Encrypted: i=1; AL+hErF6ium17FNO1GXExGmRZvNJUaSq3iPEFyxZiiJKSh/nSLjmDGoYn/cnpH41CaWoAwGwEpGZ@lists.linux.dev
+X-Gm-Message-State: APuU4Z/tvykOtqBSP+G4nGJXtkldqVdrs4a/T9cOxnjf52mj+ZxDAS70
+	/6KNTja/aHI7hgtoweoD25vGBkcDTHddRniZNoisTj/tMREOWh7dDNFixUaD6yATTfUqKNMLKhF
+	EXw==
+X-Received: from dycnn7.prod.google.com ([2002:a05:7301:1407:b0:384:71f1:1227])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:d587:b0:381:d92e:ecab
+ with SMTP id 5a478bee46e88-3856f25884emr17876278eec.11.1795645533582; Wed, 25
+ Nov 2026 14:25:33 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:25:12 +0000
 In-Reply-To: <20261125222513.1446099-1-elkin@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125222513.1446099-1-elkin@google.com>
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125222513.1446099-2-elkin@google.com>
-Subject: [PATCH 1/3] drm/sitronix: st7920: Use DMA-safe serialized TX buffer
- for SPI writes
+Message-ID: <20261125222513.1446099-3-elkin@google.com>
+Subject: [PATCH 2/3] drm/sitronix: st7920: Check drm_dev_enter() in crtc
+ atomic disable
 From: Elkin Cruz <elkin@google.com>
 To: Iker Pedrosa <ikerpedrosam@gmail.com>, 
 	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
@@ -93,154 +93,33 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In st7920_spi_write(), u8 reg[CMD_SIZE] is allocated on the stack and
-passed directly to spi_write(), violating SPI DMA safety requirements
-when CONFIG_VMAP_STACK is enabled or an IOMMU is in use.
+st7920_crtc_atomic_disable() ignores the return value of
+drm_dev_enter(), allowing SPI power-off writes to proceed after the DRM
+device has been unplugged and unconditionally calling drm_dev_exit().
 
-Embed an ARCH_DMA_MINALIGN-aligned TX buffer at the end of
-struct st7920_device protected by a DRM-managed mutex, and pass
-st7920 to st7920_spi_write().
+Return early when drm_dev_enter() returns false.
 
 Fixes: 88b09229f34a ("drm: Add driver for Sitronix ST7920 LCD displays")
 Cc: stable@vger.kernel.org
 Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
- drivers/gpu/drm/sitronix/st7920.c | 43 +++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 13 deletions(-)
+ drivers/gpu/drm/sitronix/st7920.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/sitronix/st7920.c b/drivers/gpu/drm/sitronix/st7920.c
-index 616d83387d31..091e80d8bda5 100644
+index 091e80d8bda5..ea4566009c4b 100644
 --- a/drivers/gpu/drm/sitronix/st7920.c
 +++ b/drivers/gpu/drm/sitronix/st7920.c
-@@ -7,9 +7,12 @@
-  */
+@@ -580,7 +580,8 @@ static void st7920_crtc_atomic_disable(struct drm_crtc *crtc,
+ 	struct st7920_device *st7920 = drm_to_st7920(drm);
+ 	int idx;
  
- #include <linux/bitrev.h>
-+#include <linux/cache.h>
-+#include <linux/cleanup.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/regmap.h>
- #include <linux/spi/spi.h>
+-	drm_dev_enter(drm, &idx);
++	if (!drm_dev_enter(drm, &idx))
++		return;
  
-@@ -24,6 +27,7 @@
- #include <drm/drm_gem_atomic_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_gem_shmem_helper.h>
-+#include <drm/drm_managed.h>
- #include <drm/drm_plane.h>
- #include <drm/drm_print.h>
- #include <drm/drm_probe_helper.h>
-@@ -86,6 +90,10 @@ struct st7920_device {
+ 	st7920_power_off(st7920, &err);
  
- 	u32 height;
- 	u32 width;
-+
-+	/* Serializes SPI command and GDRAM transfers using tx_buf */
-+	struct mutex tx_lock;
-+	u8 tx_buf[CMD_SIZE] __aligned(ARCH_DMA_MINALIGN);
- };
- 
- struct st7920_plane_state {
-@@ -165,16 +173,21 @@ static int st7920_store_others(int cmd, const void *data, u8 *reg)
- 	return i;
- }
- 
--static void st7920_spi_write(struct spi_device *spi, int cmd, const void *data,
--			     int delay_us, struct spi7920_error *err)
-+static void st7920_spi_write(struct st7920_device *st7920, int cmd,
-+			     const void *data, int delay_us,
-+			     struct spi7920_error *err)
- {
--	u8 reg[CMD_SIZE] = {0};
-+	u8 *reg = st7920->tx_buf;
- 	int size = 0;
- 	int ret;
- 
- 	if (err->errno)
- 		return;
- 
-+	guard(mutex)(&st7920->tx_lock);
-+
-+	memset(reg, 0, CMD_SIZE);
-+
- 	/*
- 	 * First the sync bits are sent: 11111WS0.
- 	 * Where W is the read/write (RW) bit and S is the register/data (RS) bit.
-@@ -190,7 +203,7 @@ static void st7920_spi_write(struct spi_device *spi, int cmd, const void *data,
- 	else
- 		size = st7920_store_others(cmd, data, reg);
- 
--	ret = spi_write(spi, reg, size);
-+	ret = spi_write(st7920->spi, reg, size);
- 	if (ret) {
- 		err->errno = ret;
- 		return;
-@@ -232,14 +245,14 @@ MODULE_DEVICE_TABLE(spi, st7920_spi_id);
- static void st7920_power_on(struct st7920_device *st7920,
- 			    struct spi7920_error *err)
- {
--	st7920_spi_write(st7920->spi, SET_DISPLAY_ON, NULL, 72, err);
-+	st7920_spi_write(st7920, SET_DISPLAY_ON, NULL, 72, err);
- }
- 
- static void st7920_power_off(struct st7920_device *st7920,
- 			     struct spi7920_error *err)
- {
--	st7920_spi_write(st7920->spi, SET_DISPLAY_CLEAR, NULL, 1600, err);
--	st7920_spi_write(st7920->spi, SET_DISPLAY_OFF, NULL, 72, err);
-+	st7920_spi_write(st7920, SET_DISPLAY_CLEAR, NULL, 1600, err);
-+	st7920_spi_write(st7920, SET_DISPLAY_OFF, NULL, 72, err);
- }
- 
- static void st7920_hw_reset(struct st7920_device *st7920)
-@@ -257,10 +270,10 @@ static int st7920_init(struct st7920_device *st7920)
- {
- 	struct spi7920_error err = {0};
- 
--	st7920_spi_write(st7920->spi, SET_BASIC_INSTRUCTION_SET, NULL, 72, &err);
-+	st7920_spi_write(st7920, SET_BASIC_INSTRUCTION_SET, NULL, 72, &err);
- 	st7920_power_on(st7920, &err);
--	st7920_spi_write(st7920->spi, SET_GRAPHICS_DISPLAY, NULL, 72, &err);
--	st7920_spi_write(st7920->spi, SET_DISPLAY_CLEAR, NULL, 1600, &err);
-+	st7920_spi_write(st7920, SET_GRAPHICS_DISPLAY, NULL, 72, &err);
-+	st7920_spi_write(st7920, SET_DISPLAY_CLEAR, NULL, 1600, &err);
- 
- 	return err.errno;
- }
-@@ -296,8 +309,8 @@ static int st7920_update_rect(struct st7920_device *st7920,
- 			data_array[array_idx++] = line_buffer[j];
- 		}
- 
--		st7920_spi_write(st7920->spi, SET_GDRAM_ADDRESS, &i, 72, &err);
--		st7920_spi_write(st7920->spi, SET_GDRAM_DATA, line_buffer, 72, &err);
-+		st7920_spi_write(st7920, SET_GDRAM_ADDRESS, &i, 72, &err);
-+		st7920_spi_write(st7920, SET_GDRAM_DATA, line_buffer, 72, &err);
- 	}
- 
- 	return err.errno;
-@@ -309,7 +322,7 @@ static void st7920_clear_screen(struct st7920_device *st7920, u8 *data_array)
- 
- 	memset(data_array, 0, BYTES_IN_DISPLAY);
- 
--	st7920_spi_write(st7920->spi, SET_DISPLAY_CLEAR, NULL, 1600, &err);
-+	st7920_spi_write(st7920, SET_DISPLAY_CLEAR, NULL, 1600, &err);
- }
- 
- static int st7920_fb_blit_rect(struct drm_framebuffer *fb,
-@@ -812,6 +825,10 @@ static int st7920_probe(struct spi_device *spi)
- 	st7920->width = ST7920_DEFAULT_WIDTH;
- 	st7920->height = ST7920_DEFAULT_HEIGHT;
- 
-+	ret = drmm_mutex_init(drm, &st7920->tx_lock);
-+	if (ret)
-+		return ret;
-+
- 	st7920->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
- 	if (IS_ERR(st7920->reset_gpio)) {
- 		ret = PTR_ERR(st7920->reset_gpio);
 -- 
 2.56.1.839.g22a8290db9-goog
 
