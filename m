@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645092;
-	b=CN3q6kn/CBYR62ryBgW5H9cjx96aCMlU/YspgYxM6EpNSp0nnIZiEFkXAztqaQzWGB0Z
-	 1KAEfvSnvrSeA1RLsHb/OkYjTw5aAa2195CUcEXT3HXIUkiZJj9VFLnhauug8nKRsFn1M
-	 z0hw3Hqqeqkok6CyATYD33+ipwIeHdM3VnWqC2x/CD0T4+3ezWcMqSQFPCyyCmsUYROyX
-	 km0Y3ik9wxpVpW7+Ob9Gek4IxGGHkoJyyrsHDMSnUmEtBUI6/hFNmQamti6x7FE0lvSEZ
-	 jBqUBdkBr6k1fB7U1CjR2eX4VPGjWtwHrp1zACUdTyloiOnfaLxiNNZzRmTghlzOIbw==
+	t=1795645093;
+	b=ZEtQL8VThoakzjm6q4x6p4cVXji1eYh1CUtaED8ZqjiwUw1aB4kBAF83o13ojvWjdsir
+	 HsNpMYsFKQylJDi/m7LesCEQzWCakBVpjcOYA1ltekYydle1WsJhgAJKKdDXMFfOhKHZ4
+	 yiJVXefPXAwjfTgHug8F0iAhKs3A+yRWgnvQ8RgaJMu3Aqkp+uPYzSOXxjmq5N/9LcjLG
+	 h3j8KYlDkJodXbwaR2j7ZvWYjTHDvjY0nnVeo+4cCTeE9X3O1ozOM2CSZwfNqiT+YmTfG
+	 OvQH6YMdDpK2k1F1k8NOK0S2n3kJ9BKlFTO8n+MX7L1TZpkFW0BlH5gEYmefuGOqSlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645092;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645093;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=tpmpzrLhm7pX+D8pjkEqrRIYRLx4SQ9n+QD2Zw1yZYQ=;
-	b=POjhAri4o9DphPwtiNkzX7wjCElN+L4UhF4V3rd62dYHOH42ftpwlL926lpJQKUMk9TK
-	 7yfI8IcSL2P+vrlzaRLKoo1TZgQzZkvWhBN5eaSCYhwTDEK5VaNDzX8YP0AQ9UYnsSXR4
-	 WHzFTqxfMxlq+ZS30967iO98ymLLUUw3jBMzOFtA1lZ8+7E77Vnrytdy4muJwoVADjIo8
-	 Th+AvRbCMKifCOFd0M0WKYEBJv9SP1SfENJ0+nlelcTmv89iUJGxf9bsRb8qMHX0YY2hB
-	 /f2aa3YFypQSlkwKN6As0ob96TuApAikJmMqiEqafFOWo8VWLRI3pmbzAgGKoxq4+Mg==
+	bh=VgqpPNqaZ4O4eWgZqdi1XZF/bmVHxvm7Tf4gaCeB8hw=;
+	b=5I4fCihuq1HWzDGwlWsB9unewImWPhTw/X/VGm+jj84jMVUeVc6HEw/SSxYefhnbwNC/
+	 Z/+dXXvfPe2QzQiEd85zLg78XSjtlYfGErUblDyK7q8keMrwVpug3EYu7o94gWwTpLDxc
+	 jT1RUekIYOJL7TP3huTXhk5ZE25eENNTAICq1LWlBHy4AJC9SLVUR6JVkDQiMqToXLE5F
+	 1uK9hbj5Od5Q6y5dnVk7o/0j/lNULBCpSUdxaCPtYDW8azOu8WpH//4KUWKSLgOjvcd5k
+	 ZsSBaYQP7Xn8O2WfkKtZ08M06aXx13HhtmscimRJYGn3sV8G219had0bdXz6J0GoKaQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DnAPVhAm;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HsHejouM;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7143606A69A
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:18:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7143606A69A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B643606A32C
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:18:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B643606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DnAPVhAm
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1af203073e0so6801376c88.1
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:18:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HsHejouM
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-30bcb065bfdso6647462eec.0
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:18:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645091; x=1796249891; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795645092; x=1796249892; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tpmpzrLhm7pX+D8pjkEqrRIYRLx4SQ9n+QD2Zw1yZYQ=;
-        b=DnAPVhAmEADzSF8g52jUKoIpUXh5CACgQx5gACCJ8019J96QoalINet7QEfEP8leoE
-         sPM/pCXc2QzTp3iwGPx+OvNIPajBeMAj31g7+0Qxv03jupm06liRZelZiyMsf/AJcLxz
-         vdvLSS28nbLWbQUbLTp5GKOXSeuPBkC39NVPYjfWmljcF1bv1QRHjuASWXPwgcWLJ2Rk
-         S+evu4QzO+uwqzKQ/ic4DCzOsxay8c2oDn9NFtn+6PE+8TvRqYeBWLysrN0mPN07opcL
-         I8uY4bAT1JztjBEL/v+xIk/kmn9eTfjEdqsxgHWZ1mhCdcmDDmK/AKNd3bAwuEQuur/+
-         poHA==
+        bh=VgqpPNqaZ4O4eWgZqdi1XZF/bmVHxvm7Tf4gaCeB8hw=;
+        b=HsHejouMzLlua1tkJwSPm3aLNK3KrOayQ6XL0QsWJp16CPyLwMjVeTtXXpMAxM1Wcr
+         jOVzptWAtEhVgQvt1MoBOloj3RuH0IZBIoalGhLOSNn++LIHY+XUwPTSGjS3vTGUYUjc
+         IrLVg0AkbWRcXwVu3kSOZHX7kEi1AQxXhj2z8QmoVun4BbbfA75xeS/spP1Rj42FQ56X
+         2Ovd85BZtbYd3bRzlVCZZETA6tUL8WYoEsWlMaQtsUie/CewNsvWSR/2PSEjpPwew1J0
+         CZFPIxSySyQNW4YkYUarenlBcy7cmFJ5xGkUm5Q8o/wnmAMHmj7KBCK9wZDiu+Q2FAgx
+         lXrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645091; x=1796249891;
+        d=1e100.net; s=20260707; t=1795645092; x=1796249892;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=tpmpzrLhm7pX+D8pjkEqrRIYRLx4SQ9n+QD2Zw1yZYQ=;
-        b=sJtH+BRrqlhJquJkcF0KCWLH32vn5FTgLJDbqDR6zQVXLEa9zh85osc0Mix2/+FzdK
-         iaQJrXYi0ih9BnbuxNZW+1kbIOG4inSprq3xnjwfn8fO8RNU2ID76J8Y4Z6CFBjhghpG
-         FZIMnpAuTAZtrkSiQd7kTePJsWzyTKAbRE3d3hnFsDFlTko1AeJnRxhmZahONoZ0SwVd
-         uby0mtkUHQk93RTPmfKSxY1OANNaxZYHRgv66Vr4CjI3atmxrr6Wub6g9ewgoTQtPugc
-         NvWTZczaAA2mpWJveTV0fC6Dp3pdAoMCGIZY8zN4ZVR98+v3nuSEcFaEIyJCHoJjjlb0
-         sQsQ==
-X-Forwarded-Encrypted: i=1; AL+hErEiZuVzKa2iXZaVBLJsHdqLWx8kBeBuhjTBGoBgvzvrfK5PNxQg82VAG6XQjOOfgIP6+OCW@lists.linux.dev
-X-Gm-Message-State: APuU4Z+zz/8ICJ3JFWMNMs25+ykK3CMJYvWcRgqfBupc3ooSNAX+rxEF
-	VwupjGiLev8QPb5Sp5H+AxghBy835nopc6fSoO41cm1WRiVpVZ+6INjnCw9fb3/2SwmYFt56gCE
-	aFw==
-X-Received: from dleb17-n1.prod.google.com ([2002:a05:701b:4251:10b0:1a7:f7dd:f258])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6988:b0:156:6676:d0e2
- with SMTP id a92af1059eb24-1b55689f5dbmr25363930c88.10.1795645090492; Wed, 25
- Nov 2026 14:18:10 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:17:29 +0000
+        bh=VgqpPNqaZ4O4eWgZqdi1XZF/bmVHxvm7Tf4gaCeB8hw=;
+        b=SUAvsS5XQpm5VSOkdrBDyvzs80hYDbNWfFd6tzVWm/AnB7g1l7IfDqNfeexkR9Lxit
+         boFnY8t8sf+VcVUIJXaEvlFykJ6mX6BLjE8Mi9LkzCo7Z08AcDLlEY9j24fVT2zQbOe6
+         xrHEdF/3RGF2UO6CqrbJVWRWgFRjQWUslgHfnISp1dex4gqUc/WmFQmhdM74Xre/36rr
+         1yeK7tKARPf5j+eLDG5qH6wR9kIKBHA8w15WnnqTP4rdDfWGjmRLBbBEVS2yGMhgPHXe
+         rDybPZhoBTfXTPJ3yKlydpejAiIPccR/NhiigEurKM4aWHEtwl+vxeuXfhbykAmD39GK
+         b0gw==
+X-Forwarded-Encrypted: i=1; AL+hErGj6P5PCIvr/PgM6mYXepbXOkNmzt5Nrw7ar8l1z4rlRDxI/8TqTH/Hqm9nc9Pm3lVVBnsa@lists.linux.dev
+X-Gm-Message-State: APuU4Z8u1IMgHsNoF8xvS7RAwpJoAKYwcSnJo51WeGePQPeiY6V1Z0M1
+	mCQvkP2Y42g6LrkZtJyDBjNftVlcnHAnAE0UiINMwQBL552eJMcv/8ug3+YYv2HAFM5QNpC+ROg
+	yvg==
+X-Received: from dyah11-n2.prod.google.com ([2002:a05:693c:83cb:20b0:386:458d:ba4c])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:8642:20b0:386:9e22:ca4c
+ with SMTP id 5a478bee46e88-3869e22cc7emr17859030eec.35.1795645092222; Wed, 25
+ Nov 2026 14:18:12 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:17:30 +0000
 In-Reply-To: <20261125221730.1421806-1-elkin@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125221730.1421806-1-elkin@google.com>
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125221730.1421806-2-elkin@google.com>
-Subject: [PATCH 1/2] afs: Guard NULL alist on restart in afs_select_vlserver()
+Message-ID: <20261125221730.1421806-3-elkin@google.com>
+Subject: [PATCH 2/2] afs: Use bitops for fileserver address bitmasks
 From: Elkin Cruz <elkin@google.com>
 To: David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>
 Cc: linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org, 
@@ -90,50 +90,56 @@ Cc: linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In afs_select_vlserver(), restart_from_beginning: is reached from
-no_more_servers: after pick_server:, where alist and vc->alist have
-already been cleared to NULL at next_server:. If an earlier VL call
-received a response (vc->call_responded == true) before failing with
--ECONNRESET (setting AFS_VL_CURSOR_RETRY), vc->call_responded remains
-true until another server address is selected, causing
-restart_from_beginning: to dereference a NULL vc->alist.
+In afs_select_fileserver(), es->failed_set and set are unsigned long
+bitmasks sized for AFS_MAX_ADDRESSES (BITS_PER_LONG). Testing bits via
+32-bit signed shifts (1 << j and 1 << i) sign-extends at bit 31 and
+invokes undefined behavior for bit positions >= 32 on 64-bit kernels.
+Similarly, initializing s->untried_addrs via (1UL << nr_addrs) - 1
+invokes shift undefined behavior when nr_addrs equals AFS_MAX_ADDRESSES.
 
-Guard the preferred-address update and afs_put_addrlist() at
-restart_from_beginning: with if (alist), matching the failed: path.
+Use test_bit() to inspect address bitmasks and GENMASK() to initialize
+s->untried_addrs safely across all valid address counts.
 
-Fixes: 98f9fda2057b ("afs: Fold the afs_addr_cursor struct in")
+Fixes: da0e01cc7079 ("afs: Fix fileserver rotation getting stuck")
+Fixes: 495f2ae9e355 ("afs: Fix fileserver rotation")
 Cc: stable@vger.kernel.org
 Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
- fs/afs/vl_rotate.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ fs/afs/rotate.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/fs/afs/vl_rotate.c b/fs/afs/vl_rotate.c
-index 6ad9688d8f4b..8381d6a35d3e 100644
---- a/fs/afs/vl_rotate.c
-+++ b/fs/afs/vl_rotate.c
-@@ -171,12 +171,15 @@ bool afs_select_vlserver(struct afs_vl_cursor *vc)
+diff --git a/fs/afs/rotate.c b/fs/afs/rotate.c
+index 490b433e4395..a0d293ed2aa4 100644
+--- a/fs/afs/rotate.c
++++ b/fs/afs/rotate.c
+@@ -64,7 +64,8 @@ static bool afs_start_fs_iteration(struct afs_operation *op,
+ 		s->endpoint_state = afs_get_endpoint_state(estate,
+ 							   afs_estate_trace_get_server_state);
+ 		s->probe_seq = estate->probe_seq;
+-		s->untried_addrs = (1UL << estate->addresses->nr_addrs) - 1;
++		s->untried_addrs = estate->addresses->nr_addrs ?
++			GENMASK(estate->addresses->nr_addrs - 1, 0) : 0;
+ 		init_waitqueue_entry(&s->probe_waiter, current);
+ 		afs_get_address_preferences(op->net, estate->addresses);
+ 	}
+@@ -556,7 +557,7 @@ bool afs_select_fileserver(struct afs_operation *op)
  
- restart_from_beginning:
- 	_debug("restart");
--	if (vc->call_responded &&
--	    vc->addr_index != vc->alist->preferred &&
--	    test_bit(alist->preferred, &vc->addr_tried))
--		WRITE_ONCE(alist->preferred, vc->addr_index);
--	afs_put_addrlist(alist, afs_alist_trace_put_vlrotate_restart);
--	alist = vc->alist = NULL;
-+	if (alist) {
-+		if (vc->call_responded &&
-+		    vc->addr_index != alist->preferred &&
-+		    test_bit(alist->preferred, &vc->addr_tried))
-+			WRITE_ONCE(alist->preferred, vc->addr_index);
-+		afs_put_addrlist(alist, afs_alist_trace_put_vlrotate_restart);
-+		vc->alist = NULL;
-+		alist = NULL;
-+	}
- 
- 	afs_put_vlserverlist(vc->cell->net, vc->server_list);
- 	vc->server_list = NULL;
+ 		afs_get_address_preferences_rcu(op->net, sal);
+ 		for (j = 0; j < sal->nr_addrs; j++) {
+-			if (es->failed_set & (1 << j))
++			if (test_bit(j, &es->failed_set))
+ 				continue;
+ 			if (!sal->addrs[j].peer)
+ 				continue;
+@@ -617,7 +618,7 @@ bool afs_select_fileserver(struct afs_operation *op)
+ 	best_prio = -1;
+ 	addr_index = 0;
+ 	for (i = 0; i < alist->nr_addrs; i++) {
+-		if (!(set & (1 << i)))
++		if (!test_bit(i, &set))
+ 			continue;
+ 		if (alist->addrs[i].prio > best_prio) {
+ 			addr_index = i;
 -- 
 2.56.1.839.g22a8290db9-goog
 
