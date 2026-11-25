@@ -1,49 +1,73 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795591425;
-	b=Nzsh+2TgEWeF0rH0lk9MI5j1OE8n0rL5MLU+U7AwqS2lN68lmEnJKqvQWEZkYhWbAm9E
-	 t0vdbFs2OHkcY8NOUKxnqhMpEk1hUsfP0QEoFB6iv48li9Kiw7Uo1ZbBoQrERoS2g8gYw
-	 vNBmz9Jqqs7kuzbt+tGlqyqZixUptTfVSFAhnx0Fn43RAvMduj6xkDYz5O8nud9zd8bAs
-	 7g8+iAsoOjCAGHOuF+aBwq+kYBF/oLXVZ6ORitAxEDpFrNXddLd4V1Y/Q8VMipNZzeybT
-	 z9jLHAbfx9mMSOmucFTt2uUOkRD0hS292Ri1XI9nyPM9cpVr9Ci0fF52YH9MTv9N+Pw==
+	t=1795593849;
+	b=OteRvN9wrQbd58tzZud1cBESxhyzxOgprdjuPTytcLYZK1GZyv2332T9PkCd8ufksj1G
+	 jqcJqIL0f7b8NRPFAfAXNZ6IRX5GonMBYgcv8fgX8zTLX0q6pkpsADz+TftVrCqUDbCml
+	 nJ6eVXRQEmV3KE2Z7FSWHZixiyRG5o+elUIYE8LNrIOLJDVX1Yt2FT6MPLZ9fhXuUegFf
+	 C3JMA+GL61H7iGXSOEBYLk7qvaYmKIMfsosVM4Vj3FGqgtxN1oFW4OACvrG1E100kDlwr
+	 L7WPvW3+qcinBJL+yyAWBuXWfPt0Qej1SzgstDJXOFGIhlGATDAJpbt+mC6M90Wmzxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795591425;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=D4hQqs/THsstMireSiNbtWwkdm1S+C6Al/QHsnfgvp8=;
-	b=V7bRJPkdpukLv3VxshDMq1jG8Qc8imjOrLZHhqiaDCW+GVY0ajfZMTw21Gugf78ZJReI
-	 EYgymOXkNfZGH5Y/Pj8UayKUejLMUFu+DRTVNBfT5NuTH/0CABzwuqsCzaiO4Fnv9H2GI
-	 C+pVxt31KQ1Y1kKX6D++vb460DGdfW3qr36cQxweCxfQM1faMwqrWJs38/260OV3eO5Th
-	 y1XGoEyIQkVLJyYzDaIBusaIN3Un3YTc9DbDgrQPgNS3B9XYCb6oCR9lvGh820YfcW19e
-	 WoZCZvqHw/SUrMiiS12EzQFFOcujJwdjIjFTI7kv/H00UlnvvM43qNx5vZz4UTsUlzQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795593849;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type:Content-Transfer-Encoding;
+	bh=uJIkBK2PHpdfxzIQ1VFxbtN31D06EwP128WyTvyAIWw=;
+	b=Q2p9UGpCR1LNHDYIeqAR+6spedAk0Kv4AJf5WQxUAVhOEpNtN31yyH5xMQ/7G680wpgg
+	 VSHoBuuUszbzhsz0azgsADrEgWs2Mauq+kWKCzgD9vyD2rR6tyvhWUDQA6TuJzmdWWdBJ
+	 blfxpApHy/2wXLyB+SzfxmXSfNxXJjXidatn6dxeEsvg1a9Ci/FAMSndms+ZaAFuVBaRO
+	 znpX9BZAr6SjleI3XmkRyvjUADVAfQJ33u3u3U3IhdWgRYV2WZxw3/1cwr4aKhgQj0wVb
+	 wP6f7Jvm+AB8LrUp4IFIdtlVSVtpdSMddqJ1Fuc8aoyZrl385/9l0ACYBGtXenuyhQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f86ejfOO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iMExeYxN;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DC2606A321;
-	Wed, 25 Nov 2026 07:23:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13B6606A327;
+	Wed, 25 Nov 2026 08:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f86ejfOO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7DB1F000D1;
-	Wed, 25 Nov 2026 07:23:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iMExeYxN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C4C01F000CA;
+	Wed, 25 Nov 2026 08:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795591424;
-	bh=D4hQqs/THsstMireSiNbtWwkdm1S+C6Al/QHsnfgvp8=;
-	h=From:Date:Subject:To:Cc;
-	b=f86ejfOOziL4fFH3VmCeyvqll5Ueu6l3fTyJ37ryObA4oQhdP1+hn75H4YbimZcd6
-	 W/ro9RqVhpsWsjNyC7RVCq2kzQfxaEdOI1ecGapTH12hIq+X5alPuz1np3YhHe+SPD
-	 hHyqSmmhocTbMTLpgprlV6GXOXlfCpYLui7ydFzesp11KviJABE8BtKUAVpbjODL1I
-	 azOE38uAzJ9z0NphGSD8RNVtoxGCIH1UwpWCICTj0knmEhkf2NdnaNND50svePKqN/
-	 cy+foArCkU+1lNS+JrZ5X5JxczBeuOgwGqC8o3Vy9nY2f5B/n8MbsCSoZeoIekPQq4
-	 oEsT6T54fe77A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 25 Nov 2026 00:23:35 -0700
-Subject: [PATCH v3] sched/topology: Avoid unsequenced accesses to jiffies
- in sd_init()
+	s=k20260515; t=1795593848;
+	bh=uJIkBK2PHpdfxzIQ1VFxbtN31D06EwP128WyTvyAIWw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=iMExeYxNUM1rjw51fpGv5pqq5nBOB55Q1kb0P3aWCqqyTGgKxYyCAkAUlhXEupXve
+	 aHnXGA8FpUz66QLqM0b/rcqVNitd4a37eHNL1/pnhxZYdUon3MED3CDdLoYWWvHg7j
+	 IjrzzxgqshvaOfClLjgMKrlippsjhEp8rsvANBeGhZ0ALrcrEOyoxrr0XO4FQ5K6Oh
+	 qgdxueqjv2oSUIswXW5R/dsRDo7qHV9DXxTcHQIpbmBZahQxBiXHjWvesMSXO0FgSy
+	 l8uRAkepw2VN2I58s/OkZJcE2QkUJP5m5pHGZd13Mx3U9Cbu7ZA2/CTE8kHp73MP80
+	 cumb8l1E94Ubw==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 88B5B198004A;
+	Wed, 25 Nov 2026 03:04:05 -0500 (EST)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Wed, 25 Nov 2026 03:04:05 -0500
+X-ME-Sender: <xms:c5YGa4wlCMMrVuFyb9ZVzUq1HnrtwiA0KNeSBOESlkyFwN2g9rBXVg>
+    <xme:c5YGa3GY0jxxSJ1D8HIRciJoRcutMxhgTLO83hGwEwWZPqffQ8TYtxjIZnq50C71B
+    5NgWbSijbudaC240auItTLYpfRWQoniS7l6xwhrXw7GRsylzBHi0dOL>
+X-ME-Proxy-Cause: dmFkZTEGEvs2jPgYuYT3HWVkTVwAn3k/jfHeglJAkg4XZfMFe6vOOyp+rpdfClmuQ0BEDF
+    Ovxv8tXPiAfIDjuKqdQWZqXbBkqOhKhou20+hD8oh85WYtXs10I4xBo42xrtV/7b9lp1iE
+    lBRx5S30tHiuf+y0l91VEVb4pCMcjOvHI+AchWQHT4ok6gNNsX0/npVrvhoYkwpP300DO0
+    NAXlUR6y80OZArraudPaSuxiL7ri89TvntvayVZOGgNTRc17MUkpTn1iUdtKxpR59SPvNo
+    p1Z/6MqYrVkxP9pm/Wwcr8Siw8GC9xKTiSlBS6LCfmBCFG9WlNrzmOwl6VXLw3smxnCCdG
+    3o67F1JQ41FFDlNX6KvpjNrPapzftNYLzxGccBWU7SxRjwLoe/pgaK5INkdZZdgfVwXUE5
+    3UL1/xwh3vlaWxjRAGfIiJo/R42R8JsFAhT9EX2PRHN0/6Y8/JPA5jrPI/7NXxOXuxZtZA
+    f5ICnFryrMwnVuhtYR5bxOFNq6c7q0rhrMJj79537Eldri/5k04EmQZPTxNmGR/JKuVoqy
+    nGN0HizhS12FHTAP0KYHvfEe0gFu5MsInDFcKR8Tbbe7Fi9aAIxOBam6X0mAT8FAKNY2Ju
+    oIdU8FkDuNWfKjt7nQrXWDvGw4G34Sr222SyuIZvuMSOUGvlJgzScOrQPYUw
+X-ME-Proxy: <xmx:dZYGa1nD0wQI63lF1YYFmr5bnGiZw6TwFqwuQ4NH_PAZJ2a8fSQ7WQ>
+    <xmx:dZYGa9huYqFENtwaWJVRjoIdl9sa5Qkgl25SwHGPsj5EZQs2oDMZqw>
+    <xmx:dZYGa_gkjR_9yhabRu7df31WF_3BiCRKL9xHLVY-rDh2-ZHDaE4b3Q>
+    <xmx:dZYGa_uAtQAXNOQ8aNAhymE5nNuTbr0_ryLcvOB3dP3Km6OQtSModw>
+    <xmx:dZYGa3u6BLh_2MOEX5sioNgOxA2dnPcc6wcmwgSq3wccoe7flayeMkdO>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 13062F80093; Wed, 25 Nov 2026 03:04:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,140 +77,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261125-topology-wunsequenced-v3-1-efa3db7e0bf8@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/3XMyw6CMBCF4Vcxs3YMUy4GV76HcUHLAFVscQqoI
- by7oBs3Lv/knG+CwGI5wGEzgfBog/VuiXi7AdMUrma05dKgIpURqRR73/nW1y98DC7wfWBnuMS
- EdByxybTJU1i+nXBlnx/3dP52GPSFTb9i66ISf8O+ES5+fMr++KNCwjRZJ5TTXunjlcVxu/NSw
- zy/AT/TvZPHAAAA
-X-Change-ID: 20261125-topology-wunsequenced-41b30ec6bc95
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4331; i=nathan@kernel.org;
- h=from:subject:message-id; bh=o1fjDvu1A47hKkh4BWahgRn/rkAmZDlCQAcoQ6eKA8A=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDNlsPT+n33Tb+3/jPZH0G4kG+Y4abyp97npOP/ss/IY2f
- 0SEXpVBRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjIxL+MDMcieSxzz1UWxOs8
- 4FGW4EiK6qj72jz7TJMl/+pPc6NsFjL8s3ojzKUfnOe157rqgc9JCRtecl9+1uF0capKiJzZnFd
- ZbAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Date: Wed, 25 Nov 2026 09:03:42 +0100
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Nick Desaulniers" <ndesaulniers@google.com>
+Cc: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+ "Bill Wendling" <morbo@google.com>, "Ard Biesheuvel" <ardb+git@google.com>,
+ linux-kernel@vger.kernel.org, "Peter Zijlstra" <peterz@infradead.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Will Deacon" <will@kernel.org>,
+ "Boqun Feng" <boqun@kernel.org>, "Waiman Long" <longman@redhat.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Justin Stitt" <justinstitt@google.com>, llvm@lists.linux.dev
+Message-Id: <c508e8c9-29ad-4157-bf64-40532b708067@app.fastmail.com>
+In-Reply-To: 
+ <CAKwvOdn=FjiYgiB9wdut2=2FwivPUXiNOG2F=uOeEkycrtoVUw@mail.gmail.com>
+References: <20261122105646.2223131-2-ardb+git@google.com>
+ <CAKwvOdkOjGkGajGMKtqcHpRSrpXC9UZrH9XPsiv5Rpcdte5tJQ@mail.gmail.com>
+ <73d50ff0-36db-4dcc-ad1e-c34bf3ebbce6@app.fastmail.com>
+ <CAKwvOdnh-0nOBdU=J+R-yDE7wrP_K2BZ7mY1icrL-nOQ3Bk=og@mail.gmail.com>
+ <20261124163905.tkkaLhJ2@linutronix.de>
+ <CAKwvOd=KbZgizb1VhD-zq4S1jRGCxUaLM+VHeRNhTFQf+KMrRQ@mail.gmail.com>
+ <1d4d7a84-d0b8-4b81-adb5-4fcecd1e19a1@app.fastmail.com>
+ <CAKwvOdn=FjiYgiB9wdut2=2FwivPUXiNOG2F=uOeEkycrtoVUw@mail.gmail.com>
+Subject: Re: [PATCH] locking/local_lock: Don't evaluate the per-CPU lock pointer if
+ unused
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-After a recent improvement in clang to warn on unsequenced accesses to
-volatile variables [1], an instance appears in sd_init(), which can
-break the build with CONFIG_WERROR=y / W=e:
 
-  In file included from kernel/sched/build_utility.c:86:
-  kernel/sched/topology.c:2008:29: error: unsequenced accesses to volatile qualified 'jiffies' [-Werror,-Wunsequenced]
-   1998 |                 .last_balance           = jiffies,
-        |                                           ~~~~~~~
-   1999 |                 .balance_interval       = sd_weight,
-   2000 |
-   2001 |                 /* 50% success rate */
-   2002 |                 .newidle_call           = 512,
-   2003 |                 .newidle_success        = 256,
-   2004 |                 .newidle_ratio          = 512,
-   2005 |                 .newidle_stamp          = now,
-   2006 |
-   2007 |                 .max_newidle_lb_cost    = 0,
-   2008 |                 .last_decay_max_lb_cost = jiffies,
-        |                                           ^
 
-Per C11 5.1.2.3.2, accessing a volatile object is a side effect. Per C11
-6.5.2, unsequenced side effects on the same scalar object are undefined
-behavior. Per C11 6.7.9.23, the evaluation of the initialization list
-expressions in a designated initializer is indeterminately sequenced
-relative to each other, meaning any side effects in the initialization
-list are unsequenced.
+On Tue, 24 Nov 2026, at 23:44, Nick Desaulniers wrote:
+> On Tue, Nov 24, 2026 at 2:25=E2=80=AFPM Ard Biesheuvel <ardb@kernel.or=
+g> wrote:
+>>
+>>
+>>
+>> On Tue, 24 Nov 2026, at 20:32, Nick Desaulniers wrote:
+>> > On Tue, Nov 24, 2026 at 8:39=E2=80=AFAM Sebastian Andrzej Siewior
+>> > <bigeasy@linutronix.de> wrote:
+>> >>
+>> >> On 2026-11-23 13:52:09 [-0800], Nick Desaulniers wrote:
+>> >> > On Mon, Nov 23, 2026 at 1:23=E2=80=AFPM Ard Biesheuvel <ardb@ker=
+nel.org> wrote:
+>> >> > >
+>> >> > >
+>> >> +/*
+>> >> + * Only evaluate @lock if it is actually used, i.e., for local_tr=
+ylock_t, or
+>> >> + * when lock debugging is enabled (see local_lock_acquire() above=
+).
+>> >> + */
+>> >>  #define __local_lock_acquire(lock)                               =
+      \
+>> >>         do {                                                      =
+      \
+>> >> -               local_trylock_t *__tl;                            =
+      \
+>> >> -               local_lock_t *__l;                                =
+      \
+>> >> -                                                                 =
+      \
+>> >> -               __l =3D (local_lock_t *)(lock);                   =
+        \
+>> >> -               __tl =3D (local_trylock_t *)__l;                  =
+        \
+>> >>                 _Generic((lock),                                  =
+      \
+>> >>                         local_trylock_t *: ({                     =
+      \
+>> >> +                               local_trylock_t *__tl =3D (local_t=
+rylock_t *)(lock); \
+>> >> +                                                                 =
+      \
+>> >
+>> > Why do we need the temporary?
+>> >
+>>
+>> Because 'lock' is a macro argument that we should evaluate only once.
+>
+> Ah, right!  Don't we have __auto_type or something for that though?
+> Maybe cleaner than the cast? Ah, that also doesn't work for the same
+> reason as below.
+>
+>>
+>> >>                                 lockdep_assert(__tl->acquired =3D=3D=
+ 0);    \
+>> >>                                 WRITE_ONCE(__tl->acquired, 1);    =
+      \
+>> >> +                               local_lock_acquire((local_lock_t *=
+)__tl); \
+>> >>                         }),                                       =
+      \
+>> >> -                       local_lock_t *: (void)0);                 =
+      \
+>> >> -               local_lock_acquire(__l);                          =
+      \
+>> >> +                       local_lock_t *: ({                        =
+      \
+>> >> +                               local_lock_acquire((local_lock_t *=
+)(lock)); \
+>> >
+>> > Is this cast necessary?
+>> >
+>>
+>> Surprisingly, yes.
+>>
+>> https://godbolt.org/z/E8rGchfev
+>
+> What the f...
+>
+> Anyways, with the additional context (git trailers) linking to the
+> clang bugs (and missed optimizations):
+>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Clang's warning is ultimately pointing out that jiffies may have two
-separate values in this initializer because it is volatile and accessed
-twice and the order of these accesses is not specified. This could
-result in unexpected or inconsistent behavior depending on the code
-author's intent and whether they realized the variable was volatile or
-not.
-
-As two separate accesses is not necessary here, add a local variable to
-hold the value of jiffies before the designated initializer so that a
-consistent value is used for initializing both members, clearing up the
-warning.
-
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2190
-Fixes: 2b4cfe64dee0 ("sched/numa: Initialize newidle balance stats in sd_numa_init()")
-Link: https://github.com/llvm/llvm-project/commit/955715460eaf9188c241c74750637fc82dfcc423 [1]
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v3:
-- Improve commit message to give more context into warning
-- Carry forward Nick's review tag
-- Link to v2: https://patch.msgid.link/20261116-topology-wunsequenced-v2-1-54611119172b@kernel.org
-
-Changes in v2:
-- Use a local variable with one access to jiffies before designated
-  initializer (Nick)
-- Link to v1: https://patch.msgid.link/20261114-topology-wunsequenced-v1-1-686a36fe61f5@kernel.org
----
- kernel/sched/topology.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 99878da03bce..60fad1690894 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1956,6 +1956,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 	int sd_id, sd_weight, sd_flags = 0;
- 	struct cpumask *sd_span;
- 	u64 now = sched_clock();
-+	unsigned long j;
- 
- 	sd_span = sched_domain_span(sd);
- 	cpumask_and(sd_span, cpu_map, tl->mask(tl, cpu));
-@@ -1973,6 +1974,7 @@ sd_init(struct sched_domain_topology_level *tl,
- #endif
- 	sd_flags |= asym_cpu_capacity_classify(sd_span, cpu_map);
- 
-+	j = jiffies;
- 	*sd = (struct sched_domain){
- 		.min_interval		= sd_weight,
- 		.max_interval		= 2*sd_weight,
-@@ -1994,7 +1996,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 					| sd_flags
- 					,
- 
--		.last_balance		= jiffies,
-+		.last_balance		= j,
- 		.balance_interval	= sd_weight,
- 
- 		/* 50% success rate */
-@@ -2004,7 +2006,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 		.newidle_stamp		= now,
- 
- 		.max_newidle_lb_cost	= 0,
--		.last_decay_max_lb_cost	= jiffies,
-+		.last_decay_max_lb_cost	= j,
- 		.child			= child,
- 		.name			= tl->name,
- 	};
-
----
-base-commit: 3dd8c790a7b7027abdd568e36db5e82ffaea7c77
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-change-id: 20261125-topology-wunsequenced-41b30ec6bc95
-
-Best regards,
---  
-Cheers,
-Nathan
+It turns out we should be able to work around this treewide by using
+__seg_gs only for __raw_cpu_read(). I'll send that out and we can
+discuss there.
 
