@@ -1,65 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795636999;
-	b=OWO9AW42p4iVKPqIug+tAjcPy5i8Nk263HUacC3+SL1efz5TU12BBn0WWBUwT9UorXP2
-	 PzpyVg0MZs9flYni5OGS8VAD5RP1Gjq7RSL/BcUEZeHqmcuc8c6it/xE/k2lLbQe60Fzf
-	 Rshm4VUxAhBp2D028pSOQuNbwRbfforjIbOrRhlrcnF1s2gv8oFREO5vrRneV7sHjV6bd
-	 5uiGWaGOxFKmzLLEHa6mpkrD6rVE9+qt01SzoIal2jVjI69Wqow0kDZMp5CqH5iX0E7l+
-	 lik62i5oHa4aEbvXdzeSoz3x20bdHYHpwUI/nNdoTpXN+4ouNy7IQkgOaMZDju9VlEg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795636999;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=A5nggYVq+8giAUpJT5r3lz72dFn0AiuWFrRV6uAF0kA=;
-	b=0AUcr0dgxQxBHvwwqEvqzn9163CDp9nG138tgPQb3Ou4y0hYDEW7KVrgkO+F0uozq4bX
-	 +3tgnwa4L7cLeNLHXlpf6lvzBpXcFqEJ+W04qvOp7UYXDh6Mf+xsPxiaDGiOmw5QZ3bvy
-	 Y3n5XuAMscNV+7neLIm0NeLetQE9XBaK3KolP4ueBJjc04hNcPbnDuBxYsk4gTOcdqYo7
-	 ZM48hQgc9JA0YsUKnLU3mZ+2WjDegRajCWKvLGeVa8PklyBNSUI6gNoHKdJldvVLjzPrr
-	 8NlJOHqSFVySVvYp7HCTobrzpvJ2tWjp4EcmkBIhgZvJseMOLQT7tOMkAeNT5ePrK4w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OcYoE0Lp;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795638304;
+	b=P7ue3h8TZdV23RzXlNPwvp0Iur75Zas2GuWrtGvt5wasOi8xcyoi7Y8D+EzzB8iGCAhD
+	 dFHaFrUw744r5+FTfj24lV0mCiN7WTYEKeUEJ9bGYgosw8WHOifEmcDYeXhj66118ALYN
+	 qKj3reAepnwBq/mrduhy52MmTKOQ5Nc9tB6dT4VgRTM9dZ0UOF1vUrItHDEkndrllg2Sb
+	 HnZ8r/WcDDeR4iniH93B4wUqe/LDTAPj4Hiip73gbDrcqZbAkbSgsBTC8QLKPbW/kF0Xr
+	 aEZUU11/qMZO0NTRvrA75z4q5xd8qC5ucoQKux4pYyeLhx9xt/ghgC0o2DNpwn62PNg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795638304;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+	b=YClQNZD4+s5rhoi5kzSl5bN1V0qlES9FtMUo7upev1NUJUcpKmRn2SegtqtsWwpBO4DB
+	 4OumxhubAfg3c4DR3EzQqfqJJ9fal91fmA5Otq20B/rxWeViQoKQhWbhkKRsq5BOJkAxV
+	 hlmuwRwZJ0OKTqH9Bo/LQLR4sckFbPp1g2xa4Y/F3XQ96RkZUbnMCjU9C+5qUSqAaDkqk
+	 HkopQ/GsWFY9MKaPJPdex3KIv+aFlSe8OMAwi9O5e7iX8aiBOzIxz2cbc3E0hqCGOMuRF
+	 8eZr/8zfdWqsgYtIlB33HRuR0gwyy8rtG4Tgi7wpcTdY+4BSf7/7UEJ9RwQXIxGsN9g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=k+90BSlQ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE31606A31E;
-	Wed, 25 Nov 2026 20:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8723E606A327
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 20:25:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8723E606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OcYoE0Lp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF5621F000C0;
-	Wed, 25 Nov 2026 20:03:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795636998;
-	bh=A5nggYVq+8giAUpJT5r3lz72dFn0AiuWFrRV6uAF0kA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OcYoE0LpMA0MY8ILZ0Ho+IuI9QGNvJilswpaMoS4wS/KCLSN/ZJu3lKMPrx9Yednv
-	 NW2hZsfEr5YHIF44Yv9djyKjZvg5THecugBnDJ9wPEIF8ejjzbIc/FFG8Jpw311Aet
-	 4zuZbaK+2FlNA6n5iBzFxYYfiOE8Kpb6P7Iix1XOfjVzJLT3+Ex+2YOOvUv7SUc407
-	 3TvwZxKK7SH/YTVD2BgRvrbjwZBwKGKWzLaZage9DVR3SEOcoPN8a5534K5BmO6nHr
-	 sXZX8pHoUU9RXVg63EeFKD7r6w3nk/N/zzWOWCK6kVL7NSxEaJTImmBt0b1QVDQYxS
-	 PnoRrPk+/LzVQ==
-Date: Wed, 25 Nov 2026 13:03:11 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v3] sched/topology: Avoid unsequenced accesses to jiffies
- in sd_init()
-Message-ID: <20261125200311.GA3625068@ax162>
-References: <20261125-topology-wunsequenced-v3-1-efa3db7e0bf8@kernel.org>
- <20261125094643.GY2668804@noisy.programming.kicks-ass.net>
- <CAKwvOdmyGdn4ES6Ku+Yovd7a5imzmtmYtd7KB=OMCqKpv1X8rg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=k+90BSlQ
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4bba5e17728so10735805e9.2
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 12:25:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795638303; cv=none;
+        d=google.com; s=arc-20260327;
+        b=o0TuC4/LVFP98lfbMIkVHa0BB+CmGwd+0I5/p4W0Zb02j8unr+WTuQ+kURAzBOzKST
+         J18Jl0HTtfGSUTZLg7tMJA9LruaW1IFq07TnxmA/1upJLdqCTW8MPqf5GSw6WzQZiLVW
+         gcXvP+zowfjv5TLjT9IjfEO7CvGoH9cCn3MMAbS6Un2VehcNsZjhotQw0jjVoPDO4bRj
+         I0ky3pNkMJKvuCndEDN7MmEj0n3qx/JVvSJDHVVcz5Me1ipSDSRpR2votbqSRDDdzXMZ
+         fAnLzsaB/XfvfEI5k3WNuYxbzFEZdoqVFpcHsS2CKgXBDKb4WZf6MMSsTClymEE1DT1f
+         pJ2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+        fh=vrbd8XUrJsROMDwtrKKORsIzcRDdoKfbDZ1eCWtACtE=;
+        b=BifJpR8uV2NXLpuaKFIBCFKrKx/c8ry5FxuEWHp36likEANeQM7zL15NunY0Me3A80
+         sninKjdPihN+Dld7fhn8PTmwfdEaZzTB8JiK16eBwZ7uZlfSLddamIK1YKUrdnxV3nVe
+         GIySEawgYqtlYKcpdm2zqSjP3lz2iCm7MpWh3lqAml0Ns8naxibKd8NQGbcsBEF2YMVf
+         P1CO7KREkPeWYRrth7AkbN+94XutyQYfI/pPp5fOZ8g+mTtFPkqTCaX11BpNCpiSZJd0
+         IwNJuK0xMr3myzfghRVpHQxGW6T0UPeQ7uu1C34FyR0jliRTOVvumq7hEOv3n1dzEUI1
+         qfYA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795638303; x=1796243103; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+        b=k+90BSlQCTa7mUfzvQaKBnFTGmgfAjRNRbqnQw+eDORnwTbDdBD6cnLq84+Hv9sPK/
+         zeOF65H91Gak8mJ4npfngQC+ebcpY9p/hYB0vIGnYiCYBL9HXORjHcFnRsWlbuhmvpQy
+         lI+fvEejWvLFUtIeCOGMwSzKoRRbvtSmHVT4c1DIY2IttE9f7KNo/GfkvG6u3ZSGeifP
+         X4B+P6T+Nv9+abv93zF5itL/mCyoZzY/tsikXcDZkO4Y7y7tr5BKqOLFXZ49hG+WbK9W
+         pzw1nVUBpfW6P6SaCYUQbzc1SmCvjxDvqq7osB3maWCJCK0uqRSl1L/sVTk7CWHbld7q
+         Cjag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795638303; x=1796243103;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WX1/mD88zGp/ZEzi3ka3HzLWQtdQebUwdPjAokn9YIU=;
+        b=MyaRK5sMBEybgrVN/khBq8c+MWH7VhOqu0nXWomJmZqb/cBTekfFvCM6OUjMu+XKgf
+         eHsLQqC486FIH+A8vbnJtoS7OM79cg43WdUfcrjvZtV9uffUoDltSM7efC0jrv7Sjwxx
+         2lHRQi5vbdr6C1NJHY7T39AZQbsM+ZOrXieciiqDxtfVPYIXyFsmH0no70l+Val9Zys0
+         FhO8Ia69zphN4vbYlBw/UG7N0gu1xJr3t0fEZ7I5WpuTTxnWNX5p7a9GzAJ3kmuDmUrM
+         xHl2LLDtfDMaqnYyioG8YErbRzFazwBFipUOKyUeJLL8XWsPiaIcgWimh2MncdHdzXoM
+         zBVw==
+X-Forwarded-Encrypted: i=1; AL+hErF6HkIp9HPK0cexJJ0Q0Q9qewKz46htATgkGFic3bFMMeIRlnFr1rSfQeXyYfH3uX639wBQ@lists.linux.dev
+X-Gm-Message-State: APuU4Z8v3date8nRYfnt8jbIyoPHKMng2vv6O3GOpLG0a+o7m9qJJL2U
+	lBJL0HCmBdpuegxRwfWOfNm4dCJviCBK53R0+4VeZpYlXSZAQ7GxzwAX1FKWGu6om1gCa0u1XTb
+	BAbBXS8QCfMNfZ3CH/+4omXdt5WitFfA=
+X-Gm-Gg: AZFdTZe/+RAJILRlaUIIEpk2ZY8buBTmSk8qcinc2a1MS/f/ZtDZdV6GU4AqxrZP5H6
+	FkADGkrE0C4O9bnT5awQ9KWi2SeOR8H37zChiPvIIqNM/ZHKFqSwjBoqx6/UYejW+g6b3Bm6rpt
+	RmoO00VqgrkRbSqLpch3kShNh5VT91R2zJk4UgUw8jX66Kx9VVWJNQJJiDxESqwHjQlJE15n1CP
+	sg/F0VB6E1sVpJRsdLt6k/pA2AmlbvGMTvWFR3lgAG5e0QrAvvGoj9gZfFnr7Rr3FrqUWOWEz0b
+	VnJea14G8QBMrn8eRYFb/QvThwEM8AVkEzjRVKghdmCdIUKx8VSErXMRq2HoPsvo6wDsI+tfgNT
+	r4A/XLQk8wpxTH0TezMxW/ffXLSigG361o1MDEA0mhJFLakYd+eMob0kLhv69BxFKuZt/AbrC5d
+	eZepBXfsBB3k3zcr6Dkw==
+X-Received: by 2002:a05:600c:4ec9:b0:4bb:6a5a:782d with SMTP id
+ 5b1f17b1804b1-4bb88925fcdmr394635895e9.17.1795638302754; Wed, 25 Nov 2026
+ 12:25:02 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -69,111 +105,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdmyGdn4ES6Ku+Yovd7a5imzmtmYtd7KB=OMCqKpv1X8rg@mail.gmail.com>
+References: <20261113221248.3535369-11-wusamuel@google.com> <20261113221248.3535369-13-wusamuel@google.com>
+In-Reply-To: <20261113221248.3535369-13-wusamuel@google.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 25 Nov 2026 12:24:51 -0800
+X-Gm-Features: Aa3M54paGFwRi6x8xvkBaed95VaPlmoDIEKWnad49yMfBgn6GjtOde1UijdiQkw
+Message-ID: <CAEf4Bzb6LQmHHkvB8WBezU6YRtggycRvvA3L03mQHDr3WQM6mA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
+	David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 25, 2026 at 11:32:31AM -0800, Nick Desaulniers wrote:
-> On Wed, Nov 25, 2026 at 1:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Nov 25, 2026 at 12:23:35AM -0700, Nathan Chancellor wrote:
-> > > Clang's warning is ultimately pointing out that jiffies may have two
-> > > separate values in this initializer because it is volatile and accessed
-> > > twice and the order of these accesses is not specified. This could
-> > > result in unexpected or inconsistent behavior depending on the code
-> > > author's intent and whether they realized the variable was volatile or
-> > > not.
-> > >
-> > > As two separate accesses is not necessary here, add a local variable to
-> > > hold the value of jiffies before the designated initializer so that a
-> > > consistent value is used for initializing both members, clearing up the
-> > > warning.
-> >
-> > None of this tells me why we should not just disable that warning and
-> > get on with life.
+On Fri, Nov 13, 2026 at 2:14=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
+te:
+>
+> KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
+> symbol name or prefix across module symbols in one pass.
+> module_get_kallsym() walks the module list from the head and runs an
+> export bsearch() for every symbol index.
+>
+> Add module_kallsyms_find_name(), and put the shared query struct in
+> linux/kallsyms.h, so we have a more efficient linear walk.
+>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+>  include/linux/kallsyms.h |  7 +++++
+>  include/linux/module.h   | 13 +++++++++
+>  kernel/module/kallsyms.c | 57 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 77 insertions(+)
+>
+> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+> index d5dd54c53ace..d31f2f436159 100644
+> --- a/include/linux/kallsyms.h
+> +++ b/include/linux/kallsyms.h
+> @@ -24,6 +24,13 @@
+>  struct cred;
+>  struct module;
+>
+> +/* Exact or prefix name query, optionally in one module. */
+> +struct kallsyms_name_query {
+> +       const char *name;
+> +       size_t cmp_len;         /* bytes to compare; includes NUL if exac=
+t */
+> +       const char *modname;    /* NULL matches any module */
 
-See below, I believe this warning has general value (but maybe not
-here).
+will "vmlinux" match just vmlinux? or how can one express "I only need
+symbols from vmlinux image" with this?
 
-> (Could also do ugly pragma's around this code;
+> +};
+> +
+>  static inline int is_kernel_text(unsigned long addr)
+>  {
+>         if (__is_kernel_text(addr))
 
-Comments could obviously be adjusted.
-
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 99878da03bce..729171ccc9b2 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1973,6 +1973,9 @@ sd_init(struct sched_domain_topology_level *tl,
- #endif
- 	sd_flags |= asym_cpu_capacity_classify(sd_span, cpu_map);
- 
-+	__diag_push();
-+	__diag_ignore(clang, all, "-Wunknown-warning-option", "Next warning might be unsupported");
-+	__diag_ignore(clang, all, "-Wunsequenced-volatile", "Doesn't matter for jiffies");
- 	*sd = (struct sched_domain){
- 		.min_interval		= sd_weight,
- 		.max_interval		= 2*sd_weight,
-@@ -2008,6 +2011,7 @@ sd_init(struct sched_domain_topology_level *tl,
- 		.child			= child,
- 		.name			= tl->name,
- 	};
-+	__diag_pop();
- 
- 	WARN_ONCE((sd->flags & (SD_SHARE_CPUCAPACITY | SD_ASYM_CPUCAPACITY)) ==
- 		  (SD_SHARE_CPUCAPACITY | SD_ASYM_CPUCAPACITY),
-
-> disable it for this entire source file via -Wno-unsequenced-volatile in the Makefile
-
-diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
-index b1f1a367034f..c1b2062d7356 100644
---- a/kernel/sched/Makefile
-+++ b/kernel/sched/Makefile
-@@ -30,6 +30,8 @@ ifdef CONFIG_TRACE_BRANCH_PROFILING
- CFLAGS_build_policy.o += -DDISABLE_BRANCH_PROFILING
- CFLAGS_build_utility.o += -DDISABLE_BRANCH_PROFILING
- endif
-+
-+CFLAGS_build_utility.o += $(CONFIG_CC_OPT_WNO_UNSEQUENCED_VOLATILE)
- #
- # Build efficiency:
- #
-diff --git a/scripts/Kconfig.toolchain b/scripts/Kconfig.toolchain
-index 1d68075f0469..dfd76b05b6bb 100644
---- a/scripts/Kconfig.toolchain
-+++ b/scripts/Kconfig.toolchain
-@@ -236,6 +236,9 @@ config CC_OPT_WNO_STRINGOP_TRUNCATION
- config CC_OPT_WNO_CONSTANT_LOGICAL_OPERAND
- 	def_string "$(cc-option-str,-Wno-constant-logical-operand)"
- 
-+config CC_OPT_WNO_UNSEQUENCED_VOLATILE
-+	def_string "$(cc-option-str,-Wno-unsequenced-volatile)"
-+
- config CC_HAS_COUNTED_BY
- 	bool
- 	# clang needs to be at least 20.1.0 to avoid potential crashes
-
-> and finally this diagnostic was forked into a group; it's now
-> -Wunsequenced-volatile under the -Wunsequenced group, that could go in
-> W=1).
-
-Moving this to W=1 won't really solve the problem because many people
-build with W=1 by default so you'll still get reports and patches trying
-to fix it. It either needs to be this patch or one of the ones above.
-
-> I think the warning has value generally across the tree, even if this
-> particular single instance "isn't a bug, per se."
-
-Hard agree. Just because this particular instance is not a bug does not
-mean future instances won't be. We pay a small cost to silence the
-initial instances then we get to see what it flags in the future. If it
-turns out there are never bugs, we can just turn the warning off
-globally (we've done it before) but I'd rather have hard evidence of
-that first; to me, these initial instances don't count. No maintainer
-has objected to the other patches I have sent for the other instances of
-this warning and there were not all that many for how much code the
-kernel has.
-
--- 
-Cheers,
-Nathan
+[...]
