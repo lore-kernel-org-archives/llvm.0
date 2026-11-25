@@ -1,72 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645736;
-	b=qfbjTKKo2anS6ZdCqATlfhUd0G1YKpvqXIiDXa9lXZwXDmbOplfvLvPyWjghvaTbauLA
-	 iaxN5yknLfULG92AV5w1tXiGso8i1+6kFIX/KfCnKXJflfczh/LL3YwnZC2nK7VTeiWaI
-	 vi6hBntIHXK9gEfQkkj9Ysx7CZ6b2xJTYhVOx+1khyO7wA2VMxqXLp+FGggjHxGdBcdwD
-	 t9E/h3WvbYfiBvZqRbM+o760ecgzwti9MYRLfh4RhTAya19DeufUb5J1MWjYsBDpZ81uu
-	 zHcWEghF8AXoZ0iADgAAe2Hz4gh66rTxDxJDqf+x9cPY//CJTvmCMSgvsOHwPIm4XDw==
+	t=1795645737;
+	b=qmBbBGgbjOXquDO61i+gG1NGzByNfMf1uCqEyU87C4a7Q0/vdAFeqYoknp99+XcwgQQj
+	 W+A0fU8kJkADMnkuYDalsZz6NxNHx5VmBmBDmvimFZo9IYBy00xVOIzo0TFtjRe+raDQJ
+	 WfT+NgYMwZ80NNIQxPcmKZCbjYZK3UIaQ18JHNkoT7GjXgnNhG2hvYqnS9tK/fqjaoMv4
+	 zvRe3zLoOQCcfNKMaFacvdhyg6ih/Oc4n7Ofh7+QHco18jIWYXi3+/5kQiryt8IsmQ7fi
+	 DKMMqNtBPlP6Bu8Af1A/iEmZJNdQihjxlb7sR+vl+TzLRd+Q1JQZPkPxGP+DrJj5gLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645736;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645737;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=iJKxUb/OYtiZmUaTC1b5p1/oY/CxsBACMnUtWish8DQ=;
-	b=l8x6LogTVhkHya9KxdLFF7Tfs9N0j7+MAZGaEND3aVoqfw9UrwuoJVvD+8gernY9wNjM
-	 DcC1ZRCnSKSrqRqEfTei5cK9M/SExxGo3bjetMFbQ7qBp60WX4yyxpcgCtzRXwnSsAXGy
-	 EmMnGKo+sjfLR+9AOQsy+d+dDUaQBCTmRRj/YgPdGBk02IfARgMFj2sUqLE8zizvnI3RS
-	 hufmZItdNwKSdbwrWIueJ7x3MB0EYlXjmPTQA2902BAEMTicDGPvF/kzgbelgfZQS7gOe
-	 c/zw+nOpPsN+DZB+j/87PLS7MGllNw4JBo0U+UgpNkOmalympxQuZv/a8NBQBOKO73Q==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=+G+uV6wn4dA5VTXmYb7jbew/KoHfSprRvHUbv8X9R3I=;
+	b=I3w7DdxPXuPAyCyz0fQI9pqw3FVtSzvC/x9iHe0k6SUwx31JxjbDtWSURwaGMjgyvxJ2
+	 N00YL4y0XkjdCWWAwqd5oVqt+tNY4uO+TCn/t8bYJwDIXj6sjzwj5TbrH2UkxPCm+cYca
+	 iDpKhB0lICqLm+eBVjzqe0vntgFxA0VZhJ3PmJVMQ/PCnRMqefEvXrEMSCHSkpMXpCRWf
+	 QdkCSdZDsAIbbjdkxm5LGUwC14MFb6nUtQ+aYS5PNcEepsH8bQsswV4YHZ4x1hzywJs/e
+	 zRoRRoQf6rRbRjLg0sVUx+Hmolud2FZZD9peZlxmOpw80zccYeXF4TOoe7U6ABTGRVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IJZCcGkR;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=a93pBJXH;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A914B606A323
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:28:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A914B606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D77606A339
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:28:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83D77606A339
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IJZCcGkR
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-383ec96a7deso6836513eec.1
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:28:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=a93pBJXH
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-30bcb065bfdso6655353eec.0
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:28:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645735; x=1796250535; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iJKxUb/OYtiZmUaTC1b5p1/oY/CxsBACMnUtWish8DQ=;
-        b=IJZCcGkRL7MlMQ4jt1lo389pr1s2ds8cxNqvS4tlz9NLhPqLf1uoRXzzNOCG+1rzQ+
-         WZkuV13OtN385mN8hl6ppRDmIBRgf/Be/RO14wouXpWIJq3AGol0TG1qGOqDPuYf2tec
-         /BcVWjG7lVv6mcXCr442gAXUpok3wfZ4FnzyzegnBenCHsOiOJMXwWNRP3i7AcQFGCVm
-         BDFIKTlQG6dVpKlBww8KfdkMJhq9E6dnxiVzy1D+689C3BVXZtWFT7z+9bt4JQZFWJHs
-         4HCqo5KiuC7sUKQb38m51XdxLPsJdl8MLwo/Sg0UCOFyFGzOBxg+9hGZrWuYif8fW7N0
-         2h3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645735; x=1796250535;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1795645737; x=1796250537; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iJKxUb/OYtiZmUaTC1b5p1/oY/CxsBACMnUtWish8DQ=;
-        b=rJNuLdyYTW7v4gWhYPyh8FL5G9NwOQflpyLbvxCH4qNeSxj5h/JN3dvLaDPMzTW99x
-         6vDsdDi/M+X4kT7HH3U4YpJRSGIyb4/S/JWi9dKsSPNad3PudbuzOLvMOX7CfJeqf1cK
-         dc8Mh00VmparMFToj3EqAxcP8Yp1s8dAA/3c3dF1YGoEEXtbQEsHvQINBp7MvyJCzYQy
-         xQs338Qkwg9mxlfyjMxt6ehvhv3YGcpephFpBq38RPi6cTRXzJuriZghvc9VrE2hwztK
-         oZEA1cH920CIEETJVr/k12WfaOcmWkQddry8FO/blfQkXXAWC7bqrFqZc3O9+9s7nqI8
-         L2XA==
-X-Forwarded-Encrypted: i=1; AL+hErG6sNZmUlodTJfmPF7e3kkN/unwSJSpFxc6YIsbHX6v2POa1Y7uQgMAQCgjD01+c+F+8d7s@lists.linux.dev
-X-Gm-Message-State: APuU4Z9/ra5dWKsSsWypj9m186hXybp33CqK0WDzt20r9YbKLjP2oz75
-	wT7cwlP2JGmax+OHqpCuZFTxOUsQ+7NMFOWa0UNIQBTtvVbYg3BEWrxRH4NAhHoryUjQre4Rp8T
-	tVw==
-X-Received: from dybla7.prod.google.com ([2002:a05:7301:1a87:b0:381:610e:404b])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:50fa:b0:384:6487:b155
- with SMTP id 5a478bee46e88-38570c359d3mr21814023eec.29.1795645734570; Wed, 25
- Nov 2026 14:28:54 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:28:26 +0000
+        bh=+G+uV6wn4dA5VTXmYb7jbew/KoHfSprRvHUbv8X9R3I=;
+        b=a93pBJXHs80jVGc+q9iYlKPDJMjBz7KAGTpDN7diZqozM9R6kZrUl2+HU/M0hO/13a
+         pOZoeICN/HGheLL9W0C5kVdzcK/tbBOlaPmyxoOobWHHUUjPLTYBzK/W2j/TK7k+kMJ0
+         6mD/Cgt9uJlOeoY8qCyPeM3rK683b0vExeKYkf7Tru6FJ+JqBxDI7mu8mRFyU8YJLmvA
+         /+9PiQz/9TDTOW6OMbUc0/CMkNUUAfTsrk1UGMlcRmMlkfjlO8gE4rjMEzUX1zKOYZix
+         HYqUGJC/ye05TjMALSaMu0PXYtw+Di3vrWGXu3h873BMRTADIcKeJjkE4eAJ2E/1R04m
+         uNew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795645737; x=1796250537;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+G+uV6wn4dA5VTXmYb7jbew/KoHfSprRvHUbv8X9R3I=;
+        b=GrIQ0dRMflhGAiy1F5vNxYP/6xrXva83zoEEMiRBMKfYyROU8lTTEwR+M3UB4EKeQN
+         UVqL/98z0KGGu8ruxrod+bC299ZJzVdb7bnBsX4C2yvqtYlVXJeAI/jRUxCGliZq4Fvj
+         HHfaDGQVmzUWy2195bZ3mWSkDZPj3NIpa2xWndPfVH4+2oBnSJq6FuBuwAvCxPB2Zkqt
+         fo5y8nqf8jf1a+6S1/I/Lat1gyq+E9JtdWsHGAdPwGiaV01fXYwM+9fYCGxQGexmOldf
+         wvwg+1MChr6TCkxFL3fuBtJrvxDbPBfJbmXKyCdUi5J5pm3eszndvk3lR7037hMF7qWp
+         aCng==
+X-Forwarded-Encrypted: i=1; AL+hErFQIO7CxjRtG0Pux7a0TzJup/KMVmJGZu7hcg8c1QySBVp+f/Yot+1FYs8k8mLMJing8R5m@lists.linux.dev
+X-Gm-Message-State: APuU4Z83eCnw4PcOyP1MDSoXKkXhJXDZGf9YkvjXrLMRfVP5KPLFcBnS
+	wBKNUxFNxw+g9OeZXPTwhqNAlY/zA0SrWQe4/rS74krRChb8uW5+QVwKg0amEAHgk4wOD1WQqf1
+	27w==
+X-Received: from dlaf15.prod.google.com ([2002:a05:701b:240f:b0:195:cde8:ab41])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701a:8148:20b0:1b5:227:7d1f
+ with SMTP id a92af1059eb24-1b55689eac0mr18892001c88.11.1795645736109; Wed, 25
+ Nov 2026 14:28:56 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:28:27 +0000
+In-Reply-To: <20261125222828.1452483-1-elkin@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,33 +79,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
+References: <20261125222828.1452483-1-elkin@google.com>
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125222828.1452483-1-elkin@google.com>
-Subject: [PATCH 0/2] usb: misc: usbio: fix fatal URB resubmission and probe
- maxpacket bounds
+Message-ID: <20261125222828.1452483-2-elkin@google.com>
+Subject: [PATCH 1/2] usb: misc: usbio: stop resubmitting bulk IN URB on fatal status
 From: Elkin Cruz <elkin@google.com>
 To: Hans de Goede <hansg@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Antti Laakso <antti.laakso@linux.intel.com>, linux-usb@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com, 
-	Elkin Cruz <elkin@google.com>
+	Elkin Cruz <elkin@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-I am trying out new Clang static analysis checks for kernel bug
-classes, and they flagged this code as possibly buggy. The findings
-were triaged/fixed and commit descriptions were drafted with help of AI,
-then checked against linux-next (not runtime-tested on hardware).
+usbio_bulk_recv() unconditionally resubmits usbio->urb in softirq
+completion context regardless of urb->status. When the bulk IN endpoint
+encounters a terminal status such as -EPIPE, -ESHUTDOWN, -ENODEV,
+-ECONNRESET, or -ENOENT (for example on endpoint stall, disconnect, or
+usb_kill_urb()), resubmitting the URB causes either a tight softirq
+resubmission loop on persistent errors or a wasted submission against a
+terminating URB, and zero-length completions also inspect stale
+bpkt->header.flags bytes.
 
-Thanks,
-Elkin
+Return without resubmitting on -ENOENT, -ECONNRESET, -ENODEV, -ESHUTDOWN,
+and -EPIPE (matching usb-ljca), verify urb->actual_length covers the
+packet header before checking USBIO_PKTFLAG_RSP, and log unexpected
+usb_submit_urb() errors.
 
-Elkin Cruz (2):
-  usb: misc: usbio: stop resubmitting bulk IN URB on fatal status
-  usb: misc: usbio: validate endpoint maxpacket sizes in usbio_probe()
+Fixes: 121a0f839dbb ("usb: misc: Add Intel USBIO bridge driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Elkin Cruz <elkin@google.com>
+---
+ drivers/usb/misc/usbio.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
- drivers/usb/misc/usbio.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/usb/misc/usbio.c b/drivers/usb/misc/usbio.c
+index 7b5f8669aee3..6142a32c18a9 100644
+--- a/drivers/usb/misc/usbio.c
++++ b/drivers/usb/misc/usbio.c
+@@ -239,17 +239,31 @@ static void usbio_bulk_recv(struct urb *urb)
+ {
+ 	struct usbio_bulk_packet *bpkt = urb->transfer_buffer;
+ 	struct usbio_device *usbio = urb->context;
++	int ret;
+ 
+-	if (!urb->status) {
+-		if (bpkt->header.flags & USBIO_PKTFLAG_RSP) {
++	switch (urb->status) {
++	case 0:
++		if (urb->actual_length >= sizeof(bpkt->header) &&
++		    (bpkt->header.flags & USBIO_PKTFLAG_RSP)) {
+ 			usbio->rxdat_len = urb->actual_length;
+ 			complete(&usbio->done);
+ 		}
+-	} else if (urb->status != -ENOENT) {
++		break;
++	case -ENOENT:
++	case -ECONNRESET:
++	case -ENODEV:
++	case -ESHUTDOWN:
++	case -EPIPE:
++		dev_dbg(usbio->dev, "Bulk in urb terminated: %d\n", urb->status);
++		return;
++	default:
+ 		dev_err(usbio->dev, "Bulk in error %d\n", urb->status);
++		break;
+ 	}
+ 
+-	usb_submit_urb(usbio->urb, GFP_ATOMIC);
++	ret = usb_submit_urb(usbio->urb, GFP_ATOMIC);
++	if (ret && ret != -EPERM)
++		dev_err(usbio->dev, "Submit bulk in urb error %d\n", ret);
+ }
+ 
+ int usbio_bulk_msg(struct auxiliary_device *adev, u8 type, u8 cmd, bool last,
 -- 
 2.56.1.839.g22a8290db9-goog
 
