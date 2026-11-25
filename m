@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587407;
-	b=IKA+tCNguwQpR1R0Y5ruSpcSQpn+Lym6o/uryxy6BKvuGdzC4rWsRtEBD1YQwPe9Yl7f
-	 kre7PBBQAmunxaBqEkG1Eq5K2riCQBzFgRVBssXE8wR3sGS7MXC2zXFF3VB3OzNA2XH0e
-	 iX2wNj4k0JNlo2lsNz4CEYZYXtkbj33THXvIy6X1RFvoKiRZqe6+dh7lWqGkA4DKa0VEC
-	 jveq3AjCtk5VUIhUljo0F0KvM176fxtPrgfJub4swWUljIsfT4Q9jiwZ/inEao5Px0RaV
-	 7nHyTulo808WdIX9MK0mwnPo6zIRC/44kDxp4fyvaE38SIzz+Fzej1S/Sv/k5DyD2iQ==
+	t=1795587408;
+	b=Ic3qAKAZia3HGV2ZHd+cGsf60C/ObNwqm8Ro4OjM2DzBpC/8gASLG+VZIQ02rFNlHtfJ
+	 8TfcEcrG/Ho49HQ7CPYSoEhXtR9tp9ihRlHYtXaAvuseZd2rjM5oA6bu1zq3lsYnwa6G/
+	 ZQBIdnyH7mSbIPTt9nfMkLADmyVyYg/xim4dPK3g4/Jh0E3LJc3y0ELNXqr6BJADbsnvU
+	 RM2qP6ZUeRpoRSAV+qfqrLYi0zbShiiszLqFDAmmZb2KjHcFBGZ0znOUH1Cypm8mK7LoT
+	 KeXLIg/eCvDlHuMpsUd0Mn7FKnH/0RlM1zQfYhpVfHrgxc2X2H3GtMQS5IhjuVv4Szw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587407;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587408;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
-	b=OHfrSQzuglLBwhKAm8MBrCzluZ1tX6ZCL8d+IMJ6+gkMjeiGkzwffly0/1qC3uVcwnzH
-	 YCrcljwda3LtoWO7lIJgcb/anuKt/5B/JH6q8/9wfnVGtb7Bx1dzPkQUvUCFiy/GigHlk
-	 axhf2xlAzp9ExvaC+kxEGwPZj+zXwwYk3d9S/v5Kvf/Zz8kmZ/KccJY5IoV2F5J+/lzNy
-	 bxWm6ij9Jh3NtV4+stK/8dCQrYxN6B+klU0C2X6V7vo27T+aohVS/YkpjbVwr10SuqVCx
-	 uIOGVfgHqXpm5rjzipZe7L9hSOKwaemxXdtucoH7ooNuSkWyvg/ZTogejZJBX/uPQnQ==
+	bh=XJ5Bj2HUeqnSIN+0jmezTl4ea1LIGCfrIoPbd+y7XVY=;
+	b=UvN5dSLP6NH1H9y6NrqQwNluBRr7ynCol/v5DYOBEIes3xBptzKWuclo/q2Ed3CEUryo
+	 qDHosQWyrMthobmzn1qqEeDPh1jyBF26q1LbbVeeKrWAlr+u3oMF7vGEwQzZ7NWVBjmVw
+	 PBVXnFSTd7lSTMd1C39zU1qJzQMUNALP+DGCtbQdwJrXHsVdwkfotV4JsL0cmgtm5yjXc
+	 qb1Jjs7hcgNAyRJNs+6sC1bnzfxNPSRn4NIn2Nu7kmma04dAzoRbwcdEDrkqsz2MOMwd+
+	 Z0ys730dtB3R0jErTR4u52WYgneu/R9Wkvaieu4zYtQKuCT4On/kcmPghdAIgnrWh7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Lv24EYny;
-	arc=none smtp.remote-ip=209.85.210.70
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XyMjmpk0;
+	arc=none smtp.remote-ip=74.125.82.70
+Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C07B606C836
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 06:16:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C07B606C836
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA69607AC0C
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 06:16:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CA69607AC0C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Lv24EYny
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-862a5ad18d0so6091015a34.3
-        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 22:16:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XyMjmpk0
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1383723dfddso5633030c88.0
+        for <llvm@lists.linux.dev>; Tue, 24 Nov 2026 22:16:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587406; x=1796192206; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795587408; x=1796192208; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
-        b=Lv24EYny3QwiZKifkyP03og603ySdKDeyHN3Wf4dcIk01Fnd/L403pX7qObGFgPBU9
-         OYvwYqs+zqlCpeCz8KcnM65jAMRiPvvXn3C4wa36Z5MkPJ2z7verBxnCSe/sJt+Wh+Q9
-         BP3fRcMcgvhFJyb3vYp0obWHEKCr2YbzPR3zxbv0CxUHXJF/2iTt8ohmy5VJBYdg75KK
-         JpPToOLWB7Ty4OOfE7vS0yg6xYhykJ0Df7ZmiC994dr6a/J/Ms7fDQu04xmGv0gt8x8+
-         9tUK1VsspMSphsB00rofd9YPwnaQQxvIbhPCsscCr3njoDqcVJt76IxMz6VRh3zUqkl/
-         3M2w==
+        bh=XJ5Bj2HUeqnSIN+0jmezTl4ea1LIGCfrIoPbd+y7XVY=;
+        b=XyMjmpk0p1sQI6umoHMQ6AksU8ombyl0wjvSiZmXtWVOGLLeIEWmVh4oRLMKyOVRI2
+         e7g6JNTy9UDczToDW3ZOey+JdR04xMO/RqmccymmQhn3YVDoaOBFujBZaiRpLVUIDSf5
+         SIO5ii3Shp9TPEalvrOovR1iWaYqusZjgMWtKljhzxIUrNdbEyLx/AWKmJ7VjNLvX70V
+         /8nA2WOPM1M6PdR+Hxw9eJFMqNM6x7JgYKporglrxCHwWe27qMTzWPkYm4DF0I+iWDFQ
+         39AK7ftCAA9I4tmfjEp9mIdJJLwOOFk1vKqSprXvr6iqE8rA0Wgp9cGGT2w55+St06Nv
+         nyjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587406; x=1796192206;
+        d=1e100.net; s=20260707; t=1795587408; x=1796192208;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
-        b=CyJo0VoH0vPX4HXKDfmsRbi2l1pu0z5wovK4kt7dEFPW+GIrBAfV91ABABGnTS5BuF
-         KaUPQI5x1BfL9c+j+t6o0s/IB6EuZkhHCYS6FzH3rytBDlmZsVQgmpTUje5EA1M+flqN
-         NcMHjwxqfhtVbsIYw+IVBqwsVjsAEDNB8AK8L50wrjg9QK/GNZT56q+dWmNj/mSwTe32
-         nYdkvuYMvf+wyKZBi65PH9xIPznxXdaM2Zgszi8d3LFHX7CkMIfD17+tX7GeoYDBuE4t
-         B6sThjn9Pe1veqMmMWyhDdVKLgBgoLS8b9iLE0LT28i7ab9CNZE9sCD5KDaIs0lqAzjC
-         fxYA==
-X-Forwarded-Encrypted: i=1; AL+hErHGUrjrApIlrekjh+Hl6ESFHDzuI0PCtglUHjuSmr2YMZtgHYbw0UetWJqSE6IH7O5hJrQs@lists.linux.dev
-X-Gm-Message-State: APuU4Z/u6h625wsWJKBNAAFIhD3wrl7yugL2gma3Q0MFWk+ovwLCT30K
-	GHvOcFUrmpgWTv9hSEczTMf51tfoclNjVZl9Rlljng8YsPtJVi2YJbGmkjr23A3riJJAZszNh7z
-	dOY/n17QIxQ==
-X-Received: from oigu20-n1.prod.google.com ([2002:a05:6809:5d4:10b0:4f5:740:2bcf])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:319b:b0:4f5:eaac:5173
- with SMTP id 5614622812f47-57a0b84fa3dmr15864618b6e.57.1795587405164; Tue, 24
- Nov 2026 22:16:45 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:17 -0800
+        bh=XJ5Bj2HUeqnSIN+0jmezTl4ea1LIGCfrIoPbd+y7XVY=;
+        b=jlflP5hHYqChIponsDl/wHuvqKIj2nJrJlaoqVCJalfeqlCS06oO9mv3OXfrnKNbL7
+         MojhXfL9a7cY7SujKs8ltyT9NdcUQl1PJSAkA0riw6isAHuXkalUAZ1lZu7SSfLAHe6s
+         7J061fqH4ww5G5NpTs2b3YhyG3AMWedifF2guxqlpAu9g0+LD/wP3Ums2KaB/eTiMcVH
+         OSxgXX6ANf2l8/aNVsU70BoXU9LhPb5G8jDqkbpCRblUXhxyTwFmj0XpXHBobk3dnKG8
+         h20Joy6nSY7Cs8645bbKNVMrL9c9tIA/Y3gH4XVP8hQNUY3ioyanu9E/dIuiaGjllYIY
+         Ni5A==
+X-Forwarded-Encrypted: i=1; AL+hErE/ZmEOv1ZtVH7PJBpBAdEbC/RjL+7k6DiDlFsvaFJN/ELZtGB7SE2dGBQc6VVyFd8GendQ@lists.linux.dev
+X-Gm-Message-State: APuU4Z/uA97fpYgHLQSA96OlNCaXWOb9bX9+rnu2vSiajR2QqYdZJ8Jc
+	vVjIPMEgyYi3ecwdl5mk87mlnKmYHlbp2uCCUVx3r/90Y8MZjMG0PMzdxEvf3SDHC6aH7K8pp4O
+	KecROMtUy7Q==
+X-Received: from dlar8.prod.google.com ([2002:a05:701b:21c8:b0:1b5:345d:ed30])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701a:cc88:10b0:151:6e80:ba7e
+ with SMTP id a92af1059eb24-1b5567dcec1mr15970822c88.4.1795587407220; Tue, 24
+ Nov 2026 22:16:47 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:18 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-25-irogers@google.com>
-Subject: [RFC PATCH v2 24/30] tools headers: Add linux/unwind_dwarf_cfi.h copy
- from the kernel sources
+Message-ID: <20261125061523.1540234-26-irogers@google.com>
+Subject: [RFC PATCH v2 25/30] tools include: Add linux/uaccess.h stub for
+ userspace tools
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org
@@ -103,216 +103,31 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Copy include/linux/unwind_dwarf_cfi.h to
-tools/include/linux/unwind_dwarf_cfi.h for host unwinding verification
-tools under tools/, and add it to tools/perf/check-headers.sh.
+Add a minimal tools/include/linux/uaccess.h providing a no-op
+might_fault() stub so userspace tools under tools/ can compile shared
+kernel code that includes <linux/uaccess.h>.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/include/linux/unwind_dwarf_cfi.h | 181 +++++++++++++++++++++++++
- tools/perf/check-headers.sh            |   1 +
- 2 files changed, 182 insertions(+)
- create mode 100644 tools/include/linux/unwind_dwarf_cfi.h
+ tools/include/linux/uaccess.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+ create mode 100644 tools/include/linux/uaccess.h
 
-diff --git a/tools/include/linux/unwind_dwarf_cfi.h b/tools/include/linux/unwind_dwarf_cfi.h
+diff --git a/tools/include/linux/uaccess.h b/tools/include/linux/uaccess.h
 new file mode 100644
-index 000000000000..3530794c8543
+index 000000000000..5a9e6bf4cfb5
 --- /dev/null
-+++ b/tools/include/linux/unwind_dwarf_cfi.h
-@@ -0,0 +1,181 @@
++++ b/tools/include/linux/uaccess.h
+@@ -0,0 +1,9 @@
 +/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
-+#ifndef _LINUX_UNWIND_DWARF_CFI_H
-+#define _LINUX_UNWIND_DWARF_CFI_H
++#ifndef _TOOLS_INCLUDE_LINUX_UACCESS_H
++#define _TOOLS_INCLUDE_LINUX_UACCESS_H
 +
-+#include <linux/types.h>
-+
-+/*
-+ * Minimal DWARF Call Frame Information (CFI) unwinder subset.
-+ *
-+ * Evaluates a strictly bounded, non-Turing-complete subset of .eh_frame and
-+ * .eh_frame_hdr tables matching SFrame's stack-unwinding state model (plus
-+ * fixed-pattern DRAP stack-realignment and signal-frame expressions):
-+ *  - Advances PC monotonically through a single FDE (no backward jumps)
-+ *  - Tracks CFA = (SP | FP | scratch) + cfa_off or *(FP/SP + cfa_off)
-+ *  - Tracks stack save offsets for SP, FP, and RA (ignoring callee-saved GPR
-+ *    spills)
-+ *  - Rejects general DWARF expressions, register-to-register rules on SP/FP/RA,
-+ *    and DW_EH_PE_indirect FDE/table pointer encodings (skipping CIE
-+ *    personality and LSDA fields without dereferencing).
-+ */
-+
-+/* Hard safety bounds enforced on CIE/FDE lengths, offsets, and state stack */
-+#define DWARF_CFI_MAX_CIE_LEN		128U
-+#define DWARF_CFI_MAX_FDE_LEN		4096U
-+#define DWARF_CFI_MAX_CIE_DELTA		(64U * 1024U * 1024U)
-+#define DWARF_CFI_MAX_FDE_COUNT		(4U * 1024U * 1024U)
-+#define DWARF_CFI_MAX_STATE_STACK	4U
-+
-+/**
-+ * enum dwarf_cfi_base - Base register or addressing mode for computing the CFA
-+ * @DWARF_CFI_BASE_UNDEFINED: CFA rule has not been established yet.
-+ * @DWARF_CFI_BASE_SP: CFA = stack pointer + cfa_off.
-+ * @DWARF_CFI_BASE_FP: CFA = frame pointer + cfa_off.
-+ * @DWARF_CFI_BASE_FP_INDIRECT: DRAP stack realignment: CFA = *(FP + cfa_off).
-+ * @DWARF_CFI_BASE_SP_INDIRECT: Signal trampoline frame: CFA = *(SP + cfa_off).
-+ * @DWARF_CFI_BASE_REG: Transient prologue/epilogue scratch register:
-+ *                      CFA = reg(cfa_reg) + cfa_off.
-+ */
-+enum dwarf_cfi_base {
-+	DWARF_CFI_BASE_UNDEFINED = 0,
-+	DWARF_CFI_BASE_SP,
-+	DWARF_CFI_BASE_FP,
-+	DWARF_CFI_BASE_FP_INDIRECT,
-+	DWARF_CFI_BASE_SP_INDIRECT,
-+	DWARF_CFI_BASE_REG,
-+};
-+
-+/**
-+ * enum dwarf_cfi_rule - Recovery rule for caller's SP, FP, or return address
-+ * @DWARF_CFI_RULE_SAME: Register retains its value from the current frame
-+ *                       (or defaults to CFA for SP).
-+ * @DWARF_CFI_RULE_OFFSET: Saved on the stack at *(CFA + off).
-+ * @DWARF_CFI_RULE_FP_OFFSET: Saved relative to FP at *(FP + off) (DRAP frame).
-+ * @DWARF_CFI_RULE_SP_OFFSET: Saved relative to SP at *(SP + off) (sigframe).
-+ * @DWARF_CFI_RULE_UNDEFINED: Explicitly undefined (DW_CFA_undefined); marks
-+ *                            the bottom of a stack (e.g. _start or clone).
-+ */
-+enum dwarf_cfi_rule {
-+	DWARF_CFI_RULE_SAME = 0,
-+	DWARF_CFI_RULE_OFFSET,
-+	DWARF_CFI_RULE_FP_OFFSET,
-+	DWARF_CFI_RULE_SP_OFFSET,
-+	DWARF_CFI_RULE_UNDEFINED,
-+};
-+
-+/**
-+ * struct dwarf_cfi_arch - Architecture DWARF register numbers and word size
-+ * @ws: Target address/word size in bytes (4 or 8).
-+ * @sp_reg: DWARF register number for the stack pointer.
-+ * @fp_reg: DWARF register number for the frame pointer.
-+ * @ra_reg: Default DWARF return-address column number.
-+ */
-+struct dwarf_cfi_arch {
-+	u8 ws;
-+	u8 sp_reg;
-+	u8 fp_reg;
-+	u8 ra_reg;
-+};
-+
-+/**
-+ * struct dwarf_cfi_row - Evaluated Minimal DWARF unwind state at a target PC
-+ * @cfa_off: Byte offset added to the CFA base register before or as the CFA.
-+ * @sp_off: Byte offset used to load the saved SP when @sp_rule is an offset.
-+ * @fp_off: Byte offset used to load the saved FP when @fp_rule is an offset.
-+ * @ra_off: Byte offset used to load the saved RA when @ra_rule is an offset.
-+ * @cfa_base: CFA computation mode (&enum dwarf_cfi_base).
-+ * @cfa_reg: DWARF register number when @cfa_base is %DWARF_CFI_BASE_REG.
-+ * @sp_rule: Recovery rule for the stack pointer (&enum dwarf_cfi_rule;
-+ *           %DWARF_CFI_RULE_SAME indicates caller SP equals CFA).
-+ * @fp_rule: Recovery rule for the frame pointer (&enum dwarf_cfi_rule).
-+ * @ra_rule: Recovery rule for the return address (&enum dwarf_cfi_rule).
-+ * @signal: True if the CIE carries the 'S' signal/interrupt frame augmentation,
-+ *          indicating that the saved PC points directly to the interrupted
-+ *          instruction rather than after a call instruction.
-+ * @ra_signed: True on AArch64 when DW_CFA_AARCH64_negate_ra_state indicates
-+ *             that the saved return address carries a PAC signature.
-+ */
-+struct dwarf_cfi_row {
-+	s32 cfa_off;
-+	s32 sp_off;
-+	s32 fp_off;
-+	s32 ra_off;
-+	u8 cfa_base;
-+	u8 cfa_reg;
-+	u8 sp_rule;
-+	u8 fp_rule;
-+	u8 ra_rule;
-+	bool signal;
-+	bool ra_signed;
-+};
-+
-+/**
-+ * struct eh_frame_hdr_entry - Binary-search index entry for an FDE
-+ * @start_off: Signed 32-bit offset from the table base (or entry field) to the
-+ *             FDE's initial PC location.
-+ * @fde_off: Signed 32-bit offset from the table base (or entry field) to the
-+ *           start of the FDE record in .eh_frame.
-+ */
-+struct eh_frame_hdr_entry {
-+	s32 start_off;
-+	s32 fde_off;
-+};
-+
-+#ifdef CONFIG_UNWIND_DWARF_CFI
-+
-+extern const u8 __start_eh_frame_hdr[];
-+extern const u8 __stop_eh_frame_hdr[];
-+extern const u8 __start_eh_frame[];
-+extern const u8 __stop_eh_frame[];
-+
-+int dwarf_cfi_eval_fde_kmem(const u8 *fde, const u8 *eh_start,
-+			    const u8 *eh_end, unsigned long pc,
-+			    const struct dwarf_cfi_arch *arch,
-+			    struct dwarf_cfi_row *out_row);
-+
-+int dwarf_cfi_unwind_eh_frame_hdr(const u8 *hdr, size_t hdr_size,
-+				  const u8 *eh_start, const u8 *eh_end,
-+				  unsigned long pc,
-+				  const struct dwarf_cfi_arch *arch,
-+				  struct dwarf_cfi_row *out_row);
-+
-+int dwarf_cfi_scan_eh_frame_kmem(const u8 *eh_start, size_t eh_size,
-+				 const struct dwarf_cfi_arch *arch,
-+				 unsigned long base_addr,
-+				 struct eh_frame_hdr_entry *entries,
-+				 unsigned int max_entries,
-+				 unsigned int *out_count);
-+
-+int dwarf_cfi_unwind_user_eh_frame_hdr(unsigned long hdr_uaddr,
-+				       size_t hdr_size, unsigned long pc,
-+				       const struct dwarf_cfi_arch *arch,
-+				       struct dwarf_cfi_row *out_row);
-+
-+#if defined(CONFIG_UNWINDER_DWARF_CFI) && defined(CONFIG_MODULES)
-+/**
-+ * struct mod_dwarf_cfi_index - Sorted FDE lookup table for a loadable module
-+ * @num_fdes: Number of sorted FDE index entries in @entries.
-+ * @eh_frame: Pointer to the module's in-memory SHF_ALLOC .eh_frame section;
-+ *            also serves as the base address for @entries offsets.
-+ * @eh_frame_size: Size in bytes of the module's .eh_frame section.
-+ * @entries: Sorted binary-search table mapping PCs to module FDEs.
-+ */
-+struct mod_dwarf_cfi_index {
-+	unsigned int num_fdes;
-+	const u8 *eh_frame;
-+	size_t eh_frame_size;
-+	struct eh_frame_hdr_entry entries[] __counted_by(num_fdes);
-+};
-+
-+struct mod_dwarf_cfi_index *dwarf_cfi_mod_alloc(const void *eh_frame,
-+						size_t eh_frame_size,
-+						const struct dwarf_cfi_arch *arch);
-+void dwarf_cfi_mod_free_rcu(struct mod_dwarf_cfi_index *idx);
-+int dwarf_cfi_mod_eval(const struct mod_dwarf_cfi_index *idx, unsigned long ip,
-+		       const struct dwarf_cfi_arch *arch,
-+		       struct dwarf_cfi_row *out_row);
++#ifndef might_fault
++#define might_fault() do { } while (0)
 +#endif
 +
-+#endif /* CONFIG_UNWIND_DWARF_CFI */
-+
-+#endif /* _LINUX_UNWIND_DWARF_CFI_H */
-diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-index 3e684c851a86..1b1bd04a6690 100755
---- a/tools/perf/check-headers.sh
-+++ b/tools/perf/check-headers.sh
-@@ -30,6 +30,7 @@ declare -a FILES=(
-   "include/linux/hash.h"
-   "include/linux/kmsan-checks.h"
-   "include/linux/list-sort.h"
-+  "include/linux/unwind_dwarf_cfi.h"
-   "include/uapi/linux/hw_breakpoint.h"
-   "arch/x86/include/asm/cpufeatures.h"
-   "arch/x86/include/asm/inat_types.h"
++#endif /* _TOOLS_INCLUDE_LINUX_UACCESS_H */
 -- 
 2.56.1.831.g720f3f5937-goog
 
