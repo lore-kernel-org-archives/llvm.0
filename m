@@ -1,80 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=159.69.126.157
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795601297;
-	b=j2B9chc4LRL2dJWCmZCqNMJBEET/j7d7IMPicj47enesJn7L5Oln5eGHIyJSAxgMTrIW
-	 8p0yqCWJ0QKvFAR+C9dinsLuASpbe8KUtPbkAOGKlEi82Iy8kkaJFfWdhU9RJlvtgeTfu
-	 Wo2fwdFRwu9/EtkjLW0iT7UZpe0oBzlYEcx3sar3RE728IJU6TyR3YmM2wYJsIIfxE/Fa
-	 JCeSTDcQuLxLvbgxiC/MAYQct6rtbjx4Q+g4LzIZtomUgw+4ckGL47ZGpoTzOhCzCebmP
-	 9jwR7YCu55sdHsMvhFi5JE3AWUimF9bX2sMqBxgOkg46vuOp37epgYG/eg1XasbKQfA==
+	t=1795602434;
+	b=UaoiyEGZL7UAsIxwRgNCRDZgTkCJ4cRXaxVMlVOCR2IHW8H1VtHSzV+UK5FW0aJ/xq5a
+	 q03Q54zozw+WFRocRGfd4MPYgi6GY0zhegyHEJtgyyzhYaCvjD8JieI0N6c9gHP6kEMOx
+	 Ad6k4ovrnJ6WGXxxDaMWwYf3W4CisamhGtFbqBWtl6aPp1MtqLbz3snVjndWG4PxEieC1
+	 WOlOJHffAgF+y3vtFHrAZimUNthD2i6S3lbiINt3bJR54MHFlxkgzXISjuHqRAc41mq52
+	 M2E8U3bcgGWCTYxnK95fBCNH0sb26zN3HyA7sCzqVq5h64gcAkvTq5+mIQAEyEq0VmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795601297;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:Date:From:To:CC:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=huWNQd8f5dKBY/anqpOcIdlAG1pqKmrF0SOJUgi2ST4=;
-	b=LlpB8tGJibV2jaLN7VAC2hPgVED/Y/M9n9f9I3Os2pTuohy8uLQCmNSklUunVkto8Cs7
-	 sWzxgN52KA7nGfDKeu+Ggno9CrI9HplwRTnRHi0f+VBLPMbjJh47/Bo5UTYp4x391GIoM
-	 aWVz3xRHh2S2aSBeUtdCKdU/ida11Y33LInbjKSdd6j4sb3WITOryjPa8Kc13wQZ4nrSl
-	 HggRzQal4NCWa7CFGRXdFlwPRJgQD6qWYMkIvuMQ7bveynRcP6YJJeNgK8c2HbgarXak/
-	 YcGJhSjYIfPFDNskQ3I58N73VDHB/CSyJzrllkzUFRbYQ1vSW4l6GcmzvR/3s1VH7yA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795602434;
+	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=UdjPSrmIIN+yK0pjcfXNzdP1bLb3/Iq2/gmCvGpuUSM=;
+	b=T8xPEJNSI8YWu9ESFhwbZUoSZDzjceek1+EWdGkcujE6rWRLjgOCT3CLDsSxTnSIpcJQ
+	 JranKPt4hlpXjFWqWZ7XbMKk3+Xsf4O4tkt4jo0pVqtwQA4JQ+CTPvL2MjgQ8SokT5p+I
+	 CDcVxqRRfrwVbXjzkQoca4FkbdkFTDi3mXguKsdlUaxB+WcTv7OlMFSlpTRbmRFzzOxLT
+	 iWrk0ZQzo/a/wCGJhG7kLVaSIadL53tvdAa2I4cwLJo8hNlwJis26i5a3QTl/Eryoxryn
+	 I/i6WLVQrFwlZIRauURKgSVdG976+jt86pbVy0aKmDXABy+YnuZNST8DUzsH/4N27MA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=microchip.com;
-	spf=pass smtp.mailfrom=microchip.com;
-	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b="vKwm/ysx";
-	arc=none smtp.remote-ip=68.232.154.123
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	dmarc=pass header.from=weissschuh.net;
+	spf=pass smtp.mailfrom=weissschuh.net;
+	dkim=pass header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=O0jDoNL7;
+	arc=none smtp.remote-ip=159.69.126.157
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2012606A323
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 10:08:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2012606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4987E606A32D
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 10:27:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4987E606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=vKwm/ysx
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1795601296; x=1827137296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+oxUsbUUI6wl3gb8tpPgl9CfUst6l9KNJvinAj8Kgvs=;
-  b=vKwm/ysxVXX9zi6zv35geIpf2tJo7KP57OnDegUpUr7Yz2pmaYfJXpez
-   OUkl1Xbe676k1x3KIpyeQibhir2OohMNHOqGXKah1mrX4gRIwf5VVi3yC
-   IkUphVI1GkvPaq1FJ1cFZuwzxP6i+Uy7+m8XxgUSZOW57APNbbIRY0gGX
-   WELkdIkuM/rrsduQm+tFgg53xCrbHfE/y0d5gGiBN+Lfx0uBit5UZCPFk
-   ncXRimQc1hdAa3OW3ld3rHtbCXJbAQYEPQ5LnrcOdtHs1oOVPWrhvPXl0
-   f5gsazogc23ccdAMQ9U/j8Bwdg+KHaNtagOn7wxYQnwaC2KXSlot7+Drr
-   A==;
-X-CSE-ConnectionGUID: VvsAXqvMTYyfMnYDI+mTpA==
-X-CSE-MsgGUID: 8cOewiq1R/u3NMQhgpJddA==
-X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
-   d="scan'208";a="234072207"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 03:08:16 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.57; Wed, 25 Nov 2026 03:08:15 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Wed, 25 Nov 2026 03:08:13 -0700
-Date: Wed, 25 Nov 2026 11:08:12 +0100
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Ian Rogers <irogers@google.com>
-CC: <netdev-bot+sashiko@kernel.org>, <horatiu.vultur@microchip.com>,
-	<UNGLinuxDriver@microchip.com>, <andrew+netdev@lunn.ch>,
-	<davem@davemloft.net>, <edumazet@kernel.org>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, <elkin@google.com>
-Subject: Re: [PATCH net] net: lan966x: Free skb when PTP TX timestamp request
- fails in xmit
-Message-ID: <20261125100812.gywdqx7zkjelinu4@DEN-DL-M70577.microsemi.net>
-References: <20261119170729.1524516-1-irogers@google.com>
- <179545939880.3135.6341792822211409455@kernel.org>
- <20261125004031.1005034-1-irogers@google.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=O0jDoNL7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1795602430;
+	bh=9UPOXoCV2CfcVJuo2UQgfeUtoe1J/CgkmQtANG3RcC8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O0jDoNL7/5eA2Nl4OgQYadtK1gO6tMJYxBTHeMev1YWHAF5NieOiuKvV3dngmD5w3
+	 Q8HrDGOAJvMvpSpVv+9tq2J9/W3wLTvqi+jspzqeFwi/R5j5LMl7copWKYfr18jNro
+	 iGSq5N3daWa9fHkB7QNC7nCqqC0HJtI3lnpxlI08=
+Date: Wed, 25 Nov 2026 11:27:10 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Nicolas Schier <nsc@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Julian Braha <julianbraha@gmail.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+	stable@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v3 1/2] kbuild: Introduce CONFIG_CROSS_COMPILING
+Message-ID: <25eaa926-c244-40a5-b7b9-e5182e601446@t-8ch.de>
+References: <20261124-x86-no-march-native-on-non-x86_64-v3-0-268354149c5f@kernel.org>
+ <20261124-x86-no-march-native-on-non-x86_64-v3-1-268354149c5f@kernel.org>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,39 +62,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261125004031.1005034-1-irogers@google.com>
+In-Reply-To: <20261124-x86-no-march-native-on-non-x86_64-v3-1-268354149c5f@kernel.org>
 
-On Tue, Nov 24, 2026 at 04:40:31PM -0800, Ian Rogers wrote:
-> On Mon, Nov 23, 2026 at 10:43 AM <netdev-bot+sashiko@kernel.org> wrote:
-> >
-> > [Severity: Medium]
-> > Will this tx_dropped increment ever reach userspace? lan966x sets
-> > .ndo_get_stats64 = lan966x_stats_get. dev_get_stats() adds only
-> > dev->core_stats on top of what that callback returns, so legacy
-> > dev->stats is never reported.
+On 2026-11-24 23:43:12-0700, Nathan Chancellor wrote:
+> There are times where decisions may want to be made within Kconfig when
+> cross compiling. Introduce a small script to call '$(HOSTCC) -v' and
+> '$(CC) -v' and compare the first part of the target triples to see if
+> they match.
 > 
-> Good point - dev_core_stats_tx_dropped_inc(dev) is needed so
-> dev_get_stats() reports the software drop alongside lan966x_stats_get(),
-> and it avoids an unlocked increment on dev->stats.tx_dropped as well.
+> This check is cheap but approximate, as Kconfig does not have all the
+> information available such as endianness and bit width for the target to
+> pass along to compiler. For example, a user building for x86 with a
+> compiler that can build both with '-m32' / '-m64' may have
+> CONFIG_CROSS_COMPILING set depending on the default value of the
+> toolchain and what's being targeted. Should this become problematic in
+> the future, the logic can be expanded to cover these corner cases but
+> for now, keep the implementation simple and cover the majority of cases.
+> Leave some informational prints to make it easy to debug future reports
+> with
 
-Yes, only HW counters are reported, and the tx_dropped will not even show, so
-converting to dev_core_stats_tx_dropped_inc() is right. There are 7 other call
-sites that also need updating - let me pick that up for my series.
+The expansion to bit width and endianess will be a lot of busy-work.
+See the CC_CAN_LINK infrastructure.
 
+We already have host-architecture detection in kbuild through
+scripts/subarch.include. So CC_HAS_MARCH_NATIVE could depend on
+$(ARCH) = $(SUBARCH), after exporting SUBARCH. Or maybe give the
+variable a better name, like HOSTARCH.
+
+This would avoid the introduction of a new, not-really-correct flag
+and also the whack-a-mole that Boris complained about.
+
+>   $ make ... run-command KBUILD_RUN_COMMAND='$(srctree)/scripts/check-cross-compiling.sh "$(HOSTCC)" "$(CC) $(CLANG_FLAGS)"'
 > 
-> Daniel, let me know if you'd like me to send a v2 with
-> dev_core_stats_tx_dropped_inc(dev) (and netdev_tx_t return types for
-> lan966x_port_ifh_xmit() / fdma_xmit) standalone, or if you prefer to
-> fold it into your upcoming lan966x PTP TX series.
+> Cc: stable@vger.kernel.org # dependency of future change
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Link: https://lore.kernel.org/CAHk-=wgmkoWHWwaQ6nsGoCiBp0hrpJuiwmoVbQ=Efun8JyUNKw@mail.gmail.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  MAINTAINERS                      |  1 +
+>  scripts/Kconfig.toolchain        |  3 +++
+>  scripts/check-cross-compiling.sh | 26 ++++++++++++++++++++++++++
+>  3 files changed, 30 insertions(+)
 
-Please go ahead with a v2 with dev_core_stats_tx_dropped_inc(). The netdev_tx_t
-change is hardly net material, so it also fits well within my series, please
-drop that change. I will make sure to credit you on that patch.
-
-> 
-> Thanks,
-> Ian
-
-pw-bot: cr
+(...)
