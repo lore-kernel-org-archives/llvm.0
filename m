@@ -1,49 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795622407;
-	b=ggAWWsBTgd+udDkZXcYhDRMiIrryH8KvLhnRnvCpBvUePUvrkc9a3magQ0PKswtbF4q1
-	 A4y9Uy5CBUMk8Z6M3veasV1ieFk3vvD6oOq7PbJkYDE9mreQL9ZbBoaJjufSbBFqHa2Yk
-	 q9xiegN/tMjRm2LC3PRGj/Q5T9HE/QF3co7GBHZd3IkjLcO5+Yc52mUZbhs8mAvX9g6Fr
-	 nZXeL4ncPa9+sxqEbrKvCNP9CK7vg+EfXDt+hv4VXJk7PXk1fZqHJNBuSlIkWSvuwlrYd
-	 giz095UQs9cFnVV4lmHkGc06t+mmfULKuIL07xYEIolO4nz5Iktq7Mkj4TDPkrLGLHA==
+	t=1795623489;
+	b=sJVU6kZAPdGnQBIO6lJczxqbBnXte48kYuFVcWUj5s9wqJDfa+YgYEKV0fs3Nn/qkw9J
+	 1Ryyy1Q0clhvBRZUIv7KPr/08mLcHfJiK4U/bW3h3xlYYyXsf/VnunBIkPS73/rPeMHkZ
+	 5BZmwNpIOfisqW7DQ9iP6FGVIwVsh4JNmtJ3ErSXpi82yj1tq4v/HbXugmG69wEFS5TS8
+	 or1NLYSs6No1syH17gY5M8Ro6Sns59RRdP71nA/zm9zkUyZPvuGudSWQcXgh/p5dwybB3
+	 foSFoNl3r/9gNPBU0hQHk6nGrFovFePCmzVQaUWgcHGUsQvcG+Wb9lxxWme36daK13w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795622407;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=QAaHSZ7sMw5VUlTsCKc7k41y1p2NOueXz2lrjbHzvGo=;
-	b=Px4OhSeuYOWTLaO9p4sTPFYfelH48+sZJ2zT4BCv03/GvgOFuaEHpz2YAMLmEjH0mAvk
-	 iv0hbpy/MNclmD4qnHhQhZRHmSTuP8gfS/HjqUQwZ/WRDiuOPtIPPyyVEXCoKBN8LbLsF
-	 b8ZElJEutHMnVDrRKM29+5QOmSup3o0rCXsw8TE6gYMeVa1D+OxNknr32Jsnx0RD6k0J4
-	 PAYGHjCXvlxQsGserxGijs6ZU7WdgsTq/2WNLf7EnW3xhn0LYK1Mp4CR9FpifIGNJ7GJR
-	 06o1cHpIBfXt5q17FB1XCBBH7j6DpCPWpVrmZ/mocnpaXJCN0WWAOqSgCdasaUDNhug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795623489;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=WwWsoSs2J5qpWhNs56AVQmBfYke5YnSSuODOR4ultkM=;
+	b=EMrPiCI3rfEsOxbnrUnBMvcXoO5B/h8WKYhKIj0idp4T7xgan8Eh/HhO4b00Jy2gFJT0
+	 7q+xedJCcilu1pXcx7lEFIX3448ctQ2fjF1UpKyZncA2C4s8s4JEkijFfwlFV/QumaEPe
+	 e9n2/kfciwsGB8N8jYRBrUGT94M3SZjJo0ae0jm1CBgrGC19vjQqvC3VSFUdXCPQvTBTk
+	 cBuRILUev+kPz1CsIhaGci9JqUWfCXEmw6vhifySNDgR/fNeFEuvanYcG6p9OgzWYIlSW
+	 5g6JB8/LqkBwzXJY3ckRFULtZeo7Bzw2WLNvY40WUuV1QDHMGR9DndyMIRAgK7m7HXA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gVD7JS00;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c8vX9bEe;
+	arc=none smtp.remote-ip=192.198.163.17
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53814606A32A;
-	Wed, 25 Nov 2026 16:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC44B606A31E;
+	Wed, 25 Nov 2026 16:18:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC44B606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gVD7JS00
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8086B1F000C6;
-	Wed, 25 Nov 2026 16:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795622406;
-	bh=QAaHSZ7sMw5VUlTsCKc7k41y1p2NOueXz2lrjbHzvGo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=gVD7JS00ZFP1Kv/R8gr3EKQWnODMrTPWuer6Rh+p5A0QFvINzAuRQhip2b3MgE7o3
-	 2FZryKHYsgXVEd460sTW/r6OP0dfKEfST6f5eWlCqru4eTlMjYgxhbwwrKV5nDehsP
-	 cDPL2MoH+es0b1VC2fozucNxM87Ti5fU0V4MzuIzDGnTj+IOZPFymerwe9wp5kp26l
-	 xc+rn5zZgzVRuXpHNPgshLjb2zoMLwZ6jHuKqb+kcfE9eAVvLgnLMTfp0g1rE7zmji
-	 FexHXwvVh23gfuTTyC3ftKZAaGI5bAoVG52xn/FkZiUki7T1ATA1nmd4xmPv+VG+Ek
-	 xHhW5go2vfn9A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 773CA3808209;
-	Wed, 25 Nov 2026 16:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c8vX9bEe
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795623489; x=1827159489;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9+tiGBNKlGAcbgLvr/9pQGLti36ZdFJyzGzi5HXaUoE=;
+  b=c8vX9bEeLTML4tMpf8utLXlQtQCgMO3xiimgmpiezaNd8IrXXJ1P12dj
+   qFATB0OFAU+yAEQqT3mjtspPec83HnaenJPf/8RqmwPS9yHItqPqeEW3/
+   QLlYgMky46LwX+hW9ynshf32EdRRF6p4XKuvE6BPTchdmJgvTyee1thkm
+   0ngw4A+PQR/wIgPdgPvteOVlJ1lFF3vugcWhS5EQAkRQlwGaCBoxisQHr
+   exNLkDOeiNHJl2t2u58rot+8vVoPxHatRhJhmxeo79dygH0xEj1tfQOcQ
+   NCIheQ2zlnRKOclJvxGmZ90ad21ELVXcd2jLncm7RmjO6I6uT5qSL2Qb+
+   w==;
+X-CSE-ConnectionGUID: DR0ajpduQMi/GR6lVlN18Q==
+X-CSE-MsgGUID: Zqma7boGSTC1ScqhHcnXYg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4498981"
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="4498981"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 08:07:03 -0800
+X-CSE-ConnectionGUID: rs80A/RtRHmkmjDfIQjjAQ==
+X-CSE-MsgGUID: DiFJ+MTDSaW9EKAtEObxag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="12375211"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 25 Nov 2026 08:03:58 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xWFTP-00000001S0s-3iSt;
+	Wed, 25 Nov 2026 16:03:55 +0000
+Date: Thu, 26 Nov 2026 00:03:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hefei <3066883572@qq.com>, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, robh@kernel.org, conor@kernel.org,
+	Hefei <3066883572@qq.com>
+Subject: Re: [PATCH v3 4/6] drm/panel: add VIEWE JD9365TX 7 inch DSI panel
+Message-ID: <20261125235231.H9Nhpv9l-lkp@intel.com>
+References: <tencent_3D3EC29E27E9DF37D4C9F1A60F2F2BA3EF07@qq.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -53,43 +84,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] ncsi: Initialize vid in set_one_vid() to handle
- concurrent VLAN removal
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179562240502.773214.12173450041451654164.git-patchwork-notify@kernel.org>
-Date: Wed, 25 Nov 2026 16:00:05 +0000
-References: <20261119171009.1534335-1-irogers@google.com>
-In-Reply-To: <20261119171009.1534335-1-irogers@google.com>
-To: Ian Rogers <irogers@google.com>
-Cc: sam@mendozajonas.com, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, fercerpav@gmail.com, horms@kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- elkin@google.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_3D3EC29E27E9DF37D4C9F1A60F2F2BA3EF07@qq.com>
 
-Hello:
+Hi Hefei,
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+kernel test robot noticed the following build errors:
 
-On Thu, 19 Nov 2026 09:10:09 -0800 you wrote:
-> set_one_vid() checks list_empty(&ndp->vlan_vids) before acquiring
-> nc->lock and rcu_read_lock(). If ncsi_vlan_rx_kill_vid() removes the
-> last VLAN entry in that window, list_for_each_entry_rcu() executes
-> zero iterations and leaves vid uninitialized on the stack. The
-> subsequent 'if (!vid)' check can then proceed and program stack
-> garbage into ncf->vids[index] and an NCSI_PKT_CMD_SVF command packet.
-> 
-> [...]
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on dtor-input/next dtor-input/for-linus lee-backlight/for-backlight-next lee-backlight/for-backlight-fixes linus/master v7.4-rc4 next-20261124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here is the summary with links:
-  - [net] ncsi: Initialize vid in set_one_vid() to handle concurrent VLAN removal
-    https://git.kernel.org/netdev/net-next/c/e20f88c4f08b
+url:    https://github.com/intel-lab-lkp/linux/commits/Hefei/dt-bindings-input-add-Jadard-JD9365TX-touchscreen-binding/20261125-101123
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/tencent_3D3EC29E27E9DF37D4C9F1A60F2F2BA3EF07%40qq.com
+patch subject: [PATCH v3 4/6] drm/panel: add VIEWE JD9365TX 7 inch DSI panel
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261125/20261125235231.H9Nhpv9l-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2012344e5da8e03ea4b8283ecd6fad6e13f09d64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261125/20261125235231.H9Nhpv9l-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261125235231.H9Nhpv9l-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/panel/panel-viewe-jd9365tx.c:304:8: error: call to undeclared function 'of_drm_get_panel_orientation'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     304 |         ret = of_drm_get_panel_orientation(dev->of_node, &ctx->orientation);
+         |               ^
+>> drivers/gpu/drm/panel/panel-viewe-jd9365tx.c:308:2: error: call to undeclared function 'drm_panel_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     308 |         drm_panel_init(&ctx->panel, dev, &jd9365tx_funcs, DRM_MODE_CONNECTOR_DSI);
+         |         ^
+   2 errors generated.
+
+
+vim +/drm_panel_init +308 drivers/gpu/drm/panel/panel-viewe-jd9365tx.c
+
+   273	
+   274	static int jd9365tx_probe(struct mipi_dsi_device *dsi)
+   275	{
+   276		struct device *dev = &dsi->dev;
+   277		struct jd9365tx_panel *ctx;
+   278		int ret;
+   279	
+   280		ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+   281		if (!ctx)
+   282			return -ENOMEM;
+   283	
+   284		ctx->dsi = dsi;
+   285		mipi_dsi_set_drvdata(dsi, ctx);
+   286	
+   287		dsi->lanes = 2;
+   288		dsi->format = MIPI_DSI_FMT_RGB888;
+   289		dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+   290				  MIPI_DSI_MODE_LPM;
+   291	
+   292		ctx->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+   293		if (IS_ERR(ctx->reset))
+   294			return PTR_ERR(ctx->reset);
+   295	
+   296		ctx->vdd = devm_regulator_get(dev, "vdd");
+   297		if (IS_ERR(ctx->vdd))
+   298			return PTR_ERR(ctx->vdd);
+   299	
+   300		ctx->iovcc = devm_regulator_get(dev, "iovcc");
+   301		if (IS_ERR(ctx->iovcc))
+   302			return PTR_ERR(ctx->iovcc);
+   303	
+   304		ret = of_drm_get_panel_orientation(dev->of_node, &ctx->orientation);
+   305		if (ret)
+   306			return ret;
+   307	
+ > 308		drm_panel_init(&ctx->panel, dev, &jd9365tx_funcs, DRM_MODE_CONNECTOR_DSI);
+   309		ctx->panel.prepare_prev_first = true;
+   310	
+   311		ret = drm_panel_of_backlight(&ctx->panel);
+   312		if (ret)
+   313			return ret;
+   314	
+   315		drm_panel_add(&ctx->panel);
+   316	
+   317		ret = mipi_dsi_attach(dsi);
+   318		if (ret < 0) {
+   319			drm_panel_remove(&ctx->panel);
+   320			return ret;
+   321		}
+   322	
+   323		return 0;
+   324	}
+   325	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
