@@ -1,60 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795595925;
-	b=pF6C0f93vbMA3yz1MBRkJgJWj16eEFnxt417LMHkaXu/CqTQtmOVA2dj4GQbT+zd9kZT
-	 9CvkeHNjrHgZkwiwp6i/DieXEpIWHv/DJqcLy4vE43nevkRCfDvgq4kH97v6vqnY+fGvg
-	 P2BCnwdzvCl1swslc/gq70XPtlKseA7NWuw99yG20bjNeciaY/6uqKOfwEym5QbHMf7/3
-	 zIbsGHuwMp9bktdusLZ9MJ7SR+1r92lQ1mvkOPf/8M0/mj57rTv1wDKi9DtmwsvA5zyBD
-	 KhlEJ2EX01WXiceFdj7lY6ev9wutDW9b02o89JUbdSWKuWjKjGXjGcp4weJXsG2F1hg==
+	t=1795598137;
+	b=LcPC0a4evVkpuZJPU+h0ka2o7qY75h/hcog3L5r2qrjRfwtKJ8+DFRbvl2Ff1YuJyW4S
+	 lNSTY3d727XMgzgL2K7T4y65KQig01dXXFDQEFoF8C+TE/7G6AMBYWNT5Xf5QmeKOrCgK
+	 n0GX5F+uv1B+S7vqI1e7RSV4K+cv/aKUsqekpKXpF+57cBVjAbvbORk3mucbilOENTOAf
+	 1tpmo7FKIcnOPPMQbWBfWkZ9+tgxNTEuHmUEP23MQzgsmHvPVDogHFjLdSQKgBHh7gqed
+	 UiEq47amz/RVfH+hN20ILnusR9lHbam4E+24RJcEtIue7JSlB+ONLPaDB9TmWzF4I0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795595925;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=4YzY4WJKyDUbWHVlGl0s8qGvd0UyDejmOQrF5G0LCls=;
-	b=Wm7IbSgpnW5JzOUeJb0NGp39LtNBdhbMkE0boPDVY3+BQZAHJVWm2J2xH0vcLxf+wPvi
-	 lpk/dIjdJZdy0HDcTYyEIYeFn2IGACh3GEWe9EAUallHskE4O2eDMgmoVrC0oAX2o0lFf
-	 71nsDoF5vzwf4fQRBnfVZ00SDIq7oTzWEk5joOtSSHwzPBqVLQLNwkOIh4Oc8kBR7d0Oe
-	 MvRVqUVgqCJLkj59BQ7S0w2EvWPb7l17OkUS0tBqyIF330HVavh3IKsaxdGW0WLK9wG3i
-	 yxGbxkx74rdcBVk6Abh0zKTCrjtN8gaasBrT/rZ05DXgO2eOv8k42v6ba2RC77drplA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795598137;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=hrRNPDtfKveUVTbNFVJLmLTa2pRjc1jDU56urNIEi8s=;
+	b=Ke2W+ffwQ7dqs0c5Ma6X5F+b5XitHHno1hZiuB7lVFTQZWFDi0uz6NNRQ7TGwQMZJVDI
+	 aRlRXHrhB/Tlfikg9z4nPn0QSF4vvy3thd3AZxjGH1l3GN16RDLrLVv/Vmb09nbZFxwxS
+	 i0uQMBC7Nf7DelTAV8w/eUwgRKtyMCKp+Qf9tpo6dSgJqIFiVx/I41MwU20pYQo3nfc2b
+	 yEeqX/4lFKoRuHjUYNvE2N3ahV/gBxxZITS04yNfFYJYq2Fn4LaqjcEoOsA2LxzljJojK
+	 GqprrYE/q8zhzUJqUjxcjzRgqcJ4i1jgSBx99Ucu9PaniKBie+V4s6ZQs4Ui6pXUAvg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=protonmail.com;
-	spf=pass smtp.mailfrom=protonmail.com;
-	dkim=pass header.d=protonmail.com header.i=@protonmail.com header.a=rsa-sha256 header.s=protonmail3 header.b=HdnA5d57;
-	arc=none smtp.remote-ip=79.135.106.30
-Received: from mail-10630.protonmail.ch (mail-10630.protonmail.ch [79.135.106.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Q9MDgEBo;
+	arc=none smtp.remote-ip=198.175.65.15
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D62606A321
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 08:38:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14D62606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3181C606A6AB
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 09:15:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3181C606A6AB
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=protonmail.com header.i=@protonmail.com header.a=rsa-sha256 header.s=protonmail3 header.b=HdnA5d57
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1795595922; x=1795855122;
-	bh=4YzY4WJKyDUbWHVlGl0s8qGvd0UyDejmOQrF5G0LCls=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=HdnA5d576cKuFuxHoiZ4Hu7obya801qlk6sLJXM01eKQLgQOHbkFthulLKoKtONif
-	 h/HGHOfe+j1HTSjWhXkKAnJ+JP+fdDm4dQGLRV5N6GcRbUF0sod8hl6Pmj+jdAIjju
-	 74+14l1hl1dYw04tSZUfs0n6WId4JmAoGNNCtVdkMd5IIj5A8jqePN1dhmPmaw2lF7
-	 yOiyqkZHO4c0LFUH7SAVHn0txg/uwVdnV5YfKLE7z4VBNp++seW9N5tGoW3/Lxn73t
-	 Isw3hdOGJgo07yMcWZHa/fQDtf25ThJPta9wmCoSjsilHW7Pgc8suqHuG+ytKOqzic
-	 3D55QOpJDolqw==
-Date: Wed, 25 Nov 2026 08:38:37 +0000
-To: Echo Zhang <echo.zhang@mediatek.com>
-From: Roman Vivchar <rva333@protonmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>, Jerome Brunet <jbrunet+clk@baylibre.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, MMDVFS Team <linux-mediatek@lists.infradead.org>, kyrie.wu@mediatek.com, ming-fan.chen@mediatek.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 4/7] soc: mediatek: mmdvfs: add VCP backend
-Message-ID: <qeucziSyhF2pTX6WmMWtCC6hbkD8BswMX4f-7Z5uWErS2OSaeHCBs9zq4xay6j24-RAdQuYERZCgItKMSJLwmbFxY_LslGm3K3mvjdqiKRI=@protonmail.com>
-In-Reply-To: <20261125060037.649659-5-echo.zhang@mediatek.com>
-References: <20261125060037.649659-1-echo.zhang@mediatek.com> <20261125060037.649659-5-echo.zhang@mediatek.com>
-Feedback-ID: 173184497:user:proton
-X-Pm-Message-ID: 96f5a9583a374cf2313c4937580c2b1a80dc05fa
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Q9MDgEBo
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795598131; x=1827134131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KWUqYV/VElJh+cNTl52WHVcIId83hNA9U9VjdH1qPbw=;
+  b=Q9MDgEBocrPWaQ/0Eh4Wzq3aQHLGTffJ9+kbYQAFoi8Gmr4KYda1GnAF
+   A2nd8UOb/GkBIaPPQqFDV3AMx89BcPR4Ct4Qc21yAVVMQ74hc6i1ge6Tt
+   ZvFaqNNzQIdEf3MPAHYd2hSunvh1r6NYgMGI7ewAdfzMiHTufEnRu53y2
+   0+eOhzQRIgt9QmK3f8d6kSlgUx6CYNkIzzhmyRbz0IcIRlPz9PEC6p/73
+   WkHrhrwxcyjRkQIzgnRxPvbCGWxIlgBfg3LQeY1FLxwg1AiOalOoin7h/
+   9fAUZ34dNK7cOCixZhlYK4OBoe8JLDAwg+iZKd9+dJJfc5rewPkPNdIBn
+   g==;
+X-CSE-ConnectionGUID: HbbNdfl8TmOuxpoi/e9WlQ==
+X-CSE-MsgGUID: ex609EiBS8qGpX3cWZvRSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11976"; a="4467856"
+X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
+   d="scan'208";a="4467856"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 01:15:31 -0800
+X-CSE-ConnectionGUID: MzJCY7uwRQ6k2rpiTCYyjQ==
+X-CSE-MsgGUID: fta7EKZVTka5p2GHG6fgwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
+   d="scan'208";a="11678302"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa004.jf.intel.com with ESMTP; 25 Nov 2026 01:15:29 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1008)
+	id 969CC98; Wed, 25 Nov 2026 10:15:27 +0100 (CET)
+Date: Wed, 25 Nov 2026 10:15:27 +0100
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: hd3ss3220: Propagate regmap_read() errors
+ from attached-state check
+Message-ID: <awanL3-lo2mVGVuT@black.igk.intel.com>
+References: <20261122045313.18372-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,153 +83,157 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261122045313.18372-1-irogers@google.com>
 
-On Wednesday, November 25th, 2026 at 8:01 AM, Echo Zhang <echo.zhang@mediat=
-ek.com> wrote:
+On Sat, Nov 21, 2026 at 08:53:13PM -0800, Ian Rogers wrote:
+> hd3ss3220_get_attached_state() has return type 'enum usb_role' (an
+> unsigned enum) yet returns negative regmap_read() error codes directly.
+> Neither hd3ss3220_set_role() nor output_poll_execute() checks for errors;
+> on a transient I2C failure (such as -EIO, cast to 0xfffffffb),
+> hd3ss3220_set_role() passes the bogus value to usb_role_switch_set_role()
+> and disables VBUS power. On role-switch providers without a .get callback
+> (where sw->role caches the value passed to usb_role_switch_set_role()),
+> reading /sys/class/usb_role/*/role subsequently indexes usb_roles[role]
+> out-of-bounds.
+> 
+> Return an int status from hd3ss3220_get_attached_state() and
+> hd3ss3220_set_role(), pass the resolved enum usb_role via an output
+> pointer, leave the current role and VBUS state unchanged on I2C read
+> errors, and propagate errors to hd3ss3220_probe() and hd3ss3220_irq().
+> 
+> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
+> -Wimplicit-int-enum-cast enabled; fix and changelog drafted with an AI
+> coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
+> -Wimplicit-int-enum-cast; not tested on TI HD3SS3220 hardware.
+> 
+> Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-> Add the VCP transport used by MMDVFS to map AP and firmware shared
-> memory, manage feature power references and send IPI commands.
->=20
-> Wait for VCP readiness and handle the selected MMUP or VCP READY
-> notification to initialize firmware after boot and resume. Serialize
-> IPI transactions while shared memory and acknowledgment state are in
-> use.
->=20
-> Signed-off-by: Echo Zhang <echo.zhang@mediatek.com>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
-
-...
-
-> diff --git a/drivers/soc/mediatek/mmdvfs/mmdvfs-core.c b/drivers/soc/medi=
-atek/mmdvfs/mmdvfs-core.c
-> index c32fa11557af..3388a5a3a145 100644
-> --- a/drivers/soc/mediatek/mmdvfs/mmdvfs-core.c
-> +++ b/drivers/soc/mediatek/mmdvfs/mmdvfs-core.c
-> @@ -7,22 +7,23 @@
->=20
->  #include <linux/atomic.h>
->  #include <linux/clk-provider.h>
-> +#include <linux/delay.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/io.h>
-> +#include <linux/kthread.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> -#include <linux/notifier.h>
->  #include <linux/of.h>
->  #include <linux/of_address.h>
->  #include <linux/platform_device.h>
-> +#include <linux/remoteproc/mtk_vcp_public.h>
->  #include <linux/sched/clock.h>
->  #include <linux/slab.h>
->  #include <linux/string.h>
-> -#include <linux/suspend.h>
-> -#include <linux/workqueue.h>
->=20
->  #include "mmdvfs-internal.h"
-> +#include "mmdvfs-up-priv.h"
->=20
->  static int mmdvfs_register_device(struct mmdvfs_device *mmdvfs);
->  static void mmdvfs_unregister_device(struct mmdvfs_device *mmdvfs);
-> @@ -34,14 +35,13 @@ struct mmdvfs_device *mmdvfs_find_device_any(void)
->  {
->  =09return mmdvfs_find_device_by_version(MMDVFS_VERSION_HWCCF_DVFS_VOTER)=
-;
+> 
+> Notes:
+>     v2:
+>       - Propagate regmap_read() errors out of hd3ss3220_set_role() to
+>         hd3ss3220_probe() and hd3ss3220_irq(), and test
+>         !hd3ss3220_get_attached_state() in output_poll_execute() (Greg
+>         Kroah-Hartman).
+>       - Add Cc: stable@vger.kernel.org (Heikki Krogerus).
+>     
+>     v1: https://lore.kernel.org/r/20261119170650.1521609-1-irogers@google.com
+> 
+>  drivers/usb/typec/hd3ss3220.c | 38 ++++++++++++++++++++++++-----------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index 60d6de9ba339..bdd4eaeca753 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -163,10 +163,10 @@ static int hd3ss3220_set_source_pref(struct hd3ss3220 *hd3ss3220, int prefer_rol
+>  				  src_pref);
 >  }
-> -EXPORT_SYMBOL_GPL(mmdvfs_find_device_any);
->=20
->  /**
->   * mmdvfs_get_version - Get MMDVFS voting mechanism type
->   *
->   * Return:
->   *   0 - No hardware voter
-> - *   1 - HWCCF DVFS voter
-> + *   1 - HWCCF DVFS voter (VCP IPI with MMUP SRAM)
->   */
->  u32 mmdvfs_get_version(void)
+>  
+> -static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
+> +static int hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220,
+> +					enum usb_role *attached_state)
 >  {
-> @@ -96,7 +96,8 @@ static int mmdvfs_validate_topology(struct mmdvfs_devic=
-e *mmdvfs)
->  =09=09=09return -EINVAL;
->  =09=09}
->=20
-> -=09=09if (mux->freq_num =3D=3D 0 || mux->freq_num > MMDVFS_MAX_LEVELS) {
-> +=09=09if (mux->freq_num =3D=3D 0 || mux->freq_num > rc->level_num ||
-> +=09=09    mux->freq_num > MMDVFS_MAX_LEVELS) {
->  =09=09=09mmdvfs_err(mmdvfs->dev,
->  =09=09=09=09   "MUX %d (%s): invalid freq_num: %d\n",
->  =09=09=09=09   i, mux->name, mux->freq_num);
-> @@ -112,10 +113,11 @@ static int mmdvfs_validate_topology(struct mmdvfs_d=
-evice *mmdvfs)
->  =09=09=09}
->=20
->  =09=09=09if (j > 0 && mux->freq[j] <=3D mux->freq[j - 1]) {
-> -=09=09=09=09mmdvfs_warn(mmdvfs->dev,
-> -=09=09=09=09=09    "MUX %d (%s): freq not ascending: freq[%d]=3D%llu <=
-=3D freq[%d]=3D%llu\n",
-> -=09=09=09=09=09    i, mux->name, j, mux->freq[j],
-> -=09=09=09=09=09    j - 1, mux->freq[j - 1]);
-> +=09=09=09=09mmdvfs_err(mmdvfs->dev,
-> +=09=09=09=09=09   "MUX %d (%s): freq not ascending: freq[%d]=3D%llu <=3D=
- freq[%d]=3D%llu\n",
-> +=09=09=09=09=09   i, mux->name, j, mux->freq[j],
-> +=09=09=09=09=09   j - 1, mux->freq[j - 1]);
-> +=09=09=09=09return -EINVAL;
-
-Why this can't be in the previous patch?
-
-...
-
-> diff --git a/drivers/soc/mediatek/mmdvfs/mmdvfs-vcp.c b/drivers/soc/media=
-tek/mmdvfs/mmdvfs-vcp.c
-> new file mode 100644
-> index 000000000000..fc6db1c89294
-> --- /dev/null
-> +++ b/drivers/soc/mediatek/mmdvfs/mmdvfs-vcp.c
-
-...
-
-> +/*
-> + * mmdvfs_get_bootmode - Get system boot mode
-> + *
-> + * Query boot mode from device tree /chosen node
-> + */
-> +static void mmdvfs_get_bootmode(void)
-> +{
-> +=09struct device_node *np_chosen;
-> +=09struct tag_bootmode {
-> +=09=09u32 size;
-> +=09=09u32 tag;
-> +=09=09u32 bootmode;
-> +=09=09u32 boottype;
-> +=09} *tag;
+>  	unsigned int reg_val;
+> -	enum usb_role attached_state;
+>  	int ret;
+>  
+>  	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL,
+> @@ -176,17 +176,17 @@ static enum usb_role hd3ss3220_get_attached_state(struct hd3ss3220 *hd3ss3220)
+>  
+>  	switch (reg_val & HD3SS3220_REG_CN_STAT_CTRL_ATTACHED_STATE_MASK) {
+>  	case HD3SS3220_REG_CN_STAT_CTRL_AS_DFP:
+> -		attached_state = USB_ROLE_HOST;
+> +		*attached_state = USB_ROLE_HOST;
+>  		break;
+>  	case HD3SS3220_REG_CN_STAT_CTRL_AS_UFP:
+> -		attached_state = USB_ROLE_DEVICE;
+> +		*attached_state = USB_ROLE_DEVICE;
+>  		break;
+>  	default:
+> -		attached_state = USB_ROLE_NONE;
+> +		*attached_state = USB_ROLE_NONE;
+>  		break;
+>  	}
+>  
+> -	return attached_state;
+> +	return 0;
+>  }
+>  
+>  static int hd3ss3220_try_role(struct typec_port *port, int role)
+> @@ -229,9 +229,14 @@ static void hd3ss3220_regulator_control(struct hd3ss3220 *hd3ss3220, bool on)
+>  	hd3ss3220->vbus_enabled = on;
+>  }
+>  
+> -static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+> +static int hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+>  {
+> -	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
+> +	enum usb_role role_state;
+> +	int ret;
 > +
-> +=09if (bootmode < UNKNOWN_BOOT)
-> +=09=09return;
+> +	ret = hd3ss3220_get_attached_state(hd3ss3220, &role_state);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	usb_role_switch_set_role(hd3ss3220->role_sw, role_state);
+>  
+> @@ -250,6 +255,8 @@ static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
+>  		hd3ss3220_regulator_control(hd3ss3220, role_state == USB_ROLE_HOST);
+>  
+>  	hd3ss3220->role_state = role_state;
 > +
-> +=09np_chosen =3D of_find_node_by_path("/chosen");
-> +=09if (!np_chosen) {
-> +=09=09bootmode =3D NORMAL_BOOT;
-> +=09=09return;
-> +=09}
+> +	return 0;
+>  }
+>  
+>  static void output_poll_execute(struct work_struct *work)
+> @@ -258,9 +265,10 @@ static void output_poll_execute(struct work_struct *work)
+>  	struct hd3ss3220 *hd3ss3220 = container_of(delayed_work,
+>  						   struct hd3ss3220,
+>  						   output_poll_work);
+> -	enum usb_role role_state = hd3ss3220_get_attached_state(hd3ss3220);
+> +	enum usb_role role_state;
+>  
+> -	if (hd3ss3220->role_state != role_state)
+> +	if (!hd3ss3220_get_attached_state(hd3ss3220, &role_state) &&
+> +	    hd3ss3220->role_state != role_state)
+>  		hd3ss3220_set_role(hd3ss3220);
+>  
+>  	schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
+> @@ -270,7 +278,10 @@ static irqreturn_t hd3ss3220_irq(struct hd3ss3220 *hd3ss3220)
+>  {
+>  	int err;
+>  
+> -	hd3ss3220_set_role(hd3ss3220);
+> +	err = hd3ss3220_set_role(hd3ss3220);
+> +	if (err < 0)
+> +		return IRQ_NONE;
 > +
-> +=09tag =3D (struct tag_bootmode *)of_get_property(np_chosen, "atag,boot"=
-, NULL);
-> +=09of_node_put(np_chosen);
+>  	err = regmap_write_bits(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL,
+>  				HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS,
+>  				HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
+> @@ -501,7 +512,10 @@ static int hd3ss3220_probe(struct i2c_client *client)
+>  	if (ret < 0)
+>  		goto err_unreg_port;
+>  
+> -	hd3ss3220_set_role(hd3ss3220);
+> +	ret = hd3ss3220_set_role(hd3ss3220);
+> +	if (ret < 0)
+> +		goto err_unreg_port;
 > +
-> +=09if (tag)
-> +=09=09bootmode =3D tag->bootmode;
-> +=09else
-> +=09=09bootmode =3D NORMAL_BOOT;
-> +}
+>  	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
+>  	if (ret < 0)
+>  		goto err_unreg_port;
+> -- 
+> 2.56.1.750.gf70dc682cf-goog
+> 
 
-No. Please don't add your downstream code.
-
-I'll stop here. This patch modifies too many things from the previous
-one, and the series overall needs more cleanup.
-
-Best regards,
-Roman
+-- 
+heikki
