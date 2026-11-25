@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645505;
-	b=pgBIfNuB0mCqq0xftO6ilE1+CxDat9ub41gC4+NqqTvCTqWx8EQPiWbFCMzQCxUHOnRp
-	 a5dF2HkU8O/8LNnqaNec0L/uv6ZwnwTP7klsVd3mearBG7TW0d0ogwh3XZqWr36L+/GiG
-	 dnO3T3b4ockHMUZoZLG6HVRHDPQaPDMz7hi1llAaklu5eye1Hm27L5I1xZg0F92lYtxVJ
-	 QSO9fFN5u6GeCD9a8ptXt1Ilhxj+RDw/RkiWTUOCBUyhGk0iU1BPgWVvt2RNOeFiI/FjJ
-	 fff2vyWHbFpDvMvkUWbn7xPf16ykF+eTmL2+MlCpKAgmQlP+xmMY32wq1Qa+pKvGR6A==
+	t=1795645514;
+	b=OTzzyf9h4KB18+Xf4WXrCT/y/3r6LWKT+lFiUG9pSf6BaojO5v5PJiHraRg8kexaOjXl
+	 ts4SwI6z6st4x+6exZO3q5nJAEy6lMY0V17U1B6x5MVjQRUezB0icy1H23TOdMXSmY/oG
+	 mfNGfRudoU34j03n70u+nIHlaVfTZmwBkieHkCCcPx0v9NccEPjJOZg8hNc/Hspir/5B/
+	 i3MxGNFn7gYbiNTYXl58or/roz2UOw+hU7lqpesJURd9mGpkBvkUoQLdebTGsqiU7OFjo
+	 lRUwBpp4ZCKJRJTld27NHm55JOZLsLRDWRncbhqjYV3DrWfhu+t9j26DGIZnMYY3ytA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645505;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645514;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=TveV0r8kvBsLiHa8p0PGJpcHtG/h8NzyM3pacyz3dFM=;
-	b=yfsbBK3Q4vVhcWVlcdw+1g+JWvIoPtFHyBbm9eGiE9Hq9za4eV2tWoj5Ao3eG2wLXur3
-	 2ecVG2bSYYomPwxliFICvaZxwVoTXj+MN5q8Ekt9yrggslWW9CEhcI5C28awhTaS2jL1Y
-	 11cfOgOHodEzyWS7fsphAcfpVUQVIke3apv2IjvzKJqzJvV2YhFrWSPA2VBnJeuDA/YLz
-	 oDf//5jGcpKIQyXz+c1Ld4ds9kdk55l6CN23KO2HgH9zxSQYjdbMgxGgRSSvh3SF9XdmM
-	 fhpvPpJC+w/jTdJ9/+w09WQ9rXMBxJIQUdFRRfmEEHT2o60/0itUyHUHAF5xWnTbLOg==
+	bh=tA8fanYUNEMCKg95/5mIB2W/4rmsixDLYX61xDs+OiI=;
+	b=lj5Ql8ePUizOHT8ZAGInfpAZGVvnLbakR8pEuzYj3cV2SeTlNBeY8JSEV62tOFQITi8m
+	 ySEAbOlhPUlnAbTTnbYM9YJBDsLntvBNvo6aZOtwbVMBLP6v7r2EBE42+f7hx6eBqsxOC
+	 0oMFNISPbldxHYeY5dtdhGafVlwugTT6oTPHZFTYCqZEd/agQ0TeHj99MmAekLrpwqS7J
+	 Iu0V58bOVSr+EcRqI6ph7gQGyHFL214y+r6zsMIveQAibDpHuvJEBdPnh7GRxiuGh4KQ3
+	 9CAitFBHg4Auc0Y5X7pO1p3vdF+DYxOa8IVg9vwxpE8W26nawDsHzeMCe/im7YDp4Ag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=K2+U5ThG;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LLZ+jztx;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B79960A2610
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:25:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B79960A2610
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD147606A6BF
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:25:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD147606A6BF
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=K2+U5ThG
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-33713e5e6daso10352496eec.0
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:25:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LLZ+jztx
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-33713e5e6daso10352762eec.0
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:25:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645504; x=1796250304; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795645513; x=1796250313; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TveV0r8kvBsLiHa8p0PGJpcHtG/h8NzyM3pacyz3dFM=;
-        b=K2+U5ThGQap3GpMbK+FRLMRhdapggwUfQzi+HU9cbCOTCMgY1cWvOlLJAYEC4iWHpU
-         i3m9ZmsHDSRIZsWLuK754r0qJwYWN5JmUhGdVEgoJ7cBYHxwHdANKZ2D2YBapDYeejWj
-         8xwTiFLG6KpS8mdaPrwlB8NMdgCGoppKspmcsvfUh2LaPsNkfkV2dGh5kkl68CArjBir
-         g4oqLpep8odKpa/HW3RXyUJ1IJN3jG9XvVvXueGDG1PKPZCwnql8fYniplvC/fpgyfGP
-         mTm0nQ2d7YCOzRUjNic8/vv1Ja4zL+YuEDyALQLXHzMNrU3/cj3n09Jjsfc0QOamiCID
-         eZhg==
+        bh=tA8fanYUNEMCKg95/5mIB2W/4rmsixDLYX61xDs+OiI=;
+        b=LLZ+jztxKMdOspnrIEitvmeLLapGHmydpl4vTM72y9uY5E8dggBXOHBJYECb27mdta
+         qydh2HSPYKTrJ73e6TwyUDPTtqlms08HIuP6Fm8DFThhSSKuLVgicp9rJ0NYwXlATANr
+         pXhZ6bnqY8860rzk4ln2XhZyRl4VaWMfm9zAuJcEnJR20ivdT1W0MyBeQBVCX0CduUmG
+         TIiv5+iGCVAK3J9exIkz5NfltbQoebKxfRPaKm9FRRsMUMpefh1ohCWnO/2pv7boMt3Y
+         KOxd+bg/zaQXws2JcD1GSttCwcZcxCey4BDJnx8f2HVeXIrafrkELfdwv92d+gHCDmHA
+         nYAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645504; x=1796250304;
+        d=1e100.net; s=20260707; t=1795645513; x=1796250313;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TveV0r8kvBsLiHa8p0PGJpcHtG/h8NzyM3pacyz3dFM=;
-        b=fScG3hwsj4DI0rEVafqSTQWqIhQPqroRoBkeDCtA0waWmnHTpwp9SHNsEZ0m0lOuzT
-         PEK42o+ybqb8AQ5oHadJNAxaBTp+SZXoyYYKqbC9rvzfSDp36BD4HRIcbSaQJggjaess
-         WngEKyhlOM0QYNX2pnB6HbyMFXwMrkyeybfRHBBZCoAnmaFsktgwjOVZN/WIIgGg+lKM
-         jg+8U2Vqega6O5rUmgdf6Rm23jM9cXKBtIWxrbiTUDo3MkstzUX8UZn5oVbvG0SbH54n
-         Q+GwycXH3eKrhfI5pLl/OPAw1+KuD4dTfSQTV/XfUo7GSfuSp//B3dvL3+hzDw1WM+C+
-         0weQ==
-X-Forwarded-Encrypted: i=1; AL+hErGJcWq+5RBgPowLcQjeHYoeBTE/t+kw/WI3vWlDINV8mdUdC2wuycZlMs31mLG31tn8QdaH@lists.linux.dev
-X-Gm-Message-State: APuU4Z/ihjBgxnUlw/Nr3tBeAV9jiiHfcVX2rnR8xA6UnIchzLT8m8MA
-	lF5DowzpYffST2INryY0kEJsAhpLTBnVzZOTmdnUik4Mv4BL/JwXv74uiLJGUo+dalRt9rA9GLv
-	a1w==
-X-Received: from dyw26.prod.google.com ([2002:a05:7300:881a:b0:381:e4bb:7fb7])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:152f:b0:376:203e:7d7b
- with SMTP id 5a478bee46e88-3856c6b35b5mr21680529eec.2.1795645503284; Wed, 25
- Nov 2026 14:25:03 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:24:55 +0000
+        bh=tA8fanYUNEMCKg95/5mIB2W/4rmsixDLYX61xDs+OiI=;
+        b=JgM/+Ud5ZbeFdH7yjVnoRiJed0NcnqEkMlgE4E1EGb8+cZQKGySADb5gaD5sh9oNuS
+         0kFCi1Fj2JOezLBlCBOWibuymu8fKe7Ur1wOTTSuL3ve0BVOEOzeRhgaVHUj0vmTG8mY
+         /nwqrx3+ZtGcr51mbr3vaMIsZcZ9Bg29gqYldb9Q5r5QXe3/3w90GOOaFGfzDaGN61X1
+         R2m9sNpQfvvKJW7I+hMHL2lu66O0yH6MFymdYhA2QXlSpFMt/Qyy/+lpsLlRpgdnzlVX
+         NAqDNW2sxEDLXEz4MwxT6Fg1QkXQujss6Jy9vBy/ZW3TrlXRSoJOKH+h7JrFLms2E2ZV
+         ClZA==
+X-Forwarded-Encrypted: i=1; AL+hErHu6FeTz/fr/qYS2EcJXKZrhEf7HzrrtEbiV2VJ3MFb8abynYNzH/5vKw6QG+mlF9i0bIDS@lists.linux.dev
+X-Gm-Message-State: APuU4Z+g0PDVt5TNVhVCk5pgGad3h7nZLYTKnqdzOKWyLMgAms7dtn4F
+	j48SjypCggFFqXxHiFS4zT3hZASIkhVZCimP/dx9F01SLhndNbffNFGM68KbIXvDOZQo8eockix
+	ZoA==
+X-Received: from dybkf17.prod.google.com ([2002:a05:7301:3a91:b0:359:198a:8046])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:dd8b:b0:372:32a1:b384
+ with SMTP id 5a478bee46e88-38571510675mr21473493eec.33.1795645512613; Wed, 25
+ Nov 2026 14:25:12 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:25:03 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,27 +77,29 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125222455.1445007-1-elkin@google.com>
-Subject: [PATCH] iommu/sysfs: Clear iommu->dev on error in iommu_device_sysfs_add()
+Message-ID: <20261125222503.1445426-1-elkin@google.com>
+Subject: [PATCH] crypto: sa2ul - fall back to software when assoclen exceeds
+ u8 enc_offset
 From: Elkin Cruz <elkin@google.com>
-To: "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>
-Cc: Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com, 
-	Elkin Cruz <elkin@google.com>, stable@vger.kernel.org
+To: Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, irogers@google.com, Elkin Cruz <elkin@google.com>, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In iommu_device_sysfs_add(), if device_add() or setting the kobject name
-fails, put_device(iommu->dev) is called to release the allocated device.
-However, iommu->dev is not cleared to NULL, leaving a dangling pointer.
-Callers that inspect iommu->dev during error unwinding (such as
-free_sysfs() in amd/init.c) can invoke iommu_device_sysfs_remove() on
-the deallocated device pointer, causing a use-after-free and potential
-double-free.
+In sa_aead_run(), req->assoclen (unsigned int) is assigned to
+sa_req.enc_offset, which is a u8 field corresponding to the 8-bit
+SA_CMDL_SOP_BYPASS_LEN_MASK hardware command-label field. The existing
+fallback check only tests auth_size against SA_MAX_DATA_SZ (65535) and
+the unsafe [240, 255] packet size window, allowing requests with
+req->assoclen >= 256 to silently truncate enc_offset modulo 256 and
+corrupt encryption/authentication offsets in hardware.
 
-Set iommu->dev to NULL in the error path of iommu_device_sysfs_add(),
-and guard iommu_device_sysfs_remove() against NULL pointers.
+Fall back to the software AEAD implementation whenever
+req->assoclen > U8_MAX, and compute auth_size in u64 to avoid 32-bit
+size_t addition wrap-around.
 
-Fixes: 2926a2aa5c14 ("iommu: Fix wrong freeing of iommu_device->dev")
+Fixes: d2c8ac187fc9 ("crypto: sa2ul - Add AEAD algorithm support")
 Cc: stable@vger.kernel.org
 Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
@@ -110,30 +112,35 @@ then checked against linux-next (not runtime-tested on hardware).
 Thanks,
 Elkin
 
- drivers/iommu/iommu-sysfs.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/crypto/sa2ul.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iommu/iommu-sysfs.c b/drivers/iommu/iommu-sysfs.c
-index 937d1c749843..3b9e5578978e 100644
---- a/drivers/iommu/iommu-sysfs.c
-+++ b/drivers/iommu/iommu-sysfs.c
-@@ -85,12 +85,16 @@ int iommu_device_sysfs_add(struct iommu_device *iommu,
+diff --git a/drivers/crypto/sa2ul.c b/drivers/crypto/sa2ul.c
+index f8216b5d3991..1d9cb5932b25 100644
+--- a/drivers/crypto/sa2ul.c
++++ b/drivers/crypto/sa2ul.c
+@@ -1771,17 +1771,18 @@ static int sa_aead_run(struct aead_request *req, u8 *iv, int enc)
+ 	struct crypto_aead *tfm = crypto_aead_reqtfm(req);
+ 	struct sa_tfm_ctx *ctx = crypto_aead_ctx(tfm);
+ 	struct sa_req sa_req = { 0 };
+-	size_t auth_size, enc_size;
++	u64 auth_size;
++	size_t enc_size;
  
- error:
- 	put_device(iommu->dev);
-+	iommu->dev = NULL;
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(iommu_device_sysfs_add);
+ 	enc_size = req->cryptlen;
+-	auth_size = req->assoclen + req->cryptlen;
++	auth_size = (u64)req->assoclen + req->cryptlen;
  
- void iommu_device_sysfs_remove(struct iommu_device *iommu)
- {
-+	if (!iommu->dev)
-+		return;
-+
- 	dev_set_drvdata(iommu->dev, NULL);
- 	device_unregister(iommu->dev);
- 	iommu->dev = NULL;
+ 	if (!enc) {
+ 		enc_size -= crypto_aead_authsize(tfm);
+ 		auth_size -= crypto_aead_authsize(tfm);
+ 	}
+ 
+-	if (auth_size > SA_MAX_DATA_SZ ||
++	if (req->assoclen > U8_MAX || auth_size > SA_MAX_DATA_SZ ||
+ 	    (auth_size >= SA_UNSAFE_DATA_SZ_MIN &&
+ 	     auth_size <= SA_UNSAFE_DATA_SZ_MAX)) {
+ 		struct aead_request *subreq = aead_request_ctx(req);
 -- 
 2.56.1.839.g22a8290db9-goog
 
