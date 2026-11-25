@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795644988;
-	b=U2t6P3Wm+Jjj6HwqFHDyuRl3TdI0wFsTp0ON9WJqXs2uaCITgqYKE2utBXXvyzacgvj+
-	 uakG1PR63a/yXU0ndsgDAm6VwUcMxGKcc9yKalx2G5uPmvqcHQxyVg0O832nc6onkXWEl
-	 vy27LueUcHV5C7YIzpH0WHl+qO5o8+7B1VrtVEnEwXhIkL6d7mENUU+e4A5CdVPoGv9lP
-	 IOSB4X/ZtbNdgqonZX+f2rUvr+rHc8OqyL2gkuP6voPNJJcv2LfoPc2dAft8K4nQArAW3
-	 cr/trKa/KWdDd5KFF8uf3dBP/0bLhLJP2zw4fWodNuzukenTHIyPNsj+oNyRbQmr8Yw==
+	t=1795644996;
+	b=GeWsj6a3pNJbfUBIfUO+R6U6UjnQuS658HeY3Qn4oVgFASpwfNUi3I3YjrtyPpl7IT5D
+	 MV/2i8+/iMtNUWWD6a5BY/nxOHqu0wl/O4NHpi8LGq74UOoCFgRZ1tb3wX2Mp1qlJGZ9e
+	 sycIoaDqVetOc+yQvht7ryAmaa7mpwpGp4AHv/FETl2G8D4pvwia42UoRS+ho3hd5zPqg
+	 iLwpPdBwomDWaXGslLQzYgTP30TTMBxnMCHnvDgH+34Pcxa44wgz+JelyHpWqkYXNkPgm
+	 Y0oJTSoXcxfT9PqNWH58wxNc1K/JhZrXKeBu3ZlrPnmgtB6WFg1VmWPewdeHLgWxFhg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795644988;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795644996;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=JWm3F65cTvbkSUDXl1Y/GIGqkgZqbiVzOvBBoT7EL0A=;
-	b=Xy8qGj24UCxaFOO74YIpys4tLaWYhzarJol5jzmWrHD3n3WI8Sva+SczsP16NqjMWmBG
-	 hJdM61gTz6V0PQ89yb3wCJDFoWRTzlDSLADIW2jcYeUzepAKwStplQhuvxrjTDESmX7sz
-	 LNyYYIuh9bKN192LF6IS8g51WsnkoF4Wf3MljtejaXqMlJvOlDP0OZKu/GIIaPMcq5But
-	 8PKtK+0ZK+pIc/m6G0CAtbXH2ztXnqoQ5vR6yN1ovdUHQFodyVCRGxashJMFB4EaylUBV
-	 OaeECOONMO+i3M4FK+IEmwZu0cUN/nSRUdb52kaui+xdbVWacPeN+Tf/nt4OqCwJTXw==
+	bh=iizZjgnpeBrU8oFjWBrGM7wL2DaScW85+h4ZhCRucEE=;
+	b=VcHMxFf3C9bjUjXSgTsynHs27v0Mb3Moi3jBnpb9AvHTZ1cl1YTlQzG2aiWs6IjUVoC0
+	 iAWVhjerbTO6faIpeGWPBbGmeLMZ8AcnzK3aavof0jC9UTUHYT0jEaIjvpqXgTe3BCNeX
+	 04JB2XpPrJSpfhq61sWPC5J59c2fxzI/vinPVG/EEcyZ4vmzrs2upqreOFS0poJCjWrkx
+	 LFVFD+aWdsirdWkQd5I7eQVLJJkjtP7w4l+Z43Nb81FqtpRYlB4nN93OU6Py0a+rvRAXH
+	 VtPLNLlLRqwJWnJpQf4B28SRz4uSpbbxzPBi2/nGECbIOz5kQR+HyApoKttxx4Z+Q0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="Bm/LniVg";
-	arc=none smtp.remote-ip=74.125.82.198
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="AL/sKAtQ";
+	arc=none smtp.remote-ip=74.125.82.69
+Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D67606A323
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:16:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 08D67606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2EA606A327
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:16:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF2EA606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Bm/LniVg
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-341eff9e381so9491453eec.1
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:16:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AL/sKAtQ
+Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1af203073e0so6800696c88.1
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:16:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795644987; x=1796249787; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795644995; x=1796249795; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JWm3F65cTvbkSUDXl1Y/GIGqkgZqbiVzOvBBoT7EL0A=;
-        b=Bm/LniVgb4+jhwlj7X7naQVzbaykMWug9mMsWyCAe2gvpPoo+143yPnQ9HfVZbE1Qn
-         0yMbrnNVZxe3E7IuMMb7+BYWCdFNKybtOcA8UjhuuewRrx80iYkFw0EdsA8fjjTB0PlJ
-         1Xup35zLorQ0D3bjp/ydMM84G+BnkAoC9bwJQsbMuvT8ileVbI7M7GfM+P8KxRh3V1NY
-         TJ05LXUlSkrEgRwrRO4HlQ60hzToEl1DfkMCq5EtprdHBAKUSSu/FMnNfVDWoV3CwQBC
-         aVkGFwA+oKtXqcuPYuvaO3nJaF2oSCBVn01r4v/rjAXYXaoH0d0WCEwd/eEunTTqA07j
-         NMvQ==
+        bh=iizZjgnpeBrU8oFjWBrGM7wL2DaScW85+h4ZhCRucEE=;
+        b=AL/sKAtQsi003M46qtbimr5ce4r9tYWq/ylxE6J0uXuOqqwJkT+ilqXE9NRtp9lI0D
+         tUbLsJJiIxG/6hwT3Af9VwrnkSSBYk1tjHBJEXQTx9DI4+ByJREQ1RwQQY7a4ZkCiSBr
+         xUZN7kg0E0rgelNFGgIpYw9rbCIOcaAK0dLakmDE5DZEkMnxGwEio9Xdh6h/s/z5ypOS
+         IBQL9Jq7HhmAupJkdAILcbWwkhtuPW87Fh4DeUtarEbkyVhPhOzZOUlESfzd7z6rFIsI
+         Y0ftOBc72OsrGWEjxW0eoyS0GQxWyPNTFiidsxojbo1LP+v1X/OTUWHc3tIwGF35UREn
+         WpUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795644987; x=1796249787;
+        d=1e100.net; s=20260707; t=1795644995; x=1796249795;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JWm3F65cTvbkSUDXl1Y/GIGqkgZqbiVzOvBBoT7EL0A=;
-        b=1FmP84SCWo4ImDDMNT5gR5IkWuJBkRlx9vDoEUDIMa8kZ2yeAHXz+iRlahtYDIDre2
-         GgPsRZkzVGX/7kFAgyalPeC2fGbIkfJ0Iv/Q7PxklMnnow2se3jf4rvufGAJ3OkqlYko
-         ExItuQ9u75pE0jXeNSzZhj3JE7vEtBOujTLB4xWy2Php0YjHTaruFZT7J9DpxUIktli4
-         0/QsDZb5ajfDMkugMMOuC422P029Taji9Opn/s2n+m2q3I3aNLkYyjZ7Kesh2wyMp4aX
-         tevb57FJRFsXFG68laOeRZLxU35H3pvpaudT0Ji+imEJJDW3UmiGE4ehr8rv0FSET0Bh
-         mfHQ==
-X-Forwarded-Encrypted: i=1; AL+hErHy4E418/AsYRr2USdBA8aTTuJb/sToZV0D6M3ioMyEwuF0gBCFX9FUaxPXrSYMGJMrXNgK@lists.linux.dev
-X-Gm-Message-State: APuU4Z9BB6p9oJUlkva8R7ybBlrOfV/kacxR80v9a3bY6ZpdiFJHmYbO
-	NV3uKSpsFvRBJRubLzfYNatu0gGCnnQAVhcLXYvLLoLF1gQn1SACdJ14UcT4tX71dLKjUjjp2Cf
-	a/Q==
-X-Received: from dleb17-n1.prod.google.com ([2002:a05:701b:4251:10b0:1a7:f7dd:f258])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7023:a41:b0:1b5:4b48:b9ee
- with SMTP id a92af1059eb24-1b5568c0ec9mr18863247c88.26.1795644986769; Wed, 25
- Nov 2026 14:16:26 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:15:36 +0000
+        bh=iizZjgnpeBrU8oFjWBrGM7wL2DaScW85+h4ZhCRucEE=;
+        b=eLcANClJSzo5iq7a9HmweEarkPIExe/wmUwVREaJZnRC0ZoN1Xb+TTmOM4IGeoz8a/
+         17FZ/fGFfevtSS/0K0xP4pShto+K/bdTbSFCFuJFlTp/PqMfkPLoE+CuXpDWAe59UhSC
+         szigoAy1mLglLo0WZz/O+Whmg6yse0iXP2UExNPM71KK4TDLWnTCFKPsJeNpE6J8gWpr
+         2MIIROw9/IG/N7SCvquuSx89sxOjN8PsQomjZdYnOXT/db8KXNegduV/Oep6GB8aXOZt
+         OTJ/ol8PYrvmMBuDsPtrVa/rno8rKQreRG4uXt4QazgR35Kb7ncqrbXy7BxlaPy4n10i
+         Lbng==
+X-Forwarded-Encrypted: i=1; AL+hErHgeZ5+6Tdbtbg1Xv4L35e1usOYSJHxwfq2GY6wbLyyAjdiPK5MX/Q5x8+53FhI1E3kgLq5@lists.linux.dev
+X-Gm-Message-State: APuU4Z+uV2DrFH4U5eqV3JdYn76rm+7fJUhluUZlZkoTKxCx4w0sKo56
+	yYYTVzo/teYka8V5qucVx+ms9YWoXu9LLoUGWadWFXUnXDGbNX56V4wuhabikuk7qsqswv5aFxd
+	7og==
+X-Received: from dlbrl2.prod.google.com ([2002:a05:7022:f502:b0:19a:1425:bb9c])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:3f07:b0:138:30b1:4c00
+ with SMTP id a92af1059eb24-1b5567b5685mr21927000c88.3.1795644994359; Wed, 25
+ Nov 2026 14:16:34 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:16:27 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,59 +77,57 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125221536.1417085-1-elkin@google.com>
-Subject: [PATCH wireless] wifi: mac80211: fix use-after-free in ieee80211_rx_h_data()
+Message-ID: <20261125221627.1419412-1-elkin@google.com>
+Subject: [PATCH net] phonet: fix use-after-free in can_respond()
 From: Elkin Cruz <elkin@google.com>
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, irogers@google.com, Elkin Cruz <elkin@google.com>, 
-	stable@vger.kernel.org
+To: Remi Denis-Courmont <courmisch@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, Nathan Chancellor <nathan@kernel.org>
+Cc: Simon Horman <horms@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
+	llvm@lists.linux.dev, 
+	"=?UTF-8?q?R=C3=A9mi=20Denis-Courmont?=" <remi@remlab.net>, linux-kernel@vger.kernel.org, irogers@google.com, 
+	Elkin Cruz <elkin@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In ieee80211_rx_h_data(), tf caches rx->skb->data before calling
-pskb_may_pull(). When pskb_may_pull() reallocates rx->skb->head to pull
-nonlinear fragments, tf->payload_type, tf->category, and
-tf->action_code dereference freed memory.
+In can_respond(), ph is cached before pskb_may_pull(skb, 5). When
+ph->pn_res == PN_PREFIX and pskb_may_pull() reallocates skb->head,
+the check `if (ph->pn_res == PN_COMMGR)` dereferences the dangling ph
+pointer before the code re-acquires ph = pn_hdr(skb).
 
-Ensure pskb_may_pull() succeeds before reading through tf, and derive
-tf from rx->skb->data only after pulling.
+Check for PN_COMMGR before calling pskb_may_pull() to avoid accessing
+the potentially invalidated header pointer.
 
-Fixes: 8a4d32f30d11 ("mac80211: add TDLS channel-switch Rx flow")
+This issue was found while trying out new Clang static analysis checks for
+kernel bug classes. The finding was triaged and fixed, and this commit
+description was drafted with the help of AI, then verified by code
+inspection and compile-tested against linux-next (not reproduced and not
+runtime-tested on hardware).
+
+Fixes: c3a90c788b74 ("Phonet: do not reply to indication reset packets")
 Cc: stable@vger.kernel.org
 Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
+ net/phonet/af_phonet.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I am trying out new Clang static analysis checks for kernel bug
-classes, and they flagged this code as possibly buggy. The findings
-were triaged/fixed and commit descriptions were drafted with help of AI,
-then checked against linux-next (not runtime-tested on hardware).
-
-Thanks,
-Elkin
-
- net/mac80211/rx.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
-index a2356cd17691..f97d7f4daa79 100644
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@ -3292,12 +3292,11 @@ ieee80211_rx_h_data(struct ieee80211_rx_data *rx)
+diff --git a/net/phonet/af_phonet.c b/net/phonet/af_phonet.c
+index d89225d6bfd3..e70ade97bf17 100644
+--- a/net/phonet/af_phonet.c
++++ b/net/phonet/af_phonet.c
+@@ -294,10 +294,10 @@ static inline int can_respond(struct sk_buff *skb)
+ 		return 0;
  
- 	/* directly handle TDLS channel switch requests/responses */
- 	if (unlikely(((struct ethhdr *)rx->skb->data)->h_proto ==
--						cpu_to_be16(ETH_P_TDLS))) {
-+						cpu_to_be16(ETH_P_TDLS)) &&
-+	    pskb_may_pull(rx->skb, offsetof(struct ieee80211_tdls_data, u))) {
- 		struct ieee80211_tdls_data *tf = (void *)rx->skb->data;
+ 	ph = pn_hdr(skb);
+-	if (ph->pn_res == PN_PREFIX && !pskb_may_pull(skb, 5))
+-		return 0;
+ 	if (ph->pn_res == PN_COMMGR) /* indications */
+ 		return 0;
++	if (ph->pn_res == PN_PREFIX && !pskb_may_pull(skb, 5))
++		return 0;
  
--		if (pskb_may_pull(rx->skb,
--				  offsetof(struct ieee80211_tdls_data, u)) &&
--		    tf->payload_type == WLAN_TDLS_SNAP_RFTYPE &&
-+		if (tf->payload_type == WLAN_TDLS_SNAP_RFTYPE &&
- 		    tf->category == WLAN_CATEGORY_TDLS &&
- 		    (tf->action_code == WLAN_TDLS_CHANNEL_SWITCH_REQUEST ||
- 		     tf->action_code == WLAN_TDLS_CHANNEL_SWITCH_RESPONSE)) {
+ 	ph = pn_hdr(skb); /* re-acquires the pointer */
+ 	pm = pn_msg(skb);
 -- 
 2.56.1.839.g22a8290db9-goog
 
