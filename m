@@ -1,75 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645093;
-	b=ZEtQL8VThoakzjm6q4x6p4cVXji1eYh1CUtaED8ZqjiwUw1aB4kBAF83o13ojvWjdsir
-	 HsNpMYsFKQylJDi/m7LesCEQzWCakBVpjcOYA1ltekYydle1WsJhgAJKKdDXMFfOhKHZ4
-	 yiJVXefPXAwjfTgHug8F0iAhKs3A+yRWgnvQ8RgaJMu3Aqkp+uPYzSOXxjmq5N/9LcjLG
-	 h3j8KYlDkJodXbwaR2j7ZvWYjTHDvjY0nnVeo+4cCTeE9X3O1ozOM2CSZwfNqiT+YmTfG
-	 OvQH6YMdDpK2k1F1k8NOK0S2n3kJ9BKlFTO8n+MX7L1TZpkFW0BlH5gEYmefuGOqSlA==
+	t=1795645122;
+	b=WrxTJzHc8KxiWjT3wS7ibMX9K2tO4dxNlLnbqOIUyJJnzFij2ElppNcHgoR5z3lvqrVk
+	 /tStHZ1OrZAPpOt9whnuyPyMjLKlUqoiflXBCgo7eZM7UBL32E2fWmOedqjcNWXCwT+Pw
+	 uxM+iWVEoBKXbjQg5aTINRaOizjuoxjq+NhoNocy3pX1uWZo9/9Aq11sg9wGrQZzaw729
+	 5c43dfhgY0RC3TzL+xLI6IHpusJkzLsjkgXuVBwJzISeYIinqeb2B3xIzDk6WRUtuCork
+	 HNvjVfQFLI4fv4YB8zgQa4yc3o9hh3Ecquv4u2zTN4eUOxhr8hszTgiUatWMkryp38A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645093;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=VgqpPNqaZ4O4eWgZqdi1XZF/bmVHxvm7Tf4gaCeB8hw=;
-	b=5I4fCihuq1HWzDGwlWsB9unewImWPhTw/X/VGm+jj84jMVUeVc6HEw/SSxYefhnbwNC/
-	 Z/+dXXvfPe2QzQiEd85zLg78XSjtlYfGErUblDyK7q8keMrwVpug3EYu7o94gWwTpLDxc
-	 jT1RUekIYOJL7TP3huTXhk5ZE25eENNTAICq1LWlBHy4AJC9SLVUR6JVkDQiMqToXLE5F
-	 1uK9hbj5Od5Q6y5dnVk7o/0j/lNULBCpSUdxaCPtYDW8azOu8WpH//4KUWKSLgOjvcd5k
-	 ZsSBaYQP7Xn8O2WfkKtZ08M06aXx13HhtmscimRJYGn3sV8G219had0bdXz6J0GoKaQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645122;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=o5KFqUXXjfeTfqARHGi1E8eWl4G8Q6kAjZPv4QHZ+Z8=;
+	b=laqcvrZ68y2Ubranr9/zg7OjtnIPv8qvwopRYfKXXGbGtRSsBL9ODTq2ZLK9bcJ8crpL
+	 kI8uXwJvGIzay3Z1+zMbp5hjwSePlYsIaGkzy1g4Lg5v6DxUMZXQ0eAOroj32BsgSCsJN
+	 Pdo0YTdFGq6MKwk4f5vxFyzZkq9ILfudOL9ylcMQOaqGlg9bH39Rifh6RmSa9v0B3vujt
+	 lNfENH41zsNucTMj4ppQJM6xDSc/RKEQbQ0HBnncpRhgFQG5KQfN3ehboxv6jplCYt91w
+	 tCyk4O+bsKL3oj0BwZ62vJQtPqwsHVW/2vBM3jfoZa8YTWozguOEoJLSvu+gfWs1FCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HsHejouM;
-	arc=none smtp.remote-ip=74.125.82.198
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mHZcxydn;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B643606A32C
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:18:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B643606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F08606A321;
+	Wed, 25 Nov 2026 22:18:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 08F08606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HsHejouM
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-30bcb065bfdso6647462eec.0
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:18:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645092; x=1796249892; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VgqpPNqaZ4O4eWgZqdi1XZF/bmVHxvm7Tf4gaCeB8hw=;
-        b=HsHejouMzLlua1tkJwSPm3aLNK3KrOayQ6XL0QsWJp16CPyLwMjVeTtXXpMAxM1Wcr
-         jOVzptWAtEhVgQvt1MoBOloj3RuH0IZBIoalGhLOSNn++LIHY+XUwPTSGjS3vTGUYUjc
-         IrLVg0AkbWRcXwVu3kSOZHX7kEi1AQxXhj2z8QmoVun4BbbfA75xeS/spP1Rj42FQ56X
-         2Ovd85BZtbYd3bRzlVCZZETA6tUL8WYoEsWlMaQtsUie/CewNsvWSR/2PSEjpPwew1J0
-         CZFPIxSySyQNW4YkYUarenlBcy7cmFJ5xGkUm5Q8o/wnmAMHmj7KBCK9wZDiu+Q2FAgx
-         lXrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645092; x=1796249892;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VgqpPNqaZ4O4eWgZqdi1XZF/bmVHxvm7Tf4gaCeB8hw=;
-        b=SUAvsS5XQpm5VSOkdrBDyvzs80hYDbNWfFd6tzVWm/AnB7g1l7IfDqNfeexkR9Lxit
-         boFnY8t8sf+VcVUIJXaEvlFykJ6mX6BLjE8Mi9LkzCo7Z08AcDLlEY9j24fVT2zQbOe6
-         xrHEdF/3RGF2UO6CqrbJVWRWgFRjQWUslgHfnISp1dex4gqUc/WmFQmhdM74Xre/36rr
-         1yeK7tKARPf5j+eLDG5qH6wR9kIKBHA8w15WnnqTP4rdDfWGjmRLBbBEVS2yGMhgPHXe
-         rDybPZhoBTfXTPJ3yKlydpejAiIPccR/NhiigEurKM4aWHEtwl+vxeuXfhbykAmD39GK
-         b0gw==
-X-Forwarded-Encrypted: i=1; AL+hErGj6P5PCIvr/PgM6mYXepbXOkNmzt5Nrw7ar8l1z4rlRDxI/8TqTH/Hqm9nc9Pm3lVVBnsa@lists.linux.dev
-X-Gm-Message-State: APuU4Z8u1IMgHsNoF8xvS7RAwpJoAKYwcSnJo51WeGePQPeiY6V1Z0M1
-	mCQvkP2Y42g6LrkZtJyDBjNftVlcnHAnAE0UiINMwQBL552eJMcv/8ug3+YYv2HAFM5QNpC+ROg
-	yvg==
-X-Received: from dyah11-n2.prod.google.com ([2002:a05:693c:83cb:20b0:386:458d:ba4c])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:8642:20b0:386:9e22:ca4c
- with SMTP id 5a478bee46e88-3869e22cc7emr17859030eec.35.1795645092222; Wed, 25
- Nov 2026 14:18:12 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:17:30 +0000
-In-Reply-To: <20261125221730.1421806-1-elkin@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=mHZcxydn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795645122; x=1827181122;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PPukY6G2SgZJasLiTZ5RJSGQ781r9OSE3UZlYheDPgc=;
+  b=mHZcxydnJBf7K5826MxY+ZwAbCW7uf3iEaEOdvBpjkFhzgvAtcOOyL24
+   dNQE/zA+1OQNFPeBEYv7YjJegC21tfWtyDjYxhnxMQ5uR3C7lFHlN5UEr
+   K32ItfVgcdBt/mGFloy/ZZ/r2gLXcZ0Y04ZGHTfaqq4MjX12DwkvmOMx+
+   en/9FvDSLprDc7ePJZ1NcAUsj62hfAXFCafNcv7r29XWYj+xjQIYNAiob
+   pkmai7fhmCd2lH+M5c0HM5mSLxabkQ6Yv5Zs68Qukh6W3xwGQXQ0I8rsc
+   IZkHBveGtX8qoz4aXP2c9E1eMXxgCDZPJpC8jZZVeWdlv0VlIZ4rdlgqm
+   g==;
+X-CSE-ConnectionGUID: aSmTLe57TlK2SY1kfzGChQ==
+X-CSE-MsgGUID: rT+aQiMjRoKFBl3iMAvLSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4512049"
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="4512049"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 14:18:41 -0800
+X-CSE-ConnectionGUID: fJrdTqlmT3uj9FZd8amQpQ==
+X-CSE-MsgGUID: Fy48RiB9TUqmlTK2M7JttA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="11866513"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 25 Nov 2026 14:18:38 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xWLK0-00000001SlM-1Gj4;
+	Wed, 25 Nov 2026 22:18:36 +0000
+Date: Thu, 26 Nov 2026 06:18:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+	linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>, Boris Burkov <boris@bur.io>,
+	Filipe Manana <fdmanana@suse.com>, David Sterba <dsterba@suse.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: Re: [PATCH v8 25/27] btrfs: zoned: keep a zone free for relocation
+ when allocating data chunks
+Message-ID: <20261126060952.TMeGle2I-lkp@intel.com>
+References: <20261125102956.266389-26-johannes.thumshirn@wdc.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,68 +87,39 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261125221730.1421806-1-elkin@google.com>
-X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125221730.1421806-3-elkin@google.com>
-Subject: [PATCH 2/2] afs: Use bitops for fileserver address bitmasks
-From: Elkin Cruz <elkin@google.com>
-To: David Howells <dhowells@redhat.com>, Marc Dionne <marc.dionne@auristor.com>
-Cc: linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, irogers@google.com, Elkin Cruz <elkin@google.com>, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261125102956.266389-26-johannes.thumshirn@wdc.com>
 
-In afs_select_fileserver(), es->failed_set and set are unsigned long
-bitmasks sized for AFS_MAX_ADDRESSES (BITS_PER_LONG). Testing bits via
-32-bit signed shifts (1 << j and 1 << i) sign-extends at bit 31 and
-invokes undefined behavior for bit positions >= 32 on 64-bit kernels.
-Similarly, initializing s->untried_addrs via (1UL << nr_addrs) - 1
-invokes shift undefined behavior when nr_addrs equals AFS_MAX_ADDRESSES.
+Hi Johannes,
 
-Use test_bit() to inspect address bitmasks and GENMASK() to initialize
-s->untried_addrs safely across all valid address counts.
+kernel test robot noticed the following build errors:
 
-Fixes: da0e01cc7079 ("afs: Fix fileserver rotation getting stuck")
-Fixes: 495f2ae9e355 ("afs: Fix fileserver rotation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Elkin Cruz <elkin@google.com>
----
- fs/afs/rotate.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on btrfs/for-next]
+[cannot apply to linux-review/Johannes-Thumshirn/btrfs-zoned-don-t-wait-for-a-zone-finish-after-a-filesystem-error/20261117-195824 linus/master v7.4-rc4 next-20261125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/fs/afs/rotate.c b/fs/afs/rotate.c
-index 490b433e4395..a0d293ed2aa4 100644
---- a/fs/afs/rotate.c
-+++ b/fs/afs/rotate.c
-@@ -64,7 +64,8 @@ static bool afs_start_fs_iteration(struct afs_operation *op,
- 		s->endpoint_state = afs_get_endpoint_state(estate,
- 							   afs_estate_trace_get_server_state);
- 		s->probe_seq = estate->probe_seq;
--		s->untried_addrs = (1UL << estate->addresses->nr_addrs) - 1;
-+		s->untried_addrs = estate->addresses->nr_addrs ?
-+			GENMASK(estate->addresses->nr_addrs - 1, 0) : 0;
- 		init_waitqueue_entry(&s->probe_waiter, current);
- 		afs_get_address_preferences(op->net, estate->addresses);
- 	}
-@@ -556,7 +557,7 @@ bool afs_select_fileserver(struct afs_operation *op)
- 
- 		afs_get_address_preferences_rcu(op->net, sal);
- 		for (j = 0; j < sal->nr_addrs; j++) {
--			if (es->failed_set & (1 << j))
-+			if (test_bit(j, &es->failed_set))
- 				continue;
- 			if (!sal->addrs[j].peer)
- 				continue;
-@@ -617,7 +618,7 @@ bool afs_select_fileserver(struct afs_operation *op)
- 	best_prio = -1;
- 	addr_index = 0;
- 	for (i = 0; i < alist->nr_addrs; i++) {
--		if (!(set & (1 << i)))
-+		if (!test_bit(i, &set))
- 			continue;
- 		if (alist->addrs[i].prio > best_prio) {
- 			addr_index = i;
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Thumshirn/btrfs-zoned-don-t-wait-for-a-zone-finish-after-a-filesystem-error/20261125-112930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/20261125102956.266389-26-johannes.thumshirn%40wdc.com
+patch subject: [PATCH v8 25/27] btrfs: zoned: keep a zone free for relocation when allocating data chunks
+config: hexagon-randconfig-1001-20261126 (https://download.01.org/0day-ci/archive/20261126/20261126060952.TMeGle2I-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2012344e5da8e03ea4b8283ecd6fad6e13f09d64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126060952.TMeGle2I-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261126060952.TMeGle2I-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: fs/btrfs/btrfs.ko: symbol '__hexagon_udivdi3' undefined!
+
 -- 
-2.56.1.839.g22a8290db9-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
