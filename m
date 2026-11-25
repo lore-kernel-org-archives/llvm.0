@@ -1,72 +1,72 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645683;
-	b=XhcXly/AJBXfeAT4baEtYU/c8jCvczR3H+z+zxkSL7Yrp3wivF4i0bzjP49zU5OQtMJt
-	 P22UWI1evwW4XnYBaumoQ9I/mZ2umsRk5LGVykc3/0BRlzs59908OwUMw/WQGekFPXu0e
-	 MK7K5HsjUbY28Rsdqto621WBck8W0b/TMq2X/HPkHBHUksHkSJhqaD4Iv72b38uBCOEtV
-	 jWV/DzM3WwflfRuYWsdW0/XxY5PTtLHYF7B2LL70cr2pcFfmyKDVNUKGt833U+A2Cmrk1
-	 cn+I2Rw8vHUGEbvalAriTGiFuAeJsC9G9gtFjD/vGa7fPIc9v7zL/SACc8Ve2yKduxQ==
+	t=1795645711;
+	b=b+8/MrlfXyodgtFyHB7zKV1ULglZTBXmV+Yyf7Dqpl2+svHcg7sF7KPCnCYS11Y7rqO8
+	 xQ/FhqQJYmJz/3ADb34lK9smeVXEMPIiNvv5iRiDw4MqOYvgMv8FjcgN9PshAfRhUfdEw
+	 Jh1/trF1lKpDAXcekqB987Uo2OI/PZHi/AJ3hdmNTcvw6zcW+nBJSVf9IOulF7XahLaGw
+	 kRDhqD+MfMTJO1sDAT3lVlmCOPywle0Y5nqr7i2jDuQ+9RrHFfIJLdRVPjjIfor8G7Mqb
+	 XMjvOOd8URdVToXUgK64tXQsdJfUohP3uIJ20QUeeqT3x+C3WneItujMpOL2gUXXSXA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645683;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645711;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=pGLqG+R6IwEUEhnoQECM2DID9vMzArkmStKfaJkmTj8=;
-	b=GPkdKsWwCtvyej7G8pUaKwZ0ta66FMmC5Ssd94QKE+4T0aHuV8IT7gfckCkSRKuTDy8Y
-	 /VzWsNZe8st9DNuToTlCRRV4bDgsMxc13z0KCCcNHyVHmfTltDma2CO6cCIDaBONJxqnG
-	 SI4K6ExADg6ZyKj9Vlsv3oJ9UbWzv9LK6G6TN4hxOU1kj9B4zrZx5PlKkwh0nifuGfbhS
-	 pM1XpF8KIrLo/uKxwq6CXE9gxB9yB6kd3ievOomPrZNuZQUtHNGwLv8Wih1L/7BCZAZto
-	 v0g7ofspKe1PWDUZVk0h9DpBQ76oSlYcKskeckXRarUaFee1YRKjQ8x5Ta9juq6zsxg==
+	bh=bB9dahbauIY6gVR9GUf26/TEEIOmcwn74D5zXKoaRTs=;
+	b=dAywBo7/UyjHkuHeokjcwKVavp3NFJqGlmPRFGwHdjABd1F8VbtDbb7vXbONdDfbLeND
+	 XoWdWL1wsOWMHpByHYPdoszuq7h5GhesTmK+ixW61LgNGfygqTPSH6Ur4+a6st3SHGM9W
+	 IwN/3qGwaB5XIPM3Vel/2UPHON0/nwNr239tvAko10+B1RFCO1fpHCL+gKX8U+Y3FN4vn
+	 aSRKixjdgYmbfbp6uFU/oB23V9854GqQcgKj6MlVA+5kksfZoceAKyCFV87j3sUHvKkNI
+	 ZC4KXbcUay99RRSZH9ZWYjRMpu0odt2eHRHDSN5exAhxKcZNOYKEzlyNWCi/0/qSpTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fiDNHpCm;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iizAeEjt;
 	arc=none smtp.remote-ip=74.125.82.198
 Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4384606A323
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:28:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4384606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3E2606A327
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:28:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B3E2606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fiDNHpCm
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-386ad819860so2722836eec.0
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:28:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iizAeEjt
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-3869accaac2so3791411eec.1
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:28:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645682; x=1796250482; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795645709; x=1796250509; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pGLqG+R6IwEUEhnoQECM2DID9vMzArkmStKfaJkmTj8=;
-        b=fiDNHpCmPbkjI2hOWg3+KGRRChpmBVU1ohusNJvFY+Y6Be8esv3Ie/CNGurGH7fQDM
-         SLNlZ1tpN4vQGDxJpLgpyzs9gi92keLi1TeO+vKaKFou/RG0N0JOyQ0+Eddlhmsz0Zzj
-         dLY9Kgj30sAVPVf0vn4jtdk4GlvABJ7tjPJezvMXgqcooU6g5FGXep3atCqe3koytUrS
-         vzeajCGTj+vXQGWbuLNh77jQpUPriuThCb+LBugIk55PCJk+hckyjaVrRTmobL77VoMg
-         FF8H5FijvrlB22hviruJxnLZkd6+tAtu2XOfi2Y1GsK6rvHU/A2AZzXmgDNueUcueSVm
-         sbQg==
+        bh=bB9dahbauIY6gVR9GUf26/TEEIOmcwn74D5zXKoaRTs=;
+        b=iizAeEjtsUUEpxbmLZDHmBO4UJH2OdrYARJFzyDHNoG8NsPW9285obZVtdzIxra4gz
+         JyQgoKJcF9rl+c873wF8hF6x4uzX5KK3il0NpSsVWMp1Zjuozmf7l4fZK/liFgpGMi3b
+         c8Ncb5ZDmD1ZH9GLM3AzZCA2EkpgoK7Gq8Bw6m7xMnylEAjXW6IrsJNzZdFoNYUtuOzB
+         9PpMnchT9sSvl35TBFBVpqTofQ4VObH9amBdd76yc0anf6ORzpUB1LJXHaFvjVkLUJsi
+         /hFvJeG3YDf37ZIAGOgULHZ7UBRcEIBwnwlNi9eqazzlwGFfswc7UPf14y4hgVuUwhOh
+         bPwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645682; x=1796250482;
+        d=1e100.net; s=20260707; t=1795645709; x=1796250509;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pGLqG+R6IwEUEhnoQECM2DID9vMzArkmStKfaJkmTj8=;
-        b=hEGmA+6lSLf1s6rAwO2xwxn/Wo5Z27aNWPSTEBzURPkh+xkpzA9w3RKQIgiq8ztj7p
-         RE/1YPL3zmTfym/TEo1tHtWty0ANoIpYKJedERQsAFxeYS4MEQZ+jdfhqmxUS6FoLDSf
-         ofKulsnaj6yFAx1S/DlVVM/Ua2sud4axaVmub1O23gp+8AmGNVdgbAnQk03wJlcspmi9
-         dzsoVrWk+KE9dbPQAJoJwhgR7rx7wNQsutMnK0X82iRkD9ezqfSn5wqQbi6zoUfFuR9x
-         fVmynssX1m4ys/Y6WJjA/3fXROJEpDcF5JNpghUvub2Yx2pGX+kziZkBxwhyCPem0Uqf
-         cImg==
-X-Forwarded-Encrypted: i=1; AL+hErFABtV8uJpTWZc27UGyagp0oCc5PCn2/ZcBW0GO5SuYpKlaHAIUWtKlqi9eTFbcdpe0O7Bt@lists.linux.dev
-X-Gm-Message-State: APuU4Z/HAtH/NAENrW89hz0VcQcOyNnn9bbIDGdu4BGh8bQ8f9kgL+Ao
-	icZaZy3Qr5crhB+WLmLZQIMQGRAXaVpclpP+WkhIP75Y6jsllD/bCzQKFiYbQbUrpz/fl7PEGku
-	H5Q==
-X-Received: from dycmv2.prod.google.com ([2002:a05:693c:2802:b0:386:b5d2:c426])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:dc3:b0:386:ce5a:41aa
- with SMTP id 5a478bee46e88-386ce5a47f9mr3340721eec.13.1795645681576; Wed, 25
- Nov 2026 14:28:01 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:27:29 +0000
+        bh=bB9dahbauIY6gVR9GUf26/TEEIOmcwn74D5zXKoaRTs=;
+        b=jjBbhwhsvEBrU2WncJ+EWtNYiHgdguNNpNlwcG6Hh/mtD8f6vARDYWWJG6s/2pDH+i
+         nPu3cGpRFjKhxKkTDyf9TyLc2vjGUf2Le7SMDQLMDgiwFyZkMrUgMN9tKG3+TrI6txLi
+         ki6UFn/BNlFygrPzBCCMYicW5pyAZ1nhx8S7li/KdVpE8ilndlwTyuDo+buvRdWRwU8d
+         LkULtZ15jCrYIE9zfBspPJQZ/gexrPECErPg4WhWTYkoHire/AZCFSOMYYvvQwqXKU7x
+         KqbdF7ff3rxk+Lxg//v7TbE8rirImWlbun8SzAHpRxHWA22un2Mq7IokZI3m4BhIZ8yR
+         OglQ==
+X-Forwarded-Encrypted: i=1; AL+hErEGCH+3DTOWFVtcnJPdtMejTbSjKBqeuxkTJ29Xog5uJLZc3x8R8hsAYYaoeYqj+j1J7tu0@lists.linux.dev
+X-Gm-Message-State: APuU4Z9YFfh895d17h03nj0ZTn+OYw3TqDmclUxGFcKVnI/Og07Cyzyp
+	pwwmISH5PaYIJK6u4XCKvjdOg+5sSucXh4ec0ID3atXzfQGVC1riEB+qJE83Vfylw4R2Evg1+hL
+	3bw==
+X-Received: from dleb17-n1.prod.google.com ([2002:a05:701b:4251:10b0:1a7:f7dd:f258])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:2706:b0:192:a481:361
+ with SMTP id a92af1059eb24-1b5568c12e0mr18196883c88.7.1795645707988; Wed, 25
+ Nov 2026 14:28:27 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:28:02 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,37 +77,29 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125222729.1450842-1-elkin@google.com>
-Subject: [PATCH] sched/core: Avoid atomic cpuset_lock() in __sched_setscheduler()
+Message-ID: <20261125222802.1451781-1-elkin@google.com>
+Subject: [PATCH] media: cx231xx: clamp bulk buffer copy length to vb2 plane size
 From: Elkin Cruz <elkin@google.com>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com, 
-	Elkin Cruz <elkin@google.com>, stable@vger.kernel.org
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, irogers@google.com, Elkin Cruz <elkin@google.com>, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-When Magic SysRq-N invokes normalize_rt_tasks(), it holds
-read_lock(&tasklist_lock) in atomic context and calls
-__sched_setscheduler(p, &attr, false, false) with pi == false to reset
-real-time and deadline tasks to SCHED_NORMAL.
+In cx231xx-417, start_streaming() initializes bulk URB buffers of size
+320 * max_pkt_size (up to 163,840 bytes for 512-byte USB 2.0 bulk
+endpoints), whereas queue_setup() allocates vb2 plane buffers of size
+mpeglinesize * mpeglines (65,536 bytes by default). Passing unchecked
+len into buffer_filled() overflows the destination vb2 plane buffer
+when actual_length exceeds the plane size.
 
-For a SCHED_DEADLINE task, dl_policy(p->policy) is true, so
-__sched_setscheduler() calls cpuset_lock() (mutex_lock(&cpuset_mutex))
-while in atomic context under tasklist_lock and then skips
-cpuset_unlock() on exit because unlocking is gated on if (pi), leaving
-cpuset_mutex permanently locked.
+Guard against non-positive lengths in buffer_filled(), clamp the copy
+length to vb2_plane_size(), and record the payload length via
+vb2_set_plane_payload().
 
-Guard cpuset_lock() with pi (matching the non-atomic caller contract,
-where switched_from_dl() releases deadline utilization under rq/dl_bw
-spinlocks) and call cpuset_unlock() on exit whenever cpuset_locked is
-set.
-
-Fixes: 111cd11bbc54 ("sched/cpuset: Bring back cpuset_mutex")
-Signed-off-by: Elkin Cruz <elkin@google.com>
+Fixes: 64fbf4445526 ("[media] cx231xx: Added support for Carraera, Shelby, RDx_253S and VIDEO_GRABBER")
 Cc: stable@vger.kernel.org
+Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
 
 I am trying out new Clang static analysis checks for kernel bug
@@ -118,38 +110,34 @@ then checked against linux-next (not runtime-tested on hardware).
 Thanks,
 Elkin
 
- kernel/sched/syscalls.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/media/usb/cx231xx/cx231xx-417.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index a5ff3c47e9ea..f44fc426404c 100644
---- a/kernel/sched/syscalls.c
-+++ b/kernel/sched/syscalls.c
-@@ -575,7 +575,7 @@ int __sched_setscheduler(struct task_struct *p,
- 	 * SCHED_DEADLINE bandwidth accounting relies on stable cpusets
- 	 * information.
- 	 */
--	if (dl_policy(policy) || dl_policy(p->policy)) {
-+	if (pi && (dl_policy(policy) || dl_policy(p->policy))) {
- 		cpuset_locked = true;
- 		cpuset_lock();
- 	}
-@@ -724,11 +724,11 @@ int __sched_setscheduler(struct task_struct *p,
- 	head = splice_balance_callbacks(rq);
- 	task_rq_unlock(rq, p, &rf);
+diff --git a/drivers/media/usb/cx231xx/cx231xx-417.c b/drivers/media/usb/cx231xx/cx231xx-417.c
+index 55af8b9f2038..0b3e856f6d21 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-417.c
++++ b/drivers/media/usb/cx231xx/cx231xx-417.c
+@@ -1297,15 +1297,18 @@ static void buffer_filled(char *data, int len, struct urb *urb,
+ {
+ 	void *vbuf;
+ 	struct cx231xx_buffer *buf;
++	size_t copy_len;
  
--	if (pi) {
--		if (cpuset_locked)
--			cpuset_unlock();
-+	if (cpuset_locked)
-+		cpuset_unlock();
-+
-+	if (pi)
- 		rt_mutex_adjust_pi(p);
--	}
+-	if (list_empty(&dma_q->active))
++	if (len <= 0 || list_empty(&dma_q->active))
+ 		return;
  
- 	/* Run balance callbacks after we've adjusted the PI chain: */
- 	balance_callbacks(rq, head);
+ 	buf = list_entry(dma_q->active.next, struct cx231xx_buffer, list);
+ 
+ 	/* Fill buffer */
+ 	vbuf = vb2_plane_vaddr(&buf->vb.vb2_buf, 0);
+-	memcpy(vbuf, data, len);
++	copy_len = min_t(size_t, len, vb2_plane_size(&buf->vb.vb2_buf, 0));
++	memcpy(vbuf, data, copy_len);
++	vb2_set_plane_payload(&buf->vb.vb2_buf, 0, copy_len);
+ 	buf->vb.sequence = dma_q->sequence++;
+ 	buf->vb.vb2_buf.timestamp = ktime_get_ns();
+ 	list_del(&buf->list);
 -- 
 2.56.1.839.g22a8290db9-goog
 
