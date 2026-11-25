@@ -1,73 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795603805;
-	b=ArKixl92glLzsexlMeQaAYAYbjNi35e52jyUXTy49FOTCRC2lKEk4UE6SJd5UuV4AmGy
-	 eRAg2DHLBJYCejeCDQl60M7XyaJOVU04n57eV8AYk70KN0WbWFzmWXrIY8iy8YLcTxLOp
-	 LO/4X81+M2fDufJ8eVPbC69l3X+ZgGDwtiC2SQJAPI7oqmVqJ1IMZ0iayuCFsAqlgaZBS
-	 ktwUtgbp1/IsUZPMTEKplLmq5hzu5gOX/QGE1VEABO5E1Unt6Pt7L9zVmIl9BAyZNC/mS
-	 gRS1DhAPvock+cblMXmKU6GOf+NzAI4HH30VWSxsV2ihiTXHFk9mMbL1vJ0mDJq73jA==
+	t=1795604111;
+	b=bUai7QR9IaFsO6RbXkM8tyHZmRZv5D6+wGap+sdlC1mG2tA3hAxdtlIzv340mf2s6dPJ
+	 HwQRfDxVY7xWRmde3OwXdRW5rNRYKZ55HAbycaGzW/ZTL//dKsaS4+jxiCNtLihesy3HM
+	 KrzNZayiGRhlm9JD0Oa4923diUnUshK93Fcut7BL1wRkZJgdIBtXkoTKvah+qrWm6Ov0d
+	 KtcI0ONMwZtYhp05W3niDBZXEGPXasbOKgVy61kmImlEPU21YhBz0OensTf+8Yk5iRFyV
+	 45/daPCwbG/AxRHutIZ05qtIVxBDfTG28+/cAhCvaXrRlqIIp0Q48CGaxlOtQh4ViVQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795603805;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Developer-Key:X-Developer-Signature:X-Mailer:Message-ID:Subject:
-	 From:To:Cc:Content-Type;
-	bh=iNsoMr6T6H6tXBBcGO5QuTopXNx9EbRoa5Eh8+XiL8s=;
-	b=DKsQ4TW9tmDcuT2XP9Kz92vwotK/KJqnrwwTEMvz6ayimShVFZDxFjgzu+8gxEg1VrlR
-	 +G1sirIPOR+BBjgJXkeqSnnjOTNg8AlgpkCnyuiXLA6dPkuflY/krNjflMX/NYhlk0ZRG
-	 QVDNsY9jwzX5bHaGPxTO0MZc7bele2B5K/w5lggQ+dShxOXHOkdqcA59LfmqewSyZbZrg
-	 pQAx+sTiyDDdMXWWwbwJcPekAODD4UgjdZ9kYRHY6ewJQDLYwiw03NMPtXuv/WC1JrVoa
-	 kNmALJmWK2PEL7NHCbcPInojN2BSMKNnMCM1oj0hSlKVwsemQx8oMgY7yMvgjk2u7NQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795604111;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=3T+PgBhGAeiyiJXoesZjBC+dalaU5f+v7s903e1CpXs=;
+	b=zuGx38LxMcg08sH0BRi7U3G6iul3wHkKNPdHvrtmNQNNsaEwgNOItRCXK1wjF+pN9TIE
+	 bk9h/Yy23sOjJCJ4MzLBVwiop+hVEUwFXocHGFIzx7x/k21rhcHCE45U/sjxkmYfAuG43
+	 6h2UBfX1Ad6u3aFxkdjf+4mdsg9rLYXG0qpJIYe4TdFTuvKE+qr8LcnLB9HkOovoaX+RQ
+	 rVSG5XcUjf/7wAq1D/OqpIHx3KUBgelPnF39A297erYYURWwiuCYworxs2RWscxrlsYxt
+	 fW7Ih3cHqZCxo5nA1JpAAs/vz5tnDJCXLm+NubogUbBi0bxkxOF1cz+Q5Jc2UxSgY3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--ardb.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="V/kB3GDA";
-	arc=none smtp.remote-ip=209.85.128.69
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMR+lxB9;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0F4606A326
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 10:50:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F0F4606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91677606A335;
+	Wed, 25 Nov 2026 10:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V/kB3GDA
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4ba078f26f4so39864235e9.2
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 02:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795603803; x=1796208603; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iNsoMr6T6H6tXBBcGO5QuTopXNx9EbRoa5Eh8+XiL8s=;
-        b=V/kB3GDAoGGQPCfwWTLdEFMwI/7m3q3gdMyNS1tLB/XiAtqFFN8U67IxKpPbljL/wR
-         QhwhCWjrcQqs0Yk0J1FfpUPjJNFfLSYOmNGJ4Qefzjez4Mvq6DFiNy29jkZh2GEy7vYw
-         k8WSwyKBBdkWzEM/Ueoi1Uiu+B93sUZ35JUKCb8GsfqEywcESRxlSQgDu/pio22q2nxH
-         riWm2l8e2y3AXnINIk1UEPOEKKAgC4AXySssH9gO37KYnC8VKCeUxb3AHnWpSSlbCe/Q
-         6/46qTDNIm7LCLIpic473bwnaCBKV4uty1WULtlUBaFINJNud0By5gLGf+qghoeObNzs
-         JunQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795603803; x=1796208603;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iNsoMr6T6H6tXBBcGO5QuTopXNx9EbRoa5Eh8+XiL8s=;
-        b=qpH56tyjl1DK+Bv63d5Qg+XUOM0DqgXsAU8rDAv2r5pieuL7+4I5bvBnKuNNVKtjFE
-         WO3TwJ1nVXEZGmWNUIcr7FLgN+kQ11AJEQMRD4tDS055B5aqyhKIRJyE9u/GltD7kCyP
-         igNPljGKMFKVyKtt4rqhO4Czq3LM7TJT5Rgs/GtIIx+nKxYw4IYOgn4phRddmq4rzSy4
-         GNix6Ta65RpZ22a1Rt2HHMHrFrBeA1gwH8OdbG7gke0pw9jN9EspiW+r7qcmguqjsIVN
-         sPHdk3EQ9rkWMFWowevP1rmDLC4dJhwl1AlXpkWCQBZznswCQCieX9LF6ZjteW92Q+9Z
-         4UZQ==
-X-Forwarded-Encrypted: i=1; AL+hErH9EijCbc3rEYNP2aZuukfs5hTD/RO0Yp8cWVlZmBk0weF98LU32TA71lIfG7qPx/IXaPN9@lists.linux.dev
-X-Gm-Message-State: APuU4Z+CoJ9OVSYKC9gNs2ngnBxGDzYp3Hhlz949E5g/p/CqBJ7a/R2x
-	kBPyGEPJXu+1xcFE/jrrG/GFSpMattnXjZRBbuzS8fzo+fa6HvX3dwfOQVoxTze3QvpW8+B62Q=
-	=
-X-Received: from wmdp22.prod.google.com ([2002:a05:600c:5d6:b0:4a2:1824:f77d])
- (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4fc1:b0:4bb:53e4:a7cc
- with SMTP id 5b1f17b1804b1-4bb88820741mr391672135e9.30.1795603803163; Wed, 25
- Nov 2026 02:50:03 -0800 (PST)
-Date: Wed, 25 Nov 2026 11:49:54 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMR+lxB9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E651A1F000C4;
+	Wed, 25 Nov 2026 10:55:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795604111;
+	bh=3T+PgBhGAeiyiJXoesZjBC+dalaU5f+v7s903e1CpXs=;
+	h=Date:Subject:To:References:From:In-Reply-To;
+	b=HMR+lxB9DpYGJdlMSiwTyypb8XN0TBuITla3qPw7hwHp4VeL0Ul2htvUZLPrifSxM
+	 5NuE6u2yPcrrSB5hbZWu8M1qnIFZVbjGlku0+o8f1CFiu6w6qCBfR232d7Pe3rTDzu
+	 XJCSM49gC6mR0Jpy9ilKnd8nBEYNr3L8vDVajsAjh4i1ZP8kgkHMN/pywZ9HCDo9nC
+	 e6DfPpZTAwH0OQitvZf1/87I8rDF65hEbFw8+EdlnPrg++M1CEmv6dZLa2hjiwzFz5
+	 26YToi+XTpjfn6Z4i2xdHWs6zRux06lfU2A1py1Cv9xAdKogZh4nO6JDh9NqNYfsid
+	 9/hBHeqrXmaGQ==
+Message-ID: <647d4527-dd99-4f1e-98ff-a6a5317560e6@kernel.org>
+Date: Wed, 25 Nov 2026 11:54:58 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,121 +50,140 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3347; i=ardb@kernel.org;
- h=from:subject; bh=xnrI87ZBQQSKaohYJde0WQjUe3lWmPb1HGDjkOQx43Q=;
- b=owGbwMvMwCVmkMcZplerG8N4Wi2JIZttb1CThVWc8y5vbfFdwlWLblg7Na/yWDJP43WKVuXyx
- R3ld5Z0lLIwiHExyIopsgjM/vtu5+mJUrXOs2Rh5rAygQxh4OIUgIn8LGRkOHVTes33gwV3b87W
- MNNTFpqsuO26quC/nJSNR56H/lO5+orhf7ryo5Rn/74n6BlOq7X/aMhq9iXynGPSgnbbt/lpG9R 3MQMA
-X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125104953.381561-2-ardb+git@google.com>
-Subject: [PATCH] x86/percpu: Use address space loads for per-CPU reads when
- using Clang
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
-	x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/7] soc: mediatek: add MMDVFS core driver
+To: Echo Zhang <echo.zhang@mediatek.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney+clk@redhat.com>,
+ Jerome Brunet <jbrunet+clk@baylibre.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ MMDVFS Team <linux-mediatek@lists.infradead.org>, kyrie.wu@mediatek.com,
+ ming-fan.chen@mediatek.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, llvm@lists.linux.dev
+References: <20261125060037.649659-1-echo.zhang@mediatek.com>
+ <20261125060037.649659-4-echo.zhang@mediatek.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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
+In-Reply-To: <20261125060037.649659-4-echo.zhang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Ard Biesheuvel <ardb@kernel.org>
+On 25/11/2026 07:00, Echo Zhang wrote:
+> Add the common MediaTek MMDVFS driver framework.
+> 
+> The core driver handles device probing, SoC data selection, clock provider
+> registration, power-management notification, and dispatch to the
+> microprocessor transport used for runtime performance voting.
 
-Clang never discards inline asm with memory operands, even if its result
-is unused [0]. This means unused per-CPU reads are always emitted,
-including the load of this_cpu_off by this_cpu_ptr() in cases where the
-resulting pointer is never dereferenced.
+I don't get why DVFS driver is a soc driver. This should use proper
+Linux subsystems and be placed there.
 
-Clang's support for the __seg_gs/__seg_fs named address space qualifiers
-is insufficient for full CONFIG_USE_X86_SEG_SUPPORT, but works well
-enough [1] for plain loads, and is present in all versions of Clang that
-Linux still cares about. So use those to implement __raw_cpu_read() on
-SMP, permitting the compiler to elide them when the result is unused.
+> 
+> Signed-off-by: Echo Zhang <echo.zhang@mediatek.com>
+> ---
+>  drivers/soc/mediatek/Kconfig                  |  19 +
+>  drivers/soc/mediatek/Makefile                 |   1 +
+>  drivers/soc/mediatek/mmdvfs/Makefile          |   6 +
+>  drivers/soc/mediatek/mmdvfs/mmdvfs-clk.c      | 462 ++++++++++++++
+>  drivers/soc/mediatek/mmdvfs/mmdvfs-core.c     | 581 ++++++++++++++++++
+>  drivers/soc/mediatek/mmdvfs/mmdvfs-internal.h | 305 +++++++++
+>  include/soc/mediatek/mmdvfs.h                 |  72 +++
+>  7 files changed, 1446 insertions(+)
+>  create mode 100644 drivers/soc/mediatek/mmdvfs/Makefile
+>  create mode 100644 drivers/soc/mediatek/mmdvfs/mmdvfs-clk.c
+>  create mode 100644 drivers/soc/mediatek/mmdvfs/mmdvfs-core.c
+>  create mode 100644 drivers/soc/mediatek/mmdvfs/mmdvfs-internal.h
+>  create mode 100644 include/soc/mediatek/mmdvfs.h
+> 
+> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+> index d7293977f06e..bb273a4461f0 100644
+> --- a/drivers/soc/mediatek/Kconfig
+> +++ b/drivers/soc/mediatek/Kconfig
+> @@ -60,6 +60,25 @@ config MTK_REGULATOR_COUPLER
+>  	default ARCH_MEDIATEK
+>  	depends on REGULATOR
+>  
+> +config MTK_MMDVFS
+> +	tristate "MediaTek MMDVFS support"
+> +	depends on ARCH_MEDIATEK || COMPILE_TEST
+> +	depends on MTK_VCP_RPROC
 
-On a v7.4-rc1 defconfig build, this gets rid of 174 spurious per-CPU
-loads, 136 of which are loads of this_cpu_off from this_cpu_ptr().
+Does not exist.
 
-[0] https://github.com/llvm/llvm-project/issues/245738
-[1] Exclude KMSAN, which ignores the segment base when instrumenting
-    such loads.
+> +	help
+> +	  Say yes here to add support for the MediaTek Multimedia Dynamic
+> +	  Voltage and Frequency Scaling controller. The controller provides
+> +	  virtual clocks for multimedia hardware blocks and coordinates
+> +	  performance votes with platform voltage resources.
+> +
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: llvm@lists.linux.dev
-Cc: x86@kernel.org
+...
 
-This supersedes "locking/local_lock: Don't evaluate the per-CPU lock
-pointer if unused"
+> +/* Logging macros */
+> +#define mmdvfs_dbg(dev, fmt, args...) \
+> +	dev_dbg(dev, "[mmdvfs] " fmt, ##args)
+> +#define mmdvfs_info(dev, fmt, args...) \
+> +	dev_info(dev, "[mmdvfs] " fmt, ##args)
+> +#define mmdvfs_warn(dev, fmt, args...) \
+> +	dev_warn(dev, "[mmdvfs] " fmt, ##args)
+> +#define mmdvfs_err(dev, fmt, args...) \
+> +	dev_err(dev, "[mmdvfs] " fmt, ##args)
+> +
 
-https://lore.kernel.org/all/20261122105646.2223131-2-ardb+git@google.com/
+No, do not reimplement standard Linux kernel APIs/frameworks.
 
- arch/x86/include/asm/percpu.h | 25 ++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+This applies EVERYWHERE here.
 
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index cef9a4ca9841..40262edef878 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -32,13 +32,13 @@
- 
- #define __force_percpu_prefix	"%%"__stringify(__percpu_seg)":"
- 
--#ifdef CONFIG_CC_HAS_NAMED_AS
--
- #ifdef __CHECKER__
- # define __seg_gs		__attribute__((address_space(__seg_gs)))
- # define __seg_fs		__attribute__((address_space(__seg_fs)))
- #endif
- 
-+#ifdef CONFIG_CC_HAS_NAMED_AS
-+
- #define __percpu_prefix
- 
- #else /* !CONFIG_CC_HAS_NAMED_AS: */
-@@ -144,6 +144,25 @@ do {										\
- 
- #else /* !CONFIG_USE_X86_SEG_SUPPORT: */
- 
-+#if defined(CONFIG_SMP) && defined(CONFIG_CC_IS_CLANG) && !defined(CONFIG_KMSAN)
-+
-+/*
-+ * Clang never discards inline asm with memory operands, even if its result is
-+ * unused. Its named address space support is sufficient for plain loads, so
-+ * use those instead, allowing unused per-CPU reads to be elided. KMSAN is
-+ * excluded as it ignores the segment base when instrumenting such loads.
-+ *
-+ * Once CONFIG_USE_X86_SEG_SUPPORT is fully implemented in Clang, this version
-+ * can be dropped.
-+ */
-+#define __raw_cpu_read(size, qual, _var)				\
-+({									\
-+	*(qual TYPEOF_UNQUAL(_var) CONCATENATE(__seg_, __percpu_seg) * __force) \
-+		(__force uintptr_t)&(_var);				\
-+})
-+
-+#else
-+
- #define __raw_cpu_read(size, qual, _var)				\
- ({									\
- 	__pcpu_type_##size pfo_val__;					\
-@@ -156,6 +175,8 @@ do {										\
- 	(typeof(_var))(unsigned long) pfo_val__;			\
- })
- 
-+#endif
-+
- #define __raw_cpu_write(size, qual, _var, _val)				\
- do {									\
- 	__pcpu_type_##size pto_val__ = __pcpu_cast_##size(_val);	\
--- 
-2.56.1.831.g720f3f5937-goog
 
+
+Best regards,
+Krzysztof
