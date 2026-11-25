@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645550;
-	b=yXtTijUNU9qhTtopN8ajiobMRKjUrLErQG+iXC0Im29Q2YUCA4Gx3aAViGQN1nORQ+SZ
-	 LpQ/LbbpoCXzllFfLul1Pnc9G7R+uF7wYS7KUXBY33/u8VnLDdc05jM/ctOtqxgaEEywv
-	 d4knbFNObqKUhOaDRpJxb2h8DZ4AbJP8P/m+YbluEmpLgxYUAheDxxI/f/3nrXFzTx7+h
-	 5kZ0fK/FDNuaTgeGQgBOZM4JaLflJmvXj6Lcjigr5WljRsEhm/HuahSPTbz1eXh4SoQvL
-	 bqH8kk6YZ5ixKb1scIPkw5NDL907MT8m1WyFGmkcAnYyDQwnDBX/UWUFn9hqVy9xB0A==
+	t=1795645565;
+	b=ZZEGwWTFPNtULe8Lf1dbiWJitwSwGyxT5XjdR+sQSKXQ0LwpMKnMKk7jcjsqdrXINN0G
+	 n3XfDPvbSlylrN0PlfRtWJdbZ6ccmIk8i7WpiIf6SfUVmgfonIMzrRdKsP18OT/0jvRk4
+	 CkQk8Nj3sZZ1efdCw2L1s9IOXGWI4QoUgVBHD9NVntAlhBrQ1kqKgqTo1E3etSb9e/rXF
+	 GRV8EawLVad6IQqRplsXjPPNgyflhvicIt6ycMrlUYWNInH31xBgI91uQVT+T15N7p3YW
+	 51EN7xSNSC8c/ylWmqFjJkXQru5X401zd0pKpJf7DYMhX6kdsmadbzaVDulIaZAqhIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645550;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645565;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=ue0clycRAKMXS44rtOTwgYfFDRrhexAInqWIAQ+09Ks=;
-	b=o0fJ3MAv5qEQx5PqA7VxgUqJ3zeHvbvktai5nBwtk36OdnPwyJ3Yg/OT+ZERNE6zFQU/
-	 RZ+f5ZIaz3M8yg3KUWMfJsUmw3HyNzZrFHrc9EBwQqprXqZ7pC36kVXNTpGCFiWRkFcje
-	 Ko7srlOhcGCLBEfdLP0CQkTnE3K/ODBSziRjAqjPqWb8h5VNB6FeFUGqczGpgUA0u1FZR
-	 3ZE0E4Ct6E6auwmwnOaqNUyiRtyLEI4SZ/mlKQRj19rDlJH8gZhTxY6S2y418mHKEGpmE
-	 hloWxRvZaZB5Y0Zxuzi9757GoS575FMnrttiY1f+BMKGlvu9sVlOFOfLJZfgrMO5PnQ==
+	bh=zgtJXU8YQHzy+kU/OTfUuCnnBinrSODUP5wPqMLOjgs=;
+	b=KMIj7uZ476GIcQm7kBZFCNCHCkGBIIC8Qc4OECIR5qAZQ+LgrW6g2HzgyW2LYUCNMqho
+	 OrBcpqlF6TMhjG77ARH/jDzzSaZ/LgRRxvi5oKWKlgufb+yGwko8FVeYpeXwMOykHXEBF
+	 x9v+T9ptCQj7plm+pbgERiCqs50FDe+WvErXT/2OTDTwxaHASQeKgTGuQCodQYTukDB2d
+	 CQUoD/wK+sr+SO1UTdSoHe1nvICNvIKWM5UAN2c2wJX+GNwlk8zuEu7W0WQzXSZdill+Q
+	 0zipU4jbhzqB1zBwlbuuY1yOvL7A/mg4SvnXss8jbTjy8vGZDW0odSmT30Qurzz9mvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bNO8NlTZ;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SQjxm9+y;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982C9606A32A
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:25:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 982C9606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E99E606A332
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:26:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E99E606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bNO8NlTZ
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1383723dfddso6416310c88.0
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:25:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SQjxm9+y
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-33c35f5ca6cso8025667eec.1
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645549; x=1796250349; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795645563; x=1796250363; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ue0clycRAKMXS44rtOTwgYfFDRrhexAInqWIAQ+09Ks=;
-        b=bNO8NlTZKzyhKV/rjmyrsZWd7ZD3Eo1zgbUgKQyWQifJOjdgGHqv1of2DXf4HVhaEe
-         ouU7DEUVA1cNIK8SVavg9wGeeG2CMhn1TfOjgLzHWjUqLBWin8KsjuRhT6II/wcYEdSb
-         /uwz87w0mBToorAwYIM1rZU8f3uGIPb4eb/SSxGI9if5REZN8OF4SGhnTH8+NmiG/8vC
-         pR8kSDoqaoCkX91SPbHmgM+MVqQ63Mn4e8gOBGvVmdPsGIR2ivpQwNMPjmBK7NNSO07C
-         X0pzbTTwwetfWoos6VLYS1CO2u0C6R2qezGNBY6SfhMWk0rWp+7jDw/NgK4vSXN6/gAC
-         FjyA==
+        bh=zgtJXU8YQHzy+kU/OTfUuCnnBinrSODUP5wPqMLOjgs=;
+        b=SQjxm9+y+6q1WVnpy9pxyhSD7f/ri2T83C591c1KvjKj9pr1+PXYmjLel+JYm4ZQfD
+         QqFjdWNWBNjsVEJASGyyvOKCEocPVF8umutsZsBJXROWucgqYFkm8521YJ1/sGEvPU8T
+         b7uqMGctGzHPFGdRzGZOM/vx8ShC9H5GWaTR9g5ckpefCjI4ZaMSNV55zfMHCJ84CKh0
+         8bkINWs+EOAs7TC1uZ0xeu+KQLAZvSG7rVHHBpVQmJQGscZn6G1i223FopTOhD/UnWao
+         fUS6s2LbVIOk1/HmzLkVllM5FeSDQLNlMA1DU6EJbUTIkl3xDFcRkjazGRSP4UPJ6ucs
+         Bdtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645549; x=1796250349;
+        d=1e100.net; s=20260707; t=1795645563; x=1796250363;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ue0clycRAKMXS44rtOTwgYfFDRrhexAInqWIAQ+09Ks=;
-        b=UiR8WFwgxZrOru9sK3awEul8choM/GNNxoSUhENxSudNy3HP5RkD0f8e8GGdIZK0oy
-         2PLsaZFFJ3KuCtAq6FvXj2gKUIqguSo9hrpdG5qwnF2fOVCDLYP245i/1j93ktzGNStZ
-         bBfTOIiihqCglqeA/4bVRxHJjDEL/3diBa3eSmV1ckD61CPqXRSPvMdbqG0/rIW/mW8/
-         lU9yGCBsYZeq3LYAyPs6a0ggOmqexS1DhDZh+M37Iiz8Cmr9siER7FBAWUuIl4sfA6y4
-         VGIeVnSu3xz4nixuOcKyNDvmlzYrsIcqWT3NoYDNGVzMFFOxxJB+FZXPofXegwToYYbE
-         iogA==
-X-Forwarded-Encrypted: i=1; AL+hErFYQBiqDCnE/l+G/4QhLiBiiJJZmIC1mDo/NVXS0DlgC+w9P2KYqympp0HOB92MihrYuujI@lists.linux.dev
-X-Gm-Message-State: APuU4Z/9pSR4HMWLcCNgrOr6uXFLb2ZjSVlzvdjYZKtJ4BSjSp6NOjSv
-	5iRno8PSu7hK2D9wiJnBdG9ipnx5YXFdzkMoir8L5rsD+lts+4m5Ez3e6HEGl/6tIHGcoM4sRcM
-	5og==
-X-Received: from dlbds15.prod.google.com ([2002:a05:7022:250f:b0:1b5:3561:2fe9])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:3b8e:b0:1b5:10cf:c402
- with SMTP id a92af1059eb24-1b5568a17d9mr20769440c88.10.1795645548479; Wed, 25
- Nov 2026 14:25:48 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:25:36 +0000
+        bh=zgtJXU8YQHzy+kU/OTfUuCnnBinrSODUP5wPqMLOjgs=;
+        b=lyR3FoBMQnySVScnj7efTdrNj4zYxlWbR6r4E+u2sK6ySpJXv0YYXwzOKrIiroNAto
+         mnco1qVeOPciBJBu9MSjmEmvG6iMMSpz5enMGeI7GZm+Z+nfwEO0vhL5ambXdaZphiE5
+         W04nJELS4Vez8G7qJvRfRPk1tVfiNGS3uCUcMehrJQWzDi+6eF4Pi9RM1AAIDP0665c3
+         F+fI1hn68+0/+iU09I2MDQaIR98XK3OXIqLlscZqdcnO+NtYHz/o3fE8yvBztFaZZBkV
+         XvNT6E3mvHsu2fXbDoh+FNX+mmywvJhDEagI4DNNvsMyu46ffsmaeGatKFUSqN6g70sa
+         xmxA==
+X-Forwarded-Encrypted: i=1; AL+hErGJwCIBvVBIMruSEgi/YmOfynjHEXdBCR68NuJ6wBNwoi+w50c79m40+BU/0rRNwoMZmQxq@lists.linux.dev
+X-Gm-Message-State: APuU4Z+YRxlneDypoBfzakK773xic2uGSZPb9CvLR11QGYK+0Eaf0XoH
+	9P0rZk/DWsfjaZbTxs3KmJk5qTnxJRR2OxZ2n4kd0/D/2zZBCwgxUWxxUMH3WJ8mCXitgApzgVZ
+	mXg==
+X-Received: from dldyq17-n2.prod.google.com ([2002:a05:701b:4551:20b0:1b5:58b9:e078])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:3a83:b0:184:992:c9ec
+ with SMTP id a92af1059eb24-1b55693aaabmr25999920c88.38.1795645563065; Wed, 25
+ Nov 2026 14:26:03 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:25:47 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,29 +77,16 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125222536.1447211-1-elkin@google.com>
-Subject: [PATCH] ASoC: zl38060: use bounce-buffered spi_write_then_read in bus write
+Message-ID: <20261125222549.1447825-1-elkin@google.com>
+Subject: [PATCH 0/2] pinctrl: tegra: fix Tegra186 AON bank index and add bank
+ bounds checks
 From: Elkin Cruz <elkin@google.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc: linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, irogers@google.com, Elkin Cruz <elkin@google.com>, 
-	stable@vger.kernel.org
+To: Linus Walleij <linusw@kernel.org>, Thierry Reding <thierry.reding@kernel.org>, 
+	Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	Aaron Kling <webgeek1234@gmail.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	irogers@google.com, Elkin Cruz <elkin@google.com>
 Content-Type: text/plain; charset="UTF-8"
-
-In zl38_bus_write(), the local stack buffer buf is passed directly to
-spi_write(). Passing stack memory to SPI transfers violates DMA safety
-requirements and risks memory corruption when the SPI master performs
-DMA.
-
-Switch to spi_write_then_read(), which safely bounce-buffers stack
-transfers through DMA-safe heap memory, matching the pattern already
-used in zl38_bus_read().
-
-Fixes: 52e8a94baf90 ("ASoC: Add initial ZL38060 driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Elkin Cruz <elkin@google.com>
----
 
 I am trying out new Clang static analysis checks for kernel bug
 classes, and they flagged this code as possibly buggy. The findings
@@ -109,22 +96,14 @@ then checked against linux-next (not runtime-tested on hardware).
 Thanks,
 Elkin
 
- sound/soc/codecs/zl38060.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Elkin Cruz (2):
+  pinctrl: tegra186: Fix register bank for AON drive pin groups
+  pinctrl: tegra: Add register bank bounds checks
 
-diff --git a/sound/soc/codecs/zl38060.c b/sound/soc/codecs/zl38060.c
-index 02757ae2b58b..fc67999c84e4 100644
---- a/sound/soc/codecs/zl38060.c
-+++ b/sound/soc/codecs/zl38060.c
-@@ -534,7 +534,7 @@ static int zl38_bus_write(void *context, const void *data, size_t count)
- 	memcpy(buf + len, data8 + 2, val_len);
- 	len += val_len;
- 
--	return spi_write(spi, buf, len);
-+	return spi_write_then_read(spi, buf, len, NULL, 0);
- }
- 
- static const struct regmap_bus zl38_regmap_bus = {
+ drivers/pinctrl/tegra/pinctrl-tegra.c    |   8 +-
+ drivers/pinctrl/tegra/pinctrl-tegra186.c | 102 +++++++++++------------
+ 2 files changed, 58 insertions(+), 52 deletions(-)
+
 -- 
 2.56.1.839.g22a8290db9-goog
 
