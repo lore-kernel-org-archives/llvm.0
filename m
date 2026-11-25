@@ -1,75 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645476;
-	b=ZbSPA8cZNl9QzntrejnmGGc+NCZto4ZJG+7BPDwmazWH36rc1PSm+A/WH6Y4Qsa8JQ6I
-	 6odvWscafBPL9wUeW26fK4oq9jn42yFjtFFv3dRkyYEyhX2x7TTvji+vUFiPXcUy5k1kv
-	 XUBXYt9xSDvVDkpJSfTasQYSyjyep/eLBMbEdGi9ybCUHoaevc9QXnw1j1xDhb7K+o0dr
-	 9Q5C7ZrrTkRkBn6a1NkD98hwOTPhg1UxBPmVVaSbIPOTT8BHW3xfY4EcE/AYubFB9lmsx
-	 ai9Re8o4tbdDNpAFQqK8lIEgosWGYMPsh2QrSOWMx6lxpkNXVmnn6pbYvN6H3xDAtzg==
+	t=1795645483;
+	b=QsQo5U/Ui2ShO4ym7f1SH6I2vb/9dqo2KLX5Z6qxKGj+q0ZU3hUaEKhV9szKpULNkm4B
+	 toXBN3v/tIxuWaOVxjlEl4ZIj4SF0sghYpePn5Binvr3GBmWXI0nv87bpC43CKvoRnB1K
+	 +gRNFRGnK/fWhaSnG7SANhiJ3bhX7mEluQbI0HBwABavGy3Hngl82nOQt1RBsJ52rTHLx
+	 hHAMxHJxiCUO4DS+/jUUxEIyZpJSmkFEd0fg20CK89dj1pS8UW/BkP9hwS0SIRQXjDDD4
+	 PW8I0+D/NLSO6zx2XBpKfd+M+P3tn1VHaxG0ritjnKJ2ytHNoWHxd3mIVkC/aLw0RPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645476;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795645483;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=VpmCZyaDhiCrjNxeAIXeOLBMLi9KQfBBj22GsCf5Hkc=;
-	b=ftSp8gMxPJ1VR1yvHi9U6y/H4vpFQ+9rMgfj28q/qfG7gsoCxRoZOwSSdKtYmNgwMXyn
-	 mN/1oy6EZExDDYf+e5EaSnGzDm/7jLEkVnZ0Z2Mbe5fQg8Me7XDqYapluF69zq5CRLHfx
-	 h4B6F9kL4ouHpDyOnY8sBrZhLt0p5wn0H0UMO9LEcBp/04VZ3zFokLG2v0kI2pNmpaeng
-	 SDTr+IBD9qzSPKlxdhlLjHf9XmvVF0AKMh7Mmj3+mU688dyxVkdSxap02np/6vilimFqz
-	 1JbxBRGjZagidoktC+VyA5niwL65LhAVKx/WMAS9dEbcjfrRmt+PbrrO1X1FbLtCelA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=jDuBt5Cw+ANUexZtA4dNwo8xhQaNML2KuCiDPiA1qKE=;
+	b=Oqfr8oMraC85x/i/gS6Wp3NFGoCXxE7olxQXXf6yt6gp9tb2u4qApfOZCj3C7Z8GggYT
+	 OET8KbZ38mqiRk5QaSqAfZkBCHBvX3R9k6yvRrGlXLGfGcAoFUcC058cew5FVrcHsA376
+	 1GuR2zb40c3xfYeY/Ct1yk+nkFpjYMUTGP6wNZWMc7fFKyUcgVY1SiKhYO5yduhrCZii9
+	 A4Qi3Anh1eoLfzK3+sY7ciTniJMWUjnt3J3komETuqJlvVZEr0UofAsoYWkGYlEoDc8/W
+	 h1wvPsxB+wLMXlKKn42zlD3jVeY6NIA7mtu8VU4bS/8+8MEhH9+ngUyNcVwMxrd3smw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--elkin.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NT8nZdnC;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UUhzJ9qJ;
+	arc=none smtp.remote-ip=74.125.82.197
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBE8606A6A5
-	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:24:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FBE8606A6A5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AA8606A69C
+	for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 22:24:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 30AA8606A69C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elkin.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NT8nZdnC
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-386a65fca25so5303944eec.0
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:24:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UUhzJ9qJ
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-3846d5f54c1so7335666eec.1
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 14:24:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795645474; x=1796250274; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VpmCZyaDhiCrjNxeAIXeOLBMLi9KQfBBj22GsCf5Hkc=;
-        b=NT8nZdnC/ThA4BqmuV7leApytR4HFwOcaw3Hkpen+XwOmoOFstXCRs7M7CPJwMyDhL
-         jGhHlJLodfyX3d4fdZzPsim57I+cycBTH0LKSV549sj9oWNwKaUsIV27VKhJSbtX5YkW
-         GSMBk6TZX3XaFfguEGAJtV40R2vrlh3FNkS4QiLZjdJZojMztiZ9LuSVY6rUnahQ1Yfv
-         wOt4ZxcJaysuVgcmWsOIIVIK9viE+TtPrjWZ+LAmw5Bx2y3MmpcjEAMxGOVxoAkgintZ
-         0rrFCFLCX+I35cyqn7TglUZ+SLc8kQhqJVDejplgVDeTJ8tMVyMHAERT5IZpAY2WoDr7
-         +FeQ==
+        d=google.com; s=20260707; t=1795645482; x=1796250282; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jDuBt5Cw+ANUexZtA4dNwo8xhQaNML2KuCiDPiA1qKE=;
+        b=UUhzJ9qJyo5nhJlRbw2kI6lfPuQSI/m4eWujS6L4+d3rl26OD6zAMJ8uJPlOW5RLNa
+         otS34ed7bVN9cmXVql0kNnSdmncwyQF8LlSUu/0sYAa9+eEMqBJvw5SW4YB5jiWy3tBu
+         ArEJXPwTHjt19T1KbjVP/FRjBz+Kanx5ZOmARtxfEMIxpUbMFEX4LYWThcpXSHQ33krV
+         qYWCQdyT8C44s98fOU1sXeyTbe0zB68NGvDdwDIjL8F6JwMxnvjs7e/avStSy2LDOMr7
+         zpLJGB9KkywiZS1OecIiql+/0lLsmI3zou7zoY0OJN63ucf2PR4o09oFHQ4xd1732sEK
+         kJ3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795645474; x=1796250274;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VpmCZyaDhiCrjNxeAIXeOLBMLi9KQfBBj22GsCf5Hkc=;
-        b=KtD+lt9im7TiL1GSnJPpRcyiL9W9Hgo6q5nKgY1BJbBekPsPpnj2EVarxa/eB9QDkS
-         GtTME7xN3roDx9r+JkR6scRTotkwT/W/yG5PRLdozxv/DQ+P26/W0oelRnPwdK28gYx9
-         IbnSHP943k7xB+cohaiCHMBIYioKqJ32wk5gJl73ciSJYgEoiBEEHk8PdEr3SOLVZ+4U
-         Xkm4Xmmqx/AQdZw2YbM+HCM2LByTqfall9t+RN3k/DwrJRXbn0WpuBXrgrOCOdpd9UnP
-         bFDgl5wezbGKI6L+6RCdELXhxpicLHIU/gkRO82qI1ujyeulysca51PWZyKcArYmG6yK
-         OONQ==
-X-Forwarded-Encrypted: i=1; AL+hErEws5equnDAx2nOM+mB3DiL2EOBgheNPmLSts9Um4sgtQ1092lczi3fKLNQHGIw4wgktbza@lists.linux.dev
-X-Gm-Message-State: APuU4Z8r0vtlMWwjMP8UGMicPojTqY1Tq2sSdJ6XkkSQF9REgpibATpz
-	X7RvyMzmMgKZ0OYDs+20xzXZIGLalh2x22NlqgsKGARr/MhYXW7U6HkSNyEV+S+bjwj77QaXyJN
-	A4Q==
-X-Received: from dyw15.prod.google.com ([2002:a05:7300:880f:b0:351:4a2a:1ece])
- (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:2108:b0:386:b99:8ff9
- with SMTP id 5a478bee46e88-3860b999354mr17111901eec.40.1795645473196; Wed, 25
- Nov 2026 14:24:33 -0800 (PST)
-Date: Wed, 25 Nov 2026 22:22:59 +0000
-In-Reply-To: <20261125222300.1438398-1-elkin@google.com>
+        d=1e100.net; s=20260707; t=1795645482; x=1796250282;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jDuBt5Cw+ANUexZtA4dNwo8xhQaNML2KuCiDPiA1qKE=;
+        b=AomVoSqh7YluWSPhHN9zR9ozFSDMSNqOO/DJ97HiZ0kUOtEyV3r8DeyICYiTchYUNX
+         2cC2Ct0zvi7bUktAUaFxV3VSpngN75UwOJM3LB2oJvz7l6oj0hirqQm5YNV5yyGkjaWz
+         GbePhz1eR1UACDaAPoWZ2eoVXq4SOt6uqnY9bjZ30CEwZV1ec3q4NuoHd1C8aniuwtRd
+         2X/5r18QSU+SN+JDHT/cNwTuSk3R9v8mgSTutkzC9Yg4GdTMVVrHriAnrnt9uIrSEX+2
+         H9I0jDm7WgzzjYkqs+AS4vPaQJeF+RYGb9SqlZPpXX/hkszxkzpuylHRQPjOrJkpuhXV
+         z/lA==
+X-Forwarded-Encrypted: i=1; AL+hErHqZybQvb1IP7iKFzq6nWsks4VBYijVTYHsIVPsh6CE+SwEHgxGM9IvupOE8tibL2rC3S/5@lists.linux.dev
+X-Gm-Message-State: APuU4Z+lULa5IgCMKZ0sWylDbE+WT25WDdkJUcCHiGpFGXKzUIODeLsJ
+	/DBdzDgAnqi1g+lpc5cnHlRahBoWdD6tNOwmIt2LCuWwF1LPVM+AcOD9DGFWNiCrj++xWxAfvzl
+	g7g==
+X-Received: from dycuf5.prod.google.com ([2002:a05:7300:105:b0:386:9be5:2d95])
+ (user=elkin job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:638d:20b0:375:c862:31c
+ with SMTP id 5a478bee46e88-38571816d35mr18955075eec.40.1795645482015; Wed, 25
+ Nov 2026 14:24:42 -0800 (PST)
+Date: Wed, 25 Nov 2026 22:24:33 +0000
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,246 +76,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 Mime-Version: 1.0
-References: <20261125222300.1438398-1-elkin@google.com>
 X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125222300.1438398-5-elkin@google.com>
-Subject: [PATCH net 4/4] nfc: st95hf: fix probe init order and remove teardown UAF
+Message-ID: <20261125222433.1442338-1-elkin@google.com>
+Subject: [PATCH] iommu/arm-smmu: Fix use-after-free in nvidia_smmu_impl_init()
 From: Elkin Cruz <elkin@google.com>
-To: David Heidelberg <david@ixit.cz>, Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, oe-linux-nfc@lists.linux.dev, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, irogers@google.com, 
+To: Thierry Reding <thierry.reding@kernel.org>, Will Deacon <will@kernel.org>, 
+	"Joerg Roedel (AMD)" <joro@8bytes.org>
+Cc: Krishna Reddy <vdumpa@nvidia.com>, Robin Murphy <robin.murphy@arm.com>, linux-tegra@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com, 
 	Elkin Cruz <elkin@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In st95hf_probe(), exchange_lock, rm_lock, and ddev/nfcdev are
-initialized only after devm_request_threaded_irq(), leaving the IRQ
-thread exposed to uninitialized synchronization primitives and a NULL
-ddev if an interrupt arrives during probe. On teardown, st95hf_remove()
-frees ddev while the threaded IRQ is still registered, and the end:
-path in st95hf_irq_thread_handler() still calls complete_cb() after
-nfcdev_free is set.
+In nvidia_smmu_impl_init(), smmu is reallocated with devm_krealloc() to
+embed it within struct nvidia_smmu. When devm_krealloc() moves the
+allocation, the old smmu pointer is freed, leaving nvidia_smmu->bases[0]
+dereferencing the invalid pointer.
 
-Initialize locks and allocate ddev before requesting the IRQ, skip
-complete_cb() when nfcdev_free is set, and synchronize/free the IRQ via
-devm_free_irq() before calling nfc_digital_free_device() in both
-st95hf_probe() error paths and st95hf_remove().
+Read base from nvidia_smmu->smmu.base instead of the stale smmu pointer.
 
-This issue was found while trying out new Clang static analysis checks for
-kernel bug classes. The finding was triaged and fixed, and this commit
-description was drafted with the help of AI, then verified by code
-inspection and compile-tested against linux-next (not reproduced and not
-runtime-tested on hardware).
-
-Fixes: cab47333f0f7 ("NFC: Add STMicroelectronics ST95HF driver")
+Fixes: af9da91493e5 ("iommu/arm-smmu: Use new devm_krealloc()")
 Cc: stable@vger.kernel.org
 Signed-off-by: Elkin Cruz <elkin@google.com>
 ---
- drivers/nfc/st95hf/core.c | 118 +++++++++++++++++++-------------------
- 1 file changed, 60 insertions(+), 58 deletions(-)
 
-diff --git a/drivers/nfc/st95hf/core.c b/drivers/nfc/st95hf/core.c
-index ead0c342996c..f6384d9c4da8 100644
---- a/drivers/nfc/st95hf/core.c
-+++ b/drivers/nfc/st95hf/core.c
-@@ -869,9 +869,12 @@ static irqreturn_t st95hf_irq_thread_handler(int irq, void  *st95hfcontext)
- 	kfree_skb(skb_resp);
- 	wtx = false;
- 	cb_arg->rats = false;
--	skb_resp = ERR_PTR(result);
--	/* call of callback with error */
--	cb_arg->complete_cb(stcontext->ddev, cb_arg->cb_usrarg, skb_resp);
-+	if (!stcontext->nfcdev_free) {
-+		skb_resp = ERR_PTR(result);
-+		/* call of callback with error */
-+		cb_arg->complete_cb(stcontext->ddev, cb_arg->cb_usrarg,
-+				    skb_resp);
-+	}
- 	/* up the semaphore before returning */
- 	up(&stcontext->exchange_lock);
- 	mutex_unlock(&stcontext->rm_lock);
-@@ -1076,10 +1079,9 @@ MODULE_DEVICE_TABLE(of, st95hf_spi_of_match);
- static int st95hf_probe(struct spi_device *nfc_spi_dev)
- {
- 	struct device *dev = &nfc_spi_dev->dev;
--	int ret;
--
--	struct st95hf_context *st95context;
- 	struct st95hf_spi_context *spicontext;
-+	struct st95hf_context *st95context;
-+	int ret;
+I am trying out new Clang static analysis checks for kernel bug
+classes, and they flagged this code as possibly buggy. The findings
+were triaged/fixed and commit descriptions were drafted with help of AI,
+then checked against linux-next (not runtime-tested on hardware).
+
+Thanks,
+Elkin
+
+ drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+index 2fce4f6d4e1b..a3884966dc29 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+@@ -319,7 +319,7 @@ struct arm_smmu_device *nvidia_smmu_impl_init(struct arm_smmu_device *smmu)
+ 		return ERR_CAST(nvidia_smmu->mc);
  
- 	nfc_info(&nfc_spi_dev->dev, "ST95HF driver probe called.\n");
+ 	/* Instance 0 is ioremapped by arm-smmu.c. */
+-	nvidia_smmu->bases[0] = smmu->base;
++	nvidia_smmu->bases[0] = nvidia_smmu->smmu.base;
+ 	nvidia_smmu->num_instances++;
  
-@@ -1094,6 +1096,17 @@ static int st95hf_probe(struct spi_device *nfc_spi_dev)
- 	st95context->fwi =
- 		cmd_array[CMD_ISO14443A_PROTOCOL_SELECT].cmd_params[2];
- 
-+	init_completion(&spicontext->done);
-+	mutex_init(&spicontext->spi_lock);
-+	sema_init(&st95context->exchange_lock, 1);
-+	mutex_init(&st95context->rm_lock);
-+
-+	/*
-+	 * Store spicontext in spi device object for using it in
-+	 * remove function
-+	 */
-+	dev_set_drvdata(&nfc_spi_dev->dev, spicontext);
-+
- 	if (device_property_present(&nfc_spi_dev->dev, "st95hfvin")) {
- 		st95context->st95hf_supply =
- 			devm_regulator_get(&nfc_spi_dev->dev,
-@@ -1110,15 +1123,6 @@ static int st95hf_probe(struct spi_device *nfc_spi_dev)
- 		}
- 	}
- 
--	init_completion(&spicontext->done);
--	mutex_init(&spicontext->spi_lock);
--
--	/*
--	 * Store spicontext in spi device object for using it in
--	 * remove function
--	 */
--	dev_set_drvdata(&nfc_spi_dev->dev, spicontext);
--
- 	st95context->enable_gpiod = devm_gpiod_get(dev, "enable", GPIOD_OUT_HIGH);
- 	if (IS_ERR(st95context->enable_gpiod)) {
- 		ret = PTR_ERR(st95context->enable_gpiod);
-@@ -1130,22 +1134,37 @@ static int st95hf_probe(struct spi_device *nfc_spi_dev)
- 	if (ret)
- 		goto err_disable_regulator;
- 
--	if (nfc_spi_dev->irq > 0) {
--		if (devm_request_threaded_irq(&nfc_spi_dev->dev,
--					      nfc_spi_dev->irq,
--					      st95hf_irq_handler,
--					      st95hf_irq_thread_handler,
--					      IRQF_TRIGGER_FALLING,
--					      "st95hf",
--					      (void *)st95context) < 0) {
--			dev_err(&nfc_spi_dev->dev, "err: irq request for st95hf is failed\n");
--			ret =  -EINVAL;
--			goto err_disable_regulator;
--		}
--	} else {
-+	/* create NFC dev object before requesting IRQ */
-+	st95context->ddev = nfc_digital_allocate_device(&st95hf_nfc_digital_ops,
-+							ST95HF_SUPPORTED_PROT,
-+							ST95HF_CAPABILITIES,
-+							ST95HF_HEADROOM_LEN,
-+							ST95HF_TAILROOM_LEN);
-+	if (!st95context->ddev) {
-+		ret = -ENOMEM;
-+		goto err_disable_regulator;
-+	}
-+
-+	st95context->nfcdev = st95context->ddev->nfc_dev;
-+	nfc_digital_set_parent_dev(st95context->ddev, &nfc_spi_dev->dev);
-+	nfc_digital_set_drvdata(st95context->ddev, st95context);
-+
-+	if (nfc_spi_dev->irq <= 0) {
- 		dev_err(&nfc_spi_dev->dev, "not a valid IRQ associated with ST95HF\n");
- 		ret = -EINVAL;
--		goto err_disable_regulator;
-+		goto err_free_digital_device;
-+	}
-+
-+	ret = devm_request_threaded_irq(&nfc_spi_dev->dev,
-+					nfc_spi_dev->irq,
-+					st95hf_irq_handler,
-+					st95hf_irq_thread_handler,
-+					IRQF_TRIGGER_FALLING,
-+					"st95hf",
-+					(void *)st95context);
-+	if (ret < 0) {
-+		dev_err(&nfc_spi_dev->dev, "err: irq request for st95hf is failed\n");
-+		goto err_free_digital_device;
- 	}
- 
- 	/*
-@@ -1157,44 +1176,26 @@ static int st95hf_probe(struct spi_device *nfc_spi_dev)
- 	ret = st95hf_send_spi_reset_sequence(st95context);
- 	if (ret) {
- 		dev_err(&nfc_spi_dev->dev, "err: spi_reset_sequence failed\n");
--		goto err_disable_regulator;
-+		goto err_free_irq;
- 	}
- 
- 	/* call PowerOnReset sequence of ST95hf to activate it */
- 	ret = st95hf_por_sequence(st95context);
- 	if (ret) {
- 		dev_err(&nfc_spi_dev->dev, "err: por seq failed for st95hf\n");
--		goto err_disable_regulator;
--	}
--
--	/* create NFC dev object and register with NFC Subsystem */
--	st95context->ddev = nfc_digital_allocate_device(&st95hf_nfc_digital_ops,
--							ST95HF_SUPPORTED_PROT,
--							ST95HF_CAPABILITIES,
--							ST95HF_HEADROOM_LEN,
--							ST95HF_TAILROOM_LEN);
--	if (!st95context->ddev) {
--		ret = -ENOMEM;
--		goto err_disable_regulator;
-+		goto err_free_irq;
- 	}
- 
--	st95context->nfcdev = st95context->ddev->nfc_dev;
--	nfc_digital_set_parent_dev(st95context->ddev, &nfc_spi_dev->dev);
--
--	ret =  nfc_digital_register_device(st95context->ddev);
-+	ret = nfc_digital_register_device(st95context->ddev);
- 	if (ret) {
- 		dev_err(&st95context->nfcdev->dev, "st95hf registration failed\n");
--		goto err_free_digital_device;
-+		goto err_free_irq;
- 	}
- 
--	/* store st95context in nfc device object */
--	nfc_digital_set_drvdata(st95context->ddev, st95context);
--
--	sema_init(&st95context->exchange_lock, 1);
--	mutex_init(&st95context->rm_lock);
--
--	return ret;
-+	return 0;
- 
-+err_free_irq:
-+	devm_free_irq(&nfc_spi_dev->dev, nfc_spi_dev->irq, st95context);
- err_free_digital_device:
- 	nfc_digital_free_device(st95context->ddev);
- err_disable_regulator:
-@@ -1206,18 +1207,16 @@ static int st95hf_probe(struct spi_device *nfc_spi_dev)
- 
- static void st95hf_remove(struct spi_device *nfc_spi_dev)
- {
--	int result = 0;
--	unsigned char reset_cmd = ST95HF_COMMAND_RESET;
- 	struct st95hf_spi_context *spictx = dev_get_drvdata(&nfc_spi_dev->dev);
--
- 	struct st95hf_context *stcontext = container_of(spictx,
- 							struct st95hf_context,
- 							spicontext);
-+	unsigned char reset_cmd = ST95HF_COMMAND_RESET;
-+	int result = 0;
- 
- 	mutex_lock(&stcontext->rm_lock);
- 
- 	nfc_digital_unregister_device(stcontext->ddev);
--	nfc_digital_free_device(stcontext->ddev);
- 	stcontext->nfcdev_free = true;
- 
- 	mutex_unlock(&stcontext->rm_lock);
-@@ -1227,6 +1226,9 @@ static void st95hf_remove(struct spi_device *nfc_spi_dev)
- 	if (result == -EINTR)
- 		dev_err(&spictx->spidev->dev, "sleep for semaphore interrupted by signal\n");
- 
-+	devm_free_irq(&nfc_spi_dev->dev, nfc_spi_dev->irq, stcontext);
-+	nfc_digital_free_device(stcontext->ddev);
-+
- 	/* next reset the ST95HF controller */
- 	result = st95hf_spi_send(&stcontext->spicontext,
- 				 &reset_cmd,
+ 	for (i = 1; i < MAX_SMMU_INSTANCES; i++) {
 -- 
 2.56.1.839.g22a8290db9-goog
 
