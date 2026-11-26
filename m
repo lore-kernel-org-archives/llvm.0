@@ -1,103 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795711501;
-	b=JktK+UoGmSq/OTxr8ME4FzEDl8nFxFqEwMyjL1rzBvLszhdaDprFt3D5qPmXkvpEbv/u
-	 wJEPW771XgtzV5OkuSW0rFj1OjZNsP8zBUMhwkWEtsL0S9iIAsgfl+BOOKJjDllcBEQBH
-	 kUH0oEpQ+oDPue8k+Z1FHLFPLcNSXu75kuwsYXkup7qpXbpaPdGYzb5ZiLzqkgonbUz3s
-	 IjszxbdeoL6caYcL8Ab+pU2d6XJYGohmVPH9FmfKSCYGYD+Hdjwo1hhl8c6dPDARkagyJ
-	 xeTrs/kVdo7PuLDNvNE/mvBUtdTBpcy81hL7ll2Kknj34cv+9S3r16FOLg4eZFL511w==
+	t=1795712158;
+	b=gyHV+JhYt6/x/CRWvG8Lsn1I/5QyBBInfJtOsaftYcQLyPrylAfmp5vwCJgHcGsrCEeh
+	 OGa9SProRIXc3oDKShfHF6uZwMTOD1ggfX/QArh5mGrJ4YJhLsh12MWgw7P/JRLuRf5f/
+	 vWvVedQfMWZLCdgj0zS4UgQbKIdGxjeI4XbfObOYKt78rNsP8TOKWoPuMu/Kq4yQXUgw8
+	 jkd4wCVHR8Cne5F9RvsRQvgS1V2l+yVkq5nKbNBL/CFalUvzw2MCxRT5UxGeaROaHGIpE
+	 EAS/7IvN/I0ZQJkoeCRrlgxh5gq+JT9L227kVfw6KclSIgjcarrd+ok2LPiPW445K3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795711501;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795712158;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=fHUOAZ6mMNtMo23vR2WHKfUxqC/87b1E4Io2Mv6sKk4=;
-	b=qFYA2Z1aBOj1LVt/xRibWI3UMDw7h7X9qDOVlNCEo7ZW5ejPw7abQEfu+Shj2Eakqm8L
-	 6wxN5y8h8fKrSM9Q/S8tPIIP8p3pvuLhijKOWQdvfReEq+OrpBXrKavsfsD4f91QB1m+/
-	 0I4Il7x/KCoNkY3YW556Eu6O6Z0sxOORSks6QUwv6B5DbSk4BFjzDV8bX5hQ5q9wRDhsY
-	 D2YYSFutML9H2Xah2VwR32wzLT5XSRvetWcMdxx8AFN5RVedvqP+zHyK6b8c5PvivMLg9
-	 Io9WswI8aGss35bhf69B9APwbbGs9gOkA3lHquJJVefaABCjiSPi33Faf4li7xjg30g==
+	bh=7UMJ5fq59vACu6YIC6Tb/A5NemhqR9H7sJxjwk062+A=;
+	b=LduqheRIPZUcgW4gD6dr0xsVlXYYUXPoABmRoutW04DrZVVXH5BmU7WJ3X/TyjbOZAnI
+	 FqyeDd8uJm5fgnNLItwLHGDFoqbVVyqGYXGo/CWIyovWtj6lFj2ltjhBbal/sUwtK2iSE
+	 f0l+kUHY00fIOe4813xcQDO5E9zGVlhKUOb4pOgxi4y9a4zJNZT5eHt4N7vSqmUjPwydN
+	 3yzPHjqycVOPwFSc+tM44+qLk/ooKPNdUZKEdGSRBSAGJzWBR+Q0/xZ+xjCRgtz+mMMwQ
+	 W/bH93WLrEPYu1ldiZ8CookFXyDQ6VNbesULTO2lnPSvLT7PCNIZ/gaY3CCVZyj825g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lQiodYqu;
-	arc=none smtp.remote-ip=192.198.163.11
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="QC2DL/P2";
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB366606A335;
-	Thu, 26 Nov 2026 16:45:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB366606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EB4606A31E;
+	Thu, 26 Nov 2026 16:55:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96EB4606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=lQiodYqu
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QC2DL/P2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795711501; x=1827247501;
+  t=1795712158; x=1827248158;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=i50Q9NVKtCix8B4lDLFjoFRATEwHTTiRYUfMBO48zBA=;
-  b=lQiodYqu0fRB/pUpP7sJOzV2ZWytvDpVZ6b5BJ9AsQ3ZDrH+cy07Gl+u
-   ADHMRFL+SlEp9H6KUBRi2CdaaJi3ohIEVYdyaHPyM7c/Ju0rc4vHBoMAd
-   U2lJm3Da5TKuHwxAQuBelfCto+8VJjjFYLlqRviQTXPqCYTkNNF9xF7Fa
-   vxHgwAhhMlalIBSh6Nu6/uWgcQumW/ylTy+Uto5EETer2cj6KHfH7Zhxo
-   hSOFah4AsCZutrFRfzqTEzxiz89f7Ks2b90qapC/zuF1RqpzViDj+XYqu
-   Gwessyp4fq4mpggp4JdWUg9mS+dBrnvLvBRj3YX7uOuaqsc7GEhGYNpVZ
-   g==;
-X-CSE-ConnectionGUID: 5Zd8rG7YRwqO5x305P2oxg==
-X-CSE-MsgGUID: l7iry0atRuGqVm59AFx3Ww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11978"; a="4536164"
+  bh=37k69uxyRJzVO9uddzYhhEnx5L7zKQsrBkRXxwOZKbw=;
+  b=QC2DL/P2hcdzxwbJJSTnCrQ03QDs5lPS9vX2Gj93TZRGEpzZIkbJqwnn
+   aR/2es/ne9Dc80ggm+Q6ZH8XMj+3AYfb/E+jl7nkbc/er4nMsdNa8zUCN
+   lqaUvN507Y7HiY8lC8LZuz2xl4jGfTyPq9VbzSV2XHypJ2TXYfXeJJgOH
+   HLR/GljUVUIO1Cr2CbjywVMkIAMRa0gbM7no0JFhnplKP6MXFIK19GrBz
+   LNtgO9r2QKVoV4Fc0dZXlSebPsZFy5IyTmo9UOdw2WfN6b8UWD+98SpnG
+   ix7evuDS3ZqGBO+GAngK5wzkqLJdmmGv+MzMGJi+mlKHhMAYjdTy3ZaNx
+   w==;
+X-CSE-ConnectionGUID: 5px38YicS7imnizCBPyKzA==
+X-CSE-MsgGUID: e4+Sv2WvS6KqAtU8+xB7Jg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11978"; a="4596263"
 X-IronPort-AV: E=Sophos;i="6.27,235,1787036400"; 
-   d="scan'208";a="4536164"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2026 08:45:00 -0800
-X-CSE-ConnectionGUID: YtB+QfE5S9qxdiA/Q8e41Q==
-X-CSE-MsgGUID: BgF88I1nR1Shg2G0j7ck8g==
+   d="scan'208";a="4596263"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2026 08:55:57 -0800
+X-CSE-ConnectionGUID: p+r39IeoTeS/5WhFAxkNHQ==
+X-CSE-MsgGUID: 5FAT+iOpSeq7ciSi986WGg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,235,1787036400"; 
-   d="scan'208";a="13894609"
+   d="scan'208";a="12536476"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa012.fm.intel.com with ESMTP; 26 Nov 2026 08:44:55 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 26 Nov 2026 08:55:56 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xWcaY-00000001UTg-354e;
-	Thu, 26 Nov 2026 16:44:50 +0000
-Date: Fri, 27 Nov 2026 00:44:34 +0800
+	id 1xWclE-00000001UVe-2lJt;
+	Thu, 26 Nov 2026 16:55:52 +0000
+Date: Fri, 27 Nov 2026 00:55:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>,
-	Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Oarora Etimis <oaroraetimis@gmail.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Lucas De Marchi <demarchi@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	sebastian.wick@redhat.com, victoria@system76.com,
-	thomas.petazzoni@bootlin.com, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v7 34/43] drm/vkms: Introduce config for connector
- supported colorspace
-Message-ID: <20261127003812.SJ4m3pfw-lkp@intel.com>
-References: <20261126-vkms-all-config-v7-34-21194cda2468@bootlin.com>
+To: Yingjie Wang <x-professor@outlook.com>,
+	"axboe@kernel.dk" <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+	"dlemoal@kernel.org" <dlemoal@kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] null_blk: reject device size overflow
+Message-ID: <20261127004636.Zw6bu9Dk-lkp@intel.com>
+References: <20261126074748.1076774-2-x-professor@outlook.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -109,33 +87,86 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261126-vkms-all-config-v7-34-21194cda2468@bootlin.com>
+In-Reply-To: <20261126074748.1076774-2-x-professor@outlook.com>
 
-Hi Louis,
+Hi Yingjie,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 3c7c3c12dfc7704ca614abbfa266ca00a2b5a994]
+[auto build test WARNING on 5a29cfaf51105039d156dd8a61d2783e8b653667]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Louis-Chauvet/drm-vkms-Lock-the-config-dump-against-concurrent-configfs-changes/20261126-122844
-base:   3c7c3c12dfc7704ca614abbfa266ca00a2b5a994
-patch link:    https://lore.kernel.org/r/20261126-vkms-all-config-v7-34-21194cda2468%40bootlin.com
-patch subject: [PATCH v7 34/43] drm/vkms: Introduce config for connector supported colorspace
-config: i386-randconfig-1004-20261126 (https://download.01.org/0day-ci/archive/20261127/20261127003812.SJ4m3pfw-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261127/20261127003812.SJ4m3pfw-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yingjie-Wang/null_blk-reject-device-size-overflow/20261126-074752
+base:   5a29cfaf51105039d156dd8a61d2783e8b653667
+patch link:    https://lore.kernel.org/r/20261126074748.1076774-2-x-professor%40outlook.com
+patch subject: [PATCH v2 1/3] null_blk: reject device size overflow
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261127/20261127004636.Zw6bu9Dk-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project fb29ca8163c3309160711e5a14eb46bc6d4fdad2)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261127/20261127004636.Zw6bu9Dk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261127003812.SJ4m3pfw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261127004636.Zw6bu9Dk-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> Warning: drivers/gpu/drm/vkms/vkms_connector.c:88 function parameter 'connector' not described in 'vkms_connector_init'
->> Warning: drivers/gpu/drm/vkms/vkms_connector.c:88 function parameter 'connector_cfg' not described in 'vkms_connector_init'
->> Warning: drivers/gpu/drm/vkms/vkms_connector.c:88 function parameter 'connector' not described in 'vkms_connector_init'
->> Warning: drivers/gpu/drm/vkms/vkms_connector.c:88 function parameter 'connector_cfg' not described in 'vkms_connector_init'
+>> drivers/block/null_blk/main.c:1896:16: warning: result of comparison of constant 8796093022207 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+    1896 |         if (dev->size > LLONG_MAX / SZ_1M) {
+         |             ~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +1896 drivers/block/null_blk/main.c
+
+  1893	
+  1894	static int null_validate_conf(struct nullb_device *dev)
+  1895	{
+> 1896		if (dev->size > LLONG_MAX / SZ_1M) {
+  1897			pr_err("Device size is too large\n");
+  1898			return -EINVAL;
+  1899		}
+  1900	
+  1901		if (dev->queue_mode == NULL_Q_RQ) {
+  1902			pr_err("legacy IO path is no longer available\n");
+  1903			return -EINVAL;
+  1904		}
+  1905		if (dev->queue_mode == NULL_Q_BIO) {
+  1906			pr_err("BIO-based IO path is no longer available, using blk-mq instead.\n");
+  1907			dev->queue_mode = NULL_Q_MQ;
+  1908		}
+  1909	
+  1910		if (dev->use_per_node_hctx) {
+  1911			if (dev->submit_queues != nr_online_nodes)
+  1912				dev->submit_queues = nr_online_nodes;
+  1913		} else if (dev->submit_queues > nr_cpu_ids)
+  1914			dev->submit_queues = nr_cpu_ids;
+  1915		else if (dev->submit_queues == 0)
+  1916			dev->submit_queues = 1;
+  1917		dev->prev_submit_queues = dev->submit_queues;
+  1918	
+  1919		if (dev->poll_queues > g_poll_queues)
+  1920			dev->poll_queues = g_poll_queues;
+  1921		dev->prev_poll_queues = dev->poll_queues;
+  1922		dev->irqmode = min_t(unsigned int, dev->irqmode, NULL_IRQ_TIMER);
+  1923	
+  1924		/* Do memory allocation, so set blocking */
+  1925		if (dev->memory_backed)
+  1926			dev->blocking = true;
+  1927		else /* cache is meaningless */
+  1928			dev->cache_size = 0;
+  1929		dev->cache_size = min_t(unsigned long, ULONG_MAX / 1024 / 1024,
+  1930							dev->cache_size);
+  1931		dev->mbps = min_t(unsigned int, 1024 * 40, dev->mbps);
+  1932	
+  1933		if (dev->zoned &&
+  1934		    (!dev->zone_size || !is_power_of_2(dev->zone_size))) {
+  1935			pr_err("zone_size must be power-of-two\n");
+  1936			return -EINVAL;
+  1937		}
+  1938	
+  1939		return 0;
+  1940	}
+  1941	
 
 -- 
 0-DAY CI Kernel Test Service
