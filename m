@@ -1,59 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795692681;
-	b=pornSfzx11BCRaeZEsvC7YhO8ZhiNn1UEw4wop0IvgFAVUIy9C/JU/SoCyVV45d7hTgN
-	 2StX4buyDkDVs6glz9kBuT2oGSMi+W8+yZIkhOkTgo21Sk+KVF66Agg3ofwFQ+k7KClRI
-	 KBiT3vzDYfHZ9zCC1/eN255Ggsj0xIYbpuSGFPP18VTTImiu/iHutH4WDps9ScdXu+fJL
-	 v5v7mWPwzKt2BXVtzGTTNbK2GOj1vR1KQKrB+ceiNNTZwKSmdMfgUlTp+hxotNsRUQXyP
-	 S69XEdcDqItUpDkH1x7PvftYbBpu/svcL2dgZ1xhyZl/J94YNBrHqAGlwngVN4S2iMw==
+	t=1795692682;
+	b=A5xsTiiugT1IT9QfQGHjGGcZPB4OiDmAhiv79YR6Tl/pYh8O/4EGgmCGmpotFHxHetdw
+	 bsUpJnPww87ZmAvT1WkikM/EyQD431SFXxP+turxLDcpnKbzcqv6cqkZAwcYfwe1eiGCQ
+	 cYsy9HGAoG3aA/9CyPfNimF/lkUsszcykdLftqs6mcnK2vJ30lE6lkjuI+MDk6yRGkvcm
+	 OJlAcQqWd01hv50gCtA4g2OLP5/XEZPgpAiCj/RPV3zSU1VLrQIEIQciFNPZ10jMoU33y
+	 fOs+XxwCcLvM+k6rp+U+if+LPoTxklL2YRXNQRQ4uvaoRHIQkEINr10emRYs1vJKprw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795692681;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Last-TLS-Session-Version;
-	bh=bXZ2p/XgbHcBOJKuIE4qtM2nPpzX2bLBPSbSu8Rvx2M=;
-	b=pxyBOGtLtiQI+QG2bIIkMO/C+bLmhjsOkWMx5tVKeHdkA6AYW8V1kobhw36wi9BuWT3K
-	 ZKpYZOcr4gSEAer731jzt6829SjRNh9/+yURAIpsiIXn/J/cqouM3X11xqBVh7R8OjlqC
-	 V9I/Tk70J16Shf4juzeL10glB0DkC08JoorthUVy9ZL+9oPLjICCjPgosccFxzP9pwUoD
-	 HE8SJcKLnX/41IQ0Mz9eDK+2E7OrpY2wNkFDQcZBLqIkc/LXwjc/VNaxXw2vkRa6XMQws
-	 NhIh9hLUE8K98PIyQA4kbBWANLzMoui2eIIfP0dosj6h969lPuj+4AHQ93x784MA9yQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795692682;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=UhYmE3aCk75b/r92rrJBumNbPCuhdJcIc9eLIm+sKbQ=;
+	b=F2T9bknsd32WRR/ERw4Jp5tbjwa7Dzi9VvNYogbJ4knjZ86yCr9grdNzhg48TgVKGYCj
+	 yr5oP8SFjfBzS9rOzfKeNYn4imohRQk75pArayZf2UHd1Jd4HUcZKpmh4RXI6gSqWFfr4
+	 WYIhE87PS+Lslfyjl6D9XbTwM+Y43U03qX4vkEJ43v5LVATHgHIKu6wUARFZqpHjI4R5I
+	 Am44qt09eKqlZlQQe1ssDQ5frKqpWosFGTxbBaq2vPxyn3AtG6LNDexrZSGQVZC5Oof4P
+	 X1KgfKZ+mIB6rRR9zOhJCyzYHZWfUvqlwTJB//IbPBzAMzNeQDixguy7KHiXmh8eb5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=OsIvW0IT;
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R9ZmcTRa;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA83606A321
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 11:31:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5DA83606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50005606A336;
+	Thu, 26 Nov 2026 11:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=OsIvW0IT
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 2D2B34E41693;
-	Thu, 26 Nov 2026 11:31:19 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 0257060237;
-	Thu, 26 Nov 2026 11:31:19 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4C2EC11E6B302;
-	Thu, 26 Nov 2026 12:31:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795692676; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=bXZ2p/XgbHcBOJKuIE4qtM2nPpzX2bLBPSbSu8Rvx2M=;
-	b=OsIvW0ITF++k1YHE9HvE5Ze9eTtvJnNmfRb7ZOPl+2wgbgdyJkMOPF/KXC3Q2dAEGeKXJ2
-	uoD83DG+lsBcQVJKvloHDU1ZtKyNNbDn7k8OYsQEY+5ZGAM6MeHlZlyB8n9TpJmDzeTxW9
-	q5Y+ytLyfI9WDu//VLSg1vv1paaO3MnJLWtcf2gI15Zt/vBBicETNbjnHNuEaA3dP4biyN
-	PspKl7euaonRRGhEnB95CPLxG7QgJn6/M1Td5tmO5Ee/TNvtAxsZkLEMnquS4RK7uADk2F
-	wMOwDF7LLI7hxCiuPyWgwsmkmLQ5vhEzH8a4huQK19eYCOqQWWY1g78nENre8Q==
-From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Thu, 26 Nov 2026 12:29:03 +0100
-Subject: [PATCH v7 20/43] drm/vkms: Introduce configfs for plane rotation
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R9ZmcTRa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6AAF1F000EC;
+	Thu, 26 Nov 2026 11:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795692681;
+	bh=UhYmE3aCk75b/r92rrJBumNbPCuhdJcIc9eLIm+sKbQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=R9ZmcTRaqPsMH+KrJu0BnbzqTYFRdizwUO9iei53sWX1BeaGXiCh2mGdl8gdJQ/kq
+	 ZruzL1jJeqU0wDlMFxxchyLZ+tENBu0mRHLSXsz8qlCP4+5oyONbgNo/rurXRs+jgs
+	 zGG3M1fe1eOfw63IhL6VWPRslUNICijtjiR9Y/Z64DBDsgHmKTNCoO/eRbfA0In2WQ
+	 4+k+OdeBaz6zo4iXwniKMOifkUW64ebWNxODj6YweynzqvCzYUKNh6g0BejQx0lF6O
+	 r0RiMqPfEWlwcE8Ux2a//eU/xsqHcNfAW8QMRyhwqEFqw62dpZfaYKbbu3aoEruoJY
+	 TuM3N7nZeh2gA==
+Message-ID: <c2f060a9-d437-481e-b910-8f188a436359@kernel.org>
+Date: Thu, 26 Nov 2026 12:31:14 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -63,202 +51,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20261126-vkms-all-config-v7-20-21194cda2468@bootlin.com>
-References: <20261126-vkms-all-config-v7-0-21194cda2468@bootlin.com>
-In-Reply-To: <20261126-vkms-all-config-v7-0-21194cda2468@bootlin.com>
-To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Melissa Wen <melissa.srw@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com, 
- Jonathan Corbet <corbet@lwn.net>, Oarora Etimis <oaroraetimis@gmail.com>, 
- Harry Wentland <harry.wentland@amd.com>, 
- Lucas De Marchi <demarchi@kernel.org>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>, 
- Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Kory Maincent <kory.maincent@bootlin.com>, sebastian.wick@redhat.com, 
- victoria@system76.com, thomas.petazzoni@bootlin.com, 
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, llvm@lists.linux.dev
-X-Mailer: b4 0.17-dev
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/migrate_device: use locked folio in
+ migrate_device_{range,pfns}()
+To: Elkin Cruz <elkin@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Byungchul Park <byungchul@sk.com>,
+ Gregory Price <gourry@gourry.net>, Ying Huang
+ <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>,
+ linux-mm@kvack.org, Lorenzo Stoakes <ljs@kernel.org>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com,
+ stable@vger.kernel.org
+References: <20261125222713.1450385-1-elkin@google.com>
+ <16ad231f-0cba-40a0-992a-a0d430da5a91@kernel.org>
+ <CAC_6YktiaVRXr3jbfx1ybhhxzHbO4NyMnseg9CLL5CNJgYbCvw@mail.gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <CAC_6YktiaVRXr3jbfx1ybhhxzHbO4NyMnseg9CLL5CNJgYbCvw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-To allows the userspace to test many hardware configurations, introduce a
-new interface to configure the available rotation per planes. VKMS
-supports any rotation and reflection, so the userspace can choose any
-combination.
+On 11/25/26 23:58, Elkin Cruz wrote:
+>> Before you send any more: if you cannot reproduce it in the tree, don't report it.
+> 
+> As with the previous report, this one is just a hardening patch on a
+> theoretical case.
+> 
+> Please ignore this patch.
 
-The supported rotations are configured by writing a rotation bitmask to
-the file `supported_rotations` and the default rotation is chosen by
-writing a rotation bitmask to `default_rotation`.
+All good, just don't use Fixes/stable when not appropriate :)
 
-Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
----
- Documentation/ABI/testing/configfs-vkms | 19 ++++++++
- Documentation/gpu/vkms.rst              |  7 ++-
- drivers/gpu/drm/vkms/vkms_configfs.c    | 84 +++++++++++++++++++++++++++++++++
- 3 files changed, 109 insertions(+), 1 deletion(-)
+My memory came back, I asked for this exact change and we ended up with:
 
-diff --git a/Documentation/ABI/testing/configfs-vkms b/Documentation/ABI/testing/configfs-vkms
-index 55e4183046ec..07ebb797617d 100644
---- a/Documentation/ABI/testing/configfs-vkms
-+++ b/Documentation/ABI/testing/configfs-vkms
-@@ -108,6 +108,25 @@ Description:
- 	Plane type. Possible values: 0 - overlay, 1 - primary,
- 	2 - cursor.
- 
-+What:		/sys/kernel/config/vkms/<device>/planes/<plane>/supported_rotations
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	Available rotations for the plane, as a bitmask:
-+	0x01 - no rotation, 0x02 - rotate 90°, 0x04 - rotate 180°,
-+	0x08 - rotate 270°, 0x10 - reflect x, 0x20 - reflect y.
-+	The value may be written in decimal or hexadecimal (with
-+	a 0x prefix) and is read back as a decimal number.
-+
-+What:		/sys/kernel/config/vkms/<device>/planes/<plane>/default_rotation
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	Default rotation presented to userspace, using the same
-+	bit values as supported_rotations. The value must contain
-+	exactly one rotation bit; reflection bits may be set in
-+	addition.
-+
- What:		/sys/kernel/config/vkms/<device>/planes/<plane>/possible_crtcs
- Date:		Nov 2025
- Contact:	dri-devel@lists.freedesktop.org
-diff --git a/Documentation/gpu/vkms.rst b/Documentation/gpu/vkms.rst
-index 1e79e62a6bc4..610305483716 100644
---- a/Documentation/gpu/vkms.rst
-+++ b/Documentation/gpu/vkms.rst
-@@ -87,10 +87,15 @@ Start by creating one or more planes::
- 
-   sudo mkdir /config/vkms/my-vkms/planes/plane0
- 
--Planes have 1 configurable attribute:
-+Planes have 3 configurable attributes:
- 
- - type: Plane type: 0 overlay, 1 primary, 2 cursor (same values as those
-   exposed by the "type" property of a plane)
-+- supported_rotations: Available rotation for a plane, as a bitmask: 0x01 no rotation,
-+  0x02 rotate 90°, 0x04 rotate 180°, 0x08 rotate 270°, 0x10 reflect x, 0x20 reflect y
-+  (same values as those exposed by the "rotation" property of a plane)
-+- default_rotation: Default rotation presented to the userspace, same values as
-+  supported_rotations.
- 
- Continue by creating one or more CRTCs::
- 
-diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
-index bbfc0c8a922c..5c62797627c1 100644
---- a/drivers/gpu/drm/vkms/vkms_configfs.c
-+++ b/drivers/gpu/drm/vkms/vkms_configfs.c
-@@ -322,10 +322,94 @@ static ssize_t plane_type_store(struct config_item *item, const char *page,
- 	return (ssize_t)count;
- }
- 
-+static ssize_t plane_supported_rotations_show(struct config_item *item, char *page)
-+{
-+	struct vkms_configfs_plane *plane = plane_item_to_vkms_configfs_plane(item);
-+	unsigned int plane_supported_rotations;
-+
-+	scoped_guard(mutex, &plane->dev->config->lock)
-+		plane_supported_rotations = vkms_config_plane_get_supported_rotations(plane->config);
-+
-+	return sprintf(page, "%u\n", plane_supported_rotations);
-+}
-+
-+static ssize_t plane_supported_rotations_store(struct config_item *item,
-+					       const char *page, size_t count)
-+{
-+	struct vkms_configfs_plane *plane = plane_item_to_vkms_configfs_plane(item);
-+	int ret;
-+	unsigned int val = 0;
-+
-+	ret = kstrtouint(page, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	/* Should be a supported value */
-+	if (val & ~(DRM_MODE_ROTATE_MASK | DRM_MODE_REFLECT_MASK))
-+		return -EINVAL;
-+	/* Should at least provide one rotation */
-+	if (!(val & DRM_MODE_ROTATE_MASK))
-+		return -EINVAL;
-+
-+	scoped_guard(mutex, &plane->dev->config->lock) {
-+		if (plane->dev->enabled)
-+			return -EBUSY;
-+
-+		vkms_config_plane_set_supported_rotations(plane->config, val);
-+	}
-+
-+	return count;
-+}
-+
-+static ssize_t plane_default_rotation_show(struct config_item *item, char *page)
-+{
-+	struct vkms_configfs_plane *plane = plane_item_to_vkms_configfs_plane(item);
-+	unsigned int plane_default_rotation;
-+
-+	scoped_guard(mutex, &plane->dev->config->lock) {
-+		plane_default_rotation = vkms_config_plane_get_default_rotation(plane->config);
-+	}
-+
-+	return sprintf(page, "%u\n", plane_default_rotation);
-+}
-+
-+static ssize_t plane_default_rotation_store(struct config_item *item,
-+					    const char *page, size_t count)
-+{
-+	struct vkms_configfs_plane *plane = plane_item_to_vkms_configfs_plane(item);
-+	int ret;
-+	unsigned int val = 0;
-+
-+	ret = kstrtouint(page, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	/* Should be a supported value */
-+	if (val & ~(DRM_MODE_ROTATE_MASK | DRM_MODE_REFLECT_MASK))
-+		return -EINVAL;
-+
-+	/* Should contain exactly one rotation */
-+	if (!is_power_of_2(val & DRM_MODE_ROTATE_MASK))
-+		return -EINVAL;
-+
-+	scoped_guard(mutex, &plane->dev->config->lock) {
-+		if (plane->dev->enabled)
-+			return -EBUSY;
-+
-+		vkms_config_plane_set_default_rotation(plane->config, val);
-+	}
-+
-+	return count;
-+}
-+
- CONFIGFS_ATTR(plane_, type);
-+CONFIGFS_ATTR(plane_, supported_rotations);
-+CONFIGFS_ATTR(plane_, default_rotation);
- 
- static struct configfs_attribute *plane_item_attrs[] = {
- 	&plane_attr_type,
-+	&plane_attr_supported_rotations,
-+	&plane_attr_default_rotation,
- 	NULL,
- };
- 
+https://lore.kernel.org/linux-mm/20260924041210.13d04b8be24495fc593665283d2e4453d449502f@163.com/
+
+Can you review that one? it does more refactoring, but I think it covers this
+change as well.
 
 -- 
-2.56.0
+Cheers,
 
+David
