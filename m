@@ -1,105 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795687990;
-	b=xO4hd2ZAgUfs5teJTIdGaQ4EpiYhMglVXZ5WS9+tFgIkKH+iDDV4GiVUWhXsJmFbLWgU
-	 8+5Ma18CRF18AlldjT2yYl5aIVvUHWsEtnFCo/VAKktweM/0tAgCx9N8Wi7WmwAKpbbBg
-	 ZPL4Cc9z5FjMA996sglOsOmXxZIHuIseNzuOE1UrETfY99BV5wJbaLMLXeTl5GOXQIcj1
-	 uv1IwC/2w73eL9mPB4VZ6SGxckoZVg5wjAAuNF5JQCyeytWOG7Qz/bSdEVnNiumvk3Ss5
-	 nrSJ/enhXf977D1ib3/Ac43EfvNnG5OdJI7vSNFS93l3guxVOsBx44ehoYOUUaHrrfw==
+	t=1795689925;
+	b=Mb2qM1uGLin43yYm4nX57qUxh8qjFgFEHURpGSt7lUUrsgivQM1GHMj6fXGmPCGIf0s1
+	 NOB9AxPNSTSn9U1E09yCMjk8khPyR2QhstinECuYO8emb/8fJvmRVgggNdYGmqrUrYc/V
+	 TjzPYmg98g1Qyycgd3k2cUAioBCJ4Mc8g20BxS9QqRIzvVP+tfhXvmKde+tw2EE7TrJ+2
+	 Sirsi/UywtSlc9xefLA6rd/XrqbKAr/FSCQ/phuhpAX7jv4HMJPJh/3Tg8Fo0rQdz8hcU
+	 9obv0Zs7fKTUyGsmYSwaDK47Z6mTFiqnThuC+GWU2O5jnec4Iw1m1o79Kiu5wwxorTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795687990;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-TM-AS-GCONF:X-Proofpoint-Reinject:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=hRDLFEXKJ30g1D1YJpvEImvRW5+2011T3WYnn8OR490=;
-	b=LSawpH+Mo41Hs9FwF9KWbEmcJM5BzarW7pQRR7Qf0Fhe5p/iWRqXkqO5ryX1w6DrEdYA
-	 hMwPwMrp/xRdKbBGrcd1MyykOh2f5UwbbA98MiD9Dxda/QsjT+bVKxetm3vw0YgY3CLpW
-	 KCKNpy2Te/UYP3nQ0vLfWLZhGvVgnUi4LmUd985tjC1P22859FT/rut+/ZO2zGFDHHfd8
-	 brR7/V7/OiLs6ULvVU4jALXjeEFO29JhndK66PPkadqBsHfktjYTIKgogQCRVKRy8P+Bk
-	 rg9kVKIGegBu6MUoV1z7Yim4om5TZxYO34Vkiehxwp9AKTzIQwBaw/WDJ+arC+N1qxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795689925;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+	b=pIc6g0Dscrbs3SbEd34zvJxUyrFA5Ukzw4S6Z4Vx9GE6EhptrJ5EDNbzXFF8XXKTy2QD
+	 2sWURjycZjlyuOURjHx8mtFjyi79mGS0YxTQV0tgVzkZIDS8pDeSL7L3FYE7fa1fOR58b
+	 DjQVEGVcv9RriLCSbQTGvAd3nAh66j68TRLVcbM+YSwrRaTQtFdiaRbcNeL2zwX1ylKe6
+	 P+46ZGWPnFgy4/JiJp0sdbkC/woHSO9mwDKWd0RQvVjBn0KCNHxRAbo00aa0FVmWST4NU
+	 W709hl1+2uUwgyHW+2XX9XK73cpN7EeKxgTeFc0d1uo5Uy5iWwDr4l5iurTbtoG0FNw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=I1pFjLxk;
-	arc=none smtp.remote-ip=148.163.158.5
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=aYJk+PbJ;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A6B606A31C
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 10:13:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0A6B606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAFE606A326
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 10:45:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCAFE606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=I1pFjLxk
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AQ7YfSU3658974;
-	Thu, 26 Nov 2026 10:12:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=hRDLFEXKJ30g1D1YJpvEImvRW5+201
-	1T3WYnn8OR490=; b=I1pFjLxk/i0A3imSy+b4orTo1yP6vYK7FSQnH6CTiQ/+sG
-	MdRIRhThJlm7pXFDJQvf3d31NOC7ayYP/rdX4uOi3k01OlR6hDZWx8k8kfbdxkd8
-	8XZgJ6Tmke76dHIwjD3m6MrAIn99F7Nv7Q8ZaXRq4lqOxROj4oiXXq9n6q0/yWok
-	T2DahkHaKobUPIe6rC1wEoCSfiJIgFPUk4kAta/UAwbvNQoSfNuSmDSnBE5nDFge
-	CqARwMYA/YZ8/La5CfC+BlDsRFubKDwBAHFJpZVXKTs9Bgt2kLSX0vlf+9wJQcey
-	/ERekswQ3bR1/r8EgKKFNJk3URV9EIEwLtIYOdpw==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34gvg96d-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 26 Nov 2026 10:12:46 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AQ7JHv71263837;
-	Thu, 26 Nov 2026 10:12:46 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j5uxx4bge-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Nov 2026 10:12:46 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AQACg7e50397654
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Nov 2026 10:12:42 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 513BE20076;
-	Thu, 26 Nov 2026 10:12:42 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AE54120075;
-	Thu, 26 Nov 2026 10:12:41 +0000 (GMT)
-Received: from localhost (unknown [9.123.13.41])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 26 Nov 2026 10:12:41 +0000 (GMT)
-Date: Thu, 26 Nov 2026 15:42:40 +0530
-From: "Nysal Jan K.A." <nysal@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linuxppc-dev@lists.ozlabs.org,
-        Jeevitha Palanisamy <jeevitha@linux.ibm.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Shrikanth Hegde <sshegde@linux.ibm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David Hildenbrand (Arm)" <david@kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Usama Arif <usama.arif@linux.dev>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        "Kiryl Shutsemau (Meta)" <kas@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/3] powerpc: Add support for 128-bit cmpxchg
-Message-ID: <awgFAxLnbR8Y_IFi@li-398ad3cc-28e7-11b2-a85c-e030a5b10d54.ibm.com>
-References: <20261125174035.1412724-1-nysal@linux.ibm.com>
- <20261125174035.1412724-2-nysal@linux.ibm.com>
- <20261125204453.GC3625068@ax162>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=aYJk+PbJ
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-497614c95f0so3890652f8f.1
+        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 02:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795689923; x=1796294723; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=aYJk+PbJ1OKKnWxXDxjhgdg7u9eXR6Ksfz9lYWCeGEl2kgRRphuR0V/F5Z37ARUmcZ
+         +N0ckXSdfVw26wdiVEoLEsVyzap3MiROvlxXV6d/T1j4nodLfPI3nwAX9DrqE0IA53ZZ
+         tdu5Nry/tY4JMtzxbh2KIwxXt4jer5pG55NkAhX4T6zwZAbQPINF5bF6UZGMs6FnAHXX
+         oWT1LGCXeq2NW39kywXrSc5wIhET9gPeD4YfJwXBGemdtkfw3uYlWsxgvDnar3eVxAsy
+         S7DkoBg5onsLpV8538Uc9fzvYy4+Vxsn0wZ/VWQxAfQN5Vv04auKIkqRch67jILdJSdk
+         ue1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795689923; x=1796294723;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=J50v5ZAB2j3tih0c7Wne4m7HlESHDnLcB3hp+tybcrmkeW5FicP87kTcy2uwVJt4XQ
+         DQAMgmAj2KqzF5Cmkbq9fW9EgBUp9z6MU+4iL5Rm6zJ0v2stSlvwnNhM8kl8wOSckCLf
+         w2STBaEliCFBAVIFkw937O+NnC9Teu4DMAoebtqexzWvuEeeqFLsIaT1Dr4mdly6W9/m
+         YvVNfMVra/swv06GN5SmNzmptD7FXKA0hv/rFUxjY+p5UkygvMOQvHooPfG5QG+5jLOJ
+         h6syVDg0jexAjmwKahG7lOvaXIW2gd/88Fdoo32bjrAAKY9q5FNFqTWIw/Vx+vCav+Hk
+         jw0A==
+X-Forwarded-Encrypted: i=1; AL+hErHL9d92kgGd/o9FPujHkCeglxowYBcxljZyjD1GRUs7BkYqT0uSL6DXNVnqOguCPgQb28HI@lists.linux.dev
+X-Gm-Message-State: APuU4Z9gtR67wDzdKg9KeWY+2y15LUCv6WpCZIgtC5NAxkziblG/tKVq
+	yu3w6OYtCnzMxVrnPAoWQSmFOTq2Lf1i6bPWkTbvmygb11HpKiWpZhyBi++gdqMftOw=
+X-Gm-Gg: AZFdTZdbz0fIAiE8ogaNnWomY30xm+kSkY5bj6On/fMBVbqn5ZdIyw3RnOFE4nvVqGR
+	h7vdVh71ZfkgbIB4GQo8FGqfLWS4np6Da3KpGaUwNHo7xJ98K9aMogIKFkEauTZNe2iV9h0DZ9e
+	Q5i7Y4p8jLRVKhfTRnoh6ZjZlmNcirCnIVpaWjvvKhsMW5LqOxHyzmoGtV6h4IjjDs72z57KisZ
+	Bk+bnOUIGbEE2kQkkI0egPtAHa1xl5vH7poG1lr9xO4nwSwUv+KZqpf6IdqDqpJX3Fq34HZ7o8T
+	2YkG+Tt6aZqMixHwoWpaEUWPsHZjKGLt0GcL63QpdBreQSg9oTPO4Dy0XYH0CMEXLzIQ4/PgA/V
+	cFDXDt/S7OGp4n/nqlUPQIhFfP6xkhAdW86q/t6UH7cyK/8hBQv6kuYdtRnKOfxlxjRobFHNVxp
+	qPRt2LJStguoTViMO+5tJPs9ilAolU/J+PIvoDsz1DjgvwI1lfVUcI2FvemNZuWAyfaLKNiedja
+	gEK6pa/bWPruBRbwywlLdbzHpyRD6xqXLhxCifUVJVtkGMyBB7IeoQ+7i33vGqZh7hiPujavQlT
+	x7jboNX6qCGZ3q49PSKnZ3XQ3139wrIU0i72ZSRuKgWpzkOIJwDXCU+15F0TJ/v1xw==
+X-Received: by 2002:a05:6000:248a:b0:487:b50:101c with SMTP id ffacd0b85a97d-4abaa97702bmr38359967f8f.5.1795689923186;
+        Thu, 26 Nov 2026 02:45:23 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb98b4dsm40416103f8f.53.2026.11.26.02.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Nov 2026 02:45:22 -0800 (PST)
+Message-ID: <a40ad738-cb7b-469e-b67b-353b64622dbd@suse.com>
+Date: Thu, 26 Nov 2026 11:45:21 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -109,69 +92,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125204453.GC3625068@ax162>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=CYCdd7rl c=1 sm=1 tr=0 ts=6b08061f cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
- a=mDV3o1hIAAAA:8 a=NEAV23lmAAAA:8 a=vzgTcerKnXmpP8cyqTYA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI2MDAzOSBTYWx0ZWRfX8OCC964ZfGYO
- YZDgGr5PTcHbaCrsIXkwshDi7DPjsiPMACT9J0MtdFn8cZruBQjgdPH0f+pWXd0RtQDNZK9mpZm
- x1NZmmV7irAHsP9cLUCo9GeVC5yf8GY=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI2MDAzOSBTYWx0ZWRfX08sC/SgcU7Td
- QESLsgIYUXd6vYDVlVqq1ede7PIwder5BdddiEN+YbwlHUadGmldD2YqSrj6TNOdPWpADPPAlju
- DLlI9wYUTNdqCRt8SIr7mVBYvONHVoRTICgTiGfcCKER2ngpB0TmUWz5J5+7vKlmvPjFU/qeRA4
- +w4buJFyL6Ac0B47XPz3f0yTKEdie0tP3qBvPioz/JKMmaQlC0k89OSJdRFrDyz74dlkcdXOS4A
- m1qU7SBMeHFTVTq3T5tK91KXkOxLRbr5R8KiaXu8snWY+HtQrZFi0RBQHgVZo1TQ/3UJAdLwHiQ
- ooe5l0HBMfYcwX2hoGHLpv94FTl/I5VDGhO3OWLJgWr9CUP2y0WerM/nO0B54JGklKhomI0b+8c
- oXmk6E4SDLJezeBXn4Pmz2JCxKM5IifgYqGK/KbxQNrZW6Na/JZqxJPid59tQaNhDWAwFwHst4z
- igdZNlvLZpoI5XYARKA==
-X-Proofpoint-ORIG-GUID: 5NNvVXibtYglLJHZKPuDSKa8YhIzUVBC
-X-Proofpoint-GUID: d8m3aY6He0M0n59CB_8x7Ctdimt8JCmy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-26_02,2026-11-25_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0 adultscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
- definitions=main-2611260039
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
+ ioctl to /proc/kallsyms
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
+ David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-14-wusamuel@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 25, 2026 at 01:44:53PM -0700, Nathan Chancellor wrote:
-> On Wed, Nov 25, 2026 at 11:10:22PM +0530, Nysal Jan K.A. wrote:
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index c3b6cd655606..79cda056dfc4 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -15,6 +15,9 @@ config CC_HAS_PCREL
-> >  	# do pcrel yet.
-> >  	def_bool PPC64 && CC_IS_GCC && $(cc-option, -mcpu=power10 -mpcrel)
-> >  
-> > +config CC_HAS_PTI_MODE_VAR_ATTR
-> > +	def_bool $(success,echo 'void foo(void) { unsigned __int128 u128 __attribute__((__mode__(PTI))); }' | $(CC) -x c - -c -o /dev/null)
+On 11/13/26 11:12 PM, Samuel Wu wrote:
+> To find a few kernel symbols, users such as libbpf parse all of
+> /proc/kallsyms, which is several MB and text based.
 > 
-> Please use '$(CC) $(CLANG_FLAGS)' so that this works if clang adds
-> support for this, which will depend on the target information in
-> CLANG_FLAGS.
-> 
-> Also, consider following the recently added guidance to
-> scripts/Kconfig.toolchain and add some information about when this check
-> can go away:
-> 
->   https://git.kernel.org/kbuild/c/c285fe817a92f9c747931134f468d2aefeae6bce
-> 
-> It would probably be something like
-> 
->   # gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106895 - first fixed in 17.0.0, backported in 16.2.0, 15.4.0, and 14.5.0
->   # clang: not supported - <bug link like Nick requested>
+> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
+> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
+> and optionally in a single module with module_filter, or all modules by
+> default. Each call returns one match and its position; pos + 1 continues
+> the search, until -ENOENT. The output returns the address, the size, and
+> optional name and module buffers. A buffer that is too small gives
+> -ENAMETOOLONG and the required size.
 
-I've opened a feature request - https://github.com/llvm/llvm-project/issues/246292
-Will make both the suggested changes in v2.
+The kallsyms data in the kernel can change between two
+KALLSYMS_QUERY_BY_NAME calls, for instance, when a new module is loaded.
+Should the mechanism provide a way to detect such changes, likely by
+tracking and exposing some kind of generation number, or is it
+unnecessary?
 
-Thanks
---Nysal
+-- 
+Thanks,
+Petr
