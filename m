@@ -1,81 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795712158;
-	b=gyHV+JhYt6/x/CRWvG8Lsn1I/5QyBBInfJtOsaftYcQLyPrylAfmp5vwCJgHcGsrCEeh
-	 OGa9SProRIXc3oDKShfHF6uZwMTOD1ggfX/QArh5mGrJ4YJhLsh12MWgw7P/JRLuRf5f/
-	 vWvVedQfMWZLCdgj0zS4UgQbKIdGxjeI4XbfObOYKt78rNsP8TOKWoPuMu/Kq4yQXUgw8
-	 jkd4wCVHR8Cne5F9RvsRQvgS1V2l+yVkq5nKbNBL/CFalUvzw2MCxRT5UxGeaROaHGIpE
-	 EAS/7IvN/I0ZQJkoeCRrlgxh5gq+JT9L227kVfw6KclSIgjcarrd+ok2LPiPW445K3g==
+	t=1795712273;
+	b=xnQ1pMVVBslN4NrvxgVNX6/FiBLvzWAu+Vv7yLKJR8xGM9E+xN6i+UIkFG11EIesUCm4
+	 KPtIOQfSNUEtk2qLE9icWG9q2pfjiCcjAHmOwp4CO/lJhUrID7YMWf62Sr2dIoXM6RHYA
+	 q8hC3Koy308XnwEdVWw4o0cv5J0qm7A7wYbfF7MbWGFQBIvFbeb0QC+JBLV4r3MHYa6Dh
+	 lRx9uaJqMjbrihcPLIRoV8qR7vB3NK6WJhKqTp5TS9BuCCilWf6zmFUmXN5QLZxZ3ZfRy
+	 281R5/IDwf+5IHAxGk/nyNuzVIVFbYPCUtPzFkt/jWz9koAYHgQrrfa5mPACucuE05w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795712158;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=7UMJ5fq59vACu6YIC6Tb/A5NemhqR9H7sJxjwk062+A=;
-	b=LduqheRIPZUcgW4gD6dr0xsVlXYYUXPoABmRoutW04DrZVVXH5BmU7WJ3X/TyjbOZAnI
-	 FqyeDd8uJm5fgnNLItwLHGDFoqbVVyqGYXGo/CWIyovWtj6lFj2ltjhBbal/sUwtK2iSE
-	 f0l+kUHY00fIOe4813xcQDO5E9zGVlhKUOb4pOgxi4y9a4zJNZT5eHt4N7vSqmUjPwydN
-	 3yzPHjqycVOPwFSc+tM44+qLk/ooKPNdUZKEdGSRBSAGJzWBR+Q0/xZ+xjCRgtz+mMMwQ
-	 W/bH93WLrEPYu1ldiZ8CookFXyDQ6VNbesULTO2lnPSvLT7PCNIZ/gaY3CCVZyj825g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795712273;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Received:Date:Mime-Version:X-Developer-Key:
+	 X-Developer-Signature:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=EbzDc5IQTnuzR0VW7Y/c20qDWcWC8/2koHRhDseDoYM=;
+	b=rD9S3v/78ZGrQ65Gokosp6Z8eh+7vDk7FUuMHCDEI1qfEJ9P0Cas5BKdZxXrGg5t5wXh
+	 78MEMD/m5R7XwqgyCw4fkxbIwHyqf8qxPjn6fikkbqBE13fCGy2Gv671Qnbf1JCUTspys
+	 EuFBS20vnreGV737rthvlAwX8qP4Vnbm3x/+f5TibVqICq+tXdzbXw5qP0sYp7skINlUs
+	 xdIYTNTwHmQ0aPdJB5LtohFRlBHHOaE2tHA9roErArOx1Zb2SbC2vpGbHpJSm4PG5UhJ0
+	 f5qjAlVO6lian1vlD/G1T3ja2c2WvNDgOInaSTErDG9ccf4oZvP/nlNqKjzqEW4Im8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="QC2DL/P2";
-	arc=none smtp.remote-ip=192.198.163.13
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--ardb.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GB+ISudW;
+	arc=none smtp.remote-ip=209.85.208.70
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EB4606A31E;
-	Thu, 26 Nov 2026 16:55:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96EB4606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259C8606A31C
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 16:57:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 259C8606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=QC2DL/P2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795712158; x=1827248158;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=37k69uxyRJzVO9uddzYhhEnx5L7zKQsrBkRXxwOZKbw=;
-  b=QC2DL/P2hcdzxwbJJSTnCrQ03QDs5lPS9vX2Gj93TZRGEpzZIkbJqwnn
-   aR/2es/ne9Dc80ggm+Q6ZH8XMj+3AYfb/E+jl7nkbc/er4nMsdNa8zUCN
-   lqaUvN507Y7HiY8lC8LZuz2xl4jGfTyPq9VbzSV2XHypJ2TXYfXeJJgOH
-   HLR/GljUVUIO1Cr2CbjywVMkIAMRa0gbM7no0JFhnplKP6MXFIK19GrBz
-   LNtgO9r2QKVoV4Fc0dZXlSebPsZFy5IyTmo9UOdw2WfN6b8UWD+98SpnG
-   ix7evuDS3ZqGBO+GAngK5wzkqLJdmmGv+MzMGJi+mlKHhMAYjdTy3ZaNx
-   w==;
-X-CSE-ConnectionGUID: 5px38YicS7imnizCBPyKzA==
-X-CSE-MsgGUID: e4+Sv2WvS6KqAtU8+xB7Jg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11978"; a="4596263"
-X-IronPort-AV: E=Sophos;i="6.27,235,1787036400"; 
-   d="scan'208";a="4596263"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2026 08:55:57 -0800
-X-CSE-ConnectionGUID: p+r39IeoTeS/5WhFAxkNHQ==
-X-CSE-MsgGUID: 5FAT+iOpSeq7ciSi986WGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,235,1787036400"; 
-   d="scan'208";a="12536476"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Nov 2026 08:55:56 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xWclE-00000001UVe-2lJt;
-	Thu, 26 Nov 2026 16:55:52 +0000
-Date: Fri, 27 Nov 2026 00:55:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yingjie Wang <x-professor@outlook.com>,
-	"axboe@kernel.dk" <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-	"dlemoal@kernel.org" <dlemoal@kernel.org>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] null_blk: reject device size overflow
-Message-ID: <20261127004636.Zw6bu9Dk-lkp@intel.com>
-References: <20261126074748.1076774-2-x-professor@outlook.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GB+ISudW
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-6b879462421so642038a12.1
+        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 08:57:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795712271; x=1796317071; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EbzDc5IQTnuzR0VW7Y/c20qDWcWC8/2koHRhDseDoYM=;
+        b=GB+ISudWF0Xp+meVoMJXYvCiskEEEaAm85p7iGPNXIiyQ3duCaa7oLkOwHCmHX1aDR
+         3rOqMKsm5J7ucLHl8UJBO/kPTs8INlAgTMAQMXtP9rEBVa5o/ydlMbfCdYoCJkpH9Q/b
+         SBj5+ahZVlsQYWnL4RiCaeqDGwKFRBHdTzvSncbELc5Wt1Uhsje9f/366Nx8dP3sKFg9
+         wvdBJVSmnL7KtEhHy5x2lIlUyNJcBBTqDiW+GMm2++vD7APaggTiB229+sOcf5Bv2pm0
+         ir/k4C04Se6J9cavwcybby1GMcn3+YO0AvyuBBaT3gOdGjtxtQZpW51Yy8UHCTBya2/O
+         9rgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795712271; x=1796317071;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EbzDc5IQTnuzR0VW7Y/c20qDWcWC8/2koHRhDseDoYM=;
+        b=0XO5RA9OUYv2PSlEX8yf4aZUsWdHJa+g/yx/RBN6OjkH1b7Y2TOK11b1XunCiiQlY8
+         839KOGuB9OEm7LuNhm0OBOHzqPyEdcExVQ07dywhSWpY2MvknjGh18WRS/9oG/YoFnRS
+         IxLsz1KLzv59hAyMF2pYHMp8iCb0N1rrHYozq6VsSgXmj8odO7T6dHnzYvz758EbK0VP
+         DTazUSWFTKaU2A+cSlPa2sZSJYHjeEPGAJ+/hZ8jIBL7SEDPqYIpZP0pu9h2j7qHkrIT
+         BJ5fpzPaFFd1TsVeF2rBMogX/PWGw5BgMX6aAPGF0oZCq3JYzj0pv2Ai45+rnQClMyMY
+         XGMg==
+X-Gm-Message-State: APuU4Z8CLbQkX/DknRV7jB9SzgJHVPyhI9Maa3q76pZgzR83Hoq2CFjl
+	Dfbhc040Qj2WWB6+G9fM4kzcPvDZhd8skmYYURwDs+H5ilOLwcuc989yq/4zNTSmj+KxyI5YPO6
+	XoLftoLpxKVMa7m424aKuY40MhrjmO7qWNkeur1eg9UERtjT838wrrMYXd8Uzvtgv1qmFn5lvB6
+	xuM8JlT9iR1NcxM6UPVEXhLFY=
+X-Received: from edwf26.prod.google.com ([2002:a05:6402:151a:b0:6bb:6fe7:16f8])
+ (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:1c08:b0:6ba:a614:2fa1
+ with SMTP id 4fb4d7f45d1cf-6baa6145b66mr8005803a12.20.1795712271121; Thu, 26
+ Nov 2026 08:57:51 -0800 (PST)
+Date: Thu, 26 Nov 2026 17:57:40 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,90 +76,75 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261126074748.1076774-2-x-professor@outlook.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2078; i=ardb@kernel.org;
+ h=from:subject; bh=X6vteHyIC3rKBXp7WqfXPsq2tsAfRKOq0QrILcJganE=;
+ b=owGbwMvMwCVmkMcZplerG8N4Wi2JIZsjlYVXgEdc6lFQ6GaplpkZXRdydVifTj6V1NvolL04/
+ n1/zcqOUhYGMS4GWTFFFoHZf9/tPD1RqtZ5lizMHFYmkCEMXJwCMJH6owy/mLTE59sm7VS/ELF6
+ hk4fc9KqgIlGs09GLtCW80h4+y/9GCPDSbdC5eijVdLpExl+Pg98mO4e5z+r1OTRv+eafBstSjq 4AA==
+X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
+Message-ID: <20261126165739.2453269-2-ardb+git@google.com>
+Subject: [PATCH] kallsyms: Omit unnamed local symbols from System.map and kallsyms
+From: Ard Biesheuvel <ardb+git@google.com>
+To: llvm@lists.linux.dev
+Cc: Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Yingjie,
+From: Ard Biesheuvel <ardb@kernel.org>
 
-kernel test robot noticed the following build warnings:
+Since LLVM PR #223686 [1] ("[LLD][ELF] AArch64 Errata patch use
+STT_NOTYPE for symbols"), ld.lld --fix-cortex-a53-843419 (enabled on
+arm64 by CONFIG_ARM64_ERRATUM_843419, which defaults to y) synthesizes
+an unnamed (st_name == 0, "") STT_NOTYPE local symbol for every
+executable InputSection that lacks an STT_SECTION symbol in its input
+object, such as empty .text sections in data-only or .init.text
+translation units, or per-function sections under -ffunction-sections.
 
-[auto build test WARNING on 5a29cfaf51105039d156dd8a61d2783e8b653667]
+elf_symbol_type() classifies these unnamed STT_NOTYPE local symbols in
+executable sections as 't' (matching GNU nm and llvm-nm), and
+sysmap_omits() does not filter empty names. As a result, nameless 't'
+entries are emitted into System.map and compressed into the kernel's
+kallsyms tables.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yingjie-Wang/null_blk-reject-device-size-overflow/20261126-074752
-base:   5a29cfaf51105039d156dd8a61d2783e8b653667
-patch link:    https://lore.kernel.org/r/20261126074748.1076774-2-x-professor%40outlook.com
-patch subject: [PATCH v2 1/3] null_blk: reject device size overflow
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261127/20261127004636.Zw6bu9Dk-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project fb29ca8163c3309160711e5a14eb46bc6d4fdad2)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261127/20261127004636.Zw6bu9Dk-lkp@intel.com/reproduce)
+Beyond bloating the kallsyms tables with useless nameless entries, this
+causes CONFIG_KALLSYMS_SELFTEST to fail at boot ("Test for Nth symbol
+failed: ()"), because kallsyms_lookup_name("") explicitly rejects empty
+strings and returns 0.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261127004636.Zw6bu9Dk-lkp@intel.com/
+Omit symbols with an empty name in sysmap_omits() so they are excluded
+from both System.map and kallsyms.
 
-All warnings (new ones prefixed by >>):
+[1] https://github.com/llvm/llvm-project/commit/5da7779afdf3
 
->> drivers/block/null_blk/main.c:1896:16: warning: result of comparison of constant 8796093022207 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-    1896 |         if (dev->size > LLONG_MAX / SZ_1M) {
-         |             ~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nsc@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: linux-kbuild@vger.kernel.org
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ scripts/kallsyms-sysmap.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-
-vim +1896 drivers/block/null_blk/main.c
-
-  1893	
-  1894	static int null_validate_conf(struct nullb_device *dev)
-  1895	{
-> 1896		if (dev->size > LLONG_MAX / SZ_1M) {
-  1897			pr_err("Device size is too large\n");
-  1898			return -EINVAL;
-  1899		}
-  1900	
-  1901		if (dev->queue_mode == NULL_Q_RQ) {
-  1902			pr_err("legacy IO path is no longer available\n");
-  1903			return -EINVAL;
-  1904		}
-  1905		if (dev->queue_mode == NULL_Q_BIO) {
-  1906			pr_err("BIO-based IO path is no longer available, using blk-mq instead.\n");
-  1907			dev->queue_mode = NULL_Q_MQ;
-  1908		}
-  1909	
-  1910		if (dev->use_per_node_hctx) {
-  1911			if (dev->submit_queues != nr_online_nodes)
-  1912				dev->submit_queues = nr_online_nodes;
-  1913		} else if (dev->submit_queues > nr_cpu_ids)
-  1914			dev->submit_queues = nr_cpu_ids;
-  1915		else if (dev->submit_queues == 0)
-  1916			dev->submit_queues = 1;
-  1917		dev->prev_submit_queues = dev->submit_queues;
-  1918	
-  1919		if (dev->poll_queues > g_poll_queues)
-  1920			dev->poll_queues = g_poll_queues;
-  1921		dev->prev_poll_queues = dev->poll_queues;
-  1922		dev->irqmode = min_t(unsigned int, dev->irqmode, NULL_IRQ_TIMER);
-  1923	
-  1924		/* Do memory allocation, so set blocking */
-  1925		if (dev->memory_backed)
-  1926			dev->blocking = true;
-  1927		else /* cache is meaningless */
-  1928			dev->cache_size = 0;
-  1929		dev->cache_size = min_t(unsigned long, ULONG_MAX / 1024 / 1024,
-  1930							dev->cache_size);
-  1931		dev->mbps = min_t(unsigned int, 1024 * 40, dev->mbps);
-  1932	
-  1933		if (dev->zoned &&
-  1934		    (!dev->zone_size || !is_power_of_2(dev->zone_size))) {
-  1935			pr_err("zone_size must be power-of-two\n");
-  1936			return -EINVAL;
-  1937		}
-  1938	
-  1939		return 0;
-  1940	}
-  1941	
-
+diff --git a/scripts/kallsyms-sysmap.c b/scripts/kallsyms-sysmap.c
+index a482968eba51..1cb3b1775157 100644
+--- a/scripts/kallsyms-sysmap.c
++++ b/scripts/kallsyms-sysmap.c
+@@ -96,6 +96,10 @@ static bool sysmap_omits(const char *name, char type)
+ {
+ 	size_t i;
+ 
++	/* Unnamed symbols (st_name == 0). */
++	if (!*name)
++		return true;
++
+ 	/* Absolute, undefined and debugging symbols. */
+ 	if (type == 'a' || type == 'N' || type == 'U' || type == 'w')
+ 		return true;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.56.1.839.g22a8290db9-goog
+
