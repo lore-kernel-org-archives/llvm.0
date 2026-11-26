@@ -1,99 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795653871;
-	b=hH1QztPletJOpAkkq4y4D5Fh8l0SD5XYmB3J8gIXt+NoAdVk1dpXNlAx/2IyvnybbuLV
-	 OYk5bqgAzGmECmrimuRrguHKarmqqRh4bCMiz4S2rowrIjaieYNltytz+i3t14mi5LlxY
-	 I7LbPYsUTPZY5uxRGzXEeaFaS08jou/vHPSoHvcoOfo8CBXPe97PXg+XHQojQPDCtoWCF
-	 tVPG8oSYhhwDPzsqJo11eY6Q+qy+cYl8b2ugqwNADjfjjuWt8s37I6sEZG8OGDtGcrUgf
-	 FIoOC3LI00jzoXXYW1OJYcmFJV5WJV70ZJPK7ghqYQsstI2LPMyUoHvHd+SzvLy4u0g==
+	t=1795654102;
+	b=z8Qh0UUS4+MCYK4sh43xxI5+22rlbzB6x6O2RLu6nxGaHvR4WMsHtSavORtXKpsqrcMg
+	 jItgHi8n22Wyuw+BiRilxjf53vW7kzgrJMMWiptxAW9hjZVwNLlD7XvQXquhylDBxubqS
+	 y4Vf43TDx26qTHAhGQk8lqiDGtWhL7NZT36TKQ/U3+AVRN0DeG5DrtRyiHjlwQ6AcgCw0
+	 zeNK4wDsGUyPg/y2pTaloKjSSq6EOojeIVp6TqB+kLmGGRWXKzGvSUEk/CIVFBcTqpak4
+	 wyJrAJ9pNZjmR8IMVp7Qzmyjya4vjixs5/YoPY0XJ+df+LAOLRwMk5L8sttEOvKQvfA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795653871;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795654102;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
-	b=zpCpCflR2BSoFCu0JAOlOjnpOXQ1kgL2aT4crl0cJip9PFswE9vJrR5TlwYF7oWJ0Qgs
-	 ro0pGVa1x6DiFBcgTjMi0Fp9h7P1cntPbaliYkE1Dv4caUuLgJmmRTjMSxB8x45fw924c
-	 WTH1oG2jD/JImgu/IIL489cOqBd0Gyg/Ex34hPxGfh6eSr4XzbKNbkcVr0Uin/YibBcXa
-	 gF4oFgUHlegA2X8QC6Fwl2Zt3h+Z9TryAnI/3QkiJrJmN6Vi2XFIA/jE/IIE3MevgJFh0
-	 SlPQWWaRxgCTxPuK6hWZJIJtiOZ22cTZRPOoP+3CDtRVuPwLrAA6K5VL+OzJPtjnXag==
+	bh=iCzRjJNZndkziacQw9rQDKbsJVun7kbrLRZjMIP3YsY=;
+	b=eizjnGNh0LqlohB22Pv5daciUt3cG6a0+OBA4zg09IoakpqRfjZ6VcltLIkqSCBpj0RA
+	 LUyiyIyRZR5iuYwSpOyl//2LmyxzmGVdFSufiT5QNSxdVNNJWHGQNu4ec84cnemp7desl
+	 LWLyPnFUudPL2KjFah+435x0FsWuOpfk3yLObzVEew3AcJ+iEpUa85e/i8AnZLbTenB42
+	 q2u/JsrUbtgJT3+JVpQaz8KMcoarossx8NppbT2Uj5NZzbBhWmm7M+kvICl2qjheIQ5XN
+	 cS+JHdMm2cvN9hpcc9ajBl6vpn23q8exzHvnX2Fyp3BXHxlJyD/2hN0uDkv6SpaBmVA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G5d+3jKj;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Lbst4d5Z;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85535606A326
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 00:44:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85535606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A46F606A321
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 00:48:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A46F606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G5d+3jKj
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c5133831027so909696766b.2
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 16:44:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795653869; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Lbst4d5Z
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c516a1623d0so677918466b.2
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 16:48:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795654101; cv=none;
         d=google.com; s=arc-20260327;
-        b=XhHB9632Lh9oa7Pb0ZeJJqh/REYDSGsreJsL0liLGnHDXMgIIG9po7qQLWchjNIndg
-         GbDMt0n0pyrqcMX9N6gNNhhe3K6AY2/XYKWR13Z2Ml5RqQ/mpER7kLyH29Xa7CIkbAft
-         D/EhiYUTYLOLS9MlN4dM2uNKOcwO0vaZ9Bimy7V7JnM5l+6RsqGhY57pXL8bTX7i0Ktv
-         0YCSXOY/Fgj2nNGaMj740steE9F15UFUXaFSfUAupoUwVObMRxOZT+TTQOgQ/zA3dk/z
-         bPmaCJmUe6E0OESxYeiMbTvcednBcSl+83Fidfwk1+SP7qMycf+KThRiJB7oKlG4BHvw
-         b7+Q==
+        b=rxl18353LD1wx38Je3bfEDemFQc5RZT6l4cJBEkCz/TGlg4l7kndli3i+TuF/G/A/J
+         5Q3VzWB/RIaRC4w69B+s0YvAahY7j/59EDvMZs4J6yEfSHlcBTMaRDaKyfhJFoXFykzm
+         IBwuqcWUEFOCBBroB/OZlv3M4xO2udcU+FhEAhhz9gkh4uvze0mCjNcQRnRbh8Nf14MI
+         xq7ZbAMkL4MyAi763sji+TZuLknfmDnUqQibIY3QSOyw2fKQYpACBCX91V4RMqx4NMkn
+         b7UrWDAuJgcMlWXWJZQwVJ1T9UazhX9zbIzACfIc02rGbcRnat4AwWz8NfQMjB1ClIZw
+         rUaw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
-        fh=nsztrI0MOzEEodXX8px7kCY81GJTDzBJZXjq3EreVgc=;
-        b=czUnZu6iw+79EueLBWvE90HDNwMJBEjXQjvv5byDIIXhRyJ/HJmtX+cEOEsB7Z/jzu
-         7PrdtpIGr2J/4eGDWwvWO9+7ZJeRCVQi67zhBd7kaBVA5ufvvHkV1ZdyFstdn+5yYPat
-         EupTHh082tDBdY/HbAfLOltArorZK2wPREDVDVA7aKSp8OxTwqmqa4j8BjS9f1d666tV
-         9P/E1j8oNstbDFL7F9QZeDoPUxCWmc85fYkSqszBcLsEBiWjbMtTnS9nFkXvoFEwX9a7
-         EL7R6iNwHFxfjVghYpndCdHWgODKLsecfCeTpdo1DUyXxN+GXLMx8WtpgMNirqwq0Dhe
-         On7Q==;
+        bh=iCzRjJNZndkziacQw9rQDKbsJVun7kbrLRZjMIP3YsY=;
+        fh=ekT3z9MONxnGPp3SgMNn8Ys10Yh2rzUDotURSlVVNb4=;
+        b=WD2UEumPO3FvD8XKAKHcmvxYD/kEQH6VLwmQUCbHLowN2wjKs458++ZqVXetWzegjE
+         1QNxrrb++UW2fY7jXhExFbM7f5ZtBBfinCIZWZ46I49htfZPzuixV12/Rod8G7QNYVL6
+         hRzkTtmu5qQ9i+i/8zv/oQz61LZgKpUgWZLMbZZMNOx0nrDfDZ4tRtxL/paTxVGbuWzA
+         v9KiiAQFQPQPYKBvQm4xO6rqBM4yJ+JU3sntO0Q31+umAjH0mwQGoTVa7t9C31faLUX1
+         ijLiaNU8PW4/bV154to/JpEsR9HtHQMQjtyOiOTtZVzpahaJo2QiVPUfyc7XdO3SaLdr
+         59yQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795653869; x=1796258669; darn=lists.linux.dev;
+        d=google.com; s=20260707; t=1795654101; x=1796258901; darn=lists.linux.dev;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
-        b=G5d+3jKjce9rqESe/KYXdNeHfl7iDBCEDID72tg5DqgBHIAA+mq6dst9GAr7z+NG/x
-         WWdkuJLd4vq2oxhpUBOYaPEsPVzm4jv7TWkTPeBHX4ykE0KcUUZGzCRGtxIqHoAIF1UH
-         lfn9pmBLhKyt/qnbj27ObSy+ugDKuwnOqm5tVjoq6K6WgkAzJ2ULzIC5VIwtG1AdxvUX
-         kTmYOq6uqGX2fJZ8DngtsTmqAfJaav4T39ZTL7DE73WMXnOG4rVhMHX9tdZxl0L8e7ye
-         z/1m8tFV4wAWuqQAQjIysu16XF1Jg43vlzwWvNYmgd3IKaVx27MALeekwzu8IXe1n237
-         nC3A==
+        bh=iCzRjJNZndkziacQw9rQDKbsJVun7kbrLRZjMIP3YsY=;
+        b=Lbst4d5ZrXxhmHLMcCYP46mVCNNQbtdwkPKDsTMder6uXzMSy+rqjrFUkRJcnhFCqN
+         pCHmushQTJRGLLalAbZKzP5zJ5srI+T2p/lqyTGXy6Udy5dtpkPBigMA7AvQB0lyzpGO
+         wd2jac/Zz7kPPbRUu7BmaVCa7qNTrrkekg1ol8GAiFMNutuuK47gUVIW0IFRduNoyM9R
+         QhlGgUyoR43nfYyQOK3u9jUfjJ//2QHC5RcTYuuX64PJ99lcwR6iW+l6YH9peDwVqN9K
+         WyAcnb/OMS+bH9jqKuwR9uuf4fI8RiuQcTlD3E+BQE3ySt3VT5x/WuYnyGxXgPRHYFv8
+         J/0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795653869; x=1796258669;
+        d=1e100.net; s=20260707; t=1795654101; x=1796258901;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=iVFnQD3imnTlv+9jxnHkNU96izoDIFXplUev078ijIQ=;
-        b=JBQfOPCC4dTe/GTrfWRL7QwqCDKGd+n6gaQzi0nfPRxXiNAR/JJKFpe2CzDIb17nK2
-         OjEw7+AgxrZIfLzftvyNBpjUeD7B/udXpLk1gPsGsgk1D3++6dPftEn7XpTDdlyOyFZT
-         piOPag65GG7MwRybUIInGtafejqrsanhJ369blgXyqhfSnxN4lsBP0HmXjihnELEjRt4
-         4TG2CWv3yLIdad/wF0Z/YuA5jGeq1hlwA7tdijW3Wt0bgj+f6krvZ0lL/JU5zBdVIdr5
-         HD9jU5xH9oktR/fEU7nYvOmpQViCoK9sJyzTS/hdXPL0tdF4P3x20E+sUVGnQWuJepi3
-         tK0A==
-X-Forwarded-Encrypted: i=1; AL+hErEyaFkxnWsbPctUscYq3BnVSpsrasRW3I5LfpeY7K4SpM3oTex0JfCcjXAnaE421vofNqgs@lists.linux.dev
-X-Gm-Message-State: APuU4Z+8AtEtmk6vJCP7/2yBea02lW4/unW9BUb5um5bTWbD8NlML9i0
-	tIdxr1cFRcHKeV1pPHWPzW8y/M4YFsJGdThahMJWdRHwEBLz+8bxZBfSIod773wPPhHIlsgbDSz
-	Wn2+hJUAMBeLrqjv7ZjnDfDgE9dlfppFbj+GSecJe
-X-Gm-Gg: AZFdTZeRuXBxq76zPvByAz324OtVGdV7PS2C6HIzom9Y0H54T3uFd7a00vYMFDFc0Tc
-	t87ulMegj+kxP5+JhKzsSuREAofSDIEKpgYnRtNvf9N+LhtYZF6+eUgLWG9hHsueEaRV5g5R3OU
-	dzUMpFxcaitdaPBEgsvau9eyuhD/fvfTo7SKy2CrqzgnTrXvQ4E2NxGe2y9kfIzBoMpCBlZ7hwu
-	qZBp5GReGx0gc6uTHJL1ZsqPArV2WCGCV2gSGbMK1lIzpIlSltq3Rm/O1VY2Fwtti/HrQVNmTrK
-	7H09NUnW6L9DuL1hJfBinCMWORABOfh2Te+smQPSOWI01kqbDUoFfwLRm9lgnlvzRE0nmyseErK
-	/HHmPxUO2q0+AqDkgcQtwu5ccjFqI7kLzruTVsB101jRLeuD5BBK6gFz99foba4nwav4=
-X-Received: by 2002:a17:906:6412:b0:c51:24eb:e5ed with SMTP id
- a640c23a62f3a-c513aabb094mr1147878466b.42.1795653868573; Wed, 25 Nov 2026
- 16:44:28 -0800 (PST)
+        bh=iCzRjJNZndkziacQw9rQDKbsJVun7kbrLRZjMIP3YsY=;
+        b=H8WD5HRqhqDgSoT0BUvH7du1S+PKq+pFb0hAbGBBKdtj9f/hvWCcVNBAOMSYoUDdSs
+         qwVjXZ2EbrQVX+dvzLadZQJEBbmXvN479uiaNw7ZkO30gLmFVOKwAWUQPS4BCq82JCQI
+         Buj2b7ijHX9r8RlRI/AorROvpnT2UqSIw9Vj961w8B3Bp1q5ACc6x0Pb+vFVjCTETfBF
+         5F5zH2zyoJKixwLb1ws3z6JEv3/hVOeaW5odnyRYcExllsQhTRvyiB+qfLBZpHMOABNF
+         s21nSfxF38bHU3mTCJxBlsw3DV/y3EcTPxUhgnI0jajWMzst511HB8lFFY4EJV+vTwlA
+         lh1A==
+X-Forwarded-Encrypted: i=1; AL+hErGmsDSOzviB8JWCJR45CUbvqrnmGSauLkivjPikVjd6aWUsoy+o7w8xRJ+4TA7GrNH+U4lm@lists.linux.dev
+X-Gm-Message-State: APuU4Z+2RMyG8+KMpjJVhKK8M5Ke+q8/NrfdmYx0uD/Gp8VxC59QmLls
+	QQNoyq6tWwh+GQzDdSisXMolbYU4v/ZBduvD2Prp8DL5+gvKwASAlRSd9McLHAt5RcVhgtZay+8
+	SZlC+1gFRUUYptZLqQLW+VuRX6CinHt0HdN4smUzA
+X-Gm-Gg: AZFdTZeGyAAK+n5oxRqzyWUWPRzhf4DLa2Diz3gYjRa91Q+GQFJkhJO9hjKn727BlYA
+	r8HjBFEEResBoX4p2qrBRlKiisyLnN+jSSBLMzvARCjuMZ1XBoEhVU9he/9hCxummod9f05DJT7
+	p652BrbUD8kkhLL3KXY6FMoxI81WqpGv08ayCHgngxOXX+tfaGRYMEkKkGTGR8SANH2j78SVjPv
+	b7VVN13QrPDbiDK7uoGqvdBTt+DvPhFQODs9GfP2AGX37SAiDR9BBIm6ZLApqooveVW8xz2rxD8
+	kXluF4MU7lbh6K9XEiJgnoyIxP8LYhab08lEVqlva0zMmAVpelKxPS3YSU1Z9HTnWuRUkJFMc+h
+	1Q0+sAC13JS0N1lbiTmqPbNvMemp4ZKj02+Y4P55E4jaM15H3P5WWEvPd4wu0UunL+Y0=
+X-Received: by 2002:a05:6402:1d4f:b0:6b7:f106:3419 with SMTP id
+ 4fb4d7f45d1cf-6ba37ed40e7mr16523342a12.43.1795654100281; Wed, 25 Nov 2026
+ 16:48:20 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,13 +104,14 @@ List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
 References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-13-wusamuel@google.com> <CAEf4Bzb6LQmHHkvB8WBezU6YRtggycRvvA3L03mQHDr3WQM6mA@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb6LQmHHkvB8WBezU6YRtggycRvvA3L03mQHDr3WQM6mA@mail.gmail.com>
+ <20261113221248.3535369-14-wusamuel@google.com> <CAEf4BzYLqCCwxSAfuzB-wZiae_tgf0yxAVsFc_wzfRAdeqjDtw@mail.gmail.com>
+In-Reply-To: <CAEf4BzYLqCCwxSAfuzB-wZiae_tgf0yxAVsFc_wzfRAdeqjDtw@mail.gmail.com>
 From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 25 Nov 2026 16:44:16 -0800
-X-Gm-Features: Aa3M54p3EatRpTsPAm_mcmxJ6hPDpQs1114Xl7F84nCmfTvZhGsQScuZoJFkxmI
-Message-ID: <CAG2Kctr+6-EESkYn+Dspg0FxTOMFRoj8269UZaNNDFNf3d+bHw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+Date: Wed, 25 Nov 2026 16:48:08 -0800
+X-Gm-Features: Aa3M54pWdHazBU-AqLK5TiYQKtZxCNreXkIezAAKXNEVmmWGCBCO_8U3jzAUf4c
+Message-ID: <CAG2Kctp-XoiK-Ej3eHWnYyijydej6Bw5sLKNNi-S+xEGDB+mGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
+ ioctl to /proc/kallsyms
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
@@ -133,22 +134,72 @@ Content-Type: text/plain; charset="UTF-8"
 
 [...]
 
-> > --- a/include/linux/kallsyms.h
-> > +++ b/include/linux/kallsyms.h
-> > @@ -24,6 +24,13 @@
-> >  struct cred;
-> >  struct module;
-> >
-> > +/* Exact or prefix name query, optionally in one module. */
-> > +struct kallsyms_name_query {
-> > +       const char *name;
-> > +       size_t cmp_len;         /* bytes to compare; includes NUL if exact */
-> > +       const char *modname;    /* NULL matches any module */
+> > +/*
+> > + * Find a symbol by exact name, or by prefix with KALLSYMS_QUERY_NAME_PREFIX,
+> > + * in the entries of /proc/kallsyms, except undefined module symbols. vmlinux
+> > + * matches come first. A module_filter of "vmlinux" selects the core kernel.
+> > + *
+> > + * Each call returns one match and sets pos to its position, even on
+> > + * -ENAMETOOLONG. Start with pos 0 and use pos + 1 for the next match, until
+> > + * -ENOENT. Use pos only with the same query. Matches can be skipped or
+> > + * repeated if symbols change between calls.
+> > + */
+> > +struct kallsyms_query_by_name {
+> > +       __u64 size;             /* in - sizeof(struct kallsyms_query_by_name) */
+> > +       __u64 query_flags;      /* in - enum kallsyms_query_flags */
+> > +       __u64 query_name;       /* in - user ptr to name or prefix */
+> > +       __u64 module_filter;    /* in - user ptr to loaded module name, or 0 */
 >
-> will "vmlinux" match just vmlinux? or how can one express "I only need
-> symbols from vmlinux image" with this?
+> similar to the comment on the previous patch, how does the user
+> express that it only wants to search vmlinux image and not consult
+> module?
+>
+> and naming nit: query_module to be consistent with "query_name"?
 
-At the ioctl layer (patch 3/9), passing "vmlinux" in query_module
-restricts the search to vmlinux without calling
-module_kallsyms_query_name(). I will clarify the comments in both
-patches in v4.
+Passing "vmlinux" selects only the core kernel (noted in the block
+comment above, missing inline). Will rename to query_module and note
+"vmlinux" inline.
+
+>
+> > +       __u64 pos;              /* in/out - start position / match position */
+> > +       __u64 sym;              /* in - user ptr to struct kallsyms_query_sym */
+> > +       __u64 sym_struct_size;  /* in - sizeof(struct kallsyms_query_sym) */
+>
+> I'd name it "sym_size" for consistency with "sym" naming, and the
+> comment/doc here is unambiguous about what that is (struct size, not
+> the symbol's recorded size). seems fine as far as UX goes
+>
+Ack, will switch to sym_len
+>
+> other than nits, this API looks great
+>
+> [...]
+>
+> > +/* On -ENAMETOOLONG, *ksym is still copied, to return the required sizes. */
+> > +static int kallsyms_copy_sym_to_user(u64 usym, u64 usym_size,
+> > +                                    struct kallsyms_query_sym *ksym,
+> > +                                    const struct kallsyms_sym_match *m)
+> > +{
+> > +       size_t copy_sz = min_t(size_t, usym_size, sizeof(*ksym));
+> > +       bool too_long = false;
+> > +       int err;
+> > +
+> > +       ksym->sym_addr = m->addr;
+> > +       ksym->sym_size = m->size;
+> > +       err = kallsyms_copy_str_to_user(ksym->sym_name, &ksym->sym_name_len,
+> > +                                       m->name);
+> > +       if (err == -EFAULT)
+> > +               return -EFAULT;
+> > +       too_long |= (err == -ENAMETOOLONG);
+>
+> nit: if (err == -ENAMETOOLONG) too_long = true; is just as short
+>
+> but also you are eating any other error, maybe write it so that
+> original err is preserved as is, not special-casing ENAMETOOLONG? if
+> you get EFAULT later, original error still takes precedence
+
+Sounds good- I'll simplify this to preserve the first error via
+something like `ret = ret ?: err` without any special handling for
+ENAMETOOLONG.
+
+[...]
