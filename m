@@ -1,48 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795664102;
-	b=ty/7K7Ba2KMNefdYdv/EETsgft3eFKzGU0eS9D1rpn63JRnmN/ICfjPyW+4izbaOB2gT
-	 G+07HWxKi8y7xA/qdUd8I5VSk17iRkXKFV1F3QmC9AodMcpVkTmUFUC/RjrxxbNL5I5WL
-	 LotuPoo/EEWujsFEhUd75OGhPq7igr3ptWQ9KdvGoL2xCgy68jF5Yb1lYm+JBrsXRM+O+
-	 Lpj0Ps/IIXksz64yOx7fj5o/BVYr9qL6XQdVz32pDl26laz2ZNeQOtGG4kCVkcu81rqVq
-	 UBhBzNXKv2TWoLbCJhY+SP5vRCW9liLSafGCtdOqxiqZ6Zr8o6K22tSYhEZJl/W9Sqg==
+	t=1795664103;
+	b=IhwEBg8uajbetSdtbBbexuGXfsbh7ObVnpE3MedfFQ4ZopU8wAzUStAKITLDMrSdGB5/
+	 mJHV82EVzpJ1WJlBIeDRd871AArHAbqYVqcmeR5/owcXQLuTL4N1rmfS5r9uju85PVCUn
+	 AzLWE26ypyD3oe3fya1uFr708SuCsNgJkHaE7VnjDZJv/3eFPtMW9KapE4/iexrYd1RrJ
+	 3XPLY4QBoCgPJenVnuppCpE7NeF07JKsdl8gidOxlayqf4RaEApOUYDRch+kDPPnGeNkt
+	 maCL+onrq6Cel/AyjFyrPPffeFa/6sP+aQMSvnPMkLJSxejMn/0RfTi1tvDDDLF8OuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795664102;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795664103;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=43myYpFDcE6Nm0OZu/naIjBnJGdG7mrmhVh4UgjE0YU=;
-	b=AQxLNOCGMNtsjWSi9IeheGCvaWaDsTMS93IhWYUzAAb2CfNbyAhbMundc2ePubSFjHW/
-	 7J07DKRxb9v6/sW8xo/Bf/xCayrd310yatCF26VK0MoGwwSDKWG0mwUnKPh5JHIwMeeYr
-	 sbFQMLI3eGtUkgELbP+1SAUMifYQWu3Qh7USRBSCZaRnG3YMIxgqwaSi10nXemDdUGacF
-	 fEcUsTnbxI0GzBNiArs3VAsi0QnnetHVSPBnI0PlFW8UycnhRPUFq/rJSv0rLo7as11ju
-	 1zozs40jMqc/9UzFdLapnEiVsZhL9MWm8SHOh1NpaAHPnuTy/Nom1bkitHC05UQTZyg==
+	bh=UPukCNTK7zFhxllQcaE4LGdiIYNWyuXJusPGpDAU2OQ=;
+	b=LiegTKnCDDLGNA7LSvF2sUxRdn3F6LHqhkJ9V52MfkuqtOHkK7f0qVoG2lvHD0Z15sey
+	 U+kN7wKhdYffB2WIcDoYjpTEKlbsUDPrNtnaSo1zH9Xe/y0TNxWDvhCHx8+lKCBpf10NH
+	 lmXbDiStBUEAl+oaGaW3Fwke1GVZCQdAXbmyilMBOKPjgu6jSjHpjIuIy1HGleJCB7Tgo
+	 fNB//tOhLbXY7dtXp6G6hIGzVW25gjfsUHbnYwlJPO8gy+MwZPksGY5XYmkEoPJsaHG0J
+	 M2ewvEGwdYjS0J3xKigk1UJSrzDAbsO7lLLI7g/tAalqjiReZS7W6H51hWMwX4LAy8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cNo0Jakd;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="iSc8v/p8";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511DD606A31E;
-	Thu, 26 Nov 2026 03:35:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BF7606A331;
+	Thu, 26 Nov 2026 03:35:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cNo0Jakd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5CB1F000C6;
-	Thu, 26 Nov 2026 03:35:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iSc8v/p8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3416D1F000C4;
+	Thu, 26 Nov 2026 03:35:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795664101;
-	bh=43myYpFDcE6Nm0OZu/naIjBnJGdG7mrmhVh4UgjE0YU=;
+	s=k20260515; t=1795664103;
+	bh=UPukCNTK7zFhxllQcaE4LGdiIYNWyuXJusPGpDAU2OQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cNo0JakdsYxgEyaXOA+V5I452lCmbgnjkS+wqYhIRxWzA2NOLfBvku8Irqzwb9fv0
-	 iHaIMml7ipZ9q6PdMM70Vy0xW+tdpUA0b3wTyyRb848OwhtjjfLwQODF1gKU64uMH5
-	 kq9EIpiSHS+NovYEE9BH1IxyP3MafQ0K0eHi9ySn3bQT9X+lMTsgmcZR8dgaevDhBv
-	 MrdDNm48AqT1aEBxHabeKzeU1QNoBB+dSYuSE7CKu+CTDvwFqOlm0QMGlPL6ieOaHC
-	 AV390IBTE95rND0CrEq3EtlD/HF5bsj22zv+Uf6GVTUv+Z6YPLofSOJSEDDiVDDu4X
-	 hrHHosgLLXYAg==
+	b=iSc8v/p8Iz2r7k0/xZltuC5wJC0iSSFO+OVfPXJu2koBjM7RtFT5NY2A228YjYr9B
+	 RqubGeehyoRXKlUsdLZxvYA0IwsqSyOwBw8eHKIKZLFn6PhnN8tiEs5TWxg3zgiYSy
+	 H+eNkV5+59TlZEVoZv5TpTLfhim+IKG0J3b5oNz64vdfQV/OtZxNgxaSuzkPVDPf/x
+	 WgmNMLkfOKoKwryZIvzyKjWQt/uStWZeTWg1xmOofldHoN674Ba26tsZZpwffNtoeB
+	 quejQK+5QUliCw8anAdq45/ZwPtw6ovEnBNMm8WvMijMcavnuN1GqMLi/u8W/YGSl+
+	 2/pI+Sjt1oCDw==
 From: "Martin K. Petersen (Oracle)" <mkp@kernel.org>
-To: Justin Tee <justin.tee@broadcom.com>,
-	Paul Ely <paul.ely@broadcom.com>,
+To: Jack Wang <jinpu.wang@cloud.ionos.com>,
 	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
 	Ian Rogers <irogers@google.com>
 Cc: "Martin K . Petersen" <mkp@kernel.org>,
@@ -50,12 +49,12 @@ Cc: "Martin K . Petersen" <mkp@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Elkin Cruz <elkin@google.com>
-Subject: Re: [PATCH] scsi: lpfc: Fix format string and OOB copy in lpfc_read_object()
-Date: Wed, 25 Nov 2026 22:34:47 -0500
-Message-ID: <179566062793.467514.2121267056315343510.b4-ty@b4>
+Subject: Re: [PATCH] scsi: pm8001: Fix abort completion status in pm8001_mpi_task_abort_resp()
+Date: Wed, 25 Nov 2026 22:34:48 -0500
+Message-ID: <179566062794.467514.1304420493773676333.b4-ty@b4>
 X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261119170500.1514537-1-irogers@google.com>
-References: <20261119170500.1514537-1-irogers@google.com>
+In-Reply-To: <20261119170905.1530613-1-irogers@google.com>
+References: <20261119170905.1530613-1-irogers@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -68,22 +67,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Thu, 19 Nov 2026 09:05:00 -0800, Ian Rogers wrote:
+On Thu, 19 Nov 2026 09:09:05 -0800, Ian Rogers wrote:
 
-> In lpfc_read_object(), rd_object_name is a 26-element u32 array (104
-> bytes, LPFC_OBJ_NAME_SZ) populated from rdobject via scnprintf() without a
-> "%s" format string, and then copied to the SLI-4 mailbox request with:
-> 
-> 	for (j = 0; j < strlen(rdobject); j++)
-> 		read_object->u.request.rd_object_name[j] =
-> 			cpu_to_le32(rd_object_name[j]);
+> In pm8001_mpi_task_abort_resp(), the IO_NOT_VALID branch assigns
+> TMF_RESP_FUNC_FAILED (enum tmf_resp, 5) to ts->resp (enum
+> service_response) instead of ts->stat, leaving ts->stat at 0. In
+> addition, switch (status) has no default case, so any other non-zero
+> firmware abort failure status leaves both ts->resp and ts->stat at
+> their zero-initialized values (SAS_TASK_COMPLETE and
+> SAS_SAM_STAT_GOOD), causing sas_execute_internal_abort() to falsely
+> treat a failed abort as TMF_RESP_FUNC_COMPLETE.
 > 
 > [...]
 
 Applied to 7.5/scsi-queue, thanks!
 
-[1/1] scsi: lpfc: Fix format string and OOB copy in lpfc_read_object()
-      https://git.kernel.org/mkp/scsi/c/1f4c50b5d04b
+[1/1] scsi: pm8001: Fix abort completion status in pm8001_mpi_task_abort_resp()
+      https://git.kernel.org/mkp/scsi/c/fac36816b057
 
 -- 
 Martin K. Petersen
