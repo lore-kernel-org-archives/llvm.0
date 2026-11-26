@@ -1,93 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795679833;
-	b=t9HG8/j/bMO0WjK8fDkq1PRZz+wxBX2/Su5HxptSVW2K7aHz/mHpdcFHOO5+W+UBGlQG
-	 brouglP1N0Uacd5O3NAvLmtkVlZQWHf5QyNC1ruomtcKvaAbwA1eH0xhIfSj2ahZkdUpe
-	 h9V41xQTnOxdMETcLWFqHyT7qiNOCJeTEnGJwOkBsxRpMcIrwvkrx4D7YUQlOy+S5bTjb
-	 eeAT0xc3qCnSF9N8+ZCh5cgVJyincQDeOrEw16u3OPBxLQdDkafwqDeIZGV1+HytuW23x
-	 qSK/ai7vfn6H88HmY6HUhzlw6nDn+pvH6WMQO+DZ2S27Q47ky5pcpEVO/ni0TZBilSg==
+	t=1795683100;
+	b=ejT4whjxffVmXnHGeoF4WuDgzzAMt7vXyyM9NusqFQCX9xYbAOhOEM2dLCVLmBBLno2q
+	 +DjS6aTNs3oNtTGec3utlNLS1O0Mu2zrOU+kxy7bfTUzm+fHdJ4lMjfbSx2D6SECNcd42
+	 eerIlq4MyxQEknZkqYftuakr8yS3chm8s/lsPG0zNtTgNdMQFwIEyeILw/9NQhAoEAMWb
+	 UdLxBZEL3/kvw3RQ4RDzQPpoLPqWJ7No0E4ji5KJAp+3E/09/KmQXUKAm+pJttZZzi7nS
+	 yn8C9rKowxtclf3wiGekcfdmi1pRzGL/UUcat27kUp5Z+NE9fjsweBhBTwC2bzPSR4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795679833;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=kvqxuyKdqOZIctZ1RVDJiTTys7XqmGboeKGR0Mb/Lz0=;
-	b=jIeG3E6c42/fO8N/XgRY7h00OJCynukwwQiykRXXrZNqhG3sGxjJJKLoJ86i7w0cIIRp
-	 lFijadeVCEyTpZBOTQL+tLiRFgZh6LeHbJpR9zpY82yAgWd0uDEi4E5Mm6hbkCkbXOnuL
-	 AwY508zNiAwcZ4wrv9xGbSpbqbEQaWi1pdeY6kkZHqn0eXm9KrOGk22LSHBfKv67PzSEV
-	 G4FfqshWG6gXo4acwnlsPlDn3wufxI6aSIl2zpS3gsRu2JRcihVHabKQIVaL2b95T7Yb8
-	 yDEHJSGEC5yMhCzyZZaTGpqYMNJcX40jut+YSzsmUCLYuDTTUDVwWfqaJVMKHXK0Hlg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795683100;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type:Content-Transfer-Encoding;
+	bh=RppIeY5vllf2+hf2cp04t1WXDtYA0Vaihax7esewOL0=;
+	b=LvrD8W/cpVw0IGDcw5wFfIBOJ/fMatcSiwOwEHBOKW/dtzQ/6Bbe3wWdrnJ9zV4Z9f2c
+	 JgY3jgeRvu2SqD+pUDQrhX257sa0XVRsk4/Z5H8dffxpNAhX+8uDJS9jPo+CA19gI8vy3
+	 LOr47VXmzzHhTAdZ2e30/c+xGmf6m3EylSWA1CAGFULdRmbsawfB3DXKlIu5zcC0W65Pu
+	 4FXGf6Z357NLOUjfZejyYZlwxuMIW6OPMwGouGNnCzkYVFPmjnxFK/zTS3FBotn2gHNyi
+	 +INSUhp0r65ybeU2VaKhLLjlfkYqrOXpLNYgnnAdhRw/htlw1wV0NxJR8a0OKnV3Crg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GVKL0CWE;
-	arc=none smtp.remote-ip=198.175.65.15
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H+k3bFOr;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02723606A31C;
-	Thu, 26 Nov 2026 07:57:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02723606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AAF606A31C
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 08:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GVKL0CWE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795679832; x=1827215832;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7gqO7mtbAkU5IaNVQpE0KYsTeEo00WqOION0Mo8l5RQ=;
-  b=GVKL0CWEFGDvI0s36/UX/xO8hKFVpwEIhE6S4vfUyI/75GmNN+rJRBq8
-   0wMZXHYKBq1dkDTUzLeTKUFGXoKBh8tyhy/dn96jJwQjZ0j8iH2r7K4yh
-   JMvZ5z5kX1XJ/7UtNulMh5ZXOEYLykCU1ZDk+69ezj+Q+0xCLDFuuXSQj
-   Qm0Kellht+VWiFXwk/FJ8nwPy+x+qqjDSnepuXoUuWGtyLpFMzzjji4Sz
-   7wDmnTR1cmPeXDmAwl09W0C0LrovZHZO53P+i8XdvBfv7eBDBSicfx1W0
-   t3SvxCwyomuU6rNFh4GE++dScWhfWqP2AoZ2lQGtJFWSnfaVEsFZGLmgi
-   g==;
-X-CSE-ConnectionGUID: 7X5HWC0wQ8+GpK6freeyDw==
-X-CSE-MsgGUID: BCeYRk6CSvqsEjt49/W5ug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4567265"
-X-IronPort-AV: E=Sophos;i="6.27,234,1787036400"; 
-   d="scan'208";a="4567265"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 23:57:11 -0800
-X-CSE-ConnectionGUID: itKbRMG2R9iWVRnaqlN10Q==
-X-CSE-MsgGUID: sN7xmylnSZSZMY9a4fnawA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,234,1787036400"; 
-   d="scan'208";a="12152074"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 25 Nov 2026 23:57:06 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xWULm-00000001TZw-2xrc;
-	Thu, 26 Nov 2026 07:57:02 +0000
-Date: Thu, 26 Nov 2026 15:56:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alice Ryhl <aliceryhl@google.com>, Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Philipp Stanner <phasta@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, driver-core@lists.linux.dev,
-	Alice Ryhl <aliceryhl@google.com>
-Subject: Re: [PATCH v4 4/5] rust: workqueue: add creation of workqueues
-Message-ID: <20261126154348.RP9PjaYR-lkp@intel.com>
-References: <20261119-rust-workqueue-v4-4-707c68994940@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H+k3bFOr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3612F1F000C0;
+	Thu, 26 Nov 2026 08:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795683099;
+	bh=RppIeY5vllf2+hf2cp04t1WXDtYA0Vaihax7esewOL0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=H+k3bFOrtB+M/y/hsrp5E7jt7ysIBCnOHf8QrKbY6fcqUIHkQFODkA55wASbdu833
+	 XnbZdZt7cTgFPknbkPyXFfUdt8LLciVE+H3/JowEfQK3GnzvRyhiaQAYlXsi1uLL3O
+	 Fc2P9ZAe/SF9J4xE40bisJmhuIiVG0BqXJdu2a6biWUMRdpe9WPNjQcoAVMrgxC6EH
+	 yMoSsOaIZEbeZloft7Wji0yIFcJClkkM32zWc9GQQ/B75/NyUh/aHVTSTsLXGCAFln
+	 L6RYRCtypH9CGMd4E3zN7/RvFHTi2RGO+1lFDmREfvrUTeQk/usXhPIwTdGMxzB2gq
+	 vffnJFLHnqwKQ==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 83A891980074;
+	Thu, 26 Nov 2026 03:51:36 -0500 (EST)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Thu, 26 Nov 2026 03:51:36 -0500
+X-ME-Sender: <xms:FfMHa0laADlyZP9M-X2_UHSrh236MdICVSgypDwlKXA0SCf0OmTtUg>
+    <xme:FfMHa-raHvt7XdxLCzDERzgJTX5XxFgmmoVBTF-3sBgwA0-EWmt-gTJWdnwOrjFzH
+    NQ7_-HqieKrcmXvq3oCVMBDwEqBGI8yikb467-7Ip7x8spCYMlto-tC9g>
+X-ME-Proxy-Cause: dmFkZTFdXZx5D+wChms5XzfJyMjmRiHcVmSWyeb39LIudyuiUQP+DSckdhBpJ4yf3dQhj+
+    zGeszSE2EDJQvCKnVYJmrBB/fxdre/UH26VvWx3g/bXO3btQWPWplkcD/yV9Xmsfh2ZRmO
+    Oz7e49MSWqBnPkR0wD/AqDtL4UVXu2tXVDCZoFf0CxOGUHxMTUBZmMjPC7idq7aVAO6/zL
+    VKRfVEGTP0jds+z2f2soiTVnz6lxZsB0U1G6lmog627s4DRoEbvOI0bTGdqyQJjfDO6hAj
+    +PzGhsdlA+UV06mt5H9wzBE87UJvyKrYxyzDUETfV4U/egMu8ZwnCeOUcB94TSWdO3Y2I9
+    LV0M3QK0PD3t4WpZMGPsjcIgA2GATSGpaVmiQgkwNGkRsEQ57DCwr1dZno4DN882EQCu6Y
+    URxbKvx8JtMqI4kZzlPB7U0y65GpjbW+8ZQoOCOIuDG2JU/MVQvYvSdeuWXd+weMLaHvTH
+    jj3pWKbc1Hoom1YsQ5uodFcJCNxQy5n5/OkkmgSXdwDpDNsrGeGWB8Qxtus5qhXNDDDhQn
+    L0z/7/XuOFrr7MNBxxv2P9G5QHrz7OD7ZuI877BTQcwRNuuACNcDhKox/dN1cOhS7ZnW/K
+    Y0rKeG9wbRUB0J89SBKKWp8qbG0HOCjp8zfofz8IjSIN2QveWFRLeMIFgL5Q
+X-ME-Proxy: <xmx:GPMHa4g-SlUFgZ2cPSt9dtgyZL1bP3nywzHUviRweRroVpMqD-gefg>
+    <xmx:GPMHawf0kbWzw20qIA6d8m3B5FMh-e901--sN-xLoVAR14t-oKcIvA>
+    <xmx:GPMHaxI2Ag000y8zCdwDStt7yhVRSGT3fB4taL3YwB1AXtZLP8Iedg>
+    <xmx:GPMHa9mkxy5VYxKMQAoj9dRdwKZJDFYxkoKIMRWdhcubO2gS5lC0nQ>
+    <xmx:GPMHa5eWC9BwrrMrLd1-Q4rLqx6RobETgeAJEGzuouO03tjBJZIf0fWP>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 97628F80093; Thu, 26 Nov 2026 03:51:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -97,65 +77,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261119-rust-workqueue-v4-4-707c68994940@google.com>
-
-Hi Alice,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on aebb7274476403040d582c61478df8f4a7bf9cd3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alice-Ryhl/rust-workqueue-support-stack-allocated-work-items/20261119-141242
-base:   aebb7274476403040d582c61478df8f4a7bf9cd3
-patch link:    https://lore.kernel.org/r/20261119-rust-workqueue-v4-4-707c68994940%40google.com
-patch subject: [PATCH v4 4/5] rust: workqueue: add creation of workqueues
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261126/20261126154348.RP9PjaYR-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126154348.RP9PjaYR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261126154348.RP9PjaYR-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from rust/helpers/helpers.c:110:
->> rust/helpers/workqueue.c:27:9: warning: diagnostic behavior may be improved by adding the 'format(printf, 1, 4)' attribute to the declaration of 'rust_helper_alloc_workqueue' [-Wmissing-format-attribute]
-      23 | __rust_helper
-         | __attribute__((format(printf, 1, 4))) 
-      24 | struct workqueue_struct *rust_helper_alloc_workqueue(const char *fmt, unsigned int flags,
-      25 |                                                      int max_active, const void *data)
-      26 | {
-      27 |         return alloc_workqueue(fmt, flags, max_active, data);
-         |                ^
-   include/linux/workqueue.h:519:76: note: expanded from macro 'alloc_workqueue'
-     519 | #define alloc_workqueue(...)    alloc_hooks(alloc_workqueue_noprof(__VA_ARGS__))
-         |                                                                               ^
-   include/linux/alloc_tag.h:270:31: note: expanded from macro 'alloc_hooks'
-     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^
-   include/linux/alloc_tag.h:256:9: note: expanded from macro 'alloc_hooks_tag'
-     256 |         typeof(_do_alloc) _res;                                         \
-         |                ^
-   rust/helpers/workqueue.c:24:26: note: 'rust_helper_alloc_workqueue' declared here
-      24 | struct workqueue_struct *rust_helper_alloc_workqueue(const char *fmt, unsigned int flags,
-         |                          ^
-   1 warning generated.
+Date: Thu, 26 Nov 2026 09:51:12 +0100
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Ard Biesheuvel" <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org,
+ "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, llvm@lists.linux.dev,
+ x86@kernel.org, "Alexander Potapenko" <glider@google.com>,
+ "Marco Elver" <elver@google.com>, "Dmitry Vyukov" <dvyukov@google.com>,
+ "Uros Bizjak" <ubizjak@gmail.com>
+Message-Id: <38ad4de5-1a41-4fa3-bd73-2f24d5578c41@app.fastmail.com>
+In-Reply-To: 
+ <CAKwvOd=1u6d2Epp8MgkesknixWcB+JLKfAQq8g9kqYw5sDoLow@mail.gmail.com>
+References: <20261125104953.381561-2-ardb+git@google.com>
+ <CAKwvOd=1u6d2Epp8MgkesknixWcB+JLKfAQq8g9kqYw5sDoLow@mail.gmail.com>
+Subject: Re: [PATCH] x86/percpu: Use address space loads for per-CPU reads when using
+ Clang
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +27 rust/helpers/workqueue.c
 
-    22	
-    23	__rust_helper
-    24	struct workqueue_struct *rust_helper_alloc_workqueue(const char *fmt, unsigned int flags,
-    25							     int max_active, const void *data)
-    26	{
-  > 27		return alloc_workqueue(fmt, flags, max_active, data);
+On Wed, 25 Nov 2026, at 20:05, Nick Desaulniers wrote:
+> On Wed, Nov 25, 2026 at 2:50=E2=80=AFAM Ard Biesheuvel <ardb+git@googl=
+e.com> wrote:
+>>
+>> From: Ard Biesheuvel <ardb@kernel.org>
+>>
+>> Clang never discards inline asm with memory operands, even if its res=
+ult
+>> is unused [0]. This means unused per-CPU reads are always emitted,
+>
+> Ack on this missed optimization.  I _just_ got beers with Bill last
+> night, and forgot to bring this up!
+>
+>> including the load of this_cpu_off by this_cpu_ptr() in cases where t=
+he
+>> resulting pointer is never dereferenced.
+>>
+>> Clang's support for the __seg_gs/__seg_fs named address space qualifi=
+ers
+>> is insufficient for full CONFIG_USE_X86_SEG_SUPPORT, but works well
+>> enough [1] for plain loads, and is present in all versions of Clang t=
+hat
+>> Linux still cares about. So use those to implement __raw_cpu_read() on
+>> SMP, permitting the compiler to elide them when the result is unused.
+>>
+>> On a v7.4-rc1 defconfig build, this gets rid of 174 spurious per-CPU
+>> loads, 136 of which are loads of this_cpu_off from this_cpu_ptr().
+>>
+>> [0] https://github.com/llvm/llvm-project/issues/245738
+>> [1] Exclude KMSAN, which ignores the segment base when instrumenting
+>>     such loads.
+>
+> + Maintainers of KMSAN. Ard, can we get a formal bug report about that?
+> https://github.com/llvm/llvm-project/issues
+> With the report in hand, it would be handy to reference it below.
+>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Posted a fix here:
+https://github.com/llvm/llvm-project/pull/246269
+
+Will add the reference to v2, and incorporate the rest of your feedback.
+
+Thanks,
+
