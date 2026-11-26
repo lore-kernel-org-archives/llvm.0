@@ -1,60 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795692814;
-	b=kTktWrPStc9qdudlMtpYa1m5wAEQh2KV/JGhJIizIPuBRDPanZnSyyCzYO7Dxdjczu90
-	 733sHkayKEooSjwGK4rgzRAe28mJ2G807tv7A01HZcxwUjjl7Z9hhtg/plJePa20Eps32
-	 W6BElDaaysIxqy2xl3Ww9IeTL9ih7VblRrqfLfCMA/HCGJvTX2faw7PlwiolO4way6BJ1
-	 BWrKjwUMLl7PTT+WPK7UG/Qq8vzVnVV4AZlzUQ5JSyhHTU6BqPf2sHWoEiVTv6a6vKprh
-	 rRLccvIKjFy2QURsfLAY0wSI1fsexIEaUJ4MUKUMLxvS+RzoXbgrWGDKv50cRWrXyiw==
+	t=1795693838;
+	b=ZgzyT8RbzV3qsBrODbVRqzJ+5y1a2h1KkjvfnAaQdS5fUKfPwbi/WqmmWtTNg0gTGggY
+	 nODCUBLFtbeYE41EjBKtbrzNueGswYz3nHTNF5zwQ0hs0FrroyI3O2FnjOVJfV/r2v3fN
+	 m7xl6WO31dfTlIADrkHxh4a5GcgbISkyRsQqaJMz86WO1C5ywxP4N8jWlz8Fd7SZKLQRp
+	 I1sBJadoWPX7YKg70LzDxvi/HtUHdKCHxzZFOL8vG9SI5j6UKvfPB81Er7b/D3UVB/SIN
+	 ZnlVCrNxqjOcEHGOL4CBswN3dtD8pJA9lEl7q1285ncG1VQZ7gyT3rK6hUd+4TG34lg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795692814;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Last-TLS-Session-Version;
-	bh=HoA7X4ma5bwJj/kRPNS7vTcKgiIrboSXt7Y5O79fKEE=;
-	b=PKBVrZL3e9tpPe+c518S9JWlKsBJnyJ/i3npIfbtRmBwa757gNSlKf7kwJ/NIUcMzoAK
-	 wunaQBT0OAH0/rrD41yQb7dBM7ep8SgkWnLNk9F5OICLCo81NLaPg1rPRbNOjgkQnqF0G
-	 mAJRgmAdyhSLQygKqJ6oxLyeklVQOERXLBnoeSTEVaYOPKEyrtXUue+GT64T22feT8Xs5
-	 fDHQhJ9Vtd9w2VXCYFCqNU/w0lSb+k8fQewZ/WMbWb8uXNyDpPlPzjmAv3j+sYyERz0si
-	 l4z/97zP4EyoHRuuhENgeikngkrz95w7Rl+M1AtjXqCUnNavGjDUwClwEkJgJNew2yg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795693838;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=IJ5jsxL0IuDyDDqZ5htbZgPEjfueBemxUKX+IpUo4oI=;
+	b=0q14XzoiwVAZQLoB4b1uuMAjfxTCVYqUs5BpzYBhBfMW9wIJ07tLkQk0IHdXNuT7InRs
+	 eDd7TEZRhhw6JxU2bPaeZFLo3FBLl623ShXV1ez4+GAzo3NxCWRZD670+SrZspD7+bqqu
+	 KV/GQYhXHqhSRLmA8btJyn886fNB9aci3X4wUnC5bj1d7kGSv5Qs86e0e+Bp1yTMHil8u
+	 rBb69nsAXglAlfi8KbJOYR9bAzLV5RwNASRIeLf1g5QsgkLQejm6w84IT7zlIRk90XWEG
+	 14mpXMfUQvfPja2E/C/qPZzms4VQprw23Ln1+S6jn4DWze9cEoeHlr6s8uk81igyXew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=fXvRSfe0;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=O5+HyVBQ;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0F7606A327
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 11:33:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A0F7606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB188606A321;
+	Thu, 26 Nov 2026 11:50:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB188606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=fXvRSfe0
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id A6053C2B9C7;
-	Thu, 26 Nov 2026 11:33:40 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 601B660237;
-	Thu, 26 Nov 2026 11:33:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2CDFF11E6B306;
-	Thu, 26 Nov 2026 12:33:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795692806; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=HoA7X4ma5bwJj/kRPNS7vTcKgiIrboSXt7Y5O79fKEE=;
-	b=fXvRSfe0MfaDTim26L+H+xvmIAfAJdy1AF4wSb1n/A1Ko0cq2qJvKz3Hy/WEsU5RyAL5tj
-	DOvCBD02/KO3AEHXnUM4MeUDGdOa4AasCWrEChDV44rJBollx0f/mVYIdaeReAmX2uw+pu
-	X0bCvAyeICVFkD/rWBwD0BWuyWEGy3JEPkTdyBZl4JfQ6mjuUtwzn5QfNMBUKTdy5BGmPX
-	PmsagCEJubaw/SNsFntJOhkX2rIF7sCAqScpv0rI+R6hFjaAl4J0+KOmiOmrmrHKlJqUV4
-	VdTkXa0xhrOldzo6hw7BHueJdh5ey943nFnte7N6M9PPbNRJ66Ryjx1F0DYtRQ==
-From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Thu, 26 Nov 2026 12:29:26 +0100
-Subject: [PATCH v7 43/43] drm/vkms: Add ConfigFS interface for connector
- parent and port_id
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=O5+HyVBQ
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=IJ5jsxL0IuDyDDqZ5htbZgPEjfueBemxUKX+IpUo4oI=; b=O5+HyVBQZ2YAxfcaUj5Xq2tCtW
+	I/UhPI4SYWJkx0yySCP39JT00U/BovcyKluthDlwsu+hKFDBlKdIGh5+MYBtMBsBR3uuvriCDbj0W
+	v1B8UQ6yhuZ/QlI1gdWccnRBPA/fnxzj6selMyWrik9c+qfcxqngKJ6ExJiS/f44Tb6EXyoabxdJ1
+	765g8l5g7nfOWdai9D5vuAAdlLAJcCwBGjZBB4s8aAVLBAAulPOmsgm0Xqv1mXSM2IJjnaVGGOPye
+	BpLh/LlNT6y/yPSw3Bj1S+IU/jtG6PkNeLo8tGiQLsnDqI9RADGV8vLvUAia1dK6ON24uAMlZm8iz
+	z82cuJBQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xWXzm-00000006Roe-0fVl;
+	Thu, 26 Nov 2026 11:50:34 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9B26B302186; Thu, 26 Nov 2026 12:50:32 +0100 (CET)
+Date: Thu, 26 Nov 2026 12:50:32 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v3] sched/topology: Avoid unsequenced accesses to jiffies
+ in sd_init()
+Message-ID: <20261126115032.GE49833@noisy.programming.kicks-ass.net>
+References: <20261125-topology-wunsequenced-v3-1-efa3db7e0bf8@kernel.org>
+ <20261125094643.GY2668804@noisy.programming.kicks-ass.net>
+ <CAKwvOdmyGdn4ES6Ku+Yovd7a5imzmtmYtd7KB=OMCqKpv1X8rg@mail.gmail.com>
+ <20261125200311.GA3625068@ax162>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -64,276 +79,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261126-vkms-all-config-v7-43-21194cda2468@bootlin.com>
-References: <20261126-vkms-all-config-v7-0-21194cda2468@bootlin.com>
-In-Reply-To: <20261126-vkms-all-config-v7-0-21194cda2468@bootlin.com>
-To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Melissa Wen <melissa.srw@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com, 
- Jonathan Corbet <corbet@lwn.net>, Oarora Etimis <oaroraetimis@gmail.com>, 
- Harry Wentland <harry.wentland@amd.com>, 
- Lucas De Marchi <demarchi@kernel.org>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>, 
- Shuah Khan <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Kory Maincent <kory.maincent@bootlin.com>, sebastian.wick@redhat.com, 
- victoria@system76.com, thomas.petazzoni@bootlin.com, 
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, llvm@lists.linux.dev
-X-Mailer: b4 0.17-dev
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261125200311.GA3625068@ax162>
 
-Add the parent and port_id configuration for a connector.
+On Wed, Nov 25, 2026 at 01:03:11PM -0700, Nathan Chancellor wrote:
+> On Wed, Nov 25, 2026 at 11:32:31AM -0800, Nick Desaulniers wrote:
+> > On Wed, Nov 25, 2026 at 1:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Wed, Nov 25, 2026 at 12:23:35AM -0700, Nathan Chancellor wrote:
+> > > > Clang's warning is ultimately pointing out that jiffies may have two
+> > > > separate values in this initializer because it is volatile and accessed
+> > > > twice and the order of these accesses is not specified. This could
+> > > > result in unexpected or inconsistent behavior depending on the code
+> > > > author's intent and whether they realized the variable was volatile or
+> > > > not.
+> > > >
+> > > > As two separate accesses is not necessary here, add a local variable to
+> > > > hold the value of jiffies before the designated initializer so that a
+> > > > consistent value is used for initializing both members, clearing up the
+> > > > warning.
+> > >
+> > > None of this tells me why we should not just disable that warning and
+> > > get on with life.
+> 
+> See below, I believe this warning has general value (but maybe not
+> here).
 
-- port_id can contain any u8 value
-- parent can contain at most one symlink to an other connector.
+Yeah, not here.
 
-Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
----
- Documentation/ABI/testing/configfs-vkms |  28 +++++++++
- drivers/gpu/drm/vkms/vkms_config.h      |   8 +--
- drivers/gpu/drm/vkms/vkms_configfs.c    | 103 ++++++++++++++++++++++++++++++++
- 3 files changed, 135 insertions(+), 4 deletions(-)
+> > I think the warning has value generally across the tree, even if this
+> > particular single instance "isn't a bug, per se."
+> 
+> Hard agree. Just because this particular instance is not a bug does not
+> mean future instances won't be. We pay a small cost to silence the
+> initial instances then we get to see what it flags in the future. If it
+> turns out there are never bugs, we can just turn the warning off
+> globally (we've done it before) but I'd rather have hard evidence of
+> that first; to me, these initial instances don't count. No maintainer
+> has objected to the other patches I have sent for the other instances of
+> this warning and there were not all that many for how much code the
+> kernel has.
 
-diff --git a/Documentation/ABI/testing/configfs-vkms b/Documentation/ABI/testing/configfs-vkms
-index f59533e6f80e..27d307935771 100644
---- a/Documentation/ABI/testing/configfs-vkms
-+++ b/Documentation/ABI/testing/configfs-vkms
-@@ -106,6 +106,15 @@ Description:
- 	the device is disabled, the value is only stored and takes
- 	effect when the device is enabled.
- 
-+What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/port_id
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	Port number of the connector, used together with parent to
-+	build the MST PATH property. Value is a decimal number
-+	between 0 and 255. Writing fails with -EBUSY if the device
-+	is enabled and the connector is enabled.
-+
- What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/possible_encoders
- Date:		Nov 2025
- Contact:	dri-devel@lists.freedesktop.org
-@@ -116,6 +125,25 @@ Description:
- 	connector attaches it immediately, and linking into a
- 	static connector fails with -EBUSY.
- 
-+What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/parent
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	This group contains a symbolic link to the parent
-+	connector, to emulate a DP MST topology. The target must
-+	be a connector of the same VKMS device. Creating the link
-+	fails with -EMLINK if the connector already has a parent,
-+	and with -EBUSY if the device is enabled and the connector
-+	is enabled. Removing the link detaches the parent. A
-+	connector with a parent exposes a PATH property of the
-+	form "mst:<root connector DRM ID>-<port_id>...", listing
-+	the port IDs along the path from the first connector below
-+	the root down to this one (up to 16 levels of nesting).
-+	Creating a link that forms a parent cycle (A becoming the
-+	parent of B while B is already the parent of A) is accepted,
-+	but such a cycle is rejected when the device is enabled,
-+	during configuration validation (-EINVAL).
-+
- What:		/sys/kernel/config/vkms/<device>/crtcs
- Date:		Nov 2025
- Contact:	dri-devel@lists.freedesktop.org
-diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-index 83869e677f15..457239cfc2a4 100644
---- a/drivers/gpu/drm/vkms/vkms_config.h
-+++ b/drivers/gpu/drm/vkms/vkms_config.h
-@@ -432,6 +432,10 @@ vkms_config_connector_get_edid(const struct vkms_config_connector *connector_cfg
- 	*len = 0;
- 	return NULL;
- }
-+
-+int vkms_config_connector_set_edid(struct vkms_config_connector *connector_cfg,
-+				   const u8 *edid, unsigned int len);
-+
- /**
-  * vkms_config_connector_attach_parent - Attach a connector to a parent connector
-  * @connector_cfg: Connector to attach
-@@ -492,10 +496,6 @@ vkms_config_connector_set_port_id(struct vkms_config_connector *connector_cfg,
- }
- 
- 
--int vkms_config_connector_set_edid(struct vkms_config_connector *connector_cfg,
--				   const u8 *edid, unsigned int len);
--
--
- /**
-  * vkms_config_get_device_name() - Return the name of the device
-  * @config: Configuration to get the device name from
-diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
-index e6222db02a2e..55de6a06ab2d 100644
---- a/drivers/gpu/drm/vkms/vkms_configfs.c
-+++ b/drivers/gpu/drm/vkms/vkms_configfs.c
-@@ -112,6 +112,7 @@ struct vkms_configfs_encoder {
- struct vkms_configfs_connector {
- 	struct config_group group;
- 	struct config_group possible_encoders_group;
-+	struct config_group parent_group;
- 	struct vkms_configfs_device *dev;
- 	struct vkms_config_connector *config;
- };
-@@ -149,6 +150,10 @@ struct vkms_configfs_connector {
- 	container_of(to_config_group((item)), struct vkms_configfs_connector, \
- 		     possible_encoders_group)
- 
-+#define connector_parent_item_to_vkms_configfs_connector(item) \
-+	container_of(to_config_group((item)), struct vkms_configfs_connector, \
-+		     parent_group)
-+
- static ssize_t crtc_writeback_show(struct config_item *item, char *page)
- {
- 	struct vkms_configfs_crtc *crtc;
-@@ -1391,6 +1396,42 @@ static ssize_t connector_dynamic_store(struct config_item *item,
- 	return count;
- }
- 
-+static ssize_t connector_port_id_show(struct config_item *item, char *page)
-+{
-+	struct vkms_configfs_connector *connector;
-+	u8 port_id;
-+
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+
-+	scoped_guard(mutex, &connector->dev->config->lock)
-+		port_id = vkms_config_connector_get_port_id(connector->config);
-+
-+	return sprintf(page, "%u\n", port_id);
-+}
-+
-+static ssize_t connector_port_id_store(struct config_item *item,
-+				       const char *page, size_t count)
-+{
-+	struct vkms_configfs_connector *connector;
-+	u8 port_id;
-+	int ret;
-+
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+
-+	ret = kstrtou8(page, 10, &port_id);
-+	if (ret)
-+		return ret;
-+
-+	scoped_guard(mutex, &connector->dev->config->lock) {
-+		if (connector->dev->enabled && connector_is_enabled(connector->config))
-+			return -EBUSY;
-+
-+		vkms_config_connector_set_port_id(connector->config, port_id);
-+	}
-+
-+	return count;
-+}
-+
- CONFIGFS_ATTR(connector_, status);
- CONFIGFS_ATTR(connector_, type);
- CONFIGFS_ATTR(connector_, supported_colorspaces);
-@@ -1398,6 +1439,7 @@ CONFIGFS_ATTR(connector_, edid_enabled);
- CONFIGFS_ATTR(connector_, edid);
- CONFIGFS_ATTR(connector_, dynamic);
- CONFIGFS_ATTR(connector_, enabled);
-+CONFIGFS_ATTR(connector_, port_id);
- 
- static struct configfs_attribute *connector_item_attrs[] = {
- 	&connector_attr_status,
-@@ -1407,6 +1449,7 @@ static struct configfs_attribute *connector_item_attrs[] = {
- 	&connector_attr_edid,
- 	&connector_attr_dynamic,
- 	&connector_attr_enabled,
-+	&connector_attr_port_id,
- 	NULL,
- };
- 
-@@ -1505,6 +1548,62 @@ static const struct config_item_type connector_possible_encoders_group_type = {
- 	.ct_owner	= THIS_MODULE,
- };
- 
-+static int connector_parent_connector_allow_link(struct config_item *src,
-+						 struct config_item *target)
-+{
-+	struct vkms_configfs_connector *connector;
-+	struct vkms_config_connector *connector_cfg;
-+	struct vkms_configfs_connector *parent;
-+	struct vkms_config_connector *parent_cfg;
-+
-+	if (target->ci_type != &connector_item_type)
-+		return -EINVAL;
-+
-+	connector = connector_parent_item_to_vkms_configfs_connector(src);
-+	connector_cfg = connector->config;
-+	parent = connector_item_to_vkms_configfs_connector(target);
-+	parent_cfg = parent->config;
-+
-+	if (connector->dev != parent->dev)
-+		return -EINVAL;
-+
-+	scoped_guard(mutex, &connector->dev->config->lock) {
-+		if (vkms_config_connector_get_parent(connector_cfg))
-+			return -EMLINK;
-+
-+		if (connector->dev->enabled && connector_cfg->enabled)
-+			return -EBUSY;
-+
-+		vkms_config_connector_attach_parent(connector_cfg,
-+						    parent_cfg);
-+	}
-+
-+	return 0;
-+}
-+
-+static void connector_parent_connector_drop_link(struct config_item *src,
-+						 struct config_item *target)
-+{
-+	struct vkms_configfs_connector *connector;
-+	struct vkms_config_connector *connector_cfg;
-+
-+	connector = connector_parent_item_to_vkms_configfs_connector(src);
-+	connector_cfg = connector->config;
-+
-+	scoped_guard(mutex, &connector->dev->config->lock)
-+		vkms_config_connector_attach_parent(connector_cfg, NULL);
-+}
-+
-+static struct configfs_item_operations connector_parent_item_operations = {
-+	.allow_link	= connector_parent_connector_allow_link,
-+	.drop_link	= connector_parent_connector_drop_link,
-+};
-+
-+static const struct config_item_type connector_parent_group_type = {
-+	.ct_item_ops	= &connector_parent_item_operations,
-+	.ct_owner	= THIS_MODULE,
-+};
-+
- static struct config_group *make_connector_group(struct config_group *group,
- 						 const char *name)
- {
-@@ -1537,6 +1636,10 @@ static struct config_group *make_connector_group(struct config_group *group,
- 		config_group_init_type_name(&connector->possible_encoders_group,
- 					    "possible_encoders",
- 					    &connector_possible_encoders_group_type);
-+		config_group_init_type_name(&connector->parent_group,
-+					    "parent",
-+					    &connector_parent_group_type);
-+		configfs_add_default_group(&connector->parent_group, &connector->group);
- 		configfs_add_default_group(&connector->possible_encoders_group,
- 					   &connector->group);
- 	}
+I just don't understand any of this. Perhaps I'm being super dense, but
+calling this UB is utterly stupid IMO. It is trivial to define what
+should happen here and make the compiler do it, although perhaps it is
+not what people expect -- but at that point you can have a warning about
+performance, rather than it being UB.
 
--- 
-2.56.0
+Most all of this is me being distrustful towards the C committee about
+volatile; they hate it while we live by it.
 
+But I really don't see the difference between two jiffie reads in an
+initializer vs two jiffie reads in random code. Its just two reads that
+cannot be fused, big deal.
+
+So they're making a big deal out of the unsequenced thing; but at the
+same time they're eroding actual sequence points; I mean WTF ?!
+
+So function calls used to be a sequence point; but then they allowed
+auto inlining (without the use of the inline keyword), and guess what?
+An inlined function is explicitly not a sequence point.
+
+So they cannot be both concerned about sequence *and* erode sequence.
+
+All of this just sounds like a whole pile of wankery without actual
+merit.
+
+Also; the purported justification of UB has always been room for
+optimization, but volatile is the anti-thesis of that, it explicitly
+does not allow optimization. Marking something with volatile as UB is
+just batshit.
+
+I mean, I suppose I can apply the patch, but I'm not buying any of it.
+This is not an improvement, it actively makes clang worse!
