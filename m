@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795690424;
-	b=caMbawGUx951b6yrqeJXyuhQG+mq+c8n4whrT1qT8GZHZZKizRGMzyeDrF91JwFFrSV5
-	 ohOnBLtTA28l6UBEfEoKd3GI/Xt89few9bS0gucVsuhrnnHKI9KDLptvwtEdJJlGX96te
-	 E+j0s6tEfhTYEBbWs+PCXLcrMr8gpuO2nJ42THvnrk5Bo1UTL2SHVklAlfzQTxEMuqJHg
-	 iyuYRCWOihijD9g/I8449gg3U/dKXw9n98N9XIAJyCSmgJgpeqeKdxVJ1UOANnOPIaHXy
-	 H4u3GQ+RW+5j1eUFo6mHJfrd6RIeFjoUPx7sdKIkcE7dEjuINBrdUqIvN31dmzp0OUw==
+	t=1795690434;
+	b=NushuybI64HKKMvg/WeKj+rEPnFT5BNek+LOy5OjbuLCnHhGTInqn9Yrxe4WZGhNMhkL
+	 d3iuu4PHZn1jdCGlu1cKJQBaoqlHaMW4VFZoIFuBRor+LYJdSXqVC+IB63BWa9V5qEpaC
+	 rLHl+S0Tfs1pYcw6D2F/ebQovbMCDqiBVBGrBJMJuOlGJrgRKD8HFBapT6WjjuePZRyVo
+	 DcJBTIdCrUMrd7brZZoDadCJlBun1trxHX96qlf9y1OaTAmt2mX0dzp0wYAPOcp5RITFa
+	 BSMRaESwWB67E4Peak4eNRkF2hDElRQ1sy6DZFeVF+9X/yeHn2ylVMrRfhh1G48vOhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795690424;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795690434;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=8RnxPSTHJj6ssbwJH49Q6KtCPv2E9H09AK7eDPufzS8=;
-	b=bAiCAlIGmlfgdpVs4L6QaI5uES4Ctk7m5Aq7EsaoFtzc7QRTyXJXGY517StEjaQCNUDR
-	 RV9e/zcp22292eEoOhmNMQ2y5qNHf4RWZQMXvFQ1nmKROI4OHpwhKjHNfje+o1DwD+662
-	 GG19oRaBciEYE5NXD8get9NsqWjjr7cB4BhTLIj217m4HkIo0IB0/xmT6r7b3dtxmXMKM
-	 A5KAijfT64HQqDbQNd31QeKolS4pV4VdiudVpNXyBZM4RX0Btiqj4vP5Yb8mGhfIsU+AA
-	 ocZ1len1ApkDcLzzAwTqpdYpoczi0VhZ6XSWVBY5tStU7Rxxf9peVn43viZdZir2nWw==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=OLWKll3wpoHUCYYXUcYjGv3MdRIE3PcigYZXM4He/NA=;
+	b=d4ZzN0+xUVSsjiupN5wu8fw6KKbquhio5MkUo7WH16I1+BjymrFuW+pFoV88bRDxrnn9
+	 HfAeDWuMtqJx6tNyXGFqaPON2PCpjMXkpc8kKUVpo5LN1t2JYhkFWDIYeX5YdjrbWa0e9
+	 QihENBbdkPyCJ5nMJlZybGt1oBVxYi0i65KbZ0P8O3/nRiSB4A1j0FwFCNUw91mj5GiPy
+	 RzsXK7AU0iMNmnoJEmFINB0pxAWagFSzSPlJi5LngOnvm03ndKNdwfpwDMO8RjGKT0Xla
+	 MCO5dgUxXAsUHF9WKhq1NvUzJaZ/mryRJhwsPS/TpSIOxfe2MMDhxIX29D7jSGd7DUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="U/A7BLgk";
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iWXENKMz;
+	arc=none smtp.remote-ip=209.85.216.47
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85280606A326
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 10:53:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85280606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4DF606A31E
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 10:53:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C4DF606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U/A7BLgk
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2f04bea9a93so60866325ad.3
-        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 02:53:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iWXENKMz
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3b41e5a1719so2895396a91.3
+        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 02:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795690423; x=1796295223; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8RnxPSTHJj6ssbwJH49Q6KtCPv2E9H09AK7eDPufzS8=;
-        b=U/A7BLgkOcp862UmIbhqVQIso907X7wpS+rTo3qU/gWlhZWWkynl7INzWZ+pBRPMpV
-         jImqXcaHXF8LrX2E+P2G2gVbQ6uDu5NtNIuMO63+DSr+iLe+ZLlBgvxfQcq8KgoZ5RlH
-         WFo/UR/tjIVAHDOOmurTH2K79O34XJXUebTLanAX2/y/kdg6paKTZx+Ku1+ggOzBAMrw
-         E5kOijuFVY3wFazw+pz/Aa13jNEZN3f8Vo/5fIyj2r/yrkTT61OXUdtIq91Q8KYb5ksa
-         DcChUTtwx44GwNdSFXZGUjQQ3T4kGqUBh4f8otKT8zbB12SYB7YH5FTjQ2Bv6Bm6Erdo
-         gjhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795690423; x=1796295223;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1795690432; x=1796295232; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8RnxPSTHJj6ssbwJH49Q6KtCPv2E9H09AK7eDPufzS8=;
-        b=1tEs+RRYTTEAAvBgusRP1lzwxOK5vHbn3LLPAACiYOW2xwDWrf+ZEGgaLjpConHs9t
-         k44KlGUtpTEbKrl0XGyC87yuQYJQwf4Zvfqy6oZJEJoVJtDhm87RqINTATQ75AcStz7e
-         0VeKHVLHqfdRittjwjnL7D4bDkl9EmVJHnthU0/zCzQ48ycVJK8cj0SlPnuQVi13UGHs
-         4b3ll+cu5NUhIrzfDsyFrDH6hvXuNDVcUwZF3SXEbpBQc2W1xneRGlp3dBeoZ+YAP8yz
-         Le/sS7WMzZM1h4HcUF7yPwU/RtNVJ6ar11pWEOemX/15IfjPWc57l8uhZLevXhE8J223
-         J9Og==
-X-Forwarded-Encrypted: i=1; AL+hErHvc+w7ZmgxZAZMLa5+u6sHBDBGRMxsKDUPwaG9DrucqdAr+IXkVJpVDS585D3QmE9yGjJI@lists.linux.dev
-X-Gm-Message-State: APuU4Z9ehTehiYa28qX7h6BN7U7aewR9DkFGYSIwR9Y+srOQVLMj9u0l
-	atpYNdkmnPf2hJtPqXGyE3R/Ltj1VFCZpHwGM/0QqrTbERCASTq1sGbz
-X-Gm-Gg: AZFdTZcu8GCGzJ77RmpaA3pj7hr1yyLAmjyrboeZxzGU/iPhlTKfHLG7xRYHARlyZrN
-	0vhrnrP4DbD6KXpxBr7Ww6XaXaPvHG8ClMK7XiAPK2MPEQ6PN1c9WKpXXt0N/nRsMOokoT4zV5U
-	ge/wEf8L40/QurH6WYqMfPzglBRZr0BWSFFz0ptOeWWuFed97Ot5qBSiSFDUPFZft8Qqv9fJ0Xm
-	p3gxvNVFu4H1/A+7wS1KhaeUQBl8bAkc9IG15XZUiFTZU6SPMVz38TT7Dhagwgs8Ne3xx3acNzl
-	0fF7sgpf123Yjm9HTuNaSwv0Qoj8KN+03KxJWzJ0RDvYU4sDJOZd6AhivIyns3eAT6q0C0pLDuU
-	iB21jn4B4G1QlkCu345Lc8kRj45xAnQvqOEI2OOqz9KzET4WlXR2FKtfB9zGmgjYQJFa8Kyv3Hz
-	6qVImUe5E6wq26c9sMQ0laphYTmGWPHtgwD4COQWHwSY0wEEWbT0JEIMVYq5a00NPRRdZgbGrY5
-	LuBG9fmnbsnFIcGryZf4kA0t2CyWxtnxthJEuC7mYJILnN8RIvl9QN5L64FE+N5uY0GT7hSyK99
-	6mavlF1GEStrOuCwhSb+Tmipy3RQZdnSv1+mAp3vHJr4ix9UVozj
-X-Received: by 2002:a17:90b:4b:b0:3ab:e588:c2a8 with SMTP id 98e67ed59e1d1-3b41c9ba0e4mr18519397a91.64.1795690422704;
-        Thu, 26 Nov 2026 02:53:42 -0800 (PST)
+        bh=OLWKll3wpoHUCYYXUcYjGv3MdRIE3PcigYZXM4He/NA=;
+        b=iWXENKMzb8ugwHbRX6nQjB+PFqXFXEUrQsVxbfb/lKXSlItuQlv6mHxvPdoQz0XiGf
+         /idmDubscposjRkqz8Pa572/sF1ovVYOCaaOKF8t/oBNJODZM9mHIcyhp1cpUplCDY7r
+         hFZhcknsGNRU/ks59NsHUt+FxkzfTMiLYiYfnpA6ah30GqGouGoDmFufW7rfhCAbflfX
+         Vs++/P2W+VHzQJgDmmbdDjtArkNstC3BIuw3gTJkV9430i6FTsgT/DTHEPZTpbHen5C2
+         8RBBFtDrLGjLZ1X3PRcNESglHvgMm1l+9wmNhpviZMTAEdk6LjdD6tej+ySa1xtWD7Ic
+         aE+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795690432; x=1796295232;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OLWKll3wpoHUCYYXUcYjGv3MdRIE3PcigYZXM4He/NA=;
+        b=eaES7dwBWalonq9vihdaRRDuWWsWXmr841mBrelPLtIt+hcl8pGbsd1XXRG/zff1G6
+         dXol9LzG5u3+pghdP6+UaDvrOB83eSL/T67IFXLEZLkNr6NZ90oqo5kZ+pv4RtJ9vVaF
+         ArXgV/OVcMEUJxbRy+KPlnY30rxKyURb9bfohFZoR771x5jPEvPNxJIBzJjv2sqTRy89
+         RW0RAReBxFYq3/ahg0YdUFfVr0A+l1Wae4D20Pga/2kX5so3wmc16VJ7sQidkaw1L232
+         rul7xY5ItQo2ZJ6KW+VR2wKw1NlfL41bqwL4O9M1Dwd25SS3nyDUU+RFJHYQkIoCdXyF
+         OJpA==
+X-Forwarded-Encrypted: i=1; AL+hErE106rfHiyFFbwUqEZ30YXrIw/Xen7l3ov6bBq5KjrTyXRpPEqRzGGZgbCnTu+hk8aBGi4u@lists.linux.dev
+X-Gm-Message-State: APuU4Z+ACggFEpBDw8AkN3Eg+vqh/sLGtPGdHmPc6GKA/PPMkpgNPhAz
+	cRPlxfisRWoSu4DFfhdZEUZ//bW/ro4J4CYoUGWyYbN7/jtfAP/snGwwnDomahJ47gQ=
+X-Gm-Gg: AZFdTZc1EpRHkpWb7Uc2vx+96gAD78o2bOf6dL7oeH7/2vbk7OIeTCYQgzZ2B50clf7
+	b/h20S1MqfGYWPjW2HJImGVl9iAqFJqf3J46SWg9dQdTowCe206ksJegANvo8OTOALHia027NHB
+	r9BrKD3uo6mG9xUBH8zffSadACC2oKpLgvQzaB/ZBkcbvxHPBY2JxvUEVJj2FB5nkXri625SKl/
+	oyJ13SNzQS70BFlIIM6gJ5vFJ661up88ngg5+r54XWO7qeTeTqFCH6BqJfQJzChITuht9jvKCg7
+	yrnKa3BYETfUtgLdj9bpmaEO5r2qEQStESg0wgtlCxeez5ykbm5d3IDmKps93+VrOGwpcPZbDB3
+	Ce+lxvyDWg+DR+itomXAnS7yGz0r1arv/aypSodhoK3mT14wigb7YdaI/knelbpbl9Q1Yzq8obp
+	CRV/IraF6BzAaJVK4saTAQNpVOUmD6IdVkW6dRVb4MwmNEVtgQjGh/BxE5AccFVHnzW7Yj4D63j
+	gqdE1GQcQyZUxzr37ByU1kn0OrQ7MxgKWFpxdRNoZJ3lmnee9XYbCUuTgAUHB/l7A2OblJyXEAW
+	5+NO6eASxMYytGl3lkQJlttfKx7MfyD6eAK2oF5nBw3ERP+Zltg=
+X-Received: by 2002:a17:90b:4b05:b0:3a0:516d:9f88 with SMTP id 98e67ed59e1d1-3b41c911c9emr18727345a91.26.1795690432434;
+        Thu, 26 Nov 2026 02:53:52 -0800 (PST)
 Received: from anatasluo-Precision-5560 ([2408:820c:d29:db90:58ff:756e:834a:9b39])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40578dca0sm35469676a91.2.2026.11.26.02.53.33
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40578dca0sm35469676a91.2.2026.11.26.02.53.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 02:53:42 -0800 (PST)
+        Thu, 26 Nov 2026 02:53:52 -0800 (PST)
 From: Longjun Luo <luolongjuna@gmail.com>
 To: jpoimboe@kernel.org,
 	peterz@infradead.org
@@ -93,10 +94,12 @@ Cc: mbenes@suse.cz,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Longjun Luo <luolongjuna@gmail.com>
-Subject: [PATCH 1/2] objtool/klp: Fix the offset and length used to read SHF_STRINGS data
-Date: Thu, 26 Nov 2026 18:53:24 +0800
-Message-ID: <20261126105325.2521938-1-luolongjuna@gmail.com>
+Subject: [PATCH 2/2] objtool/klp: Fix string sentinels referenced through .L labels
+Date: Thu, 26 Nov 2026 18:53:25 +0800
+Message-ID: <20261126105325.2521938-2-luolongjuna@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261126105325.2521938-1-luolongjuna@gmail.com>
+References: <20261126105325.2521938-1-luolongjuna@gmail.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -108,224 +111,270 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For offset, handle PC-relative references, like the one in
-proc_ns_dir_lookup() with Clang ThinLTO. Use arch_adjusted_addend()
-to read the string, and generate symbol-based relocations when needed.
+String relocations can be used for string loads or sentinel checks.
+For example, with GCC 16, range_string() in lib/vsprintf.c uses .LC22 + 8
+as a loop bound. Treating a sentinel as the start of a string can cause
+objtool to read past the end of the referenced string.
 
-For length, add support for wide strings. The u16 psr_setup_time_us[]
-table is placed in a wide-string section by Clang. The table
-occupies 14 bytes, while strlen() gives objtool a length of only 5 bytes.
+Encode each string reference as [byte offset, whole string] in the
+checksum to distinguish references at different offsets.
 
-With GCC and Clang, the test catches both wide string truncation and a
-missing PC-relative adjustment.
+Keep the symbol-based form for sentinel-related relocations to preserve
+their offsets from the same string label. Then handle them as normal
+data references.
+
+With GCC and Clang, moving the bound from +7 to +8 changes the checksum
+even though the string stays the same.
 
 Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
 Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
 Fixes: 873a2208ea31 ("objtool/klp: Calculate object checksums")
 Signed-off-by: Longjun Luo <luolongjuna@gmail.com>
 ---
-Ran the test suite on x86-64 (tip/objtool/core, b99a5337da3c).
-Same results with patch 1 alone and with both patches.
+ tools/objtool/klp-checksum.c                  | 43 ++++++++++++++-----
+ tools/objtool/klp-diff.c                      | 42 +++++++++++++++---
+ .../tests/generic/fixtures/checksum_insn.c    | 15 +++++++
+ .../tests/generic/test-checksum-insn.sh       | 21 +++++++--
+ 4 files changed, 101 insertions(+), 20 deletions(-)
 
-GCC 12.2.0 (-fno-pie)  49 passed, 4 skipped
-Clang 17.0.6           51 passed, 2 skipped
-
-With this GCC's default PIE, the same 35 tests fail with or without
-the patches.
-
-Codex helped write the new tests.
-
- tools/objtool/elf.c                           | 27 +++++++++++++-
- tools/objtool/include/objtool/elf.h           |  1 +
- tools/objtool/klp-checksum.c                  |  6 ++-
- tools/objtool/klp-diff.c                      | 37 ++++++++++++++++---
- .../tests/generic/fixtures/checksum_insn.c    | 11 ++++++
- .../tests/generic/test-checksum-insn.sh       | 18 +++++++++
- 6 files changed, 91 insertions(+), 9 deletions(-)
-
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index a791f4ea6ec1..4a8698114666 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -1382,9 +1382,32 @@ struct elf *elf_create_file(GElf_Ehdr *ehdr, const char *name)
- 	return elf;
- }
- 
-+static size_t __elf_strlen(const char *str, size_t width, size_t size)
-+{
-+	size_t len;
-+
-+	for (len = 0; size - len >= width; len += width) {
-+		if (!memchr_inv(str + len, 0, width))
-+			return len;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Same as strlen, add support for wide strings like:
-+ *   u16 psr_setup_time_us[] from the DRM DisplayPort helpers.
-+ * Clang puts this data into a wide string section with sh_entsize = 2.
-+ */
-+size_t elf_strlen(struct section *sec, unsigned long offset)
-+{
-+	return __elf_strlen(sec->data->d_buf + offset, sec->sh.sh_entsize ?: 1,
-+			    sec_size(sec) - offset);
-+}
-+
- unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char *str)
- {
- 	unsigned int offset;
-+	size_t width, len;
- 
- 	if (!strtab)
- 		strtab = find_section_by_name(elf, ".strtab");
-@@ -1399,8 +1422,10 @@ unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char
- 	}
- 
- 	offset = ALIGN(sec_size(strtab), strtab->sh.sh_addralign);
-+	width = strtab->sh.sh_entsize ?: 1;
-+	len = __elf_strlen(str, width, SIZE_MAX);
- 
--	if (!elf_add_data(elf, strtab, str, strlen(str) + 1))
-+	if (!elf_add_data(elf, strtab, str, len + width))
- 		return -1;
- 
- 	return offset;
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index f7e6a652ee78..50d5b17907c8 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -180,6 +180,7 @@ struct symbol *elf_create_section_symbol(struct elf *elf, struct section *sec);
- void *elf_add_data(struct elf *elf, struct section *sec, const void *data,
- 		   size_t size);
- 
-+size_t elf_strlen(struct section *sec, unsigned long offset);
- unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char *str);
- 
- struct reloc *elf_create_reloc(struct elf *elf, struct section *sec,
 diff --git a/tools/objtool/klp-checksum.c b/tools/objtool/klp-checksum.c
-index ebe25f9c5260..2547e142794b 100644
+index 2547e142794b..05437c52c26a 100644
 --- a/tools/objtool/klp-checksum.c
 +++ b/tools/objtool/klp-checksum.c
-@@ -138,7 +138,8 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
- 		char *str;
+@@ -67,6 +67,36 @@ static bool is_anonymous_const_data(struct symbol *sym)
+ 	       (is_sec_sym(sym) || strstarts(sym->name, ".LC"));
+ }
  
- 		str = sym->sec->data->d_buf + sym->offset + offset;
--		__checksum_update_insn(func, insn, str, strlen(str));
-+		__checksum_update_insn(func, insn, str,
-+				       elf_strlen(sym->sec, sym->offset + offset));
++/*
++ * Encode a string reference as [byte offset, whole string]. This can express
++ * differences in either the offset or the string.
++ *
++ * - For a string sentinel, the compiler uses this relocation for a boundary
++ *   check without reading from the referenced address.
++ * - The referenced part stays the same but the whole string changes, for
++ *   example when the code uses &s[1] and s changes from "kfree" to "vfree".
++ */
++static void checksum_update_string(struct symbol *sym, struct instruction *insn,
++				   struct reloc *reloc, s64 offset)
++{
++	struct symbol *target = reloc->sym;
++	unsigned long start = is_sec_sym(target) ? offset : target->offset;
++	s64 addend = is_sec_sym(target) ? 0 : offset;
++	const char *str = target->sec->data->d_buf + start;
++	size_t len = elf_strlen(target->sec, start);
++
++	if (insn) {
++		__checksum_update_insn(sym, insn, &addend, sizeof(addend));
++		__checksum_update_insn(sym, insn, str, len);
++	} else {
++		unsigned long sym_offset = reloc_offset(reloc) - sym->offset;
++
++		__checksum_update_object(sym, sym_offset, "reloc addend",
++					 &addend, sizeof(addend));
++		__checksum_update_object(sym, sym_offset, "reloc string", str, len);
++	}
++}
++
+ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 				 struct instruction *insn)
+ {
+@@ -135,11 +165,7 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 	offset = arch_insn_adjusted_addend(insn, reloc);
+ 
+ 	if (is_string_sec(sym->sec)) {
+-		char *str;
+-
+-		str = sym->sec->data->d_buf + sym->offset + offset;
+-		__checksum_update_insn(func, insn, str,
+-				       elf_strlen(sym->sec, sym->offset + offset));
++		checksum_update_string(func, insn, reloc, offset);
  		goto alts;
  	}
  
-@@ -215,7 +216,8 @@ static void checksum_update_object(struct objtool_file *file, struct symbol *sym
+@@ -212,12 +238,7 @@ static void checksum_update_object(struct objtool_file *file, struct symbol *sym
+ 		offset = reloc_addend(reloc);
  
- 			str = target->sec->data->d_buf + target->offset + offset;
- 			__checksum_update_object(sym, sym_offset,
--						 "reloc string", str, strlen(str));
-+						 "reloc string", str,
-+						 elf_strlen(target->sec, target->offset + offset));
+ 		if (is_string_sec(target->sec)) {
+-			char *str;
+-
+-			str = target->sec->data->d_buf + target->offset + offset;
+-			__checksum_update_object(sym, sym_offset,
+-						 "reloc string", str,
+-						 elf_strlen(target->sec, target->offset + offset));
++			checksum_update_string(sym, NULL, reloc, offset);
  			continue;
  		}
  
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 95d0d86666d7..dd5c4d604be3 100644
+index dd5c4d604be3..c32054bff84e 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -1584,18 +1584,43 @@ static int clone_reloc(struct elfs *e, struct reloc *patched_reloc,
- 		return -1;
+@@ -923,6 +923,7 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
  
- 	/*
--	 * For strings, all references use section symbols, thanks to
--	 * convert_reloc_sym().  clone_symbol() has cloned an empty
--	 * version of the string section.  Now copy the string itself.
-+	 * For string relocations, in some cases, compilers generate
-+	 * PC-relative code like:
-+	 *
-+	 *   xorw 0(%rip), %dx    # "mnt", R_X86_64_PC32, addend -4
-+	 *   (from proc_ns_dir_lookup(), Clang ThinLTO).
-+	 *
-+	 * In that case, str_off is not equal to the addend.
-+	 * To read the string, use arch_adjusted_addend instead.
-+	 *
-+	 * To write the string, we could use out_off + (addend - str_off)
-+	 * as the section-based addend.
-+	 * The addend may become negative, and make lld report
-+	 * "offset is outside the section".
-+	 * So for this case, create temp symbol to use symbol-based relocation.
+ 	if (data_too && !is_undef_sym(patched_sym)) {
+ 		struct section *patched_sec = patched_sym->sec;
++		size_t sym_size = patched_sym->len;
+ 
+ 		out_sec = find_section_by_name(elf, patched_sec->name);
+ 		if (!out_sec) {
+@@ -935,7 +936,12 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
+ 				return NULL;
+ 		}
+ 
+-		if (is_string_sec(patched_sym->sec)) {
++		/* String at the label will be copied as normal data. */
++		if (is_string_sec(patched_sec) && !is_sec_sym(patched_sym) && !sym_size)
++			sym_size = elf_strlen(patched_sec, patched_sym->offset) +
++				   (patched_sec->sh.sh_entsize ?: 1);
++
++		if (is_string_sec(patched_sec) && is_sec_sym(patched_sym)) {
+ 			out_sym = elf_create_section_symbol(elf, out_sec);
+ 			if (!out_sym)
+ 				return NULL;
+@@ -946,7 +952,7 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
+ 		if (!is_sec_sym(patched_sym))
+ 			offset = ALIGN(sec_size(out_sec), out_sec->sh.sh_addralign);
+ 
+-		if (patched_sym->len || is_sec_sym(patched_sym)) {
++		if (sym_size || is_sec_sym(patched_sym)) {
+ 			void *data = NULL;
+ 			size_t size;
+ 
+@@ -957,7 +963,7 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
+ 			if (is_sec_sym(patched_sym))
+ 				size = sec_size(patched_sym->sec);
+ 			else
+-				size = patched_sym->len;
++				size = sym_size;
+ 
+ 			if (!elf_add_data(elf, out_sec, data, size))
+ 				return NULL;
+@@ -1258,6 +1264,26 @@ static bool klp_reloc_needed(struct reloc *patched_reloc)
+ 	return true;
+ }
+ 
++/*
++ * String relocations can be used for string loads or sentinel checks.
++ * For a string sentinel, we must keep its offset from the string's start.
++ * To achieve this, keep both relocations relative to the same string label
++ * when it can be identified.
++ */
++static struct symbol *find_string_label(struct reloc *reloc)
++{
++	struct symbol *sym = reloc->sym;
++	struct section *sec = sym->sec;
++
++	if (!is_string_sec(sec) || !(sec->sh.sh_flags & SHF_MERGE))
++		return NULL;
++
++	if (is_sec_sym(sym))
++		sym = find_symbol_by_offset(sec, arch_adjusted_addend(reloc));
++
++	return sym && is_local_label(sym) ? sym : NULL;
++}
++
+ /* Return -1 error, 0 success, 1 skip */
+ static int convert_reloc_sym_to_secsym(struct elf *elf, struct reloc *reloc)
+ {
+@@ -1290,6 +1316,10 @@ static int convert_reloc_secsym_to_sym(struct elf *elf, struct reloc *reloc)
+ 	if (sym && sym->len == sec_size(sec))
+ 		goto found_sym;
+ 
++	sym = find_string_label(reloc);
++	if (sym)
++		goto found_sym;
++
+ 	/* No dedicated section; find the symbol manually */
+ 	sym = find_symbol_containing_inclusive(sec, arch_adjusted_addend(reloc));
+ 	if (!sym) {
+@@ -1327,7 +1357,7 @@ static int convert_reloc_secsym_to_sym(struct elf *elf, struct reloc *reloc)
+ 
+ /*
+  * Sections with anonymous or uncorrelated data (strings, UBSAN data, Clang
+- * anonymous constants) need section symbol references.
++ * anonymous constants) normally use section symbol references.
+  */
+ static bool is_uncorrelated_section(struct section *sec)
+ {
+@@ -1348,7 +1378,7 @@ static int convert_reloc_sym(struct elf *elf, struct reloc *reloc)
+ 	if (reloc_type(reloc) == R_NONE)
+ 		return 1;
+ 
+-	if (is_uncorrelated_section(sec))
++	if (is_uncorrelated_section(sec) && !find_string_label(reloc))
+ 		return convert_reloc_sym_to_secsym(elf, reloc);
+ 
+ 	/* Everything else: references should use named symbols. */
+@@ -1599,7 +1629,7 @@ static int clone_reloc(struct elfs *e, struct reloc *patched_reloc,
+ 	 * "offset is outside the section".
+ 	 * So for this case, create temp symbol to use symbol-based relocation.
  	 */
- 	if (is_string_sec(patched_sym->sec)) {
--		const char *str = patched_sym->sec->data->d_buf + addend;
-+		long str_off = arch_adjusted_addend(patched_reloc);
-+		const char *str = patched_sym->sec->data->d_buf + str_off;
-+		struct section *out_sec = out_sym->sec;
-+		unsigned int out_off;
- 
- 		__dbg_clone("\"%s\"", escape_str(str));
- 
--		addend = elf_add_string(e->out, out_sym->sec, str);
--		if (addend == -1)
-+		out_off = elf_add_string(e->out, out_sec, str);
-+		if (out_off == -1)
- 			return -1;
-+
-+		if (addend != str_off) {
-+			out_sym = elf_create_symbol(e->out, ".L.str", out_sec,
-+						    STB_LOCAL, STT_NOTYPE, out_off, 0);
-+			if (!out_sym)
-+				return -1;
-+
-+			addend -= str_off;
-+		} else {
-+			addend = out_off;
-+		}
- 	}
- 
- 	if (!elf_create_reloc(e->out, sec, offset, out_sym, addend,
+-	if (is_string_sec(patched_sym->sec)) {
++	if (is_string_sec(patched_sym->sec) && is_sec_sym(patched_sym)) {
+ 		long str_off = arch_adjusted_addend(patched_reloc);
+ 		const char *str = patched_sym->sec->data->d_buf + str_off;
+ 		struct section *out_sec = out_sym->sec;
 diff --git a/tools/objtool/tests/generic/fixtures/checksum_insn.c b/tools/objtool/tests/generic/fixtures/checksum_insn.c
-index 10f70a74a976..70c2e9106f8a 100644
+index 70c2e9106f8a..5e794df2c7de 100644
 --- a/tools/objtool/tests/generic/fixtures/checksum_insn.c
 +++ b/tools/objtool/tests/generic/fixtures/checksum_insn.c
-@@ -76,3 +76,14 @@ int target(int x)
+@@ -50,6 +50,21 @@ void set_priv(int i, int v)
+ #define MESSAGE "original"
+ #endif
  
- 	return r;
- }
++#ifdef STRING_END
++int walk(const char *start, const char *end);
 +
-+#ifdef WIDE_STRING
-+unsigned short wide_string(void)
++int range_string(void)
 +{
-+#ifdef PATCHED
-+	return *(const volatile unsigned short *)u"\u0200";
-+#else
-+	return *(const volatile unsigned short *)u"\u0100";
++	const char *p = "[range ";
++	const char *end = p + sizeof("[range ");
++
++#if defined(MOVE_END) && !defined(PATCHED)
++	end--;
 +#endif
++	return walk(p, end);
 +}
 +#endif
++
+ int target(int x)
+ {
+ 	int r;
 diff --git a/tools/objtool/tests/generic/test-checksum-insn.sh b/tools/objtool/tests/generic/test-checksum-insn.sh
-index e1c04a1f518a..692ab1b174b2 100755
+index 692ab1b174b2..08b9dafc2088 100755
 --- a/tools/objtool/tests/generic/test-checksum-insn.sh
 +++ b/tools/objtool/tests/generic/test-checksum-insn.sh
-@@ -46,4 +46,22 @@ build_pair checksum_insn.c
- run_checksum
- assert_checksum_matches target
+@@ -4,9 +4,10 @@
+ # What a function's checksum has to cover beyond its instruction bytes.
+ #
+ # checksum_update_insn() hashes the raw bytes, and then what any relocation on
+-# the instruction refers to: a string section contributes the string's
+-# contents, anything else the target symbol's name and the adjusted addend,
+-# with a reference to a static resolved back through its section symbol first.
++# the instruction refers to: a string section contributes the byte offset
++# within the string and its full contents, anything else the target symbol's
++# name and the adjusted addend, with a reference to a static resolved back
++# through its section symbol first.
+ #
+ # None of these show up in the bytes.  A rel32 operand is zero in the object
+ # and supplied by the relocation, so every change below leaves the encoded
+@@ -64,4 +65,18 @@ if $READELF -h "$workdir/patched.o" | grep -q 'Machine:.*X86-64'; then
+ 		fail "wide_string() lost its PC-relative string reference"
+ fi
  
-+# The wide character changes while its low byte stays zero.
-+build_pair checksum_insn.c -DWIDE_STRING -fno-pic
-+assert_checksum_differs wide_string
-+run_diff
-+for obj in patched out; do
-+	$OBJCOPY -O binary --only-section='*.str2.*' "$workdir/$obj.o" \
-+		"$workdir/$obj.bin" || fail "cannot extract wide string from $obj.o"
-+done
-+[ -s "$workdir/patched.bin" ] || fail "fixture produced no two-byte string section"
-+cmp -s "$workdir/patched.bin" "$workdir/out.bin" ||
-+	fail "wide string was copied incorrectly"
++# Place MESSAGE after "[range " to catch hashing the next literal at the loop bound.
++string_flags=(-fno-pic -fno-data-sections)
++build_pair checksum_insn.c -DSTRING_END -DSTR_CONTENT "${string_flags[@]}"
++assert_checksum_matches range_string
 +
-+# The x86-64 RIP-relative load needs a string label with addend -4.
-+if $READELF -h "$workdir/patched.o" | grep -q 'Machine:.*X86-64'; then
-+	section_relocs .text.wide_string | grep -Eq 'R_X86_64_PC32.* \.L[^ ]* - 4$' ||
-+		fail "wide_string() lost its PC-relative string reference"
-+fi
++# Move the bound from the terminating NUL to one past it.
++build_pair checksum_insn.c -DSTRING_END -DMOVE_END "${string_flags[@]}"
++assert_checksum_differs range_string
++run_diff
++section_relocs .text.range_string | awk '
++	$5 ~ /^\.L/ && $6 == "+" { base[$7] = $4 " " $5 }
++	END { exit !(0 in base && 8 in base && base[0] == base[8]) }' ||
++	fail "range_string() lost the common base of its two references"
 +
  pass "instruction checksums cover reloc targets, addends and string contents"
 -- 
