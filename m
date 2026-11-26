@@ -1,88 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795658444;
-	b=28ybK8ZLL/v8LairvOdWKouAx/1NPbvLt9D+Ly1WD/Of8L9fQLHTJwoJpATVtPtdgwjx
-	 KClDul9skq2QQh4+W2vQnvCwsUJH5ovBPilHDvjZSgDvRsClwZ1CnP3HB+xrTcWAjR0l/
-	 s/f3jeHK0zEQgt3Of1eYzTSSwDXSHiA77DWzGpQqnhTg/XxWMgAI/3PkSP798M2Dd8SNX
-	 jDgOMQqdECCTLC65JWQkOQZypb8RspW22gkqzhT/bMW02k7P2Dv/ipQGMgR3mtDWdMX6Y
-	 wioBr7onx4M6RJJNKxvo6HUmOmv1wAKYpSedioMuLBhR1EhRiOOpZ2nozVa8vB6quPQ==
+	t=1795659044;
+	b=14WWjdgF+h+diWrfO8nU1BiHYhv9nBWrl0/HhGTAx+oaZbESoalToH3SwNizmnyr7kwt
+	 6fJggWMle3TVeyrpLj4pvDrMue621MYcrv6KrRQTpdDFQlBya5nzoM5mvtnncNFaLZCEE
+	 EAichZ0TsKeX56DjQbnS5rzmyhczIwSUc1XeQ2jbrhadKGmopxpU/XTCsYHwjtjigLWzX
+	 +2Hvgbk3xHMui+MyBzm/pGIBzxX64/93oVBQk37+f3D+SKze1eo4HnmxunnXCHj6U5xGR
+	 oZcrs9lehEh/pfdW78vil9YNP3P2iR2rxZpq5dqwKFxLtERTMtT0Y37w29CYImr+5cw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795658444;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=L6goEdFq7O5GDRozIYCd7HLSe04ZuUddA+kdR8LBkqQ=;
-	b=B2g2HhXM4mqPDKmS2Qtk+ZWeHMrSQN2JD79kE44LuPZwz66OkUGNhyFjcVuH8I/hJF/X
-	 3C9koo/6VEkI5vma/sQfSLpAV++nJbXpVnp7E7zqqVzbhMKGxBaB9dZ13tz2jG2lQcWro
-	 KvE3pDHrw2mH6/yp+2zrXWIWnpjlxE53LT2SCfNqCQzMxCRK7z7JCHD9ZJFiEipHUbIsA
-	 bS08EAHhOcyjkTIIhYHzdspNTLL7+KWOSvIIdoKXTSBYIiCfp6BNORmho4Bgr07FbHeRl
-	 L6EkZwgZcGTZLVYINtbvuZ+GvjDD7hb/ODI1yrONXQFJTB/vnnpQX84HRR3gklMbZ3A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795659044;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=7Xrm3Ii2UMn6o6i/Sx3ADDnGnCPb7sChuDPD//evDPc=;
+	b=BCvdabu22DcEdb7PoHDypYotkcMwhX8qmQMjx4JiSuWrX11UlrWTikG1+g7nZJBNqyWp
+	 pA+/PlEpAMyONBcOcsafuOevHumvWHzbCKqlz2ck3DROCyLKDTSq92Nsi3dXtayL61d0V
+	 /lV13tMEsGK9FkGq6yn8LdRatJOWgQgxSNuN03n0/0n3YUFL9hAcuH/hV0nvdWtfoOq0n
+	 wHki30roQZaUNkWef7YEpoP3kDsgKHzSH7NRu9OsOizDWa0UAzzr8JvwhPoo3djmKIolE
+	 zHKksaqys8NCNoHRJoRVIY+iI/zvPpes9vxQC5fqFc1HC1QAlwiOwpQR7kU4M499fzg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=marvell.com;
-	spf=pass smtp.mailfrom=marvell.com;
-	dkim=pass header.d=marvell.com header.i=@marvell.com header.a=rsa-sha256 header.s=pfpt0220 header.b=LBR1EYMB;
-	arc=none smtp.remote-ip=67.231.156.173
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gud3aQtn;
+	arc=none smtp.remote-ip=192.198.163.16
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B23606A321
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 02:00:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54B23606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43F7606A323;
+	Thu, 26 Nov 2026 02:10:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B43F7606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=marvell.com header.i=@marvell.com header.a=rsa-sha256 header.s=pfpt0220 header.b=LBR1EYMB
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6APNfsSP3980007;
-	Wed, 25 Nov 2026 18:00:23 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=L6goEdFq7O5GDRozIYCd7HLSe
-	04ZuUddA+kdR8LBkqQ=; b=LBR1EYMBX0kGCUBHBWt/+33QhDGfpdqXJkVcYVKpg
-	g0Rds6SxIyS/iVQspGZxlrfuNUJk1HoOp+SVTZM3eiQby1Pl+c83fsyaLffU0n4i
-	YTXJyBpG/mQ/tOIAq5A1xfvJrxDmEDsdzDsogirAWSVn3yDvrIZeNNDI0oKxxxLr
-	eNLxcSMfaOR5xuP5pJcM9uMK7sCb3qXxx70OuoGEf8B9CcyJcPKDCU4OnKw0sTpB
-	MsOAQTZf42n6A4ubh795V7U2bOwvstKrLJL0gN9FQKsOr9JA17rdRjZXMPSzPc+8
-	p9wl8RfTF0Wk3D4ZbRWUjfauDpSNzBgkwKEGSiiTmds2A==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4j5nhg5bsx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Nov 2026 18:00:22 -0800 (PST)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Wed, 25 Nov 2026 18:00:21 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Wed, 25 Nov 2026 18:00:21 -0800
-Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id A230F3F704A;
-	Wed, 25 Nov 2026 18:00:17 -0800 (PST)
-Date: Thu, 26 Nov 2026 07:30:16 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Ian Rogers <irogers@google.com>
-CC: Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya
-	<gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Andrew Lunn
-	<andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric
- Dumazet" <edumazet@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, Elkin Cruz
-	<elkin@google.com>
-Subject: Re: [PATCH net v2] octeontx2-af: Fix uninitialized variables in MCS
- alloc handlers
-Message-ID: <aweSsCquVuAOvvUW@rkannoth-OptiPlex-7090>
-References: <20261125004227.1007723-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gud3aQtn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795659044; x=1827195044;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5cPPsvKVfKbmEot/zcim5f/Zke1K+AxY3gPtiCc13S0=;
+  b=Gud3aQtnxcZ1XLkS/UYWdpFW5daSVsen7onmhG+hMVqSMmilXDRyLyYg
+   c3CH9SmqO4/f8nry2rv/BemZQR/m2C12cjNfacsMpD59yy6u6tLkU+Eym
+   UB3yJwug00VvjLjnU48VgsQSum89LwHnZ5XkfjF/giVnoCsGqZMhantcW
+   izKzJ7mgTpbCgFbtoBjYjfssC8LBE/9MQ8vQxsW2DXdeTJeTufw6Tzbju
+   iEwBEdoJyoOqewiktyQB9gOhOH70o1/tf8cnyazLlw1xkI5YGNabawOnW
+   zbVuKRwAEFJIi453sszYiNYP+2MJPL4+7G1uAe8c4Dxd7sO9Xrmevu7s7
+   A==;
+X-CSE-ConnectionGUID: Fq3GXZBGQlOrP2feI/gHmw==
+X-CSE-MsgGUID: dmGb1BoTQEmLmqyxJSlEkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4576883"
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="4576883"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 18:10:43 -0800
+X-CSE-ConnectionGUID: CFmCtIdJSgCv7Rg1Busaug==
+X-CSE-MsgGUID: pparLZx3QaeJTphX7N1TDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="11904551"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 25 Nov 2026 18:10:41 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xWOwY-00000001T78-1FF6;
+	Thu, 26 Nov 2026 02:10:38 +0000
+Date: Thu, 26 Nov 2026 10:09:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+	linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>, Boris Burkov <boris@bur.io>,
+	Filipe Manana <fdmanana@suse.com>, David Sterba <dsterba@suse.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: Re: [PATCH v8 25/27] btrfs: zoned: keep a zone free for relocation
+ when allocating data chunks
+Message-ID: <20261126095818.PPaSJDyv-lkp@intel.com>
+References: <20261125102956.266389-26-johannes.thumshirn@wdc.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -92,74 +88,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261125004227.1007723-1-irogers@google.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI2MDAwNiBTYWx0ZWRfX2IWq3yDnsrRL
- eHDx3jtFsXa3Ix7pu/3AEVVa/KslZMUzQd4KiLGugr5V037jLFC1vW3YbQHNVSbhBGEYrtwvsC+
- u2M1QJaSOQF18gJL6GDTs+CyDSotr2d2koLpCClDpS3WkO9BgaCKejLEZX+4o4AGvwFMMunwL9/
- qdqgA+1d8QC56oIzfOhC8JrvEPQi2wOiGvMsZbtu+99AvuWPD9ke5KWyIVTxiAqGE7S7IIbAYEo
- stEPi8Ox0C/YdJRDP/jvQUj/p9AFm/ceU3kemFssUPZpS1yY9laDRMBJ6ajUZ1aWVAX0J3bZ6Xj
- KAL66hN869QTe/Ym3NZikqmJZdgBiu37gJpRjGONCiWAx6U+jD2Y25LssdbefrOR2xPV42MA5er
- 6lzG9+T0kqVt6ieXRYgKWkiXazyBlEV2FI3yfR5TwzWx2rTuWNCpFOYtVJkGL1gtOFAETv55kgk
- Y5qpRItQ+4b4z55aQLg==
-X-Proofpoint-GUID: OM6vz0pOG0NPddNM883AYxlCtsb-MBes
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI2MDAwNiBTYWx0ZWRfX1BYYKQyq7/bb
- BYJsQZhbJRaFWVEpawqiAeO7wvukzCFYFVugTELUjpss5osQdpMmIzyC5B66s1daRVBY6jkyD/0
- OQJpcNYOebKRWDUxvOXXKZG2CNFqm4s=
-X-Authority-Analysis: v=2.4 cv=WtC+otfv c=1 sm=1 tr=0 ts=6b0792b6 cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=l0iWHRpgs5sLHlkKQ1IR:22 a=QXcCYyLzdtTjyudCfB6f:22 a=1XWaLZrsAAAA:8
- a=M5GUcnROAAAA:8 a=N5rkjbZfQW29Q2f-B9oA:9 a=CjuIK1q_8ugA:10
- a=OBjm3rFKGHvpk9ecZwUJ:22 a=-hqoVU7_RMCviKuYZNaS:22
-X-Proofpoint-ORIG-GUID: OM6vz0pOG0NPddNM883AYxlCtsb-MBes
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-25_05,2026-11-25_01,2025-10-01_01
+In-Reply-To: <20261125102956.266389-26-johannes.thumshirn@wdc.com>
 
-On 2026-11-25 at 06:12:27, Ian Rogers (irogers@google.com) wrote:
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c b/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c
-> index cd9cca5a9cf5..92c987134436 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/af/mcs_rvu_if.c
-> @@ -682,12 +682,15 @@ int rvu_mbox_handler_mcs_alloc_resources(struct rvu *rvu,
->  {
->  	u16 pcifunc = req->hdr.pcifunc;
->  	struct mcs_rsrc_map *map;
-> +	int rsrc_id = 0, i;
->  	struct mcs *mcs;
-> -	int rsrc_id, i;
->
->  	if (req->mcs_id >= rvu->mcs_blk_cnt)
->  		return MCS_AF_ERR_INVALID_MCSID;
->
-> +	if (!req->all && !req->rsrc_cnt)
-> +		return -EINVAL;
-> +
->  	mcs = mcs_get_pdata(req->mcs_id);
->
->  	if (req->dir == MCS_RX)
-> @@ -744,6 +747,9 @@ int rvu_mbox_handler_mcs_alloc_resources(struct rvu *rvu,
->  			rsp->rsrc_cnt++;
->  		}
->  		break;
-> +	default:
-> +		mutex_unlock(&rvu->rsrc_lock);
-> +		return -EINVAL;
->  	}
->
->  	rsp->rsrc_type = req->rsrc_type;
-> @@ -793,6 +799,9 @@ int rvu_mbox_handler_mcs_alloc_ctrl_pkt_rule(struct rvu *rvu,
->  	case MCS_CTRL_PKT_RULE_TYPE_MAC:
->  		offset = MCS_CTRLPKT_MAC_EN_RULE_OFFSET;
->  		break;
-> +	default:
-> +		mutex_unlock(&rvu->rsrc_lock);
-> +		return -EINVAL;
-Thanks.
+Hi Johannes,
 
-May be we need to add some debug prints as same error code is returned for all these
-error cases.
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Ratheesh Kannoth <rkannoth@marvell.com>
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on btrfs/for-next]
+[cannot apply to linux-review/Johannes-Thumshirn/btrfs-zoned-don-t-wait-for-a-zone-finish-after-a-filesystem-error/20261117-195824 linus/master v7.4-rc4 next-20261125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Thumshirn/btrfs-zoned-don-t-wait-for-a-zone-finish-after-a-filesystem-error/20261125-112930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/20261125102956.266389-26-johannes.thumshirn%40wdc.com
+patch subject: [PATCH v8 25/27] btrfs: zoned: keep a zone free for relocation when allocating data chunks
+config: hexagon-randconfig-1000-20261126 (https://download.01.org/0day-ci/archive/20261126/20261126095818.PPaSJDyv-lkp@intel.com/config)
+compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126095818.PPaSJDyv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261126095818.PPaSJDyv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __hexagon_udivdi3
+   >>> referenced by zoned.c
+   >>>               fs/btrfs/zoned.o:(btrfs_zoned_data_chunk_allowed) in archive vmlinux.a
+   >>> referenced by zoned.c
+   >>>               fs/btrfs/zoned.o:(btrfs_zoned_data_chunk_allowed) in archive vmlinux.a
+   >>> did you mean: __hexagon_udivsi3
+   >>> defined in: vmlinux.a(arch/hexagon/lib/udivsi3.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
