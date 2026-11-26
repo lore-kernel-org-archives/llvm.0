@@ -1,98 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795651484;
-	b=VvglikOsbJSL0Ku2N9hKz0uPk0SQ3lF0gdSPh8/rW9I0DdVnJCsKbXapxkJYB8C2LXnO
-	 rLpjaRYJ8ySFKuY4sjH9L5AjOlxXivFs+gTzlsj2tXtEoQMUdoV4pxUKVzn+lsHfiIMf5
-	 gSGaAVmVUY3jC65RfZTx/ptk1hGYyAF5VqByGTNivjZvSk1IxIKDRjy0ZXhWFhDK6xu7o
-	 EIOGimsfxquxXRsQayp+Ex6CSwS/rUpC1xsLSWGZmutrBVG7eVmTw4Ttf+XFYmlUiv2H/
-	 8vSB0Juius43Vj6QaA/WD5JXhYB7WaBEAp6XOxkqB/xHo7i4+k/hE5urVoGvjajUX+w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795651484;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.45
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795653751;
+	b=BsgPHC3Ck34YAPcLfnEAMXCJ1zvx9mqBAPqmdesBlGlwNak5Et3LSOEef/5ytlvb3nUq
+	 QX4BZc3Jxj9sC1sVgcSsMizG1Zf8yAyRMX0gy4hqylH7tLswGkZYYWGadZbCNrBPoOZvA
+	 FpNMDpPXLYM8hCRiMxf4MvJQLo8FWQV4CXWB5xYe9tGy7QjSM7PJcdBJuFAiLF0dvNo9M
+	 vrWwRty4JPIHin+tVAwCpVr4gLX7BCNI4eMTRgBXxtMpeizkpPiqD3A2Lta6cRTKVCwEv
+	 DDaOqqu6oe1+zm7yCwzQ5yrkiKtIC432wecN+mSYTLLZhg1TKF8AN76sbzVwZtjwSSQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795653751;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=temVQvDVu+s05Df0IBCe5kNFmrbC8OpyvSIXnzE63yo=;
-	b=x5qlvm0DP3HqFIRusFqUbsr70Nice907c0RWkcaOZDLNXt9+zSX88zvKdBvLCPVpDecx
-	 twn3sR0LZJhacjkMvvvKUBshOS/mfoVB/4JsN0FBVTm8E8uHplnb2+5f36QBrCoil9N2a
-	 XJCmm9AqGtUWrB0ANwM6cWez/nPgvldZyh7M46vwI54l2qD4fKEQHnFa1hATSZBSYpvM0
-	 MO0o7ucHLK6c55CC5PsoQYpsdXT27Qkdng3k0LqYjSiXUvQz23cjAzhnYK3DikNyjs5sn
-	 XmRAzBF4mn1y3B7BRkEO32h4/aL5bzjfWMeIaH7vra7eKc7a6IeK40e9K/55gZwFGDg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WQ+KhmK6;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+	b=MHFHmw8IMnM6DekyHK0FopqSWuKrRV3Ad0Gg0dL72a1HUeZW3OgeR35BoBHHxBvyQA88
+	 F/daXSoMjeStX9X2bqmH7NrIH4EzXQdGpCHq7CDE0Jn4yAV8YC6yzWWmqhvQtn10eUnKk
+	 US1a9FFtcmVmLqIm5lsXAVilP2Yd8jrmcpKQVZBUABITBmdkULnLvgQR16JVVSfn+K/e9
+	 LyF1NPV/4Up8dN85a9Np8XrxyZMw73413UQJR0lRlt7dvtk3PmGplQzf7FeTmAmSmg8CV
+	 abQ4KjR5bC41hiqXlQ5rJsklD82z6S6dTZk88c9pWe9uk0yMngyv5yPGI4s6EsNoCVA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gwMMdoWY;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.45
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96017606A31E
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 00:04:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96017606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24BA606A329
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 00:42:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D24BA606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WQ+KhmK6
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cd69954c755so4690078a12.3
-        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 16:04:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gwMMdoWY
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c5188e17487so104399066b.2
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 16:42:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795653749; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TjeLdKE3Xwm4MHQerP/GRvj0Pgdmrh0R3sG/jji6Cv+jR34C8bqds52s8PIMJbQfE3
+         0ZvJyhaP4KSg8jiNhJRorbdF0uHT7FEBsjReEX7ab9Cv4SoYFkyG4azbl/HkUkHTxBq+
+         A8tOfVCrNOKsfe6jr0CgKoIpvJuKEeWVKHpnDSlUmTfD4bwK7PVH84sHAcW12rHy+K1O
+         Ben2GAXxezW8DyPNbJiQzBSrNTamkhX2jAjfnVLvq/YEeokIWDOONMW4efvDK0mNQA5q
+         hPWjus9ayA5oLu8sEWtb/S2gTNnexQUeF7FQlmb7ME+NyKgWwxYqdrskXC8W0Dk67O6O
+         LERw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+        fh=fjlhN6PBcZj1lSR38TvgEygU5FxgapLUYUG4Etjc+fU=;
+        b=QOoDZ4SmH7OQE1EOgCM89JCRSVJZkemSKb6GeCoQb3kKpN03Nlte0mn5YIbFPLZXyN
+         oKumNgN6ji11XPWef3lXE68Yt9thead8S/lOg5xfKs+tER7cSNfSpFJ1dcuCS97T8ZqH
+         RTVZIkwNo7wrdeiTVbcnUx7cM8GJvzh6jMkzbbs8K85YuVZ9fwou2C7LawJ/5VWYLEuO
+         wIdO0ZwBHJK2H5W0Pv05rm5/ynP3+/QRMhXW9oXvSu5I5u3xUao6cqj/0cb1hw1y9+w5
+         o91ILcAF5VH5ixFE5l32TLxAKw/AFIPGSpXqR+5rs2KG9SnoQN9OaONm5zvYvOi7KJf+
+         IfNg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795651483; x=1796256283; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=temVQvDVu+s05Df0IBCe5kNFmrbC8OpyvSIXnzE63yo=;
-        b=WQ+KhmK6wTAP9deFARybwLjEeCaXxGasEbrAE3lqPrg5ks2WGuXA4sw6GQRNsQuYo/
-         B3VbvHWvi9a7IcLpg9Qpb674pHQ4rkzTOmxjTGpeeTs1k3AUG/BCSFcZmRQqqXKt8BbK
-         Jm64Eycjbs5S6Citq+5IW4JG6qCsFo5c6xqsuOfG+b6/fECkBTlQujB95JqjVSbQ0iuh
-         S9cH1ZMr3DFYPwfx4Nc4qIw9fCQ+NR9X/HH+Bv3gRf96JcAL41DjE4icXMLu0NRYuXXb
-         rTaUKk3ledoWDXzZROdUv56Oiof9DInCV+8tykQ8X0NFAYiC6z/jUoxyUwX39jtQVsC+
-         NqLg==
+        d=google.com; s=20260707; t=1795653749; x=1796258549; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+        b=gwMMdoWYf807ypJvPTsVeRIx8825PfU9Y5C4Vf9pWZu2Lut7g3bHL7d8HFS0An8oGA
+         dX7YaV3Vxw/8LICCYzoGSEpbFQ7A7kRu+r5XHEXSv6AmKb2hEt+476+j3FHLGioW8tXG
+         qB5Z9kGIfTFsFTzxProCawB83gZ+PWoXTVZJYJ0hjZ9YzMCYF5w3jhGbbBxbU8+Mb2pb
+         ZEmZPrT44qf6n9plCL8akaY8W0DmIfadZYWiUkbVXKEeQXB0qIwLlgNlyjU9lEBNz/sZ
+         3gp7zxWMihlDxRCYAg1pYdTK2eAqYhasn5FAPKw0Re1QUTNZl8zA3fN4MPji4H/izZml
+         d9sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795651483; x=1796256283;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=temVQvDVu+s05Df0IBCe5kNFmrbC8OpyvSIXnzE63yo=;
-        b=WaCWptQ8qQuZOqWGIgwqvmSJGhC/0dSHCs9w+66EHAQy3l412MR7EGV1mFzQavcJr/
-         Xf6JBhvjeHMJbF/hxbM0hxlS3jpuKZrZFF3yAAN0Iin+fuMyJeoBjJKs/rGyOHuNV7Wu
-         hXgX3tT/Hi/d+jrzh0KH2cDKVked3gdFao5PoBWDz+JoInMJfRmwBSrVI1SmyLJZ2NXl
-         lwn0MDD0oPsMl1EWxVuQNKjQcFDjUa+gQamMksyGafGdjlENq1fln9kWxIEszigy4E0u
-         VPtwuxRsCcMTHc32LHKkLc8SJRvmFRjp7IPJSJJBLt6EiRqrGVmtOAa/WVl8bA3l2aEd
-         6RNg==
-X-Forwarded-Encrypted: i=1; AL+hErG2limPZpiK2vQxNiGxBlMbG3Bbo8grr42hC7hrtAYWge5tND0F+XVkx6SxNunNGOAI7Peb@lists.linux.dev
-X-Gm-Message-State: APuU4Z9p0xIsM5eHzAWWScESJdfMmRRILVPOQLFxpKenEyiJT8ammN82
-	dNDq/HcJYJH+WNt+YT8hvIaTzodAEtErzBZRcxM2ZcO5/EMlHU5WJjcd
-X-Gm-Gg: AZFdTZdDhXCGY5Kxcg+gBPedLi7O+ppzS4TTVahra5KpGJRv+agZHAGnpdyzm+P1Soi
-	ar6ALJEKzWuoZIlp7sZdWjpUIhoSHoinIESQK5v4jji08zR3UeYIv0ANdjsKgbJplF9BejXFz8A
-	XAQyK4NTg/STnV5eP1P2dLPdHwbGi5TTCiq+dKRg4jjCiMZJbz1VBsIEs2Qlw7XQcq0/YdChjcD
-	Dp4mLppR8G0dITaQTxHiptNk0COZ+hzS2EUIZZJYx9hpgBlRIm5GUz0sI5LSDNlQQLcpREe4TqK
-	M0laeG5loeFzXZCq/Hk84MBLSc6N/3V4VNC4tGQhCfAa/knnaHZGiFvUmdye6bFRz9/9k3+HU/8
-	yAxJJg1dIILLzNWha9UYNiLO9IHMpUwGzbG+5Gfkob+67q+GYSjlQn+y6d7nU0af1JWu1/Lc4rS
-	SqVUYUJJc9WC/FKlD/cI8JABQdqlGYAizFUj80Ml+I5KD9iL+XWEiqN2Sf48qMJ+bCtOiXnSQdP
-	YNkPKlqDhvtNIOe24ZF9r5ykG8fSrlRB7iq4uA2scV4loAhKXyC2OZqsdohJMg6lORP3+/PkW+M
-	soj1pbxrumVjAb4u0zLtq1U94xuK5tz9lhn8VZ/Maa8dDnMAOKARcNSHprxvJJDZTsO7RUfMl9e
-	XSUtr8r4nxp2TbSm0kuHsyPFS5TUp4/tvh3p+/UM3sndPivO5YUxdPRY037cvLq2yFU+Es2MU3t
-	xQVg==
-X-Received: by 2002:a17:90a:d444:b0:3b4:15e3:3a53 with SMTP id 98e67ed59e1d1-3b41cb53acbmr18503178a91.66.1795651482731;
-        Wed, 25 Nov 2026 16:04:42 -0800 (PST)
-Received: from ryzen.lan ([2601:644:8000:37f::e34])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41adcfe23sm29613845a91.15.2026.11.25.16.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 16:04:42 -0800 (PST)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-bluetooth@vger.kernel.org
-Cc: Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Kiran K <kiran.k@intel.com>,
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] Bluetooth: btintel_pcie: fix context analysis error in YoYo config sets
-Date: Wed, 25 Nov 2026 16:04:39 -0800
-Message-ID: <20261126000439.318058-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.56.1
+        d=1e100.net; s=20260707; t=1795653749; x=1796258549;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+        b=r3xE+prUaMoo9QyOzOBpvmkRnokdASU4AGcr/6xknvEKh03VlD2iDVzGvY3phq8vYr
+         McYKGA+T0HCgxw5CdQFv7iYhg0kc5yv9W2cgacYWcruiVnYfHW5JPVLEun6OYPTfnF5M
+         czuUnQs8sZdzwilLVjQQLRtuWhSASjrdCoL7fMuigQnjWx3vvjGdOOaH1l0C57t7yBAw
+         P++TAxCjz5XwtJhBahxC4PU4bi8FzSJidpxO5X/n03nxzhM579W3cJz8B64x76TSk9mS
+         aMvZoXYOttaZGKwEPGeiFh8+6wP2EhNZA9EC3Gx0OdTpwFmp2mT5dWtrnx6bGBNeypDv
+         YDrg==
+X-Forwarded-Encrypted: i=1; AL+hErFtQYiSV1qNTiyR87IjduBM724Vz5iKq7B7RW12tMwv5qp7Mv+F/vUO4SmepHuo3ZtNTPES@lists.linux.dev
+X-Gm-Message-State: APuU4Z832vUzAFQoKgrnKXQyfWomg/y2CMJSP2V6RcRR46Q5hzLbaoCE
+	0rdAIwJLvxebe7Udjgvbg75KJKJycf2MnKdNXHelaWxgzh2pwA4wTpNKiRbJrXdxjm86NVUf4mS
+	qrITK8l6Q525pEAeArJb/rrd6eqKxa4eaj/eJzYZ1
+X-Gm-Gg: AZFdTZflQQAMbR+/eFEJt7hvQ1IT8gYZy77yG76czm+Ef8mkm9ZY3vCqjp3EIFIqIn/
+	kxmEIo14dt9timmt9FlYr51ztCY9ZphUofXR/XvJQZ/D1UX82h5CGtOeQRALdmYDDKXmJvWzvfB
+	oL4Qm7cNSuuGmJxLj84s2X/UjyXi+2bVnrhlXlnzsXJK9Hulk2yruUOewPMXhM9U8qvHFR7vSEB
+	3ERe1nXtbbeRS7FfRGsCtwAJ81wEc2id+W787KRRL0hgVlJXTh8ZDZlN+ZQW/sI5Qu3KwBXqX42
+	JPpcxP8OnyEKDKLPSNwzrTQ3seXKftNxvCFksJc6U1r+2M3N5XtZ03qSHDznZTS0GF3Dcm1WBRy
+	7szxGWk5JobtliDzJ0NlNqurrXY91OIk0v8rTt3y55D2Vyh7fVwBi/v6LLQLLXekfVgzutnAys/
+	xhcTVFhz7+UYKf
+X-Received: by 2002:a17:907:da1:b0:c50:5275:fb97 with SMTP id
+ a640c23a62f3a-c513acb5e2emr1626085466b.47.1795653748662; Wed, 25 Nov 2026
+ 16:42:28 -0800 (PST)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -102,224 +104,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-13-wusamuel@google.com> <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+In-Reply-To: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 25 Nov 2026 16:42:17 -0800
+X-Gm-Features: Aa3M54rYVczs2SqMo55_UQYl-QiaJqAFTx0CS_STMdfssfUbqw_TSopd5IfB7RE
+Message-ID: <CAG2KctrMMo0j9Mnbg8fdNsSc-eQaaaW51dO4mqwVNn3hfSdx_Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
+	David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-btintel_pcie_apply_yoyo_config_sets() takes mac_access_lock only for
-PERIPH_MAC and DEVICE_MEM config sets, writes the pairs, and later drops
-the lock under a second, identical type check. Clang's context analysis
-cannot correlate the two conditions, so with CONTEXT_ANALYSIS enabled for
-drivers/bluetooth the build fails:
+[...]
+> > + */
+> > +int module_kallsyms_find_name(unsigned int *symnum,
+> > +                           const struct kallsyms_name_query *q,
+> > +                           unsigned long *value, char *name,
+> > +                           char *module_name)
+>
+> Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
+> with similar names. Adding module_kallsyms_find_name() adds more to the
+> confusion, being similar to module_kallsyms_lookup_name() and
+> find_kallsyms_symbol_value().
+>
+> I suggest calling it module_kallsyms_query_name() to match the
+> kallsyms_name_query parameter and to express that this is a structured
+> query, as opposed to a simple by-name lookup. It might be a good idea to
+> similarly stick to "query" instead of "find" in kernel/kallsyms.c.
+>
+> Otherwise, this looks ok to me from the modules perspective. Feel free
+> to add:
+>
+> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+>
+> --
+> Thanks,
+> Petr
 
-  drivers/bluetooth/btintel_pcie.c:1052:12: error: mutex 'data->mac_access_lock' is not held on every path through here [-Werror,-Wthread-safety-analysis]
-  drivers/bluetooth/btintel_pcie.c:1110:4: error: releasing mutex 'data->mac_access_lock' that was not held [-Werror,-Wthread-safety-analysis]
-
-Move the pair-writing loop into a helper and take and release the lock
-within a single switch case for the indirect config set types. No
-functional change.
-
-Fixes: 5bf3a9b6b720 ("Bluetooth: btintel_pcie: Serialize MAC access requests")
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/bluetooth/btintel_pcie.c | 159 +++++++++++++++----------------
- 1 file changed, 79 insertions(+), 80 deletions(-)
-
-diff --git a/drivers/bluetooth/btintel_pcie.c b/drivers/bluetooth/btintel_pcie.c
-index d7d0e890dfbb..7cbf6d2df491 100644
---- a/drivers/bluetooth/btintel_pcie.c
-+++ b/drivers/bluetooth/btintel_pcie.c
-@@ -997,6 +997,70 @@ static void btintel_pcie_yoyo_send_hcmds(struct btintel_pcie_data *data,
- 	mutex_unlock(&data->yoyo.lock);
- }
- 
-+static void
-+btintel_pcie_yoyo_write_pairs(struct btintel_pcie_data *data,
-+			      struct btintel_pcie_yoyo_config_set *config_set,
-+			      resource_size_t bar0_len)
-+{
-+	u32 pair_addr, addr, value;
-+	u32 i;
-+
-+	for (i = 0; i < config_set->num_pairs; i++) {
-+		pair_addr = get_unaligned_le32(&config_set->pairs[i].address);
-+
-+		/* Calculate the effective address by adding the address offset */
-+		if (check_add_overflow(pair_addr, config_set->addr_offset, &addr)) {
-+			BT_WARN("YoYo: config set address overflow (0x%08x + 0x%08x)",
-+				pair_addr, config_set->addr_offset);
-+			continue;
-+		}
-+
-+		value = get_unaligned_le32(&config_set->pairs[i].value);
-+
-+		switch (config_set->config_set_type) {
-+		/* Direct Address Access (CSR) */
-+		case BTINTEL_PCIE_CFGSET_CSR:
-+			/* Validate the effective address for CSR access (Direct Address)
-+			 * addr not aligned to 4 bytes or exceeds the BAR0 length
-+			 */
-+			if ((addr & (sizeof(u32) - 1)) ||
-+			    bar0_len < sizeof(u32) ||
-+			    addr > bar0_len - sizeof(u32)) {
-+				BT_WARN("YoYo: bad CSR address 0x%08x for BAR0 length %llu",
-+					addr, (unsigned long long)bar0_len);
-+				continue;
-+			}
-+
-+			BT_DBG("YoYo: CSR write [0x%08x] = 0x%08x", addr, value);
-+			/* addr may be PRPH_DEV_* or HBUS_TARG_WRPTR */
-+			spin_lock(&data->dev_mem_lock);
-+			btintel_pcie_wr_reg32(data, addr, value);
-+			spin_unlock(&data->dev_mem_lock);
-+			break;
-+		/* Indirect Address Access (Peripheral MAC and Device Memory) */
-+		case BTINTEL_PCIE_CFGSET_PERIPH_MAC:
-+		case BTINTEL_PCIE_CFGSET_DEVICE_MEM:
-+			/* The config-set TLV comes from an untrusted external file;
-+			 * reject null or unaligned targets.
-+			 */
-+			if (!addr || (addr & (sizeof(u32) - 1))) {
-+				BT_WARN("YoYo: bad indirect address 0x%08x for type %u",
-+					addr, config_set->config_set_type);
-+				continue;
-+			}
-+
-+			btintel_pcie_wr_dev_mem(data, addr, value);
-+			BT_DBG("YoYo: indirect write type %u addr 0x%08x value 0x%08x",
-+			       config_set->config_set_type, addr, value);
-+			break;
-+		default:
-+			BT_WARN("YoYo: unknown config_set type %u",
-+				config_set->config_set_type);
-+			break;
-+		}
-+	}
-+}
-+
- static void
- btintel_pcie_apply_yoyo_config_sets(struct btintel_pcie_data *data,
- 				    u32 time_point)
-@@ -1004,7 +1068,6 @@ btintel_pcie_apply_yoyo_config_sets(struct btintel_pcie_data *data,
- 	struct btintel_pcie_yoyo_config_set *config_set;
- 	resource_size_t bar0_len;
- 	int ret;
--	u32 i;
- 
- 	if (!data)
- 		return;
-@@ -1016,98 +1079,34 @@ btintel_pcie_apply_yoyo_config_sets(struct btintel_pcie_data *data,
- 		return;
- 
- 	list_for_each_entry(config_set, &data->yoyo.config_set_list, list) {
--		u32 pair_addr, addr, value;
--
- 		if (config_set->time_point != time_point)
- 			continue;
- 
- 		switch (config_set->config_set_type) {
- 		case BTINTEL_PCIE_CFGSET_CSR:
-+			btintel_pcie_yoyo_write_pairs(data, config_set, bar0_len);
-+			break;
- 		case BTINTEL_PCIE_CFGSET_PERIPH_MAC:
- 		case BTINTEL_PCIE_CFGSET_DEVICE_MEM:
--			break;
--		default:
--			BT_WARN("YoYo: unknown/unsupported config_set type %u, skipping",
--				config_set->config_set_type);
--			continue;
--		}
--
--		if (config_set->config_set_type == BTINTEL_PCIE_CFGSET_PERIPH_MAC ||
--		    config_set->config_set_type == BTINTEL_PCIE_CFGSET_DEVICE_MEM) {
- 			mutex_lock(&data->mac_access_lock);
- 			ret = btintel_pcie_get_mac_access(data);
--			if (ret) {
-+			if (ret)
- 				BT_WARN("YoYo: MAC access failed for config set (%d), skipping",
- 					ret);
--				/* get_mac_access() asserts MAC_ACCESS_REQ before it
--				 * polls, and leaves it set on timeout; drop it so the
--				 * request bit is not leaked.
--				 */
--				btintel_pcie_release_mac_access(data);
--				mutex_unlock(&data->mac_access_lock);
--				continue;
--			}
--		}
--
--		for (i = 0; i < config_set->num_pairs; i++) {
--			pair_addr = get_unaligned_le32(&config_set->pairs[i].address);
--
--			/* Calculate the effective address by adding the address offset */
--			if (check_add_overflow(pair_addr, config_set->addr_offset, &addr)) {
--				BT_WARN("YoYo: config set address overflow (0x%08x + 0x%08x)",
--					pair_addr, config_set->addr_offset);
--				continue;
--			}
--
--			value = get_unaligned_le32(&config_set->pairs[i].value);
--
--			switch (config_set->config_set_type) {
--			/* Direct Address Access (CSR) */
--			case BTINTEL_PCIE_CFGSET_CSR:
--				/* Validate the effective address for CSR access (Direct Address)
--				 * addr not aligned to 4 bytes or exceeds the BAR0 length
--				 */
--				if ((addr & (sizeof(u32) - 1)) ||
--				    bar0_len < sizeof(u32) ||
--				    addr > bar0_len - sizeof(u32)) {
--					BT_WARN("YoYo: bad CSR address 0x%08x for BAR0 length %llu",
--						addr, (unsigned long long)bar0_len);
--					continue;
--				}
--
--				BT_DBG("YoYo: CSR write [0x%08x] = 0x%08x", addr, value);
--				/* addr may be PRPH_DEV_* or HBUS_TARG_WRPTR */
--				spin_lock(&data->dev_mem_lock);
--				btintel_pcie_wr_reg32(data, addr, value);
--				spin_unlock(&data->dev_mem_lock);
--				break;
--			/* Indirect Address Access (Peripheral MAC and Device Memory) */
--			case BTINTEL_PCIE_CFGSET_PERIPH_MAC:
--			case BTINTEL_PCIE_CFGSET_DEVICE_MEM:
--				/* The config-set TLV comes from an untrusted external file;
--				 * reject null or unaligned targets.
--				 */
--				if (!addr || (addr & (sizeof(u32) - 1))) {
--					BT_WARN("YoYo: bad indirect address 0x%08x for type %u",
--						addr, config_set->config_set_type);
--					continue;
--				}
--
--				btintel_pcie_wr_dev_mem(data, addr, value);
--				BT_DBG("YoYo: indirect write type %u addr 0x%08x value 0x%08x",
--				       config_set->config_set_type, addr, value);
--				break;
--			default:
--				BT_WARN("YoYo: unknown config_set type %u",
--					config_set->config_set_type);
--				break;
--			}
--		}
--
--		if (config_set->config_set_type == BTINTEL_PCIE_CFGSET_PERIPH_MAC ||
--		    config_set->config_set_type == BTINTEL_PCIE_CFGSET_DEVICE_MEM) {
-+			else
-+				btintel_pcie_yoyo_write_pairs(data, config_set,
-+							      bar0_len);
-+			/* get_mac_access() asserts MAC_ACCESS_REQ before it
-+			 * polls, and leaves it set on timeout; drop it in both
-+			 * cases so the request bit is not leaked.
-+			 */
- 			btintel_pcie_release_mac_access(data);
- 			mutex_unlock(&data->mac_access_lock);
-+			break;
-+		default:
-+			BT_WARN("YoYo: unknown/unsupported config_set type %u, skipping",
-+				config_set->config_set_type);
-+			break;
- 		}
- 	}
- }
--- 
-2.56.1
-
+Sounds good, will apply s/find/query/ in v4. Thanks for the review Petr!
