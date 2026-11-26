@@ -1,80 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795654527;
-	b=NgU5MsY0FhTQ6Uko0XVL5iPyMlqYRkldKooVMchrLeSn/qU8mCCcj+RKsk0k7lQ63Ubu
-	 WprYG+9gI6U6JcRVaA+VU5xspcVHZOCN9FvKM49YTCVwZPBXW1HD9+SmaaN/lTozCassY
-	 n45+2BsjkEwZAnGcjh5LD60oaG6h5W/+hHCfZKlXwC4hzowTWnlk1E7ftWwmig0fvB+lN
-	 vSUvW53SRMTVvcpotDbxGgO7NnMMFVm7ZfjocaTYFM0SDTwCi7EfRagTISScJHfX8n+Jf
-	 eHeHJfTWzJfF1ZA7/lrGcIw/CwIjX/MzalbiHxrTJuS/tSZdi0o/2iTeSANii0tu7nw==
+	t=1795655838;
+	b=wu7O+QFS0thRytFQZea/HfwzbnRvEvxWKr8LY38GkQr0PB/DwUlcH7SCB/OvVwufN5Ox
+	 8XK9ADliIW5uXNNA0x3KoS3MWJ0a3LbhnZ/R8v9+8Bh6hd8X8lPn5htiKsBaFkZMsqGM5
+	 pvpPe2Cozs+R4zUIycI99WUJZVNK6KD53Zqhfwlu7y4W0qe8ZeDhDowvxemqgVZ0YHeHn
+	 QD0sbyDloTU7QllvIK6ZTRIfzP+UFUOZ/kCFp9TJ+S0jOpIr6Tet/ei2GdfTde9hRVEAx
+	 yArXGDxfvbbGSCBH58HYqknkpyR3Z9ZkdAzr+QnqABE+0CYmxbtDqgrFbiV5HjtmBCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795654527;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=2A9j+BDLkFG4cOZ+8gKgGAgg/4bYCsSFwMlWi8oGZEA=;
-	b=NBZpXC1BN94UXL2K619iOBMX0IObKP6r7rY5W54pKiuXmG76VUpKPKgYgMH6gGpFtubt
-	 FuTOXuYgMhjUmyA9VhpnbVcma6HIdHV5o8I9zJMjz0bXiZwkLZDUARbzwiHPKXONhGNLp
-	 zlUkWSKUaVE7fgTU86r49qSuXSsDyWhI3Y77z0RIR1j7nsuS4To7A6/sVK/pj2HVJq+Xs
-	 APsHDa3OGy5XleNVwBe8IvVy86RTGadCqDYnKd2MvnbFyxtCQtU4JsetV3IzvZqjhKdvC
-	 BrZe9p5Oho+OC/wKoIOld0//L9/ACslJkRi0vSYfnacTLkFDKbmYGJGnBuRvpS+PgcQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795655838;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=8vhDEbyn1nkYBGZ2jl97YuxcDAz2vqULbU/VOeX9XGM=;
+	b=zq+PT834ULEpF4TCBfXfUQeMhjIJaC79ZHIx2TxKSf1hyvmFcKJR7cZVx5Ow95cFqjBY
+	 FRfbTBHT+eK06YK+3rDCI9TiFN/AQwqv6EIFisb0K7njWa1rYpbvz+DinmeTJ1ciPFcT9
+	 qp8xiTJpFUALINjGONnTNxgg527az5g47LiCnNuIr6aaReZpmmS1753zV9asFjae3M0z5
+	 LUfPVnwpMz/+Y9sxVPGmYya4IrHzBx32hnmOul3LrrJWppeOseQdnyqtWK4ZS2F0Cgv0Y
+	 OlB2P4Sab66l1Zv/oG281q6s87WXEBhYfr2xSokQbprHoxZF5ehhUCbuQMiUBazVxRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nxM0GarR;
-	arc=none smtp.remote-ip=198.175.65.19
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=WcStPNn+;
+	arc=none smtp.remote-ip=209.85.218.54
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA673606A31E;
-	Thu, 26 Nov 2026 00:55:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA673606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B634606A31E
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 01:17:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B634606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nxM0GarR
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795654527; x=1827190527;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pcikDXyhr+ETo28SOe5c+PfM88gq+rI74IfSFjRbHHU=;
-  b=nxM0GarRM8P4yW/SgLkh6lmY8qdKVevSRVpp65Nwu43iAQM0IcZjb5TQ
-   PiKuR4W2OQhdYfyStis2sU+ZJJvPS10J5RmLmEVxrTNeXJQ2KetolWZ4i
-   QLujG5Oupy3n6qKd8fL/GJ4LGqr6LfpdzdC3kLyn5LVaTXgDfb+lSm5Bi
-   qPbXBU0A6VPIMhKpvQw6pUX3a6GMdTI2DNcUyyi0V76rmjxSuGtPjU/Dy
-   zIm6glVUfJbxHExLOgS32RaB4s2xCeOXrmHv637lEHodh0kRBflABvSgr
-   Jj/qgldPp5MLHZ03ujAivK+8UiHX4CRYOLT8zXXs3mUtaFWgl+Qcc0AtH
-   g==;
-X-CSE-ConnectionGUID: j+taNb4MQi+2IshxJhloyg==
-X-CSE-MsgGUID: YeSmbivHTpO/t5Kt1kyQYQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4616890"
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="4616890"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 16:55:27 -0800
-X-CSE-ConnectionGUID: 8km/F1/dTYq0GpiF8yiFpg==
-X-CSE-MsgGUID: j7yqNdtxTZeXhTmc/G+OGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="12023056"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 25 Nov 2026 16:55:25 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xWNli-00000001T1O-2ucd;
-	Thu, 26 Nov 2026 00:55:22 +0000
-Date: Thu, 26 Nov 2026 08:54:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Abel Vesa <abelvesa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pawel Zalewski <pzalewski@thegoodpenguin.co.uk>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] spmi: Drop struct spmi_device_id
-Message-ID: <20261126085245.HG2kUp4p-lkp@intel.com>
-References: <20261125112158.938835-2-u.kleine-koenig@baylibre.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=WcStPNn+
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c4d5b2db4bbso1214224866b.0
+        for <llvm@lists.linux.dev>; Wed, 25 Nov 2026 17:17:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795655836; x=1796260636; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8vhDEbyn1nkYBGZ2jl97YuxcDAz2vqULbU/VOeX9XGM=;
+        b=WcStPNn+KFzkHr4MmE8wt6l+y6W0yGVoifpbF3LjcFQVxqmcPbzUvG5dty8QgdQSaE
+         JpMLXgDjx6y04MOAmJbxlcdQCuHXNmyfmcBG3yzSRxCQuYx62NTzY0y4vb4zpmupSa1Y
+         V4hWnPslb3iCKRcovdZX6r8FsGp5BTI3mmVnNWThII5z8jQydGv0WT/5s7QNrU3cCpHy
+         ae6QDIPz4AIhwUEkbqeAsToEQSY2LapPmBgfHqqIKSNBw1MYFoDEluMNFv0MYA8pNuve
+         B/knfUVa91haveVbmCCm5mm9K6HI7NSIoZl7geM1rwMGwWEAkHNSMa22P9fbLuiw4tZX
+         kUGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795655836; x=1796260636;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8vhDEbyn1nkYBGZ2jl97YuxcDAz2vqULbU/VOeX9XGM=;
+        b=H6y5i/NWOx2dXIv2s94KsklTX1LI3TidRcF6cCCuyeEsmKtDN4FM9rxUH8BzF6k7X3
+         0QQkv5CDwGAVMR5FOMV/uJQ6fnVnjtRpKEpOyFzYTtUVpRqNsf8zom8hHmz+qVTBLBRn
+         QIKy4IS5Rk6wZIdYU6beDjbLUJ0Hq38+pVCypu0py9L+lLWjbcuKnxeX3cj6Zhfo7ABt
+         q4aIzRiJWAnotsRlMce2hfTVf3QR1GrxG/qdVI1/ohQpmeByZSI9AEE8XCn22KYR+RMP
+         kNgEBP3A2ywH2QMyb2smrxwbPt+NUNo02WklT7CLIKhDcAlWACLJiLHmB5mXuW/vB923
+         ZOuA==
+X-Forwarded-Encrypted: i=1; AL+hErFjs5izwVClo5rJqUeFcTjIf//qHZpfLBGJmkl1wQZFvKiDCFUlol3rp5KJQNNXZtusGC2g@lists.linux.dev
+X-Gm-Message-State: APuU4Z/2UqP+mbs3XXQpoMW+5ZbgaZ4kTSn14qOIxb2v/wUDaauSCeyT
+	bkpU+Tp5c3hf53ZvrTS+odr5YQuIcQ0bzagLJPOZPn4JIRcA3UVs2QBe/7HQUkpmkiE=
+X-Gm-Gg: AZFdTZc4LOX53zVdzJbsg+Snw1BVSstK/9IYjn7p7T076NFNExJioG2XIKi20On0H0+
+	rBMjGDQmztqp9bgs1jiTKbifhMLguPYjwbXKmspYZDSqHKaWlbJcFWmYnXX6gUg6pQ2ftMd0gj2
+	97r/1pcFkSk9HYx37rgnM12I3fh13Ff1ADtSZnyfzbuvrK3yoMAzllmaOjUb8bebxny2daPY1tQ
+	PlwfOQZyMwwnkyHN9S9hVY8mqCpkx8wPOEi9xt/b/nukk/xc6nRMwfyeCU3V7W3UU9k6ckEAFHU
+	qX1XkpN1Hjeu34hKjiWzoHAUP0uocL/l3MCWqNIUpkS2N1jFizsM8Te0hqWrnmwNMFVa4UPnPcn
+	6GZ1jJAgHOZpD225b2SRqDSF6PFg/8Sn1RfcAu9dYMtt4Rz4RZgLY2f8U5hMnAHYROH3juHj2An
+	rmetwFXP1US3O79nMZxDu2NMZeHgZfKm5Cs6iGqTwZRVkxXntspgeWjEdcAkBBdULcj8MAmGFTG
+	5nERfecga4xiEc0OjsZUHN5PMWuwRMuQ8aKitIFCqYlp2etZnBDkUVq/4yFXMGwxErA/3OuG67G
+	396tpmKjB3T0JAjxc8TzEPpFIoOcN3tfX7SjHMwcVu8=
+X-Received: by 2002:a17:906:730a:b0:c2e:1b6b:8b19 with SMTP id a640c23a62f3a-c51319443e5mr1859065766b.23.1795655835781;
+        Wed, 25 Nov 2026 17:17:15 -0800 (PST)
+Received: from [172.16.0.229] ([159.196.52.54])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cff4c1asm9716494a12.15.2026.11.25.17.17.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2026 17:17:13 -0800 (PST)
+Message-ID: <03dd7e64-2357-4e8a-9383-d748b4883efa@suse.com>
+Date: Thu, 26 Nov 2026 11:47:02 +1030
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -84,53 +92,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125112158.938835-2-u.kleine-koenig@baylibre.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] btrfs: tree-checker: verify tree_block_info bounds in
+ check_extent_item()
+To: Elkin Cruz <elkin@google.com>, David Sterba <dsterba@suse.com>,
+ Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc: Chris Mason <mason@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, irogers@google.com,
+ stable@vger.kernel.org
+References: <20261126004332.1712403-1-elkin@google.com>
+Content-Language: en-US
+From: Qu Wenruo <wqu@suse.com>
+Autocrypt: addr=wqu@suse.com; keydata=
+ xsBNBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
+ 8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
+ 1NxPKXIlEdHvN0Kov3CtWA+R1iNN0RCeVun7rmOrrjBK573aWC5sgP7YsBOLK79H3tmUtz6b
+ 9Imuj0ZyEsa76Xg9PX9Hn2myKj1hfWGS+5og9Va4hrwQC8ipjXik6NKR5GDV+hOZkktU81G5
+ gkQtGB9jOAYRs86QG/b7PtIlbd3+pppT0gaS+wvwMs8cuNG+Pu6KO1oC4jgdseFLu7NpABEB
+ AAHNGFF1IFdlbnJ1byA8d3F1QHN1c2UuY29tPsLAlAQTAQgAPgIbAwULCQgHAgYVCAkKCwIE
+ FgIDAQIeAQIXgBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJq3ujyBQkUpLw5AAoJEMI9kfOh
+ Jf6o8OIH/0mqW+TQM4m2x3hCsnK+oB4yJH1qnGvIhFF/Lhs48wI02sGh6/4aA0hkCDfd9LHQ
+ +ci4FUepZ9y4VS01+oIExbg/8ytzGYTzLtb44jK2GBOBVSJkMiha6jp22XFt7WUkT/tvbreu
+ WWdGsaJIRQaZChy7xsMI8lqQ2WdmluZJ4LT0wD3l/l6QU1ZseMGySebdY9sVOQEOJNV7Qj92
+ /KOAFNmeZshV/qDI8Iw1RTs6TvLqCcqmlZLCmJkYSVhT1RonWRren8xIRcFEgMe004IDnt7V
+ qdQhk/nhTS9x9MBAhMRl0TTE1VKDLvVALsud3iZLrmmtYvwPApzGJk052f0m28vOwE0EWdWB
+ rwEIAKpT62HgSzL9zwGe+WIUCMB+nOEjXAfvoUPUwk+YCEDcOdfkkM5FyBoJs8TCEuPXGXBO
+ Cl5P5B8OYYnkHkGWutAVlUTV8KESOIm/KJIA7jJA+Ss9VhMjtePfgWexw+P8itFRSRrrwyUf
+ E+0WcAevblUi45LjWWZgpg3A80tHP0iToOZ5MbdYk7YFBE29cDSleskfV80ZKxFv6koQocq0
+ vXzTfHvXNDELAuH7Ms/WJcdUzmPyBf3Oq6mKBBH8J6XZc9LjjNZwNbyvsHSrV5bgmu/THX2n
+ g/3be+iqf6OggCiy3I1NSMJ5KtR0q2H2Nx2Vqb1fYPOID8McMV9Ll6rh8S8AEQEAAcLAfAQY
+ AQgAJgIbDBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJq3ukKBQkUzDspAAoJEMI9kfOhJf6o
+ SNsH/1ysUWOKmzY0rGS3ZdS61QgqMGhSWD/EJ4UiPw+xO4l4+GtX0fOAqxqsmBKqje3vyhBa
+ Z5o/1Y+gNiN+E6RBcSz4b1TAd78sQ2bvT5DWOvBjeeVxHdiuQMIn4S8xk5ZpySBw5ifjoiuL
+ 0M33UVtJOzM8yfAeL+d/Rp4leJw72SutjkLyZTG/gJIp4pJGD/kFHn24OLL0IxEcO0gOekNZ
+ os5e1R6jAJ2ILk7+MDnvU8wXHcCiVzuDhJLI1tih1uUIE50muHQJWbYuVBbdJeu8WlIDDssx
+ UOCxLylNG3gDXV5MhLubPTOpp9OiFc/XC37nvkgEcrlmlOFBv4/NJCbECpo=
+In-Reply-To: <20261126004332.1712403-1-elkin@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Uwe,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 3dd8c790a7b7027abdd568e36db5e82ffaea7c77]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig/spmi-Drop-struct-spmi_device_id/20261125-122152
-base:   3dd8c790a7b7027abdd568e36db5e82ffaea7c77
-patch link:    https://lore.kernel.org/r/20261125112158.938835-2-u.kleine-koenig%40baylibre.com
-patch subject: [PATCH v1] spmi: Drop struct spmi_device_id
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20261126/20261126085245.HG2kUp4p-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2012344e5da8e03ea4b8283ecd6fad6e13f09d64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126085245.HG2kUp4p-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261126085245.HG2kUp4p-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/spmi/spmi.c:68:11: error: use of undeclared identifier 'SPMI_NAME_SIZE'
-      68 |                                SPMI_NAME_SIZE) == 0;
-         |                                ^~~~~~~~~~~~~~
-   1 error generated.
 
 
-vim +/SPMI_NAME_SIZE +68 drivers/spmi/spmi.c
+在 2026/11/26 11:13, Elkin Cruz 写道:
+> check_extent_item() only verifies item_size >= sizeof(*ei) before
+> reading struct btrfs_tree_block_info on non-skinny tree block extent
+> items (BTRFS_EXTENT_ITEM_KEY with BTRFS_EXTENT_FLAG_TREE_BLOCK). A
+> crafted filesystem image with 24 <= item_size < 42 causes
+> btrfs_tree_block_level() to read past the item and potentially past the
+> extent buffer's populated folios.
+> 
+> Verify ptr + sizeof(*info) <= end before accessing
+> btrfs_tree_block_info, matching the inline ref bounds checks below.
+> 
+> Fixes: f82d1c7ca8ae ("btrfs: tree-checker: Add EXTENT_ITEM and METADATA_ITEM check")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Elkin Cruz <elkin@google.com>
 
-5a86bf343976b9c Kenneth Heitke     2014-02-12  60  
-d69d804845985c2 Greg Kroah-Hartman 2024-07-01  61  static int spmi_device_match(struct device *dev, const struct device_driver *drv)
-5a86bf343976b9c Kenneth Heitke     2014-02-12  62  {
-5a86bf343976b9c Kenneth Heitke     2014-02-12  63  	if (of_driver_match_device(dev, drv))
-5a86bf343976b9c Kenneth Heitke     2014-02-12  64  		return 1;
-5a86bf343976b9c Kenneth Heitke     2014-02-12  65  
-5a86bf343976b9c Kenneth Heitke     2014-02-12  66  	if (drv->name)
-5a86bf343976b9c Kenneth Heitke     2014-02-12  67  		return strncmp(dev_name(dev), drv->name,
-5a86bf343976b9c Kenneth Heitke     2014-02-12 @68  			       SPMI_NAME_SIZE) == 0;
-5a86bf343976b9c Kenneth Heitke     2014-02-12  69  
-5a86bf343976b9c Kenneth Heitke     2014-02-12  70  	return 0;
-5a86bf343976b9c Kenneth Heitke     2014-02-12  71  }
-5a86bf343976b9c Kenneth Heitke     2014-02-12  72  
+Reviewed-by: Qu Wenruo <wqu@suse.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Will push to for-next soon.
+
+Thanks,
+Qu
+
+> ---
+> 
+> Changes in v2:
+> - Use (ptr + sizeof(*info) > end) with matching extent_err() format to
+>    follow the existing pattern in check_extent_item(), thanks to Qu
+>    Wenruo for the review.
+> 
+> v1: https://lore.kernel.org/r/20261125221849.1424464-1-elkin@google.com
+> 
+> I am trying out new Clang static analysis checks for kernel bug
+> classes, and they flagged this code as possibly buggy. The findings
+> were triaged/fixed and commit descriptions were drafted with help of AI,
+> then checked against linux-next (not runtime-tested on hardware).
+> 
+> Thanks,
+> Elkin
+> 
+>   fs/btrfs/tree-checker.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/fs/btrfs/tree-checker.c b/fs/btrfs/tree-checker.c
+> index d2bf21c7b848..40f2355cbb1d 100644
+> --- a/fs/btrfs/tree-checker.c
+> +++ b/fs/btrfs/tree-checker.c
+> @@ -1665,6 +1665,12 @@ static int check_extent_item(struct extent_buffer *leaf,
+>   	if (is_tree_block && key->type != BTRFS_METADATA_ITEM_KEY) {
+>   		struct btrfs_tree_block_info *info;
+>   
+> +		if (unlikely(ptr + sizeof(*info) > end)) {
+> +			extent_err(leaf, slot,
+> +				   "tree block info overflows extent item, ptr %lu info size %zu end %lu",
+> +				   ptr, sizeof(*info), end);
+> +			return -EUCLEAN;
+> +		}
+>   		info = (struct btrfs_tree_block_info *)ptr;
+>   		if (unlikely(btrfs_tree_block_level(leaf, info) >= BTRFS_MAX_LEVEL)) {
+>   			extent_err(leaf, slot,
+
