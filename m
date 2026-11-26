@@ -1,84 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.10
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795659044;
-	b=14WWjdgF+h+diWrfO8nU1BiHYhv9nBWrl0/HhGTAx+oaZbESoalToH3SwNizmnyr7kwt
-	 6fJggWMle3TVeyrpLj4pvDrMue621MYcrv6KrRQTpdDFQlBya5nzoM5mvtnncNFaLZCEE
-	 EAichZ0TsKeX56DjQbnS5rzmyhczIwSUc1XeQ2jbrhadKGmopxpU/XTCsYHwjtjigLWzX
-	 +2Hvgbk3xHMui+MyBzm/pGIBzxX64/93oVBQk37+f3D+SKze1eo4HnmxunnXCHj6U5xGR
-	 oZcrs9lehEh/pfdW78vil9YNP3P2iR2rxZpq5dqwKFxLtERTMtT0Y37w29CYImr+5cw==
+	t=1795663435;
+	b=AYAjw1kXR1NpTHyltbThq/APBsJYm5LHAHiX+GQd0az1O7T4VMBn7MSqBLtBCgA60Pm3
+	 R7OOWOxrHQU+3EqJswNOW17s06pEm+AjDkiFhfnbkZyeLTdEs7tmdAFii38Fw2tLMZ9WP
+	 ZcDk+pLB4biSTizBcPok1feMvjrqT/EFjwS68AhsvySn7pL8K2mmEybwPqfVjiIHbEjYA
+	 HAF6P2KYMsCpB7S5QslF1TpWWsKqNC+Jmuu+4OMOv6OlKmdw9bRmh/bLLIY0pG8dpH42z
+	 ZtQ3BEPqMdFfCXQWHOCo/5FyiG5OqG7Ab/ZJJ+7oo66noZvv/Y1uEIKINxIHheSMLmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795659044;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795663435;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
 	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=7Xrm3Ii2UMn6o6i/Sx3ADDnGnCPb7sChuDPD//evDPc=;
-	b=BCvdabu22DcEdb7PoHDypYotkcMwhX8qmQMjx4JiSuWrX11UlrWTikG1+g7nZJBNqyWp
-	 pA+/PlEpAMyONBcOcsafuOevHumvWHzbCKqlz2ck3DROCyLKDTSq92Nsi3dXtayL61d0V
-	 /lV13tMEsGK9FkGq6yn8LdRatJOWgQgxSNuN03n0/0n3YUFL9hAcuH/hV0nvdWtfoOq0n
-	 wHki30roQZaUNkWef7YEpoP3kDsgKHzSH7NRu9OsOizDWa0UAzzr8JvwhPoo3djmKIolE
-	 zHKksaqys8NCNoHRJoRVIY+iI/zvPpes9vxQC5fqFc1HC1QAlwiOwpQR7kU4M499fzg==
+	bh=9SCIE49WMzYwPp4ktfSJeuROtN0FBbwcDPIEmVvuWLE=;
+	b=G8a3TDbWhGfnKe+SfvlyMgjvQAqNSMtCuGGwrwQl23YWuBqef8bV5nvemZdnBf+sExek
+	 B1TU+yF1RD71QieoCzawAw61XvyieTlxiInQfJjzxueMzJKmwXZUkTgnHtApiwiWX/S/5
+	 I0Zw3ZGQjm3zeAgEZor/NBIgg9LzQcX8jADQ6gkCGFsjffnDembk7m3P/Tmil4Ma4a+Bj
+	 X7rskLUv99w87J7pjrVOyUdTjntWPg3/6FupZ9mtgKXjxZOWYQ2cjW24gaLeZbBcWo+i0
+	 hbmQAjWoyDjIqxiPIEOLbBZSSW/y86fqyJQ9aKYoVvyD1a0j71M8jbVq7lPCvBMwysA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=intel.com;
 	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gud3aQtn;
-	arc=none smtp.remote-ip=192.198.163.16
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hj0M3Cjt;
+	arc=none smtp.remote-ip=198.175.65.10
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43F7606A323;
-	Thu, 26 Nov 2026 02:10:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B43F7606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05819606A31E;
+	Thu, 26 Nov 2026 03:23:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05819606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Gud3aQtn
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=hj0M3Cjt
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795659044; x=1827195044;
+  t=1795663435; x=1827199435;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5cPPsvKVfKbmEot/zcim5f/Zke1K+AxY3gPtiCc13S0=;
-  b=Gud3aQtnxcZ1XLkS/UYWdpFW5daSVsen7onmhG+hMVqSMmilXDRyLyYg
-   c3CH9SmqO4/f8nry2rv/BemZQR/m2C12cjNfacsMpD59yy6u6tLkU+Eym
-   UB3yJwug00VvjLjnU48VgsQSum89LwHnZ5XkfjF/giVnoCsGqZMhantcW
-   izKzJ7mgTpbCgFbtoBjYjfssC8LBE/9MQ8vQxsW2DXdeTJeTufw6Tzbju
-   iEwBEdoJyoOqewiktyQB9gOhOH70o1/tf8cnyazLlw1xkI5YGNabawOnW
-   zbVuKRwAEFJIi453sszYiNYP+2MJPL4+7G1uAe8c4Dxd7sO9Xrmevu7s7
-   A==;
-X-CSE-ConnectionGUID: Fq3GXZBGQlOrP2feI/gHmw==
-X-CSE-MsgGUID: dmGb1BoTQEmLmqyxJSlEkQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4576883"
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="4576883"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 18:10:43 -0800
-X-CSE-ConnectionGUID: CFmCtIdJSgCv7Rg1Busaug==
-X-CSE-MsgGUID: pparLZx3QaeJTphX7N1TDQ==
+  bh=KzqInPU2T2Q0Ilp3D07UjggUx1G2Mky+EM6C1eJB5pc=;
+  b=hj0M3CjtiaSETNpzNPDe0AQawt+h8NFZRBR+a8LP8WFIdiuXUc5//gNB
+   jh9odwhqTOscg+q37lIw35Z7ql7sGD334xPV/KmZoDjGv0hiW2BSjf4ro
+   za/g96sFrQOyT/FOOop9n8qyIP4zUc0j0X6Ao1khiWxqUBjUgaCbmkWYw
+   OGwVHjnRMJccTc09PvkgYAKMeXlT6+vC/fR0bJzN7Yc90E5FwJ2MQ61QQ
+   p7NwTR/2yBUN/UjmcPmC2I55h9BFfmAUiJQD0MCYo4uVjkC/DUJWir77L
+   53vlwnjkxKSjXUJXBYSPK3Exlh8lFm4duEaSNGO2rY++QJ9W5hHrQ573j
+   g==;
+X-CSE-ConnectionGUID: 4RAbfTTVQaWKHaqOSy9qRQ==
+X-CSE-MsgGUID: Dac3le9VRiqB3pkR6/M8lw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4485842"
+X-IronPort-AV: E=Sophos;i="6.27,234,1787036400"; 
+   d="scan'208";a="4485842"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 19:23:54 -0800
+X-CSE-ConnectionGUID: FExLKwtwQte2U/pAERnWMw==
+X-CSE-MsgGUID: drPz814hQpa2PRHK4FNyQQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="11904551"
+X-IronPort-AV: E=Sophos;i="6.27,234,1787036400"; 
+   d="scan'208";a="12083337"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 25 Nov 2026 18:10:41 -0800
+  by orviesa002.jf.intel.com with ESMTP; 25 Nov 2026 19:23:48 -0800
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xWOwY-00000001T78-1FF6;
-	Thu, 26 Nov 2026 02:10:38 +0000
-Date: Thu, 26 Nov 2026 10:09:39 +0800
+	id 1xWQ5H-00000001TDO-2xfE;
+	Thu, 26 Nov 2026 03:23:43 +0000
+Date: Thu, 26 Nov 2026 11:23:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	linux-btrfs@vger.kernel.org
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Inki Dae <inki.dae@samsung.com>,
+	Jagan Teki <jagan@amarulasolutions.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>, Boris Burkov <boris@bur.io>,
-	Filipe Manana <fdmanana@suse.com>, David Sterba <dsterba@suse.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: Re: [PATCH v8 25/27] btrfs: zoned: keep a zone free for relocation
- when allocating data chunks
-Message-ID: <20261126095818.PPaSJDyv-lkp@intel.com>
-References: <20261125102956.266389-26-johannes.thumshirn@wdc.com>
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	Hui Pu <Hui.Pu@gehealthcare.com>,
+	Ian Ray <ian.ray@gehealthcare.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 32/32] drm/mxsfb/lcdif: enable bridge hotplug
+Message-ID: <20261126111350.x2HRRGyo-lkp@intel.com>
+References: <20261125-drm-bridge-hotplug-v4-32-822722850492@bootlin.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -90,41 +109,77 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261125102956.266389-26-johannes.thumshirn@wdc.com>
+In-Reply-To: <20261125-drm-bridge-hotplug-v4-32-822722850492@bootlin.com>
 
-Hi Johannes,
+Hi Luca,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on btrfs/for-next]
-[cannot apply to linux-review/Johannes-Thumshirn/btrfs-zoned-don-t-wait-for-a-zone-finish-after-a-filesystem-error/20261117-195824 linus/master v7.4-rc4 next-20261125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 479e381e77dcde0dfcc9d51e89ff3273da199804]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Thumshirn/btrfs-zoned-don-t-wait-for-a-zone-finish-after-a-filesystem-error/20261125-112930
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/20261125102956.266389-26-johannes.thumshirn%40wdc.com
-patch subject: [PATCH v8 25/27] btrfs: zoned: keep a zone free for relocation when allocating data chunks
-config: hexagon-randconfig-1000-20261126 (https://download.01.org/0day-ci/archive/20261126/20261126095818.PPaSJDyv-lkp@intel.com/config)
-compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126095818.PPaSJDyv-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Luca-Ceresoli/drm-display-hdmi-cec-helper-use-drmm_-prefix-for-drmm-action/20261125-185014
+base:   479e381e77dcde0dfcc9d51e89ff3273da199804
+patch link:    https://lore.kernel.org/r/20261125-drm-bridge-hotplug-v4-32-822722850492%40bootlin.com
+patch subject: [PATCH v4 32/32] drm/mxsfb/lcdif: enable bridge hotplug
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261126/20261126111350.x2HRRGyo-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2012344e5da8e03ea4b8283ecd6fad6e13f09d64)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126111350.x2HRRGyo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261126095818.PPaSJDyv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261126111350.x2HRRGyo-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __hexagon_udivdi3
-   >>> referenced by zoned.c
-   >>>               fs/btrfs/zoned.o:(btrfs_zoned_data_chunk_allowed) in archive vmlinux.a
-   >>> referenced by zoned.c
-   >>>               fs/btrfs/zoned.o:(btrfs_zoned_data_chunk_allowed) in archive vmlinux.a
-   >>> did you mean: __hexagon_udivsi3
-   >>> defined in: vmlinux.a(arch/hexagon/lib/udivsi3.o)
+>> drivers/gpu/drm/display/drm_hotplug_helper.c:235:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+     235 |         }
+         |         ^
+   1 warning generated.
+
+
+vim +235 drivers/gpu/drm/display/drm_hotplug_helper.c
+
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  200  
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  201  static int drm_hotplug_helper_handle_event(struct notifier_block *nb,
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  202  					   unsigned long event, void *data)
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  203  {
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  204  	struct drm_hotplug_helper *hotplug_helper =
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  205  		container_of(nb, struct drm_hotplug_helper, drm_event_nb);
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  206  	struct device *dev = hotplug_helper->encoder->dev->dev;
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  207  
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  208  	guard(mutex)(&hotplug_helper->event_mutex);
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  209  
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  210  	dev_dbg(dev, "received event %lu\n", event);
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  211  
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  212  	switch (event) {
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  213  	case DRM_BRIDGE_ADDED:
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  214  	case DRM_MIPI_DSI_ATTACHED:
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  215  		/*
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  216  		 * A bridges hot-plugged, try adding the
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  217  		 * drm_bridge_connector
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  218  		 */
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  219  		drm_hotplug_helper_try_complete(hotplug_helper);
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  220  		break;
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  221  	case DRM_BRIDGE_DETACHED:
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  222  	{
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  223  		/*
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  224  		 * A bridge was unplugged, remove the drm_bridge_connector
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  225  		 * if it's part of the same pipeline
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  226  		 */
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  227  		struct drm_bridge *bridge = (struct drm_bridge *)data;
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  228  
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  229  		if (hotplug_helper->connector &&
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  230  		    bridge->encoder == hotplug_helper->encoder)
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  231  			drm_hotplug_helper_connector_remove(hotplug_helper);
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  232  		break;
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  233  	}
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  234  	default:
+6ee877a9b7f826 Luca Ceresoli 2026-11-25 @235  	}
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  236  
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  237  	return NOTIFY_DONE;
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  238  }
+6ee877a9b7f826 Luca Ceresoli 2026-11-25  239  
 
 -- 
 0-DAY CI Kernel Test Service
