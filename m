@@ -1,73 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795712273;
-	b=xnQ1pMVVBslN4NrvxgVNX6/FiBLvzWAu+Vv7yLKJR8xGM9E+xN6i+UIkFG11EIesUCm4
-	 KPtIOQfSNUEtk2qLE9icWG9q2pfjiCcjAHmOwp4CO/lJhUrID7YMWf62Sr2dIoXM6RHYA
-	 q8hC3Koy308XnwEdVWw4o0cv5J0qm7A7wYbfF7MbWGFQBIvFbeb0QC+JBLV4r3MHYa6Dh
-	 lRx9uaJqMjbrihcPLIRoV8qR7vB3NK6WJhKqTp5TS9BuCCilWf6zmFUmXN5QLZxZ3ZfRy
-	 281R5/IDwf+5IHAxGk/nyNuzVIVFbYPCUtPzFkt/jWz9koAYHgQrrfa5mPACucuE05w==
+	t=1795712838;
+	b=VADbEjY/EyNCfhd0FFSz/Rzwek2GvII6S1RsUCyegk4gL2Dv04YmtKsL1ISA2di1xnKw
+	 Q5XpnBrIbiN3PFvl9hTkwSAnPl/BO01CvoaTgq9bWa1FMLJIntk3wfjTiweX2mRn3IBGT
+	 oqjeT7gjKvj/s8DPCs/1ExQuFhZrV9tejcQlisOaObU8kM932tzS1PbBAgWJrbTm+2gGF
+	 S58WmAyKXfCNs2RN5ZOaCFwEIblwfePlxya//iBZ2dDbutZA+cK0lmm02TZWxbi/RtIqM
+	 8CY1ys3yWf68fD0qrc0amo13xWatCPbQccyf7zOkEusu60xZLzTokw6y84kcj8QVpEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795712273;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Received:Date:Mime-Version:X-Developer-Key:
-	 X-Developer-Signature:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=EbzDc5IQTnuzR0VW7Y/c20qDWcWC8/2koHRhDseDoYM=;
-	b=rD9S3v/78ZGrQ65Gokosp6Z8eh+7vDk7FUuMHCDEI1qfEJ9P0Cas5BKdZxXrGg5t5wXh
-	 78MEMD/m5R7XwqgyCw4fkxbIwHyqf8qxPjn6fikkbqBE13fCGy2Gv671Qnbf1JCUTspys
-	 EuFBS20vnreGV737rthvlAwX8qP4Vnbm3x/+f5TibVqICq+tXdzbXw5qP0sYp7skINlUs
-	 xdIYTNTwHmQ0aPdJB5LtohFRlBHHOaE2tHA9roErArOx1Zb2SbC2vpGbHpJSm4PG5UhJ0
-	 f5qjAlVO6lian1vlD/G1T3ja2c2WvNDgOInaSTErDG9ccf4oZvP/nlNqKjzqEW4Im8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795712838;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=2Ss6lG0u3KhmrW/sNtdDOTe+bYGe0twUZML83rrflOc=;
+	b=h4v9iChfIjk9rBo0uz++L5Rnc5PGc07ljsGJCa6JZfWByp2i95rr1GXOk1JEAVtPdvYc
+	 ce0lgyYtMlcpQnRvxq1OS3aben+FXBmgArdtugNuaXrUTRzLqvvZmtXPfkLDvsmPPGXcx
+	 rU/80sy83tr1QMJ+8oWYwCbp4D81wTPhMnlH44ziR4yUTxsHDAJF1iNINHmPe6nvbJsdt
+	 eqBLYUfcfUWaNYaAxSqBFQ58YzEgdnn1oEeRZJJz6uV32rsc6jshYjD9e6MlRCkPPV5Yn
+	 7IsmiZnDMamIXHQY/IyLuhL+9ejapz2XG/oop6XD4X0+gGYAJwTUpkQwshDp7fxp/nQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--ardb.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GB+ISudW;
-	arc=none smtp.remote-ip=209.85.208.70
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TuCD0mnM;
+	arc=none smtp.remote-ip=198.175.65.12
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259C8606A31C
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 16:57:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 259C8606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F66606A323;
+	Thu, 26 Nov 2026 17:07:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C6F66606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GB+ISudW
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-6b879462421so642038a12.1
-        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 08:57:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795712271; x=1796317071; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=EbzDc5IQTnuzR0VW7Y/c20qDWcWC8/2koHRhDseDoYM=;
-        b=GB+ISudWF0Xp+meVoMJXYvCiskEEEaAm85p7iGPNXIiyQ3duCaa7oLkOwHCmHX1aDR
-         3rOqMKsm5J7ucLHl8UJBO/kPTs8INlAgTMAQMXtP9rEBVa5o/ydlMbfCdYoCJkpH9Q/b
-         SBj5+ahZVlsQYWnL4RiCaeqDGwKFRBHdTzvSncbELc5Wt1Uhsje9f/366Nx8dP3sKFg9
-         wvdBJVSmnL7KtEhHy5x2lIlUyNJcBBTqDiW+GMm2++vD7APaggTiB229+sOcf5Bv2pm0
-         ir/k4C04Se6J9cavwcybby1GMcn3+YO0AvyuBBaT3gOdGjtxtQZpW51Yy8UHCTBya2/O
-         9rgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795712271; x=1796317071;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EbzDc5IQTnuzR0VW7Y/c20qDWcWC8/2koHRhDseDoYM=;
-        b=0XO5RA9OUYv2PSlEX8yf4aZUsWdHJa+g/yx/RBN6OjkH1b7Y2TOK11b1XunCiiQlY8
-         839KOGuB9OEm7LuNhm0OBOHzqPyEdcExVQ07dywhSWpY2MvknjGh18WRS/9oG/YoFnRS
-         IxLsz1KLzv59hAyMF2pYHMp8iCb0N1rrHYozq6VsSgXmj8odO7T6dHnzYvz758EbK0VP
-         DTazUSWFTKaU2A+cSlPa2sZSJYHjeEPGAJ+/hZ8jIBL7SEDPqYIpZP0pu9h2j7qHkrIT
-         BJ5fpzPaFFd1TsVeF2rBMogX/PWGw5BgMX6aAPGF0oZCq3JYzj0pv2Ai45+rnQClMyMY
-         XGMg==
-X-Gm-Message-State: APuU4Z8CLbQkX/DknRV7jB9SzgJHVPyhI9Maa3q76pZgzR83Hoq2CFjl
-	Dfbhc040Qj2WWB6+G9fM4kzcPvDZhd8skmYYURwDs+H5ilOLwcuc989yq/4zNTSmj+KxyI5YPO6
-	XoLftoLpxKVMa7m424aKuY40MhrjmO7qWNkeur1eg9UERtjT838wrrMYXd8Uzvtgv1qmFn5lvB6
-	xuM8JlT9iR1NcxM6UPVEXhLFY=
-X-Received: from edwf26.prod.google.com ([2002:a05:6402:151a:b0:6bb:6fe7:16f8])
- (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:1c08:b0:6ba:a614:2fa1
- with SMTP id 4fb4d7f45d1cf-6baa6145b66mr8005803a12.20.1795712271121; Thu, 26
- Nov 2026 08:57:51 -0800 (PST)
-Date: Thu, 26 Nov 2026 17:57:40 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TuCD0mnM
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795712839; x=1827248839;
+  h=date:from:to:cc:subject:message-id;
+  bh=m6c/jqZysm3WN5nRCKT/Qz3Nbfpefgtye12NqAt7rUA=;
+  b=TuCD0mnMjNBPGSgzjsRfW4XcpGfYfYLzROGrzA81P6W3odsekKjnX+p7
+   axTbU/kY68Qti0vpoPFJXDUJekGmQH8m3voyDipUJA91UYMCFF45zXut9
+   l12LFvomP/jade7fMJMY68qYnFOGSHDd3Y6W9miADH2R6D4jfk1hrj0RX
+   gLtmDkUOqTnk1e+wJTw2nmgWu1gLeXbIUuSQPPF2mC3aZGZvIb5oQV2QN
+   MHx4C30ve/18YJ0Bek2fxXHGDgGVeFXa0gSrKH4Anv4xwgdoMRLlkf8GY
+   MAUosuzZBNLNTFsaooyF6WGkJwBB8XXTLjAfR5wHi1llD50ylv/WlZ6ls
+   A==;
+X-CSE-ConnectionGUID: mMXPNmKgTaCD1O6mVh77XQ==
+X-CSE-MsgGUID: hHwsED5RTGCpkJPZkaGhJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11978"; a="4536054"
+X-IronPort-AV: E=Sophos;i="6.27,235,1787036400"; 
+   d="scan'208";a="4536054"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2026 09:07:18 -0800
+X-CSE-ConnectionGUID: ENOWcLY8Q9e4TXi0U2PbTA==
+X-CSE-MsgGUID: is+Cy8kqQCitpWybMddeiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,235,1787036400"; 
+   d="scan'208";a="13897901"
+Received: from igk-lkp-server01.igk.intel.com (HELO 800201f3098f) ([10.211.93.152])
+  by fmviesa012.fm.intel.com with ESMTP; 26 Nov 2026 09:07:14 -0800
+Received: from kbuild by 800201f3098f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xWcwA-0000000008U-2nbK;
+	Thu, 26 Nov 2026 17:07:10 +0000
+Date: Thu, 26 Nov 2026 18:06:18 +0100
+From: kernel test robot <lkp@intel.com>
+To: daichengrong <daichengrong@iscas.ac.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Cong Wang <cwang@multikernel.io>, Andy Chiu <tchiu@tenstorrent.com>
+Subject: [congwang:riscv-vector-discard 3/5]
+ arch/riscv/kernel/signal.c:130:2: error: call to undeclared function
+ '__riscv_v_vstate_clean'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <20261126180329.cKNnHjkb-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -76,75 +82,90 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2078; i=ardb@kernel.org;
- h=from:subject; bh=X6vteHyIC3rKBXp7WqfXPsq2tsAfRKOq0QrILcJganE=;
- b=owGbwMvMwCVmkMcZplerG8N4Wi2JIZsjlYVXgEdc6lFQ6GaplpkZXRdydVifTj6V1NvolL04/
- n1/zcqOUhYGMS4GWTFFFoHZf9/tPD1RqtZ5lizMHFYmkCEMXJwCMJH6owy/mLTE59sm7VS/ELF6
- hk4fc9KqgIlGs09GLtCW80h4+y/9GCPDSbdC5eijVdLpExl+Pg98mO4e5z+r1OTRv+eafBstSjq 4AA==
-X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261126165739.2453269-2-ardb+git@google.com>
-Subject: [PATCH] kallsyms: Omit unnamed local symbols from System.map and kallsyms
-From: Ard Biesheuvel <ardb+git@google.com>
-To: llvm@lists.linux.dev
-Cc: Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-From: Ard Biesheuvel <ardb@kernel.org>
+tree:   https://github.com/congwang/linux.git riscv-vector-discard
+head:   82089161ab902778cdd13a9cd126871c69aa4e87
+commit: 19973bf52f3795693ec7baaa5812d33009dbcd6e [3/5] riscv: clarify vector state semantics on syscall and context switch
+config: riscv-randconfig-2005-20261126 (https://download.01.org/0day-ci/archive/20261126/20261126180329.cKNnHjkb-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 3a9f981aab0cc32f74ffac36a87891cda8889c37)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126180329.cKNnHjkb-lkp@intel.com/reproduce)
 
-Since LLVM PR #223686 [1] ("[LLD][ELF] AArch64 Errata patch use
-STT_NOTYPE for symbols"), ld.lld --fix-cortex-a53-843419 (enabled on
-arm64 by CONFIG_ARM64_ERRATUM_843419, which defaults to y) synthesizes
-an unnamed (st_name == 0, "") STT_NOTYPE local symbol for every
-executable InputSection that lacks an STT_SECTION symbol in its input
-object, such as empty .text sections in data-only or .init.text
-translation units, or per-function sections under -ffunction-sections.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/20261126180329.cKNnHjkb-lkp@intel.com/
 
-elf_symbol_type() classifies these unnamed STT_NOTYPE local symbols in
-executable sections as 't' (matching GNU nm and llvm-nm), and
-sysmap_omits() does not filter empty names. As a result, nameless 't'
-entries are emitted into System.map and compressed into the kernel's
-kallsyms tables.
+All errors (new ones prefixed by >>):
 
-Beyond bloating the kallsyms tables with useless nameless entries, this
-causes CONFIG_KALLSYMS_SELFTEST to fail at boot ("Test for Nth symbol
-failed: ()"), because kallsyms_lookup_name("") explicitly rejects empty
-strings and returns 0.
+   In file included from arch/riscv/kernel/signal.c:12:
+   In file included from include/linux/syscalls.h:96:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:148:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> arch/riscv/kernel/signal.c:130:2: error: call to undeclared function '__riscv_v_vstate_clean'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     130 |         __riscv_v_vstate_clean(regs);
+         |         ^
+   arch/riscv/kernel/signal.c:130:2: note: did you mean 'riscv_v_vstate_query'?
+   arch/riscv/include/asm/vector.h:429:20: note: 'riscv_v_vstate_query' declared here
+     429 | static inline bool riscv_v_vstate_query(struct pt_regs *regs) { return false; }
+         |                    ^
+   1 warning and 1 error generated.
 
-Omit symbols with an empty name in sysmap_omits() so they are excluded
-from both System.map and kallsyms.
 
-[1] https://github.com/llvm/llvm-project/commit/5da7779afdf3
+vim +/__riscv_v_vstate_clean +130 arch/riscv/kernel/signal.c
 
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- scripts/kallsyms-sysmap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+   107	
+   108	/*
+   109	 * Restore Vector extension context from the user's signal frame. This function
+   110	 * assumes a valid extension header. So magic and size checking must be done by
+   111	 * the caller.
+   112	 */
+   113	static long __restore_v_state(struct pt_regs *regs, void __user *sc_vec)
+   114	{
+   115		long err;
+   116		struct __sc_riscv_v_state __user *state = sc_vec;
+   117		void __user *datap;
+   118	
+   119		/*
+   120		 * Mark the vstate as clean prior performing the actual copy,
+   121		 * to avoid getting the vstate incorrectly clobbered by the
+   122		 * discarded vector state.
+   123		 *
+   124		 * This also allows user to modify vregs through the signal
+   125		 * interface at a syscall stop. e.g. to support user space
+   126		 * context switching.
+   127		 */
+   128		preempt_disable();
+   129		riscv_v_vstate_set_restore(current, regs);
+ > 130		__riscv_v_vstate_clean(regs);
+   131		preempt_enable();
+   132	
+   133		/* Copy everything of __sc_riscv_v_state except datap. */
+   134		err = __copy_from_user(&current->thread.vstate, &state->v_state,
+   135				       offsetof(struct __riscv_v_ext_state, datap));
+   136		if (unlikely(err))
+   137			return err;
+   138	
+   139		/* Copy the pointer datap itself. */
+   140		err = __get_user(datap, &state->v_state.datap);
+   141		if (unlikely(err))
+   142			return err;
+   143		/*
+   144		 * Copy the whole vector content from user space datap. Use
+   145		 * copy_from_user to prevent information leak.
+   146		 */
+   147		return copy_from_user(current->thread.vstate.datap, datap, riscv_v_vsize);
+   148	}
+   149	
 
-diff --git a/scripts/kallsyms-sysmap.c b/scripts/kallsyms-sysmap.c
-index a482968eba51..1cb3b1775157 100644
---- a/scripts/kallsyms-sysmap.c
-+++ b/scripts/kallsyms-sysmap.c
-@@ -96,6 +96,10 @@ static bool sysmap_omits(const char *name, char type)
- {
- 	size_t i;
- 
-+	/* Unnamed symbols (st_name == 0). */
-+	if (!*name)
-+		return true;
-+
- 	/* Absolute, undefined and debugging symbols. */
- 	if (type == 'a' || type == 'N' || type == 'U' || type == 'w')
- 		return true;
 -- 
-2.56.1.839.g22a8290db9-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
