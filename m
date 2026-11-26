@@ -1,88 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795689925;
-	b=Mb2qM1uGLin43yYm4nX57qUxh8qjFgFEHURpGSt7lUUrsgivQM1GHMj6fXGmPCGIf0s1
-	 NOB9AxPNSTSn9U1E09yCMjk8khPyR2QhstinECuYO8emb/8fJvmRVgggNdYGmqrUrYc/V
-	 TjzPYmg98g1Qyycgd3k2cUAioBCJ4Mc8g20BxS9QqRIzvVP+tfhXvmKde+tw2EE7TrJ+2
-	 Sirsi/UywtSlc9xefLA6rd/XrqbKAr/FSCQ/phuhpAX7jv4HMJPJh/3Tg8Fo0rQdz8hcU
-	 9obv0Zs7fKTUyGsmYSwaDK47Z6mTFiqnThuC+GWU2O5jnec4Iw1m1o79Kiu5wwxorTA==
+	t=1795690424;
+	b=caMbawGUx951b6yrqeJXyuhQG+mq+c8n4whrT1qT8GZHZZKizRGMzyeDrF91JwFFrSV5
+	 ohOnBLtTA28l6UBEfEoKd3GI/Xt89few9bS0gucVsuhrnnHKI9KDLptvwtEdJJlGX96te
+	 E+j0s6tEfhTYEBbWs+PCXLcrMr8gpuO2nJ42THvnrk5Bo1UTL2SHVklAlfzQTxEMuqJHg
+	 iyuYRCWOihijD9g/I8449gg3U/dKXw9n98N9XIAJyCSmgJgpeqeKdxVJ1UOANnOPIaHXy
+	 H4u3GQ+RW+5j1eUFo6mHJfrd6RIeFjoUPx7sdKIkcE7dEjuINBrdUqIvN31dmzp0OUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795689925;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795690424;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-	b=pIc6g0Dscrbs3SbEd34zvJxUyrFA5Ukzw4S6Z4Vx9GE6EhptrJ5EDNbzXFF8XXKTy2QD
-	 2sWURjycZjlyuOURjHx8mtFjyi79mGS0YxTQV0tgVzkZIDS8pDeSL7L3FYE7fa1fOR58b
-	 DjQVEGVcv9RriLCSbQTGvAd3nAh66j68TRLVcbM+YSwrRaTQtFdiaRbcNeL2zwX1ylKe6
-	 P+46ZGWPnFgy4/JiJp0sdbkC/woHSO9mwDKWd0RQvVjBn0KCNHxRAbo00aa0FVmWST4NU
-	 W709hl1+2uUwgyHW+2XX9XK73cpN7EeKxgTeFc0d1uo5Uy5iWwDr4l5iurTbtoG0FNw==
+	bh=8RnxPSTHJj6ssbwJH49Q6KtCPv2E9H09AK7eDPufzS8=;
+	b=bAiCAlIGmlfgdpVs4L6QaI5uES4Ctk7m5Aq7EsaoFtzc7QRTyXJXGY517StEjaQCNUDR
+	 RV9e/zcp22292eEoOhmNMQ2y5qNHf4RWZQMXvFQ1nmKROI4OHpwhKjHNfje+o1DwD+662
+	 GG19oRaBciEYE5NXD8get9NsqWjjr7cB4BhTLIj217m4HkIo0IB0/xmT6r7b3dtxmXMKM
+	 A5KAijfT64HQqDbQNd31QeKolS4pV4VdiudVpNXyBZM4RX0Btiqj4vP5Yb8mGhfIsU+AA
+	 ocZ1len1ApkDcLzzAwTqpdYpoczi0VhZ6XSWVBY5tStU7Rxxf9peVn43viZdZir2nWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=aYJk+PbJ;
-	arc=none smtp.remote-ip=209.85.221.52
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="U/A7BLgk";
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAFE606A326
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 10:45:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCAFE606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85280606A326
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 10:53:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85280606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=aYJk+PbJ
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-497614c95f0so3890652f8f.1
-        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 02:45:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U/A7BLgk
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2f04bea9a93so60866325ad.3
+        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 02:53:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795689923; x=1796294723; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-        b=aYJk+PbJ1OKKnWxXDxjhgdg7u9eXR6Ksfz9lYWCeGEl2kgRRphuR0V/F5Z37ARUmcZ
-         +N0ckXSdfVw26wdiVEoLEsVyzap3MiROvlxXV6d/T1j4nodLfPI3nwAX9DrqE0IA53ZZ
-         tdu5Nry/tY4JMtzxbh2KIwxXt4jer5pG55NkAhX4T6zwZAbQPINF5bF6UZGMs6FnAHXX
-         oWT1LGCXeq2NW39kywXrSc5wIhET9gPeD4YfJwXBGemdtkfw3uYlWsxgvDnar3eVxAsy
-         S7DkoBg5onsLpV8538Uc9fzvYy4+Vxsn0wZ/VWQxAfQN5Vv04auKIkqRch67jILdJSdk
-         ue1w==
+        d=gmail.com; s=20260707; t=1795690423; x=1796295223; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=8RnxPSTHJj6ssbwJH49Q6KtCPv2E9H09AK7eDPufzS8=;
+        b=U/A7BLgkOcp862UmIbhqVQIso907X7wpS+rTo3qU/gWlhZWWkynl7INzWZ+pBRPMpV
+         jImqXcaHXF8LrX2E+P2G2gVbQ6uDu5NtNIuMO63+DSr+iLe+ZLlBgvxfQcq8KgoZ5RlH
+         WFo/UR/tjIVAHDOOmurTH2K79O34XJXUebTLanAX2/y/kdg6paKTZx+Ku1+ggOzBAMrw
+         E5kOijuFVY3wFazw+pz/Aa13jNEZN3f8Vo/5fIyj2r/yrkTT61OXUdtIq91Q8KYb5ksa
+         DcChUTtwx44GwNdSFXZGUjQQ3T4kGqUBh4f8otKT8zbB12SYB7YH5FTjQ2Bv6Bm6Erdo
+         gjhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795689923; x=1796294723;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1795690423; x=1796295223;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-        b=J50v5ZAB2j3tih0c7Wne4m7HlESHDnLcB3hp+tybcrmkeW5FicP87kTcy2uwVJt4XQ
-         DQAMgmAj2KqzF5Cmkbq9fW9EgBUp9z6MU+4iL5Rm6zJ0v2stSlvwnNhM8kl8wOSckCLf
-         w2STBaEliCFBAVIFkw937O+NnC9Teu4DMAoebtqexzWvuEeeqFLsIaT1Dr4mdly6W9/m
-         YvVNfMVra/swv06GN5SmNzmptD7FXKA0hv/rFUxjY+p5UkygvMOQvHooPfG5QG+5jLOJ
-         h6syVDg0jexAjmwKahG7lOvaXIW2gd/88Fdoo32bjrAAKY9q5FNFqTWIw/Vx+vCav+Hk
-         jw0A==
-X-Forwarded-Encrypted: i=1; AL+hErHL9d92kgGd/o9FPujHkCeglxowYBcxljZyjD1GRUs7BkYqT0uSL6DXNVnqOguCPgQb28HI@lists.linux.dev
-X-Gm-Message-State: APuU4Z9gtR67wDzdKg9KeWY+2y15LUCv6WpCZIgtC5NAxkziblG/tKVq
-	yu3w6OYtCnzMxVrnPAoWQSmFOTq2Lf1i6bPWkTbvmygb11HpKiWpZhyBi++gdqMftOw=
-X-Gm-Gg: AZFdTZdbz0fIAiE8ogaNnWomY30xm+kSkY5bj6On/fMBVbqn5ZdIyw3RnOFE4nvVqGR
-	h7vdVh71ZfkgbIB4GQo8FGqfLWS4np6Da3KpGaUwNHo7xJ98K9aMogIKFkEauTZNe2iV9h0DZ9e
-	Q5i7Y4p8jLRVKhfTRnoh6ZjZlmNcirCnIVpaWjvvKhsMW5LqOxHyzmoGtV6h4IjjDs72z57KisZ
-	Bk+bnOUIGbEE2kQkkI0egPtAHa1xl5vH7poG1lr9xO4nwSwUv+KZqpf6IdqDqpJX3Fq34HZ7o8T
-	2YkG+Tt6aZqMixHwoWpaEUWPsHZjKGLt0GcL63QpdBreQSg9oTPO4Dy0XYH0CMEXLzIQ4/PgA/V
-	cFDXDt/S7OGp4n/nqlUPQIhFfP6xkhAdW86q/t6UH7cyK/8hBQv6kuYdtRnKOfxlxjRobFHNVxp
-	qPRt2LJStguoTViMO+5tJPs9ilAolU/J+PIvoDsz1DjgvwI1lfVUcI2FvemNZuWAyfaLKNiedja
-	gEK6pa/bWPruBRbwywlLdbzHpyRD6xqXLhxCifUVJVtkGMyBB7IeoQ+7i33vGqZh7hiPujavQlT
-	x7jboNX6qCGZ3q49PSKnZ3XQ3139wrIU0i72ZSRuKgWpzkOIJwDXCU+15F0TJ/v1xw==
-X-Received: by 2002:a05:6000:248a:b0:487:b50:101c with SMTP id ffacd0b85a97d-4abaa97702bmr38359967f8f.5.1795689923186;
-        Thu, 26 Nov 2026 02:45:23 -0800 (PST)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb98b4dsm40416103f8f.53.2026.11.26.02.45.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Nov 2026 02:45:22 -0800 (PST)
-Message-ID: <a40ad738-cb7b-469e-b67b-353b64622dbd@suse.com>
-Date: Thu, 26 Nov 2026 11:45:21 +0100
+        bh=8RnxPSTHJj6ssbwJH49Q6KtCPv2E9H09AK7eDPufzS8=;
+        b=1tEs+RRYTTEAAvBgusRP1lzwxOK5vHbn3LLPAACiYOW2xwDWrf+ZEGgaLjpConHs9t
+         k44KlGUtpTEbKrl0XGyC87yuQYJQwf4Zvfqy6oZJEJoVJtDhm87RqINTATQ75AcStz7e
+         0VeKHVLHqfdRittjwjnL7D4bDkl9EmVJHnthU0/zCzQ48ycVJK8cj0SlPnuQVi13UGHs
+         4b3ll+cu5NUhIrzfDsyFrDH6hvXuNDVcUwZF3SXEbpBQc2W1xneRGlp3dBeoZ+YAP8yz
+         Le/sS7WMzZM1h4HcUF7yPwU/RtNVJ6ar11pWEOemX/15IfjPWc57l8uhZLevXhE8J223
+         J9Og==
+X-Forwarded-Encrypted: i=1; AL+hErHvc+w7ZmgxZAZMLa5+u6sHBDBGRMxsKDUPwaG9DrucqdAr+IXkVJpVDS585D3QmE9yGjJI@lists.linux.dev
+X-Gm-Message-State: APuU4Z9ehTehiYa28qX7h6BN7U7aewR9DkFGYSIwR9Y+srOQVLMj9u0l
+	atpYNdkmnPf2hJtPqXGyE3R/Ltj1VFCZpHwGM/0QqrTbERCASTq1sGbz
+X-Gm-Gg: AZFdTZcu8GCGzJ77RmpaA3pj7hr1yyLAmjyrboeZxzGU/iPhlTKfHLG7xRYHARlyZrN
+	0vhrnrP4DbD6KXpxBr7Ww6XaXaPvHG8ClMK7XiAPK2MPEQ6PN1c9WKpXXt0N/nRsMOokoT4zV5U
+	ge/wEf8L40/QurH6WYqMfPzglBRZr0BWSFFz0ptOeWWuFed97Ot5qBSiSFDUPFZft8Qqv9fJ0Xm
+	p3gxvNVFu4H1/A+7wS1KhaeUQBl8bAkc9IG15XZUiFTZU6SPMVz38TT7Dhagwgs8Ne3xx3acNzl
+	0fF7sgpf123Yjm9HTuNaSwv0Qoj8KN+03KxJWzJ0RDvYU4sDJOZd6AhivIyns3eAT6q0C0pLDuU
+	iB21jn4B4G1QlkCu345Lc8kRj45xAnQvqOEI2OOqz9KzET4WlXR2FKtfB9zGmgjYQJFa8Kyv3Hz
+	6qVImUe5E6wq26c9sMQ0laphYTmGWPHtgwD4COQWHwSY0wEEWbT0JEIMVYq5a00NPRRdZgbGrY5
+	LuBG9fmnbsnFIcGryZf4kA0t2CyWxtnxthJEuC7mYJILnN8RIvl9QN5L64FE+N5uY0GT7hSyK99
+	6mavlF1GEStrOuCwhSb+Tmipy3RQZdnSv1+mAp3vHJr4ix9UVozj
+X-Received: by 2002:a17:90b:4b:b0:3ab:e588:c2a8 with SMTP id 98e67ed59e1d1-3b41c9ba0e4mr18519397a91.64.1795690422704;
+        Thu, 26 Nov 2026 02:53:42 -0800 (PST)
+Received: from anatasluo-Precision-5560 ([2408:820c:d29:db90:58ff:756e:834a:9b39])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40578dca0sm35469676a91.2.2026.11.26.02.53.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2026 02:53:42 -0800 (PST)
+From: Longjun Luo <luolongjuna@gmail.com>
+To: jpoimboe@kernel.org,
+	peterz@infradead.org
+Cc: mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	song@kernel.org,
+	puranjay@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	live-patching@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Longjun Luo <luolongjuna@gmail.com>
+Subject: [PATCH 1/2] objtool/klp: Fix the offset and length used to read SHF_STRINGS data
+Date: Thu, 26 Nov 2026 18:53:24 +0800
+Message-ID: <20261126105325.2521938-1-luolongjuna@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -92,57 +106,228 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
- ioctl to /proc/kallsyms
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-14-wusamuel@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/13/26 11:12 PM, Samuel Wu wrote:
-> To find a few kernel symbols, users such as libbpf parse all of
-> /proc/kallsyms, which is several MB and text based.
-> 
-> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
-> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
-> and optionally in a single module with module_filter, or all modules by
-> default. Each call returns one match and its position; pos + 1 continues
-> the search, until -ENOENT. The output returns the address, the size, and
-> optional name and module buffers. A buffer that is too small gives
-> -ENAMETOOLONG and the required size.
+For offset, handle PC-relative references, like the one in
+proc_ns_dir_lookup() with Clang ThinLTO. Use arch_adjusted_addend()
+to read the string, and generate symbol-based relocations when needed.
 
-The kallsyms data in the kernel can change between two
-KALLSYMS_QUERY_BY_NAME calls, for instance, when a new module is loaded.
-Should the mechanism provide a way to detect such changes, likely by
-tracking and exposing some kind of generation number, or is it
-unnecessary?
+For length, add support for wide strings. The u16 psr_setup_time_us[]
+table is placed in a wide-string section by Clang. The table
+occupies 14 bytes, while strlen() gives objtool a length of only 5 bytes.
 
+With GCC and Clang, the test catches both wide string truncation and a
+missing PC-relative adjustment.
+
+Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
+Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+Fixes: 873a2208ea31 ("objtool/klp: Calculate object checksums")
+Signed-off-by: Longjun Luo <luolongjuna@gmail.com>
+---
+Ran the test suite on x86-64 (tip/objtool/core, b99a5337da3c).
+Same results with patch 1 alone and with both patches.
+
+GCC 12.2.0 (-fno-pie)  49 passed, 4 skipped
+Clang 17.0.6           51 passed, 2 skipped
+
+With this GCC's default PIE, the same 35 tests fail with or without
+the patches.
+
+Codex helped write the new tests.
+
+ tools/objtool/elf.c                           | 27 +++++++++++++-
+ tools/objtool/include/objtool/elf.h           |  1 +
+ tools/objtool/klp-checksum.c                  |  6 ++-
+ tools/objtool/klp-diff.c                      | 37 ++++++++++++++++---
+ .../tests/generic/fixtures/checksum_insn.c    | 11 ++++++
+ .../tests/generic/test-checksum-insn.sh       | 18 +++++++++
+ 6 files changed, 91 insertions(+), 9 deletions(-)
+
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index a791f4ea6ec1..4a8698114666 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -1382,9 +1382,32 @@ struct elf *elf_create_file(GElf_Ehdr *ehdr, const char *name)
+ 	return elf;
+ }
+ 
++static size_t __elf_strlen(const char *str, size_t width, size_t size)
++{
++	size_t len;
++
++	for (len = 0; size - len >= width; len += width) {
++		if (!memchr_inv(str + len, 0, width))
++			return len;
++	}
++	return 0;
++}
++
++/*
++ * Same as strlen, add support for wide strings like:
++ *   u16 psr_setup_time_us[] from the DRM DisplayPort helpers.
++ * Clang puts this data into a wide string section with sh_entsize = 2.
++ */
++size_t elf_strlen(struct section *sec, unsigned long offset)
++{
++	return __elf_strlen(sec->data->d_buf + offset, sec->sh.sh_entsize ?: 1,
++			    sec_size(sec) - offset);
++}
++
+ unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char *str)
+ {
+ 	unsigned int offset;
++	size_t width, len;
+ 
+ 	if (!strtab)
+ 		strtab = find_section_by_name(elf, ".strtab");
+@@ -1399,8 +1422,10 @@ unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char
+ 	}
+ 
+ 	offset = ALIGN(sec_size(strtab), strtab->sh.sh_addralign);
++	width = strtab->sh.sh_entsize ?: 1;
++	len = __elf_strlen(str, width, SIZE_MAX);
+ 
+-	if (!elf_add_data(elf, strtab, str, strlen(str) + 1))
++	if (!elf_add_data(elf, strtab, str, len + width))
+ 		return -1;
+ 
+ 	return offset;
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index f7e6a652ee78..50d5b17907c8 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -180,6 +180,7 @@ struct symbol *elf_create_section_symbol(struct elf *elf, struct section *sec);
+ void *elf_add_data(struct elf *elf, struct section *sec, const void *data,
+ 		   size_t size);
+ 
++size_t elf_strlen(struct section *sec, unsigned long offset);
+ unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char *str);
+ 
+ struct reloc *elf_create_reloc(struct elf *elf, struct section *sec,
+diff --git a/tools/objtool/klp-checksum.c b/tools/objtool/klp-checksum.c
+index ebe25f9c5260..2547e142794b 100644
+--- a/tools/objtool/klp-checksum.c
++++ b/tools/objtool/klp-checksum.c
+@@ -138,7 +138,8 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 		char *str;
+ 
+ 		str = sym->sec->data->d_buf + sym->offset + offset;
+-		__checksum_update_insn(func, insn, str, strlen(str));
++		__checksum_update_insn(func, insn, str,
++				       elf_strlen(sym->sec, sym->offset + offset));
+ 		goto alts;
+ 	}
+ 
+@@ -215,7 +216,8 @@ static void checksum_update_object(struct objtool_file *file, struct symbol *sym
+ 
+ 			str = target->sec->data->d_buf + target->offset + offset;
+ 			__checksum_update_object(sym, sym_offset,
+-						 "reloc string", str, strlen(str));
++						 "reloc string", str,
++						 elf_strlen(target->sec, target->offset + offset));
+ 			continue;
+ 		}
+ 
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index 95d0d86666d7..dd5c4d604be3 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -1584,18 +1584,43 @@ static int clone_reloc(struct elfs *e, struct reloc *patched_reloc,
+ 		return -1;
+ 
+ 	/*
+-	 * For strings, all references use section symbols, thanks to
+-	 * convert_reloc_sym().  clone_symbol() has cloned an empty
+-	 * version of the string section.  Now copy the string itself.
++	 * For string relocations, in some cases, compilers generate
++	 * PC-relative code like:
++	 *
++	 *   xorw 0(%rip), %dx    # "mnt", R_X86_64_PC32, addend -4
++	 *   (from proc_ns_dir_lookup(), Clang ThinLTO).
++	 *
++	 * In that case, str_off is not equal to the addend.
++	 * To read the string, use arch_adjusted_addend instead.
++	 *
++	 * To write the string, we could use out_off + (addend - str_off)
++	 * as the section-based addend.
++	 * The addend may become negative, and make lld report
++	 * "offset is outside the section".
++	 * So for this case, create temp symbol to use symbol-based relocation.
+ 	 */
+ 	if (is_string_sec(patched_sym->sec)) {
+-		const char *str = patched_sym->sec->data->d_buf + addend;
++		long str_off = arch_adjusted_addend(patched_reloc);
++		const char *str = patched_sym->sec->data->d_buf + str_off;
++		struct section *out_sec = out_sym->sec;
++		unsigned int out_off;
+ 
+ 		__dbg_clone("\"%s\"", escape_str(str));
+ 
+-		addend = elf_add_string(e->out, out_sym->sec, str);
+-		if (addend == -1)
++		out_off = elf_add_string(e->out, out_sec, str);
++		if (out_off == -1)
+ 			return -1;
++
++		if (addend != str_off) {
++			out_sym = elf_create_symbol(e->out, ".L.str", out_sec,
++						    STB_LOCAL, STT_NOTYPE, out_off, 0);
++			if (!out_sym)
++				return -1;
++
++			addend -= str_off;
++		} else {
++			addend = out_off;
++		}
+ 	}
+ 
+ 	if (!elf_create_reloc(e->out, sec, offset, out_sym, addend,
+diff --git a/tools/objtool/tests/generic/fixtures/checksum_insn.c b/tools/objtool/tests/generic/fixtures/checksum_insn.c
+index 10f70a74a976..70c2e9106f8a 100644
+--- a/tools/objtool/tests/generic/fixtures/checksum_insn.c
++++ b/tools/objtool/tests/generic/fixtures/checksum_insn.c
+@@ -76,3 +76,14 @@ int target(int x)
+ 
+ 	return r;
+ }
++
++#ifdef WIDE_STRING
++unsigned short wide_string(void)
++{
++#ifdef PATCHED
++	return *(const volatile unsigned short *)u"\u0200";
++#else
++	return *(const volatile unsigned short *)u"\u0100";
++#endif
++}
++#endif
+diff --git a/tools/objtool/tests/generic/test-checksum-insn.sh b/tools/objtool/tests/generic/test-checksum-insn.sh
+index e1c04a1f518a..692ab1b174b2 100755
+--- a/tools/objtool/tests/generic/test-checksum-insn.sh
++++ b/tools/objtool/tests/generic/test-checksum-insn.sh
+@@ -46,4 +46,22 @@ build_pair checksum_insn.c
+ run_checksum
+ assert_checksum_matches target
+ 
++# The wide character changes while its low byte stays zero.
++build_pair checksum_insn.c -DWIDE_STRING -fno-pic
++assert_checksum_differs wide_string
++run_diff
++for obj in patched out; do
++	$OBJCOPY -O binary --only-section='*.str2.*' "$workdir/$obj.o" \
++		"$workdir/$obj.bin" || fail "cannot extract wide string from $obj.o"
++done
++[ -s "$workdir/patched.bin" ] || fail "fixture produced no two-byte string section"
++cmp -s "$workdir/patched.bin" "$workdir/out.bin" ||
++	fail "wide string was copied incorrectly"
++
++# The x86-64 RIP-relative load needs a string label with addend -4.
++if $READELF -h "$workdir/patched.o" | grep -q 'Machine:.*X86-64'; then
++	section_relocs .text.wide_string | grep -Eq 'R_X86_64_PC32.* \.L[^ ]* - 4$' ||
++		fail "wide_string() lost its PC-relative string reference"
++fi
++
+ pass "instruction checksums cover reloc targets, addends and string contents"
 -- 
-Thanks,
-Petr
+2.53.0
+
