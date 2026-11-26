@@ -1,76 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=143.255.12.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795694895;
-	b=AXCzwcfKKVEqfNzgxlkJ7jtCUtgnUv2hl48A0WJ3lqqshaANKuK5jNaFH22BqSCyeEwb
-	 yy/l9H5JbOGeA+HI/Jh5H9e2Sr8PvxIkmo0JdYUlL9azAH30+pL1jll4HeVn6D1um9j5d
-	 sOckL1pcg+Gik/9PQ3UlRT1q1mPcZWYUWYikfaDmbl9roHBL0bksKYZfoQkPgYbpYm1/J
-	 /FGAISctyGss5Dx6ZfQ7r9eIh7MlH76qrHv1AnSKk6pQCo3xzkmulTpcp2jnQBbWo5Y0u
-	 2bI5/9FhsNKJR6+4sYC8jv7gJ+07xRThfj1cR/C9OW+5/aelA/lYAoKqtO4iDibg4GQ==
+	t=1795695414;
+	b=ap8yhDn7Qd7r5+GaoRPx+80/OMVDtFk+hauQUaNfnFzuZCIfs8xdwZ0wTbX1XJbbFktq
+	 CmtbyK+ylwMxzMFKwDy+J8ZNFizq5kI+FjmtUDldlrvSp1YXqgOG1rvF9s1pVYDQ4ncml
+	 gvUAMhHr4xBCZPK3GVGelhHT+P2eFwKuN3aNmjzNuQNLru7FfRvOrbLHi1jD5SEgmAp52
+	 O8tITPAcxFtMp0QGHThXx1T8UIbroBLPnG8Iu2pALQo17ctwZux02a1J0FOKkjkAtySAU
+	 RcYVkQ9Od+r1zmZe1YwnuMtR938G8N1SOI0Fx5g9V4rUMiA9LABXY9C8N6CmsDOsntw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795694895;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=4SVfDoLwtWsNqklX6U3Vo1vpURtzjNZI3fsbY/rTazM=;
-	b=PFvv6UKHYjzVeLKqbIH6Z6LEic9Eum5l45Wd/3ucNlf6W4R6tMbRph5stNhXq6if+3Eq
-	 PQyJVi+yhf1k9VpL1lwVH8/jeMfRlNms3z7muyZkCWRMWxM/JaC8mnJRC/vXlL33HMaFs
-	 NYApFa91ocXff1w7bD6j8jQUx06M8rSteYSMQjrrGkY8rEGOh9F1XRrkjhFFIKuUElO0Z
-	 3S/KTTENQTRwYHN7IN++Fl4U8e0TmuXJ0PvQKDYkWvt05YDgNJJqYr3O5utLOs2SCjm1c
-	 TFOhWLkId4MiipYTMXYe/7IuBiO83TLBIdgM5uS6qXLEgfnSTUZfB1XJhV2JDa+SezA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795695414;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:Date:MIME-Version:Content-Type;
+	bh=nY9kYR/xw/7wOiVhGg3uzbGjOgXyshW0del5pACziv4=;
+	b=Ll0KOzl+3AxtlgmZVXA3QM143F/E3kfjL5IvtDQKHjTSeBf3R/2M1VdpBwzKo8DgmHY6
+	 BwzPizoPsvmwo1rrce9HonFf/Y/DS9uHspznU+HtKnQjPOMbWPkvq26m0+rvNTpzxM0AR
+	 JM/ReCojkTpDZCBOvvhKWACAzlgMZA6ZHoqKtxO7i6PK/DtrKpyQo9hz8PvnfZHUFy/l+
+	 8sXNNBksu4KGHqTwhNNyjqypWj0u2Gjv2ZwfFn4LLY+RJlDDfGDOsxwO4iqlZFsH5yLN9
+	 XwJRgj5xPpMCkVdh5YvXair0etVU4ICky6AD8brz9wSBEDnVm2EWw6Tu29r7hWHTP7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=B7KIW8u5;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dmarc=pass header.from=manguebit.org;
+	spf=pass smtp.mailfrom=manguebit.org;
+	dkim=pass header.d=manguebit.org header.i=@manguebit.org header.a=rsa-sha256 header.s=dkim header.b=trs+zPqO;
+	arc=none smtp.remote-ip=143.255.12.172
+Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731E4606A31C;
-	Thu, 26 Nov 2026 12:08:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 731E4606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D364606A31C;
+	Thu, 26 Nov 2026 12:16:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D364606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=B7KIW8u5
+	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.a=rsa-sha256 header.s=dkim header.b=trs+zPqO
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=4SVfDoLwtWsNqklX6U3Vo1vpURtzjNZI3fsbY/rTazM=; b=B7KIW8u5AVWuwIDsjtarSTTzPZ
-	V7qAQyAOXyOQFwozgEZnWuoRdZdmp7zaLebqm0i+bC03hX3bYqguhEHREHt3SDinkIbawVxcytytm
-	IUfoY1oh0AbrdVey55sQ9QSAG2comlaHVYgfDJrN4fmhq/uou8zGjl6TMFFA5VOsT5Z5gKDGARvE0
-	tvzAGjLENDVlXsplt6iOv1CzDZaiiNBiU1QNHUW3PuvFv29rVjeIHbdLd0HQVZGBlxAPdmN0aOTZd
-	RzTZygi0Q/+UOo0EP/XyrTd0KnFUu7rvRAzYm37hJHQeY0BXTZUsl23PfagnfiZfxVDeoD2mu/TFj
-	Ihck30Lg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xWYGo-00000006SRK-230B;
-	Thu, 26 Nov 2026 12:08:10 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4F88E302186; Thu, 26 Nov 2026 13:08:09 +0100 (CET)
-Date: Thu, 26 Nov 2026 13:08:09 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v3] sched/topology: Avoid unsequenced accesses to jiffies
- in sd_init()
-Message-ID: <20261126120809.GA83911@noisy.programming.kicks-ass.net>
-References: <20261125-topology-wunsequenced-v3-1-efa3db7e0bf8@kernel.org>
- <20261125094643.GY2668804@noisy.programming.kicks-ass.net>
- <CAKwvOdmyGdn4ES6Ku+Yovd7a5imzmtmYtd7KB=OMCqKpv1X8rg@mail.gmail.com>
- <20261125200311.GA3625068@ax162>
- <20261126115032.GE49833@noisy.programming.kicks-ass.net>
+	d=manguebit.org; s=dkim; h=Content-Type:MIME-Version:Date:References:
+	In-Reply-To:Subject:Cc:To:From:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=nY9kYR/xw/7wOiVhGg3uzbGjOgXyshW0del5pACziv4=; b=trs+zPqObBmbFuWzSje6cG8p/Z
+	XxLyFSTnTu6JZ/rtVxBIPyJ+VMpZ6KuyqMl9bTCV2CBiJKow0zqh+N1sd6nTS8eDbX3T1lr1Sb/40
+	0l6QBOGvmLI/5Il/fGqxwVgGTzOC9wtV+igWlmOPkyZXCSP31N7qbwH9WA1S7dsvkeysVhPO/Ih3J
+	0qjaqZLM/9tWwPn8EONQkcvLdJUxDYqH663Ru4Jts3hXlggsGtzx4bbAptqvRtaVhDAnhIR3XW/xr
+	/ICz5CSijAneM1KCKUpk/LHP3MbOfTo5SfGpLpB+qjI15PU2Cae+zgqxB1aaGcsixtfijAKxB/OMj
+	FW9nBgRw==;
+Received: from pc by mx1.manguebit.org with local (Exim 4.100.1)
+	id 1xWYPD-00000000zqR-3EYd;
+	Thu, 26 Nov 2026 09:16:51 -0300
+Message-ID: <c9542b37c8edfdfa255cdfc2d5e3f9d2@manguebit.org>
+From: Paulo Alcantara <pc@manguebit.org>
+To: Elkin Cruz <elkin@google.com>, Namjae Jeon <linkinjeon@kernel.org>
+Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>, Shyam Prasad N
+ <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>, Bharath SM
+ <bharathsm@microsoft.com>, linux-cifs@vger.kernel.org,
+ samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, irogers@google.com, Elkin Cruz <elkin@google.com>,
+ stable@vger.kernel.org
+Subject: Re: [PATCH] smb: client: unlock reconnect_mutex before putting
+ session on terminate
+In-Reply-To: <20261125210025.1277771-1-elkin@google.com>
+References: <20261125210025.1277771-1-elkin@google.com>
+Date: Thu, 26 Nov 2026 09:16:51 -0300
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -80,86 +68,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261126115032.GE49833@noisy.programming.kicks-ass.net>
+Content-Type: text/plain
 
-On Thu, Nov 26, 2026 at 12:50:32PM +0100, Peter Zijlstra wrote:
-> On Wed, Nov 25, 2026 at 01:03:11PM -0700, Nathan Chancellor wrote:
-> > On Wed, Nov 25, 2026 at 11:32:31AM -0800, Nick Desaulniers wrote:
-> > > On Wed, Nov 25, 2026 at 1:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > >
-> > > > On Wed, Nov 25, 2026 at 12:23:35AM -0700, Nathan Chancellor wrote:
-> > > > > Clang's warning is ultimately pointing out that jiffies may have two
-> > > > > separate values in this initializer because it is volatile and accessed
-> > > > > twice and the order of these accesses is not specified. This could
-> > > > > result in unexpected or inconsistent behavior depending on the code
-> > > > > author's intent and whether they realized the variable was volatile or
-> > > > > not.
-> > > > >
-> > > > > As two separate accesses is not necessary here, add a local variable to
-> > > > > hold the value of jiffies before the designated initializer so that a
-> > > > > consistent value is used for initializing both members, clearing up the
-> > > > > warning.
-> > > >
-> > > > None of this tells me why we should not just disable that warning and
-> > > > get on with life.
-> > 
-> > See below, I believe this warning has general value (but maybe not
-> > here).
-> 
-> Yeah, not here.
-> 
-> > > I think the warning has value generally across the tree, even if this
-> > > particular single instance "isn't a bug, per se."
-> > 
-> > Hard agree. Just because this particular instance is not a bug does not
-> > mean future instances won't be. We pay a small cost to silence the
-> > initial instances then we get to see what it flags in the future. If it
-> > turns out there are never bugs, we can just turn the warning off
-> > globally (we've done it before) but I'd rather have hard evidence of
-> > that first; to me, these initial instances don't count. No maintainer
-> > has objected to the other patches I have sent for the other instances of
-> > this warning and there were not all that many for how much code the
-> > kernel has.
-> 
-> I just don't understand any of this. Perhaps I'm being super dense, but
-> calling this UB is utterly stupid IMO. It is trivial to define what
-> should happen here and make the compiler do it, although perhaps it is
-> not what people expect -- but at that point you can have a warning about
-> performance, rather than it being UB.
-> 
-> Most all of this is me being distrustful towards the C committee about
-> volatile; they hate it while we live by it.
-> 
-> But I really don't see the difference between two jiffie reads in an
-> initializer vs two jiffie reads in random code. Its just two reads that
-> cannot be fused, big deal.
-> 
-> So they're making a big deal out of the unsequenced thing; but at the
-> same time they're eroding actual sequence points; I mean WTF ?!
-> 
-> So function calls used to be a sequence point; but then they allowed
-> auto inlining (without the use of the inline keyword), and guess what?
-> An inlined function is explicitly not a sequence point.
-> 
-> So they cannot be both concerned about sequence *and* erode sequence.
-> 
-> All of this just sounds like a whole pile of wankery without actual
-> merit.
-> 
-> Also; the purported justification of UB has always been room for
-> optimization, but volatile is the anti-thesis of that, it explicitly
-> does not allow optimization. Marking something with volatile as UB is
-> just batshit.
-> 
-> I mean, I suppose I can apply the patch, but I'm not buying any of it.
-> This is not an improvement, it actively makes clang worse!
+Elkin Cruz <elkin@google.com> writes:
 
-So, if we hide this evil volatile in an external function call; then the
-C frontend will not see this most evil of UB. If we then LTO these
-objects together, the optimizer will happily merge it all back together
-again.
+> In smb2_reconnect_server(), when server->terminate is set, the early
+> exit path calls cifs_put_tcp_session(server, true) while still holding
+> pserver->reconnect_mutex and unlocks pserver->reconnect_mutex
+> afterwards. Dropping the last session reference can free server (which
+> equals pserver for primary channels), causing mutex_unlock() to touch
+> freed memory; the normal done: label at the end of the same function
+> explicitly unlocks reconnect_mutex before calling cifs_put_tcp_session().
+>
+> Unlock pserver->reconnect_mutex before calling cifs_put_tcp_session() in
+> the server->terminate branch as well.
+> ...
 
-There is no spoon^WUB.
+Applied.
