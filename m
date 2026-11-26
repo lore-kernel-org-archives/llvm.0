@@ -1,100 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795690850;
-	b=D2IzmkEzj/G1uNBOVDdjpkOmwsw6ZyUUJTPJSh5xpco20o2rV/+tL9+r7qhc+NQFSi7l
-	 qgSgAJQfFQTPbdYqe60Z//IUCGfrYJ4c05Aeqpy1f/ZAWMksLkfQNc/QNiZR9RvpzTLx1
-	 UnlKEXwRbwlXIV2tr+oHOmPeWN08yO2Sb3LrRiw745C8AWvXyUCvPtwr7SsNwtHxVwOyl
-	 Udv4s7VcdOXqklzslOsq3pWsoPBkGB/Uj7AvEHBMnlqiFEBx6fmJdAeZ9lCcJ+pt+rfa4
-	 D+IoALeuKQDoOdlFzwOEWVIKjr2GxeiWPFWt/IRnkXsv4YtKTD8WBpHIPVEyfAhZ3Nw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795690850;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795691532;
+	b=UrMX2lzIXiYMkRW1fac18FUodrfXDV/jh+Xg7UgyDZC/fSDG0B2PJeRaA4cFRS/m4I+a
+	 kIKYW989Ui4t9U5d74Gv//hOToYJduZXT4EdhHwDM5WdsQ0LsLiKpvt3VS6cOri34DJe2
+	 EDvBSmpJtCTAnjUzw/s2b31K8iAlVQiwlHM6erB0bIfFmx5KG2pSW6AYVu3QHrPON/Msf
+	 SpOjZ37tk5kikeqzxeIvJQEuoDbfTbieUfV1xXn3yFXugMAtYipF1cTNNCWazwVHAWcUd
+	 QGtMFrpp56AsBi+c1jao7TnXGJGZCjCL3RgrbKAAOTG+mOlticJgjlGphocDoBL1s9g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795691532;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
-	b=nAQFjc4sq/h9UQ6Ajts4ycrxKI/n5LuMRjhwekxn9CNMFSi0epl3evBPqkuW/6kgHqKc
-	 09BHJ7qzFxrPxckaPDAtAG2hTFECnRfrgbQoAfuVhneCQq8wlh1GvIj45UPGSn0hZ4BYJ
-	 oZcK0X9hgMshbp8L17HawBnru6NKwqsmiaayfpTHIYcgW1kWogRr7UjfbvnVFc6DtcfHR
-	 a7TaO32ck8kYTSc4j7/LCZc2SX+7UA/+pqX3azaNGa0Mkp950L1yQxwLvZ1YrybmoPsWj
-	 uBOT4moi4oCSCcvxN1YLP9VKO2EE4Qnk8+TawlR8iadZ0bTrj6165GOJZ/vLFWIXE9Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YNhcWKfg;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:In-Reply-To:X-Mimecast-Spam-Score:X-Mimecast-MFC-PROC-ID:
+	 X-Mimecast-Originator:Content-Type:Content-Disposition;
+	bh=/bantJDujBdPXRkbIoqLhEHljHB1m6SQlPYF9yA+ZR8=;
+	b=rI9YRtNP3ROXRWUbdmcN9VD8ah64HMFRAeR8GFebYSQkMN/w3HpWSh8BCdi261Q9S3Xs
+	 9XxtV2mD6w612DidDOa75Q1cuyoGs+x2H3EDyooyAwT30t+SFbRMvICHi5swCIJENN/lJ
+	 wptz0xrZOjm2ibNUk2VRh8YXgl2QYihd0+QbC+WmaA2r+A9R8Nk1DJ/do59gHHnPQjUix
+	 /4G+ihbgGoJEmZk/OmE6aruIq02Keq32js8agZUEgSkZ0GwgY2Vx7PuZIOtSfA02WUuux
+	 uW4kvIYC+L73Mu2O+gpyIs+LYb4qJ1D/TXAAF6imSyB7Iss3ssc57Vzas2O5tndjwKw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NfZ1kP62;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93571606A321
-	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 11:00:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93571606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB65606A31E
+	for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 11:12:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4AB65606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YNhcWKfg
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67583c777abso7174235d50.1
-        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 03:00:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795690850; cv=none;
-        d=google.com; s=arc-20260327;
-        b=W9Gg8ol/HNRj5/F5twEqFxoG7F91JRpw/P+Qf8PW3kmMMXcN4++qL6CJB88/+0lv6x
-         GDB4f347k/Rt2pOC9QOlMmZvwMbswh6zUMlSinoy+lNeqQBDf+81F+88723hOHk5L6jb
-         Oi8+sNvHVWRAUTwiCZZtt8+3+0e8FuxsFX/lECxrDJWTnWGB0FIX3RSMPn7Ei5PIYeRs
-         vJuGg70EJkiJHETnIzdMC3yC4EN3iOMrbbjT61YXk65llcB/AB18bcJcJAoR+geD0I4k
-         QVupFrq20pk5OZ63BVY9W3Pynxn9mfeEt7ig9NouaTgHxiTMw3uQOVb8KkNzH1MFpKkx
-         bpfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
-        fh=xsRoT1ceDTUf2Z6GZnk5++bhxEgv/XIiFBhwCPX9WVw=;
-        b=nVlxfs4cESNc361zyf/FrX6XT3NZ/y+OcZ6190fZrWs0ECwGdIgMaPVxtEqb5K8kG0
-         DJf2HoaXho9aRgyZoTlqEjJUM+R2H0rYcsjWRYDTmPkwDeAyQRTdG9MA0xHMCIN23TZ4
-         EFBr2V+lMng3feYfQL9XEtkBMzJ0xsUUVeYf7zZYwAix9sh5GcFr7R4TcqJBlDLhQy8v
-         WVqXxTg9WpmzrQHu2iHykxoMb4cJkm5rF0uRqIKb4Onf+IBQpEMVwKtE7Exxt4R0As9J
-         7q0CloHCwDWA42Nw1W5BOPJORsdb7liEnVezhEEABs0aOFvEHYTYRryQmZJinu1k3wNW
-         xeBw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795690850; x=1796295650; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
-        b=YNhcWKfgbU8CRWFrGOOxjcr4/XuXfaKp2nqQ/fTc0tnYi9xXa3ViXwtMRVd3sbWRlV
-         TNQoroF4Grl1BVzvtCcsmy8+bELCx/o7HsixdqqUSatv7P/97LhmSyIwdRUtJaQh3hM5
-         DmrJHy7eRNuSF1qunAwSqfsNqWd6hjTM57R/60C8HO9uxuzpUmqJVlHh5c51bS3vKUZO
-         eciGb9GfZNmRIwaY4XL09F/HTroB6fWB+6sRPEmAlAExJvkWIVUmBPqsnqDusE6NL/Ie
-         FSvnWgxpiB7tJoJLHkD6elEZLRh/GgvWqlw3TLC+Z7g0+lNlqfb/jAXSaPvlfTfDa3bZ
-         QgoQ==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NfZ1kP62
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795691531;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/bantJDujBdPXRkbIoqLhEHljHB1m6SQlPYF9yA+ZR8=;
+	b=NfZ1kP62lBJhCFaL7AzyO1ECIE0/NYCh+NNbvGO3+xPhDVPyldUN9xnX+yNVjtVIxIqBts
+	+/V5XjGOEike52xFNr/lDFRafkeV6eyUaxEwv+P50eYm0XSldZlCCmOaZ+p2uMRWMxiFen
+	g1BDKHDV2N+DwRTh96bwSG+5zpKmM9U=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-187-d8--rMG0Noudwq0-pRZLaQ-1; Thu, 26 Nov 2026 11:12:09 +0000
+X-MC-Unique: d8--rMG0Noudwq0-pRZLaQ-1
+X-Mimecast-MFC-AGG-ID: d8--rMG0Noudwq0-pRZLaQ_1795691528
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-4bcda4c853aso313641f8f.0
+        for <llvm@lists.linux.dev>; Thu, 26 Nov 2026 03:12:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795690850; x=1796295650;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1795691528; x=1796296328;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
-        b=zh8YUoHQLbG4+8a1StQ7BmNccRdgTDAqub5f4myx22VB5sQ+jjax8/F+A45RHsSkZs
-         da22AL/dL/mS5pWfYEDqhwKeX9iML0O5sSJX50Kfv/55e9kPdqp6zg9i7WEkV3uJ/kiV
-         jWvjstH/D1peCHiEhl3fVAoLDKzO2XbrbRgrdz0hUwL20xsgZlrY+ifw9pL1ZWQyGZxa
-         A+ZtUTg4h2ZdnfZZEiEWUwju7NASWImeZhGIQ4a2FNr38iSrn8pQrUZ+JrpKAIZwEHIc
-         YteGJmhon847w+J7x+yP8CVOIQp0ZPRIidVcVij3n8CWFs1E84kQkcNyZnZyqrOfCLuI
-         2xtw==
-X-Forwarded-Encrypted: i=1; AL+hErGpLlbhs95KTrBPjt1PH+gXwPbmuykatuP0ZLX5H/SeUzdq4RbIeMMhxyHQLo3mIUrAYtGW@lists.linux.dev
-X-Gm-Message-State: APuU4Z/Lnn6xDbr6LQfp0+qOdKLmKkxUBMFdGGG4uJBa/ULDIlUEDn1j
-	/XLw+C9tzFIh34Qg/6x1j9lE/7KmIM8z15te6AKG4/Gfohh2DuL1aCQABZRSM47RI/9lRFKsbaf
-	ag2Ao0nD+L9y6NQt2N6QaC8Qr3MHatJ4=
-X-Gm-Gg: AZFdTZe2ptv8uNuk+ndPx/R6gxJGOCpBEsjLPOCmGDQq7VDKEjz00ke06XkpA8DZUw3
-	kQ2TOnskYHbXI+ZKx3IU0aOvlRFONdKOiPx3D4gCJthZGIUxxreGCGGqDfyy2ppscD58oYKxWUT
-	CxRJn3xUsEM40/ggLxrXACG/rI6wRKJWLKZI7TDurvScf18XxvhxWR+OmM3DR1aWgwexNVi0Q0n
-	FPmdkI2J8GUlBG9y7ms+g+IqQe40PGVy/u56hdULzPuW2n8FzD2AM96FvC8Zkl+Tu2KSTCqfoRW
-	BdF0u7DoseIdycj8/Vl8DrtB2dYL8tjkABwFQOkmQqKm+Sviyw2crFt3mrPds41rMyh/UOCM2Uv
-	PQe7qMC7YWYNJ1N3RrL4a82SG776H+gNV1/kCxw==
-X-Received: by 2002:a05:690e:480c:b0:67c:6bcd:b905 with SMTP id
- 956f58d0204a3-67df440791dmr4500687d50.10.1795690849512; Thu, 26 Nov 2026
- 03:00:49 -0800 (PST)
+        bh=/bantJDujBdPXRkbIoqLhEHljHB1m6SQlPYF9yA+ZR8=;
+        b=VZtijeASwU13n684PYKiyTBRC+eBhKEGFXIkgQUg/WA8LhBe6xwC4I1Abv4KuAJ/N4
+         79jKn8Qk6jpJSmFNQdlBwuyFxPV1BiF1iSNCttSxCxALnSXFDDy61VYC6/g7sB8TsQxQ
+         5uOHPmMOlzhhOghXslC9GvfS2WS6lQT7ZB9bUWzpTYEK6afDEv1gzBr//J62Hx99695U
+         Ywr83y8FWS/rph+Hp/oCp7JfdCcsvPaL7axna4PP2rGygcSm2qcm99NRPicMvNlYaHqu
+         qGMfM+/g6/QD+kEpbNdotPWfLSopO1jfk2Yc1BfOXm618EaIiszxKBeZq5igcCCfDAMO
+         /qPw==
+X-Forwarded-Encrypted: i=1; AL+hErETGA/Rt1viFYsCpz3ko5zHS6FcLWGTCwgCQR7xupZmIoeLSmDNTElqrx2FS9+TQkeqmTiK@lists.linux.dev
+X-Gm-Message-State: APuU4Z+Gurekoyl5TOQIC31nckqhSDxy4mh0rgtSrDDwr/QxmMI48k+0
+	REV0lrGzsCsju9fAZyFqFcAvxBeqe64MlVhwlxBuIT8Nku3tJT13b1osQUsN17mYC/iE6WgqXzp
+	44otjQ4m5KyPh/TFjtntg3FA+7XAYLcpWSRb5O1GrnVXR4PiXC02HUC4=
+X-Gm-Gg: AZFdTZeykDp0/pttlRPFToqXTuUpqt+5JUaLQRu/1/I+n0lI1Qfh3Wo4szlmQhb4qqv
+	eO1L+BSkLjL9/D7wwQXcwfYgFfk9VOG5EBdvf1imDSJJe2SaUD01OEmALAYk3x0FjiW4Kihj6za
+	qJnl4whGtcpw5+UPcsnVCET0+/8u+/M60QFHGPV5yD8tn+0Mq6D5uiDt1MZkla5M1/Pr8seiZ35
+	GFHUd5vznl2qoN7xhpHJaE17FXfxiUeOAzPFGV8xU+0H24VMmBoCiYITToEPB00ef+3Zz3Xi7iM
+	REouz6KTb02GHRY3hSnUQXzGeXxUTROHEREYXsc/JzgJw9yOkvnu8zL8j6vOy7fk6JD4MEFlvlK
+	tjLdAQuUcBNhZiabjnf6zv1yolFLb4kUh8MypC4Im1NurXq+e66ZCGJFyBb3QoahcDZY7tUeIJB
+	wlqYm7
+X-Received: by 2002:a05:6000:299c:10b0:4a7:9630:7b5a with SMTP id ffacd0b85a97d-4abb47b2043mr29541071f8f.47.1795691528421;
+        Thu, 26 Nov 2026 03:12:08 -0800 (PST)
+X-Received: by 2002:a05:6000:299c:10b0:4a7:9630:7b5a with SMTP id ffacd0b85a97d-4abb47b2043mr29541030f8f.47.1795691528027;
+        Thu, 26 Nov 2026 03:12:08 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.146.153])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4b70c05b9desm15925798f8f.54.2026.11.26.03.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2026 03:12:07 -0800 (PST)
+Date: Thu, 26 Nov 2026 12:12:05 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Elkin Cruz <elkin@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	irogers@google.com, stable@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] sched/core: Avoid atomic cpuset_lock() in
+ __sched_setscheduler()
+Message-ID: <awgUBa_9VrhDahUt@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261125222729.1450842-1-elkin@google.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -104,94 +111,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
 MIME-Version: 1.0
-References: <20261104133158.3187525-1-luolongjuna@gmail.com>
- <20261104133158.3187525-2-luolongjuna@gmail.com> <avZ3jEbnuVu5Qv2G@jpoimboe>
- <CAKL4jwX=ctyjXmm=Oz_+HXe89vOHWHgT_-KGyL47fOBEQTYJiQ@mail.gmail.com> <avdWaZboJeDyyOMs@jpoimboe>
-In-Reply-To: <avdWaZboJeDyyOMs@jpoimboe>
-From: Longjun Luo <luolongjuna@gmail.com>
-Date: Thu, 26 Nov 2026 19:00:37 +0800
-X-Gm-Features: Aa3M54rwjsZu7jMc1Fcx0xLlcwpmIPWCqXj01ITTPuucs-yBR6GhxYBGJrQyqJo
-Message-ID: <CAKL4jwXZQKf2XrkRmpws3BK6x6iyMD+BRY-NMfqzR1DMmowadg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 01/11] objtool/klp: Fix checksums and copying of
- wide strings
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, 
-	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, 
-	justinstitt@google.com, live-patching@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20261125222729.1450842-1-elkin@google.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: BPuXJ-etsrusLB2NW25-to8Obm_E0eHjoWY4st6RFDY_1795691528
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I sent string-related fixes as a separate series.
-https://lore.kernel.org/live-patching/20261126105325.2521938-1-luolongjuna@=
-gmail.com/
+Hello,
 
-On Sat, Nov 14, 2026 at 2:27=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org=
-> wrote:
->
-> On Fri, Nov 13, 2026 at 12:32:20PM +0800, Longjun Luo wrote:
-> > Sorry, I left out the debugging context here. Both comments refer to
-> > specific kernel build artifacts:
-> >
-> > On Thu, Nov 12, 2026 at 06:42:36PM -0800, Josh Poimboeuf wrote:
-> > > Please give example(s) of such "wide strings" in the changelog.
-> > >
-> > > > +/* Wide strings, such as the u16 PSR setup table, end at an all-ze=
-ro element. */
-> > > > +ssize_t elf_string_len(struct section *sec, unsigned long offset)
-> > >
-> > > What is the "u16 PSR setup table"?
-> >
-> > PSR stands for Panel Self Refresh.
-> >
-> > Source    : drivers/gpu/drm/display/drm_dp_helper.c: drm_dp_psr_setup_t=
-ime()
-> >             /* macros expanded */
-> >             static const u16 psr_setup_time_us[] =3D { 330, 275, 220,
-> > 165, 110, 55, 0 };
-> > Section   : .rodata.str2.2 (SHF_STRINGS, sh_entsize =3D 2, Clang ThinLT=
-O)
-> > Bytes     : 4a 01 13 01 dc 00 a5 00 6e 00 37 00 00 00
-> >                         ^^^^^
-> >                         220 (0x00dc) contains a zero byte at offset +5
-> >
-> > objtool   : strlen() returns 5. The checksum hashes only 5 bytes, and
-> >             the copy includes only 6 of the table's 14 bytes.
-> >
-> > > > + /*
-> > > > + * FIXME: GCC's range_string() uses a one-past-end string pointer.
-> > > > + * strlen() reads past the section; preserve the string base and a=
-ddend.
-> > > > + */
-> > > > + if (entsize =3D=3D 1)
-> > > > + return strlen(sec->data->d_buf + offset);
-> > >
-> > > I don't understand what this comment means either.  Please make sure =
-all
-> > > comments and changelogs are written by humans, as LLMs tend to write
-> > > nonsensically.
-> >
-> > Source    : lib/vsprintf.c: range_string()
-> >             p =3D string_nocheck(p, pend, "[range ", default_str_spec);
-> > Section   : .rodata.range_string.isra.0.str1.1 (8 bytes: "[range \0")
-> > Reloc     : range_string.isra.0+0x9a: R_X86_64_32S .LC22+8
-> >
-> > GCC note  : Uses .LC22+8 (one-past-the-end pointer) as a loop bound wit=
-hout
-> >             dereferencing it.
-> > objtool   : Passes offset =3D 8 to strlen(sec->data->d_buf + 8), readin=
-g past
-> >             the 8-byte section. Fixing this requires tracking the base
-> >             string (.LC22) and the +8 addend separately (left as a FIXM=
-E).
-> >
-> > I came across both while testing on full kernel builds rather than in
-> > production livepatching, so I'll leave it to you whether they are worth
-> > addressing in practice.
->
-> It's probably worth fixing, just the comments and commit log need to be
-> clear about what exactly we're fixing.
->
-> --
-> Josh
+On 25/11/26 22:27, Elkin Cruz wrote:
+> When Magic SysRq-N invokes normalize_rt_tasks(), it holds
+> read_lock(&tasklist_lock) in atomic context and calls
+> __sched_setscheduler(p, &attr, false, false) with pi == false to reset
+> real-time and deadline tasks to SCHED_NORMAL.
+> 
+> For a SCHED_DEADLINE task, dl_policy(p->policy) is true, so
+> __sched_setscheduler() calls cpuset_lock() (mutex_lock(&cpuset_mutex))
+> while in atomic context under tasklist_lock and then skips
+> cpuset_unlock() on exit because unlocking is gated on if (pi), leaving
+> cpuset_mutex permanently locked.
+> 
+> Guard cpuset_lock() with pi (matching the non-atomic caller contract,
+> where switched_from_dl() releases deadline utilization under rq/dl_bw
+> spinlocks) and call cpuset_unlock() on exit whenever cpuset_locked is
+> set.
+> 
+> Fixes: 111cd11bbc54 ("sched/cpuset: Bring back cpuset_mutex")
+> Signed-off-by: Elkin Cruz <elkin@google.com>
+> Cc: stable@vger.kernel.org
+> ---
+> 
+> I am trying out new Clang static analysis checks for kernel bug
+> classes, and they flagged this code as possibly buggy. The findings
+> were triaged/fixed and commit descriptions were drafted with help of AI,
+> then checked against linux-next (not runtime-tested on hardware).
+
+Thanks for this, but I believe Mathieu's patch takes care of it already?
+
+https://lore.kernel.org/lkml/9194486f15bb0cb36b51e4525f471d1150c0d58b.1795115075.git.mathieu.desnoyers@efficios.com/
+
+Best,
+Juri
+
