@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795779590;
-	b=rQ8s1weUzhd5xcwnLD95T+ScqU/hTr1lsnPQG7BH5pLfWH/fUKbhjO0QqmQRHivvJTXu
-	 HYVBJtaRiraD4F6rB8wRAeBbunrfy4iYBsXkiPpmM6u5JJqYhef1eKadTDmXL3Mml8SUH
-	 uD0S5CHhf1oAtjwD3oYJRbe2M8aGnlCipfw95rzkl0Isb8trPzIEQxwK4Vv0S77xj+iwl
-	 SRCTBBKbNhG4cLoUB9T936v8IcDI7thyUri5ISP+yu7mHQpwH/iuXwISQTUboAUyoekIJ
-	 26ipyv7nHIE0cEdf4aSbICaRnm8ltNERi2MZ0lvicGifBudndpvwrhbh5xn0JhjlEBw==
+	t=1795779660;
+	b=wLfsB5VDeJKZiaEbeZMhn5Es0F7kGBZl13BAGdArCG6fEfMNVz78IqEvYh3r0YZ4Z61L
+	 CXjQ7P/uu9bYeL5/9qu0nOIg1Oy2tHm1z2fLcc1vpDz0skFw8h7YUzndik/5AWo13AlIe
+	 aT8LDs/6N8D0JBxDjfZSHnfZgYHnUF3l4+CDZWofRdRIbuJsjREzWK7go8nS9b6jv+GYP
+	 dnr5QIeHJB87fIMs3hE1MzUVXTAlZOg/dBn4T2H1XBOTQM7sgiMp63igw7+3+FyY0aKlA
+	 CGdCFJAoaTqwCkEbrjmB8YL+tPH7i/hS4W9pbm4PkC3LR83v9PFK+ekZW34wgkKW/Dg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795779590;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795779660;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Type:Content-Disposition:
 	 Content-Transfer-Encoding;
-	bh=YwGjvP6ctTxZun8XTu6GbbqiRyztei0tj/DC1LKv/lo=;
-	b=RdKQE6IfpX7FKtX7ZWsB7HZiUB/MZD4FUfYsSziTsh0tfSrRyHyeBjwXTvGBp1pLIyon
-	 ttRVXUwf6oXDgWGwUfLBmtDHKtJ/lJGzH4BFa/PcJVWNRB4KE9EHNCzgPxk37ZmOpHjUv
-	 Daxm4k5bVsdDBzKO+yqdLlFkCCZVeLd5//K/iNhNE4RC7dkenbbXv/ce7u+dOKDqOAmQY
-	 qge16nJ+VFiWgLM0Q3Bf6ujFQ10Ret1GhnRYxbEV+W5P5IW91or+eyx9woNxzAxEmXDCY
-	 a66HNC626kYM5ZLGfm6ogwYmedDRBny7gIn8ZjSLLaOvuGPDkrVr3bShc3Bcq1ut/7A==
+	bh=bp/KRA36N8EH7qPrylVQjtX79x1i14QeIGDoVR7yhis=;
+	b=0MpIIfxppjWj7lN5i/9hMzNYFw03SeQmQmMZoKESn3jzBJpHO/J7YQxZ19MwFdmwR+pt
+	 s84JkaSMQCxMO4iuCk4YVYAFZghTQqrX8dQtnS1W0DF8j0+dUZfFeCEuJBTF/PLE6zXXC
+	 1mGMnDu2+xp7GZNkRsmGK+VwNOcuSuMLd6u4f0JHpPizs/GHs4TSbutMNX0yP4Hs/ykMQ
+	 Cgsbll4nea1WMkRFmWisMkpWWkAwN1rXJuTZr+dGkLKDdPRfxr+Q+BgaYyDgHKZ6NbXvA
+	 u206m2E7f70TsQAUekh6a65Ic50qH103hYq/66ZlG8e2K0bwuvmZqZhN6qxlgfXYi6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fwe+eUNd;
-	arc=none smtp.remote-ip=209.85.221.51
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vTwYvJB7;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD359606A330
-	for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 11:39:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AD359606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186B6606A33A
+	for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 11:40:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 186B6606A33A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fwe+eUNd
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-498f5fa5103so4754282f8f.2
-        for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 03:39:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vTwYvJB7
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4bb70074ab2so84837615e9.0
+        for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 03:40:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795779588; x=1796384388; darn=lists.linux.dev;
+        d=gmail.com; s=20260707; t=1795779658; x=1796384458; darn=lists.linux.dev;
         h=content-transfer-encoding:content-disposition:content-type
          :mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YwGjvP6ctTxZun8XTu6GbbqiRyztei0tj/DC1LKv/lo=;
-        b=fwe+eUNdJ2+Y54yr7PTQl47O/WD2lK6E8CBuyQfL6ze+sAplFXTBEe18D7gYz4QM0Z
-         GYJH1JAw4NIjUgLp0HH/AqOsRIH+fxV6WJN//CiMG3C9xnyMPh8CZOJJy5z+tp6bEs8U
-         rv+D/Wf9QJ47DF87zuyVihgaYS9RGbyFNHox7pk4TRVXo+bKGjjXTTIvwe8RjXv9rGmP
-         2MKsuC9Lmz2JpPNJpIIF/KYCcfNhXQWJ5SH0uHR9718mYxBWBNY+GumGTCvCsAqf58L4
-         SpvnfAtfo2p/fFL3AKJqQwDPPFMMddEf1Kp9wsQoukSS0YhUbRZG2gZ6QfGN/rk794K0
-         fIWA==
+        bh=bp/KRA36N8EH7qPrylVQjtX79x1i14QeIGDoVR7yhis=;
+        b=vTwYvJB7hkY3UlkfuUc/7735jKrUISj3IGuAoxQ2pmB3wSqAL4Z3fjuTItmuDoQzH7
+         ei41k3Gqo9bjvWigMIpg/Gq8yrC6up1+rSCTPvjJVgEVD7jlfpkGmCDxtFt2XBDC4A8O
+         0l3i3ELOWo+k46dZS5oMNFeFcqZg0duLfefvyEXQ3T+gUJd4Rr+Qmo4BLdY/oEzsB0dD
+         usdjrOvDpV0bTjHoXJS4Z23kIwJobRDzi7ZfV33JkGoRDqXLEggQal+jJNfeqxoZafa7
+         /1LvMOco29iVK9D2vfymn6PyoRh/N39EXtmTEE+m6LYBWVpguHGNi7Lh1xcrXjc/uR2I
+         wDZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795779588; x=1796384388;
+        d=1e100.net; s=20260707; t=1795779658; x=1796384458;
         h=content-transfer-encoding:content-disposition:content-type
          :mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=YwGjvP6ctTxZun8XTu6GbbqiRyztei0tj/DC1LKv/lo=;
-        b=Rf1FV2eaH0/XI0Fb237/xkV1VHHURhHbTHJ9ZSfpMwABj4AN7CcrtcFVoZxAbbSbWU
-         35crbWfq0jCqnQqig096osJ9QAUowRoiJrXpYDWZJ2/xV9Np6oihAEXUbcU3R7pIsgrN
-         7mQm+XjAT4ncBbAH0OYKU38aW+JPlHkRBhjr3w7mYSBiauQnXFU+OX2da9qg627mKD3U
-         In2TSHdzcwAmpfLcQPsuNFS9uT6qGPfZebLI+3bZ45r2FkSO5CUS2AprBZTVfty3vbih
-         K+JrfH4piHBQlkPqEn+daWPejRkCaB7KPvbzjlF/oC0aELa1lBwB2MEarCqX28FMy/1J
-         PS3w==
-X-Forwarded-Encrypted: i=1; AL+hErGaMwkKmX7CZ51/YVV41QWeYfYQzXtFPlnItyjajUhgwxVOjWgcqpLv4GsEvZ/lBtiZUKD1@lists.linux.dev
-X-Gm-Message-State: APuU4Z9RV9NMk2po3fdmMKdDknEM0a9G9hk7LKSDCooOWkCIE4rKc+VL
-	ig68M7bVUhieNAyZ3AOds95QLwLJx5VB7P37bM8bnJ1B+8X1TyIUAiUq
-X-Gm-Gg: AZFdTZfSlj5YBxaVuP5Zi8V0Lw0Z7mtVpa2gStLDZt4aYjoj1Ka+Lz2NwWl50DmgqQK
-	GhJ7lePndrK82cgv1gJ+Kt2Ftm1C6RKBfZNG4HgJW6f7ZnqjIb6BCxYu83UunZZnQAjJog177uR
-	TfK4RsE+22WKse7b4V4hv9Z1cC60L/3Zc+1s5TSS0fibyGwWKOlfgpgT7htl0LIt6K3+SZZMR9p
-	XyOpaZYVpcKWjaZ/DlJ384uTn6MyjQ+tri9fCMeRsIBA+irRR2CefMdUtFsEFs1mYirgcNTRBRp
-	KhM2pErtDnqrfdDfnWnNBls7nEUhoZpNLJYW/zq+jWhnCKFUXZKFB7ECntXt4d5lZn/JeKV4Oe5
-	IHEAOqzQYe5+UtK9e3uxGZKoQ1Ln1FBZWE3zlOy6B7R4wnzxVAluYRyMBhU7I1FMlNYo5ffDgOd
-	L/5aNP9s7YcwKGPzb/swYfHYU7GyKJqel+Di+LHT6OBxKo3cAtFtLeLN07RpklD91Rb7vmat2Qn
-	wJHShwKkz6qZScrsH3q6m7rpvVnwweh3uVGhhRYgYyingYFJV7V41vtYW+/q7LOVEXDStc3yOme
-	0qZR1AyxMNaFl9VQ9YdSOyfVk5r6t1Q=
-X-Received: by 2002:a05:6000:184d:b0:48c:7386:af18 with SMTP id ffacd0b85a97d-4abacfea55cmr51711565f8f.8.1795779587982;
-        Fri, 27 Nov 2026 03:39:47 -0800 (PST)
+        bh=bp/KRA36N8EH7qPrylVQjtX79x1i14QeIGDoVR7yhis=;
+        b=zjEy8XrZnKwokX4apty26tnBsIAsU3FsFeblFtAY5d7+uUe1bTXjAzc1jINM98UrgO
+         3HsUuLN8lfNxpsDL0dHaQIg2UzlPGjZHdXCHdM6yR+AYozfq9vZgbArLfVfH1niM1d6F
+         CE5P/VMh01myPoOwoM+8yPaFS0A1yYEcbZ9sSuuWi022bg2lrASE2FHlYj0DCGIqsVls
+         w0W8SNyer37DGhUxH9Zc39t7IBXyRAzZ3uQW4fJET3x8mDALv6oH/44b6Hy+oRQg2CI0
+         dAzL0e45HffxK8Tuy0qBCkb/gqrTnmkxjOL/2l96Egdy7c/XkYUKLAOEjS749eaBzds3
+         qD6A==
+X-Forwarded-Encrypted: i=1; AL+hErECU7Jj7dojp1AsuI7l+bswErrfMswiyVuKg5YpzUTOMt0FrFFoKe+ou7jWdqQpHfW8AYH2@lists.linux.dev
+X-Gm-Message-State: APuU4Z/qo1yhZKeOFQOaxN/jvsqzL7gVjv4AGCH2yfhw6rYQGBmvyCP+
+	MaSabxDbbwejip5QAXRWDyBmAvSFjL311UXp3mqqS5I37K9t6CY9UXOQ
+X-Gm-Gg: AZFdTZezWyshWZqXGZhWiGu3OZHwvANi1oOAJZ4STh61WaXpZwkDKGr3Frun4Ypv8ek
+	8/82HbNXuJebvMoc5StM8cGCIi8yBE0QXhQRsrvTYPBtUAnR4br6gPcb8EvXbJ30b8kdjlH4AZN
+	c9+AGhMZEUYx8vJXoQyMtJ+XA/sQEqy6LNCSmWG/Do936rQHix8j9q5QkiM3xaLexZPsMVR9Gj9
+	LfIP5zHu95auHoBGOSO8NeKUAl7kBFOAra5B+DAXf7Px9/EdMYdvXIHTUx0pEIDtazlj7jOycHf
+	hIBC0LNTZn+4Q7lGrC32YIJe6MjUUhKSyboGNv0h1yXixYPzRxlqwb4V5yr4OuxiPWJZRs//hzf
+	qSRIr0REHfWjw81WDTZDDDpn/WX4icFv+a9nuQK4kZ94/rVYSf6yUUZ7yvzQ9M49OTe9luVuZy5
+	jkkU7tatJ2AunQ3EDgP5PCHib8aCleqkguI/ci7Zqgh+SZgaxmHY39q+nbxFDEEwsYduMbqIPvm
+	Yxlb8A9aH2//eIAjZ6QbSWcLKQWZV/LOKP3NRoc8RCfFFK4tnwZH6hUvthWek3IFJ7AOBF/p2wx
+	Py7Xhjx5yUrie8tc8F4F/qHWELZU+ZU=
+X-Received: by 2002:a05:600c:5246:b0:4bb:6de4:2f7c with SMTP id 5b1f17b1804b1-4bb8881c5bdmr504767125e9.20.1795779658410;
+        Fri, 27 Nov 2026 03:40:58 -0800 (PST)
 Received: from ArchOarora ([95.179.249.152])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4b34e9c3ffesm31135419f8f.19.2026.11.27.03.39.38
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab658e2d60sm47752163f8f.3.2026.11.27.03.40.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2026 03:39:47 -0800 (PST)
+        Fri, 27 Nov 2026 03:40:57 -0800 (PST)
 From: Oarora Etimis <oaroraetimis@gmail.com>
 To: Louis Chauvet <louis.chauvet@bootlin.com>
 Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
@@ -111,12 +111,12 @@ Cc: Haneen Mohammed <hamohammed.sa@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v7 17/43] drm/vkms: Introduce config for plane name
-Date: Fri, 27 Nov 2026 12:39:33 +0100
-Message-ID: <awlqNR4-W6a8w6QN@Oarora>
+Subject: Re: [PATCH v7 18/43] drm/vkms: Use plane folder name as plane name
+Date: Fri, 27 Nov 2026 12:40:44 +0100
+Message-ID: <awlsJLmNiJhyZH6Y@Oarora>
 X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261126-vkms-all-config-v7-17-21194cda2468@bootlin.com>
-References: <20261126-vkms-all-config-v7-0-21194cda2468@bootlin.com> <20261126-vkms-all-config-v7-17-21194cda2468@bootlin.com>
+In-Reply-To: <20261126-vkms-all-config-v7-18-21194cda2468@bootlin.com>
+References: <20261126-vkms-all-config-v7-0-21194cda2468@bootlin.com> <20261126-vkms-all-config-v7-18-21194cda2468@bootlin.com>
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -130,12 +130,53 @@ Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-Hello,
+On Thu, Nov 26, 2026 at 12:29:01PM +0100, Louis Chauvet wrote:
+> The plane name is now directly derived from the configfs folder
+> name. When a plane directory is created under
+> /config/vkms/<device>/planes/, the folder name is used as the
+> plane name via vkms_config_plane_set_name.
+> 
+> Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
+> ---
+>  Documentation/ABI/testing/configfs-vkms | 3 ++-
+>  drivers/gpu/drm/vkms/vkms_configfs.c    | 7 +++++++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/configfs-vkms b/Documentation/ABI/testing/configfs-vkms
+> index 26e7f81b5b7d..55e4183046ec 100644
+> --- a/Documentation/ABI/testing/configfs-vkms
+> +++ b/Documentation/ABI/testing/configfs-vkms
+> @@ -98,7 +98,8 @@ Date:		Nov 2025
+>  Contact:	dri-devel@lists.freedesktop.org
+>  Description:
+>  	This group contains attributes corresponding to the
+> -	plane <plane> of the VKMS device <device>.
+> +	plane <plane> of the VKMS device <device>. The name of
+> +	the directory becomes the name of the DRM plane.
+>  
+>  What:		/sys/kernel/config/vkms/<device>/planes/<plane>/type
+>  Date:		Nov 2025
+> diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
+> index c57791df72cb..bbfc0c8a922c 100644
+> --- a/drivers/gpu/drm/vkms/vkms_configfs.c
+> +++ b/drivers/gpu/drm/vkms/vkms_configfs.c
+> @@ -375,6 +375,13 @@ static struct config_group *make_plane_group(struct config_group *group,
+>  			return ERR_PTR(ret);
+>  		}
+>  
+> +		ret = vkms_config_plane_set_name(plane->config, name, strlen(name));
+> +		if (ret) {
+> +			vkms_config_destroy_plane(plane->config);
+> +			kfree(plane);
+> +			return ERR_PTR(ret);
+> +		}
+> +
+>  		config_group_init_type_name(&plane->group, name, &plane_item_type);
+>  
+>  		config_group_init_type_name(&plane->possible_crtcs_group,
+> 
+> -- 
+> 2.56.0
+> 
 
-vkms_config_destroy_plane() frees the plane through call_rcu() and
-vkms_config_plane_rcu_free(), which is module text. vkms_exit() has no
-rcu_barrier(), so a queued callback can still run after the module is
-unloaded.
-
-Thank you,
-Oarora Etimis
+Reviewed-by: Oarora Etimis <oaroraetimis@gmail.com>
