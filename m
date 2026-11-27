@@ -1,75 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795789441;
-	b=3EO6Hj2d7ohGfwXSLgLIyDkpHrrWBuhQhIU3J1soR7k7nL2PoSHUkz5EkKe/Qpf+3iNk
-	 wQCDMcrULsiTgfyWDu9/Te3MLIGgE5xYXv27jqOACnNXrKN4WrG+DDTvMis8KolL3KjMP
-	 JVd6R521DQ4Y0LGlX0QnQ3eWpWVkfl1Yar0z/GYPOAXR16bALr9UDg34B0+VF5oXcuVkj
-	 y+ISYekoXUIOZ7qsx7vMkh0yM7Y5IZ6lA/Gq48OqJKfzcjkAhryhWXU5LY20QtQekWbBd
-	 o8DM7HUxIzm1CbK5LwjW/nTFOrVrowXX5IHxTtspxyqIGpLHUyFBxDTMBCsKG1pPvkw==
+	t=1795793889;
+	b=dwUBPUzTAlHrF7xRairH3DJXw/p/cHBg9bBvpGEr9VJgYEQy74EckXOeJpqLc7I0tjRE
+	 0g8UzZavRAaM+Z3YscQwWFB0j5/IUlDIi7+Vo/vo3zHCGeTlDmlsMAnMsjizejAi4ZqJy
+	 2RZ3OfAuRMvzcHXh7fogpxMU6p+TScpDjtU7nWa1LM8i3+TPxJSofVKix74fKk/Qe8zqW
+	 tzKaQv0aJnTUpgIQnr9vAUmYjFYSioBtMlOsdR29ftNm4Yvw/6v5nCelt2mwy/ZFomiFX
+	 OjNZBPKpWAqipBgKq6Dswo9nGcVbdgZfJLfmaElYgnlZAxPlG3tJa8kJqoXG7dpuaXA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795789441;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Developer-Key:X-Developer-Signature:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=nst+cq+RCQZd8DKJagmNoo0PO23xtVq1JOUVv/rZqj4=;
-	b=J1i80hrEMMGol/1ant72HWhXD1F//b2TaTKmaQCpH9sq/94aEITKZImFCv6FdAUMfMTy
-	 qqf5tRz/2PD2Ze8yWFhOLt9WG+MqcrHHZI4s4VhVxv1TBH3nYWYBYQ04+SKPOg44Jpn0V
-	 5IVIQKr1hTeaob2tak9nIeTqxq+KVExq4lb3Y6+AfMYTajpjNA+mxikCIVWIhomtTAoNy
-	 lKMfwWJAA5X6Y4Mp8dZOxVftiuYk8zSASOTpQCd/f9DGDAS9W2JeNmSb3ENFqUXu6pIzV
-	 gkfC9DDZMun9f9LYb+G64BsqoQWsLvpgV5XKlStGdxIE5ZfPHWXhptkQFgmIBDoG8NQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795793889;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:From:Subject:To:Cc:References:Content-Language:
+	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-TM-AS-GCONF:X-Proofpoint-Reinject:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=wSDkFlm4jY6UNA0o3Zt5f5H/V94IK7NSFsorwTBkxTg=;
+	b=YF6wk5oMRex5h/zhCR9VXOuWxOEKiOI9kqFgg9SHKRN0cnJHQomtNjYFx/7iR6Tic97A
+	 L06dFzOeaMrlOLQH2rASuID/ITR0V7qgPkIaVvozpjIkIxtDV/ADQGRjWsEQ1huY0F5ae
+	 eEVNNDBCiYI/GKfSWNcq3ZPNBXCcxs1UVpC//fR6yy4A2LFaX0MK6CVK7In9uqV1RB84H
+	 Xo2RXcG+0E1HKLyVQysIdR3vbemOmXqAkLCmFvxffmiLk90WrvUvFsNFv/pnOvqAT6cLe
+	 PRNCTTZZkTPTgbd40SSUgss+klTdXubsIaxfk0iCIsJ4fnuHewcU0QdrjNzv6eayrrg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--ardb.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pd7yrvJO;
-	arc=none smtp.remote-ip=209.85.221.71
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b="nn/hj00N";
+	arc=none smtp.remote-ip=148.163.158.5
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB77606A334
-	for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 14:24:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FB77606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3AC606A31C;
+	Fri, 27 Nov 2026 15:38:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A3AC606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pd7yrvJO
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-48e00f3929bso4689328f8f.0
-        for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 06:24:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795789440; x=1796394240; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nst+cq+RCQZd8DKJagmNoo0PO23xtVq1JOUVv/rZqj4=;
-        b=Pd7yrvJOhrLOFYMIwSSrqSy9X3RWTtY4lLZTVFaePxFK/sDFM5WbHGXJMFjR5lu0yg
-         yi++L9gWKAeA7XTqerof3cKBydLhFeS0GiHpZwOVlVnCBK7HQYwmKLGaO9mhUvhqN4fE
-         oSBrsWES5xH21o615QQrqXGawoWa1hZvydKn8ntaGIcrbbNzmzdYY5376IiaXfrXQ511
-         s1dz1WFfPZq3qCF1OThRmimQiYQHDK+blY5KIQyt5Y4z/7V4NHrtNhWrpaaG4Wjm0lny
-         cP5OmnnF0jNXe8pbVL9yyav1UYxdpslkOFNuQ9SYFXpfcYydFJmYAUp2zPEu8s7Xn7/+
-         cusg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795789440; x=1796394240;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=nst+cq+RCQZd8DKJagmNoo0PO23xtVq1JOUVv/rZqj4=;
-        b=V/VHb4selyXmOe1JlXnYcaxqWJMLDxG9L9jw4pqkraIdLKWkqT1r48z5bP58eq7a8N
-         amkoegxtQLU444q+2Za7p2o+wwVjVoU+9AYhUEgOjLG9N+RzKirlRpjovLjcJURzuE0r
-         fYnMz9qVt1WHyuGOGtv9qoB75et1Fn1mTrdXQ6cFFzZ5vk/SgRpslThRpzZrcsNylWJ0
-         /qGoMLIMjUdYKE9Yo1fNs2ICt0CfOuAh7OsS4dqpZm2BSvYgzbrLzy+v91N1CG8Q6UvW
-         ZgG2qs7K4AuG38GMNqduRokli8w4CtxfqsB0Ks1SR8C+hIQ7SRG35t3cj3zmWWGFm4Nc
-         NMvA==
-X-Forwarded-Encrypted: i=1; AL+hErGk0JokFWg1LelkwweGsoLjutwyrcX5hu0n5nwEIT4TdrC1p5ch99eHlo41hgLtY1q5V7NT@lists.linux.dev
-X-Gm-Message-State: APuU4Z9SEKv5iUsTTjxgW46cMbIG28YIEOgB6Lmv12/igHPNTbyk9Kol
-	s2geBMzt398PImQPixKUS6Br/JZ0W8GDM0OIPhd9m2gt5TSV1JpBIx7Oc3T6GXLUamJQbOSYsQ=
-	=
-X-Received: from wmaq25.prod.google.com ([2002:a05:600c:6c99:b0:4bb:73d5:ab38])
- (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4e0b:b0:49e:65f2:db64
- with SMTP id 5b1f17b1804b1-4bb887fb66cmr519561025e9.5.1795789439448; Fri, 27
- Nov 2026 06:23:59 -0800 (PST)
-Date: Fri, 27 Nov 2026 15:23:49 +0100
-In-Reply-To: <20261127142346.788995-4-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=nn/hj00N
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ARE4sZS3266007;
+	Fri, 27 Nov 2026 15:37:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=wSDkFl
+	m4jY6UNA0o3Zt5f5H/V94IK7NSFsorwTBkxTg=; b=nn/hj00NgZJYb5SXVZhx2Z
+	kNkF85lXdR5x+V+fqdDyxJ5qYh+Gqipxe0MXks2I/k/un6fKwJ3RJaiTxctQaP3z
+	nCMk1w00QNknlcaL+IOfEC7OeTi8YZ0MRCNvCUsHFIsIoo2c9niAfPaklcJTFebi
+	qkJGjLSH4y4xq/eFyQ1U5fWtVLz7iulTZYM+peO9uvVRKsefY4CRYRSxQc+DaKCn
+	lGJi0Jwl+FH3u48VV2G3+qhvTDQk1AnZhUUL+VXF5QXvZEDDGj4oIQwJIvS7hrbY
+	5qJpcAuXFjFaWRPge4t52PMZGfS4F+OreQ8l8CHyb2ZpBdA7WTO85cQAzXNB62ag
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g1nns7-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 27 Nov 2026 15:37:14 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6ARE4Hec2819251;
+	Fri, 27 Nov 2026 15:37:13 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4j5kfaarn6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Nov 2026 15:37:13 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6ARFb8ha49676778
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 27 Nov 2026 15:37:11 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 915132004F;
+	Fri, 27 Nov 2026 15:37:08 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0CC8F2004E;
+	Fri, 27 Nov 2026 15:37:05 +0000 (GMT)
+Received: from [9.111.162.114] (unknown [9.111.162.114])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 27 Nov 2026 15:37:04 +0000 (GMT)
+Message-ID: <a98fab70-48fa-4640-88d2-a7a08f523128@linux.ibm.com>
+Date: Fri, 27 Nov 2026 16:37:04 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -78,211 +85,220 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-Mime-Version: 1.0
-References: <20261127142346.788995-4-ardb+git@google.com>
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7019; i=ardb@kernel.org;
- h=from:subject; bh=rx8m1dggkQbZeJXP7IVHLUsRFHtLh+mS/d71BeR3Ugg=;
- b=owGbwMvMwCVmkMcZplerG8N4Wi2JIZtzUulvLvnoMB5h9TaOk5tVTig/PczL/uuw0L1tGj9uL
- +r8zZjfUcrCIMbFICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACbyvYOR4anWXf7kMN6fbhM+
- 16zl1NRKLk8ou3s1Xn7lFnemBb/O2TD80zU1/1qq+aP7RYFXxts/HTceXJtzVsuiNWhGmNJ1i20 cTAA=
-X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261127142346.788995-6-ardb+git@google.com>
-Subject: [PATCH 2/2] x86/stackprotector: Use a named address space for the
- Clang stack guard
-From: Ard Biesheuvel <ardb+git@google.com>
-To: x86@kernel.org, linux-kernel@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>, Uros Bizjak <ubizjak@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Jens Remus <jremus@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 01/30] unwind: Add Minimal DWARF CFI bytecode
+ interpreter
+To: Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
+        mingo@redhat.com, tglx@kernel.org, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, pjw@kernel.org,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+        linux-riscv@lists.infradead.org, acme@kernel.org, namhyung@kernel.org,
+        linux-perf-users@vger.kernel.org, mhiramat@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
+        nathan@kernel.org, llvm@lists.linux.dev, nsc@kernel.org,
+        linux-kbuild@vger.kernel.org, ojeda@kernel.org,
+        rust-for-linux@vger.kernel.org, ardb@kernel.org,
+        linux-efi@vger.kernel.org, maz@kernel.org, oupton@kernel.org,
+        kvmarm@lists.linux.dev, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, indu.bhagat@oracle.com,
+        wnliu@google.com, dylanbhatch@google.com
+References: <20261125061523.1540234-1-irogers@google.com>
+ <20261125061523.1540234-2-irogers@google.com>
+Content-Language: en-US
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20261125061523.1540234-2-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: brvXg_RJUZTQu5mAUmnatHUtcWzdDrrf
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI3MDA2MiBTYWx0ZWRfX+qzyyuyu1B+R
+ /ruRXWo/zu5u+2/Z0LaCtY3N+BUb8znffYTTtu+NHKiNIaooKN3ELdx20GOt2uvxx7P5wXL+1+A
+ cpcYOaHmrjyz1MF/V7sVGbOPBX+fEdk=
+X-Proofpoint-GUID: wK7aymzh3GdSqbeQ85e9O3Dhs5dNAbYJ
+X-Authority-Analysis: v=2.4 cv=c8M+0h9l c=1 sm=1 tr=0 ts=6b09a3ab cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
+ a=1XWaLZrsAAAA:8 a=M8zXbRpaHz8_b2Mss2oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=O8hF6Hzn-FEA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI3MDA2MiBTYWx0ZWRfX4HPNbmoz03PS
+ bjSpWwHbVDc6A2l18C+xFCEmA5d1gCfAti1AE4Q1SzAW+XWH1dJfaPQdyS4stAn2G+cg/1aAUvf
+ uRdgrMyWaeQO3VhqDkxGUuZ2cKaGcV1OBrcozmGInTBrfeDXb6RQrK4KxWwkAtf42OotKBIWdHe
+ BceGetoE/nBLl99++V5H3LEeU1J4HIw9TYbDgVEuk9GuJR2pdZKKa9D/CsYi8ZDqJARO/x5ufyD
+ 2Jpgbhn/gZMqp0o8TMTsgQaOMNwvalX4PYiAfWhyhXyVAi/esM70kJBhZWD9wMlkR/aiDWPBf4i
+ xwqUtmTmLdRda/+RZJvu1W41t85aw+igiTDUK8MpVNp9G1dcUK9mU62x9+jkJKQaVc9srXlgnZB
+ Ih3tcpQ1UlqbOBvPf5aIAVXxJ3jGYc131ZTQb9l7oa6JZzH2VjFqr7PCIm5nNDsFOCNVU4nM1HJ
+ FsYR8R2QvfZiN/PT/7g==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-27_02,2026-11-27_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1011 malwarescore=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611270062
 
-From: Ard Biesheuvel <ardb@kernel.org>
+Hello Ian,
 
-When Clang finds an existing declaration of the variable passed via
--mstack-protector-guard-symbol=, it uses it as is, and only emits the
-segment prefix if it resides in the matching named address space. This is
-why the guard is currently referenced via an alias that never appears in
-C code.
+great work, I like it!  I am working on adding s390 support on top of
+your series.  Some early feedback.
 
-Instead, declare __stack_chk_guard in the %gs/%fs named address space when
-building with Clang, and access it via an unqualified per-CPU lvalue from
-C code, permitting the alias, and the export from asm, to be dropped.
+On 11/25/2026 7:14 AM, Ian Rogers wrote:
+> Add a strictly bounded DWARF Call Frame Information (.eh_frame /
+> .eh_frame_hdr) interpreter (CONFIG_UNWIND_DWARF_CFI) matching SFrame's
+> stack-unwinding state model and security properties, without requiring
+> new toolchain sections or duplicating user-space unwind metadata.
+> 
+> Instead of implementing a general DWARF expression virtual machine or
+> tracking arbitrary architectural register arrays, struct dwarf_cfi_row
+> tracks only:
+>  - CFA = (SP | FP | prologue scratch reg) + cfa_off, or fixed-pattern
+>    indirect CFA *(FP + off) (DRAP stack realignment) / *(SP + off)
+>    (signal trampolines)
+>  - Stack pointer save rule (SAME or *(CFA + off)) for signal frames that
+>    save SP in sigcontext (such as 32-bit x86 vdso32 __kernel_rt_sigreturn)
+>  - Frame pointer save rule (SAME, *(CFA + off), *(FP + off), *(SP + off))
+>  - Return address save rule (SAME in link register, *(CFA + off),
+>    *(SP + off), or UNDEFINED for bottom-of-stack termination), plus
+>    AArch64 PAC-RET signing state (DW_CFA_AARCH64_negate_ra_state)
+> 
+> Callee-saved general-purpose register spill/restore opcodes are decoded
+> and ignored in O(1) space. General DW_OP_* expressions, DW_CFA_set_loc
+> backward PC jumps, and DW_CFA_register rules on {SP, FP, RA} are
+> rejected with -EINVAL; DW_EH_PE_indirect encodings are rejected whenever
+> an encoded address is evaluated (while unused 'P'/'L' CIE augmentation
+> fields are skipped by encoded width without dereferencing). CIEs
+> (<= 128 B), FDEs (<= 4096 B), LEB128 operands (<= 5 B), and
+> DW_CFA_remember_state nesting (<= 4 entries) execute in a single forward
+> pass with zero dynamic memory allocations, zero locks, KMSAN output
+> unpoisoning, noinstr kernel-memory entry points, and Spectre v1 / v1.1
+> nospec hardening (array_index_nospec() and barrier_nospec()).
+> 
+> Also provide shared RCU-safe loadable-module .eh_frame indexing helpers
+> using kvmalloc()/kvfree_rcu_mightsleep() (dwarf_cfi_mod_alloc(),
+> dwarf_cfi_mod_free_rcu(), dwarf_cfi_mod_eval()).
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Once CONFIG_USE_X86_SEG_SUPPORT=y is implemented by all supported
-compilers, this workaround can be dropped.
+> diff --git a/include/linux/unwind_dwarf_cfi.h b/include/linux/unwind_dwarf_cfi.h
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/Makefile                     |  2 +-
- arch/x86/entry/entry.S                | 14 ----------
- arch/x86/include/asm/asm-prototypes.h |  4 ---
- arch/x86/include/asm/percpu.h         | 10 +++----
- arch/x86/include/asm/stackprotector.h | 29 ++++++++++++++++++--
- arch/x86/kernel/cpu/common.c          |  4 +--
- arch/x86/kernel/vmlinux.lds.S         |  3 --
- 7 files changed, 33 insertions(+), 33 deletions(-)
+> +/**
+> + * enum dwarf_cfi_rule - Recovery rule for caller's SP, FP, or return address
+> + * @DWARF_CFI_RULE_SAME: Register retains its value from the current frame
+> + *                       (or defaults to CFA for SP).
+> + * @DWARF_CFI_RULE_OFFSET: Saved on the stack at *(CFA + off).
+> + * @DWARF_CFI_RULE_FP_OFFSET: Saved relative to FP at *(FP + off) (DRAP frame).
+> + * @DWARF_CFI_RULE_SP_OFFSET: Saved relative to SP at *(SP + off) (sigframe).
 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index b7e08519b8c1..116700da7988 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -183,7 +183,7 @@ endif
- ifeq ($(CONFIG_STACKPROTECTOR),y)
-     ifeq ($(CONFIG_SMP),y)
- 	KBUILD_CFLAGS += -mstack-protector-guard-reg=$(percpu_seg)
--	KBUILD_CFLAGS += -mstack-protector-guard-symbol=__ref_stack_chk_guard
-+	KBUILD_CFLAGS += -mstack-protector-guard-symbol=__stack_chk_guard
-     else
- 	KBUILD_CFLAGS += -mstack-protector-guard=global
-     endif
-diff --git a/arch/x86/entry/entry.S b/arch/x86/entry/entry.S
-index 2bc217bb5475..f88021f4467e 100644
---- a/arch/x86/entry/entry.S
-+++ b/arch/x86/entry/entry.S
-@@ -62,20 +62,6 @@ EXPORT_SYMBOL_FOR_KVM(x86_verw_sel);
- 
- THUNK warn_thunk_thunk, __warn_thunk
- 
--/*
-- * Clang's implementation of TLS stack cookies requires the variable in
-- * question to be a TLS variable. If the variable happens to be defined as an
-- * ordinary variable with external linkage in the same compilation unit (which
-- * amounts to the whole of vmlinux with LTO enabled), Clang will drop the
-- * segment register prefix from the references, resulting in broken code. Work
-- * around this by avoiding the symbol used in -mstack-protector-guard-symbol=
-- * entirely in the C code, and use an alias emitted by the linker script
-- * instead.
-- */
--#if defined(CONFIG_STACKPROTECTOR) && defined(CONFIG_SMP)
--EXPORT_SYMBOL(__ref_stack_chk_guard);
--#endif
--
- #if IS_ENABLED(CONFIG_KVM_INTEL)
- .macro IDT_DO_EVENT_IRQOFF call_insn call_target
- 	/*
-diff --git a/arch/x86/include/asm/asm-prototypes.h b/arch/x86/include/asm/asm-prototypes.h
-index 11c6fecc3ad7..b04015ef12a9 100644
---- a/arch/x86/include/asm/asm-prototypes.h
-+++ b/arch/x86/include/asm/asm-prototypes.h
-@@ -19,7 +19,3 @@
- #ifndef CONFIG_X86_CX8
- extern void cmpxchg8b_emu(void);
- #endif
--
--#ifdef CONFIG_STACKPROTECTOR
--extern unsigned long __ref_stack_chk_guard;
--#endif
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index cef9a4ca9841..f7e37722913e 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -28,17 +28,17 @@
- #include <linux/stringify.h>
- #include <asm/asm.h>
- 
-+#ifdef __CHECKER__
-+# define __seg_gs		__attribute__((address_space(__seg_gs)))
-+# define __seg_fs		__attribute__((address_space(__seg_fs)))
-+#endif
-+
- #ifdef CONFIG_SMP
- 
- #define __force_percpu_prefix	"%%"__stringify(__percpu_seg)":"
- 
- #ifdef CONFIG_CC_HAS_NAMED_AS
- 
--#ifdef __CHECKER__
--# define __seg_gs		__attribute__((address_space(__seg_gs)))
--# define __seg_fs		__attribute__((address_space(__seg_fs)))
--#endif
--
- #define __percpu_prefix
- 
- #else /* !CONFIG_CC_HAS_NAMED_AS: */
-diff --git a/arch/x86/include/asm/stackprotector.h b/arch/x86/include/asm/stackprotector.h
-index cd761b14eb02..184c630452a7 100644
---- a/arch/x86/include/asm/stackprotector.h
-+++ b/arch/x86/include/asm/stackprotector.h
-@@ -20,7 +20,28 @@
- 
- #include <linux/sched.h>
- 
--DECLARE_PER_CPU_CACHE_HOT(unsigned long, __stack_chk_guard);
-+/*
-+ * If a per-CPU C declaration of __stack_chk_guard is observable by Clang, it
-+ * will emit the memory operand with the segment prefix only when the C
-+ * declaration is annotated with the correct address space.  Otherwise, Clang
-+ * will ignore -mstack-protector-guard-reg=%fs/%gs, and emit the bare unshifted
-+ * memory operand. 'Observable' means part of the same translation unit, which
-+ * amounts to all of vmlinux when LTO is enabled.
-+ *
-+ * So use an address space annotation for the stack canary even when using a
-+ * Clang version that does not support CONFIG_USE_X86_SEG_SUPPORT=y fully.
-+ */
-+#if defined(CONFIG_SMP) && defined(CONFIG_CC_IS_CLANG) && \
-+    !defined(CONFIG_USE_X86_SEG_SUPPORT)
-+#define __stack_chk_guard_seg	CONCATENATE(__seg_, __percpu_seg)
-+#define __pcpu_stack_chk_guard	\
-+	*(unsigned long __percpu *)(__force unsigned long)&__stack_chk_guard
-+#else
-+#define __stack_chk_guard_seg
-+#define __pcpu_stack_chk_guard	__stack_chk_guard
-+#endif
-+
-+DECLARE_PER_CPU_CACHE_HOT(unsigned long __stack_chk_guard_seg, __stack_chk_guard);
- 
- /*
-  * Initialize the stackprotector canary value.
-@@ -38,14 +59,16 @@ static __always_inline void boot_init_stack_canary(void)
- 	unsigned long canary = get_random_canary();
- 
- 	current->stack_canary = canary;
--	this_cpu_write(__stack_chk_guard, canary);
-+	this_cpu_write(__pcpu_stack_chk_guard, canary);
- }
- 
- static inline void cpu_init_stack_canary(int cpu, struct task_struct *idle)
- {
--	per_cpu(__stack_chk_guard, cpu) = idle->stack_canary;
-+	per_cpu(__pcpu_stack_chk_guard, cpu) = idle->stack_canary;
- }
- 
-+#undef __pcpu_stack_chk_guard
-+
- #else	/* STACKPROTECTOR */
- 
- /* dummy boot_init_stack_canary() is defined in linux/stackprotector.h */
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 9bd50c68cd7e..5d0d29ec8974 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2322,11 +2322,9 @@ void syscall_init(void)
- #endif /* CONFIG_X86_64 */
- 
- #ifdef CONFIG_STACKPROTECTOR
--DEFINE_PER_CPU_CACHE_HOT(unsigned long, __stack_chk_guard);
--#ifndef CONFIG_SMP
-+DEFINE_PER_CPU_CACHE_HOT(unsigned long __stack_chk_guard_seg, __stack_chk_guard);
- EXPORT_PER_CPU_SYMBOL(__stack_chk_guard);
- #endif
--#endif
- 
- static void initialize_debug_regs(void)
- {
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 2438b89a4620..61173c38a951 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -475,9 +475,6 @@ SECTIONS
- 	   "kernel image bigger than KERNEL_IMAGE_SIZE");
- #endif
- 
--/* needed for Clang - see arch/x86/entry/entry.S */
--PROVIDE(__ref_stack_chk_guard = __stack_chk_guard);
--
- #ifdef CONFIG_X86_64
- 
- #ifdef CONFIG_MITIGATION_UNRET_ENTRY
+For s390 support I plan to add the following:
+
+For the implicit DW_CFA_val_offset(SP, -160) rule, as the CFA is defined
+as SP at call site + 160:
+
+ * @DWARF_CFI_RULE_VAL_OFFSET: Value is CFA + off; only used for SP.
+
+For DW_CFA_register (mostly used in lead functions to save FP and RA as
+well as SP):
+
+ * @DWARF_CFI_RULE_REG[ISTER]: Saved in another register.
+
+> + * @DWARF_CFI_RULE_UNDEFINED: Explicitly undefined (DW_CFA_undefined); marks
+> + *                            the bottom of a stack (e.g. _start or clone).
+> + */
+> +enum dwarf_cfi_rule {
+> +	DWARF_CFI_RULE_SAME = 0,
+> +	DWARF_CFI_RULE_OFFSET,
+> +	DWARF_CFI_RULE_FP_OFFSET,
+> +	DWARF_CFI_RULE_SP_OFFSET,
+> +	DWARF_CFI_RULE_UNDEFINED,
+> +};
+> +
+> +/**
+> + * struct dwarf_cfi_arch - Architecture DWARF register numbers and word size
+
+For s390 support I plan to add:
+
+ * @sp_off: Initial SP offset from the CFA unless a CIE instruction says
+ *          otherwise, caller SP = CFA + @sp_off.
+ *          0 on most ABIs; -160 on s390, where CFA = caller SP + 160.
+
+That would be used in dwarf_cfi_parse_cie() to initialize the SP rule
+and offset.
+
+> + * @ws: Target address/word size in bytes (4 or 8).
+> + * @sp_reg: DWARF register number for the stack pointer.
+> + * @fp_reg: DWARF register number for the frame pointer.
+> + * @ra_reg: Default DWARF return-address column number.
+> + */
+> +struct dwarf_cfi_arch {
+> +	u8 ws;
+> +	u8 sp_reg;
+> +	u8 fp_reg;
+> +	u8 ra_reg;
+> +};
+> +
+> +/**
+> + * struct dwarf_cfi_row - Evaluated Minimal DWARF unwind state at a target PC
+> + * @cfa_off: Byte offset added to the CFA base register before or as the CFA.
+
+As a non-native speaker I have a hard time to understand that comment.
+Wouldn't the following suffice?
+
+ * @cfa_off: Byte offset added to the CFA base register.
+
+> + * @sp_off: Byte offset used to load the saved SP when @sp_rule is an offset.
+> + * @fp_off: Byte offset used to load the saved FP when @fp_rule is an offset.
+> + * @ra_off: Byte offset used to load the saved RA when @ra_rule is an offset.
+> + * @cfa_base: CFA computation mode (&enum dwarf_cfi_base).
+
+What about renaming to cfa_rule?  That would nicely align with the
+{sp|fp|ra}_rule and *_reg.
+
+> + * @cfa_reg: DWARF register number when @cfa_base is %DWARF_CFI_BASE_REG.
+
+For s390 support I plan to add the following to support DW_CFA_register:
+
+ * @sp_reg: DWARF register number containing the saved SP when @sp_rule is a register.
+ * @fp_reg: DWARF register number containing the saved FP when @fp_rule is a register.
+ * @ra_reg: DWARF register number containing the saved RA when @ra_rule is a register.
+
+> + * @sp_rule: Recovery rule for the stack pointer (&enum dwarf_cfi_rule;
+> + *           %DWARF_CFI_RULE_SAME indicates caller SP equals CFA).
+> + * @fp_rule: Recovery rule for the frame pointer (&enum dwarf_cfi_rule).
+> + * @ra_rule: Recovery rule for the return address (&enum dwarf_cfi_rule).
+> + * @signal: True if the CIE carries the 'S' signal/interrupt frame augmentation,
+> + *          indicating that the saved PC points directly to the interrupted
+> + *          instruction rather than after a call instruction.
+> + * @ra_signed: True on AArch64 when DW_CFA_AARCH64_negate_ra_state indicates
+> + *             that the saved return address carries a PAC signature.
+> + */
+> +struct dwarf_cfi_row {
+> +	s32 cfa_off;
+> +	s32 sp_off;
+> +	s32 fp_off;
+> +	s32 ra_off;
+> +	u8 cfa_base;
+> +	u8 cfa_reg;
+> +	u8 sp_rule;
+> +	u8 fp_rule;
+> +	u8 ra_rule;
+> +	bool signal;
+> +	bool ra_signed;
+> +};
+Regards,
+Jens
 -- 
-2.56.1.839.g22a8290db9-goog
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
