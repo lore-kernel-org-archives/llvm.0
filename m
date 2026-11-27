@@ -1,74 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=81.187.191.129
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795788447;
-	b=Qep6TD574u2mBWtNoxdrzeGwUzC3KB83IEjOjsLyFcoc7YErQ4Fy+ROxHzhWDVdtRBWO
-	 y7h77YKHoH+Pn/4+mW0Aa3VCUAXZ/mTi9hLYUEPXgQX7eTXRlVuYuUGTV47H9ZRKtxRjp
-	 0+keTbggNYuelO+v3vdVrqItK3tqYYNAlafGQvr8ZSvp61/bnan/JwhAgjutSST8gzDsy
-	 Clv5AYK/aGKYlt/pLN8n1ZLR1oJht1Y6NbYwAm7NCED9UKnvLJEsnGKb4f7YfPhqGC/dV
-	 aFOvU/vhwxratGFC5J7x2agURHLE2s71w7WkkO1RfAax1kIKYQxrtA/b1YvqujZ1s0g==
+	t=1795789439;
+	b=WAfSq0wQQtxvW1Z8uuB/IAii3ATCNFFHzbVPC6KDp267Oo9J8cYsomBtpW2xPcfXlu5C
+	 E0PNm7DGZ+zxCQEUIh5I7XGEagZLjnpeAzhHP6NfHig3JAiSZ17ql4Cv6Vde9xj8ZpfKq
+	 MskXj0GR/xwtZ+tgnxeQVX9nJ3N2ijWmz4CGPiZNbR0c8FOo6bsgnnFgZew5Gbo7/K0s8
+	 scDgv8FrflExb3tzox5D973DCWkKCE4LcPeEoqWov2Je5Yc4vukCApPQgYhzYBGe5TSVH
+	 m4OCuvIKBAvTByHwthy8bpFkXwGkxlF5rVIQS6otdcly+5RDItqd3Ve7R4UzyHsfNDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795788447;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:In-Reply-To:References:
-	 Emacs:Date:Message-ID:User-Agent:MIME-Version:Content-Type:
-	 X-DCC--Metrics;
-	bh=k3IRFjTa40yijxkZ99mvI6rZpFQBTdXXPJw6CdGe++A=;
-	b=Rsh9tGbByfEvN7P7g2z2KrR+l1aJAd6u/FFSqvZSpkPO85mEFSYI6Jn2ZVqVSWTxtREE
-	 J5ovC8Adu7oTl1A31TGClVkii88yo7TpYPTf1VDjKxsA4SjqUlRKtkonDyqV2WiebVZxS
-	 8ZJKUD/q0nCQl8SD5aBFqYFJ32Nehi6E3KuYlzd8rDOsXHzHoFDQm7REz6DxqHsfhKmul
-	 qVMdgDDuCdGHzSvszo3KSWHrvS6m3TfnEnZUhsMW1rMG8F5VDf/H/d6Z+czdcpGeFr+27
-	 sp8U+xXt+45LsWimF2SrO6p4bMPks2RLmFIsJO8aDcGYmEtgM4FdgbhOv+7f/3F7a4g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795789439;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Developer-Key:X-Developer-Signature:X-Mailer:Message-ID:Subject:
+	 From:To:Cc:Content-Type;
+	bh=Nr4GHdi8TuNIIYYptR82W4hGTIpm1KHzw93c/HPqhLo=;
+	b=LDP6rrgc3D3amnjC3bjneoor0GNgBiG4L8K3QYy9505Rqf0r3O4dQAX7Rw+tAvPhSn62
+	 L7e6lHTOwOgYPizVTBeP1xqcTZ2fNXj9/jjKK3JlSezWTDQbEkag7aftpLV2/zETzZr+3
+	 iIGAC5URguARzROtp17bYGzg8MOCN3UHMk0A/GARF0mQhDi9GTuyQQZRNqcm3NfSbigtU
+	 nZNLS/+ifr6sIT4nKsFOKWyTQCAzyx5Bd1AQU7e4NpYFdRLt7qATUpRnWhFvXVAdjCsWm
+	 lsK+pkOTOQUzHSdrMpAigxaMPyqDuRujorPo5EYP/8k68ndUP2DtK9omcdEz1CgnLpw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=esperi.org.uk;
-	spf=pass smtp.mailfrom=esperi.org.uk;
-	arc=none smtp.remote-ip=81.187.191.129
-Received: from mail.esperi.org.uk (icebox.esperi.org.uk [81.187.191.129])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--ardb.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hGjbUMMX;
+	arc=none smtp.remote-ip=209.85.208.70
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD27606A33D
-	for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 14:07:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7BD27606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=esperi.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esperi.org.uk
-Received: from loom (nix@sidle.srvr.nix [192.168.14.8])
-	by mail.esperi.org.uk (8.17.2/8.17.2) with ESMTPS id 6ARE7DIa020970
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Fri, 27 Nov 2026 14:07:14 GMT
-From: Nick Alcock <nix@esperi.org.uk>
-To: "Jose E. Marchesi" <jemarch@gnu.org>
-Cc: "Can" <can@tartanoglu.com>, <bpf@vger.kernel.org>,
-        "Alexei
- Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Eduard Zingerman"
- <eddyz87@gmail.com>,
-        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        "Song Liu" <song@kernel.org>,
-        "Yonghong Song" <yonghong.song@linux.dev>,
-        "Jiri Olsa"
- <jolsa@kernel.org>,
-        "Emil Tsalapatis" <emil@etsalapatis.com>,
-        "Ihor
- Solodrai" <ihor.solodrai@linux.dev>,
-        "Alan Maguire"
- <alan.maguire@oracle.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "David Faust" <david.faust@oss.qualcomm.com>,
-        "Bruce McCulloch"
- <bruce.mcculloch64@gmail.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nicolas Schier" <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <dwarves@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: RFC: vmlinux BTF from clang -gbtf, stock lld and a libbpf tool
-In-Reply-To: <87fqwmspyg.fsf@gnu.org>
-References: <20261121205803.b46d9bd1a88c@tartanoglu.com>
-	<87fqwmspyg.fsf@gnu.org>
-Emacs: if SIGINT doesn't work, try a tranquilizer.
-Date: Fri, 27 Nov 2026 14:07:13 +0000
-Message-ID: <87ecc6fjvy.fsf@esperi.org.uk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46491606A31C
+	for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 14:23:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46491606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hGjbUMMX
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-6b3f6d9827eso1616419a12.2
+        for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 06:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795789438; x=1796394238; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Nr4GHdi8TuNIIYYptR82W4hGTIpm1KHzw93c/HPqhLo=;
+        b=hGjbUMMXojX2Jm5ZqHtE2wNcMndVyBulDKtm1kvy80W8Gc9heyjCWN3A2KWLDoni6u
+         spwFXJChNSOe2zX/JTdkcKMaSJHlTL935pXkQ70IUubNfObMzVBdtPGzXf1mfMjwlwVp
+         qXoqCdvo+kRSJwL5uR+rl9gt/8EtMGzdh0bOCwaKzC9DALgtNygu4dj80sQRBtn5peBc
+         MFdWCScsWHsjGTia8z6uwqyQ9TDgCO9agQ3tARftRkZs96sWbhYURkNOOn3AphLlES3Q
+         ifxmJZvkQzgVsiLgM3wqjWFycWnrTVKOA6oTQyQp8M67NDtt10KE+Pkxx2EfYp7O2sVw
+         gFkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795789438; x=1796394238;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Nr4GHdi8TuNIIYYptR82W4hGTIpm1KHzw93c/HPqhLo=;
+        b=AAzxNT0FOKDRy6dVfBMZTk13F3TjGP3rukhRdqMylC/dhWv+OMs3mWgTynttrakF6M
+         XTBMx8dZ3LbmSaORgi5v96c7fwQuvHLMJkbIT3yZ7ix0sWHkPeh05N4Ios3rTIMkHyBU
+         AyfQ/MlIU5Eshzr0yfL1yQF9jCfzB9zUfYwtrDtGN90RUolcFB2yd05bzmxnaECCuPFQ
+         1/rbw5gJ2R9giNls5gpN6U1LS+vWSi3+46V7WroNNyVF5LjduWb1a++VmIoDURSXDx6S
+         DtPZIa7R2jrSRG3/ZkBpf+DpNKhYg2AkWdagDS4sgMJeyJ7MZmwnVKjGGs2h8oG2Grr7
+         U8JA==
+X-Forwarded-Encrypted: i=1; AL+hErGpqcYNjWHwpdMDdAmybO23a3hxDl2+Sxd8lpmNZbabtrIWxlrqRaWnK+XimIgyUgJzMto+@lists.linux.dev
+X-Gm-Message-State: APuU4Z+BgNNOuPL8sNl+wohebVawPK7F30Qpz9I5kta6zS0YXaRjNjae
+	Hncn0/uawvksdLZToZcfAn67JjvXiGpX18U1cVAdyyqGueH4sTyIyb2m18ZEO49j6aY6P0b1VA=
+	=
+X-Received: from edqs19.prod.google.com ([2002:aa7:d793:0:b0:6ba:1277:9974])
+ (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:1e8e:b0:6ba:5993:cec5
+ with SMTP id 4fb4d7f45d1cf-6ba5993f458mr16315738a12.35.1795789436818; Fri, 27
+ Nov 2026 06:23:56 -0800 (PST)
+Date: Fri, 27 Nov 2026 15:23:47 +0100
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -77,101 +76,62 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain
-X-DCC--Metrics: loom 1102; Body=23 Fuz1=23 Fuz2=23 rep=100%
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1689; i=ardb@kernel.org;
+ h=from:subject; bh=vU/fdwAiBRa6c+OuOUG6Wglb6aTzwZfj0yngfrJ3Py0=;
+ b=owGbwMvMwCVmkMcZplerG8N4Wi2JIZtzUnHE15YDE+sKeLpumrVN02Zszj8hf+2hidvCtln3R
+ NdN1VfoKGVhEONikBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABNh/8PwP01aL0p9oaiew62s
+ h+v6Re6yLopRuVVf/3mZSOaFsBRbEYb/IT4PNcPjrG10XSW263//1dqyYmURe9LlhmksT4q2XeV hBAA=
+X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
+Message-ID: <20261127142346.788995-4-ardb+git@google.com>
+Subject: [PATCH 0/2] x86: replace stack cookie hack with named address space
+From: Ard Biesheuvel <ardb+git@google.com>
+To: x86@kernel.org, linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Uros Bizjak <ubizjak@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 27 Nov 2026, Jose E. Marchesi uttered the following:
+From: Ard Biesheuvel <ardb@kernel.org>
 
-> [Fixing email adresses of David Faust and Bruce McCullough and Nick
->  Alcock]
+Currently, on x86, the C name of the stack check cookie per-CPU variable
+is deliberately different from the one passed to the compiler command
+line option -mstack-check-guard-symbol=
 
-Thanks!
+This was done to work around a Clang issue, where a non-TLS C
+declaration of the variable results in Clang dropping the segment
+prefixes.
 
->> Alexei asked in llvm/llvm-project#183915 [1][2] for native-vs-pahole
->> results to come here, and suggested dropping BTF dedup from lld in
->> favour of a stock link plus a libbpf-based kernel tool. I closed
->> #183915 and tested that route on saved x86-64 kernel objects.
->>
->> Two headline findings up front:
->>
->> 1. On those saved objects, unmodified ld.lld plus a libbpf prototype
->> reproduced the patched linker's decoded vmlinux BTF (bpftool raw
->> dumps match) and byte-identical .BTF_ids, though not byte-identical
->> .BTF and without booting a host-tool image.
->> 2. On the booted native kernel from the earlier patched-lld run, a
->> verifier negative test (flex_array_unaligned_step in
->> verifier_btf_array_access) unexpectedly loads across all three
->> test_progs flavours because struct vring_used is only a FWD in
->> native BTF. Static checks also show shifted-register FUNC
->> prototypes (e.g. __add_to_kill) and two duplicate-ID warnings in
->> resolve_btfids that fail CONFIG_WERROR=y.
->>
->> The compiler side is LLVM #183929 (-gbtf for non-BPF ELF targets);
->> its
+As it turns out, all Clang versions that Linux supports today have some
+support for address space annotations, and annotating the C declaration
+with the correct address space is sufficient to coerce Clang into
+generating the appropriate prefixes for the memory operands. This means
+the linker and asm hacks can be dropped.
 
-Ooh! I thought I was going to have to implement this. :)
+Patch #1 makes EXPORT_SYMBOL() work as expected for symbols with an
+address space annotation, so that patch #2 can export __stack_chk_guard
+normally, rather than from an unrelated .S file.
 
->> Discourse RFC [3] drew a key question from LLVM DebugInfo
->> maintainers:
->> LLVM debug info is best-effort, whereas the verifier and trampolines
->> treat vmlinux BTF as trusted safety and ABI metadata. Before
->> reshaping #183929 or proposing kbuild patches, I'd like feedback on where that
->> trust boundary sits, how functions and DATASECs should be handled,
->> and what GCC/Clang/linker contract makes sense.
+Cc: Uros Bizjak <ubizjak@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev
 
-I'm quite interested in this too, given my past, ah, arguments over the
-possibility of structs with conflicting definitions in different TUs,
-the mess pahole makes of them (because it assumes they don't exist, and
-accepts the first available struct with a given name it sees), and their
-occasional appearance in the kernel. We've even had cases where setting
-the wrong kconfig options can cause wildly different duplicate
-definitions of things like task_struct, though having structs this
-important with the wrong definitions causes the BTF self-tests to fail
-disastrously so hopefully nobody would actually ship a kernel that
-turned those on.
+Ard Biesheuvel (2):
+  compiler.h: Use the symbol's own pointer type in __ADDRESSABLE()
+  x86/stackprotector: Use a named address space for the Clang stack
+    guard
 
-(I am willing to believe that there is an intent that no such structures
-exist in the kernel and thus the file format need not accommodate them,
-though CTF, being meant for userspace, has to be more flexible. I stil
-don't believe that they don't *appear*, because I've seen them, and
-there is no obvious means to keep them from reappearing accidentally.
-A deduplicator is of course the perfect place to implement guards
-against such things appearing in built kernels, but it has to be able to
-spot them first...)
+ arch/x86/Makefile                     |  2 +-
+ arch/x86/entry/entry.S                | 14 ----------
+ arch/x86/include/asm/asm-prototypes.h |  4 ---
+ arch/x86/include/asm/percpu.h         | 10 +++----
+ arch/x86/include/asm/stackprotector.h | 29 ++++++++++++++++++--
+ arch/x86/kernel/cpu/common.c          |  4 +--
+ arch/x86/kernel/vmlinux.lds.S         |  3 --
+ include/linux/compiler.h              |  4 +--
+ 8 files changed, 35 insertions(+), 35 deletions(-)
 
->> true_signature [7]. Whatever comes out of this should work for GCC
->> objects too.
+-- 
+2.56.1.839.g22a8290db9-goog
 
-I intend to build CTFv4 support for LLVM on top of it, too, following
-which BTF-compatible (CTFv4) support in LLVM-compiled userspace should
-be practical, modulo bugs.
-
->> Saved-object replay (experimental instrument, not a kbuild API)
-
-This is really neat :)
-
->> Types. In raw BTF, 132 STRUCT/UNION definitions present in pahole are
->> FWD-only in native. In the normalized C-dump comparison (23,109 exact
->> of 23,216 native and 23,490 pahole declaration rows), only 39 show up
->> in fwd_vs_definition.txt; the other 93 (including vring_used) were
->> paired as "exact" against bpftool's synthetic forward declarations
->> and
->> filed under extras.txt (111 pahole rows = 93 missing definitions + 18
->> extra FWDs; 2 native FWDs). Walking pahole's BTF from those 132 roots
->> reaches 149 of 178 pahole-only rows (e.g. acpi_gpio_params via
->> acpi_gpio_mapping).
->>
->> The cause confirmed per-object in libahci.o (ahci_cmd_hdr) and
->> e1000_hw.o (e1000_shadow_ram) is clang's deferred pointee traversal,
->> which emits a FWD even when the CU's DWARF has the full definition.
-
-libctf fuses such things together when it sees them (addition of
-structs/unions to a dict when a forward already exists mutates the
-forward into a struct/union; addition of a forward when a struct/union
-already exists just returns the struct/union; the deduplicator also
-avoids emitting forwards unless no concrate definition is visible, and
-by the time it emits anything it's already seen everything there is to
-see.)
-
-This sort of thing may not be practical in your model though.
