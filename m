@@ -1,76 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=81.187.191.129
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795786479;
-	b=A7Q/8dksOPMgDJZRr6gairiksf8MjYGOAbUHOLtaYWqJdL3jVWTurpSXHoo3y7H7P5nD
-	 eDQ9pZiCKxyXKymcw8VMGdbaql8EJ6WFJEtkvdHK7TlntxZh1hgRMCUYMRnuQq3MDBVH4
-	 VM4WdimZbur6wY+GV6XUuNxHQvb2+SoWaQcdGsCm9HqdhKKhwYkdRyyG9GyMlIUr28NXD
-	 DPJER4C2nDgH13cVX4bJv6aX3UOzHEpCR0lIZa+FAHgprJMnHbdlarwnPbqL7u7K17OPk
-	 ZWEE9KOD2p1Vdp+Tb8UYNy+s+6+tm/He7UtNtELAx6RhVNgfd07diqk2AXE5lxe+xZA==
+	t=1795788447;
+	b=Qep6TD574u2mBWtNoxdrzeGwUzC3KB83IEjOjsLyFcoc7YErQ4Fy+ROxHzhWDVdtRBWO
+	 y7h77YKHoH+Pn/4+mW0Aa3VCUAXZ/mTi9hLYUEPXgQX7eTXRlVuYuUGTV47H9ZRKtxRjp
+	 0+keTbggNYuelO+v3vdVrqItK3tqYYNAlafGQvr8ZSvp61/bnan/JwhAgjutSST8gzDsy
+	 Clv5AYK/aGKYlt/pLN8n1ZLR1oJht1Y6NbYwAm7NCED9UKnvLJEsnGKb4f7YfPhqGC/dV
+	 aFOvU/vhwxratGFC5J7x2agURHLE2s71w7WkkO1RfAax1kIKYQxrtA/b1YvqujZ1s0g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795786479;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:User-Agent;
-	bh=2SK1Xgbf6fyj1hdX4K1PB4cnKvLC5vu/Pgi2aCMB8is=;
-	b=RZpX588yVuDRUq531Zv6Kfu81F50VeTSmK92CbvCwSzxU5h1or9QnUUWOMKrK96GB14S
-	 KpeKL51zUfGoW7aNqtA5nFwdZ90FJzMVGo1T2BUJWVXEEQdhwSQBJldd8Z1kJqS/ZPU5o
-	 BcnJCItUqwPwwLa0uE9XFBteAki8Ln0CIBE1y6ZsaDBozjd/CGtdPdxeE5PaiX15mHImG
-	 u5qJU5x84hDA0ORcXAp68FAKI6KB863/85Yw8qzjoKvkdwwPQm/nuaDKfQroBpHaqmYwA
-	 PexVX3zF0nGsVpSpHLUizH+dmRAvh+IVbRx00e7voUquFMh/UV13KuOKVRkLxdBhc/w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795788447;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:In-Reply-To:References:
+	 Emacs:Date:Message-ID:User-Agent:MIME-Version:Content-Type:
+	 X-DCC--Metrics;
+	bh=k3IRFjTa40yijxkZ99mvI6rZpFQBTdXXPJw6CdGe++A=;
+	b=Rsh9tGbByfEvN7P7g2z2KrR+l1aJAd6u/FFSqvZSpkPO85mEFSYI6Jn2ZVqVSWTxtREE
+	 J5ovC8Adu7oTl1A31TGClVkii88yo7TpYPTf1VDjKxsA4SjqUlRKtkonDyqV2WiebVZxS
+	 8ZJKUD/q0nCQl8SD5aBFqYFJ32Nehi6E3KuYlzd8rDOsXHzHoFDQm7REz6DxqHsfhKmul
+	 qVMdgDDuCdGHzSvszo3KSWHrvS6m3TfnEnZUhsMW1rMG8F5VDf/H/d6Z+czdcpGeFr+27
+	 sp8U+xXt+45LsWimF2SrO6p4bMPks2RLmFIsJO8aDcGYmEtgM4FdgbhOv+7f/3F7a4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YAYgIpi6;
-	arc=none smtp.remote-ip=198.175.65.18
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=none header.from=esperi.org.uk;
+	spf=pass smtp.mailfrom=esperi.org.uk;
+	arc=none smtp.remote-ip=81.187.191.129
+Received: from mail.esperi.org.uk (icebox.esperi.org.uk [81.187.191.129])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40940606A323;
-	Fri, 27 Nov 2026 13:34:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40940606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=YAYgIpi6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795786479; x=1827322479;
-  h=date:from:to:cc:subject:message-id;
-  bh=IOXUtQNmfHlpd9W66NXKEWCS5XcE25gMYMutlohsmZo=;
-  b=YAYgIpi6rLOPElZ8tKUf1gl56c0iGsMh4I7JXoHK2pIKsvW+ebjRr1Yw
-   Oph21PEaGcxS12M3Q8X8UbGqSp/UmR82VvopknNOlSVjWdkRqXTJeLnOu
-   FoN2YGTwsLnfzVmo0lAVLgjsMFRQmk0nYrYuJYcTTwVpMX/INs3NH3yHH
-   jSoI1m0bY0uEDf+fr8mvkQb+/jzQoZd/WwOJ7RkFsJqfaiLMx+uG+ezF5
-   hluizcIGJFZePGJnYNl3ScCe8C+GqaGwiLXHCMgbIu5L1wAQDRXrF1YID
-   KAdVXmjM2PrKelr4ZrEkEW+5spaJQIW+WvLHdFNahPuK+nyZ7PsmbauPb
-   A==;
-X-CSE-ConnectionGUID: 0cXlSqvLRkGdD58yMqXmSQ==
-X-CSE-MsgGUID: Ca0JlNWkSZKLs3mXINj89Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11979"; a="4704695"
-X-IronPort-AV: E=Sophos;i="6.27,237,1787036400"; 
-   d="scan'208";a="4704695"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2026 05:34:38 -0800
-X-CSE-ConnectionGUID: WECBWC3oRoapoGDmhNcaqA==
-X-CSE-MsgGUID: G+p0duVoQUS9eH+1pbiz4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,237,1787036400"; 
-   d="scan'208";a="12916792"
-Received: from igk-lkp-server01.igk.intel.com (HELO 146cf1e082f1) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 27 Nov 2026 05:34:37 -0800
-Received: from kbuild by 146cf1e082f1 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xWw5z-000000000CR-1YKH;
-	Fri, 27 Nov 2026 13:34:35 +0000
-Date: Fri, 27 Nov 2026 14:34:34 +0100
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/250-aop 19/50] 19 | use
- crate::error::to_result;
-Message-ID: <20261127142830.dn5dzTxW-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD27606A33D
+	for <llvm@lists.linux.dev>; Fri, 27 Nov 2026 14:07:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7BD27606A33D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=esperi.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esperi.org.uk
+Received: from loom (nix@sidle.srvr.nix [192.168.14.8])
+	by mail.esperi.org.uk (8.17.2/8.17.2) with ESMTPS id 6ARE7DIa020970
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Fri, 27 Nov 2026 14:07:14 GMT
+From: Nick Alcock <nix@esperi.org.uk>
+To: "Jose E. Marchesi" <jemarch@gnu.org>
+Cc: "Can" <can@tartanoglu.com>, <bpf@vger.kernel.org>,
+        "Alexei
+ Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        "Eduard Zingerman"
+ <eddyz87@gmail.com>,
+        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+        "Martin KaFai Lau" <martin.lau@linux.dev>,
+        "Song Liu" <song@kernel.org>,
+        "Yonghong Song" <yonghong.song@linux.dev>,
+        "Jiri Olsa"
+ <jolsa@kernel.org>,
+        "Emil Tsalapatis" <emil@etsalapatis.com>,
+        "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>,
+        "Alan Maguire"
+ <alan.maguire@oracle.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        "David Faust" <david.faust@oss.qualcomm.com>,
+        "Bruce McCulloch"
+ <bruce.mcculloch64@gmail.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nicolas Schier" <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+        <dwarves@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: RFC: vmlinux BTF from clang -gbtf, stock lld and a libbpf tool
+In-Reply-To: <87fqwmspyg.fsf@gnu.org>
+References: <20261121205803.b46d9bd1a88c@tartanoglu.com>
+	<87fqwmspyg.fsf@gnu.org>
+Emacs: if SIGINT doesn't work, try a tranquilizer.
+Date: Fri, 27 Nov 2026 14:07:13 +0000
+Message-ID: <87ecc6fjvy.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -79,30 +77,101 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain
+X-DCC--Metrics: loom 1102; Body=23 Fuz1=23 Fuz2=23 rep=100%
 
-tree:   https://github.com/AsahiLinux/linux bits/250-aop
-head:   fc24f7e1a3f10a336872c79b3772930633b0205c
-commit: 546597bebe363b65904233afc69ea24b1983bca0 [19/50] rust: of: Add reserved_mem_region_to_resource_byname()
-config: x86_64-randconfig-2002-20261126 (https://download.01.org/0day-ci/archive/20261127/20261127142830.dn5dzTxW-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261127/20261127142830.dn5dzTxW-lkp@intel.com/reproduce)
+On 27 Nov 2026, Jose E. Marchesi uttered the following:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261127142830.dn5dzTxW-lkp@intel.com/
+> [Fixing email adresses of David Faust and Bruce McCullough and Nick
+>  Alcock]
 
-All errors (new ones prefixed by >>):
+Thanks!
 
-   warning: unused import: `crate::error::to_result`
-   --> rust/kernel/of.rs:19:5
-   |
->> 19 | use crate::error::to_result;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+>> Alexei asked in llvm/llvm-project#183915 [1][2] for native-vs-pahole
+>> results to come here, and suggested dropping BTF dedup from lld in
+>> favour of a stock link plus a libbpf-based kernel tool. I closed
+>> #183915 and tested that route on saved x86-64 kernel objects.
+>>
+>> Two headline findings up front:
+>>
+>> 1. On those saved objects, unmodified ld.lld plus a libbpf prototype
+>> reproduced the patched linker's decoded vmlinux BTF (bpftool raw
+>> dumps match) and byte-identical .BTF_ids, though not byte-identical
+>> .BTF and without booting a host-tool image.
+>> 2. On the booted native kernel from the earlier patched-lld run, a
+>> verifier negative test (flex_array_unaligned_step in
+>> verifier_btf_array_access) unexpectedly loads across all three
+>> test_progs flavours because struct vring_used is only a FWD in
+>> native BTF. Static checks also show shifted-register FUNC
+>> prototypes (e.g. __add_to_kill) and two duplicate-ID warnings in
+>> resolve_btfids that fail CONFIG_WERROR=y.
+>>
+>> The compiler side is LLVM #183929 (-gbtf for non-BPF ELF targets);
+>> its
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ooh! I thought I was going to have to implement this. :)
+
+>> Discourse RFC [3] drew a key question from LLVM DebugInfo
+>> maintainers:
+>> LLVM debug info is best-effort, whereas the verifier and trampolines
+>> treat vmlinux BTF as trusted safety and ABI metadata. Before
+>> reshaping #183929 or proposing kbuild patches, I'd like feedback on where that
+>> trust boundary sits, how functions and DATASECs should be handled,
+>> and what GCC/Clang/linker contract makes sense.
+
+I'm quite interested in this too, given my past, ah, arguments over the
+possibility of structs with conflicting definitions in different TUs,
+the mess pahole makes of them (because it assumes they don't exist, and
+accepts the first available struct with a given name it sees), and their
+occasional appearance in the kernel. We've even had cases where setting
+the wrong kconfig options can cause wildly different duplicate
+definitions of things like task_struct, though having structs this
+important with the wrong definitions causes the BTF self-tests to fail
+disastrously so hopefully nobody would actually ship a kernel that
+turned those on.
+
+(I am willing to believe that there is an intent that no such structures
+exist in the kernel and thus the file format need not accommodate them,
+though CTF, being meant for userspace, has to be more flexible. I stil
+don't believe that they don't *appear*, because I've seen them, and
+there is no obvious means to keep them from reappearing accidentally.
+A deduplicator is of course the perfect place to implement guards
+against such things appearing in built kernels, but it has to be able to
+spot them first...)
+
+>> true_signature [7]. Whatever comes out of this should work for GCC
+>> objects too.
+
+I intend to build CTFv4 support for LLVM on top of it, too, following
+which BTF-compatible (CTFv4) support in LLVM-compiled userspace should
+be practical, modulo bugs.
+
+>> Saved-object replay (experimental instrument, not a kbuild API)
+
+This is really neat :)
+
+>> Types. In raw BTF, 132 STRUCT/UNION definitions present in pahole are
+>> FWD-only in native. In the normalized C-dump comparison (23,109 exact
+>> of 23,216 native and 23,490 pahole declaration rows), only 39 show up
+>> in fwd_vs_definition.txt; the other 93 (including vring_used) were
+>> paired as "exact" against bpftool's synthetic forward declarations
+>> and
+>> filed under extras.txt (111 pahole rows = 93 missing definitions + 18
+>> extra FWDs; 2 native FWDs). Walking pahole's BTF from those 132 roots
+>> reaches 149 of 178 pahole-only rows (e.g. acpi_gpio_params via
+>> acpi_gpio_mapping).
+>>
+>> The cause confirmed per-object in libahci.o (ahci_cmd_hdr) and
+>> e1000_hw.o (e1000_shadow_ram) is clang's deferred pointee traversal,
+>> which emits a FWD even when the CU's DWARF has the full definition.
+
+libctf fuses such things together when it sees them (addition of
+structs/unions to a dict when a forward already exists mutates the
+forward into a struct/union; addition of a forward when a struct/union
+already exists just returns the struct/union; the deduplicator also
+avoids emitting forwards unless no concrate definition is visible, and
+by the time it emits anything it's already seen everything there is to
+see.)
+
+This sort of thing may not be practical in your model though.
